@@ -428,7 +428,7 @@
         "z":  "bb3654998a6bf514",
         "g":  "b49b9676d4dbdff1",
         "name":  "Šetřit Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\nmsg.victron = { power_set_point: 0, min_soc: Math.max(minSoc, currentSoc - 5), schedule_soc: currentSoc };\nmsg.mode = \"setrit\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Ĺ etĹ™it\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// SETRIT = nenabijet ze site, nevybijet baterii\n// schedule_charge: false = ZASTAVIT planovane nabijeni z predchoziho modu\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: Math.max(minSoc, currentSoc - 5),\n    schedule_charge: false\n};\nmsg.mode = \"setrit\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Setrit\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
         "outputs":  1,
         "timeout":  "",
         "noerr":  0,
@@ -495,7 +495,7 @@
         "type":  "api-call-service",
         "z":  "bb3654998a6bf514",
         "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule SOC = aktuální",
+        "name":  "Schedule SOC = 0 (setrit)",
         "server":  "c7421fe2.cb11c",
         "version":  7,
         "debugenabled":  false,
@@ -515,7 +515,7 @@
         "labelId":  [
 
                     ],
-        "data":  "{\"value\": {{victron.schedule_soc}}}",
+        "data":  "{\"value\": 0}",
         "dataType":  "json",
         "mergeContext":  "",
         "mustacheAltTags":  false,
@@ -539,7 +539,7 @@
         "type":  "api-call-service",
         "z":  "bb3654998a6bf514",
         "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule Duration = 86399",
+        "name":  "Schedule Duration = 0 (setrit)",
         "server":  "c7421fe2.cb11c",
         "version":  7,
         "debugenabled":  false,
@@ -559,7 +559,7 @@
         "labelId":  [
 
                     ],
-        "data":  "{\"value\": 86399}",
+        "data":  "{\"value\": 0}",
         "dataType":  "json",
         "mergeContext":  "",
         "mustacheAltTags":  false,
