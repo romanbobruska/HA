@@ -99,7 +99,7 @@ files_merged = 0
 for fpath in sorted(glob.glob(os.path.join(flows_dir, '*.json'))):
     fname = os.path.basename(fpath)
     try:
-        with open(fpath, 'r', encoding='utf-8') as f:
+        with open(fpath, 'r', encoding='utf-8-sig') as f:
             content = f.read().rstrip().rstrip('.')
             nodes = json.loads(content)
         
