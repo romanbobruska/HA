@@ -1,0 +1,188 @@
+# sensors:
+# NIBE
+- name: "Nibe - Aktuální reálný stav"
+  unique_id: nibe_realny_stav
+  icon: >
+    {% if states('sensor.nibe_stav_ep14')|int == 60 or states('sensor.nibe_stav_ep15')|int == 60 %}
+      mdi:heat-pump
+    {% else %}
+      mdi:pause-circle-outline
+    {% endif %}
+  state: >
+    {% set ep14 = states('sensor.nibe_stav_ep14') | int(0) %}
+    {% set ep15 = states('sensor.nibe_stav_ep15') | int(0) %}
+    {% set priorita = states('sensor.nibe_priorita_provozu_real') | int(0) %}
+
+    {# Pokud alespoň jeden kompresor vykazuje stav 60 (běh) #}
+    {% if ep14 == 60 or ep15 == 60 %}
+      {% if priorita == 30 %}
+        PRACUJE: Vytápění domu
+      {% elif priorita == 20 %}
+        PRACUJE: Ohřev vody (TUV)
+      {% elif priorita == 40 %}
+        PRACUJE: Ohřev bazénu
+      {% else %}
+        PRACUJE: Jiný režim (kód {{ priorita }})
+      {% endif %}
+    {% else %}
+      Klidový stav (kompresory stojí)
+    {% endif %}
+
+#FVE
+- name: "Spotřeba dnes ze sítě"
+  unique_id: "spotreba_dnes_ze_site"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.spotreba_dnes_sit') | float(0) }}"
+
+- name: "Spotřeba dnes auto"
+  unique_id: "spotreba_dnes_auto"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.spotreba_dnes_auto') | float(0) }}"
+
+- name: "Solární výroba dnes"
+  unique_id: "solarni_vyroba_dnes"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.vyroba_dnes') | float(0) }}"
+
+- name: "Nabíjení baterií dnes"
+  unique_id: "nabijeni_baterii_total"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.nabijeni_baterie_dnes') | float(0) }}"
+
+- name: "Vybíjení baterií dnes"
+  unique_id: "vybijeni_baterii_total"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.vybijeni_baterie_dnes') | float(0) }}"
+
+- name: "Prodej do sítě dnes"
+  unique_id: "prodej_dos_site_dnes"
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state_class: total_increasing
+  icon: mdi:chart-histogram
+  state: "{{ states('input_number.prodej_do_site_dnes') | float(0) }}"
+
+#Řízení FVE
+- name: "FVE Aktuální mód"
+  unique_id: fve_aktualni_mod
+  icon: mdi:state-machine
+  state: "{{ states('input_select.fve_manual_mod') if states('input_select.fve_manual_mod') != 'auto' else states('sensor.fve_planovany_mod') }}"
+
+- name: "FVE Plánovaný mód"
+  unique_id: fve_planovany_mod
+  icon: mdi:calendar-clock
+  state: "{{ state_attr('sensor.fve_plan', 'current_mode') | default('normal') }}"
+
+- name: "FVE Rozdíl výroby a spotřeby"
+  unique_id: fve_rozdil_vyroby_a_spotreby
+  icon: mdi:scale-balance
+  unit_of_measurement: "W"
+  device_class: power
+  state: >
+    {% set vyroba = states('sensor.vyroba_fve') | float(0) %}
+    {% set spotreba_L1 = states('sensor.ac_loads_L1') | float(0) %}
+    {% set spotreba_L2 = states('sensor.ac_loads_L2') | float(0) %}
+    {% set spotreba_L3 = states('sensor.ac_loads_L3') | float(0) %}
+    {% set spotreba = spotreba_L1 + spotreba_L2 + spotreba_L3 %}
+    {% set nabijeni_baterie = states('sensor.battery_power_plus') | float(0) %}
+    {{ (vyroba - spotreba - nabijeni_baterie) | round(0) }}
+
+- name: "FVE Dostupný přebytek"
+  unique_id: fve_dostupny_prebytek
+  icon: mdi:lightning-bolt
+  unit_of_measurement: "W"
+  device_class: power
+  state: >
+    {% set rozdil = states('sensor.fve_rozdil_vyroby_a_spotreby') | float(0) %}
+    {{ [rozdil, 0] | max | round(0) }}
+
+- name: "FVE Celková spotřeba AC"
+  unique_id: fve_celkova_spotreba_ac
+  icon: mdi:home-lightning-bolt
+  unit_of_measurement: "W"
+  device_class: power
+  state: >
+    {% set L1 = states('sensor.ac_loads_L1') | float(0) %}
+    {% set L2 = states('sensor.ac_loads_L2') | float(0) %}
+    {% set L3 = states('sensor.ac_loads_L3') | float(0) %}
+    {{ (L1 + L2 + L3) | round(0) }}
+
+- name: "FVE Celkový odběr ze sítě"
+  unique_id: fve_celkovy_odber_ze_site
+  icon: mdi:transmission-tower-import
+  unit_of_measurement: "W"
+  device_class: power
+  state: >
+    {% set L1 = states('sensor.grid_loads_L1') | float(0) %}
+    {% set L2 = states('sensor.grid_loads_L2') | float(0) %}
+    {% set L3 = states('sensor.grid_loads_L3') | float(0) %}
+    {{ (L1 + L2 + L3) | round(0) }}
+
+- name: "FVE Celkový prodej do sítě"
+  unique_id: fve_celkovy_prodej_do_site
+  icon: mdi:transmission-tower-export
+  unit_of_measurement: "W"
+  device_class: power
+  state: >
+    {% set L1 = states('sensor.grid_production_L1') | float(0) %}
+    {% set L2 = states('sensor.grid_production_L2') | float(0) %}
+    {% set L3 = states('sensor.grid_production_L3') | float(0) %}
+    {{ (L1 + L2 + L3) | round(0) }}
+
+- name: "FVE Energie v baterii"
+  unique_id: fve_energie_v_baterii
+  icon: mdi:battery
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state: >
+    {% set soc = states('sensor.battery_percent') | float(0) %}
+    {% set kapacita = states('input_number.fve_kapacita_baterie') | float(28) %}
+    {{ (soc / 100 * kapacita) | round(2) }}
+
+- name: "FVE Dostupná energie v baterii"
+  unique_id: fve_dostupna_energie_v_baterii
+  icon: mdi:battery-charging
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state: >
+    {% set soc = states('sensor.battery_percent') | float(0) %}
+    {% set min_soc = states('input_number.fve_min_soc') | float(20) %}
+    {% set kapacita = states('input_number.fve_kapacita_baterie') | float(28) %}
+    {% set hodnota = ((soc - min_soc) / 100) * kapacita %}
+    {{ [hodnota, 0] | max | round(2) }}
+
+- name: "FVE Volná kapacita baterie"
+  unique_id: fve_volna_kapacita_baterie
+  icon: mdi:battery-plus
+  unit_of_measurement: "kWh"
+  device_class: energy
+  state: >
+    {% set soc = states('sensor.battery_percent') | float(0) %}
+    {% set kapacita = states('input_number.fve_kapacita_baterie') | float(28) %}
+    {{ (((100 - soc) / 100) * kapacita) | round(2) }}
+
+# Plán - čte data z command_line sensoru
+- name: "FVE Plan"
+  unique_id: fve_plan
+  icon: mdi:calendar-clock
+  state: "{{ states('sensor.fve_plan_data') | default('normal') }}"
+  attributes:
+    current_mode: "{{ state_attr('sensor.fve_plan_data', 'current_mode') | default('normal') }}"
+    current_hour: "{{ state_attr('sensor.fve_plan_data', 'current_hour') | default(now().hour) }}"
+    plan: "{{ state_attr('sensor.fve_plan_data', 'plan') | default([]) }}"
+    last_update: "{{ state_attr('sensor.fve_plan_data', 'last_update') | default(now().isoformat()) }}"

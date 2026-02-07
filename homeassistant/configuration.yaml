@@ -1,0 +1,105 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+mqtt: !include mqtt.yaml
+modbus: !include modbus.yaml
+template:
+  #NIBE
+  - binary_sensor:
+      - name: "Nibe - Kompresory aktivní (binární)"
+        unique_id: nibe_kompresory_aktivni_binarni
+        # device_class: running  <-- Můžete přidat pro lepší ikony v HA
+        state: >
+          {% set ep14_stav = states('sensor.nibe_stav_modulu_ep14') | int(0) %}
+          {% set ep15_stav = states('sensor.nibe_stav_modulu_ep15') | int(0) %}
+
+          {# Pokud je hodnota 60 na kterémkoliv z modulů, je stav ON #}
+          {{ ep14_stav == 60 or ep15_stav == 60 }}
+
+        icon: >
+          {% if is_state('binary_sensor.nibe_kompresory_aktivni_binarni', 'on') %}
+            mdi:engine
+          {% else %}
+            mdi:engine-off
+          {% endif %}
+
+  - sensor: !include template_sensors.yaml
+  - switch: !include template_switches.yaml
+
+# OVLÁDÁNÍ FVE
+# -----------------------------------------------------------------------------
+# COMMAND LINE - Čtení JSON souboru s plánem
+# -----------------------------------------------------------------------------
+command_line:
+  - sensor:
+      name: "FVE Plan Data"
+      unique_id: fve_plan_data
+      command: "cat /config/fve_plan.json"
+      value_template: "{{ value_json.current_mode | default('normal') }}"
+      json_attributes:
+        - current_mode
+        - current_hour
+        - plan
+        - last_update
+      scan_interval: 5
+
+# -----------------------------------------------------------------------------
+# INPUT BOOLEANS - Přepínače pro ovládání automatizace
+# -----------------------------------------------------------------------------
+input_boolean:
+  fve_automatizace:
+    name: "FVE Automatizace"
+    icon: mdi:robot
+
+  fve_prodej_z_baterie:
+    name: "Povolit prodej z baterie"
+    icon: mdi:battery-arrow-up
+
+  fve_blokace_vybijeni:
+    name: "Blokace vybíjení baterie"
+    icon: mdi:battery-lock
+
+# -----------------------------------------------------------------------------
+# INPUT NUMBERS - Nastavitelné parametry
+# -----------------------------------------------------------------------------
+
+input_number: !include input_numbers.yaml
+
+# -----------------------------------------------------------------------------
+# INPUT SELECT - Výběrové možnosti
+# -----------------------------------------------------------------------------
+input_select:
+  fve_rezim_casu:
+    name: "Režim času"
+    options:
+      - "hodina"
+      - "ctvrthodina"
+    icon: mdi:clock-outline
+
+  fve_manual_mod:
+    name: "Manuální mód"
+    options:
+      - "🤖 Automaticky"
+      - "🟢 Normální provoz"
+      - "🟡 Šetřit baterii"
+      - "🔵 Nabíjet ze sítě"
+      - "🔴 Prodávat do sítě"
+      - "🟣 Zákaz přetoků"
+    icon: mdi:cog
+
+  fve_plan_mode:
+    name: "FVE Plánovaný mód"
+    options:
+      - "normal"
+      - "setrit"
+      - "nabijet_ze_site"
+      - "prodavat"
+      - "zakaz_pretoku"
+    icon: mdi:calendar-clock

@@ -1,0 +1,568 @@
+﻿switch:
+  # Overvoltage Feed In - povolení přetoku při přepětí
+  - name: "Overvoltage Feed In"
+    unique_id: "victron_overvoltage_feed_in"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/OvervoltageFeedIn"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/OvervoltageFeedIn"
+    value_template: "{{ value_json.value }}"
+    state_on: 1
+    state_off: 0
+    payload_on: '{"value": 1}'
+    payload_off: '{"value": 0}'
+    icon: mdi:flash-alert
+
+  # Wallboxy
+  - name: "Wallbox garáž Start Stop"
+    unique_id: "ev_charger_garage_start_stop"
+    state_topic: "victron/N/c0619ab69c71/evcharger/41/StartStop"
+    command_topic: "victron/W/c0619ab69c71/evcharger/41/StartStop"
+    value_template: "{{ value_json.value }}"
+    state_on: 1
+    state_off: 0
+    payload_on: '{"value":1}'
+    payload_off: '{"value":0}'
+    optimistic: false
+
+  - name: "Wallbox zahrada Start Stop"
+    unique_id: "ev_charger_garden_start_stop"
+    state_topic: "victron/N/c0619ab69c71/evcharger/40/StartStop"
+    command_topic: "victron/W/c0619ab69c71/evcharger/40/StartStop"
+    value_template: "{{ value_json.value }}"
+    state_on: 1
+    state_off: 0
+    payload_on: '{"value":1}'
+    payload_off: '{"value":0}'
+    optimistic: false
+
+select:
+  - name: "Wallbox garáž Amperace"
+    unique_id: "evcharger_garage_amperage"
+    state_topic: "victron/N/c0619ab69c71/evcharger/41/SetCurrent"
+    value_template: >
+      {% if value_json.value == 6 %}
+        6A
+      {% elif value_json.value == 7 %}
+        7A
+      {% elif value_json.value == 8 %}
+        8A
+      {% elif value_json.value == 9 %}
+        9A  
+      {% elif value_json.value == 10 %}
+        10A
+      {% elif value_json.value == 11 %}
+        11A
+      {% elif value_json.value == 12 %}
+        12A
+      {% elif value_json.value == 13 %}
+        13A  
+      {% elif value_json.value == 14 %}
+        14A
+      {% elif value_json.value == 15 %}
+        15A  
+      {% elif value_json.value == 16 %}
+        16A
+      {% else %}
+        Error - No Data
+      {% endif %}
+    options:
+      - "6A"
+      - "7A"
+      - "8A"
+      - "9A"
+      - "10A"
+      - "11A"
+      - "12A"
+      - "13A"
+      - "14A"
+      - "15A"
+      - "16A"
+    command_topic: "victron/W/c0619ab69c71/evcharger/41/SetCurrent"
+    command_template: >
+      {% set values = { '6A':'{"value": 6}', 
+                        '7A':'{"value": 7}', '8A':'{"value": 8}', 
+                        '9A':'{"value": 9}', '10A' : '{"value": 10}',
+                        '11A':'{"value": 11}', '12A' : '{"value": 12}', 
+                        '13A':'{"value": 13}', '14A' : '{"value": 14}', 
+                        '15A' : '{"value": 15}', '16A' : '{"value": 16}'} %}
+      {{ values[value] if value in values.keys() else '{"value": 6}' }}
+
+  - name: "Wallbox zahrada Amperace"
+    unique_id: "evcharger_garden_amperage"
+    state_topic: "victron/N/c0619ab69c71/evcharger/40/SetCurrent"
+    value_template: >
+      {% if value_json.value == 6 %}
+        6A
+      {% elif value_json.value == 7 %}
+        7A
+      {% elif value_json.value == 8 %}
+        8A
+      {% elif value_json.value == 9 %}
+        9A  
+      {% elif value_json.value == 10 %}
+        10A
+      {% elif value_json.value == 11 %}
+        11A
+      {% elif value_json.value == 12 %}
+        12A
+      {% elif value_json.value == 13 %}
+        13A  
+      {% elif value_json.value == 14 %}
+        14A
+      {% elif value_json.value == 15 %}
+        15A  
+      {% elif value_json.value == 16 %}
+        16A
+      {% else %}
+        Error - No Data
+      {% endif %}
+    options:
+      - "6A"
+      - "7A"
+      - "8A"
+      - "9A"
+      - "10A"
+      - "11A"
+      - "12A"
+      - "13A"
+      - "14A"
+      - "15A"
+      - "16A"
+    command_topic: "victron/W/c0619ab69c71/evcharger/40/SetCurrent"
+    command_template: >
+      {% set values = { '6A':'{"value": 6}', 
+                        '7A':'{"value": 7}', '8A':'{"value": 8}', 
+                        '9A':'{"value": 9}', '10A' : '{"value": 10}',
+                        '11A':'{"value": 11}', '12A' : '{"value": 12}', 
+                        '13A':'{"value": 13}', '14A' : '{"value": 14}', 
+                        '15A' : '{"value": 15}', '16A' : '{"value": 16}'} %}
+      {{ values[value] if value in values.keys() else '{"value": 6}' }}
+
+  - name: "Wallbox garáž Mód"
+    unique_id: "evcharger_garage_mode"
+    state_topic: "victron/N/c0619ab69c71/evcharger/41/Mode"
+    value_template: >
+      {% if value_json.value == 0 %}
+        Manual
+      {% elif value_json.value == 1 %}
+        Auto
+      {% else %}
+        Error - No Data
+      {% endif %}
+    options:
+      - "Manual"
+      - "Auto"
+    command_topic: "victron/W/c0619ab69c71/evcharger/41/Mode"
+    command_template: >
+      {% set values = { 'Manual':'{"value": 0}', 'Auto':'{"value": 1}' } %}
+      {{ values[value] if value in values.keys() else '{"value": 0}' }}
+
+  - name: "Wallbox zahrada Mód"
+    unique_id: "evcharger_garden_mode"
+    state_topic: "victron/N/c0619ab69c71/evcharger/40/Mode"
+    value_template: >
+      {% if value_json.value == 0 %}
+        Manual
+      {% elif value_json.value == 1 %}
+        Auto
+      {% else %}
+        Error - No Data
+      {% endif %}
+    options:
+      - "Manual"
+      - "Auto"
+    command_topic: "victron/W/c0619ab69c71/evcharger/40/Mode"
+    command_template: >
+      {% set values = { 'Manual':'{"value": 0}', 'Auto':'{"value": 1}' } %}
+      {{ values[value] if value in values.keys() else '{"value": 0}' }}
+
+number:
+  # Max Discharge Power - maximální výkon vybíjení baterie
+  - name: "Max Discharge Power"
+    unique_id: "max_discharge_power"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/MaxDischargePower"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/MaxDischargePower"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: -1
+    max: 1000000
+    step: 1
+    unit_of_measurement: "W"
+    icon: mdi:battery-arrow-down
+    mode: box
+
+  # AC Power Set Point - řízení toku energie (záporná = odběr, kladná = export)
+  - name: "Power Set Point"
+    unique_id: "power_set_point"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/AcPowerSetPoint"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/AcPowerSetPoint"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: -1000000
+    max: 1000000
+    step: 1
+    unit_of_measurement: "W"
+    icon: mdi:transmission-tower
+    mode:
+      box
+
+      # Plánované SoC pro nabíjení baterie
+  - name: "Scheduled charge SoC"
+    unique_id: "scheduled_soc"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Soc"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Soc"
+    value_template: "{{ value_json.value | int }}"
+    command_template: '{"value": {{ value }} }'
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+    mode:
+      box
+
+      # Min SOC - minimální stav nabití baterie
+  - name: "Min SOC"
+    unique_id: "min_soc"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/MinimumSocLimit"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/MinimumSocLimit"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: 0
+    max: 100
+    step: 1
+    unit_of_measurement: "%"
+    icon: mdi:battery-low
+    mode: slider
+
+  # Max Feed In Power - maximální výkon do sítě
+  - name: "Max Feed In Power"
+    unique_id: "max_feed_in_power"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/MaxFeedInPower"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/MaxFeedInPower"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: 0
+    max: 15000
+    step: 100
+    unit_of_measurement: "W"
+    icon: mdi:transmission-tower-export
+    mode: box
+
+  # Schedule Charge Start - začátek nabíjení (sekundy od půlnoci)
+  - name: "Schedule Charge Start"
+    unique_id: "schedule_charge_start"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Start"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Start"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: 0
+    max: 86400
+    step: 1
+    unit_of_measurement: "s"
+    icon: mdi:clock-start
+    mode: box
+
+  # Schedule Charge Duration - délka nabíjení (sekundy)
+  - name: "Schedule Charge Duration"
+    unique_id: "schedule_charge_duration"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Duration"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Duration"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: 0
+    max: 86400
+    step: 1
+    unit_of_measurement: "s"
+    icon: mdi:timer-outline
+    mode: box
+
+  # Schedule Charge Day - den nabíjení (0-6 = Po-Ne, 7 = každý den)
+  - name: "Schedule Charge Day"
+    unique_id: "schedule_charge_day"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Day"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/BatteryLife/Schedule/Charge/0/Day"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: -7
+    max: 7
+    step: 1
+    icon: mdi:calendar
+    mode: box
+
+sensor:
+  # Stav baterie - nabíjení/vybíjení
+  - name: "Battery State"
+    unique_id: "victron_battery_state"
+    state_topic: "victron/N/c0619ab69c71/system/0/Dc/Battery/State"
+    value_template: >
+      {% set state = value_json.value | int %}
+      {% if state == 0 %}
+        Idle
+      {% elif state == 1 %}
+        Charging
+      {% elif state == 2 %}
+        Discharging
+      {% else %}
+        Unknown
+      {% endif %}
+    icon: mdi:battery
+
+  # ESS Mode
+  - name: "ESS Mode"
+    unique_id: "victron_ess_mode"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/Hub4Mode"
+    value_template: >
+      {% set mode = value_json.value | int %}
+      {% if mode == 1 %}
+        ESS with Phase Compensation
+      {% elif mode == 2 %}
+        ESS without Phase Compensation
+      {% elif mode == 3 %}
+        External Control
+      {% else %}
+        Unknown ({{ mode }})
+      {% endif %}
+    icon: mdi:cog
+
+  # Battery Time to Go
+  - name: "Battery Time to Go"
+    unique_id: "victron_battery_time_to_go"
+    state_topic: "victron/N/c0619ab69c71/system/0/Dc/Battery/TimeToGo"
+    value_template: "{{ ((value_json.value | default(0)) | float(0) / 3600) | round(1) }}"
+    unit_of_measurement: "h"
+    icon: mdi:clock-outline
+
+  # Battery Temperature
+  - name: "Battery Temperature"
+    unique_id: "victron_battery_temperature"
+    state_topic: "victron/N/c0619ab69c71/system/0/Dc/Battery/Temperature"
+    value_template: "{{ (value_json.value | default(0)) | float(0) | round(1) }}"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    icon: mdi:thermometer
+
+  # Grid Set Point (aktuální nastavení)
+  - name: "Grid Set Point Current"
+    unique_id: "victron_grid_set_point_current"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/AcPowerSetPoint"
+    value_template: "{{ value_json.value | default(0) }}"
+    unit_of_measurement: "W"
+    icon: mdi:target
+
+  # Stav baterií - procento
+  - name: "Procento baterií"
+    unique_id: "battery_percent"
+    state_topic: "victron/N/c0619ab69c71/system/0/Batteries"
+    device_class: battery
+    value_template: "{{ value_json.value[0].soc | round(0) }}"
+    unit_of_measurement: "%"
+
+  # Nabíjení baterií - výkon
+  - name: "Nabíjení baterií"
+    unique_id: "battery_power"
+    state_topic: "victron/N/c0619ab69c71/system/0/Batteries"
+    device_class: power
+    value_template: "{{ value_json.value[0].power }}"
+    unit_of_measurement: "W"
+    icon: mdi:power-socket-uk
+
+  # Nabíjení baterií do plusu
+  - name: "Nabíjení baterií do plusu"
+    unique_id: "battery_power_plus"
+    state_topic: "victron/N/c0619ab69c71/system/0/Batteries"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value[0].power) %}
+      {{ 0 if power < 0 else power }}
+
+  # Nabíjení baterií do mínusu
+  - name: "Nabíjení baterií do mínusu"
+    unique_id: "battery_power_minus"
+    state_topic: "victron/N/c0619ab69c71/system/0/Batteries"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value[0].power) %}
+      {{ 0 if power >= 0 else power }}
+
+  # Spotřeba AC
+  - name: "AC Loads L1"
+    unique_id: "ac_loads_L1"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Consumption/L1/Power"
+    device_class: power
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "W"
+    icon: mdi:power-socket-uk
+
+  - name: "AC Loads L2"
+    unique_id: "ac_loads_L2"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Consumption/L2/Power"
+    device_class: power
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "W"
+    icon: mdi:power-socket-uk
+
+  - name: "AC Loads L3"
+    unique_id: "ac_loads_L3"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Consumption/L3/Power"
+    device_class: power
+    value_template: "{{ value_json.value }}"
+    unit_of_measurement: "W"
+    icon: mdi:power-socket-uk
+
+  # Spotřeba ze sítě
+  - name: "Grid Loads L1"
+    unique_id: "grid_loads_L1"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L1/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power < 0 else power }}
+
+  - name: "Grid Loads L2"
+    unique_id: "grid_loads_L2"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L2/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power < 0 else power }}
+
+  - name: "Grid Loads L3"
+    unique_id: "grid_loads_L3"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L3/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power < 0 else power }}
+
+  # Produkce do sítě
+  - name: "Grid production L1"
+    unique_id: "grid_production_L1"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L1/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power >= 0 else power }}
+
+  - name: "Grid production L2"
+    unique_id: "grid_production_L2"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L2/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power >= 0 else power }}
+
+  - name: "Grid production L3"
+    unique_id: "grid_production_L3"
+    state_topic: "victron/N/c0619ab69c71/system/0/Ac/Grid/L3/Power"
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: >-
+      {% set power = (value_json.value) %}
+      {{ 0 if power >= 0 else power }}
+
+  # Stav EV Chargeru Garáž
+  - name: "Stav wallboxu garáž"
+    unique_id: "evcharger_state_garage"
+    state_topic: "victron/N/c0619ab69c71/evcharger/41/Status"
+    value_template: "{{ value_json.value }}"
+
+  - name: "Stav wallboxu garáž popis"
+    unique_id: "evcharger_state_garage_desc"
+    state_topic: "victron/N/c0619ab69c71/evcharger/41/Status"
+    value_template: >
+      {% if value_json.value == 0 %}
+        Disconnected
+      {% elif value_json.value == 1 %}
+        Connected
+      {% elif value_json.value == 2 %}
+        Charging
+      {% elif value_json.value == 3 %}
+        Charged
+      {% elif value_json.value == 4 %}
+        Waiting for sun
+      {% elif value_json.value == 5 %}
+        Waiting for RFID
+      {% elif value_json.value == 6 %}
+        Waiting for start
+      {% elif value_json.value == 7 %}
+        Low SOC
+      {% elif value_json.value == 8 %}
+        Ground test error
+      {% elif value_json.value == 9 %}
+        Welded contacts error
+      {% elif value_json.value == 10 %}
+        CP input test error
+      {% elif value_json.value == 11 %}
+        Residual current detected
+      {% elif value_json.value == 12 %}
+        Undervoltage detected
+      {% elif value_json.value == 13 %}
+        Overvoltage detected
+      {% elif value_json.value == 14 %}
+        Overheating detected 
+      {% elif value_json.value == 20 %}
+        Charging limit                                          
+      {% else %}
+        Error - No Data
+      {% endif %}
+
+  # Stav EV Chargeru Venek
+  - name: "Stav wallboxu venek"
+    unique_id: "evcharger_state_out"
+    state_topic: "victron/N/c0619ab69c71/evcharger/40/Status"
+    value_template: "{{ value_json.value }}"
+
+  - name: "Stav wallboxu venek popis"
+    unique_id: "evcharger_state_out_desc"
+    state_topic: "victron/N/c0619ab69c71/evcharger/40/Status"
+    value_template: >
+      {% if value_json.value == 0 %}
+        Disconnected
+      {% elif value_json.value == 1 %}
+        Connected
+      {% elif value_json.value == 2 %}
+        Charging
+      {% elif value_json.value == 3 %}
+        Charged
+      {% elif value_json.value == 4 %}
+        Waiting for sun
+      {% elif value_json.value == 5 %}
+        Waiting for RFID
+      {% elif value_json.value == 6 %}
+        Waiting for start
+      {% elif value_json.value == 7 %}
+        Low SOC
+      {% elif value_json.value == 8 %}
+        Ground test error
+      {% elif value_json.value == 9 %}
+        Welded contacts error
+      {% elif value_json.value == 10 %}
+        CP input test error
+      {% elif value_json.value == 11 %}
+        Residual current detected
+      {% elif value_json.value == 12 %}
+        Undervoltage detected
+      {% elif value_json.value == 13 %}
+        Overvoltage detected
+      {% elif value_json.value == 14 %}
+        Overheating detected 
+      {% elif value_json.value == 20 %}
+        Charging limit                                          
+      {% else %}
+        Error - No Data
+      {% endif %}
+
+  # Výroba FVE
+  - name: "Výroba FVE"
+    unique_id: "solar_power"
+    state_topic: "victron/N/c0619ab69c71/system/0/Dc/Pv/Power"
+    icon: mdi:solar-power
+    unit_of_measurement: "W"
+    device_class: power
+    value_template: "{{ value_json.value | round }}"

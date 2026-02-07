@@ -1,0 +1,56 @@
+- name: "Nibe - Topení"
+  unique_id: nibe_topeni
+  state: "{{ states('sensor.nibe_stav_topeni') | int(0) == 1 }}"
+  turn_on:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47371
+        value: [1]
+  turn_off:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47371
+        value: [0]
+  icon: "{{ 'mdi:radiator' if states('sensor.nibe_stav_topeni') | int(0) == 1 else 'mdi:radiator-off' }}"
+
+- name: "Nibe - Chlazení"
+  unique_id: nibe_chlazeni
+  state: "{{ states('sensor.nibe_stav_chlazeni') | int(0) == 1 }}"
+  turn_on:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47372
+        value: [1]
+  turn_off:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47372
+        value: [0]
+  icon: "{{ 'mdi:snowflake' if states('sensor.nibe_stav_chlazeni') | int(0) == 1 else 'mdi:snowflake-off' }}"
+
+- name: "Nibe - Teplá voda"
+  unique_id: nibe_tuv
+  state: "{{ states('sensor.nibe_stav_tuv') | int(0) == 1 }}"
+  turn_on:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47387
+        value: [1]
+  turn_off:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 47387
+        value: [0]
+  icon: "{{ 'mdi:water-boiler' if states('sensor.nibe_stav_tuv') | int(0) == 1 else 'mdi:water-boiler-off' }}"

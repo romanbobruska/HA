@@ -1,0 +1,1128 @@
+﻿[
+    {
+        "id": "e451448d0e5cd53a",
+        "type": "tab",
+        "label": "Init & Set Victron",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "60ea726b8bbc5fbc",
+        "type": "group",
+        "z": "e451448d0e5cd53a",
+        "name": "SpouĹˇtÄ›cĂ­ algoritmus",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "d90b66fb1f48e589",
+            "0b40707ee362a5e8",
+            "9a0e0c189982adb7"
+        ],
+        "x": 14,
+        "y": -1,
+        "w": 612,
+        "h": 82
+    },
+    {
+        "id": "8052afe0fea27044",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "PĹ™edpovÄ›ÄŹ vĂ˝roby solar dnes",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "solar_yield_forecast",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 160,
+        "y": 140,
+        "wires": [
+            [
+                "94fad41d26e0cad6"
+            ]
+        ]
+    },
+    {
+        "id": "a9f0fdbe34b08f42",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "PĹ™edpovÄ›ÄŹ vĂ˝roby solar zĂ­tra",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "solar_yield_forecast",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bot",
+        "stats_end": "172800",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 160,
+        "y": 200,
+        "wires": [
+            [
+                "d4aa59089ba5e79a"
+            ]
+        ]
+    },
+    {
+        "id": "82516184e2da4aba",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav forecast vĂ˝robu dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.predpoved_solarni_vyroby_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_forecast_vyroba_dnes}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5bc15235de0be6d7",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav forecast vĂ˝robu zĂ­tra",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.predpoved_solarni_vyroby_zitra"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_forecast_vyroba_zitra}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "94fad41d26e0cad6",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "forecast_vyroba_dnes",
+                "pt": "global",
+                "to": "payload.totals.solar_yield_forecast",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 140,
+        "wires": [
+            [
+                "a9f0fdbe34b08f42"
+            ]
+        ]
+    },
+    {
+        "id": "b3489292b6b19a0a",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "Set globals",
+        "rules": [
+            {
+                "t": "set",
+                "p": "max_spotreba_sit",
+                "pt": "global",
+                "to": "24000",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 110,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f75eb57b02744611",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "SpotĹ™eba ze sĂ­tÄ›",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Gc",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 120,
+        "y": 260,
+        "wires": [
+            [
+                "e898a34c99d763a9"
+            ]
+        ]
+    },
+    {
+        "id": "510d8c7a6922180c",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "NabĂ­jenĂ­ bat. ze sĂ­tÄ›",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Gb",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 140,
+        "y": 320,
+        "wires": [
+            [
+                "12e5622470d1810f"
+            ]
+        ]
+    },
+    {
+        "id": "e898a34c99d763a9",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "grid_direct_use",
+                "pt": "global",
+                "to": "payload.totals.Gc",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 260,
+        "wires": [
+            [
+                "510d8c7a6922180c"
+            ]
+        ]
+    },
+    {
+        "id": "12e5622470d1810f",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "grid_to_battery",
+                "pt": "global",
+                "to": "payload.totals.Gb",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 320,
+        "wires": [
+            [
+                "a55129e755036403"
+            ]
+        ]
+    },
+    {
+        "id": "cbe7aadb6a9789fb",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav spotĹ™ebu dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.spotreba_dnes_sit"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_grid}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 960,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a55129e755036403",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "EV spotĹ™eba",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "evcs",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 110,
+        "y": 380,
+        "wires": [
+            [
+                "ef45bce4eeb696b2"
+            ]
+        ]
+    },
+    {
+        "id": "ef45bce4eeb696b2",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "ev_consumption",
+                "pt": "global",
+                "to": "payload.totals.evE",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 380,
+        "wires": [
+            [
+                "90ecdd0dbac92033"
+            ]
+        ]
+    },
+    {
+        "id": "cf10227596934c6b",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav spotĹ™ebu EV dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.spotreba_dnes_auto"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_ev}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 970,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "90ecdd0dbac92033",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "SpotĹ™eba solar dnes",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Pc",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 140,
+        "y": 440,
+        "wires": [
+            [
+                "7de54d464c4599ae"
+            ]
+        ]
+    },
+    {
+        "id": "7de54d464c4599ae",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "solar_consumption",
+                "pt": "global",
+                "to": "payload.totals.Pc",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 440,
+        "y": 440,
+        "wires": [
+            [
+                "c3dbf47b62785eff"
+            ]
+        ]
+    },
+    {
+        "id": "c3dbf47b62785eff",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "NabĂ­jenĂ­ bat. ze solaru",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Pb",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 140,
+        "y": 500,
+        "wires": [
+            [
+                "b6bcdbf86abcbeb8"
+            ]
+        ]
+    },
+    {
+        "id": "b6bcdbf86abcbeb8",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "solar_to_battery",
+                "pt": "global",
+                "to": "payload.totals.Pb",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 500,
+        "wires": [
+            [
+                "4236d9de7efc61ec"
+            ]
+        ]
+    },
+    {
+        "id": "94b7b011f71e932d",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav vĂ˝robu solar dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.vyroba_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_solar}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 970,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "492bb8db67a996d6",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav nabĂ­jenĂ­ baterie dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.nabijeni_baterie_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_battery_plus}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4236d9de7efc61ec",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "SpotĹ™eba z baterie",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Bc",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 130,
+        "y": 560,
+        "wires": [
+            [
+                "214177b52b123155"
+            ]
+        ]
+    },
+    {
+        "id": "214177b52b123155",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_consumption",
+                "pt": "global",
+                "to": "payload.totals.Bc",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 440,
+        "y": 560,
+        "wires": [
+            [
+                "4245e7094a4f80b7"
+            ]
+        ]
+    },
+    {
+        "id": "4245e7094a4f80b7",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "Baterie do sĂ­tÄ›",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "Bg",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 120,
+        "y": 620,
+        "wires": [
+            [
+                "3bfaab9a23737f7e"
+            ]
+        ]
+    },
+    {
+        "id": "3bfaab9a23737f7e",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "battery_to_grid",
+                "pt": "global",
+                "to": "payload.totals.Bg",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 620,
+        "wires": [
+            [
+                "3a3fb82b0bca8580"
+            ]
+        ]
+    },
+    {
+        "id": "4356e0d632c43221",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav vybĂ­jenĂ­ baterie dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.vybijeni_baterie_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_battery_minus}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a3fb82b0bca8580",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "CelkovĂˇ solĂˇrnĂ­ spotĹ™eba",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "total_solar_yield",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "bod",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 150,
+        "y": 680,
+        "wires": [
+            [
+                "d0cec879a0aa07e1"
+            ]
+        ]
+    },
+    {
+        "id": "d0cec879a0aa07e1",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "total_solar_yield",
+                "pt": "global",
+                "to": "payload.totals.total_solar_yield",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 430,
+        "y": 680,
+        "wires": [
+            [
+                "ea8178ed56fc307d"
+            ]
+        ]
+    },
+    {
+        "id": "0924d118225c702a",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav prodej do sĂ­tÄ› dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.prodej_do_site_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_vyroba}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d4aa59089ba5e79a",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "forecast_vyroba_zitra",
+                "pt": "global",
+                "to": "payload.records.solar_yield_forecast[0][1]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 200,
+        "wires": [
+            [
+                "f75eb57b02744611"
+            ]
+        ]
+    },
+    {
+        "id": "815f4827fac6b509",
+        "type": "function",
+        "z": "e451448d0e5cd53a",
+        "name": "SpoÄŤĂ­tej hodnoty",
+        "func": "let forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") \nlet forecast_vyroba_zitra = global.get(\"forecast_vyroba_zitra\") \nlet grid_direct_use = global.get(\"grid_direct_use\")\nlet grid_to_battery = global.get(\"grid_to_battery\")\nlet ev_consumption = global.get(\"ev_consumption\")\nlet solar_consumption = global.get(\"solar_consumption\")\nlet solar_to_battery = global.get(\"solar_to_battery\")\nlet battery_consumption = global.get(\"battery_consumption\")\nlet battery_to_grid = global.get(\"battery_to_grid\")\nlet total_solar_yield = global.get(\"total_solar_yield\")\nlet forecast_vyroba_dnes_zbytek = global.get(\"forecast_zbytek_vyroba_dnes\") \n\n\nif (!Number.isFinite(forecast_vyroba_dnes)) {\n    forecast_vyroba_dnes = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_zitra)) {\n    forecast_vyroba_zitra = 0\n}\n\nif (!Number.isFinite(grid_direct_use)) {\n    grid_direct_use = 0\n}\n\nif (!Number.isFinite(grid_to_battery)) {\n    grid_to_battery = 0\n}\n\nif (!Number.isFinite(ev_consumption)) {\n    ev_consumption = 0\n}\n\nif (!Number.isFinite(solar_consumption)) {\n    solar_consumption = 0\n}\n\nif (!Number.isFinite(solar_to_battery)) {\n    solar_to_battery = 0\n}\n\nif (!Number.isFinite(battery_consumption)) {\n    battery_consumption = 0\n}\n\nif (!Number.isFinite(battery_to_grid)) {\n    battery_to_grid = 0\n}\n\nif (!Number.isFinite(total_solar_yield)) {\n    total_solar_yield = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_dnes_zbytek)) {\n    forecast_vyroba_dnes_zbytek = 0\n}\n\nmsg.payload_forecast_vyroba_dnes = (forecast_vyroba_dnes / 1000).toFixed(2)\n\nmsg.payload_forecast_vyroba_zitra = (forecast_vyroba_zitra / 1000).toFixed(2)\n\nmsg.payload_grid = (grid_direct_use +\n    grid_to_battery).toFixed(2)\n\nmsg.payload_ev = ev_consumption.toFixed(2)\n\nmsg.payload_solar = total_solar_yield.toFixed(2)\n\nmsg.payload_battery_plus = (solar_to_battery + grid_to_battery).toFixed(2)\n\nmsg.payload_battery_minus = (battery_consumption + battery_to_grid).toFixed(2)\n\nmsg.payload_vyroba = ((total_solar_yield - (solar_to_battery + solar_consumption))\n    + battery_to_grid).toFixed(2)\n\nmsg.payload_forecast_vyroba_dnes_zbytek = (forecast_vyroba_dnes_zbytek / 1000).toFixed(2)\n\n// Store computed values in global for other flows\nglobal.set(\"fve_spotreba_sit_kwh\", parseFloat(msg.payload_grid))\nglobal.set(\"fve_spotreba_ev_kwh\", parseFloat(msg.payload_ev))\nglobal.set(\"fve_vyroba_solar_kwh\", parseFloat(msg.payload_solar))\nglobal.set(\"fve_nabijeni_bat_kwh\", parseFloat(msg.payload_battery_plus))\nglobal.set(\"fve_vybijeni_bat_kwh\", parseFloat(msg.payload_battery_minus))\nglobal.set(\"fve_prodej_sit_kwh\", parseFloat(msg.payload_vyroba))\n    \nreturn msg",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 400,
+        "wires": [
+            [
+                "82516184e2da4aba",
+                "5bc15235de0be6d7",
+                "cbe7aadb6a9789fb",
+                "cf10227596934c6b",
+                "94b7b011f71e932d",
+                "492bb8db67a996d6",
+                "4356e0d632c43221",
+                "0924d118225c702a",
+                "5efc09c5570e0e2d"
+            ]
+        ]
+    },
+    {
+        "id": "d90b66fb1f48e589",
+        "type": "inject",
+        "z": "e451448d0e5cd53a",
+        "g": "60ea726b8bbc5fbc",
+        "name": "1 sekunda",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 40,
+        "wires": [
+            [
+                "0b40707ee362a5e8"
+            ]
+        ]
+    },
+    {
+        "id": "0b40707ee362a5e8",
+        "type": "function",
+        "z": "e451448d0e5cd53a",
+        "g": "60ea726b8bbc5fbc",
+        "name": "MĂˇ se spustit?",
+        "func": "let d = new Date()\nlet current_minute = d.getMinutes()\nlet spusteno_minutou = flow.get(\"spusteno_minutou\")\n\nif ([0, 10, 20, 30, 40, 50, 58, 59].includes(current_minute) && spusteno_minutou != current_minute) {\n    flow.set(\"spusteno_minutou\", current_minute)\n    return msg;\n} \n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 40,
+        "wires": [
+            [
+                "8052afe0fea27044"
+            ]
+        ]
+    },
+    {
+        "id": "9a0e0c189982adb7",
+        "type": "inject",
+        "z": "e451448d0e5cd53a",
+        "g": "60ea726b8bbc5fbc",
+        "name": "ManuĂˇlnÄ›",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 540,
+        "y": 40,
+        "wires": [
+            [
+                "8052afe0fea27044"
+            ]
+        ]
+    },
+    {
+        "id": "5efc09c5570e0e2d",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "name": "Nastav zbytek solar dnes",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.zbyvajici_solarni_vyroba_dnes"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_forecast_vyroba_dnes_zbytek}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 970,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea8178ed56fc307d",
+        "type": "vrm-api",
+        "z": "e451448d0e5cd53a",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "ZbĂ˝vajĂ­cĂ­ solĂˇrnĂ­ spotĹ™eba",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "solar_yield_forecast",
+        "stats_interval": "days",
+        "show_instance": false,
+        "stats_start": "0",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "transform_price_schedule": false,
+        "outputs": 1,
+        "x": 150,
+        "y": 740,
+        "wires": [
+            [
+                "06bafcba794da9e5",
+                "7a40f647c053ea8e"
+            ]
+        ]
+    },
+    {
+        "id": "7a40f647c053ea8e",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "forecast_zbytek_vyroba_dnes",
+                "pt": "global",
+                "to": "payload.totals.solar_yield_forecast",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 740,
+        "wires": [
+            [
+                "815f4827fac6b509",
+                "b3489292b6b19a0a"
+            ]
+        ]
+    },
+    {
+        "id": "06bafcba794da9e5",
+        "type": "debug",
+        "z": "e451448d0e5cd53a",
+        "name": "debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 370,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "e1bd0d865b19d57e",
+        "type": "config-vrm-api",
+        "name": "VRM api"
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "537aaa7c69c02576",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "victron-vrm-api": "0.3.11",
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    }
+]

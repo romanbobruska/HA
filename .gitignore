@@ -1,0 +1,26 @@
+# Logs
+*.log
+
+# Runtime data
+runtime/
+fve_plan.json
+
+# Temporary build scripts
+*.ps1
+*.js.bak
+
+# Node-RED user data
+.config.nodes.json
+.flows.json.backup
+
+# OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# HTML dashboard (large, generated)
+html/

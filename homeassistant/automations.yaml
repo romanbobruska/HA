@@ -1,0 +1,134 @@
+- id: "1746052767671"
+  alias: Publikuj VIctron
+  description: ""
+  triggers:
+    - trigger: time_pattern
+      seconds: /30
+  conditions: []
+  actions:
+    - action: mqtt.publish
+      data:
+        evaluate_payload: false
+        qos: 0
+        retain: false
+        topic: victron/R/c0619ab69c71/system/0/Serial
+  mode: single
+- id: "1746482790388"
+  alias: Auto má hlad
+  description: ""
+  triggers:
+    - trigger: time_pattern
+      hours: "*"
+      minutes: /1
+  conditions:
+    - condition: or
+      conditions:
+        - alias: Wallbox garáž je charging
+          condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 1
+          below: 3
+        - condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 3
+          below: 5
+          alias: Wallbox garáž je waiting for sun
+        - alias: Wallbox zahrada je charging
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 1
+          below: 3
+        - alias: Wallbox zahrada je waiting for sun
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 3
+          below: 5
+        - alias: Wallbox garáž je Waiting for start nebo Low SOC
+          condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 5
+          below: 8
+        - alias: Wallbox zahrada je Waiting for start nebo Low SOC
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 5
+          below: 8
+  actions:
+    - action: input_boolean.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.auto_ma_hlad
+  mode: single
+- id: "1746483353432"
+  alias: Auto nemá hlad
+  description: ""
+  triggers:
+    - trigger: time_pattern
+      hours: "*"
+      minutes: /1
+  conditions:
+    - condition: not
+      conditions:
+        - alias: Wallbox garáž je charging
+          condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 1
+          below: 3
+        - condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 3
+          below: 5
+          alias: Wallbox garáž je waiting for sun
+        - alias: Wallbox zahrada je charging
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 1
+          below: 3
+        - alias: Wallbox zahrada je waiting for sun
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 3
+          below: 5
+        - alias: Wallbox garáž je Waiting for start nebo Low SOC
+          condition: numeric_state
+          entity_id: sensor.charger_state_garage
+          above: 5
+          below: 8
+        - alias: Wallbox zahrada je Waiting for start nebo Low SOC
+          condition: numeric_state
+          entity_id: sensor.stav_wallboxu_venek
+          above: 5
+          below: 8
+  actions:
+    - action: input_boolean.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id: input_boolean.auto_ma_hlad
+  mode: single
+- id: "1746747997553"
+  alias: Spusť nabíjení auta manuálně
+  description: ""
+  triggers:
+    - trigger: event
+      event_type: run
+      event_data: {}
+  conditions: []
+  actions:
+    - action: select.select_option
+      metadata: {}
+      data:
+        option: Manual
+      target:
+        entity_id:
+          - select.wallbox_garaz_mod
+          - select.wallbox_zahrada_mod
+    - action: switch.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - switch.wallbox_garaz_start_stop
+          - switch.wallbox_zahrada_start_stop
+  mode: single

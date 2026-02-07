@@ -1,0 +1,357 @@
+[
+    {
+        "id": "fve_history_tab",
+        "type": "tab",
+        "label": "FVE History Learning",
+        "disabled": false,
+        "info": "Učení z historie spotřeby pro lepší plánování",
+        "env": []
+    },
+    {
+        "id": "fve_history_collect_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Sběr historických dat (každou hodinu)",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_trigger",
+            "fve_history_collect",
+            "fve_history_store",
+            "fve_history_debug"
+        ],
+        "x": 4,
+        "y": 19,
+        "w": 872,
+        "h": 82
+    },
+    {
+        "id": "fve_history_predict_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Predikce spotřeby",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_predict_in",
+            "fve_history_predict_calc",
+            "fve_history_predict_out"
+        ],
+        "x": 24,
+        "y": 119,
+        "w": 622,
+        "h": 82
+    },
+    {
+        "id": "fve_history_analyze_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Analýza vzorců spotřeby",
+        "style": {
+            "fill": "#f3e8d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_analyze_trigger",
+            "fve_history_analyze_calc",
+            "fve_history_analyze_save"
+        ],
+        "x": 4,
+        "y": 219,
+        "w": 642,
+        "h": 82
+    },
+    {
+        "id": "fve_history_export_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Export/Import historie",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_export_trigger",
+            "fve_history_export_func",
+            "fve_history_export_file"
+        ],
+        "x": 4,
+        "y": 319,
+        "w": 602,
+        "h": 82
+    },
+    {
+        "id": "fve_history_trigger",
+        "type": "inject",
+        "z": "fve_history_tab",
+        "g": "fve_history_collect_group",
+        "name": "Každou hodinu",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "3600",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "60",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 60,
+        "wires": [
+            [
+                "fve_history_collect"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_collect",
+        "type": "function",
+        "z": "fve_history_tab",
+        "g": "fve_history_collect_group",
+        "name": "Sbírka aktuálních dat",
+        "func": "// Sbírka aktuálních dat pro historii\nconst status = global.get(\"fve_status\") || {};\nconst config = global.get(\"fve_config\") || {};\nconst currentPrice = global.get(\"fve_current_price\") || {};\nconst currentMode = global.get(\"fve_current_mode\") || \"normal\";\n\nconst now = new Date();\nconst hour = now.getHours();\nconst dayOfWeek = now.getDay(); // 0 = neděle, 1-6 = po-so\nconst isWeekend = dayOfWeek === 0 || dayOfWeek === 6;\nconst month = now.getMonth() + 1;\n\n// Získat aktuální hodnoty z HA (budou doplněny v dalším nodu)\nmsg.historyData = {\n    timestamp: now.toISOString(),\n    hour: hour,\n    dayOfWeek: dayOfWeek,\n    isWeekend: isWeekend,\n    month: month,\n    \n    // Tyto hodnoty budou doplněny z HA\n    soc: status.battery_soc || 0,\n    priceLevel: status.price_level || 5,\n    priceBuy: currentPrice.buy || 0,\n    priceSell: currentPrice.sell || 0,\n    mode: currentMode\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 60,
+        "wires": [
+            [
+                "fve_history_store"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_store",
+        "type": "function",
+        "z": "fve_history_tab",
+        "g": "fve_history_collect_group",
+        "name": "Uložit do historie",
+        "func": "// Uložení dat do historie (flow context)\nconst data = msg.historyData;\nconst hour = data.hour;\nconst dayOfWeek = data.dayOfWeek;\nconst isWeekend = data.isWeekend;\n\n// Načíst existující historii\nlet history = flow.get(\"consumption_history\") || {};\n\n// Struktura historie:\n// history[hour][dayType] = { count, avgConsumption, avgProduction, avgSoc }\n// dayType: \"weekday\" nebo \"weekend\"\n\nconst dayType = isWeekend ? \"weekend\" : \"weekday\";\n\nif (!history[hour]) {\n    history[hour] = {};\n}\n\nif (!history[hour][dayType]) {\n    history[hour][dayType] = {\n        count: 0,\n        totalSoc: 0,\n        avgSoc: 50,\n        samples: []\n    };\n}\n\nconst entry = history[hour][dayType];\n\n// Přidat nový vzorek\nentry.count++;\nentry.totalSoc += data.soc;\nentry.avgSoc = Math.round(entry.totalSoc / entry.count);\n\n// Uložit posledních 30 vzorků pro analýzu\nentry.samples.push({\n    timestamp: data.timestamp,\n    soc: data.soc,\n    priceLevel: data.priceLevel,\n    mode: data.mode\n});\n\n// Omezit na posledních 30 vzorků\nif (entry.samples.length > 30) {\n    entry.samples.shift();\n}\n\n// Uložit aktualizovanou historii\nflow.set(\"consumption_history\", history);\n\nmsg.payload = {\n    hour: hour,\n    dayType: dayType,\n    entry: entry,\n    message: `Historie aktualizována pro ${hour}:00 (${dayType})`\n};\n\nnode.status({fill:\"green\", shape:\"dot\", text:`${hour}:00 | ${dayType} | count: ${entry.count}`});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 60,
+        "wires": [
+            [
+                "fve_history_debug"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_debug",
+        "type": "debug",
+        "z": "fve_history_tab",
+        "g": "fve_history_collect_group",
+        "name": "History Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "fve_history_predict_in",
+        "type": "link in",
+        "z": "fve_history_tab",
+        "g": "fve_history_predict_group",
+        "name": "← Predikce request",
+        "links": [],
+        "x": 65,
+        "y": 160,
+        "wires": [
+            [
+                "fve_history_predict_calc"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_predict_calc",
+        "type": "function",
+        "z": "fve_history_tab",
+        "g": "fve_history_predict_group",
+        "name": "Výpočet predikce",
+        "func": "// Výpočet predikce spotřeby na základě historie\nconst history = flow.get(\"consumption_history\") || {};\n\nconst now = new Date();\nconst currentHour = now.getHours();\nconst dayOfWeek = now.getDay();\nconst isWeekend = dayOfWeek === 0 || dayOfWeek === 6;\nconst dayType = isWeekend ? \"weekend\" : \"weekday\";\n\nconst horizont = 12; // hodin dopředu\nconst predictions = [];\n\nfor (let i = 0; i < horizont; i++) {\n    const predictHour = (currentHour + i) % 24;\n    const predictDayType = dayType; // Zjednodušení - použít aktuální typ dne\n    \n    let prediction = {\n        hour: predictHour,\n        offset: i,\n        avgSoc: 50, // výchozí hodnota\n        confidence: \"low\",\n        sampleCount: 0\n    };\n    \n    if (history[predictHour] && history[predictHour][predictDayType]) {\n        const entry = history[predictHour][predictDayType];\n        prediction.avgSoc = entry.avgSoc;\n        prediction.sampleCount = entry.count;\n        \n        // Určit spolehlivost predikce\n        if (entry.count >= 14) {\n            prediction.confidence = \"high\";\n        } else if (entry.count >= 7) {\n            prediction.confidence = \"medium\";\n        } else {\n            prediction.confidence = \"low\";\n        }\n    }\n    \n    predictions.push(prediction);\n}\n\nmsg.payload = {\n    currentHour: currentHour,\n    dayType: dayType,\n    predictions: predictions,\n    generatedAt: now.toISOString()\n};\n\n// Uložit predikce do global kontextu\nglobal.set(\"fve_consumption_predictions\", predictions);\n\nnode.status({fill:\"blue\", shape:\"dot\", text:`Predikce pro ${horizont}h`});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 160,
+        "wires": [
+            [
+                "fve_history_predict_out"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_predict_out",
+        "type": "debug",
+        "z": "fve_history_tab",
+        "g": "fve_history_predict_group",
+        "name": "Prediction Output",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fve_history_analyze_trigger",
+        "type": "inject",
+        "z": "fve_history_tab",
+        "g": "fve_history_analyze_group",
+        "name": "Denně v 00:05",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "5 0 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 260,
+        "wires": [
+            [
+                "fve_history_analyze_calc"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_analyze_calc",
+        "type": "function",
+        "z": "fve_history_tab",
+        "g": "fve_history_analyze_group",
+        "name": "Analýza vzorců",
+        "func": "// Analýza vzorců spotřeby pro optimalizaci\nconst history = flow.get(\"consumption_history\") || {};\n\nconst analysis = {\n    weekday: {\n        peakHours: [],      // hodiny s nejvyšší spotřebou\n        lowHours: [],       // hodiny s nejnižší spotřebou\n        avgPattern: {}      // průměrný vzorec\n    },\n    weekend: {\n        peakHours: [],\n        lowHours: [],\n        avgPattern: {}\n    },\n    recommendations: []\n};\n\n// Analyzovat vzorce pro každý typ dne\nfor (const dayType of [\"weekday\", \"weekend\"]) {\n    const hourlyData = [];\n    \n    for (let hour = 0; hour < 24; hour++) {\n        if (history[hour] && history[hour][dayType]) {\n            const entry = history[hour][dayType];\n            hourlyData.push({\n                hour: hour,\n                avgSoc: entry.avgSoc,\n                count: entry.count\n            });\n            analysis[dayType].avgPattern[hour] = entry.avgSoc;\n        }\n    }\n    \n    // Seřadit podle SOC (nižší SOC = vyšší spotřeba)\n    const sorted = [...hourlyData].sort((a, b) => a.avgSoc - b.avgSoc);\n    \n    // Peak hodiny (nejnižší SOC = nejvyšší spotřeba)\n    analysis[dayType].peakHours = sorted.slice(0, 3).map(h => h.hour);\n    \n    // Low hodiny (nejvyšší SOC = nejnižší spotřeba)\n    analysis[dayType].lowHours = sorted.slice(-3).map(h => h.hour);\n}\n\n// Generovat doporučení\nif (analysis.weekday.peakHours.length > 0) {\n    const peakStr = analysis.weekday.peakHours.join(\", \");\n    analysis.recommendations.push(`Špičkové hodiny (pracovní dny): ${peakStr}:00 - zvážit nabíjení baterie předem`);\n}\n\nif (analysis.weekday.lowHours.length > 0) {\n    const lowStr = analysis.weekday.lowHours.join(\", \");\n    analysis.recommendations.push(`Nízká spotřeba (pracovní dny): ${lowStr}:00 - ideální pro nabíjení ze sítě`);\n}\n\n// Uložit analýzu\nflow.set(\"consumption_analysis\", analysis);\nglobal.set(\"fve_consumption_analysis\", analysis);\n\nmsg.payload = analysis;\n\nnode.status({fill:\"green\", shape:\"dot\", text:`Analýza dokončena | ${analysis.recommendations.length} doporučení`});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 260,
+        "wires": [
+            [
+                "fve_history_analyze_save"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_analyze_save",
+        "type": "debug",
+        "z": "fve_history_tab",
+        "g": "fve_history_analyze_group",
+        "name": "Analysis Output",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "fve_history_export_trigger",
+        "type": "inject",
+        "z": "fve_history_tab",
+        "g": "fve_history_export_group",
+        "name": "Export historie",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "export",
+        "payloadType": "str",
+        "x": 120,
+        "y": 360,
+        "wires": [
+            [
+                "fve_history_export_func"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_export_func",
+        "type": "function",
+        "z": "fve_history_tab",
+        "g": "fve_history_export_group",
+        "name": "Připrav export",
+        "func": "const history = flow.get(\"consumption_history\") || {};\nconst analysis = flow.get(\"consumption_analysis\") || {};\n\nmsg.payload = JSON.stringify({\n    exportedAt: new Date().toISOString(),\n    history: history,\n    analysis: analysis\n}, null, 2);\n\nmsg.filename = \"fve_history_export.json\";\n\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Export připraven\"});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 360,
+        "wires": [
+            [
+                "fve_history_export_file"
+            ]
+        ]
+    },
+    {
+        "id": "fve_history_export_file",
+        "type": "debug",
+        "z": "fve_history_tab",
+        "g": "fve_history_export_group",
+        "name": "Export Data",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 490,
+        "y": 360,
+        "wires": []
+    }
+]

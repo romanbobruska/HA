@@ -1,0 +1,1044 @@
+[
+    {
+        "id": "a86ad952ad7756aa",
+        "type": "tab",
+        "label": "Automatizuj nabíjení auta ze sítě",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8002c1778266b948",
+        "type": "group",
+        "z": "a86ad952ad7756aa",
+        "name": "Cyklus nabíjení",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true,
+            "label-position": "n",
+            "color": "#3f3f3f"
+        },
+        "nodes": [
+            "49fdcac28d31c133",
+            "1f5e371852712ac6",
+            "0360f471b476ef16",
+            "ec6bef21ab14caa8",
+            "d31a8b64172a3eab",
+            "a9e5aa5fbd19b5c0",
+            "8518fd99f86a1202",
+            "feec8727ed6c0ea4"
+        ],
+        "x": 14,
+        "y": 479,
+        "w": 912,
+        "h": 282
+    },
+    {
+        "id": "0f16dca17f84783e",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "3. nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "3",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 500,
+        "y": 198,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "49fdcac28d31c133",
+        "type": "function",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Vypočítej max amperaci",
+        "func": "\nlet rozdil_wattu = global.get(\"max_spotreba_sit\")  - \n                    msg.payload_spotreba\nlet max_amper = Math.floor((rozdil_wattu \n                            / 230 / 3) + msg.payload_charger)\n\nif (max_amper > 16) {\n    msg.payload = 16\n} else if (max_amper < 6) {\n    msg.payload = 0\n} else {\n    msg.payload = max_amper\n}\n    \nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 600,
+        "wires": [
+            [
+                "d31a8b64172a3eab"
+            ]
+        ]
+    },
+    {
+        "id": "1f5e371852712ac6",
+        "type": "api-call-service",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Nastav amperaci na chargeru",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "select.select_option",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "select.wallboxu_garaz_amperace",
+            "select.wallbox_venek_amperace"
+        ],
+        "labelId": [],
+        "data": "{\"option\":msg.payload & 'A'}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "select",
+        "service": "select_option",
+        "x": 770,
+        "y": 720,
+        "wires": [
+            [
+                "0360f471b476ef16"
+            ]
+        ]
+    },
+    {
+        "id": "7612c188de813d7c",
+        "type": "api-call-service",
+        "z": "a86ad952ad7756aa",
+        "name": "Vypni nabíjení",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.wallbox_garaz_start_stop"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 1000,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d3c7e952ee2fc2a4",
+        "type": "api-call-service",
+        "z": "a86ad952ad7756aa",
+        "name": "Spusť nabíjení auta manuálně",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "automation.trigger",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "automation.spust_nabijeni_auta_manualne"
+        ],
+        "labelId": [],
+        "data": "run",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "automation",
+        "service": "trigger",
+        "x": 990,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0360f471b476ef16",
+        "type": "delay",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 160,
+        "y": 720,
+        "wires": [
+            [
+                "a9e5aa5fbd19b5c0"
+            ]
+        ]
+    },
+    {
+        "id": "ec6bef21ab14caa8",
+        "type": "server-state-changed",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Nastavuj amperaci?",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.nastavuj_amperaci_chargeru_grid"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "on",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 130,
+        "y": 520,
+        "wires": [
+            [
+                "a9e5aa5fbd19b5c0"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e2fbe35de1091fa3",
+        "type": "switch",
+        "z": "a86ad952ad7756aa",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 6,
+        "x": 270,
+        "y": 240,
+        "wires": [
+            [
+                "22e344a6bf0c5b70"
+            ],
+            [
+                "d59cea4bd7885a65"
+            ],
+            [
+                "0f16dca17f84783e"
+            ],
+            [
+                "b19eb944cb946785"
+            ],
+            [
+                "2ab649c94e2517e5"
+            ],
+            [
+                "5ddb5d94494bcb4d"
+            ]
+        ]
+    },
+    {
+        "id": "0e9ad909cb38430e",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "Nabíjet hodin?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "num",
+        "halt_if_compare": "is",
+        "entity_id": "input_select.nabijet_auto_hodin_v_bloku",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "e2fbe35de1091fa3"
+            ]
+        ]
+    },
+    {
+        "id": "d59cea4bd7885a65",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "2. nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "2",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 500,
+        "y": 138,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "b19eb944cb946785",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "4. nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "4",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 500,
+        "y": 258,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "2ab649c94e2517e5",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "5. nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "5",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 500,
+        "y": 318,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "d26f96e53531f384",
+        "type": "api-call-service",
+        "z": "a86ad952ad7756aa",
+        "name": "Nastavuj amperaci OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_grid"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 990,
+        "y": 140,
+        "wires": [
+            [
+                "7612c188de813d7c"
+            ]
+        ]
+    },
+    {
+        "id": "707a53451c626ff1",
+        "type": "api-call-service",
+        "z": "a86ad952ad7756aa",
+        "name": "Nastavuj amperaci ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_grid"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_on",
+        "x": 980,
+        "y": 300,
+        "wires": [
+            [
+                "d3c7e952ee2fc2a4"
+            ]
+        ]
+    },
+    {
+        "id": "d31a8b64172a3eab",
+        "type": "switch",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Amperace < 6?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "6",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 820,
+        "y": 660,
+        "wires": [
+            [
+                "d26f96e53531f384"
+            ],
+            [
+                "1f5e371852712ac6"
+            ]
+        ]
+    },
+    {
+        "id": "542205d3587ae7f0",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "Chci rychle nabít auto?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.chci_rychle_nabit_auto",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "707a53451c626ff1"
+            ],
+            [
+                "0e9ad909cb38430e"
+            ]
+        ]
+    },
+    {
+        "id": "a9e5aa5fbd19b5c0",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Nastavuj amperaci?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.nastavuj_amperaci_chargeru_grid",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 240,
+        "y": 600,
+        "wires": [
+            [
+                "8518fd99f86a1202"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4c0ccbe3229bb4f8",
+        "type": "link in",
+        "z": "a86ad952ad7756aa",
+        "name": "IN nabíjení ze sítě",
+        "links": [
+            "f95d3971ad3d46f7"
+        ],
+        "x": 55,
+        "y": 40,
+        "wires": [
+            [
+                "542205d3587ae7f0"
+            ]
+        ]
+    },
+    {
+        "id": "5ddb5d94494bcb4d",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "6. nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "6",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 500,
+        "y": 380,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "22e344a6bf0c5b70",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "nejlevnější hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "1",
+        "halt_if_type": "num",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 490,
+        "y": 80,
+        "wires": [
+            [
+                "96f43cae137cc3b1"
+            ],
+            [
+                "b542785e15e32db7"
+            ]
+        ]
+    },
+    {
+        "id": "8518fd99f86a1202",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Spotřeba ze sítě",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.spotreba_ze_site",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload_spotreba",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_spotreba",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 440,
+        "y": 600,
+        "wires": [
+            [
+                "feec8727ed6c0ea4"
+            ]
+        ]
+    },
+    {
+        "id": "feec8727ed6c0ea4",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "g": "8002c1778266b948",
+        "name": "Charger",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "number.wallbox_garaz_ameprace_slider",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload_charger",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_charger",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 600,
+        "y": 600,
+        "wires": [
+            [
+                "49fdcac28d31c133"
+            ]
+        ]
+    },
+    {
+        "id": "b542785e15e32db7",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "kWh <= 3 Kč?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "3",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.aktualni_cena_kwh",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 780,
+        "y": 40,
+        "wires": [
+            [
+                "707a53451c626ff1"
+            ],
+            [
+                "d26f96e53531f384"
+            ]
+        ]
+    },
+    {
+        "id": "96f43cae137cc3b1",
+        "type": "api-current-state",
+        "z": "a86ad952ad7756aa",
+        "name": "kWh <= 4.30 Kč?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "4.3",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.aktualni_cena_kwh",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 790,
+        "y": 380,
+        "wires": [
+            [
+                "707a53451c626ff1"
+            ],
+            [
+                "d26f96e53531f384"
+            ]
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "3356624d9b66b9ed",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    }
+]
