@@ -1,7 +1,7 @@
 # sensors:
 # NIBE
 
-- name: "Nibe - Aktuální režim provozu"
+- name: "Nibe - Plánovaný režim provozu"
   unique_id: nibe_status_rezim_provozu
   state: >
     {% set topeni = states('sensor.nibe_stav_topeni') | int(0) == 1 %}
