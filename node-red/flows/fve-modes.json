@@ -471,7 +471,7 @@
         "labelId":  [
 
                     ],
-        "data":  "{\"value\": {{victron.power_set_point}}}",
+        "data":  "{\"value\": 0}",
         "dataType":  "json",
         "mergeContext":  "",
         "mustacheAltTags":  false,
@@ -583,7 +583,7 @@
         "type":  "api-call-service",
         "z":  "bb3654998a6bf514",
         "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule Day = 7",
+        "name":  "Schedule Day = -7 (setrit)",
         "server":  "c7421fe2.cb11c",
         "version":  7,
         "debugenabled":  false,
@@ -603,7 +603,7 @@
         "labelId":  [
 
                     ],
-        "data":  "{\"value\": 7}",
+        "data":  "{\"value\": -7}",
         "dataType":  "json",
         "mergeContext":  "",
         "mustacheAltTags":  false,
