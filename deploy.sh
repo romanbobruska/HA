@@ -10,8 +10,6 @@ set -e
 REPO_DIR="/tmp/HA"
 HA_CONFIG="/config"
 NODERED_DIR="/config/node-red"
-BACKUP_DIR="/config/backup_$(date +%Y%m%d_%H%M%S)"
-
 echo "=========================================="
 echo "  Deploy HA + Node-RED z GitHub repo"
 echo "=========================================="
@@ -23,20 +21,10 @@ if [ ! -d "$REPO_DIR" ]; then
     exit 1
 fi
 
-# --- 2. Záloha stávající konfigurace ---
+# --- 2. Úklid starých záloh ---
 echo ""
-echo "📦 Vytvářím zálohu do $BACKUP_DIR ..."
-mkdir -p "$BACKUP_DIR"
-cp -f "$HA_CONFIG/configuration.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-cp -f "$HA_CONFIG/automations.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-cp -f "$HA_CONFIG/mqtt.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-cp -f "$HA_CONFIG/input_numbers.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-cp -f "$HA_CONFIG/template_sensors.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-cp -f "$HA_CONFIG/template_switches.yaml" "$BACKUP_DIR/" 2>/dev/null || true
-if [ -f "$NODERED_DIR/flows.json" ]; then
-    cp -f "$NODERED_DIR/flows.json" "$BACKUP_DIR/flows.json.bak"
-fi
-echo "   ✅ Záloha vytvořena"
+echo "🧹 Mažu staré zálohy..."
+rm -rf /config/backup_* 2>/dev/null && echo "   ✅ Zálohy smazány" || echo "   ℹ️  Žádné zálohy k smazání"
 
 # --- 3. Kopie HA konfiguračních souborů ---
 echo ""
@@ -161,8 +149,5 @@ echo ""
 echo "=========================================="
 echo "  ✅ Deploy dokončen!"
 echo "=========================================="
-echo ""
-echo "Záloha:     $BACKUP_DIR"
-echo "Rollback:   cp $BACKUP_DIR/* $HA_CONFIG/"
-echo "            cp $BACKUP_DIR/flows.json.bak $NODERED_DIR/flows.json"
+echo "Rollback:   git repo = https://github.com/romanbobruska/HA.git"
 echo ""
