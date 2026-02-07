@@ -391,7 +391,7 @@
         "name":  "→ Normal",
         "mode":  "link",
         "links":  [
-                      "950678946344326f"
+                      "8b55cfc5181b9eb7"
                   ],
         "x":  785,
         "y":  280,
@@ -407,7 +407,7 @@
         "name":  "→ Šetřit",
         "mode":  "link",
         "links":  [
-                      "b3b1dc8c491639d5"
+                      "ec611f6aba7d5c59"
                   ],
         "x":  785,
         "y":  320,
@@ -423,7 +423,7 @@
         "name":  "→ Nabíjet",
         "mode":  "link",
         "links":  [
-                      "bf8aa5aa63374c57"
+                      "1d98a0541716ce58"
                   ],
         "x":  785,
         "y":  360,
@@ -439,7 +439,7 @@
         "name":  "→ Prodávat",
         "mode":  "link",
         "links":  [
-                      "0d998be3cd1577ea"
+                      "179ed150020d459c"
                   ],
         "x":  785,
         "y":  400,
@@ -455,7 +455,7 @@
         "name":  "→ Zákaz přetoků",
         "mode":  "link",
         "links":  [
-                      "4d086710157d96b9"
+                      "c682224043634fcd"
                   ],
         "x":  785,
         "y":  440,
