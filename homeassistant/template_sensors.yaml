@@ -1,32 +1,82 @@
 # sensors:
 # NIBE
+
+- name: "Nibe - Aktuální režim provozu"
+  unique_id: nibe_status_rezim_provozu
+  state: >
+    {% set topeni = states('sensor.nibe_stav_topeni') | int(0) == 1 %}
+    {% set chlazeni = states('sensor.nibe_stav_chlazeni') | int(0) == 1 %}
+    {% set voda = states('sensor.nibe_stav_tuv') | int(0) == 1 %}
+
+    {% set ns = namespace(res=[]) %}
+    {% if topeni %}{% set ns.res = ns.res + ["Vytápění"] %}{% endif %}
+    {% if chlazeni %}{% set ns.res = ns.res + ["Chlazení"] %}{% endif %}
+    {% if voda %}{% set ns.res = ns.res + ["Ohřev vody"] %}{% endif %}
+
+    {% if ns.res | length > 0 %}
+      {{ ns.res | join(" + ") }}
+    {% else %}
+      Nečinnost (Standby)
+    {% endif %}
+  icon: >
+    {% set topeni = states('sensor.nibe_stav_topeni') | int(0) == 1 %}
+    {% set chlazeni = states('sensor.nibe_stav_chlazeni') | int(0) == 1 %}
+    {% set voda = states('sensor.nibe_stav_tuv') | int(0) == 1 %}
+
+    {% if topeni and voda %} mdi:home-thermometer-outline
+    {% elif chlazeni and voda %} mdi:snowflake-thermometer
+    {% elif topeni %} mdi:radiator
+    {% elif chlazeni %} mdi:snowflake
+    {% elif voda %} mdi:water-boiler
+    {% else %} mdi:power-sleep
+    {% endif %}
+  attributes:
+    posledni_zmena: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+
 - name: "Nibe - Aktuální reálný stav"
   unique_id: nibe_realny_stav
   icon: >
-    {% if states('sensor.nibe_stav_ep14')|int == 60 or states('sensor.nibe_stav_ep15')|int == 60 %}
+    {# Cpr Status 43434/43435: 0=Off, 1=On #}
+    {% set cpr14 = states('sensor.nibe_kompresor_ep14_zapnuty') | int(0) %}
+    {% set cpr15 = states('sensor.nibe_kompresor_ep15_zapnuty') | int(0) %}
+    {% if cpr14 == 1 or cpr15 == 1 %}
       mdi:heat-pump
     {% else %}
       mdi:pause-circle-outline
     {% endif %}
   state: >
-    {% set ep14 = states('sensor.nibe_stav_ep14') | int(0) %}
-    {% set ep15 = states('sensor.nibe_stav_ep15') | int(0) %}
-    {% set priorita = states('sensor.nibe_priorita_provozu_real') | int(0) %}
+    {# Cpr Status 43434/43435: 0=Off, 1=On #}
+    {% set cpr14 = states('sensor.nibe_kompresor_ep14_zapnuty') | int(0) %}
+    {% set cpr15 = states('sensor.nibe_kompresor_ep15_zapnuty') | int(0) %}
+    {# Prio 43086: 10=Off, 20=HW, 30=Heat, 40=Pool, 50=Transfer, 60=Cooling #}
+    {% set prio = states('sensor.nibe_priorita_provozu_real') | int(0) %}
+    {# Compressor State 43426/43427: 20=Stopped, 40=Starting, 60=Running, 100=Stopping #}
+    {% set state14 = states('sensor.nibe_stav_ep14') | int(0) %}
+    {% set state15 = states('sensor.nibe_stav_ep15') | int(0) %}
 
-    {# Pokud alespoň jeden kompresor vykazuje stav 60 (běh) #}
-    {% if ep14 == 60 or ep15 == 60 %}
-      {% if priorita == 30 %}
+    {% if cpr14 == 1 or cpr15 == 1 %}
+      {% if prio == 30 %}
         PRACUJE: Vytápění domu
-      {% elif priorita == 20 %}
+      {% elif prio == 20 %}
         PRACUJE: Ohřev vody (TUV)
-      {% elif priorita == 40 %}
+      {% elif prio == 60 %}
+        PRACUJE: Chlazení
+      {% elif prio == 40 %}
         PRACUJE: Ohřev bazénu
+      {% elif prio == 50 %}
+        PRACUJE: Přenos tepla
       {% else %}
-        PRACUJE: Jiný režim (kód {{ priorita }})
+        PRACUJE: Aktivní (Priorita {{ prio }})
       {% endif %}
     {% else %}
       Klidový stav (kompresory stojí)
     {% endif %}
+  attributes:
+    cpr14_on: "{{ states('sensor.nibe_kompresor_ep14_zapnuty') }}"
+    cpr15_on: "{{ states('sensor.nibe_kompresor_ep15_zapnuty') }}"
+    ep14_state: "{{ states('sensor.nibe_stav_ep14') }}"
+    ep15_state: "{{ states('sensor.nibe_stav_ep15') }}"
+    priorita: "{{ states('sensor.nibe_priorita_provozu_real') }}"
 
 #FVE
 - name: "Spotřeba dnes ze sítě"

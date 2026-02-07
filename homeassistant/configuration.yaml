@@ -15,14 +15,11 @@ template:
   - binary_sensor:
       - name: "Nibe - Kompresory aktivní (binární)"
         unique_id: nibe_kompresory_aktivni_binarni
-        # device_class: running  <-- Můžete přidat pro lepší ikony v HA
         state: >
-          {% set ep14_stav = states('sensor.nibe_stav_modulu_ep14') | int(0) %}
-          {% set ep15_stav = states('sensor.nibe_stav_modulu_ep15') | int(0) %}
-
-          {# Pokud je hodnota 60 na kterémkoliv z modulů, je stav ON #}
-          {{ ep14_stav == 60 or ep15_stav == 60 }}
-
+          {# Cpr Status registry 43434/43435: 0=Off, 1=On #}
+          {% set ep14 = states('sensor.nibe_kompresor_ep14_zapnuty') | int(0) %}
+          {% set ep15 = states('sensor.nibe_kompresor_ep15_zapnuty') | int(0) %}
+          {{ ep14 == 1 or ep15 == 1 }}
         icon: >
           {% if is_state('binary_sensor.nibe_kompresory_aktivni_binarni', 'on') %}
             mdi:engine

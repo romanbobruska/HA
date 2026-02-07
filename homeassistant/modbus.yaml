@@ -1,0 +1,86 @@
+- name: "nibe"
+  type: tcp
+  host: 192.168.0.223
+  port: 502
+  delay: 3
+  timeout: 30
+  message_wait_milliseconds: 1000
+  retries: 5
+  retry_on_empty: true
+  close_comm_on_error: false
+
+  sensors:
+    - name: "Nibe - Venkovní teplota"
+      address: 40004
+      slave: 1
+      input_type: holding
+      data_type: int16
+      scale: 0.1
+      scan_interval: 120
+
+    - name: "Nibe - Stav topení"
+      address: 47371
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 5
+
+    - name: "Nibe - Stav chlazení"
+      address: 47372
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 5
+
+    - name: "Nibe - Stav TUV"
+      address: 47387
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 5
+
+    - name: "Nibe - Provozní režim"
+      address: 47137
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 120
+
+    # === STAV KOMPRESORŮ (skutečný provoz) ===
+    # Cpr Status - jednoduchý on/off (0=Off, 1=On)
+    - name: "Nibe - Kompresor EP14 zapnuty"
+      address: 43435
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 10
+
+    - name: "Nibe - Kompresor EP15 zapnuty"
+      address: 43434
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 10
+
+    # Compressor State - detailní (20=Stopped, 40=Starting, 60=Running, 100=Stopping)
+    - name: "Nibe - Stav EP14"
+      address: 43427
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 10
+
+    - name: "Nibe - Stav EP15"
+      address: 43426
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 10
+
+    # Priorita provozu (10=Off, 20=Hot Water, 30=Heat, 40=Pool, 50=Transfer, 60=Cooling)
+    - name: "Nibe - Priorita provozu real"
+      address: 43086
+      slave: 1
+      input_type: holding
+      data_type: uint16
+      scan_interval: 10
