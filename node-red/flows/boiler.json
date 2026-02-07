@@ -1,0 +1,822 @@
+[
+    {
+        "id": "0a2df88897520187",
+        "type": "tab",
+        "label": "Automatizuj boiler",
+        "disabled": false,
+        "info": "Optimalizované flow pro řízení bojleru s hysterezí.\n\nKONFIGURACE: Klikni na node '⚙️ Konfigurace' a spusť ho pro nastavení výchozích hodnot.\nPro změnu parametrů uprav hodnoty v tom nodu a znovu ho spusť.\n\nPriorita rozhodování:\n1. Nejsme doma → MIN°C\n2. Rychle teplá voda → MAX°C\n3. 17:00-19:30 a voda < 58°C → VYSOKA°C\n4. Solární přebytek → MAX/VYSOKA°C\n5. Levná elektřina (ne v letním režimu) → STREDNI°C\n6. Jinak → MIN°C",
+        "env": []
+    },
+    {
+        "id": "3cf7f93b204c1246",
+        "type": "group",
+        "z": "0a2df88897520187",
+        "name": "Spuštění",
+        "style": {
+            "stroke": "#92d04f",
+            "fill": "#92d04f",
+            "label": true,
+            "color": "#000000",
+            "label-position": "n"
+        },
+        "nodes": [
+            "39a25019f11040ab",
+            "d7197dbac0af5dec"
+        ],
+        "x": 5,
+        "y": 5,
+        "w": 272,
+        "h": 142
+    },
+    {
+        "id": "4716d6957365e423",
+        "type": "group",
+        "z": "0a2df88897520187",
+        "name": "Načtení vstupních parametrů",
+        "style": {
+            "fill": "#ffff7f",
+            "label": true,
+            "color": "#000000",
+            "label-position": "n"
+        },
+        "nodes": [
+            "d8271d02d0bbbfd8",
+            "6928b9ce6f9095d6",
+            "205418b685f04054",
+            "9bc05f8969dbf039",
+            "bd83ae614ae3aceb",
+            "9ae533d8f63f25b9",
+            "7adb3cd3d88ce186",
+            "e52ed86bbf0b492e",
+            "8d4c88c33909fdd1",
+            "d7e4abc357eeac72",
+            "23c46fbe21db7775",
+            "3b8dc5297620970b",
+            "bb69a154a4c0febb"
+        ],
+        "x": 54,
+        "y": 179,
+        "w": 972,
+        "h": 322
+    },
+    {
+        "id": "09797f9996ff875a",
+        "type": "group",
+        "z": "0a2df88897520187",
+        "name": "Rozdhodnutí a nastavení boileru",
+        "style": {
+            "fill": "#ffC000",
+            "label": true,
+            "color": "#000000",
+            "label-position": "s"
+        },
+        "nodes": [
+            "f8bbbf2eb77de391",
+            "8d401c2a5bd5d0ef",
+            "3472b1985ec023f5"
+        ],
+        "x": 234,
+        "y": 558,
+        "w": 612,
+        "h": 150
+    },
+    {
+        "id": "7d6c1cd0300cfd29",
+        "type": "group",
+        "z": "0a2df88897520187",
+        "name": "Inicializace parametrů ve flow",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true,
+            "color": "#000000",
+            "label-position": "n"
+        },
+        "nodes": [
+            "6d9185dedec4cb65",
+            "7efc2560d20a0a05",
+            "6fa5674faf1afa4f"
+        ],
+        "x": 294,
+        "y": 39,
+        "w": 772,
+        "h": 82
+    },
+    {
+        "id": "6d9185dedec4cb65",
+        "type": "inject",
+        "z": "0a2df88897520187",
+        "g": "7d6c1cd0300cfd29",
+        "name": "⚙️ Konfigurace (spusť po deployi)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 480,
+        "y": 80,
+        "wires": [
+            [
+                "7efc2560d20a0a05"
+            ]
+        ]
+    },
+    {
+        "id": "7efc2560d20a0a05",
+        "type": "function",
+        "z": "0a2df88897520187",
+        "g": "7d6c1cd0300cfd29",
+        "name": "📝 Nastav parametry",
+        "func": "// ╔════════════════════════════════════════════════════════════╗\n// ║  KONFIGUROVATELNÉ PARAMETRY - UPRAV HODNOTY NÍŽE           ║\n// ╚════════════════════════════════════════════════════════════╝\n\nconst CONFIG = {\n    // === TEPLOTY (°C) ===\n    TEPLOTA_MAX: 69,        // Maximální teplota bojleru\n    TEPLOTA_VYSOKA: 60,     // Vysoká teplota (běžný ohřev)\n    TEPLOTA_STREDNI: 58,    // Střední teplota (levná elektřina)\n    TEPLOTA_MIN: 20,        // Minimální teplota (vypnuto)\n    \n    // === HYSTEREZE A SPOTŘEBA ===\n    HYSTEREZE: 500,         // Hystereze v W (zabraňuje oscilaci)\n    SPOTREBA_BOJLER: 2500,  // Spotřeba bojleru v W\n    \n    // === CENOVÉ PRAHY ===\n    PRICE_LEVEL_LEVNY: 6,   // Level ceny (1-24), kdy je proud levný\n    CENA_KWH_LEVNA: 2.6,    // Cena v Kč/kWh, kdy je proud levný\n    \n    // === FORECAST ===\n    FORECAST_THRESHOLD: 35000  // Práh forecastu v Wh (35kWh)\n};\n\n// ╔════════════════════════════════════════════════════════════╗\n// ║  ULOŽENÍ DO FLOW PROMĚNNÝCH - NEMĚNIT                      ║\n// ╚════════════════════════════════════════════════════════════╝\n\nfor (const [key, value] of Object.entries(CONFIG)) {\n    flow.set(key, value);\n}\n\nmsg.payload = {\n    status: \"Konfigurace uložena\",\n    config: CONFIG\n};\n\nnode.status({fill: \"green\", shape: \"dot\", text: \"Konfigurace uložena\"});\n//node.warn(\"Bojler konfigurace uložena: \" + JSON.stringify(CONFIG));\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 80,
+        "wires": [
+            [
+                "6fa5674faf1afa4f"
+            ]
+        ]
+    },
+    {
+        "id": "6fa5674faf1afa4f",
+        "type": "debug",
+        "z": "0a2df88897520187",
+        "g": "7d6c1cd0300cfd29",
+        "name": "📋 Konfigurace",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 940,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "d7197dbac0af5dec",
+        "type": "inject",
+        "z": "0a2df88897520187",
+        "g": "3cf7f93b204c1246",
+        "name": "⏱️ Každé 2 minuty",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "120",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 151,
+        "y": 106,
+        "wires": [
+            [
+                "d8271d02d0bbbfd8"
+            ]
+        ]
+    },
+    {
+        "id": "d8271d02d0bbbfd8",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "📊 Jsme doma?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.jsme_doma",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "jsme_doma",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "6928b9ce6f9095d6"
+            ]
+        ]
+    },
+    {
+        "id": "6928b9ce6f9095d6",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🚿 Rychle teplá voda?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.chci_rychle_teplou_vodu",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "rychle_voda",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 420,
+        "y": 220,
+        "wires": [
+            [
+                "205418b685f04054"
+            ]
+        ]
+    },
+    {
+        "id": "205418b685f04054",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🌡️ Teplota bojleru",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53_temperature",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "teplota_bojleru",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 650,
+        "y": 220,
+        "wires": [
+            [
+                "9bc05f8969dbf039"
+            ]
+        ]
+    },
+    {
+        "id": "9bc05f8969dbf039",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🔌 Spotřeba bojleru",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53_power",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "spotreba_bojleru",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 180,
+        "y": 300,
+        "wires": [
+            [
+                "bd83ae614ae3aceb"
+            ]
+        ]
+    },
+    {
+        "id": "bd83ae614ae3aceb",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🔋 Stav baterie",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery_percent",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 400,
+        "y": 300,
+        "wires": [
+            [
+                "9ae533d8f63f25b9"
+            ]
+        ]
+    },
+    {
+        "id": "9ae533d8f63f25b9",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "☀️ Rozdíl výroby a spotřeby",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "rozdil_vyroby",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 680,
+        "y": 300,
+        "wires": [
+            [
+                "7adb3cd3d88ce186"
+            ]
+        ]
+    },
+    {
+        "id": "7adb3cd3d88ce186",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🌞 Letní režim?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.letni_rezim",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "letni_rezim",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 160,
+        "y": 380,
+        "wires": [
+            [
+                "e52ed86bbf0b492e"
+            ]
+        ]
+    },
+    {
+        "id": "e52ed86bbf0b492e",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🚗 Auto má hlad?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.auto_ma_hlad",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "auto_hlad",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 410,
+        "y": 380,
+        "wires": [
+            [
+                "8d4c88c33909fdd1"
+            ]
+        ]
+    },
+    {
+        "id": "8d4c88c33909fdd1",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🔌 Automatizace nabíjení auta",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.automatizovat_nabijeni_auta",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "auto_automatizace",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 690,
+        "y": 380,
+        "wires": [
+            [
+                "d7e4abc357eeac72"
+            ]
+        ]
+    },
+    {
+        "id": "d7e4abc357eeac72",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "💰 Level ceny",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.levelcheapesthourbuy",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "price_level",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 160,
+        "y": 460,
+        "wires": [
+            [
+                "23c46fbe21db7775"
+            ]
+        ]
+    },
+    {
+        "id": "23c46fbe21db7775",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "💵 Cena kWh",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.aktualni_cena_kwh",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "cena_kwh",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 400,
+        "y": 460,
+        "wires": [
+            [
+                "3b8dc5297620970b"
+            ]
+        ]
+    },
+    {
+        "id": "3b8dc5297620970b",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "⚡ Celková spotřeba",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.celkova_spotreba",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "celkova_spotreba",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 660,
+        "y": 460,
+        "wires": [
+            [
+                "bb69a154a4c0febb"
+            ]
+        ]
+    },
+    {
+        "id": "bb69a154a4c0febb",
+        "type": "api-current-state",
+        "z": "0a2df88897520187",
+        "g": "4716d6957365e423",
+        "name": "🔌 Spotřeba ze sítě",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.spotreba_ze_site",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "spotreba_ze_site",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "none",
+        "entity_location": "data",
+        "override_data": "none",
+        "x": 900,
+        "y": 460,
+        "wires": [
+            [
+                "f8bbbf2eb77de391"
+            ]
+        ]
+    },
+    {
+        "id": "f8bbbf2eb77de391",
+        "type": "function",
+        "z": "0a2df88897520187",
+        "g": "09797f9996ff875a",
+        "name": "🧠 Rozhodovací logika",
+        "func": "// ========== NAČTENÍ KONFIGURACE Z FLOW PROMĚNNÝCH ==========\nconst TEPLOTA_MAX = flow.get(\"TEPLOTA_MAX\") || 69;\nconst TEPLOTA_VYSOKA = flow.get(\"TEPLOTA_VYSOKA\") || 60;\nconst TEPLOTA_STREDNI = flow.get(\"TEPLOTA_STREDNI\") || 55;\nconst TEPLOTA_MIN = flow.get(\"TEPLOTA_MIN\") || 20;\nconst HYSTEREZE = flow.get(\"HYSTEREZE\") || 500;\nconst SPOTREBA_BOJLER = flow.get(\"SPOTREBA_BOJLER\") || 2500;\nconst PRICE_LEVEL_LEVNY = flow.get(\"PRICE_LEVEL_LEVNY\") || 3;\nconst CENA_KWH_LEVNA = flow.get(\"CENA_KWH_LEVNA\") || 2.6;\nconst FORECAST_THRESHOLD = flow.get(\"FORECAST_THRESHOLD\") || 35000;\n\n// ========== NAČTENÍ GLOBÁLNÍCH PROMĚNNÝCH ==========\nconst max_spotreba_sit = global.get(\"max_spotreba_sit\") || 24000;\nconst forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") || 0;\n\n// ========== NAČTENÍ VSTUPNÍCH HODNOT Z MSG ==========\nconst jsme_doma = msg.jsme_doma === \"on\";\nconst rychle_voda = msg.rychle_voda === \"on\";\nconst teplota_bojleru = msg.teplota_bojleru || 0;\nconst spotreba_bojleru_aktualni = msg.spotreba_bojleru || 0;\nconst battery = msg.battery_percent || 0;\nconst rozdil_vyroby = msg.rozdil_vyroby || 0;\nconst letni_rezim = msg.letni_rezim === \"on\";\nconst auto_hlad = msg.auto_hlad === \"on\";\nconst auto_automatizace = msg.auto_automatizace === \"on\";\nconst price_level = msg.price_level || 24;\nconst cena_kwh = msg.cena_kwh || 10;\nconst celkova_spotreba = msg.celkova_spotreba || 0;\nconst spotreba_ze_site = msg.spotreba_ze_site || 0;\n\n// ========== ČASOVÁ KONTROLA ==========\nconst now = new Date();\nconst hodina = now.getHours();\nconst minuty = now.getMinutes();\nconst cas_minuty = hodina * 60 + minuty;\nconst je_povinny_cas = cas_minuty >= 17 * 60 && cas_minuty <= 19 * 60 + 30;\n\n// ========== DETEKCE STAVU BOJLERU ==========\nconst bojler_ohriva = spotreba_bojleru_aktualni > 100;\n\n// ========== KONTROLA LIMITU ODBĚRU ZE SÍTĚ ==========\nconst volna_kapacita_site = max_spotreba_sit - spotreba_ze_site;\nconst muzeme_zapnout_bojler = bojler_ohriva || (volna_kapacita_site >= SPOTREBA_BOJLER);\n\n// ========== PRAHY S HYSTEREZÍ ==========\nconst PRAH_ZAPNUTI_MAX = 4000 + SPOTREBA_BOJLER + HYSTEREZE;\nconst PRAH_VYPNUTI_MAX = 4000;\nconst PRAH_ZAPNUTI_VYSOKA = SPOTREBA_BOJLER + HYSTEREZE;\nconst PRAH_VYPNUTI_VYSOKA = -HYSTEREZE;\n\n// ========== POMOCNÉ FUNKCE ==========\nconst je_levna_elektrina = (price_level <= PRICE_LEVEL_LEVNY) || (cena_kwh <= CENA_KWH_LEVNA);\nconst slunecny_den = forecast_vyroba_dnes > FORECAST_THRESHOLD;\n\nlet cilova_teplota = TEPLOTA_MIN;\nlet duvod = \"\";\n\n// ========== ROZHODOVACÍ LOGIKA ==========\n\n// 1. Nejsme doma - vždy vypnout\nif (!jsme_doma) {\n    cilova_teplota = TEPLOTA_MIN;\n    duvod = \"Nejsme doma\";\n}\n// 2. Rychle teplá voda - override vše\nelse if (rychle_voda) {\n    cilova_teplota = TEPLOTA_MAX;\n    duvod = \"Rychle teplá voda (override)\";\n}\n// 3. Povinný čas 17:00-19:30 a voda je studená\nelse if (je_povinny_cas && teplota_bojleru < 58) {\n    if (muzeme_zapnout_bojler) {\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Povinný ohřev 17:00-19:30\";\n    } else {\n        cilova_teplota = TEPLOTA_MIN;\n        duvod = \"Povinný čas, ale limit sítě\";\n    }\n}\n// 4. Baterie plné (>96%) - využijeme solární přebytek\nelse if (battery > 96) {\n    const prah_max = bojler_ohriva ? PRAH_VYPNUTI_MAX : PRAH_ZAPNUTI_MAX;\n    const prah_vysoka = bojler_ohriva ? PRAH_VYPNUTI_VYSOKA : PRAH_ZAPNUTI_VYSOKA;\n    \n    if (rozdil_vyroby > prah_max) {\n        if (auto_hlad && auto_automatizace) {\n            cilova_teplota = TEPLOTA_VYSOKA;\n            duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW, ale auto nabíjí\";\n        } else {\n            cilova_teplota = TEPLOTA_MAX;\n            duvod = \"Baterie plné + přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW\";\n        }\n    } else if (rozdil_vyroby > prah_vysoka) {\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW pokryje ohřev\";\n    } else if (bojler_ohriva && rozdil_vyroby > -SPOTREBA_BOJLER) {\n        cilova_teplota = flow.get(\"posledni_cilova_teplota\") || TEPLOTA_MIN;\n        duvod = \"Hystereze - udržuji \" + cilova_teplota + \"°C\";\n    } else {\n        if (!letni_rezim && je_levna_elektrina && muzeme_zapnout_bojler) {\n            cilova_teplota = TEPLOTA_STREDNI;\n            duvod = \"Levná elektřina (L\" + price_level + \", \" + cena_kwh + \" Kč)\";\n        } else if (letni_rezim) {\n            cilova_teplota = TEPLOTA_MIN;\n            duvod = \"Letní režim - čekám na slunce\";\n        } else {\n            cilova_teplota = TEPLOTA_MIN;\n            duvod = \"Málo přebytku a drahá elektřina\";\n        }\n    }\n}\n// 5. Baterie nejsou plné\nelse {\n    const prah = bojler_ohriva ? PRAH_VYPNUTI_VYSOKA : PRAH_ZAPNUTI_VYSOKA;\n    \n    if (rozdil_vyroby > prah) {\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW (bat \" + battery + \"%)\";\n    } else if (bojler_ohriva && rozdil_vyroby > -SPOTREBA_BOJLER) {\n        cilova_teplota = flow.get(\"posledni_cilova_teplota\") || TEPLOTA_MIN;\n        duvod = \"Hystereze - udržuji \" + cilova_teplota + \"°C\";\n    } else if (letni_rezim && slunecny_den) {\n        cilova_teplota = TEPLOTA_MIN;\n        duvod = \"Letní režim + forecast \" + Math.round(forecast_vyroba_dnes/1000) + \"kWh\";\n    } else if (!letni_rezim && je_levna_elektrina && muzeme_zapnout_bojler) {\n        cilova_teplota = TEPLOTA_STREDNI;\n        duvod = \"Levná elektřina (L\" + price_level + \", \" + cena_kwh + \" Kč)\";\n    } else {\n        cilova_teplota = TEPLOTA_MIN;\n        if (letni_rezim) {\n            duvod = \"Letní režim - pouze solar\";\n        } else if (!muzeme_zapnout_bojler) {\n            duvod = \"Limit sítě\";\n        } else {\n            duvod = \"Drahá elektřina\";\n        }\n    }\n}\n\n// ========== ULOŽENÍ STAVU ==========\nflow.set(\"posledni_cilova_teplota\", cilova_teplota);\n\n// ========== VÝSTUP ==========\nmsg.payload = {\n    teplota: cilova_teplota,\n    duvod: duvod,\n    config: {\n        TEPLOTA_MAX, TEPLOTA_VYSOKA, TEPLOTA_STREDNI, TEPLOTA_MIN,\n        HYSTEREZE, SPOTREBA_BOJLER, PRICE_LEVEL_LEVNY, CENA_KWH_LEVNA,\n        FORECAST_THRESHOLD\n    },\n    debug: {\n        jsme_doma, rychle_voda, teplota_bojleru, spotreba_bojleru_aktualni,\n        bojler_ohriva, battery, rozdil_vyroby, letni_rezim, slunecny_den,\n        forecast_vyroba_dnes, auto_hlad, auto_automatizace, price_level,\n        cena_kwh, je_levna_elektrina, celkova_spotreba, spotreba_ze_site,\n        max_spotreba_sit, volna_kapacita_site, muzeme_zapnout_bojler,\n        je_povinny_cas, cas: hodina + \":\" + (minuty < 10 ? \"0\" : \"\") + minuty\n    }\n};\n\n// ========== STATUS ==========\nlet barva = \"grey\";\nif (cilova_teplota >= TEPLOTA_VYSOKA) barva = \"green\";\nelse if (cilova_teplota >= TEPLOTA_STREDNI) barva = \"yellow\";\nnode.status({fill: barva, shape: bojler_ohriva ? \"ring\" : \"dot\", text: cilova_teplota + \"°C - \" + duvod});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 626,
+        "wires": [
+            [
+                "8d401c2a5bd5d0ef",
+                "3472b1985ec023f5"
+            ]
+        ]
+    },
+    {
+        "id": "8d401c2a5bd5d0ef",
+        "type": "api-call-service",
+        "z": "0a2df88897520187",
+        "g": "09797f9996ff875a",
+        "name": "🔥 Nastav teplotu boileru",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "climate.set_temperature",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53"
+        ],
+        "labelId": [],
+        "data": "{\"temperature\": payload.teplota}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "climate",
+        "service": "set_temperature",
+        "x": 710,
+        "y": 659,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3472b1985ec023f5",
+        "type": "debug",
+        "z": "0a2df88897520187",
+        "g": "09797f9996ff875a",
+        "name": "📋 Debug výstup",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 599,
+        "wires": []
+    },
+    {
+        "id": "39a25019f11040ab",
+        "type": "inject",
+        "z": "0a2df88897520187",
+        "g": "3cf7f93b204c1246",
+        "name": "▶️ Ruční spuštění",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 141,
+        "y": 46,
+        "wires": [
+            [
+                "d8271d02d0bbbfd8"
+            ]
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "b6ac39c28a43ec7d",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    }
+]

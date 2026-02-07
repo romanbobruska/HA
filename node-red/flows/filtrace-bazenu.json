@@ -1,0 +1,1245 @@
+[
+    {
+        "id": "ea6d31715793bece",
+        "type": "tab",
+        "label": "Automatizuj filtraci v bazénu",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0c72f34400427c16",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Zapnutí filtrace",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "edd2cfde3acc45bc",
+            "534d3910f31b4ec5",
+            "5d8236cf2d6b303d",
+            "e8be56c1dc73057a",
+            "3db1f974d18c7ea8",
+            "7588515f2c9e29f3",
+            "fc94f3ecad3a4f0c",
+            "eae8d5ceac34f060",
+            "7178d85718f361b4",
+            "65a8cd625e863e0a",
+            "4dc841f22a7394d0",
+            "a40fb62e7bb0b8f1",
+            "234bc7086cf5f169",
+            "27d6480c05a1b2da",
+            "f891297083d4f0e0",
+            "12c63727aff2837e",
+            "88b7208b88c5a7b7",
+            "afa2ebf2f4ba09a7"
+        ],
+        "x": 314,
+        "y": 39,
+        "w": 814,
+        "h": 762
+    },
+    {
+        "id": "f5ed045858c9a10d",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Vypnutí filtrace",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true
+        },
+        "nodes": [
+            "8897cd2cf4b7671d",
+            "61adaea3d1f7ded8",
+            "1dd3d1905d1f83bd",
+            "d1a41f84ccd0a101",
+            "e0765820200eadb7",
+            "2c37a50b6fbd3781",
+            "16279a86bd05a9b4",
+            "7a59f81243cedae5",
+            "588c26c119e092ce",
+            "1fc0978dcabd497b",
+            "1f835561754ba7c7",
+            "39f31a4bd7c6821c",
+            "1e097f406d969b19"
+        ],
+        "x": 314,
+        "y": 859,
+        "w": 812,
+        "h": 682
+    },
+    {
+        "id": "e840eaa72d311da7",
+        "type": "inject",
+        "z": "ea6d31715793bece",
+        "name": "1 minuta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 100,
+        "y": 40,
+        "wires": [
+            [
+                "7d5dc7c2d35c0e1c"
+            ]
+        ]
+    },
+    {
+        "id": "f891297083d4f0e0",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Je letní režim?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.letni_rezim",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 420,
+        "y": 200,
+        "wires": [
+            [
+                "edd2cfde3acc45bc"
+            ],
+            [
+                "88b7208b88c5a7b7"
+            ]
+        ]
+    },
+    {
+        "id": "7356e9d06c433ba5",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "name": "Filtrace je vypnuta?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "switch.filtrace",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 130,
+        "y": 200,
+        "wires": [
+            [
+                "f891297083d4f0e0"
+            ],
+            [
+                "1e097f406d969b19"
+            ]
+        ]
+    },
+    {
+        "id": "edd2cfde3acc45bc",
+        "type": "moment",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 440,
+        "y": 80,
+        "wires": [
+            [
+                "534d3910f31b4ec5"
+            ]
+        ]
+    },
+    {
+        "id": "534d3910f31b4ec5",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Je 8:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "07:59",
+        "endTime": "08:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 842,
+        "y": 81,
+        "wires": [
+            [
+                "5d8236cf2d6b303d"
+            ],
+            [
+                "7588515f2c9e29f3"
+            ]
+        ]
+    },
+    {
+        "id": "5d8236cf2d6b303d",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Rozdíl výroby a spotřeby je nad 3kW?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "3000",
+        "halt_if_type": "num",
+        "halt_if_compare": "gt",
+        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 845,
+        "y": 167,
+        "wires": [
+            [
+                "e8be56c1dc73057a"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "e8be56c1dc73057a",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Filtrace ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.filtrace"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 665,
+        "y": 247,
+        "wires": [
+            [
+                "3db1f974d18c7ea8"
+            ]
+        ]
+    },
+    {
+        "id": "3db1f974d18c7ea8",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Nastav, že filtrace byla spuštěna dříve",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.filtrace_spustena_drive"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 945,
+        "y": 247,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7588515f2c9e29f3",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Je 9:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "08:59",
+        "endTime": "09:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 840,
+        "y": 309,
+        "wires": [
+            [
+                "fc94f3ecad3a4f0c"
+            ],
+            [
+                "4dc841f22a7394d0"
+            ]
+        ]
+    },
+    {
+        "id": "fc94f3ecad3a4f0c",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Filtrace ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.filtrace"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 670,
+        "y": 387,
+        "wires": [
+            [
+                "eae8d5ceac34f060"
+            ]
+        ]
+    },
+    {
+        "id": "eae8d5ceac34f060",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Nastav, že filtrace nebyla spuštěna dříve",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.filtrace_spustena_drive"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 942,
+        "y": 387,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "88b7208b88c5a7b7",
+        "type": "moment",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 449,
+        "y": 760,
+        "wires": [
+            [
+                "12c63727aff2837e"
+            ]
+        ]
+    },
+    {
+        "id": "12c63727aff2837e",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Je 02:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "01:59",
+        "endTime": "02:03",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 780,
+        "y": 760,
+        "wires": [
+            [
+                "afa2ebf2f4ba09a7"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "afa2ebf2f4ba09a7",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Filtrace ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.filtrace"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 979,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1e097f406d969b19",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je letní režim?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.letni_rezim",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 440,
+        "y": 900,
+        "wires": [
+            [
+                "16279a86bd05a9b4"
+            ],
+            [
+                "e0765820200eadb7"
+            ]
+        ]
+    },
+    {
+        "id": "8897cd2cf4b7671d",
+        "type": "moment",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 760,
+        "y": 920,
+        "wires": [
+            [
+                "61adaea3d1f7ded8"
+            ]
+        ]
+    },
+    {
+        "id": "61adaea3d1f7ded8",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je 11:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "10:59",
+        "endTime": "11:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 960,
+        "y": 920,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            [
+                "588c26c119e092ce"
+            ]
+        ]
+    },
+    {
+        "id": "1dd3d1905d1f83bd",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Filtrace OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.filtrace"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 1030,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d1a41f84ccd0a101",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je 12:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "11:59",
+        "endTime": "12:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 960,
+        "y": 1060,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            [
+                "588c26c119e092ce"
+            ]
+        ]
+    },
+    {
+        "id": "e0765820200eadb7",
+        "type": "moment",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 460,
+        "y": 1500,
+        "wires": [
+            [
+                "2c37a50b6fbd3781"
+            ]
+        ]
+    },
+    {
+        "id": "2c37a50b6fbd3781",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je 03:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "02:59",
+        "endTime": "03:05",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 780,
+        "y": 1500,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "16279a86bd05a9b4",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Byla filtrace spuštěna dříve?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.filtrace_spustena_drive",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 480,
+        "y": 1000,
+        "wires": [
+            [
+                "8897cd2cf4b7671d"
+            ],
+            [
+                "7a59f81243cedae5"
+            ]
+        ]
+    },
+    {
+        "id": "7a59f81243cedae5",
+        "type": "moment",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 762,
+        "y": 1060,
+        "wires": [
+            [
+                "d1a41f84ccd0a101"
+            ]
+        ]
+    },
+    {
+        "id": "7178d85718f361b4",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Rozdíl výroby a spotřeby je nad 3kW?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "3000",
+        "halt_if_type": "num",
+        "halt_if_compare": "gt",
+        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 950,
+        "y": 587,
+        "wires": [
+            [
+                "a40fb62e7bb0b8f1"
+            ],
+            [
+                "234bc7086cf5f169"
+            ]
+        ]
+    },
+    {
+        "id": "65a8cd625e863e0a",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Baterky jsou nad 85%?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "85",
+        "halt_if_type": "num",
+        "halt_if_compare": "gte",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 590,
+        "y": 587,
+        "wires": [
+            [
+                "7178d85718f361b4"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4dc841f22a7394d0",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Je 16:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "15:59",
+        "endTime": "16:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 840,
+        "y": 467,
+        "wires": [
+            [
+                "27d6480c05a1b2da"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a40fb62e7bb0b8f1",
+        "type": "api-call-service",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Filtrace ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.filtrace"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 970,
+        "y": 687,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "588c26c119e092ce",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je 18:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "17:59",
+        "endTime": "18:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 780,
+        "y": 1160,
+        "wires": [
+            [
+                "1fc0978dcabd497b"
+            ],
+            [
+                "39f31a4bd7c6821c"
+            ]
+        ]
+    },
+    {
+        "id": "1fc0978dcabd497b",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Baterky jsou pod 85%?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "85",
+        "halt_if_type": "num",
+        "halt_if_compare": "lt",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 510,
+        "y": 1240,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            [
+                "1f835561754ba7c7"
+            ]
+        ]
+    },
+    {
+        "id": "1f835561754ba7c7",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Rozdíl výroby a spotřeby je pod 2kW?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "2000",
+        "halt_if_type": "num",
+        "halt_if_compare": "lt",
+        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 490,
+        "y": 1300,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "39f31a4bd7c6821c",
+        "type": "time-range-switch",
+        "z": "ea6d31715793bece",
+        "g": "f5ed045858c9a10d",
+        "name": "Je 19:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "18:59",
+        "endTime": "19:15",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 780,
+        "y": 1380,
+        "wires": [
+            [
+                "1dd3d1905d1f83bd"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "234bc7086cf5f169",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Baterky jsou nad 94%?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "94",
+        "halt_if_type": "num",
+        "halt_if_compare": "gte",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 590,
+        "y": 687,
+        "wires": [
+            [
+                "a40fb62e7bb0b8f1"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "27d6480c05a1b2da",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "g": "0c72f34400427c16",
+        "name": "Má auto hlad?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.auto_ma_hlad",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 740,
+        "y": 527,
+        "wires": [
+            [],
+            [
+                "65a8cd625e863e0a"
+            ]
+        ]
+    },
+    {
+        "id": "7d5dc7c2d35c0e1c",
+        "type": "api-current-state",
+        "z": "ea6d31715793bece",
+        "name": "Automatizovat filtraci v bazénu?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.automatizovat_filtraci_v_bazenu",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 150,
+        "y": 120,
+        "wires": [
+            [
+                "7356e9d06c433ba5"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "96048a5ab4ac149f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-moment": "5.0.0",
+            "node-red-contrib-time-range-switch": "1.2.0"
+        }
+    }
+]

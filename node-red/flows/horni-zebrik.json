@@ -1,0 +1,219 @@
+[
+    {
+        "id": "431d263a7b7e3efc",
+        "type": "tab",
+        "label": "Automatizuj horní žebřík",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0e498f9e964819c1",
+        "type": "inject",
+        "z": "431d263a7b7e3efc",
+        "name": "1 minuta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 80,
+        "wires": [
+            [
+                "7e72db1ed74a7ee6"
+            ]
+        ]
+    },
+    {
+        "id": "7e72db1ed74a7ee6",
+        "type": "api-current-state",
+        "z": "431d263a7b7e3efc",
+        "name": "Jsme doma?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.jsme_doma",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 171,
+        "y": 320,
+        "wires": [
+            [
+                "03604375bc4eed26"
+            ],
+            [
+                "a308b934f6261ddc"
+            ]
+        ]
+    },
+    {
+        "id": "03604375bc4eed26",
+        "type": "moment",
+        "z": "431d263a7b7e3efc",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 175,
+        "y": 460,
+        "wires": [
+            [
+                "cbfb5b3fbcf02b19"
+            ]
+        ]
+    },
+    {
+        "id": "cbfb5b3fbcf02b19",
+        "type": "time-range-switch",
+        "z": "431d263a7b7e3efc",
+        "name": "Je odpoledne a musí být nahřáto?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "17:00",
+        "endTime": "21:00",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 547,
+        "y": 460,
+        "wires": [
+            [
+                "9ffe0e18d51c7193"
+            ],
+            [
+                "a308b934f6261ddc"
+            ]
+        ]
+    },
+    {
+        "id": "a308b934f6261ddc",
+        "type": "api-call-service",
+        "z": "431d263a7b7e3efc",
+        "name": "Žebřík OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horni_zebrik"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 890,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9ffe0e18d51c7193",
+        "type": "api-call-service",
+        "z": "431d263a7b7e3efc",
+        "name": "Žebřík ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horni_zebrik"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 890,
+        "y": 453,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "9ac5ada21574a9f3",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-moment": "5.0.0",
+            "node-red-contrib-time-range-switch": "1.2.0"
+        }
+    }
+]

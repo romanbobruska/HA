@@ -35,7 +35,11 @@ HA/
 │   ├── manager-nabijeni-auta.json # Manager nabíjení auta
 │   ├── nabijeni-auta-sit.json   # Nabíjení auta ze sítě
 │   ├── nabijeni-auta-slunce.json # Nabíjení auta ze slunce
-│   └── nibe-control.json        # Ovládání Nibe TČ
+│   ├── nibe-control.json        # Ovládání Nibe TČ
+│   ├── boiler.json              # Automatizace bojleru (hystereze, solar)
+│   ├── boiler-altan.json        # Ohřívač v altánu
+│   ├── horni-zebrik.json        # Horní žebřík (topný)
+│   └── filtrace-bazenu.json     # Filtrace bazénu
 ├── homeassistant/           # Home Assistant konfigurace
 │   ├── configuration.yaml       # Hlavní konfigurace HA
 │   ├── automations.yaml         # HA automatizace
