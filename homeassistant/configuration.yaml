@@ -45,7 +45,7 @@ command_line:
         - current_hour
         - plan
         - last_update
-      scan_interval: 5
+      scan_interval: 30
 
 # -----------------------------------------------------------------------------
 # INPUT BOOLEANS - Přepínače pro ovládání automatizace
