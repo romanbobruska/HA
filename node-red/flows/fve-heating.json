@@ -1,693 +1,712 @@
 [
     {
-        "id":  "f1e2d3c4b5a60001",
-        "type":  "tab",
-        "label":  "FVE Heating Control",
-        "disabled":  false,
-        "info":  "Automatizace topeni a chlazeni domu",
-        "env":  [
-
-                ]
+        "id": "f1e2d3c4b5a60001",
+        "type": "tab",
+        "label": "FVE Heating Control",
+        "disabled": false,
+        "info": "Automatizace topeni a chlazeni domu",
+        "env": []
     },
     {
-        "id":  "f1e2d3c4b5a60002",
-        "type":  "group",
-        "z":  "f1e2d3c4b5a60001",
-        "name":  "Sber dat a rozhodovani",
-        "style":  {
-                      "fill":  "#e3f3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "f1e2d3c4b5a60010",
-                      "f1e2d3c4b5a60011",
-                      "f1e2d3c4b5a60012",
-                      "f1e2d3c4b5a60013",
-                      "f1e2d3c4b5a60016",
-                      "f1e2d3c4b5a60017",
-                      "f1e2d3c4b5a60018",
-                      "f1e2d3c4b5a60014",
-                      "f1e2d3c4b5a60015"
-                  ],
-        "x":  14,
-        "y":  19,
-        "w":  1242,
-        "h":  182
+        "id": "f1e2d3c4b5a60002",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Sber dat a rozhodovani",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "f1e2d3c4b5a60010",
+            "f1e2d3c4b5a60011",
+            "f1e2d3c4b5a60012",
+            "f1e2d3c4b5a60013",
+            "f1e2d3c4b5a60016",
+            "f1e2d3c4b5a60017",
+            "f1e2d3c4b5a60018",
+            "f1e2d3c4b5a60019",
+            "f1e2d3c4b5a60014",
+            "f1e2d3c4b5a60015"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 1142,
+        "h": 162
     },
     {
-        "id":  "f1e2d3c4b5a60003",
-        "type":  "group",
-        "z":  "f1e2d3c4b5a60001",
-        "name":  "Exekuce",
-        "style":  {
-                      "fill":  "#d3e8f3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "f1e2d3c4b5a60020",
-                      "f1e2d3c4b5a60021",
-                      "f1e2d3c4b5a60022",
-                      "f1e2d3c4b5a60023",
-                      "f1e2d3c4b5a60024",
-                      "f1e2d3c4b5a60025"
-                  ],
-        "x":  14,
-        "y":  249,
-        "w":  692,
-        "h":  182
+        "id": "f1e2d3c4b5a60003",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Exekuce",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "f1e2d3c4b5a60020",
+            "f1e2d3c4b5a60021",
+            "f1e2d3c4b5a60022",
+            "f1e2d3c4b5a60023",
+            "f1e2d3c4b5a60024",
+            "f1e2d3c4b5a60025"
+        ],
+        "x": 274,
+        "y": 249,
+        "w": 432,
+        "h": 242
     },
     {
-        "id":  "f1e2d3c4b5a60004",
-        "type":  "group",
-        "z":  "f1e2d3c4b5a60001",
-        "name":  "Ochrana baterie",
-        "style":  {
-                      "fill":  "#f3e8d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "f1e2d3c4b5a60030",
-                      "f1e2d3c4b5a60031",
-                      "f1e2d3c4b5a60032"
-                  ],
-        "x":  14,
-        "y":  479,
-        "w":  692,
-        "h":  82
+        "id": "f1e2d3c4b5a60004",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Ochrana baterie",
+        "style": {
+            "fill": "#f3e8d3",
+            "label": true
+        },
+        "nodes": [
+            "f1e2d3c4b5a60030",
+            "f1e2d3c4b5a60031",
+            "f1e2d3c4b5a60032"
+        ],
+        "x": 94,
+        "y": 539,
+        "w": 772,
+        "h": 82
     },
     {
-        "id":  "f1e2d3c4b5a60010",
-        "type":  "inject",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Kazdou minutu",
-        "props":  [
-                      {
-                          "p":  "payload"
-                      }
-                  ],
-        "repeat":  "60",
-        "crontab":  "",
-        "once":  true,
-        "onceDelay":  "30",
-        "topic":  "",
-        "payload":  "",
-        "payloadType":  "date",
-        "x":  110,
-        "y":  60,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60012"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60010",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Kazdou minutu",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "30",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 60,
+        "wires": [
+            [
+                "f1e2d3c4b5a60012"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60011",
-        "type":  "server-state-changed",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Zmena teploty",
-        "server":  "c7421fe2.cb11c",
-        "version":  6,
-        "outputs":  1,
-        "exposeAsEntityConfig":  "",
-        "entities":  {
-                         "entity":  [
-                                        "sensor.horousany_ths_33253013_temperature"
-                                    ],
-                         "substring":  [
-
-                                       ],
-                         "regex":  [
-
-                                   ]
-                     },
-        "outputInitially":  true,
-        "stateType":  "str",
-        "ifState":  "",
-        "ifStateType":  "str",
-        "ifStateOperator":  "is",
-        "outputOnlyOnStateChange":  true,
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "ignorePrevStateNull":  false,
-        "ignorePrevStateUnknown":  false,
-        "ignorePrevStateUnavailable":  false,
-        "ignoreCurrentStateUnknown":  false,
-        "ignoreCurrentStateUnavailable":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "payload",
-                                     "propertyType":  "msg",
-                                     "value":  "string",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "x":  110,
-        "y":  120,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60012"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60011",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Zmena teploty",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.horousany_ths_33253013_temperature"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "f1e2d3c4b5a60012"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60012",
-        "type":  "api-current-state",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Nacti teplotu",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "sensor.horousany_ths_33253013_temperature",
-        "state_type":  "num",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "temperature",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  310,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60013"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60012",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti teplotu",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.horousany_ths_33253013_temperature",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "temperature",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 340,
+        "y": 80,
+        "wires": [
+            [
+                "f1e2d3c4b5a60013"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60013",
-        "type":  "api-current-state",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Nacti stav chlazeni",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "input_boolean.chlazeni",
-        "state_type":  "str",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "coolingEnabled",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  490,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60016"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60013",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti stav chlazeni",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.chlazeni",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "coolingEnabled",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 520,
+        "y": 80,
+        "wires": [
+            [
+                "f1e2d3c4b5a60016"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60016",
-        "type":  "api-current-state",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Nacti venkovni teplotu",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "sensor.nibe_venkovni_teplota",
-        "state_type":  "num",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "outdoorTemp",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  670,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60017"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60016",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti venkovni teplotu",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.nibe_venkovni_teplota",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "outdoorTemp",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 750,
+        "y": 80,
+        "wires": [
+            [
+                "f1e2d3c4b5a60017"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60017",
-        "type":  "api-current-state",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Nacti stav kompresoru",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "binary_sensor.nibe_kompresory_aktivni_binarni",
-        "state_type":  "str",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "compressorState",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  850,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60018"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60017",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti stav kompresoru",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "binary_sensor.nibe_kompresory_aktivni_binarni",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "compressorState",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 370,
+        "y": 140,
+        "wires": [
+            [
+                "f1e2d3c4b5a60018"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60018",
-        "type":  "api-current-state",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Nacti stav krbu",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "input_boolean.topi_se_v_krbu",
-        "state_type":  "str",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "fireplaceActive",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  1030,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60014"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60018",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti stav krbu",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.topi_se_v_krbu",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "fireplaceActive",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 610,
+        "y": 140,
+        "wires": [
+            [
+                "f1e2d3c4b5a60019"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60014",
-        "type":  "function",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Rozhodnuti topeni/chlazeni",
-        "func":  "// FVE Heating Control - Rozhodnutí o topení a chlazení\n// Zimní režim: cílová teplota 23-23.5°C, nouzový práh 22.5°C\n// Letní režim: chlazení při \u003e23.5°C, vypnout při \u003c22°C, max 4 přepnutí/den\n// Čerpadlo: cca 3 hodiny na ohřev 1°C (závisí na venkovní teplotě)\n// ZAKÁZÁNO vypínat čerpadlo, když kompresor běží!\n\nvar config = global.get(\"fve_config\") || {};\nvar prices = global.get(\"fve_prices_forecast\") || [];\n\n// Parametry z configu\nvar letniRezim = config.letni_rezim || false;\nvar PRAH_LEVNA = config.prah_levna_energie || 4;\nvar PRAH_DRAHA = config.prah_draha_energie || 12;\n\n// Aktuální stav\nvar temp = parseFloat(msg.temperature) || 22;\nvar coolingEnabled = (msg.coolingEnabled === \"on\");\nvar outdoorTemp = parseFloat(msg.outdoorTemp) || 0;\nvar compressorRunning = (msg.compressorState === \"on\");\nvar fireplaceActive = (msg.fireplaceActive === \"on\");\nvar currentHour = new Date().getHours();\nvar now = Date.now();\n\n// === ODHAD RYCHLOSTI TOPENÍ PODLE VENKOVNÍ TEPLOTY ===\n// Základ: 3h/°C při 0°C venku\n// Chladnější = pomalejší, teplejší = rychlejší\nvar heatingHoursPerDegree = Math.max(1.5, Math.min(6, 3 + (0 - outdoorTemp) * 0.1));\n// Příklady: 0°C→3h, -10°C→4h, -20°C→5h, 10°C→2h\n\n// Cenový level pro aktuální hodinu\nvar currentPriceLevel = 5;\nfor (var i = 0; i \u003c prices.length; i++) {\n    if (prices[i].hour === currentHour) {\n        currentPriceLevel = prices[i].levelCheapestHourBuy || 5;\n        break;\n    }\n}\n\n// Stav z flow kontextu\nvar heatingOn = flow.get(\"heating_on\") || false;\nvar coolingOn = flow.get(\"cooling_on\") || false;\nvar lastHeatSwitch = flow.get(\"last_heat_switch\") || 0;\nvar lastCoolSwitch = flow.get(\"last_cool_switch\") || 0;\nvar MIN_HEAT_INTERVAL = 5 * 60 * 1000;   // 5 minut mezi přepnutími topení\nvar MIN_COOL_INTERVAL = 30 * 60 * 1000;  // 30 minut mezi přepnutími chlazení\n\n// Počítadlo přepnutí chlazení (max 4 přepnutí = 2 cykly on/off denně)\nvar today = new Date().toISOString().split(\"T\")[0];\nvar coolSwitchDate = flow.get(\"cool_switch_date\") || \"\";\nvar coolSwitchCount = flow.get(\"cool_switch_count\") || 0;\nif (coolSwitchDate !== today) {\n    coolSwitchCount = 0;\n    flow.set(\"cool_switch_date\", today);\n    flow.set(\"cool_switch_count\", 0);\n}\n\n// === DYNAMICKÉ PRAHY PODLE RYCHLOSTI TOPENÍ ===\n// Preventivní práh pro drahou energii: musí být dostatečně vysoko,\n// aby se dům nestihl vychladit k nouzovému prahu (22.5°C)\n// Čím pomalejší topení, tím dříve musíme reagovat\nvar preventiveThreshold = 22.5 + (0.5 * heatingHoursPerDegree / 3);\n// Příklady: 3h/°C→23.0, 4h/°C→23.17, 5h/°C→23.33\npreventiveThreshold = Math.min(23.3, preventiveThreshold);\n\n// Buffer pro vypnutí při drahé energii\nvar expensiveOffThreshold = 23.0 + (0.2 * heatingHoursPerDegree / 3);\n// Příklady: 3h/°C→23.2, 4h/°C→23.27, 5h/°C→23.33\nexpensiveOffThreshold = Math.min(23.4, expensiveOffThreshold);\n\nvar action = \"none\";\nvar reason = \"\";\n\nif (!letniRezim) {\n    // === ZIMNÍ REŽIM ===\n    // Cílová teplota: 23 - 23.5°C, Nouzový práh: 22.5°C\n\n    // Vypni chlazení v zimě\n    if (coolingOn) {\n        action = \"cool_off\";\n        reason = \"Zima - vypínám chlazení\";\n    } else if (!heatingOn) {\n        // Topení VYPNUTÉ - zapnout?\n        if ((now - lastHeatSwitch) \u003e= MIN_HEAT_INTERVAL) {\n            if (temp \u003c= 22.5) {\n                action = \"heat_on\";\n                reason = \"NOUZOVÉ topení (\" + temp.toFixed(1) + \"°C ≤ 22.5°C)\";\n            } else if (currentPriceLevel \u003c= PRAH_LEVNA \u0026\u0026 temp \u003c 23.5) {\n                action = \"heat_on\";\n                reason = \"Levná energie - předtápění (\" + temp.toFixed(1) + \"°C, level \" + currentPriceLevel + \")\";\n            } else if (currentPriceLevel \u003c PRAH_DRAHA \u0026\u0026 temp \u003c 23.0) {\n                action = \"heat_on\";\n                reason = \"Střední cena - topení (\" + temp.toFixed(1) + \"°C, level \" + currentPriceLevel + \")\";\n            } else if (currentPriceLevel \u003e= PRAH_DRAHA \u0026\u0026 temp \u003c preventiveThreshold) {\n                // Drahá energie, ale teplota blízko nebezpečné zóny\n                // Preventivní práh závisí na venkovní teplotě (rychlost topení)\n                action = \"heat_on\";\n                reason = \"Drahá, ale nízká teplota (\" + temp.toFixed(1) + \"°C \u003c \" + preventiveThreshold.toFixed(1) + \"°C, venku \" + outdoorTemp.toFixed(0) + \"°C)\";\n            }\n        }\n    } else {\n        // Topení ZAPNUTÉ - vypnout?\n        if ((now - lastHeatSwitch) \u003e= MIN_HEAT_INTERVAL) {\n            if (temp \u003e= 23.5) {\n                action = \"heat_off\";\n                reason = \"Cílová teplota (\" + temp.toFixed(1) + \"°C ≥ 23.5°C)\";\n            } else if (currentPriceLevel \u003e= PRAH_DRAHA \u0026\u0026 temp \u003e= expensiveOffThreshold) {\n                // Drahá energie: vypnout jen s dostatečným bufferem\n                action = \"heat_off\";\n                reason = \"Drahá energie, buffer OK (\" + temp.toFixed(1) + \"°C ≥ \" + expensiveOffThreshold.toFixed(1) + \"°C)\";\n            }\n        }\n    }\n} else {\n    // === LETNÍ REŽIM ===\n    // Cílová teplota: 22 - 23.5°C, chlazení pouze pokud povoleno\n\n    // Vypni topení v létě\n    if (heatingOn) {\n        action = \"heat_off\";\n        reason = \"Léto - vypínám topení\";\n    } else if (coolingEnabled) {\n        if (!coolingOn \u0026\u0026 temp \u003e 23.5) {\n            if ((now - lastCoolSwitch) \u003e= MIN_COOL_INTERVAL \u0026\u0026 coolSwitchCount \u003c 4) {\n                action = \"cool_on\";\n                reason = \"Horko (\" + temp.toFixed(1) + \"°C \u003e 23.5°C)\";\n            }\n        } else if (coolingOn \u0026\u0026 temp \u003c 22.0) {\n            // Rozmezí 22-23.5°C → chlazení vypnout až pod 22°C\n            if ((now - lastCoolSwitch) \u003e= MIN_COOL_INTERVAL \u0026\u0026 coolSwitchCount \u003c 4) {\n                action = \"cool_off\";\n                reason = \"Ochlazeno (\" + temp.toFixed(1) + \"°C \u003c 22°C)\";\n            }\n        }\n    } else if (coolingOn) {\n        action = \"cool_off\";\n        reason = \"Chlazení deaktivováno\";\n    }\n}\n\n// === OCHRANA KRBU ===\n// Krb topi - cerpadlo neni potreba\nif (fireplaceActive) {\n    if (action === \"heat_on\") {\n        action = \"none\";\n        reason = \"Krb topi - cerpadlo nepotrebne\";\n    } else if (heatingOn) {\n        action = \"heat_off\";\n        reason = \"Krb topi - vypnout cerpadlo\";\n    }\n}\n\n// === OCHRANA ČERPADLA ===\n// ZAKÁZÁNO vypínat čerpadlo při TOPENÍ, když kompresor běží!\n// U chlazení tento zákaz NEPLATÍ.\nif (compressorRunning \u0026\u0026 action === \"heat_off\") {\n    reason = \"BLOKOVÁNO: kompresor běží (\" + reason + \")\";\n    action = \"none\";\n}\n\n// Aktualizuj stav (jen pokud skutečně provedeme akci)\nif (action === \"heat_on\") {\n    flow.set(\"heating_on\", true);\n    flow.set(\"last_heat_switch\", now);\n} else if (action === \"heat_off\") {\n    flow.set(\"heating_on\", false);\n    flow.set(\"last_heat_switch\", now);\n} else if (action === \"cool_on\") {\n    flow.set(\"cooling_on\", true);\n    flow.set(\"last_cool_switch\", now);\n    flow.set(\"cool_switch_count\", coolSwitchCount + 1);\n} else if (action === \"cool_off\") {\n    flow.set(\"cooling_on\", false);\n    flow.set(\"last_cool_switch\", now);\n    flow.set(\"cool_switch_count\", coolSwitchCount + 1);\n}\n\nmsg.action = action;\nmsg.reason = reason;\n\n// Status\nvar statusText = (letniRezim ? \"LÉTO\" : \"ZIMA\");\nstatusText += \" | \" + temp.toFixed(1) + \"°C | Venku:\" + outdoorTemp.toFixed(0) + \"°C\";\nstatusText += \" | Lv:\" + currentPriceLevel + \" | \" + heatingHoursPerDegree.toFixed(1) + \"h/°C\";\nstatusText += \" | Top:\" + (flow.get(\"heating_on\") ? \"ON\" : \"OFF\");\nstatusText += \" | Chlaz:\" + (flow.get(\"cooling_on\") ? \"ON\" : \"OFF\");\nif (compressorRunning) statusText += \" | KOMP\";\nif (fireplaceActive) statusText += \" | KRB\";\nif (action !== \"none\") statusText += \" → \" + action;\n\nvar colors = {heat_on: \"blue\", heat_off: \"yellow\", cool_on: \"blue\", cool_off: \"yellow\", none: \"green\"};\nnode.status({fill: colors[action] || \"green\", shape: \"dot\", text: statusText});\n\nreturn msg;\n",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  1020,
-        "y":  80,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60020",
-                          "f1e2d3c4b5a60015"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60019",
+        "type": "api-current-state",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Nacti realny stav cerpadla",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.nibe_aktualni_realny_stav",
+        "state_type": "str",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "pumpRealState",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 370,
+        "y": 140,
+        "wires": [
+            [
+                "f1e2d3c4b5a60014"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60015",
-        "type":  "debug",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60002",
-        "name":  "Heating Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  790,
-        "y":  160,
-        "wires":  [
-
-                  ]
+        "id": "f1e2d3c4b5a60014",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Rozhodnuti topeni/chlazeni",
+        "func": "// FVE Heating Control - Rozhodnutí o topení a chlazení\n// Zimní režim: cílová teplota 23-23.5°C, nouzový práh 22.5°C\n// Letní režim: chlazení při >23.5°C, vypnout při <22°C, max 4 přepnutí/den\n// Čerpadlo: cca 3 hodiny na ohřev 1°C (závisí na venkovní teplotě)\n// ZAKÁZÁNO vypínat čerpadlo, když kompresor běží!\n\nvar config = global.get(\"fve_config\") || {};\nvar prices = global.get(\"fve_prices_forecast\") || [];\n\n// Parametry z configu\nvar letniRezim = config.letni_rezim || false;\nvar PRAH_LEVNA = config.prah_levna_energie || 4;\nvar PRAH_DRAHA = config.prah_draha_energie || 12;\n\n// Aktuální stav\nvar temp = parseFloat(msg.temperature) || 22;\nvar coolingEnabled = (msg.coolingEnabled === \"on\");\nvar outdoorTemp = parseFloat(msg.outdoorTemp) || 0;\nvar compressorRunning = (msg.compressorState === \"on\");\nvar fireplaceActive = (msg.fireplaceActive === \"on\");\nvar currentHour = new Date().getHours();\nvar now = Date.now();\n\n// === ODHAD RYCHLOSTI TOPENÍ PODLE VENKOVNÍ TEPLOTY ===\n// Základ: 3h/°C při 0°C venku\n// Chladnější = pomalejší, teplejší = rychlejší\nvar heatingHoursPerDegree = Math.max(1.5, Math.min(6, 3 + (0 - outdoorTemp) * 0.1));\n// Příklady: 0°C→3h, -10°C→4h, -20°C→5h, 10°C→2h\n\n// Cenový level pro aktuální hodinu\nvar currentPriceLevel = 5;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === currentHour) {\n        currentPriceLevel = prices[i].levelCheapestHourBuy || 5;\n        break;\n    }\n}\n\n// Stav z flow kontextu\nvar heatingOn = flow.get(\"heating_on\") || false;\nvar coolingOn = flow.get(\"cooling_on\") || false;\nvar lastHeatSwitch = flow.get(\"last_heat_switch\") || 0;\nvar lastCoolSwitch = flow.get(\"last_cool_switch\") || 0;\nvar MIN_HEAT_INTERVAL = 5 * 60 * 1000;   // 5 minut mezi přepnutími topení\nvar MIN_COOL_INTERVAL = 30 * 60 * 1000;  // 30 minut mezi přepnutími chlazení\n\n// Počítadlo přepnutí chlazení (max 4 přepnutí = 2 cykly on/off denně)\nvar today = new Date().toISOString().split(\"T\")[0];\nvar coolSwitchDate = flow.get(\"cool_switch_date\") || \"\";\nvar coolSwitchCount = flow.get(\"cool_switch_count\") || 0;\nif (coolSwitchDate !== today) {\n    coolSwitchCount = 0;\n    flow.set(\"cool_switch_date\", today);\n    flow.set(\"cool_switch_count\", 0);\n}\n\n// === DYNAMICKÉ PRAHY PODLE RYCHLOSTI TOPENÍ ===\n// Preventivní práh pro drahou energii: musí být dostatečně vysoko,\n// aby se dům nestihl vychladit k nouzovému prahu (22.5°C)\n// Čím pomalejší topení, tím dříve musíme reagovat\nvar preventiveThreshold = 22.5 + (0.5 * heatingHoursPerDegree / 3);\n// Příklady: 3h/°C→23.0, 4h/°C→23.17, 5h/°C→23.33\npreventiveThreshold = Math.min(23.3, preventiveThreshold);\n\n// Buffer pro vypnutí při drahé energii\nvar expensiveOffThreshold = 23.0 + (0.2 * heatingHoursPerDegree / 3);\n// Příklady: 3h/°C→23.2, 4h/°C→23.27, 5h/°C→23.33\nexpensiveOffThreshold = Math.min(23.4, expensiveOffThreshold);\n\nvar action = \"none\";\nvar reason = \"\";\n\nif (!letniRezim) {\n    // === ZIMNÍ REŽIM ===\n    // Cílová teplota: 23 - 23.5°C, Nouzový práh: 22.5°C\n\n    // Vypni chlazení v zimě\n    if (coolingOn) {\n        action = \"cool_off\";\n        reason = \"Zima - vypínám chlazení\";\n    } else if (!heatingOn) {\n        // Topení VYPNUTÉ - zapnout?\n        if ((now - lastHeatSwitch) >= MIN_HEAT_INTERVAL) {\n            if (temp <= 22.5) {\n                action = \"heat_on\";\n                reason = \"NOUZOVÉ topení (\" + temp.toFixed(1) + \"°C ≤ 22.5°C)\";\n            } else if (currentPriceLevel <= PRAH_LEVNA && temp < 23.5) {\n                action = \"heat_on\";\n                reason = \"Levná energie - předtápění (\" + temp.toFixed(1) + \"°C, level \" + currentPriceLevel + \")\";\n            } else if (currentPriceLevel < PRAH_DRAHA && temp < 23.0) {\n                action = \"heat_on\";\n                reason = \"Střední cena - topení (\" + temp.toFixed(1) + \"°C, level \" + currentPriceLevel + \")\";\n            } else if (currentPriceLevel >= PRAH_DRAHA && temp < preventiveThreshold) {\n                // Drahá energie, ale teplota blízko nebezpečné zóny\n                // Preventivní práh závisí na venkovní teplotě (rychlost topení)\n                action = \"heat_on\";\n                reason = \"Drahá, ale nízká teplota (\" + temp.toFixed(1) + \"°C < \" + preventiveThreshold.toFixed(1) + \"°C, venku \" + outdoorTemp.toFixed(0) + \"°C)\";\n            }\n        }\n    } else {\n        // Topení ZAPNUTÉ - vypnout?\n        if ((now - lastHeatSwitch) >= MIN_HEAT_INTERVAL) {\n            if (temp >= 23.5) {\n                action = \"heat_off\";\n                reason = \"Cílová teplota (\" + temp.toFixed(1) + \"°C ≥ 23.5°C)\";\n            } else if (currentPriceLevel >= PRAH_DRAHA && temp >= expensiveOffThreshold) {\n                // Drahá energie: vypnout jen s dostatečným bufferem\n                action = \"heat_off\";\n                reason = \"Drahá energie, buffer OK (\" + temp.toFixed(1) + \"°C ≥ \" + expensiveOffThreshold.toFixed(1) + \"°C)\";\n            }\n        }\n    }\n} else {\n    // === LETNÍ REŽIM ===\n    // Cílová teplota: 22 - 23.5°C, chlazení pouze pokud povoleno\n\n    // Vypni topení v létě\n    if (heatingOn) {\n        action = \"heat_off\";\n        reason = \"Léto - vypínám topení\";\n    } else if (coolingEnabled) {\n        if (!coolingOn && temp > 23.5) {\n            if ((now - lastCoolSwitch) >= MIN_COOL_INTERVAL && coolSwitchCount < 4) {\n                action = \"cool_on\";\n                reason = \"Horko (\" + temp.toFixed(1) + \"°C > 23.5°C)\";\n            }\n        } else if (coolingOn && temp < 22.0) {\n            // Rozmezí 22-23.5°C → chlazení vypnout až pod 22°C\n            if ((now - lastCoolSwitch) >= MIN_COOL_INTERVAL && coolSwitchCount < 4) {\n                action = \"cool_off\";\n                reason = \"Ochlazeno (\" + temp.toFixed(1) + \"°C < 22°C)\";\n            }\n        }\n    } else if (coolingOn) {\n        action = \"cool_off\";\n        reason = \"Chlazení deaktivováno\";\n    }\n}\n\n// === OCHRANA KRBU ===\n// Krb topi - cerpadlo neni potreba\nif (fireplaceActive) {\n    if (action === \"heat_on\") {\n        action = \"none\";\n        reason = \"Krb topi - cerpadlo nepotrebne\";\n    } else if (heatingOn) {\n        action = \"heat_off\";\n        reason = \"Krb topi - vypnout cerpadlo\";\n    }\n}\n\n// === OCHRANA ČERPADLA ===\n// ZAKÁZÁNO vypínat čerpadlo, když topí do vody nebo do domu!\n// Vypnout lze POUZE v klidovém stavu (kompresory stojí).\n// U chlazení tento zákaz NEPLATÍ.\nif (action === \"heat_off\") {\n    var pumpRealState = msg.pumpRealState || \"\";\n    var pumpIsIdle = pumpRealState.indexOf(\"Klidový\") > -1;\n    var pumpIsCooling = pumpRealState.indexOf(\"Chlazení\") > -1;\n    \n    if (pumpRealState !== \"\" && !pumpIsIdle && !pumpIsCooling) {\n        reason = \"BLOKOVÁNO: čerpadlo není v klidu - \" + pumpRealState + \" (\" + reason + \")\";\n        action = \"none\";\n    } else if (compressorRunning && !pumpIsCooling) {\n        reason = \"BLOKOVÁNO: kompresor běží (\" + reason + \")\";\n        action = \"none\";\n    }\n}\n\n// Aktualizuj stav (jen pokud skutečně provedeme akci)\nif (action === \"heat_on\") {\n    flow.set(\"heating_on\", true);\n    flow.set(\"last_heat_switch\", now);\n} else if (action === \"heat_off\") {\n    flow.set(\"heating_on\", false);\n    flow.set(\"last_heat_switch\", now);\n} else if (action === \"cool_on\") {\n    flow.set(\"cooling_on\", true);\n    flow.set(\"last_cool_switch\", now);\n    flow.set(\"cool_switch_count\", coolSwitchCount + 1);\n} else if (action === \"cool_off\") {\n    flow.set(\"cooling_on\", false);\n    flow.set(\"last_cool_switch\", now);\n    flow.set(\"cool_switch_count\", coolSwitchCount + 1);\n}\n\nmsg.action = action;\nmsg.reason = reason;\n\n// Status\nvar statusText = (letniRezim ? \"LÉTO\" : \"ZIMA\");\nstatusText += \" | \" + temp.toFixed(1) + \"°C | Venku:\" + outdoorTemp.toFixed(0) + \"°C\";\nstatusText += \" | Lv:\" + currentPriceLevel + \" | \" + heatingHoursPerDegree.toFixed(1) + \"h/°C\";\nstatusText += \" | Top:\" + (flow.get(\"heating_on\") ? \"ON\" : \"OFF\");\nstatusText += \" | Chlaz:\" + (flow.get(\"cooling_on\") ? \"ON\" : \"OFF\");\nif (compressorRunning) statusText += \" | KOMP\";\nif (fireplaceActive) statusText += \" | KRB\";\nif (action !== \"none\") statusText += \" → \" + action;\n\nvar colors = {heat_on: \"blue\", heat_off: \"yellow\", cool_on: \"blue\", cool_off: \"yellow\", none: \"green\"};\nnode.status({fill: colors[action] || \"green\", shape: \"dot\", text: statusText});\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 140,
+        "wires": [
+            [
+                "f1e2d3c4b5a60020",
+                "f1e2d3c4b5a60015"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60020",
-        "type":  "switch",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Akce",
-        "property":  "action",
-        "propertyType":  "msg",
-        "rules":  [
-                      {
-                          "t":  "eq",
-                          "v":  "heat_on",
-                          "vt":  "str"
-                      },
-                      {
-                          "t":  "eq",
-                          "v":  "heat_off",
-                          "vt":  "str"
-                      },
-                      {
-                          "t":  "eq",
-                          "v":  "cool_on",
-                          "vt":  "str"
-                      },
-                      {
-                          "t":  "eq",
-                          "v":  "cool_off",
-                          "vt":  "str"
-                      },
-                      {
-                          "t":  "else"
-                      }
-                  ],
-        "checkall":  "false",
-        "repair":  false,
-        "outputs":  5,
-        "x":  140,
-        "y":  340,
-        "wires":  [
-                      [
-                          [
-                              "f1e2d3c4b5a60021"
-                          ]
-                      ],
-                      [
-                          "f1e2d3c4b5a60022"
-                      ],
-                      [
-                          "f1e2d3c4b5a60023"
-                      ],
-                      [
-                          "f1e2d3c4b5a60024"
-                      ],
-                      [
-                          "f1e2d3c4b5a60025"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60015",
+        "type": "debug",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60002",
+        "name": "Heating Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 80,
+        "wires": []
     },
     {
-        "id":  "f1e2d3c4b5a60021",
-        "type":  "api-call-service",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Zapni topeni",
-        "server":  "c7421fe2.cb11c",
-        "version":  5,
-        "debugenabled":  false,
-        "domain":  "switch",
-        "service":  "turn_on",
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "switch.nibe_topeni"
-                     ],
-        "data":  "",
-        "dataType":  "jsonata",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "x":  380,
-        "y":  290,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60020",
+        "type": "switch",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Akce",
+        "property": "action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "heat_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "heat_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "cool_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "cool_off",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 5,
+        "x": 350,
+        "y": 360,
+        "wires": [
+            [
+                "f1e2d3c4b5a60021"
+            ],
+            [
+                "f1e2d3c4b5a60022"
+            ],
+            [
+                "f1e2d3c4b5a60023"
+            ],
+            [
+                "f1e2d3c4b5a60024"
+            ],
+            [
+                "f1e2d3c4b5a60025"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60022",
-        "type":  "api-call-service",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Vypni topeni",
-        "server":  "c7421fe2.cb11c",
-        "version":  5,
-        "debugenabled":  false,
-        "domain":  "switch",
-        "service":  "turn_off",
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "switch.nibe_topeni"
-                     ],
-        "data":  "",
-        "dataType":  "jsonata",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "x":  380,
-        "y":  330,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60021",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Zapni topeni",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 590,
+        "y": 290,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60023",
-        "type":  "api-call-service",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Zapni chlazeni",
-        "server":  "c7421fe2.cb11c",
-        "version":  5,
-        "debugenabled":  false,
-        "domain":  "switch",
-        "service":  "turn_on",
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "switch.nibe_chlazeni"
-                     ],
-        "data":  "",
-        "dataType":  "jsonata",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "x":  380,
-        "y":  370,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60022",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Vypni topeni",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 590,
+        "y": 330,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60024",
-        "type":  "api-call-service",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Vypni chlazeni",
-        "server":  "c7421fe2.cb11c",
-        "version":  5,
-        "debugenabled":  false,
-        "domain":  "switch",
-        "service":  "turn_off",
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "switch.nibe_chlazeni"
-                     ],
-        "data":  "",
-        "dataType":  "jsonata",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "x":  380,
-        "y":  410,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60023",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Zapni chlazeni",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 590,
+        "y": 370,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60025",
-        "type":  "debug",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60003",
-        "name":  "Zadna akce",
-        "active":  false,
-        "tosidebar":  false,
-        "console":  false,
-        "tostatus":  true,
-        "complete":  "reason",
-        "targetType":  "msg",
-        "statusVal":  "action",
-        "statusType":  "msg",
-        "x":  380,
-        "y":  450,
-        "wires":  [
-
-                  ]
+        "id": "f1e2d3c4b5a60024",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Vypni chlazeni",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 590,
+        "y": 410,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60030",
-        "type":  "server-state-changed",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60004",
-        "name":  "Stav cerpadla",
-        "server":  "c7421fe2.cb11c",
-        "version":  6,
-        "outputs":  1,
-        "exposeAsEntityConfig":  "",
-        "entities":  {
-                         "entity":  [
-                                        "sensor.nibe_aktualni_realny_stav"
-                                    ],
-                         "substring":  [
-
-                                       ],
-                         "regex":  [
-
-                                   ]
-                     },
-        "outputInitially":  true,
-        "stateType":  "str",
-        "ifState":  "",
-        "ifStateType":  "str",
-        "ifStateOperator":  "is",
-        "outputOnlyOnStateChange":  true,
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "ignorePrevStateNull":  false,
-        "ignorePrevStateUnknown":  false,
-        "ignorePrevStateUnavailable":  false,
-        "ignoreCurrentStateUnknown":  false,
-        "ignoreCurrentStateUnavailable":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "payload",
-                                     "propertyType":  "msg",
-                                     "value":  "string",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "x":  170,
-        "y":  520,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60031"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60025",
+        "type": "debug",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60003",
+        "name": "Zadna akce",
+        "active": false,
+        "tosidebar": false,
+        "console": false,
+        "tostatus": true,
+        "complete": "reason",
+        "targetType": "msg",
+        "statusVal": "action",
+        "statusType": "msg",
+        "x": 590,
+        "y": 450,
+        "wires": []
     },
     {
-        "id":  "f1e2d3c4b5a60031",
-        "type":  "function",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60004",
-        "name":  "Detekce topeni vs chlazeni",
-        "func":  "// Detekce topení vs chlazení z textového stavu čerpadla\n// Blokovat vybíjení baterie při topení nebo TUV (NE při chlazení)\nvar state = msg.payload || \"\";\n\nvar isHeating = state.indexOf(\"Vytápění\") \u003e -1;\nvar isTUV = state.indexOf(\"Ohřev vody\") \u003e -1 || state.indexOf(\"TUV\") \u003e -1;\n\n// Blokovat vybíjení baterie při topení nebo TUV\nvar blockDischarge = isHeating || isTUV;\n\nmsg.blockDischarge = blockDischarge;\n\nvar statusText = blockDischarge\n    ? \"Blokace vybíjení (\" + (isHeating ? \"topení\" : \"TUV\") + \")\"\n    : \"OK - \" + state.substring(0, 30);\n\nnode.status({\n    fill: blockDischarge ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: statusText\n});\n\nreturn msg;\n",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  420,
-        "y":  520,
-        "wires":  [
-                      [
-                          "f1e2d3c4b5a60032"
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60030",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "Stav cerpadla",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.nibe_aktualni_realny_stav"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 190,
+        "y": 580,
+        "wires": [
+            [
+                "f1e2d3c4b5a60031"
+            ]
+        ]
     },
     {
-        "id":  "f1e2d3c4b5a60032",
-        "type":  "change",
-        "z":  "f1e2d3c4b5a60001",
-        "g":  "f1e2d3c4b5a60004",
-        "name":  "Nastav global cerpadlo_topi",
-        "rules":  [
-                      {
-                          "t":  "set",
-                          "p":  "cerpadlo_topi",
-                          "pt":  "global",
-                          "to":  "blockDischarge",
-                          "tot":  "msg"
-                      }
-                  ],
-        "action":  "",
-        "property":  "",
-        "from":  "",
-        "to":  "",
-        "reg":  false,
-        "x":  620,
-        "y":  520,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "f1e2d3c4b5a60031",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "Detekce topeni vs chlazeni",
+        "func": "// Detekce topení vs chlazení z textového stavu čerpadla\n// Blokovat vybíjení baterie při topení nebo TUV (NE při chlazení)\nvar state = msg.payload || \"\";\n\nvar isHeating = state.indexOf(\"Vytápění\") > -1;\nvar isTUV = state.indexOf(\"Ohřev vody\") > -1 || state.indexOf(\"TUV\") > -1;\n\n// Blokovat vybíjení baterie při topení nebo TUV\nvar blockDischarge = isHeating || isTUV;\n\nmsg.blockDischarge = blockDischarge;\n\nvar statusText = blockDischarge\n    ? \"Blokace vybíjení (\" + (isHeating ? \"topení\" : \"TUV\") + \")\"\n    : \"OK - \" + state.substring(0, 30);\n\nnode.status({\n    fill: blockDischarge ? \"yellow\" : \"green\",\n    shape: \"dot\",\n    text: statusText\n});\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 580,
+        "wires": [
+            [
+                "f1e2d3c4b5a60032"
+            ]
+        ]
+    },
+    {
+        "id": "f1e2d3c4b5a60032",
+        "type": "change",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "Nastav global cerpadlo_topi",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cerpadlo_topi",
+                "pt": "global",
+                "to": "blockDischarge",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "199b5d53d8fa78f7",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     }
 ]
