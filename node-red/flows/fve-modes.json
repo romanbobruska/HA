@@ -1,1336 +1,1102 @@
 [
     {
-        "id":  "bb3654998a6bf514",
-        "type":  "tab",
-        "label":  "FVE Modes",
-        "disabled":  false,
-        "info":  "Implementace jednotlivých módů FVE automatizace",
-        "env":  [
-
-                ]
+        "id": "bb3654998a6bf514",
+        "type": "tab",
+        "label": "FVE Modes",
+        "disabled": false,
+        "info": "Implementace jednotlivých módů FVE automatizace",
+        "env": []
     },
     {
-        "id":  "432ef0e12c1fccd9",
-        "type":  "group",
-        "z":  "bb3654998a6bf514",
-        "name":  "Mód: NORMAL - Standardní provoz",
-        "style":  {
-                      "fill":  "#d3f3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "8b55cfc5181b9eb7",
-                      "670432a909cf3b26",
-                      "a613f38251bd9e72",
-                      "a3a0aeac0fbd3e99",
-                      "246063034880ca80",
-                      "702b8ef11c8c396c",
-                      "3a87476592bc532f",
-                      "84c9363491961540"
-                  ],
-        "x":  14,
-        "y":  -1,
-        "w":  952,
-        "h":  182
+        "id": "432ef0e12c1fccd9",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: NORMAL - Standardní provoz",
+        "style": {
+            "fill": "#d3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "8b55cfc5181b9eb7",
+            "670432a909cf3b26",
+            "a613f38251bd9e72",
+            "a3a0aeac0fbd3e99",
+            "246063034880ca80",
+            "702b8ef11c8c396c",
+            "3a87476592bc532f",
+            "84c9363491961540"
+        ],
+        "x": 14,
+        "y": -1,
+        "w": 952,
+        "h": 182
     },
     {
-        "id":  "b49b9676d4dbdff1",
-        "type":  "group",
-        "z":  "bb3654998a6bf514",
-        "name":  "Mód: ŠETŘIT - Minimální vybíjení baterie",
-        "style":  {
-                      "fill":  "#f3f3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "ec611f6aba7d5c59",
-                      "139cd450edbbde37",
-                      "17f08b797c764787",
-                      "6e319aa534013af8",
-                      "6d2e2f534bf9e398",
-                      "906ece2b651b5a64",
-                      "176abc1b75a23fb4"
-                  ],
-        "x":  14,
-        "y":  179,
-        "w":  952,
-        "h":  182
+        "id": "b49b9676d4dbdff1",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ŠETŘIT - Minimální vybíjení baterie",
+        "style": {
+            "fill": "#f3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "ec611f6aba7d5c59",
+            "139cd450edbbde37",
+            "17f08b797c764787",
+            "6e319aa534013af8",
+            "6d2e2f534bf9e398",
+            "906ece2b651b5a64",
+            "176abc1b75a23fb4"
+        ],
+        "x": 14,
+        "y": 179,
+        "w": 952,
+        "h": 182
     },
     {
-        "id":  "2767feb260d6904c",
-        "type":  "group",
-        "z":  "bb3654998a6bf514",
-        "name":  "Mód: NABÍJET ZE SÍTĚ - Levná energie",
-        "style":  {
-                      "fill":  "#d3d3f3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "1d98a0541716ce58",
-                      "ebcf9e560f598c02",
-                      "11f838e573d16c9f",
-                      "9cb53882cac5a9e2",
-                      "cf1085b95156e10a",
-                      "fc83a9cf78db7a97",
-                      "6598def5a6b435a3"
-                  ],
-        "x":  14,
-        "y":  359,
-        "w":  952,
-        "h":  182
+        "id": "2767feb260d6904c",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
+        "style": {
+            "fill": "#d3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "1d98a0541716ce58",
+            "ebcf9e560f598c02",
+            "11f838e573d16c9f",
+            "9cb53882cac5a9e2",
+            "cf1085b95156e10a",
+            "fc83a9cf78db7a97",
+            "6598def5a6b435a3"
+        ],
+        "x": 14,
+        "y": 359,
+        "w": 952,
+        "h": 182
     },
     {
-        "id":  "7ce258bed914f262",
-        "type":  "group",
-        "z":  "bb3654998a6bf514",
-        "name":  "Mód: PRODÁVAT - Prodej z baterie do sítě",
-        "style":  {
-                      "fill":  "#f3d3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "179ed150020d459c",
-                      "68992d178ce105ed",
-                      "52d5e20c2cede1f3",
-                      "9c7ee4010ab79e98",
-                      "53cd1a74ee8332ac",
-                      "e12fd7a540b89f05",
-                      "9bd525cb24b06701",
-                      "86d71450ca024a50"
-                  ],
-        "x":  14,
-        "y":  539,
-        "w":  952,
-        "h":  202
+        "id": "7ce258bed914f262",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: PRODÁVAT - Prodej z baterie do sítě",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "179ed150020d459c",
+            "68992d178ce105ed",
+            "52d5e20c2cede1f3",
+            "9c7ee4010ab79e98",
+            "53cd1a74ee8332ac",
+            "e12fd7a540b89f05",
+            "9bd525cb24b06701",
+            "86d71450ca024a50"
+        ],
+        "x": 14,
+        "y": 539,
+        "w": 952,
+        "h": 202
     },
     {
-        "id":  "12a3795b66ec7d44",
-        "type":  "group",
-        "z":  "bb3654998a6bf514",
-        "name":  "Mód: ZÁKAZ PŘETOKŮ - Při záporné ceně",
-        "style":  {
-                      "fill":  "#e3d3f3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "c682224043634fcd",
-                      "75d1f9e77bc15e0a",
-                      "21e5f570ecff7fb5",
-                      "c900a46800b30516",
-                      "8db6ee5fbb848b8b"
-                  ],
-        "x":  14,
-        "y":  739,
-        "w":  952,
-        "h":  142
+        "id": "12a3795b66ec7d44",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ZÁKAZ PŘETOKŮ - Při záporné ceně",
+        "style": {
+            "fill": "#e3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "c682224043634fcd",
+            "75d1f9e77bc15e0a",
+            "21e5f570ecff7fb5",
+            "c900a46800b30516",
+            "8db6ee5fbb848b8b"
+        ],
+        "x": 14,
+        "y": 739,
+        "w": 952,
+        "h": 142
     },
     {
-        "id":  "8b55cfc5181b9eb7",
-        "type":  "link in",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "← Normal",
-        "links":  [
-                      "f10a91fcb4de6bd3"
-                  ],
-        "x":  55,
-        "y":  80,
-        "wires":  [
-                      [
-                          "670432a909cf3b26"
-                      ]
-                  ]
+        "id": "8b55cfc5181b9eb7",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "← Normal",
+        "links": [
+            "f10a91fcb4de6bd3"
+        ],
+        "x": 55,
+        "y": 80,
+        "wires": [
+            [
+                "670432a909cf3b26"
+            ]
+        ]
     },
     {
-        "id":  "670432a909cf3b26",
-        "type":  "function",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Normal Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\n\nmsg.victron = { power_set_point: 0, min_soc: minSoc, schedule_charge: false };\nmsg.mode = \"normal\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  170,
-        "y":  80,
-        "wires":  [
-                      [
-                          "a613f38251bd9e72",
-                          "84c9363491961540"
-                      ]
-                  ]
+        "id": "670432a909cf3b26",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Normal Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\n\nmsg.victron = { power_set_point: 0, min_soc: minSoc, schedule_charge: false };\nmsg.mode = \"normal\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 80,
+        "wires": [
+            [
+                "a613f38251bd9e72",
+                "84c9363491961540"
+            ]
+        ]
     },
     {
-        "id":  "a613f38251bd9e72",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Set Power Point = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.power_set_point"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  360,
-        "y":  40,
-        "wires":  [
-                      [
-                          "a3a0aeac0fbd3e99"
-                      ]
-                  ]
+        "id": "a613f38251bd9e72",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Set Power Point = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 360,
+        "y": 40,
+        "wires": [
+            [
+                "a3a0aeac0fbd3e99"
+            ]
+        ]
     },
     {
-        "id":  "a3a0aeac0fbd3e99",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Schedule Duration = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_duration"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  620,
-        "y":  40,
-        "wires":  [
-                      [
-                          "246063034880ca80"
-                      ]
-                  ]
+        "id": "a3a0aeac0fbd3e99",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Schedule Duration = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 620,
+        "y": 40,
+        "wires": [
+            [
+                "246063034880ca80"
+            ]
+        ]
     },
     {
-        "id":  "246063034880ca80",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Schedule SOC = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.scheduled_soc"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  850,
-        "y":  40,
-        "wires":  [
-                      [
-                          "702b8ef11c8c396c"
-                      ]
-                  ]
+        "id": "246063034880ca80",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Schedule SOC = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 850,
+        "y": 40,
+        "wires": [
+            [
+                "702b8ef11c8c396c"
+            ]
+        ]
     },
     {
-        "id":  "702b8ef11c8c396c",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Schedule Day = -7",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_day"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": -7}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  570,
-        "y":  120,
-        "wires":  [
-                      [
-                          "3a87476592bc532f"
-                      ]
-                  ]
+        "id": "702b8ef11c8c396c",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Schedule Day = -7",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 570,
+        "y": 120,
+        "wires": [
+            [
+                "3a87476592bc532f"
+            ]
+        ]
     },
     {
-        "id":  "3a87476592bc532f",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "MaxDischargePower = -1",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.max_discharge_power"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": -1}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  830,
-        "y":  120,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "3a87476592bc532f",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "MaxDischargePower = -1",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_discharge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -1}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 830,
+        "y": 120,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "84c9363491961540",
-        "type":  "debug",
-        "z":  "bb3654998a6bf514",
-        "g":  "432ef0e12c1fccd9",
-        "name":  "Normal Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  280,
-        "y":  140,
-        "wires":  [
-
-                  ]
+        "id": "84c9363491961540",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "Normal Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 140,
+        "wires": []
     },
     {
-        "id":  "ec611f6aba7d5c59",
-        "type":  "link in",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "← Šetřit",
-        "links":  [
-                      "7f051a6595e57c3e"
-                  ],
-        "x":  55,
-        "y":  260,
-        "wires":  [
-                      [
-                          "139cd450edbbde37"
-                      ]
-                  ]
+        "id": "ec611f6aba7d5c59",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "← Šetřit",
+        "links": [
+            "7f051a6595e57c3e"
+        ],
+        "x": 55,
+        "y": 260,
+        "wires": [
+            [
+                "139cd450edbbde37"
+            ]
+        ]
     },
     {
-        "id":  "139cd450edbbde37",
-        "type":  "function",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Šetřit Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\nmsg.victron = { power_set_point: 0, min_soc: Math.max(minSoc, currentSoc - 5), schedule_soc: currentSoc };\nmsg.mode = \"setrit\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Šetřit\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  170,
-        "y":  260,
-        "wires":  [
-                      [
-                          "17f08b797c764787",
-                          "176abc1b75a23fb4"
-                      ]
-                  ]
+        "id": "139cd450edbbde37",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Šetřit Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\nmsg.victron = { power_set_point: 0, min_soc: Math.max(minSoc, currentSoc - 5), schedule_soc: currentSoc };\nmsg.mode = \"setrit\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Šetřit\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 260,
+        "wires": [
+            [
+                "17f08b797c764787",
+                "176abc1b75a23fb4"
+            ]
+        ]
     },
     {
-        "id":  "17f08b797c764787",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Set Power Point (šetřit)",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.power_set_point"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": {{victron.power_set_point}}}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  370,
-        "y":  220,
-        "wires":  [
-                      [
-                          "6e319aa534013af8"
-                      ]
-                  ]
+        "id": "17f08b797c764787",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Set Power Point (šetřit)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.power_set_point}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 370,
+        "y": 220,
+        "wires": [
+            [
+                "6e319aa534013af8"
+            ]
+        ]
     },
     {
-        "id":  "6e319aa534013af8",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule SOC = aktuální",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.scheduled_soc"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": {{victron.schedule_soc}}}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  650,
-        "y":  220,
-        "wires":  [
-                      [
-                          "6d2e2f534bf9e398"
-                      ]
-                  ]
+        "id": "6e319aa534013af8",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Schedule SOC = aktuální",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.schedule_soc}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 650,
+        "y": 220,
+        "wires": [
+            [
+                "6d2e2f534bf9e398"
+            ]
+        ]
     },
     {
-        "id":  "6d2e2f534bf9e398",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule Duration = 86399",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_duration"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 86399}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  600,
-        "y":  280,
-        "wires":  [
-                      [
-                          "906ece2b651b5a64"
-                      ]
-                  ]
+        "id": "6d2e2f534bf9e398",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Schedule Duration = 86399",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 86399}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 600,
+        "y": 280,
+        "wires": [
+            [
+                "906ece2b651b5a64"
+            ]
+        ]
     },
     {
-        "id":  "906ece2b651b5a64",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Schedule Day = 7",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_day"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 7}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  850,
-        "y":  280,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "906ece2b651b5a64",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Schedule Day = 7",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 850,
+        "y": 280,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "176abc1b75a23fb4",
-        "type":  "debug",
-        "z":  "bb3654998a6bf514",
-        "g":  "b49b9676d4dbdff1",
-        "name":  "Šetřit Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  270,
-        "y":  320,
-        "wires":  [
-
-                  ]
+        "id": "176abc1b75a23fb4",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "Šetřit Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 270,
+        "y": 320,
+        "wires": []
     },
     {
-        "id":  "1d98a0541716ce58",
-        "type":  "link in",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "← Nabíjet",
-        "links":  [
-                      "185f95d7c56fe799"
-                  ],
-        "x":  55,
-        "y":  440,
-        "wires":  [
-                      [
-                          "ebcf9e560f598c02"
-                      ]
-                  ]
+        "id": "1d98a0541716ce58",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "← Nabíjet",
+        "links": [
+            "185f95d7c56fe799"
+        ],
+        "x": 55,
+        "y": 440,
+        "wires": [
+            [
+                "ebcf9e560f598c02"
+            ]
+        ]
     },
     {
-        "id":  "ebcf9e560f598c02",
-        "type":  "function",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Nabíjet Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\n\n// Použij maximální kapacitu sítě - Victron si sám omezí na max inverter\n// Při nabíjení auta: auto má prioritu (AC zátěž), zbytek kapacity jde do baterie\nvar maxGridW = config.max_spotreba_sit_w || 22000;\n\nmsg.victron = { power_set_point: -maxGridW, schedule_charge: true, schedule_charge_soc: 100, min_soc: 20 };\nmsg.mode = \"nabijet_ze_site\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Nabíjet\" + autoText + \" | Max: \" + maxGridW + \"W | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  170,
-        "y":  440,
-        "wires":  [
-                      [
-                          "11f838e573d16c9f",
-                          "6598def5a6b435a3"
-                      ]
-                  ]
+        "id": "ebcf9e560f598c02",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Nabíjet Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\n\n// Použij maximální kapacitu sítě - Victron si sám omezí na max inverter\n// Při nabíjení auta: auto má prioritu (AC zátěž), zbytek kapacity jde do baterie\nvar maxGridW = config.max_spotreba_sit_w || 22000;\n\nmsg.victron = { power_set_point: -maxGridW, schedule_charge: true, schedule_charge_soc: 100, min_soc: config.min_soc || 20 };\nmsg.mode = \"nabijet_ze_site\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Nabíjet\" + autoText + \" | Max: \" + maxGridW + \"W | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 440,
+        "wires": [
+            [
+                "11f838e573d16c9f",
+                "6598def5a6b435a3"
+            ]
+        ]
     },
     {
-        "id":  "11f838e573d16c9f",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Set Power Point (nabíjení)",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.power_set_point"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": {{victron.power_set_point}}}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  370,
-        "y":  400,
-        "wires":  [
-                      [
-                          "9cb53882cac5a9e2"
-                      ]
-                  ]
+        "id": "11f838e573d16c9f",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Set Power Point (nabíjení)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.power_set_point}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 370,
+        "y": 400,
+        "wires": [
+            [
+                "9cb53882cac5a9e2"
+            ]
+        ]
     },
     {
-        "id":  "9cb53882cac5a9e2",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Schedule SOC = 100",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.scheduled_soc"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 100}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  640,
-        "y":  400,
-        "wires":  [
-                      [
-                          "cf1085b95156e10a"
-                      ]
-                  ]
+        "id": "9cb53882cac5a9e2",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Schedule SOC = 100",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 100}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 640,
+        "y": 400,
+        "wires": [
+            [
+                "cf1085b95156e10a"
+            ]
+        ]
     },
     {
-        "id":  "cf1085b95156e10a",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Schedule Duration = 86399",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_duration"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 86399}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  600,
-        "y":  460,
-        "wires":  [
-                      [
-                          "fc83a9cf78db7a97"
-                      ]
-                  ]
+        "id": "cf1085b95156e10a",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Schedule Duration = 86399",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 86399}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 600,
+        "y": 460,
+        "wires": [
+            [
+                "fc83a9cf78db7a97"
+            ]
+        ]
     },
     {
-        "id":  "fc83a9cf78db7a97",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Schedule Day = 7",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_day"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 7}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  850,
-        "y":  460,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "fc83a9cf78db7a97",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Schedule Day = 7",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 850,
+        "y": 460,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "6598def5a6b435a3",
-        "type":  "debug",
-        "z":  "bb3654998a6bf514",
-        "g":  "2767feb260d6904c",
-        "name":  "Nabíjet Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  280,
-        "y":  500,
-        "wires":  [
-
-                  ]
+        "id": "6598def5a6b435a3",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "Nabíjet Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 500,
+        "wires": []
     },
     {
-        "id":  "179ed150020d459c",
-        "type":  "link in",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "← Prodávat",
-        "links":  [
-                      "a706b353f30c25d1"
-                  ],
-        "x":  55,
-        "y":  640,
-        "wires":  [
-                      [
-                          "68992d178ce105ed"
-                      ]
-                  ]
+        "id": "179ed150020d459c",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "← Prodávat",
+        "links": [
+            "a706b353f30c25d1"
+        ],
+        "x": 55,
+        "y": 640,
+        "wires": [
+            [
+                "68992d178ce105ed"
+            ]
+        ]
     },
     {
-        "id":  "68992d178ce105ed",
-        "type":  "function",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "Prodávat Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\n// Při nabíjení auta neprodáváme z baterie\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc \u003c= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nmsg.victron = { power_set_point: -maxFeedIn, min_soc: minSoc };\nmsg.mode = \"prodavat\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat | \" + maxFeedIn + \"W | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  180,
-        "y":  640,
-        "wires":  [
-                      [
-                          "52d5e20c2cede1f3",
-                          "86d71450ca024a50"
-                      ]
-                  ]
+        "id": "68992d178ce105ed",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "Prodávat Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\n// Při nabíjení auta neprodáváme z baterie\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nmsg.victron = { power_set_point: -maxFeedIn, min_soc: minSoc };\nmsg.mode = \"prodavat\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat | \" + maxFeedIn + \"W | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 180,
+        "y": 640,
+        "wires": [
+            [
+                "52d5e20c2cede1f3",
+                "86d71450ca024a50"
+            ]
+        ]
     },
     {
-        "id":  "52d5e20c2cede1f3",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "Set Power Point (prodej)",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.power_set_point"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": {{victron.power_set_point}}}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  370,
-        "y":  580,
-        "wires":  [
-                      [
-                          "9c7ee4010ab79e98"
-                      ]
-                  ]
+        "id": "52d5e20c2cede1f3",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "Set Power Point (prodej)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.power_set_point}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 370,
+        "y": 580,
+        "wires": [
+            [
+                "9c7ee4010ab79e98"
+            ]
+        ]
     },
     {
-        "id":  "9c7ee4010ab79e98",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "Schedule Duration = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_duration"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  640,
-        "y":  580,
-        "wires":  [
-                      [
-                          "53cd1a74ee8332ac"
-                      ]
-                  ]
+        "id": "9c7ee4010ab79e98",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "Schedule Duration = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 640,
+        "y": 580,
+        "wires": [
+            [
+                "53cd1a74ee8332ac"
+            ]
+        ]
     },
     {
-        "id":  "53cd1a74ee8332ac",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "ScheduledSoc = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.scheduled_soc"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  410,
-        "y":  640,
-        "wires":  [
-                      [
-                          "e12fd7a540b89f05"
-                      ]
-                  ]
+        "id": "53cd1a74ee8332ac",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "ScheduledSoc = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 410,
+        "y": 640,
+        "wires": [
+            [
+                "e12fd7a540b89f05"
+            ]
+        ]
     },
     {
-        "id":  "e12fd7a540b89f05",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "Schedule Day = -7",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_day"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": -7}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  630,
-        "y":  640,
-        "wires":  [
-                      [
-                          "9bd525cb24b06701"
-                      ]
-                  ]
+        "id": "e12fd7a540b89f05",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "Schedule Day = -7",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 630,
+        "y": 640,
+        "wires": [
+            [
+                "9bd525cb24b06701"
+            ]
+        ]
     },
     {
-        "id":  "9bd525cb24b06701",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "MaxDischargePower = -1",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.max_discharge_power"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": -1}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  830,
-        "y":  700,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "9bd525cb24b06701",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "MaxDischargePower = -1",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_discharge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -1}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 830,
+        "y": 700,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "86d71450ca024a50",
-        "type":  "debug",
-        "z":  "bb3654998a6bf514",
-        "g":  "7ce258bed914f262",
-        "name":  "Prodávat Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  280,
-        "y":  700,
-        "wires":  [
-
-                  ]
+        "id": "86d71450ca024a50",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "Prodávat Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 280,
+        "y": 700,
+        "wires": []
     },
     {
-        "id":  "c682224043634fcd",
-        "type":  "link in",
-        "z":  "bb3654998a6bf514",
-        "g":  "12a3795b66ec7d44",
-        "name":  "← Zákaz přetoků",
-        "links":  [
-                      "a86bc5233cfa0458"
-                  ],
-        "x":  55,
-        "y":  820,
-        "wires":  [
-                      [
-                          "75d1f9e77bc15e0a"
-                      ]
-                  ]
+        "id": "c682224043634fcd",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "← Zákaz přetoků",
+        "links": [
+            "a86bc5233cfa0458"
+        ],
+        "x": 55,
+        "y": 820,
+        "wires": [
+            [
+                "75d1f9e77bc15e0a"
+            ]
+        ]
     },
     {
-        "id":  "75d1f9e77bc15e0a",
-        "type":  "function",
-        "z":  "bb3654998a6bf514",
-        "g":  "12a3795b66ec7d44",
-        "name":  "Zákaz přetoků Logic",
-        "func":  "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\nmsg.victron = { power_set_point: 0, min_soc: minSoc };\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"purple\", shape:\"dot\", text:\"Zákaz přetoků\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  200,
-        "y":  820,
-        "wires":  [
-                      [
-                          "21e5f570ecff7fb5",
-                          "8db6ee5fbb848b8b"
-                      ]
-                  ]
+        "id": "75d1f9e77bc15e0a",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Zákaz přetoků Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\nmsg.victron = { power_set_point: 0, min_soc: minSoc };\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nnode.status({fill:\"purple\", shape:\"dot\", text:\"Zákaz přetoků\" + autoText + \" | SOC: \" + currentSoc + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 820,
+        "wires": [
+            [
+                "21e5f570ecff7fb5",
+                "8db6ee5fbb848b8b"
+            ]
+        ]
     },
     {
-        "id":  "21e5f570ecff7fb5",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "12a3795b66ec7d44",
-        "name":  "Set Power Point = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.power_set_point"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  480,
-        "y":  780,
-        "wires":  [
-                      [
-                          "c900a46800b30516"
-                      ]
-                  ]
+        "id": "21e5f570ecff7fb5",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Set Power Point = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 480,
+        "y": 780,
+        "wires": [
+            [
+                "c900a46800b30516"
+            ]
+        ]
     },
     {
-        "id":  "c900a46800b30516",
-        "type":  "api-call-service",
-        "z":  "bb3654998a6bf514",
-        "g":  "12a3795b66ec7d44",
-        "name":  "Schedule Duration = 0",
-        "server":  "c7421fe2.cb11c",
-        "version":  7,
-        "debugenabled":  false,
-        "action":  "number.set_value",
-        "floorId":  [
-
-                    ],
-        "areaId":  [
-
-                   ],
-        "deviceId":  [
-
-                     ],
-        "entityId":  [
-                         "number.schedule_charge_duration"
-                     ],
-        "labelId":  [
-
-                    ],
-        "data":  "{\"value\": 0}",
-        "dataType":  "json",
-        "mergeContext":  "",
-        "mustacheAltTags":  false,
-        "outputProperties":  [
-
-                             ],
-        "queue":  "none",
-        "blockInputOverrides":  true,
-        "domain":  "number",
-        "service":  "set_value",
-        "x":  840,
-        "y":  780,
-        "wires":  [
-                      [
-
-                      ]
-                  ]
+        "id": "c900a46800b30516",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Schedule Duration = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 840,
+        "y": 780,
+        "wires": [
+            []
+        ]
     },
     {
-        "id":  "8db6ee5fbb848b8b",
-        "type":  "debug",
-        "z":  "bb3654998a6bf514",
-        "g":  "12a3795b66ec7d44",
-        "name":  "Zákaz Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "true",
-        "targetType":  "full",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  460,
-        "y":  840,
-        "wires":  [
-
-                  ]
+        "id": "8db6ee5fbb848b8b",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Zákaz Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 460,
+        "y": 840,
+        "wires": []
     },
     {
-        "id":  "c7421fe2.cb11c",
-        "type":  "server",
-        "name":  "Home Assistant",
-        "addon":  true,
-        "rejectUnauthorizedCerts":  true,
-        "ha_boolean":  "",
-        "connectionDelay":  false,
-        "cacheJson":  false,
-        "heartbeat":  false,
-        "heartbeatInterval":  "",
-        "statusSeparator":  "",
-        "enableGlobalContextStore":  false
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
     },
     {
-        "id":  "d28b2b9f173a2bfe",
-        "type":  "global-config",
-        "env":  [
-
-                ],
-        "modules":  {
-                        "node-red-contrib-home-assistant-websocket":  "0.80.3"
-                    }
+        "id": "d28b2b9f173a2bfe",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     }
 ]

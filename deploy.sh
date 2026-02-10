@@ -2,7 +2,9 @@
 # ============================================================
 # Deploy skript pro HA + Node-RED
 # Spusťte přes SSH na Home Assistant
-# Usage: bash /tmp/HA/deploy.sh
+# Usage: bash /tmp/HA/deploy.sh              # jen Node-RED
+#        bash /tmp/HA/deploy.sh --with-ha    # Node-RED + HA restart
+#        bash /tmp/HA/deploy.sh --pull       # git pull + Node-RED
 # ============================================================
 
 set -e
@@ -10,8 +12,22 @@ set -e
 REPO_DIR="/tmp/HA"
 HA_CONFIG="/config"
 NODERED_DIR="/config/node-red"
+RESTART_HA=false
+GIT_PULL=false
+
+for arg in "$@"; do
+    case $arg in
+        --with-ha) RESTART_HA=true ;;
+        --pull) GIT_PULL=true ;;
+    esac
+done
 echo "=========================================="
 echo "  Deploy HA + Node-RED z GitHub repo"
+if $RESTART_HA; then
+    echo "  (s restartem Home Assistant)"
+else
+    echo "  (pouze Node-RED)"
+fi
 echo "=========================================="
 
 # --- 1. Kontrola, že repo existuje ---
@@ -19,6 +35,14 @@ if [ ! -d "$REPO_DIR" ]; then
     echo "❌ Repo neexistuje v $REPO_DIR"
     echo "   Nejprve spusťte: cd /tmp && git clone https://github.com/romanbobruska/HA.git"
     exit 1
+fi
+
+# --- 1b. Git pull pokud požadováno ---
+if $GIT_PULL; then
+    echo ""
+    echo "📥 Stahuji nejnovější změny z gitu..."
+    cd "$REPO_DIR" && git pull
+    echo "   ✅ Git pull dokončen"
 fi
 
 # --- 2. Úklid starých záloh ---
@@ -128,13 +152,15 @@ print(f'   📁 Uloženo do: {output_file}')
 fi
 
 # --- 5. Kontrola HA konfigurace ---
-echo ""
-echo "🔍 Kontroluji HA konfiguraci..."
-ha core check 2>/dev/null
-if [ $? -eq 0 ]; then
-    echo "   ✅ Konfigurace OK"
-else
-    echo "   ⚠️  ha core check selhal (může být OK pokud nejste na HA OS)"
+if $RESTART_HA; then
+    echo ""
+    echo "🔍 Kontroluji HA konfiguraci..."
+    ha core check 2>/dev/null
+    if [ $? -eq 0 ]; then
+        echo "   ✅ Konfigurace OK"
+    else
+        echo "   ⚠️  ha core check selhal (může být OK pokud nejste na HA OS)"
+    fi
 fi
 
 # --- 6. Restart ---
@@ -142,8 +168,13 @@ echo ""
 echo "🔄 Restartuji služby..."
 echo "   Spouštím Node-RED..."
 ha addons start a0d7b954_nodered 2>/dev/null || ha addons start core_node_red 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
-echo "   Restartuji Home Assistant..."
-ha core restart 2>/dev/null || echo "   ⚠️  Restartujte HA ručně: Nastavení → Systém → Restartovat"
+
+if $RESTART_HA; then
+    echo "   Restartuji Home Assistant..."
+    ha core restart 2>/dev/null || echo "   ⚠️  Restartujte HA ručně: Nastavení → Systém → Restartovat"
+else
+    echo "   ℹ️  Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)"
+fi
 
 echo ""
 echo "=========================================="
