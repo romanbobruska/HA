@@ -1,572 +1,544 @@
 [
     {
-        "id":  "3f2680578b66e78f",
-        "type":  "tab",
-        "label":  "FVE Config",
-        "disabled":  false,
-        "info":  "Konfigurace FVE automatizace - parametry a inicializace",
-        "env":  [
-
-                ]
+        "id": "3f2680578b66e78f",
+        "type": "tab",
+        "label": "FVE Config",
+        "disabled": false,
+        "info": "Konfigurace FVE automatizace - parametry a inicializace",
+        "env": []
     },
     {
-        "id":  "2d77556df552e86d",
-        "type":  "group",
-        "z":  "3f2680578b66e78f",
-        "name":  "Konfigurace FVE",
-        "style":  {
-                      "fill":  "#e3f3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "2df5b10f83b0e39d",
-                      "44025571f9d270fb",
-                      "2e5f28e1a0b06f19"
-                  ],
-        "x":  14,
-        "y":  19,
-        "w":  702,
-        "h":  82
+        "id": "2d77556df552e86d",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Konfigurace FVE",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "2df5b10f83b0e39d",
+            "44025571f9d270fb",
+            "2e5f28e1a0b06f19"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 702,
+        "h": 82
     },
     {
-        "id":  "c7e025194045b1be",
-        "type":  "group",
-        "z":  "3f2680578b66e78f",
-        "name":  "Aktuální ceny energie",
-        "style":  {
-                      "fill":  "#f3e8d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "7c3b58eeb3106ded",
-                      "caf460b8b3af03dd",
-                      "402735a3f30a84e8",
-                      "f1cea1e4214578c4"
-                  ],
-        "x":  14,
-        "y":  279,
-        "w":  832,
-        "h":  82
+        "id": "c7e025194045b1be",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Aktuální ceny energie",
+        "style": {
+            "fill": "#f3e8d3",
+            "label": true
+        },
+        "nodes": [
+            "7c3b58eeb3106ded",
+            "caf460b8b3af03dd",
+            "402735a3f30a84e8",
+            "f1cea1e4214578c4"
+        ],
+        "x": 24,
+        "y": 279,
+        "w": 822,
+        "h": 82
     },
     {
-        "id":  "da4c9bfc3dddec82",
-        "type":  "group",
-        "z":  "3f2680578b66e78f",
-        "name":  "Aktuální stav systému",
-        "style":  {
-                      "fill":  "#f3d3d3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "322c6a3de64b51b5",
-                      "90dca62607936795",
-                      "88d08735b548d24c",
-                      "8cfae471cfa68d3f"
-                  ],
-        "x":  14,
-        "y":  379,
-        "w":  832,
-        "h":  82
+        "id": "da4c9bfc3dddec82",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Aktuální stav systému",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "322c6a3de64b51b5",
+            "90dca62607936795",
+            "88d08735b548d24c",
+            "8cfae471cfa68d3f"
+        ],
+        "x": 14,
+        "y": 379,
+        "w": 832,
+        "h": 82
     },
     {
-        "id":  "452576adb7294b87",
-        "type":  "group",
-        "z":  "3f2680578b66e78f",
-        "name":  "Synchronizace s Home Assistant",
-        "style":  {
-                      "fill":  "#d3e8f3",
-                      "label":  true
-                  },
-        "nodes":  [
-                      "2986fe2bccfe8740",
-                      "ae5590b0cd6e6b6a",
-                      "3fefdad956c6ae27",
-                      "4a5169173535c2a2",
-                      "f4160d8797285db7",
-                      "926f790a1d6a8f6e"
-                  ],
-        "x":  14,
-        "y":  119,
-        "w":  832,
-        "h":  142
+        "id": "452576adb7294b87",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Synchronizace s Home Assistant",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "2986fe2bccfe8740",
+            "ae5590b0cd6e6b6a",
+            "3fefdad956c6ae27",
+            "4a5169173535c2a2",
+            "f4160d8797285db7",
+            "926f790a1d6a8f6e"
+        ],
+        "x": 14,
+        "y": 119,
+        "w": 832,
+        "h": 142
     },
     {
-        "id":  "2df5b10f83b0e39d",
-        "type":  "inject",
-        "z":  "3f2680578b66e78f",
-        "g":  "2d77556df552e86d",
-        "name":  "Inicializace při startu",
-        "props":  [
-                      {
-                          "p":  "payload"
-                      }
-                  ],
-        "repeat":  "",
-        "crontab":  "",
-        "once":  true,
-        "onceDelay":  "10",
-        "topic":  "",
-        "payload":  "init",
-        "payloadType":  "str",
-        "x":  160,
-        "y":  60,
-        "wires":  [
-                      [
-                          "44025571f9d270fb"
-                      ]
-                  ]
+        "id": "2df5b10f83b0e39d",
+        "type": "inject",
+        "z": "3f2680578b66e78f",
+        "g": "2d77556df552e86d",
+        "name": "Inicializace při startu",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "init",
+        "payloadType": "str",
+        "x": 160,
+        "y": 60,
+        "wires": [
+            [
+                "44025571f9d270fb"
+            ]
+        ]
     },
     {
-        "id":  "44025571f9d270fb",
-        "type":  "function",
-        "z":  "3f2680578b66e78f",
-        "g":  "2d77556df552e86d",
-        "name":  "Nastav konfiguraci",
-        "func":  "// =============================================================================\n// FVE Konfigurace - Výchozí hodnoty\n// =============================================================================\n\nconst config = {\n    // Baterie\n    kapacita_baterie_kwh: 28,\n    min_soc: 20,\n    max_daily_soc: 80,\n    amortizace_baterie_czk_kwh: 1.5,\n    charge_efficiency: 0.90,       // 10% ztráta při nabíjení\n    discharge_efficiency: 0.90,    // 10% ztráta při vybíjení\n    charge_rate_kwh: 5,            // rychlost nabíjení ze sítě (kWh/h)\n    soc_drop_normal_pct: 5,        // % pokles SOC za hodinu v NORMAL módu\n    daily_consumption_kwh: 20,     // odhadovaná denní spotřeba domu (kWh)\n    \n    // Síť\n    max_feed_in_w: 7600,\n    max_spotreba_sit_w: 22000,\n    jistic_a: 32,\n    \n    // FVE\n    fve_peak_kwp: 3,\n    fve_azimut: 270,\n    fve_sklon: 50,\n    \n    // Victron MQTT\n    victron_id: \"c0619ab69c71\",\n    victron_mqtt_prefix: \"victron\",\n    \n    // Cenové prahy (level 1-10, 1=nejlevnější)\n    prah_levna_energie: 4,      // level \u003c= prah = levná energie\n    prah_draha_energie: 13,      // level \u003e= prah = drahá energie\n    \n    // Hystereze\n    hystereze_zapnuti_w: 500,   // přebytek pro zapnutí spotřebiče\n    hystereze_vypnuti_w: 200,   // přebytek pro udržení spotřebiče\n    \n    // Časové intervaly\n    plan_interval_min: 1,      // interval aktualizace plánu\n    plan_horizon_hours: 12,     // horizont plánování\n    \n    // Manuální mód (auto = automatický výběr podle plánu)\n    manual_mod: \"auto\",\n    \n    // Automatizace\n    automatizace_enabled: true,\n    prodej_z_baterie_enabled: false,\n    blokace_vybijeni: false,\n    \n    // Módy\n    mody: {\n        NORMAL: \"normal\",\n        SETRIT: \"setrit\",\n        NABIJET_ZE_SITE: \"nabijet_ze_site\",\n        PRODAVAT: \"prodavat\",\n        PRODAVAT_MISTO_NABIJENI: \"prodavat_misto_nabijeni\",\n        ZAKAZ_PRETOKU: \"zakaz_pretoku\"\n    },\n    \n    // Priorita spotřebičů (nižší = vyšší priorita)\n    priority: {\n        tepelne_cerpadlo: 1,\n        bojler: 2,\n        auto_nabijeni: 3,       \n        baterie_nabijeni: 4,\n        ostatni: 5\n    }\n};\n\n// Uložit do global kontextu\nglobal.set(\"fve_config\", config);\n\n// Uložit jednotlivé hodnoty pro zpětnou kompatibilitu\nglobal.set(\"max_spotreba_sit\", config.max_spotreba_sit_w);\nglobal.set(\"forecast_vyroba_dnes\", 0);\nglobal.set(\"forecast_vyroba_zitra\", 0);\n\nmsg.payload = config;\nmsg.topic = \"fve/config\";\n\nnode.status({fill:\"green\", shape:\"dot\", text:\"Konfigurace načtena\"});\n\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  390,
-        "y":  60,
-        "wires":  [
-                      [
-                          "2e5f28e1a0b06f19"
-                      ]
-                  ]
+        "id": "44025571f9d270fb",
+        "type": "function",
+        "z": "3f2680578b66e78f",
+        "g": "2d77556df552e86d",
+        "name": "Nastav konfiguraci",
+        "func": "// =============================================================================\n// FVE Konfigurace - Výchozí hodnoty\n// =============================================================================\n\nconst config = {\n    // Baterie\n    kapacita_baterie_kwh: 28,\n    min_soc: 20,\n    max_daily_soc: 80,\n    amortizace_baterie_czk_kwh: 1.5,\n    charge_efficiency: 0.90,       // 10% ztráta při nabíjení\n    discharge_efficiency: 0.90,    // 10% ztráta při vybíjení\n    charge_rate_kwh: 5,            // rychlost nabíjení ze sítě (kWh/h)\n    soc_drop_normal_pct: 5,        // % pokles SOC za hodinu v NORMAL módu\n    daily_consumption_kwh: 20,     // odhadovaná denní spotřeba domu (kWh)\n    \n    // Síť\n    max_feed_in_w: 7600,\n    max_spotreba_sit_w: 22000,\n    jistic_a: 32,\n    \n    // FVE\n    fve_peak_kwp: 3,\n    fve_azimut: 270,\n    fve_sklon: 50,\n    \n    // Victron MQTT\n    victron_id: \"c0619ab69c71\",\n    victron_mqtt_prefix: \"victron\",\n    \n    // Cenové prahy (level 1-10, 1=nejlevnější)\n    prah_levna_energie: 4,      // level <= prah = levná energie\n    prah_draha_energie: 12,      // level >= prah = drahá energie\n    \n    // Hystereze\n    hystereze_zapnuti_w: 500,   // přebytek pro zapnutí spotřebiče\n    hystereze_vypnuti_w: 200,   // přebytek pro udržení spotřebiče\n    \n    // Časové intervaly\n    plan_interval_min: 1,      // interval aktualizace plánu\n    plan_horizon_hours: 12,     // horizont plánování\n    \n    // Manuální mód (auto = automatický výběr podle plánu)\n    manual_mod: \"auto\",\n    \n    // Automatizace\n    automatizace_enabled: true,\n    prodej_z_baterie_enabled: false,\n    blokace_vybijeni: false,\n    \n    // Módy\n    mody: {\n        NORMAL: \"normal\",\n        SETRIT: \"setrit\",\n        NABIJET_ZE_SITE: \"nabijet_ze_site\",\n        PRODAVAT: \"prodavat\",\n        PRODAVAT_MISTO_NABIJENI: \"prodavat_misto_nabijeni\",\n        ZAKAZ_PRETOKU: \"zakaz_pretoku\"\n    },\n    \n    // Priorita spotřebičů (nižší = vyšší priorita)\n    priority: {\n        tepelne_cerpadlo: 1,\n        bojler: 2,\n        auto_nabijeni: 3,       \n        baterie_nabijeni: 4,\n        ostatni: 5\n    }\n};\n\n// Uložit do global kontextu\nglobal.set(\"fve_config\", config);\n\n// Uložit jednotlivé hodnoty pro zpětnou kompatibilitu\nglobal.set(\"max_spotreba_sit\", config.max_spotreba_sit_w);\nglobal.set(\"forecast_vyroba_dnes\", 0);\nglobal.set(\"forecast_vyroba_zitra\", 0);\n\nmsg.payload = config;\nmsg.topic = \"fve/config\";\n\nnode.status({fill:\"green\", shape:\"dot\", text:\"Konfigurace načtena\"});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 60,
+        "wires": [
+            [
+                "2e5f28e1a0b06f19"
+            ]
+        ]
     },
     {
-        "id":  "2e5f28e1a0b06f19",
-        "type":  "debug",
-        "z":  "3f2680578b66e78f",
-        "g":  "2d77556df552e86d",
-        "name":  "Config Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "payload",
-        "targetType":  "msg",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  590,
-        "y":  60,
-        "wires":  [
-
-                  ]
+        "id": "2e5f28e1a0b06f19",
+        "type": "debug",
+        "z": "3f2680578b66e78f",
+        "g": "2d77556df552e86d",
+        "name": "Config Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 60,
+        "wires": []
     },
     {
-        "id":  "7c3b58eeb3106ded",
-        "type":  "inject",
-        "z":  "3f2680578b66e78f",
-        "g":  "c7e025194045b1be",
-        "name":  "Každou minutu",
-        "props":  [
-                      {
-                          "p":  "payload"
-                      }
-                  ],
-        "repeat":  "60",
-        "crontab":  "",
-        "once":  true,
-        "onceDelay":  "5",
-        "topic":  "",
-        "payload":  "",
-        "payloadType":  "date",
-        "x":  150,
-        "y":  320,
-        "wires":  [
-                      [
-                          "f1cea1e4214578c4"
-                      ]
-                  ]
+        "id": "7c3b58eeb3106ded",
+        "type": "inject",
+        "z": "3f2680578b66e78f",
+        "g": "c7e025194045b1be",
+        "name": "Každou minutu",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 320,
+        "wires": [
+            [
+                "f1cea1e4214578c4"
+            ]
+        ]
     },
     {
-        "id":  "caf460b8b3af03dd",
-        "type":  "function",
-        "z":  "3f2680578b66e78f",
-        "g":  "c7e025194045b1be",
-        "name":  "Zpracuj ceny",
-        "func":  "// Zpracování cenových dat z databáze - aktualizace každou minutu\n// Deduplikace: pokud tabulka obsahuje data z více dní,\n// zachováme poslední (nejaktuálnější) záznam pro každou hodinu\nconst prices = msg.payload || [];\nconst config = global.get(\"fve_config\") || {};\nconst rezim = config.rezim_casu || \"hodina\";\n\nconst now = new Date();\nconst currentHour = now.getHours();\nconst currentMinute = now.getMinutes();\nconst currentQuarter = Math.floor(currentMinute / 15);\n\n// Deduplikace po hodinách - pozdější záznamy přepíší starší\nvar priceMap = {};\nfor (var i = 0; i \u003c prices.length; i++) {\n    var row = prices[i];\n    var key = String(row.hour);\n    if (rezim === \"ctvrthodina\" \u0026\u0026 row.minute !== undefined) {\n        key = row.hour + \"_\" + row.minute;\n    }\n    priceMap[key] = row;\n}\nvar dedupedPrices = [];\nvar keys = Object.keys(priceMap);\nfor (var k = 0; k \u003c keys.length; k++) {\n    dedupedPrices.push(priceMap[keys[k]]);\n}\n\n// Najít aktuální cenu\nlet currentPrice = null;\nlet priceLevel = 5; // default střední\n\nfor (const row of dedupedPrices) {\n    if (row.hour === currentHour) {\n        if (rezim === \"ctvrthodina\") {\n            if (row.minute === currentQuarter * 15) {\n                currentPrice = {\n                    buy: row.priceCZKquarterBuy,\n                    sell: row.priceCZKquarterProd,\n                    levelBuy: row.levelCheapestQuarterBuy,\n                    levelSell: row.levelMostExpensiveQuarterProd\n                };\n                priceLevel = row.levelCheapestQuarterBuy;\n                break;\n            }\n        } else {\n            currentPrice = {\n                buy: row.priceCZKhourBuy,\n                sell: row.priceCZKhourProd,\n                levelBuy: row.levelCheapestHourBuy,\n                levelSell: row.levelMostExpensiveHourProd\n            };\n            priceLevel = row.levelCheapestHourBuy;\n            break;\n        }\n    }\n}\n\n// Uložit do global kontextu\nglobal.set(\"fve_current_price\", currentPrice);\nglobal.set(\"fve_price_level\", priceLevel);\nglobal.set(\"fve_prices_forecast\", dedupedPrices);\n\nmsg.payload = {\n    currentPrice: currentPrice,\n    priceLevel: priceLevel,\n    pricesCount: dedupedPrices.length,\n    rawCount: prices.length,\n    timestamp: now.toISOString()\n};\n\nconst levelText = priceLevel \u003c= 4 ? \"levná\" : (priceLevel \u003e= 7 ? \"drahá\" : \"střední\");\nnode.status({fill: priceLevel \u003c= 4 ? \"green\" : (priceLevel \u003e= 7 ? \"red\" : \"yellow\"), shape:\"dot\", text: `Level ${priceLevel} (${levelText}) | ${dedupedPrices.length}/${prices.length} řádků`});\n\nreturn msg;\n",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  530,
-        "y":  320,
-        "wires":  [
-                      [
-                          "402735a3f30a84e8"
-                      ]
-                  ]
+        "id": "caf460b8b3af03dd",
+        "type": "function",
+        "z": "3f2680578b66e78f",
+        "g": "c7e025194045b1be",
+        "name": "Zpracuj ceny",
+        "func": "// Zpracování cenových dat z databáze - aktualizace každou minutu\n// Deduplikace: pokud tabulka obsahuje data z více dní,\n// zachováme poslední (nejaktuálnější) záznam pro každou hodinu\nconst prices = msg.payload || [];\nconst config = global.get(\"fve_config\") || {};\nconst rezim = config.rezim_casu || \"hodina\";\n\nconst now = new Date();\nconst currentHour = now.getHours();\nconst currentMinute = now.getMinutes();\nconst currentQuarter = Math.floor(currentMinute / 15);\n\n// Deduplikace po hodinách - pozdější záznamy přepíší starší\nvar priceMap = {};\nfor (var i = 0; i < prices.length; i++) {\n    var row = prices[i];\n    var key = String(row.hour);\n    if (rezim === \"ctvrthodina\" && row.minute !== undefined) {\n        key = row.hour + \"_\" + row.minute;\n    }\n    priceMap[key] = row;\n}\nvar dedupedPrices = [];\nvar keys = Object.keys(priceMap);\nfor (var k = 0; k < keys.length; k++) {\n    dedupedPrices.push(priceMap[keys[k]]);\n}\n\n// Najít aktuální cenu\nlet currentPrice = null;\nlet priceLevel = 5; // default střední\n\nfor (const row of dedupedPrices) {\n    if (row.hour === currentHour) {\n        if (rezim === \"ctvrthodina\") {\n            if (row.minute === currentQuarter * 15) {\n                currentPrice = {\n                    buy: row.priceCZKquarterBuy,\n                    sell: row.priceCZKquarterProd,\n                    levelBuy: row.levelCheapestQuarterBuy,\n                    levelSell: row.levelMostExpensiveQuarterProd\n                };\n                priceLevel = row.levelCheapestQuarterBuy;\n                break;\n            }\n        } else {\n            currentPrice = {\n                buy: row.priceCZKhourBuy,\n                sell: row.priceCZKhourProd,\n                levelBuy: row.levelCheapestHourBuy,\n                levelSell: row.levelMostExpensiveHourProd\n            };\n            priceLevel = row.levelCheapestHourBuy;\n            break;\n        }\n    }\n}\n\n// Uložit do global kontextu\nglobal.set(\"fve_current_price\", currentPrice);\nglobal.set(\"fve_price_level\", priceLevel);\nglobal.set(\"fve_prices_forecast\", dedupedPrices);\n\nmsg.payload = {\n    currentPrice: currentPrice,\n    priceLevel: priceLevel,\n    pricesCount: dedupedPrices.length,\n    rawCount: prices.length,\n    timestamp: now.toISOString()\n};\n\nconst levelText = priceLevel <= 4 ? \"levná\" : (priceLevel >= 7 ? \"drahá\" : \"střední\");\nnode.status({fill: priceLevel <= 4 ? \"green\" : (priceLevel >= 7 ? \"red\" : \"yellow\"), shape:\"dot\", text: `Level ${priceLevel} (${levelText}) | ${dedupedPrices.length}/${prices.length} řádků`});\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 320,
+        "wires": [
+            [
+                "402735a3f30a84e8"
+            ]
+        ]
     },
     {
-        "id":  "402735a3f30a84e8",
-        "type":  "debug",
-        "z":  "3f2680578b66e78f",
-        "g":  "c7e025194045b1be",
-        "name":  "Prices Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "payload",
-        "targetType":  "msg",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  720,
-        "y":  320,
-        "wires":  [
-
-                  ]
+        "id": "402735a3f30a84e8",
+        "type": "debug",
+        "z": "3f2680578b66e78f",
+        "g": "c7e025194045b1be",
+        "name": "Prices Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 320,
+        "wires": []
     },
     {
-        "id":  "322c6a3de64b51b5",
-        "type":  "inject",
-        "z":  "3f2680578b66e78f",
-        "g":  "da4c9bfc3dddec82",
-        "name":  "Každou minutu",
-        "props":  [
-                      {
-                          "p":  "payload"
-                      }
-                  ],
-        "repeat":  "60",
-        "crontab":  "",
-        "once":  true,
-        "onceDelay":  "10",
-        "topic":  "",
-        "payload":  "",
-        "payloadType":  "date",
-        "x":  140,
-        "y":  420,
-        "wires":  [
-                      [
-                          "90dca62607936795"
-                      ]
-                  ]
+        "id": "322c6a3de64b51b5",
+        "type": "inject",
+        "z": "3f2680578b66e78f",
+        "g": "da4c9bfc3dddec82",
+        "name": "Každou minutu",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 420,
+        "wires": [
+            [
+                "90dca62607936795"
+            ]
+        ]
     },
     {
-        "id":  "90dca62607936795",
-        "type":  "api-current-state",
-        "z":  "3f2680578b66e78f",
-        "g":  "da4c9bfc3dddec82",
-        "name":  "Stav baterie",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "sensor.battery_percent",
-        "state_type":  "num",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "battery_soc",
-                                     "propertyType":  "msg",
-                                     "value":  "string",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  320,
-        "y":  420,
-        "wires":  [
-                      [
-                          "88d08735b548d24c"
-                      ]
-                  ]
+        "id": "90dca62607936795",
+        "type": "api-current-state",
+        "z": "3f2680578b66e78f",
+        "g": "da4c9bfc3dddec82",
+        "name": "Stav baterie",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "battery_soc",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 320,
+        "y": 420,
+        "wires": [
+            [
+                "88d08735b548d24c"
+            ]
+        ]
     },
     {
-        "id":  "88d08735b548d24c",
-        "type":  "function",
-        "z":  "3f2680578b66e78f",
-        "g":  "da4c9bfc3dddec82",
-        "name":  "Aktualizuj stav",
-        "func":  "// Sestavení aktuálního stavu systému\nconst config = global.get(\"fve_config\") || {};\nconst priceLevel = global.get(\"fve_price_level\") || 5;\nconst currentPrice = global.get(\"fve_current_price\") || {};\n\nconst status = {\n    timestamp: new Date().toISOString(),\n    \n    // Baterie\n    battery_soc: msg.battery_soc || 0,\n    battery_energy_kwh: (msg.battery_soc / 100) * (config.kapacita_baterie_kwh || 28),\n    battery_available_kwh: Math.max(0, ((msg.battery_soc - (config.min_soc || 20)) / 100) * (config.kapacita_baterie_kwh || 28)),\n    battery_free_kwh: ((100 - msg.battery_soc) / 100) * (config.kapacita_baterie_kwh || 28),\n    \n    // Ceny\n    price_level: priceLevel,\n    price_buy: currentPrice.buy || 0,\n    price_sell: currentPrice.sell || 0,\n    is_cheap: priceLevel \u003c= (config.prah_levna_energie || 4),\n    is_expensive: priceLevel \u003e= (config.prah_draha_energie || 7),\n    \n    // Konfigurace\n    automatizace_enabled: config.automatizace_enabled !== false,\n    prodej_z_baterie_enabled: config.prodej_z_baterie_enabled === true,\n    blokace_vybijeni: config.blokace_vybijeni === true,\n    manual_mod: config.manual_mod || \"auto\"\n};\n\n// Uložit do global kontextu\nglobal.set(\"fve_status\", status);\n\nmsg.payload = status;\n\nconst socText = `SOC: ${status.battery_soc}% | Level: ${status.price_level}`;\nnode.status({fill: status.battery_soc \u003e 50 ? \"green\" : (status.battery_soc \u003e 20 ? \"yellow\" : \"red\"), shape:\"dot\", text: socText});\n\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  510,
-        "y":  420,
-        "wires":  [
-                      [
-                          "8cfae471cfa68d3f"
-                      ]
-                  ]
+        "id": "88d08735b548d24c",
+        "type": "function",
+        "z": "3f2680578b66e78f",
+        "g": "da4c9bfc3dddec82",
+        "name": "Aktualizuj stav",
+        "func": "// Sestavení aktuálního stavu systému\nconst config = global.get(\"fve_config\") || {};\nconst priceLevel = global.get(\"fve_price_level\") || 5;\nconst currentPrice = global.get(\"fve_current_price\") || {};\n\nconst status = {\n    timestamp: new Date().toISOString(),\n    \n    // Baterie\n    battery_soc: msg.battery_soc || 0,\n    battery_energy_kwh: (msg.battery_soc / 100) * (config.kapacita_baterie_kwh || 28),\n    battery_available_kwh: Math.max(0, ((msg.battery_soc - (config.min_soc || 20)) / 100) * (config.kapacita_baterie_kwh || 28)),\n    battery_free_kwh: ((100 - msg.battery_soc) / 100) * (config.kapacita_baterie_kwh || 28),\n    \n    // Ceny\n    price_level: priceLevel,\n    price_buy: currentPrice.buy || 0,\n    price_sell: currentPrice.sell || 0,\n    is_cheap: priceLevel <= (config.prah_levna_energie || 4),\n    is_expensive: priceLevel >= (config.prah_draha_energie || 7),\n    \n    // Konfigurace\n    automatizace_enabled: config.automatizace_enabled !== false,\n    prodej_z_baterie_enabled: config.prodej_z_baterie_enabled === true,\n    blokace_vybijeni: config.blokace_vybijeni === true,\n    manual_mod: config.manual_mod || \"auto\"\n};\n\n// Uložit do global kontextu\nglobal.set(\"fve_status\", status);\n\nmsg.payload = status;\n\nconst socText = `SOC: ${status.battery_soc}% | Level: ${status.price_level}`;\nnode.status({fill: status.battery_soc > 50 ? \"green\" : (status.battery_soc > 20 ? \"yellow\" : \"red\"), shape:\"dot\", text: socText});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 420,
+        "wires": [
+            [
+                "8cfae471cfa68d3f"
+            ]
+        ]
     },
     {
-        "id":  "8cfae471cfa68d3f",
-        "type":  "debug",
-        "z":  "3f2680578b66e78f",
-        "g":  "da4c9bfc3dddec82",
-        "name":  "Status Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "payload",
-        "targetType":  "msg",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  720,
-        "y":  420,
-        "wires":  [
-
-                  ]
+        "id": "8cfae471cfa68d3f",
+        "type": "debug",
+        "z": "3f2680578b66e78f",
+        "g": "da4c9bfc3dddec82",
+        "name": "Status Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 420,
+        "wires": []
     },
     {
-        "id":  "f1cea1e4214578c4",
-        "type":  "sqlite",
-        "z":  "3f2680578b66e78f",
-        "g":  "c7e025194045b1be",
-        "mydb":  "6d97960f9560e05b",
-        "sqlquery":  "fixed",
-        "sql":  "SELECT * FROM \"own_energy_prices_total\";\n",
-        "name":  "Vyber tabulku cen",
-        "x":  350,
-        "y":  320,
-        "wires":  [
-                      [
-                          "caf460b8b3af03dd"
-                      ]
-                  ]
+        "id": "f1cea1e4214578c4",
+        "type": "sqlite",
+        "z": "3f2680578b66e78f",
+        "g": "c7e025194045b1be",
+        "mydb": "6d97960f9560e05b",
+        "sqlquery": "fixed",
+        "sql": "SELECT * FROM \"own_energy_prices_total\";\n",
+        "name": "Vyber tabulku cen",
+        "x": 350,
+        "y": 320,
+        "wires": [
+            [
+                "caf460b8b3af03dd"
+            ]
+        ]
     },
     {
-        "id":  "2986fe2bccfe8740",
-        "type":  "server-state-changed",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "HA Config změna",
-        "server":  "c7421fe2.cb11c",
-        "version":  6,
-        "outputs":  1,
-        "exposeAsEntityConfig":  "",
-        "entities":  {
-                         "entity":  [
-                                        "input_number.fve_kapacita_baterie",
-                                        "number.min_soc",
-                                        "input_number.fve_amortizace_baterie",
-                                        "input_number.fve_max_feed_in",
-                                        "input_number.fve_max_spotreba_sit",
-                                        "input_boolean.fve_automatizace",
-                                        "input_boolean.fve_prodej_z_baterie",
-                                        "input_boolean.fve_blokace_vybijeni",
-                                        "input_boolean.letni_rezim",
-                                        "input_number.predpoved_solarni_vyroby_dnes",
-                                        "input_number.predpoved_solarni_vyroby_zitra",
-                                        "input_select.fve_rezim_casu",
-                                        "input_select.fve_manual_mod",
-                                        "input_number.zbyvajici_solarni_vyroba_dnes"
-                                    ],
-                         "substring":  [
-
-                                       ],
-                         "regex":  [
-
-                                   ]
-                     },
-        "outputInitially":  true,
-        "stateType":  "str",
-        "ifState":  "",
-        "ifStateType":  "str",
-        "ifStateOperator":  "is",
-        "outputOnlyOnStateChange":  true,
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "ignorePrevStateNull":  false,
-        "ignorePrevStateUnknown":  false,
-        "ignorePrevStateUnavailable":  false,
-        "ignoreCurrentStateUnknown":  false,
-        "ignoreCurrentStateUnavailable":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "payload",
-                                     "propertyType":  "msg",
-                                     "value":  "string",
-                                     "valueType":  "entityState"
-                                 },
-                                 {
-                                     "property":  "entity_id",
-                                     "propertyType":  "msg",
-                                     "value":  "",
-                                     "valueType":  "triggerId"
-                                 }
-                             ],
-        "x":  120,
-        "y":  160,
-        "wires":  [
-                      [
-                          "ae5590b0cd6e6b6a"
-                      ]
-                  ]
+        "id": "2986fe2bccfe8740",
+        "type": "server-state-changed",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "HA Config změna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_number.fve_kapacita_baterie",
+                "number.min_soc",
+                "input_number.fve_amortizace_baterie",
+                "input_number.fve_max_feed_in",
+                "input_number.fve_max_spotreba_sit",
+                "input_boolean.fve_automatizace",
+                "input_boolean.fve_prodej_z_baterie",
+                "input_boolean.fve_blokace_vybijeni",
+                "input_boolean.letni_rezim",
+                "input_number.predpoved_solarni_vyroby_dnes",
+                "input_number.predpoved_solarni_vyroby_zitra",
+                "input_select.fve_rezim_casu",
+                "input_select.fve_manual_mod",
+                "input_number.zbyvajici_solarni_vyroba_dnes"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "entity_id",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "ae5590b0cd6e6b6a"
+            ]
+        ]
     },
     {
-        "id":  "ae5590b0cd6e6b6a",
-        "type":  "api-current-state",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "Načti všechny FVE stavy",
-        "server":  "c7421fe2.cb11c",
-        "version":  3,
-        "outputs":  1,
-        "halt_if":  "",
-        "halt_if_type":  "str",
-        "halt_if_compare":  "is",
-        "entity_id":  "input_number.fve_kapacita_baterie",
-        "state_type":  "num",
-        "blockInputOverrides":  false,
-        "outputProperties":  [
-                                 {
-                                     "property":  "kapacita_baterie",
-                                     "propertyType":  "msg",
-                                     "value":  "string",
-                                     "valueType":  "entityState"
-                                 }
-                             ],
-        "for":  "0",
-        "forType":  "num",
-        "forUnits":  "minutes",
-        "x":  350,
-        "y":  160,
-        "wires":  [
-                      [
-                          "3fefdad956c6ae27"
-                      ]
-                  ]
+        "id": "ae5590b0cd6e6b6a",
+        "type": "api-current-state",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "Načti všechny FVE stavy",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_number.fve_kapacita_baterie",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "kapacita_baterie",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "3fefdad956c6ae27"
+            ]
+        ]
     },
     {
-        "id":  "3fefdad956c6ae27",
-        "type":  "function",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "Zpracuj HA stavy",
-        "func":  "// Načtení aktuální konfigurace\nconst config = global.get(\"fve_config\") || {};\n\n// Aktualizace z HA entity (pokud přišla změna)\nconst entity_id = msg.entity_id || \"\";\nconst value = msg.payload;\n\nswitch(entity_id) {\n    case \"input_number.fve_kapacita_baterie\":\n        config.kapacita_baterie_kwh = parseFloat(value) || 28;\n        break;\n    case \"input_number.fve_min_soc\":\n        config.min_soc = parseFloat(value) || 20;\n        break;\n    case \"input_number.fve_amortizace_baterie\":\n        config.amortizace_baterie_czk_kwh = parseFloat(value) || 1.0;\n        break;\n    case \"input_number.fve_max_feed_in\":\n        config.max_feed_in_w = parseFloat(value) || 7600;\n        break;\n    case \"input_number.fve_max_spotreba_sit\":\n        config.max_spotreba_sit_w = parseFloat(value) || 22000;\n        global.set(\"max_spotreba_sit\", config.max_spotreba_sit_w);\n        break;\n    case \"input_boolean.fve_automatizace\":\n        config.automatizace_enabled = (value === \"on\");\n        break;\n    case \"input_boolean.fve_prodej_z_baterie\":\n        config.prodej_z_baterie_enabled = (value === \"on\");\n        break;\n    case \"input_boolean.fve_blokace_vybijeni\":\n        config.blokace_vybijeni = (value === \"on\");\n        break;\n    case \"input_boolean.letni_rezim\":\n        config.letni_rezim = (value === \"on\");\n        break;\n    case \"input_number.predpoved_solarni_vyroby_dnes\":\n        config.forecast_vyroba_dnes = parseFloat(value) || 0;\n        global.set(\"forecast_vyroba_dnes\", config.forecast_vyroba_dnes);\n        break;\n    case \"input_number.predpoved_solarni_vyroby_zitra\":\n        config.forecast_vyroba_zitra = parseFloat(value) || 0;\n        global.set(\"forecast_vyroba_zitra\", config.forecast_vyroba_zitra);\n        break;\n    case \"input_number.zbyvajici_solarni_vyroba_dnes\":\n        config.zbyvajici_solar_dnes = parseFloat(value) || 0;\n        global.set(\"zbyvajici_solar_dnes\", config.zbyvajici_solar_dnes);\n        break;\n    case \"input_select.fve_rezim_casu\":\n        config.rezim_casu = value;\n        break;\n    case \"input_select.fve_manual_mod\":\n        // Mapování českých názvů na technické hodnoty\n        const modeMap = {\n            \"🤖 Automaticky\": \"auto\",\n            \"🟢 Normální provoz\": \"normal\",\n            \"🟡 Šetřit baterii\": \"setrit\",\n            \"🔵 Nabíjet ze sítě\": \"nabijet_ze_site\",\n            \"🔴 Prodávat do sítě\": \"prodavat\",\n            \"🟣 Zákaz přetoků\": \"zakaz_pretoku\"\n        };\n        config.manual_mod = modeMap[value] || value;\n        break;\n}\n\n// Uložit aktualizovanou konfiguraci\nglobal.set(\"fve_config\", config);\n\nmsg.payload = {\n    entity_id: entity_id,\n    value: value,\n    config: config\n};\n\nnode.status({fill:\"blue\", shape:\"dot\", text: entity_id.split(\".\")[1] + \": \" + value});\n\nreturn msg;",
-        "outputs":  1,
-        "timeout":  "",
-        "noerr":  0,
-        "initialize":  "",
-        "finalize":  "",
-        "libs":  [
-
-                 ],
-        "x":  390,
-        "y":  220,
-        "wires":  [
-                      [
-                          "f4160d8797285db7",
-                          "4a5169173535c2a2"
-                      ]
-                  ]
+        "id": "3fefdad956c6ae27",
+        "type": "function",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "Zpracuj HA stavy",
+        "func": "// Načtení aktuální konfigurace\nconst config = global.get(\"fve_config\") || {};\n\n// Aktualizace z HA entity (pokud přišla změna)\nconst entity_id = msg.entity_id || \"\";\nconst value = msg.payload;\n\nswitch(entity_id) {\n    case \"input_number.fve_kapacita_baterie\":\n        config.kapacita_baterie_kwh = parseFloat(value) || 28;\n        break;\n    case \"input_number.fve_min_soc\":\n        config.min_soc = parseFloat(value) || 20;\n        break;\n    case \"input_number.fve_amortizace_baterie\":\n        config.amortizace_baterie_czk_kwh = parseFloat(value) || 1.0;\n        break;\n    case \"input_number.fve_max_feed_in\":\n        config.max_feed_in_w = parseFloat(value) || 7600;\n        break;\n    case \"input_number.fve_max_spotreba_sit\":\n        config.max_spotreba_sit_w = parseFloat(value) || 22000;\n        global.set(\"max_spotreba_sit\", config.max_spotreba_sit_w);\n        break;\n    case \"input_boolean.fve_automatizace\":\n        config.automatizace_enabled = (value === \"on\");\n        break;\n    case \"input_boolean.fve_prodej_z_baterie\":\n        config.prodej_z_baterie_enabled = (value === \"on\");\n        break;\n    case \"input_boolean.fve_blokace_vybijeni\":\n        config.blokace_vybijeni = (value === \"on\");\n        break;\n    case \"input_boolean.letni_rezim\":\n        config.letni_rezim = (value === \"on\");\n        break;\n    case \"input_number.predpoved_solarni_vyroby_dnes\":\n        config.forecast_vyroba_dnes = parseFloat(value) || 0;\n        global.set(\"forecast_vyroba_dnes\", config.forecast_vyroba_dnes);\n        break;\n    case \"input_number.predpoved_solarni_vyroby_zitra\":\n        config.forecast_vyroba_zitra = parseFloat(value) || 0;\n        global.set(\"forecast_vyroba_zitra\", config.forecast_vyroba_zitra);\n        break;\n    case \"input_number.zbyvajici_solarni_vyroba_dnes\":\n        config.zbyvajici_solar_dnes = parseFloat(value) || 0;\n        global.set(\"zbyvajici_solar_dnes\", config.zbyvajici_solar_dnes);\n        break;\n    case \"input_select.fve_rezim_casu\":\n        config.rezim_casu = value;\n        break;\n    case \"input_select.fve_manual_mod\":\n        // Mapování českých názvů na technické hodnoty\n        const modeMap = {\n            \"🤖 Automaticky\": \"auto\",\n            \"🟢 Normální provoz\": \"normal\",\n            \"🟡 Šetřit baterii\": \"setrit\",\n            \"🔵 Nabíjet ze sítě\": \"nabijet_ze_site\",\n            \"🔴 Prodávat do sítě\": \"prodavat\",\n            \"🟣 Zákaz přetoků\": \"zakaz_pretoku\"\n        };\n        config.manual_mod = modeMap[value] || value;\n        break;\n}\n\n// Uložit aktualizovanou konfiguraci\nglobal.set(\"fve_config\", config);\n\nmsg.payload = {\n    entity_id: entity_id,\n    value: value,\n    config: config\n};\n\nnode.status({fill:\"blue\", shape:\"dot\", text: entity_id.split(\".\")[1] + \": \" + value});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "f4160d8797285db7",
+                "4a5169173535c2a2"
+            ]
+        ]
     },
     {
-        "id":  "4a5169173535c2a2",
-        "type":  "switch",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "Je změna módu?",
-        "property":  "entity_id",
-        "propertyType":  "msg",
-        "rules":  [
-                      {
-                          "t":  "eq",
-                          "v":  "input_select.fve_manual_mod",
-                          "vt":  "str"
-                      }
-                  ],
-        "checkall":  "true",
-        "repair":  false,
-        "outputs":  1,
-        "x":  670,
-        "y":  220,
-        "wires":  [
-                      [
-                          "926f790a1d6a8f6e"
-                      ]
-                  ]
+        "id": "4a5169173535c2a2",
+        "type": "switch",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "Je změna módu?",
+        "property": "entity_id",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "input_select.fve_manual_mod",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 670,
+        "y": 220,
+        "wires": [
+            [
+                "926f790a1d6a8f6e"
+            ]
+        ]
     },
     {
-        "id":  "f4160d8797285db7",
-        "type":  "debug",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "Sync Debug",
-        "active":  false,
-        "tosidebar":  true,
-        "console":  false,
-        "tostatus":  false,
-        "complete":  "payload",
-        "targetType":  "msg",
-        "statusVal":  "",
-        "statusType":  "auto",
-        "x":  650,
-        "y":  160,
-        "wires":  [
-
-                  ]
+        "id": "f4160d8797285db7",
+        "type": "debug",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "Sync Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 160,
+        "wires": []
     },
     {
-        "id":  "926f790a1d6a8f6e",
-        "type":  "link out",
-        "z":  "3f2680578b66e78f",
-        "g":  "452576adb7294b87",
-        "name":  "→ Přepočti plán",
-        "mode":  "link",
-        "links":  [
-
-                  ],
-        "x":  805,
-        "y":  180,
-        "wires":  [
-
-                  ]
+        "id": "926f790a1d6a8f6e",
+        "type": "link out",
+        "z": "3f2680578b66e78f",
+        "g": "452576adb7294b87",
+        "name": "→ Přepočti plán",
+        "mode": "link",
+        "links": [],
+        "x": 805,
+        "y": 180,
+        "wires": []
     },
     {
-        "id":  "c7421fe2.cb11c",
-        "type":  "server",
-        "name":  "Home Assistant",
-        "addon":  true,
-        "rejectUnauthorizedCerts":  true,
-        "ha_boolean":  "",
-        "connectionDelay":  false,
-        "cacheJson":  false,
-        "heartbeat":  false,
-        "heartbeatInterval":  "",
-        "statusSeparator":  "",
-        "enableGlobalContextStore":  false
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
     },
     {
-        "id":  "6d97960f9560e05b",
-        "type":  "sqlitedb",
-        "db":  "/homeassistant/home-assistant_v2.db",
-        "mode":  "RWC"
+        "id": "6d97960f9560e05b",
+        "type": "sqlitedb",
+        "db": "/homeassistant/home-assistant_v2.db",
+        "mode": "RWC"
     },
     {
-        "id":  "e53a25e104050ad0",
-        "type":  "global-config",
-        "env":  [
-
-                ],
-        "modules":  {
-                        "node-red-contrib-home-assistant-websocket":  "0.80.3",
-                        "node-red-node-sqlite":  "1.1.1"
-                    }
+        "id": "4b99422bc2057b70",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-node-sqlite": "1.1.1"
+        }
     }
 ]
