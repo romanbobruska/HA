@@ -79,6 +79,61 @@
     priorita: "{{ states('sensor.nibe_priorita_provozu_real') }}"
 
 #FVE
+
+- name: "Stav wallboxu garáž popis"
+  unique_id: "evcharger_state_garage_desc"
+  state: >
+    {% set val = states('sensor.charger_state_garage') | int(-1) %}
+    {% set mapper = {
+      0: 'Disconnected', 1: 'Connected', 2: 'Charging', 3: 'Charged',
+      4: 'Waiting for sun', 5: 'Waiting for RFID', 6: 'Waiting for start',
+      7: 'Low SOC', 8: 'Ground test error', 9: 'Welded contacts error',
+      10: 'CP test error', 11: 'Residual current', 12: 'Undervoltage',
+      13: 'Overvoltage', 14: 'Overheating', 20: 'Charging limit'
+    } %}
+    {{ mapper.get(val, "Error - No Data") }}
+  icon: >
+    {% set val = states('sensor.charger_state_garage') | int(-1) %}
+    {% if val == 0 %} mdi:ev-plug-ccs2
+    {% elif val == 1 %} mdi:ev-station
+    {% elif val == 2 %} mdi:battery-charging-100
+    {% elif val == 3 %} mdi:battery-check
+    {% elif val == 4 %} mdi:solar-power
+    {% elif val == 5 %} mdi:card-account-details
+    {% elif val == 6 %} mdi:play-circle-outline
+    {% elif val == 7 %} mdi:battery-alert
+    {% elif val >= 8 and val <= 14 %} mdi:alert-octagon
+    {% elif val == 20 %} mdi:speedometer-slow
+    {% else %} mdi:help-circle
+    {% endif %}
+
+- name: "Stav wallboxu venek popis"
+  unique_id: "evcharger_state_out_desc"
+  state: >
+    {% set val = states('sensor.charger_state_out') | int(-1) %}
+    {% set mapper = {
+      0: 'Disconnected', 1: 'Connected', 2: 'Charging', 3: 'Charged',
+      4: 'Waiting for sun', 5: 'Waiting for RFID', 6: 'Waiting for start',
+      7: 'Low SOC', 8: 'Ground test error', 9: 'Welded contacts error',
+      10: 'CP test error', 11: 'Residual current', 12: 'Undervoltage',
+      13: 'Overvoltage', 14: 'Overheating', 20: 'Charging limit'
+    } %}
+    {{ mapper.get(val, "Error - No Data") }}
+  icon: >
+    {% set val = states('sensor.charger_state_out') | int(-1) %}
+    {% if val == 0 %} mdi:ev-plug-ccs2
+    {% elif val == 1 %} mdi:ev-station
+    {% elif val == 2 %} mdi:battery-charging-100
+    {% elif val == 3 %} mdi:battery-check
+    {% elif val == 4 %} mdi:solar-power
+    {% elif val == 5 %} mdi:card-account-details
+    {% elif val == 6 %} mdi:play-circle-outline
+    {% elif val == 7 %} mdi:battery-alert
+    {% elif val >= 8 and val <= 14 %} mdi:alert-octagon
+    {% elif val == 20 %} mdi:speedometer-slow
+    {% else %} mdi:help-circle
+    {% endif %}
+
 - name: "Spotřeba dnes ze sítě"
   unique_id: "spotreba_dnes_ze_site"
   unit_of_measurement: "kWh"

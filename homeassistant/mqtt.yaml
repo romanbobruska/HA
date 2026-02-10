@@ -472,91 +472,11 @@ sensor:
     state_topic: "victron/N/c0619ab69c71/evcharger/41/Status"
     value_template: "{{ value_json.value }}"
 
-  - name: "Stav wallboxu garáž popis"
-    unique_id: "evcharger_state_garage_desc"
-    state_topic: "victron/N/c0619ab69c71/evcharger/41/Status"
-    value_template: >
-      {% if value_json.value == 0 %}
-        Disconnected
-      {% elif value_json.value == 1 %}
-        Connected
-      {% elif value_json.value == 2 %}
-        Charging
-      {% elif value_json.value == 3 %}
-        Charged
-      {% elif value_json.value == 4 %}
-        Waiting for sun
-      {% elif value_json.value == 5 %}
-        Waiting for RFID
-      {% elif value_json.value == 6 %}
-        Waiting for start
-      {% elif value_json.value == 7 %}
-        Low SOC
-      {% elif value_json.value == 8 %}
-        Ground test error
-      {% elif value_json.value == 9 %}
-        Welded contacts error
-      {% elif value_json.value == 10 %}
-        CP input test error
-      {% elif value_json.value == 11 %}
-        Residual current detected
-      {% elif value_json.value == 12 %}
-        Undervoltage detected
-      {% elif value_json.value == 13 %}
-        Overvoltage detected
-      {% elif value_json.value == 14 %}
-        Overheating detected 
-      {% elif value_json.value == 20 %}
-        Charging limit                                          
-      {% else %}
-        Error - No Data
-      {% endif %}
-
   # Stav EV Chargeru Venek
   - name: "Stav wallboxu venek"
     unique_id: "evcharger_state_out"
     state_topic: "victron/N/c0619ab69c71/evcharger/40/Status"
     value_template: "{{ value_json.value }}"
-
-  - name: "Stav wallboxu venek popis"
-    unique_id: "evcharger_state_out_desc"
-    state_topic: "victron/N/c0619ab69c71/evcharger/40/Status"
-    value_template: >
-      {% if value_json.value == 0 %}
-        Disconnected
-      {% elif value_json.value == 1 %}
-        Connected
-      {% elif value_json.value == 2 %}
-        Charging
-      {% elif value_json.value == 3 %}
-        Charged
-      {% elif value_json.value == 4 %}
-        Waiting for sun
-      {% elif value_json.value == 5 %}
-        Waiting for RFID
-      {% elif value_json.value == 6 %}
-        Waiting for start
-      {% elif value_json.value == 7 %}
-        Low SOC
-      {% elif value_json.value == 8 %}
-        Ground test error
-      {% elif value_json.value == 9 %}
-        Welded contacts error
-      {% elif value_json.value == 10 %}
-        CP input test error
-      {% elif value_json.value == 11 %}
-        Residual current detected
-      {% elif value_json.value == 12 %}
-        Undervoltage detected
-      {% elif value_json.value == 13 %}
-        Overvoltage detected
-      {% elif value_json.value == 14 %}
-        Overheating detected 
-      {% elif value_json.value == 20 %}
-        Charging limit                                          
-      {% else %}
-        Error - No Data
-      {% endif %}
 
   # Výroba FVE
   - name: "Výroba FVE"
