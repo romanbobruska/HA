@@ -1,70 +1,63 @@
-NO debug field in attributes!
-Available keys: ['current_mode', 'current_hour', 'plan', 'last_update', 'friendly_name']
+  (pouze Node-RED)
+==========================================
 
-=== FIRST PLAN ENTRY ===
-{
-  "hour": 19,
-  "offset": 0,
-  "mode": "setrit",
-  "modeCZ": "Šetřit baterii",
-  "reason": "Šetřím baterii (SOC 34%)",
-  "priceLevel": 11,
-  "priceBuy": 4.54,
-  "priceSell": 2.63,
-  "simulatedSoc": 33,
-  "isNextDay": false,
-  "isChargingHour": false,
-  "isSolarHour": false,
-  "isExpensiveHour": false,
-  "isPeakDischargeHour": false
-}
-{
-  "hour": 20,
-  "offset": 1,
-  "mode": "normal",
-  "modeCZ": "Normální provoz",
-  "reason": "Drahá energie, vybíjení SOC 33% → ~28%",
-  "priceLevel": 14,
-  "priceBuy": 4.46,
-  "priceSell": 2.57,
-  "simulatedSoc": 28,
-  "isNextDay": false,
-  "isChargingHour": false,
-  "isSolarHour": false,
-  "isExpensiveHour": true,
-  "isPeakDischargeHour": false
+📥 Repo existuje, přepínám na branch main...
+Your branch is up to date with 'origin/main'.
+HEAD is now at 9e12b80 v11.1: Debug data do sensoru + global pro diagnostiku levelu
+   ✅ Repo aktualizováno (branch: main)
 
-                  "simulatedSoc": 27,
-                "isNextDay": false,
-                "isChargingHour": false,
-                "isSolarHour": false,
-                "isExpensiveHour": false,
-                "isPeakDischargeHour": false
-            },
-            {
-                "hour": 22,
-                "offset": 3,
-                "mode": "setrit",
-                "modeCZ": "\u0160et\u0159it baterii",
-                "reason": "\u0160et\u0159\u00edm baterii (SOC 27%)",
-                "priceLevel": 7,
-                "priceBuy": 3.88,
-                "priceSell": 2.09,
-                "simulatedSoc": 26,
-                "isNextDay": false,
-                "isChargingHour": false,
-                "isSolarHour": false,
-                "isExpensiveHour": false,
-                "isPeakDischargeHour": false
-            },
-            {
-                "hour": 23,
-                "offset": 4,
-                "mode": "setrit",
-                "modeCZ": "\u0160et\u0159it baterii",
-                "reason": "\u0160et\u0159\u00edm baterii (SOC 26%)",
-                "priceLevel": 5,
-                "priceBuy": 3.6,
-                "priceSell": 1.86,
+🧹 Mažu staré zálohy...
+   ✅ Zálohy smazány
 
-priste si ty vystupy presmeruj do souboru, ja cely vystup v terminalu nevidim a scroll mi nefunguje
+📋 Kopíruji HA konfiguraci...
+   ✅ configuration.yaml
+   ✅ automations.yaml
+   ✅ mqtt.yaml
+   ✅ modbus.yaml
+   ✅ input_numbers.yaml
+   ✅ template_sensors.yaml
+   ✅ template_switches.yaml
+
+🔧 Slučuji Node-RED flows...
+   ⏹️   Zastavuji Node-RED...
+Command completed successfully.
+   ✅ boiler.json (28 nodes)
+   ✅ filtrace-bazenu.json (38 nodes)
+   ✅ fve-config.json (24 nodes)
+   ✅ fve-heating.json (24 nodes)
+   ✅ fve-history-learning.json (18 nodes)
+   ✅ fve-modes.json (42 nodes)
+   ✅ fve-orchestrator.json (25 nodes)
+   ✅ init-set-victron.json (41 nodes)
+   ✅ manager-nabijeni-auta.json (19 nodes)
+   ✅ nabijeni-auta-sit.json (27 nodes)
+   ✅ nabijeni-auta-slunce.json (25 nodes)
+   ✅ nibe-control.json (19 nodes)
+   ✅ ostatni.json (22 nodes)
+   ✅ vypocitej-ceny.json (53 nodes)
+
+   📊 Celkem: 14 flows, 405 nodes
+   📁 Uloženo do: /addon_configs/a0d7b954_nodered/flows.json
+   ✅ Flows sloučeny úspěšně
+
+🔄 Restartuji služby...
+   Spouštím Node-RED...
+Command completed successfully.
+   ℹ️   Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)
+
+🧹 Mažu dočasný repozitář...
+   ✅ Úklid dokončen
+
+==========================================
+  ✅ Deploy dokončen!
+==========================================
+
+➜  /tmp curl -s -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/core/api/states/sensor.fve_plan_data > /tmp/plan_debug.json && python3 -c "
+import json
+with open('/tmp/plan_debug.json') as f:
+    data = json.load(f)
+debug = data.get('attributes', {}).get('debug', {})
+with open('/tmp/debug_output.txt', 'w') as out:
+    json.dump(debug, out, indent=2, ensure_ascii=False)
+print(open('/tmp/debug_output.txt').read()[:3000])
+" > /tmp/debug_result.txt 2>&1 && cat /tmp/debug_result.txt
