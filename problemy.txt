@@ -1,50 +1,20 @@
-DEBUG: NO DEBUG
+PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
 
-{
-  "hour": 20,
-  "offset": 0,
-  "mode": "normal",
-  "modeCZ": "Normální provoz",
-  "reason": "Drahá energie, vybíjení SOC 33% → ~28%",
-  "priceLevel": 14,
-  "priceBuy": 4.46,
-  "priceSell": 2.57,
-  "simulatedSoc": 28,
-  "isNextDay": false,
-  "isChargingHour": false,
-  "isSolarHour": false,
-  "isExpensiveHour": true,
-  "isPeakDischargeHour": false
-}
-{
-  "hour": 21,
-  "offset": 1,
-  "mode": "setrit",
-  "modeCZ": "Šetřit baterii",
-  "reason": "Šetřím baterii (SOC 28%)",
-  "priceLevel": 8,
-  "priceBuy": 4.02,
-  "priceSell": 2.2,
-  "simulatedSoc": 27,
-  "isNextDay": false,
-  "isChargingHour": false,
-  "isSolarHour": false,
-  "isExpensiveHour": false,
-  "isPeakDischargeHour": false
-}
-{
-  "hour": 22,
-  "offset": 2,
-  "mode": "setrit",
-  "modeCZ": "Šetřit baterii",
-  "reason": "Šetřím baterii (SOC 27%)",
-  "priceLevel": 7,
-  "priceBuy": 3.88,
-  "priceSell": 2.09,
-  "simulatedSoc": 26,
-  "isNextDay": false,
-  "isChargingHour": false,
-  "isSolarHour": false,
-  "isExpensiveHour": false,
-  "isPeakDischargeHour": false
-}
+PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+
+PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+
+
+  /tmp ha addons logs a0d7b954_nodered 2>&1 | grep "PLAN_DEBUG" > /config/plan_debug_log.txt && cat /config/plan_debug_log.txt
+11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
+11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
+11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
+11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
+11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
+11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
+11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
+11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
+11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
