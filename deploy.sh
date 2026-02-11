@@ -2,27 +2,29 @@
 # ============================================================
 # Deploy skript pro HA + Node-RED
 # Spusťte přes SSH na Home Assistant
-# Usage: bash /tmp/HA/deploy.sh              # jen Node-RED
-#        bash /tmp/HA/deploy.sh --with-ha    # Node-RED + HA restart
-#        bash /tmp/HA/deploy.sh --pull       # git pull + Node-RED
+# Usage: bash deploy.sh                       # klonuje/aktualizuje repo + deploy Node-RED
+#        bash deploy.sh --with-ha             # + restart Home Assistant
+#        bash deploy.sh --branch=feature/xyz  # deploy z jiné branch
 # ============================================================
 
 set -e
 
 REPO_DIR="/tmp/HA"
+REPO_URL="https://github.com/romanbobruska/HA.git"
+BRANCH="main"
 HA_CONFIG="/config"
 NODERED_DIR="/config/node-red"
 RESTART_HA=false
-GIT_PULL=false
 
 for arg in "$@"; do
     case $arg in
         --with-ha) RESTART_HA=true ;;
-        --pull) GIT_PULL=true ;;
+        --branch=*) BRANCH="${arg#*=}" ;;
     esac
 done
 echo "=========================================="
 echo "  Deploy HA + Node-RED z GitHub repo"
+echo "  Branch: $BRANCH"
 if $RESTART_HA; then
     echo "  (s restartem Home Assistant)"
 else
@@ -30,19 +32,21 @@ else
 fi
 echo "=========================================="
 
-# --- 1. Kontrola, že repo existuje ---
-if [ ! -d "$REPO_DIR" ]; then
-    echo "❌ Repo neexistuje v $REPO_DIR"
-    echo "   Nejprve spusťte: cd /tmp && git clone https://github.com/romanbobruska/HA.git"
-    exit 1
-fi
-
-# --- 1b. Git pull pokud požadováno ---
-if $GIT_PULL; then
-    echo ""
-    echo "📥 Stahuji nejnovější změny z gitu..."
-    cd "$REPO_DIR" && git pull
-    echo "   ✅ Git pull dokončen"
+# --- 1. Kontrola / klonování repozitáře ---
+echo ""
+if [ -d "$REPO_DIR/.git" ]; then
+    echo "📥 Repo existuje, přepínám na branch $BRANCH..."
+    cd "$REPO_DIR"
+    git fetch origin
+    git checkout "$BRANCH" 2>/dev/null || git checkout -b "$BRANCH" "origin/$BRANCH"
+    git reset --hard "origin/$BRANCH"
+    echo "   ✅ Repo aktualizováno (branch: $BRANCH)"
+else
+    echo "📥 Klonuji repo (branch: $BRANCH)..."
+    rm -rf "$REPO_DIR"
+    cd /tmp
+    git clone -b "$BRANCH" "$REPO_URL"
+    echo "   ✅ Repo naklonováno (branch: $BRANCH)"
 fi
 
 # --- 2. Úklid starých záloh ---
@@ -176,9 +180,14 @@ else
     echo "   ℹ️  Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)"
 fi
 
+# --- 7. Úklid repozitáře ---
+echo ""
+echo "🧹 Mažu dočasný repozitář..."
+rm -rf "$REPO_DIR"
+echo "   ✅ Úklid dokončen"
+
 echo ""
 echo "=========================================="
 echo "  ✅ Deploy dokončen!"
 echo "=========================================="
-echo "Rollback:   git repo = https://github.com/romanbobruska/HA.git"
 echo ""

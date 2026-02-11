@@ -1,0 +1,688 @@
+[
+    {
+        "id": "58f453ee71c85d6d",
+        "type": "tab",
+        "label": "Automatizuj ostatní",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "115b21930df59327",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Světla TV",
+        "style": {
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "d172dcd2f5166a9d",
+            "7522f4d106cb49a7",
+            "ea195d59b673f480",
+            "71953129eb896707"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 692,
+        "h": 142
+    },
+    {
+        "id": "34989895a7491a91",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Průtokáč altán",
+        "style": {
+            "fill": "#ffff00",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "ee0d741fdc5cbfdd",
+            "7cab9c28a5473d81",
+            "02750065ac5e632a",
+            "6d245da5ca53613e",
+            "4d56aa02abf550cf",
+            "9750b05dcbbff9f7",
+            "5d99886761325d1d"
+        ],
+        "x": 14,
+        "y": 172,
+        "w": 872,
+        "h": 189
+    },
+    {
+        "id": "c7058c6bcde0cfc8",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Horní žebřík",
+        "style": {
+            "fill": "#ffdf7f",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "af6f98e63742ea83",
+            "79b4a2cb676426f1",
+            "a25c4f2c2d82868b",
+            "e9bfb79af53f16df",
+            "2d1eda397588e770",
+            "5c777d8344b192ab"
+        ],
+        "x": 14,
+        "y": 373,
+        "w": 852,
+        "h": 148
+    },
+    {
+        "id": "d172dcd2f5166a9d",
+        "type": "server-state-changed",
+        "z": "58f453ee71c85d6d",
+        "g": "115b21930df59327",
+        "name": "Světla TV",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "switch.3"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 100,
+        "y": 80,
+        "wires": [
+            [
+                "7522f4d106cb49a7"
+            ]
+        ]
+    },
+    {
+        "id": "7522f4d106cb49a7",
+        "type": "switch",
+        "z": "58f453ee71c85d6d",
+        "g": "115b21930df59327",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 80,
+        "wires": [
+            [
+                "ea195d59b673f480"
+            ],
+            [
+                "71953129eb896707"
+            ]
+        ]
+    },
+    {
+        "id": "ea195d59b673f480",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "115b21930df59327",
+        "name": "Solný panel obývák ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horousany_solny_panel_obyvak"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 570,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "71953129eb896707",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "115b21930df59327",
+        "name": "Solný panel obývák OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horousany_solny_panel_obyvak"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 570,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ee0d741fdc5cbfdd",
+        "type": "inject",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "5 minut",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "300",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 220,
+        "wires": [
+            [
+                "5d99886761325d1d"
+            ]
+        ]
+    },
+    {
+        "id": "7cab9c28a5473d81",
+        "type": "api-current-state",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "Nejsme doma?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.jsme_doma",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 540,
+        "y": 213,
+        "wires": [
+            [
+                "4d56aa02abf550cf"
+            ],
+            [
+                "02750065ac5e632a"
+            ]
+        ]
+    },
+    {
+        "id": "02750065ac5e632a",
+        "type": "moment",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "6d245da5ca53613e"
+            ]
+        ]
+    },
+    {
+        "id": "6d245da5ca53613e",
+        "type": "time-range-switch",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "je den a musí být nahřáto?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "12:00",
+        "endTime": "19:30",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 440,
+        "y": 300,
+        "wires": [
+            [
+                "9750b05dcbbff9f7"
+            ],
+            [
+                "4d56aa02abf550cf"
+            ]
+        ]
+    },
+    {
+        "id": "4d56aa02abf550cf",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "Průtokáč OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.water_heater"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 780,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9750b05dcbbff9f7",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "Průtokáč ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.water_heater"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 770,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5d99886761325d1d",
+        "type": "api-current-state",
+        "z": "58f453ee71c85d6d",
+        "g": "34989895a7491a91",
+        "name": "Je letní režim?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.letni_rezim",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 220,
+        "wires": [
+            [
+                "7cab9c28a5473d81"
+            ],
+            [
+                "4d56aa02abf550cf"
+            ]
+        ]
+    },
+    {
+        "id": "af6f98e63742ea83",
+        "type": "inject",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "1 minuta",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 420,
+        "wires": [
+            [
+                "79b4a2cb676426f1"
+            ]
+        ]
+    },
+    {
+        "id": "79b4a2cb676426f1",
+        "type": "api-current-state",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "Nejsme doma?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "off",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.jsme_doma",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 460,
+        "y": 420,
+        "wires": [
+            [
+                "2d1eda397588e770"
+            ],
+            [
+                "a25c4f2c2d82868b"
+            ]
+        ]
+    },
+    {
+        "id": "a25c4f2c2d82868b",
+        "type": "moment",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "e9bfb79af53f16df"
+            ]
+        ]
+    },
+    {
+        "id": "e9bfb79af53f16df",
+        "type": "time-range-switch",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "Je odpoledne a musí být nahřáto?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "17:00",
+        "endTime": "21:00",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 460,
+        "y": 480,
+        "wires": [
+            [
+                "5c777d8344b192ab"
+            ],
+            [
+                "2d1eda397588e770"
+            ]
+        ]
+    },
+    {
+        "id": "2d1eda397588e770",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "Žebřík OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horni_zebrik"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 770,
+        "y": 414,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5c777d8344b192ab",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "c7058c6bcde0cfc8",
+        "name": "Žebřík ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.horni_zebrik"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 770,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "d1055d0a61ea5872",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-moment": "5.0.0",
+            "node-red-contrib-time-range-switch": "1.2.0"
+        }
+    }
+]

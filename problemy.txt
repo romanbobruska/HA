@@ -1,0 +1,12 @@
+- nic se nezmenilo - nasazeni zde:
+
+rm -rf /tmp/HA && cd /tmp && git clone https://github.com/romanbobruska/HA.git && cp -r /tmp/HA/homeassistant/* /config/ && mkdir -p /config/node-red/flows && cp -r /tmp/HA/node-red/flows/* /config/node-red/flows/ && rm -rf /tmp/HA
+Cloning into 'HA'...
+remote: Enumerating objects: 2696, done.
+remote: Counting objects: 100% (2696/2696), done.
+remote: Compressing objects: 100% (2366/2366), done.
+remote: Total 2696 (delta 351), reused 2642 (delta 297), pack-reused 0 (from 0)
+Receiving objects: 100% (2696/2696), 19.46 MiB | 10.01 MiB/s, done.
+Resolving deltas: 100% (351/351), done.
+
+- do nasazovaciho skriptu pridej restart node-red
