@@ -1,3 +1,75 @@
+- id: "1739307600001"
+  alias: "Nibe TUV komfort - zapis do modbus"
+  description: "Při změně input_select zapíše novou hodnotu do Nibe registru 47041"
+  triggers:
+    - trigger: state
+      entity_id: input_select.nibe_tuv_komfort
+  conditions: []
+  actions:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_select.nibe_tuv_komfort
+              state: "Ekonomický"
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: nibe
+                slave: 1
+                address: 47041
+                value: [0]
+        - conditions:
+            - condition: state
+              entity_id: input_select.nibe_tuv_komfort
+              state: "Normální"
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: nibe
+                slave: 1
+                address: 47041
+                value: [1]
+        - conditions:
+            - condition: state
+              entity_id: input_select.nibe_tuv_komfort
+              state: "Luxusní"
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: nibe
+                slave: 1
+                address: 47041
+                value: [2]
+        - conditions:
+            - condition: state
+              entity_id: input_select.nibe_tuv_komfort
+              state: "Smart Control"
+          sequence:
+            - action: modbus.write_register
+              data:
+                hub: nibe
+                slave: 1
+                address: 47041
+                value: [4]
+  mode: single
+- id: "1739307600002"
+  alias: "Nibe TUV komfort - sync z modbus"
+  description: "Při změně modbus sensoru synchronizuje input_select"
+  triggers:
+    - trigger: state
+      entity_id: sensor.nibe_rezim_komfortu_tuv
+  conditions:
+    - condition: template
+      value_template: "{{ trigger.to_state.state not in ['unavailable', 'unknown'] }}"
+  actions:
+    - action: input_select.select_option
+      target:
+        entity_id: input_select.nibe_tuv_komfort
+      data:
+        option: >
+          {% set val = states('sensor.nibe_rezim_komfortu_tuv') | int(-1) %}
+          {% if val == 0 %}Ekonomický{% elif val == 1 %}Normální{% elif val == 2 %}Luxusní{% elif val == 4 %}Smart Control{% else %}Normální{% endif %}
+  mode: single
 - id: "1746052767671"
   alias: Publikuj VIctron
   description: ""

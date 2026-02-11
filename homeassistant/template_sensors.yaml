@@ -78,6 +78,18 @@
     ep15_state: "{{ states('sensor.nibe_stav_ep15') }}"
     priorita: "{{ states('sensor.nibe_priorita_provozu_real') }}"
 
+- name: "Nibe - Režim komfortu TUV popis"
+  unique_id: nibe_rezim_komfortu_tuv_popis
+  icon: mdi:water-thermometer
+  state: >
+    {% set val = states('sensor.nibe_rezim_komfortu_tuv') | int(-1) %}
+    {% if val == 0 %} Ekonomický
+    {% elif val == 1 %} Normální
+    {% elif val == 2 %} Luxusní
+    {% elif val == 4 %} Smart Control
+    {% else %} Neznámý ({{ val }})
+    {% endif %}
+
 #FVE
 
 - name: "Stav wallboxu garáž popis"

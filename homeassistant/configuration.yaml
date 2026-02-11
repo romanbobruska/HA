@@ -80,6 +80,15 @@ input_select:
       - "ctvrthodina"
     icon: mdi:clock-outline
 
+  nibe_tuv_komfort:
+    name: "Nibe - Komfort TUV"
+    options:
+      - "Ekonomický"
+      - "Normální"
+      - "Luxusní"
+      - "Smart Control"
+    icon: mdi:water-thermometer
+
   fve_manual_mod:
     name: "Manuální mód"
     options:

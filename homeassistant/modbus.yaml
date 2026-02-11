@@ -2,9 +2,9 @@
   type: tcp
   host: 192.168.0.223
   port: 502
-  delay: 1
-  timeout: 5
-  message_wait_milliseconds: 300
+  delay: 5
+  timeout: 10
+  message_wait_milliseconds: 200
   retries: 3
   retry_on_empty: true
   close_comm_on_error: false
@@ -81,6 +81,17 @@
       input_type: holding
       data_type: uint16
       scan_interval: 30
+
+    # Režim komfortu TUV (0=Economy, 1=Normal, 2=Luxury, 4=Smart Control)
+    - name: "Nibe - Režim komfortu TUV"
+      unique_id: "nibe_rezim_komfortu_tuv"
+      address: 47041
+      slave: 1
+      input_type: holding
+      data_type: int16
+      scale: 1
+      precision: 0
+      scan_interval: 60
 
     # Priorita provozu (10=Off, 20=Hot Water, 30=Heat, 40=Pool, 50=Transfer, 60=Cooling)
     - name: "Nibe - Priorita provozu real"

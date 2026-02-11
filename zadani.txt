@@ -1,21 +1,3 @@
-- Chci navazat na predchozi chat, ale byl jsem nucen reinstalovat windows, takze nemas historii. Zanalyzuj readme.txt a souvisejici
-flows v node red, abys mel co nejsirsi kontext
-- V zadani mj. bylo, ze chci, aby se mody prepinaly tak, abych spotreboval ze site co nejmene energie za co nejnizsi cenu
-- dnes i vcera se stalo, ze se baterie podle vypocitaneho planu (napr. ve 12:00) chce nabijet i za cenu vyssi, nez je prah levne ceny
-
-Oprav flows tak, aby 
-
-1/ se baterie nabijela opravdu pri co nejnizsich cenach a tehdy, kdy to ma smysl (viz nize)
-2/ se baterie nabijela do takove kapacity, aby na konci dne tesne pred nabijenim mela idealne kapacitu minSOC
-3/ Uvazuj s amortizaci (je definovana v parametru) a nove uvazuj se ztratou 20 procent - 10 procent na nabijeni a 10 procent na vybijeni. 
-4/ V kazde pouzite funkci chci mit na zacatku inicializovane parametry s naplnenim hodnot - nechci, aby jakakoli 
-hodnota byla pouzita natvrdo v kodu (abych mohl snadno upravit parametry)
-5/ Pokud to nedava financni smysl, baterii nenabijej ani nevybijej
-6/ Pri kazdem planovanem vybijeni a nabijeni chci videt v planu v poli duvod i cil procenta nabiti nebo 
-predpoklad procenta vybiti baterie. Naopak nechci videt v poli duvod informaci o cene, kterou mam v poli cena
-
-pouzij git, nechci rucne deployovat flows do node red. Mam git i v HA, takze mohu pouzit git i tam, takze mi vzdy vygeneruj 
-nasazovaci skript. Nechi pri kazdem nasazeni restartovat HA, staci pouze restart node red
-
-Mas nainstalovany python, muzes pouzit
+precti si konfiguraci HA na nibe a pridej entitu do HA pro nastaveni pro komfortu teploty vody (47041). Bud peclivy a nstuduj si presne
+celou konfiguraci, at neudelas chybu. Pridavam pro jistotu soubor modbus.csv, ktery obsahuje vsechny registry, ktere se v modbusu pouzivaji.
 
