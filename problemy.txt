@@ -1,29 +1,21 @@
-/tmp ha addons logs a0d7b954_nodered 2>&1 | grep "PLANv12.1" | tail -20 > /config/plan_v122_log.txt && cat /config/plan_v122_log.txt
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | h23 off=3 buy=3.77 lvl=4 method=exact_hoursToday day=hoursToday min=0
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | LOW SOC! projected=19% < 25% -> charge to 37% (1.9 kWh)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | Using cheapest 1 hours for charging (no viable hours)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | Skipping peakDischarge - SOC 31% too low (need > 35%)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h20 setrit lvl=8 buy=4.28 soc=30% | Šetřím baterii (SOC 31%)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h21 setrit lvl=7 buy=4.07 soc=29% | Šetřím baterii (SOC 30%)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h22 setrit lvl=6 buy=3.97 soc=28% | Šetřím baterii (SOC 29%)
-11 Feb 20:53:52 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h23 setrit lvl=4 buy=3.77 soc=27% | Šetřím baterii (SOC 28%)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | prices:192 today:96 tomorrow:96 horizont:12 SOC:31% minSOC:20
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | h20 off=0 buy=4.28 lvl=8 method=exact_hoursToday day=hoursToday min=0
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | h21 off=1 buy=4.07 lvl=7 method=exact_hoursToday day=hoursToday min=0
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | h22 off=2 buy=3.97 lvl=6 method=exact_hoursToday day=hoursToday min=0
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | h23 off=3 buy=3.77 lvl=4 method=exact_hoursToday day=hoursToday min=0
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | LOW SOC! projected=19% < 25% -> charge to 37% (1.9 kWh)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | Using cheapest 1 hours for charging (no viable hours)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | Skipping peakDischarge - SOC 31% too low (need > 35%)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h20 setrit lvl=8 buy=4.28 soc=30% | Šetřím baterii (SOC 31%)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h21 setrit lvl=7 buy=4.07 soc=29% | Šetřím baterii (SOC 30%)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h22 setrit lvl=6 buy=3.97 soc=28% | Šetřím baterii (SOC 29%)
-11 Feb 20:53:55 - [warn] [function:Výpočet plánu na 12h (v12.1)] PLANv12.1 | PLAN h23 setrit lvl=4 buy=3.77 soc=27% | Šetřím baterii (SOC 28%)
-➜  /tmp 
+opet jsi mi nedal nasazovaci skript. Na konci kazdeho ukolu chci kratke shrnuti a nasazovaci skript do ha.
+Precti si znova zadani, upravil jsem ho, a postupuj podle toho.
 
-ted to vypada dobre. Jsi ale optimisticky v nabijeni baterie pouze na cilovych 45 procent. v 7 rano vidim, ze se baterie dostane na 28 procent. 
-Zitra podle predpovedi ma byt vyroba cca 14,5 kWh. Jestli si myslis, ze to zvladneme zitra s takto nabitou baterii tak, abychom byli tesne pred 
-nejlevnejsi hodinou na minSOC, tak ok, jinak to zanalyzuj a zkus navysit SOC. Necham to na tobe. Kazdopadne,  doufam, ze se plan bude upravovat z 
-historie spotreby a predpovedi výroby. 
+Jedná se vytápění bazénu, jen je napojené na ohrev vody. Zapamatuj si tuto entitu, pouzijeme ji priste pro ohrev bazenu.
+Uprav hodnoty následovně:
 
-Uklid po sobe, jestli bude potreba, vypni debugy a proved finalni deploy. 
+Hodnota	Režim	Popis
+0	Ekonomický	Start teplota 2°C
+1	Normální	Start teplota 3°C (default)
+2	Luxusní	Start teplota 10°C
+4	Smart Control	Řízení Nibe
+
+Pokud prepnu komfortni rezim, pise mi to varovani: 
+
+Logger: homeassistant.components.automation.nibe_tuv_komfort_zapis_do_modbus
+Zdroj: helpers/script.py:2098
+integrace: Automatizace (dokumentace, problémy)
+První výskyt: 23:51:28 (1 výskyt)
+Naposledy logováno: 23:51:28
+
+Nibe TUV komfort - zapis do modbus: Already running
