@@ -1,17 +1,70 @@
-jsem na verzi 10.1., stale problem - vidim toto:
+NO debug field in attributes!
+Available keys: ['current_mode', 'current_hour', 'plan', 'last_update', 'friendly_name']
 
-Hodina	Mód	Důvod	Level	Cena
-19:00	🟡 Šetřit	Šetřím baterii (SOC 34%)	11	4.54 Kč
-20:00	🟢 Normální	Drahá energie, vybíjení SOC 33% → ~28%	14	4.46 Kč
-21:00	🟡 Šetřit	Šetřím baterii (SOC 28%)	8	4.02 Kč
-22:00	🟡 Šetřit	Šetřím baterii (SOC 27%)	7	3.88 Kč
-23:00	🟡 Šetřit	Šetřím baterii (SOC 26%)	5	3.60 Kč
-00:00 +1	🟡 Šetřit	Šetřím baterii (SOC 25%)	4	3.77 Kč
-01:00 +1	🟡 Šetřit	Šetřím baterii (SOC 24%)	4	3.55 Kč
-02:00 +1	🟡 Šetřit	Ochrana baterie (SOC 23% blízko min 20%)	2	3.51 Kč
-03:00 +1	🟡 Šetřit	Ochrana baterie (SOC 22% blízko min 20%)	1	3.49 Kč
-04:00 +1	🟡 Šetřit	Ochrana baterie (SOC 21% blízko min 20%)	3	3.53 Kč
-05:00 +1	🟡 Šetřit	Ochrana baterie (SOC 20% blízko min 20%)	6	3.65 Kč
-06:00 +1	🟡 Šetřit	Ochrana baterie (SOC 20% blízko min 20%)	20	4.92 Kč
+=== FIRST PLAN ENTRY ===
+{
+  "hour": 19,
+  "offset": 0,
+  "mode": "setrit",
+  "modeCZ": "Šetřit baterii",
+  "reason": "Šetřím baterii (SOC 34%)",
+  "priceLevel": 11,
+  "priceBuy": 4.54,
+  "priceSell": 2.63,
+  "simulatedSoc": 33,
+  "isNextDay": false,
+  "isChargingHour": false,
+  "isSolarHour": false,
+  "isExpensiveHour": false,
+  "isPeakDischargeHour": false
+}
+{
+  "hour": 20,
+  "offset": 1,
+  "mode": "normal",
+  "modeCZ": "Normální provoz",
+  "reason": "Drahá energie, vybíjení SOC 33% → ~28%",
+  "priceLevel": 14,
+  "priceBuy": 4.46,
+  "priceSell": 2.57,
+  "simulatedSoc": 28,
+  "isNextDay": false,
+  "isChargingHour": false,
+  "isSolarHour": false,
+  "isExpensiveHour": true,
+  "isPeakDischargeHour": false
 
-Zaroven jsi nesplnil pravidlo pro nabijeni baterie zminene drive
+                  "simulatedSoc": 27,
+                "isNextDay": false,
+                "isChargingHour": false,
+                "isSolarHour": false,
+                "isExpensiveHour": false,
+                "isPeakDischargeHour": false
+            },
+            {
+                "hour": 22,
+                "offset": 3,
+                "mode": "setrit",
+                "modeCZ": "\u0160et\u0159it baterii",
+                "reason": "\u0160et\u0159\u00edm baterii (SOC 27%)",
+                "priceLevel": 7,
+                "priceBuy": 3.88,
+                "priceSell": 2.09,
+                "simulatedSoc": 26,
+                "isNextDay": false,
+                "isChargingHour": false,
+                "isSolarHour": false,
+                "isExpensiveHour": false,
+                "isPeakDischargeHour": false
+            },
+            {
+                "hour": 23,
+                "offset": 4,
+                "mode": "setrit",
+                "modeCZ": "\u0160et\u0159it baterii",
+                "reason": "\u0160et\u0159\u00edm baterii (SOC 26%)",
+                "priceLevel": 5,
+                "priceBuy": 3.6,
+                "priceSell": 1.86,
+
+priste si ty vystupy presmeruj do souboru, ja cely vystup v terminalu nevidim a scroll mi nefunguje
