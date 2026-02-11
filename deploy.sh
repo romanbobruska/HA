@@ -13,7 +13,7 @@ REPO_DIR="/tmp/HA"
 REPO_URL="https://github.com/romanbobruska/HA.git"
 BRANCH="main"
 HA_CONFIG="/config"
-NODERED_DIR="/config/node-red"
+NODERED_DIR="/addon_configs/a0d7b954_nodered"
 RESTART_HA=false
 
 for arg in "$@"; do
