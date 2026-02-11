@@ -86,7 +86,7 @@
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "switch.3"
+                "switch.tv_zasuvka_3"
             ],
             "substring": [],
             "regex": []
@@ -676,7 +676,7 @@
         "enableGlobalContextStore": false
     },
     {
-        "id": "d1055d0a61ea5872",
+        "id": "923d94c2c4b1ba5f",
         "type": "global-config",
         "env": [],
         "modules": {

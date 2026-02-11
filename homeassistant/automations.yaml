@@ -4,7 +4,11 @@
   triggers:
     - trigger: state
       entity_id: input_select.nibe_tuv_komfort
-  conditions: []
+  conditions:
+    - condition: template
+      value_template: >
+        {% set mapper = {"Ekonomický": "0", "Normální": "1", "Luxusní": "2", "Smart Control": "4"} %}
+        {{ mapper.get(states('input_select.nibe_tuv_komfort'), '1') != states('sensor.nibe_rezim_komfortu_tuv') }}
   actions:
     - choose:
         - conditions:
@@ -51,7 +55,7 @@
                 slave: 1
                 address: 47041
                 value: [4]
-  mode: single
+  mode: restart
 - id: "1739307600002"
   alias: "Nibe TUV komfort - sync z modbus"
   description: "Při změně modbus sensoru synchronizuje input_select"

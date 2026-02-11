@@ -1,3 +1,18 @@
-precti si konfiguraci HA na nibe a pridej entitu do HA pro nastaveni pro komfortu teploty vody (47041). Bud peclivy a nstuduj si presne
-celou konfiguraci, at neudelas chybu. Pridavam pro jistotu soubor modbus.csv, ktery obsahuje vsechny registry, ktere se v modbusu pouzivaji.
+Jedná se vytápění bazénu, jen je napojené na ohrev vody. Zapamatuj si tuto entitu, pouzijeme ji priste pro ohrev bazenu.
+Uprav hodnoty následovně:
 
+Hodnota	Režim	Popis
+0	Ekonomický	Start teplota 5°C
+1	Normální	Start teplota 6°C (default)
+2	Luxusní	Start teplota 50°C
+4	Smart Control	Řízení Nibe
+
+Pokud prepnu komfortni rezim, pise mi to varovani: 
+
+Logger: homeassistant.components.automation.nibe_tuv_komfort_zapis_do_modbus
+Zdroj: helpers/script.py:2098
+integrace: Automatizace (dokumentace, problémy)
+První výskyt: 23:51:28 (1 výskyt)
+Naposledy logováno: 23:51:28
+
+Nibe TUV komfort - zapis do modbus: Already running

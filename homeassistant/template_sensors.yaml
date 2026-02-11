@@ -83,9 +83,9 @@
   icon: mdi:water-thermometer
   state: >
     {% set val = states('sensor.nibe_rezim_komfortu_tuv') | int(-1) %}
-    {% if val == 0 %} Ekonomický
-    {% elif val == 1 %} Normální
-    {% elif val == 2 %} Luxusní
+    {% if val == 0 %} Ekonomický (5°C)
+    {% elif val == 1 %} Normální (6°C)
+    {% elif val == 2 %} Luxusní (50°C)
     {% elif val == 4 %} Smart Control
     {% else %} Neznámý ({{ val }})
     {% endif %}
