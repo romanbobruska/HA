@@ -1,20 +1,78 @@
-PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
+plan se zmenil, ale jse stejne spatne:
 
-PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+v tabulce mame:
 
-PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
+hoursToday	20	0	4.28	2.43	4.46	2.57	8	28	12	33
+hoursToday	20	15	4.28	2.43	4.37	2.5	8	23	12	39
+hoursToday	20	30	4.28	2.43	4.25	2.4	8	20	12	43
+hoursToday	20	45	4.28	2.43	4.05	2.24	8	16	12	48
 
+v planu je:
 
-  /tmp ha addons logs a0d7b954_nodered 2>&1 | grep "PLAN_DEBUG" > /config/plan_debug_log.txt && cat /config/plan_debug_log.txt
-11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
-11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
-11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
-11 Feb 20:28:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
-11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
-11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
-11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
-11 Feb 20:28:56 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
-11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | prices:24 | keys:day,hour,minute,priceCZKhourBuy,priceCZKhourProd,priceCZKquarterBuy,priceCZKquarterProd,levelCheapestHourBuy,levelCheapestQuarterBuy,levelMostExpensiveHourProd,levelMostExpensiveQuarterProd | prices[0]: day=hoursToday hour=0 min=45 buyH=3.77 prodH=2 buyQ=3.75 prodQ=1.99 lvlBuyH=4 lvlBuyQ=5 lvlProdH=17
-11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h20 off=0 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=20 foundMin=45 lvlBuy=14 priceBuy=4.46
-11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h21 off=1 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=21 foundMin=45 lvlBuy=8 priceBuy=4.02
-11 Feb 20:29:11 - [warn] [function:Výpočet plánu na 12h (v11)] PLAN_DEBUG | h22 off=2 method=hour_only_hoursTomorrow foundDay=hoursTomorrow foundHour=22 foundMin=45 lvlBuy=7 priceBuy=3.88
+Hodina	Mód	Důvod	Level	Cena
+20:00	🟡 Šetřit	Šetřím baterii (SOC 31%)	10	4.46 Kč
+21:00	🟡 Šetřit	Šetřím baterii (SOC 30%)	9	4.02 Kč
+22:00	🟡 Šetřit	Šetřím baterii (SOC 29%)	8	3.88 Kč
+23:00	🟡 Šetřit	Šetřím baterii (SOC 28%)	5	3.60 Kč
+00:00 +1	🟢 Normální	Vybíjení na minSOC, SOC 27% → ~22%	7	3.77 Kč
+01:00 +1	🟡 Šetřit	Ochrana baterie (SOC 22% blízko min 20%)	4	3.55 Kč
+02:00 +1	🟡 Šetřit	Ochrana baterie (SOC 21% blízko min 20%)	2	3.51 Kč
+03:00 +1	🔵 Nabíjet	Nabíjení na cíl 39% (nyní 20%)	1	3.49 Kč
+04:00 +1	🟡 Šetřit	Šetřím baterii (SOC 36%)	3	3.53 Kč
+05:00 +1	🟡 Šetřit	Šetřím baterii (SOC 35%)	6	3.65 Kč
+06:00 +1	🟢 Normální	Drahá energie, vybíjení SOC 34% → ~29%	12	4.92 Kč
+07:00 +1	🟡 Šetřit	Šetřím baterii (SOC 29%)	11	4.57 Kč
+
+levelbuycheapesthour je napr. ve 20 hodin 8, ty mas 10.
+
+Dale vybijis baterii ve strednim prahu: 
+
+00:00 +1	🟢 Normální	Vybíjení na minSOC, SOC 27% → ~22%	7	3.77 Kč
+
+To je spatne - proc? Vzdyt tady se ma setrit
+
+tady mas vypis:
+
+  /tmp ha addons logs a0d7b954_nodered 2>&1 | grep "PLANv12" > /config/plan_v12_log.txt && cat /config/plan_v12_log.txt
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:35:53 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:35:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:36:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:37:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:38:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | prices:24 horizont:12 SOC:31% minSOC:20
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h20 off=0 buy=4.46 localLvl=10 dbLvl=14 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h21 off=1 buy=4.02 localLvl=9 dbLvl=8 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h22 off=2 buy=3.88 localLvl=8 dbLvl=7 method=any_hoursTomorrow day=hoursTomorrow min=45
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | h23 off=3 buy=3.6 localLvl=5 dbLvl=5 method=any_hoursTomorrow day=hoursTomorrow min=30
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | LOW SOC! projected=19% < 25% → charge to 37% (1.9 kWh)
+11 Feb 20:39:56 - [warn] [function:Výpočet plánu na 12h (v12)] PLANv12 | No viable hours, using cheapest 1 hours for charging
