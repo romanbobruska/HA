@@ -290,11 +290,17 @@ rm -rf /tmp/HA
   - `fve-modes.json`: standardizovaný `energy_arbiter` se `consumers_active` ve všech 5 módech
 - **Soubory**: 7 flow souborů
 
-### Session 5: 2026-02-12 — Aktuální
-- **Problémy k řešení**:
-  - Baterie se nabila na 70% — pravděpodobně starý kód na HA (v13.1 fix nebyl nasazen)
-  - Vytápění TČ vypnuté v levných hodinách — analyzována logika, čeká se na runtime data
-- **Stav**: Merge refactoring do main, push na GitHub, čeká na deploy na HA
+### Session 5: 2026-02-12
+- **Merge refactoring** do main + push na GitHub
+- **Baterie na 70%**: pravděpodobně starý kód na HA (v13.1 fix nebyl nasazen) — vyřeší deploy
+- **Vytápění TČ**: analyzována logika fve-heating.json, čeká na runtime data
+- **Refaktoring filtrace-bazenu.json**:
+  - 30+ nodes (spaghetti z moment, time-range-switch, duplicitních service callů) → 19 nodes
+  - 1 rozhodovací funkce "Rozhodnutí filtrace" (121 řádků, 4 výstupy)
+  - Odstraněno: 4× duplicitní "Filtrace ON", 2× "Je letní režim?", 5× moment node, 2× "Rozdíl výroby > 3kW?"
+  - Zachována identická logika: stejná časová okna, prahy, podmínky
+  - Timezone-safe (Europe/Prague via Intl)
+  - Nepotřebuje `node-red-contrib-moment` ani `node-red-contrib-time-range-switch`
 
 ---
 
