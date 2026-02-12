@@ -86,7 +86,7 @@
         "z": "a86ad952ad7756aa",
         "g": "8002c1778266b948",
         "name": "Vypočítej max amperaci",
-        "func": "\nlet rozdil_wattu = global.get(\"max_spotreba_sit\")  - \n                    msg.payload_spotreba\nlet max_amper = Math.floor((rozdil_wattu \n                            / 230 / 3) + msg.payload_charger)\n\nif (max_amper > 16) {\n    msg.payload = 16\n} else if (max_amper < 6) {\n    msg.payload = 0\n} else {\n    msg.payload = max_amper\n}\n    \nreturn msg;",
+        "func": "\n// === ENERGY ARBITER - rezervace kapacity pro baterii ===\nconst arbiter = global.get(\"energy_arbiter\") || {};\nconst reserved_for_battery = arbiter.reserved_for_battery_w || 0;\nconst max_sit = global.get(\"max_spotreba_sit\") || 24000;\nconst effective_max = max_sit - reserved_for_battery;\n\nlet rozdil_wattu = effective_max - msg.payload_spotreba;\nlet max_amper = Math.floor((rozdil_wattu / 230 / 3) + msg.payload_charger);\n\nif (max_amper > 16) {\n    msg.payload = 16;\n} else if (max_amper < 6) {\n    msg.payload = 0;\n} else {\n    msg.payload = max_amper;\n}\n\nnode.status({fill: msg.payload > 0 ? \"green\" : \"red\", shape: \"dot\",\n    text: msg.payload + \"A | max_sit:\" + max_sit + \" reserved:\" + reserved_for_battery + \" spotreba:\" + Math.round(msg.payload_spotreba)});\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
