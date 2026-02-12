@@ -243,7 +243,7 @@
         "z": "49921d17efb0cefe",
         "g": "68ded079ca35f344",
         "name": "Vypočítej max amperaci",
-        "func": "let spotreba_sit = msg.payload_spotreba\nlet max_amper = 0\nlet battpct = msg.payload_battpct\nlet chargeramp = msg.payload_charger * 3 * 230\nlet max_spotreba = global.get(\"max_spotreba_sit\")\nlet batt_minus = msg.payload_batt_minus\nlet rozdil_vyroby_spotreby = msg.payload\n\nif (battpct > 95)  {\n    max_amper = Math.floor((11040 - \n                            spotreba_sit + batt_minus) \n                            / 230 / 3)\n} else {\n    max_amper = Math.floor((rozdil_vyroby_spotreby \n                            + chargeramp) / 230 / 3)\n}\n\nif (max_amper > 16) {\n    msg.payload = 16\n} else if (max_amper < 6) {\n    msg.payload = 0\n} else {\n    msg.payload = max_amper\n}\n\nreturn msg;",
+        "func": "let spotreba_sit = msg.payload_spotreba\nlet max_amper = 0\nlet battpct = msg.payload_battpct\nlet chargeramp = msg.payload_charger * 3 * 230\nconst config = global.get(\"fve_config\") || {};\nlet max_spotreba = config.max_spotreba_sit_w || 22000;\nconst SAFETY_MARGIN = config.safety_margin_w || 2000\nlet batt_minus = msg.payload_batt_minus\nlet rozdil_vyroby_spotreby = msg.payload\n\nif (battpct > 95)  {\n    max_amper = Math.floor((11040 - \n                            spotreba_sit + batt_minus) \n                            / 230 / 3)\n} else {\n    max_amper = Math.floor((rozdil_vyroby_spotreby \n                            + chargeramp) / 230 / 3)\n}\n\nif (max_amper > 16) {\n    msg.payload = 16\n} else if (max_amper < 6) {\n    msg.payload = 0\n} else {\n    msg.payload = max_amper\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
