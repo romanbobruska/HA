@@ -280,12 +280,29 @@ rm -rf /tmp/HA
 - **Oprava**: Vyloučit solární hodiny z expensive filtr + opravit výpočet na `totalDrainKwh + extraExpensiveDrain`
 - **Soubory**: fve-orchestrator.json (v13.1)
 
+### Session 4: Refaktoring (branch `refactoring` → merged do `main`)
+- **Změny**:
+  - `fve-config.json`: nové config parametry `safety_margin_w`, `solar_start_hour`, `solar_end_hour`, `soc_drop_setrit_pct`
+  - `boiler.json`, `nabijeni-auta-sit.json`, `fve-modes.json`: SAFETY_MARGIN čte z configu místo hardcoded 2000
+  - `nabijeni-auta-slunce.json`: přechod z `global.get("max_spotreba_sit")` na `fve_config.max_spotreba_sit_w`
+  - `fve-orchestrator.json`: `solarStartHour`, `solarEndHour`, `socDropSetrit` čtou z configu
+  - `vypocitej-ceny.json`: přejmenované duplicitní funkce ("Sestav insert" → "ceny_total"/"ceny_raw")
+  - `fve-modes.json`: standardizovaný `energy_arbiter` se `consumers_active` ve všech 5 módech
+- **Soubory**: 7 flow souborů
+
+### Session 5: 2026-02-12 — Aktuální
+- **Problémy k řešení**:
+  - Baterie se nabila na 70% — pravděpodobně starý kód na HA (v13.1 fix nebyl nasazen)
+  - Vytápění TČ vypnuté v levných hodinách — analyzována logika, čeká se na runtime data
+- **Stav**: Merge refactoring do main, push na GitHub, čeká na deploy na HA
+
 ---
 
 ## 11. Známé limitace a budoucí práce
 
-1. **Hardcoded konstanty**: `solarStartHour=9`, `solarEndHour=17`, `socDropSetrit=1` — měly by být v configu
-2. **Duplikátní kód** napříč flows — viz sekce 8
+1. ~~**Hardcoded konstanty**~~: ✅ Vyřešeno v Session 4 (refaktoring)
+2. ~~**Duplikátní kód**~~: ✅ Částečně vyřešeno (přejmenování, centralizace configu)
 3. **Predikce spotřeby**: `dailyConsumptionKwh=20` je statická, fve-history-learning.json zatím učí vzory ale nepoužívá je aktivně
 4. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
 5. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
+6. **Vytápění**: Logika v `fve-heating.json` závisí na `letni_rezim` a cenových levelech — potřeba ověřit runtime chování
