@@ -187,7 +187,7 @@
                 "t": "set",
                 "p": "max_spotreba_sit",
                 "pt": "global",
-                "to": "24000",
+                "to": "22000",
                 "tot": "num"
             }
         ],
