@@ -1,2 +1,5 @@
-pojdme se zamerit na vytapeni domu. Nerozumim tomu, proc je ted v nejlevnejsich hodinach vypnute topeni na cerpadle. jsme prece na 
-dolni hranici teploty v dome a bylo by dobre ho vzhledem k cene energie zapnouit, aby natopil smesovaci nadrz pro topeni domu.
+uklid po sobe.
+
+zaroven sepis kompletni shrnuti do md filu, ktery bych mohl pouzit v jinem OS (linux) v pripade prepnuti, abychom neprisli o kontext.
+
+Az to udelas, proved celkovy refaktoring, aby nebyli duplicity a nesmyslne opakovani kodu. Toto proved do branch git refactoring.
