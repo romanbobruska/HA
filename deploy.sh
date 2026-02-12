@@ -57,7 +57,7 @@ rm -rf /config/backup_* 2>/dev/null && echo "   ✅ Zálohy smazány" || echo " 
 # --- 3. Kopie HA konfiguračních souborů ---
 echo ""
 echo "📋 Kopíruji HA konfiguraci..."
-for f in configuration.yaml automations.yaml mqtt.yaml modbus.yaml input_numbers.yaml template_sensors.yaml template_switches.yaml; do
+for f in configuration.yaml automations.yaml scripts.yaml scenes.yaml mqtt.yaml modbus.yaml input_numbers.yaml template_sensors.yaml template_switches.yaml; do
     if [ -f "$REPO_DIR/homeassistant/$f" ]; then
         cp -f "$REPO_DIR/homeassistant/$f" "$HA_CONFIG/$f"
         echo "   ✅ $f"
