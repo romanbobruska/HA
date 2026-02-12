@@ -1,5 +1,5 @@
-uklid po sobe.
-
-zaroven sepis kompletni shrnuti do md filu, ktery bych mohl pouzit v jinem OS (linux) v pripade prepnuti, abychom neprisli o kontext.
-
-Az to udelas, proved celkovy refaktoring, aby nebyli duplicity a nesmyslne opakovani kodu. Toto proved do branch git refactoring.
+- vzdy pouzivej svuj md file pro kontext, abys videl historii pozadavku. nevidim ho v browseru
+- rekni mi, jaky md file pouzivas pro kontext
+- po kazdem promptu aktualizuj md file
+- nechapu, proc se dnes baterie nabila na 70 procent
+- pokud jsi si jist, ze refactoring zafunguje, dej to do produkce
