@@ -72,7 +72,7 @@ echo "🔧 Slučuji Node-RED flows..."
 
 # Zastav Node-RED PŘED zápisem (jinak při restartu přepíše flows.json starými daty)
 echo "   ⏹️  Zastavuji Node-RED..."
-ha addons stop a0d7b954_nodered 2>/dev/null || ha addons stop core_node_red 2>/dev/null || true
+ha apps stop a0d7b954_nodered 2>/dev/null || ha addons stop a0d7b954_nodered 2>/dev/null || true
 sleep 3
 
 # Najdi Node-RED adresář
@@ -171,7 +171,7 @@ fi
 echo ""
 echo "🔄 Restartuji služby..."
 echo "   Spouštím Node-RED..."
-ha addons start a0d7b954_nodered 2>/dev/null || ha addons start core_node_red 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
+ha apps start a0d7b954_nodered 2>/dev/null || ha addons start a0d7b954_nodered 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
 
 if $RESTART_HA; then
     echo "   Restartuji Home Assistant..."
