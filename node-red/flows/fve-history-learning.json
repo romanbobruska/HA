@@ -22,7 +22,7 @@
             "fve_history_store",
             "fve_history_debug"
         ],
-        "x": 4,
+        "x": 14,
         "y": 19,
         "w": 872,
         "h": 82
@@ -41,7 +41,7 @@
             "fve_history_predict_calc",
             "fve_history_predict_out"
         ],
-        "x": 24,
+        "x": 14,
         "y": 119,
         "w": 622,
         "h": 82
@@ -60,7 +60,7 @@
             "fve_history_analyze_calc",
             "fve_history_analyze_save"
         ],
-        "x": 4,
+        "x": 14,
         "y": 219,
         "w": 642,
         "h": 82
@@ -79,7 +79,7 @@
             "fve_history_export_func",
             "fve_history_export_file"
         ],
-        "x": 4,
+        "x": 14,
         "y": 319,
         "w": 602,
         "h": 82
@@ -102,7 +102,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
+        "x": 140,
         "y": 60,
         "wires": [
             [
@@ -123,7 +123,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 350,
         "y": 60,
         "wires": [
             [
@@ -144,7 +144,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 560,
         "y": 60,
         "wires": [
             [
@@ -166,7 +166,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
+        "x": 760,
         "y": 60,
         "wires": []
     },
@@ -177,7 +177,7 @@
         "g": "fve_history_predict_group",
         "name": "← Predikce request",
         "links": [],
-        "x": 65,
+        "x": 55,
         "y": 160,
         "wires": [
             [
@@ -198,7 +198,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 290,
+        "x": 280,
         "y": 160,
         "wires": [
             [
@@ -220,7 +220,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 510,
+        "x": 500,
         "y": 160,
         "wires": []
     },
@@ -242,7 +242,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
+        "x": 140,
         "y": 260,
         "wires": [
             [
@@ -263,7 +263,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
+        "x": 330,
         "y": 260,
         "wires": [
             [
@@ -285,7 +285,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 520,
+        "x": 530,
         "y": 260,
         "wires": []
     },
@@ -307,7 +307,7 @@
         "topic": "",
         "payload": "export",
         "payloadType": "str",
-        "x": 120,
+        "x": 130,
         "y": 360,
         "wires": [
             [
@@ -328,7 +328,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
+        "x": 310,
         "y": 360,
         "wires": [
             [
@@ -350,7 +350,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 490,
+        "x": 500,
         "y": 360,
         "wires": []
     }

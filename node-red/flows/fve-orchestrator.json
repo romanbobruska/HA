@@ -30,7 +30,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 952,
+        "w": 1292,
         "h": 162
     },
     {
@@ -53,8 +53,8 @@
             "a706b353f30c25d1",
             "a86bc5233cfa0458"
         ],
-        "x": 74,
-        "y": 239,
+        "x": 134,
+        "y": 219,
         "w": 752,
         "h": 242
     },
@@ -72,8 +72,8 @@
             "376106d716756636",
             "dc8da09248ec1e29"
         ],
-        "x": 114,
-        "y": 539,
+        "x": 174,
+        "y": 519,
         "w": 672,
         "h": 82
     },
@@ -152,7 +152,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1040,
+        "x": 1160,
         "y": 60,
         "wires": [
             [
@@ -174,8 +174,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 60,
+        "x": 400,
+        "y": 140,
         "wires": [
             [
                 "517215d5f730e80c"
@@ -196,7 +196,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 310,
+        "x": 1170,
         "y": 140,
         "wires": []
     },
@@ -213,7 +213,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 560,
+        "x": 620,
         "y": 140,
         "wires": [
             [
@@ -233,7 +233,7 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 840,
+        "x": 880,
         "y": 140,
         "wires": [
             []
@@ -257,8 +257,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 220,
-        "y": 280,
+        "x": 280,
+        "y": 260,
         "wires": [
             [
                 "c36915a8599c5282"
@@ -278,8 +278,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 280,
+        "x": 530,
+        "y": 260,
         "wires": [
             [
                 "8eef6d1d51c9c644"
@@ -299,8 +299,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
-        "y": 360,
+        "x": 390,
+        "y": 340,
         "wires": [
             [
                 "19a783a61de3519b"
@@ -345,8 +345,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 5,
-        "x": 610,
-        "y": 360,
+        "x": 670,
+        "y": 340,
         "wires": [
             [
                 "f10a91fcb4de6bd3"
@@ -375,8 +375,8 @@
         "links": [
             "8b55cfc5181b9eb7"
         ],
-        "x": 785,
-        "y": 280,
+        "x": 845,
+        "y": 260,
         "wires": []
     },
     {
@@ -389,8 +389,8 @@
         "links": [
             "ec611f6aba7d5c59"
         ],
-        "x": 785,
-        "y": 320,
+        "x": 845,
+        "y": 300,
         "wires": []
     },
     {
@@ -403,8 +403,8 @@
         "links": [
             "1d98a0541716ce58"
         ],
-        "x": 785,
-        "y": 360,
+        "x": 845,
+        "y": 340,
         "wires": []
     },
     {
@@ -417,8 +417,8 @@
         "links": [
             "179ed150020d459c"
         ],
-        "x": 785,
-        "y": 400,
+        "x": 845,
+        "y": 380,
         "wires": []
     },
     {
@@ -431,8 +431,8 @@
         "links": [
             "c682224043634fcd"
         ],
-        "x": 785,
-        "y": 440,
+        "x": 845,
+        "y": 420,
         "wires": []
     },
     {
@@ -481,8 +481,8 @@
                 "valueType": "str"
             }
         ],
-        "x": 240,
-        "y": 580,
+        "x": 300,
+        "y": 560,
         "wires": [
             [
                 "376106d716756636"
@@ -502,8 +502,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 472,
-        "y": 580,
+        "x": 532,
+        "y": 560,
         "wires": [
             [
                 "dc8da09248ec1e29"
@@ -530,33 +530,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 680,
-        "y": 580,
+        "x": 740,
+        "y": 560,
         "wires": [
             []
         ]
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "3be39a8e17624894",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
     },
     {
         "id": "aabb001122334455",
@@ -567,7 +545,7 @@
         "sqlquery": "fixed",
         "sql": "SELECT * FROM \"own_energy_prices_total\"",
         "name": "Čti čerstvé ceny z DB",
-        "x": 570,
+        "x": 620,
         "y": 60,
         "wires": [
             [
@@ -588,12 +566,41 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
+        "x": 880,
         "y": 60,
         "wires": [
             [
                 "9e0b46a9dfedea33"
             ]
         ]
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "6d97960f9560e05b",
+        "type": "sqlitedb",
+        "db": "/homeassistant/home-assistant_v2.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "2f65d436b2bf6251",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-node-sqlite": "1.1.1"
+        }
     }
 ]

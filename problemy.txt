@@ -1,21 +1,2 @@
-opet jsi mi nedal nasazovaci skript. Na konci kazdeho ukolu chci kratke shrnuti a nasazovaci skript do ha.
-Precti si znova zadani, upravil jsem ho, a postupuj podle toho.
-
-Jedná se vytápění bazénu, jen je napojené na ohrev vody. Zapamatuj si tuto entitu, pouzijeme ji priste pro ohrev bazenu.
-Uprav hodnoty následovně:
-
-Hodnota	Režim	Popis
-0	Ekonomický	Start teplota 2°C
-1	Normální	Start teplota 3°C (default)
-2	Luxusní	Start teplota 10°C
-4	Smart Control	Řízení Nibe
-
-Pokud prepnu komfortni rezim, pise mi to varovani: 
-
-Logger: homeassistant.components.automation.nibe_tuv_komfort_zapis_do_modbus
-Zdroj: helpers/script.py:2098
-integrace: Automatizace (dokumentace, problémy)
-První výskyt: 23:51:28 (1 výskyt)
-Naposledy logováno: 23:51:28
-
-Nibe TUV komfort - zapis do modbus: Already running
+pojdme se zamerit na vytapeni domu. Nerozumim tomu, proc je ted v nejlevnejsich hodinach vypnute topeni na cerpadle. jsme prece na 
+dolni hranici teploty v dome a bylo by dobre ho vzhledem k cene energie zapnouit, aby natopil smesovaci nadrz pro topeni domu.
