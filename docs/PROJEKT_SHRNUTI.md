@@ -314,6 +314,13 @@ rm -rf /tmp/HA
   - Schedule SOC = 0, Schedule Day = -7, MaxDischargePower = 0
   - Předtím měl jen 2 ze 5 potřebných nastavení
 - **HA obnovena ze zálohy** (v9 → v13.1 přes deploy.sh)
+- **Fix fve-orchestrator.json** — root cause nabíjení baterie v Normal režimu:
+  - Bug 1: Override feedback loop — `Kontrola podmínek` přepisovala `fve_current_mode` overridnutým módem,
+    další 15s cyklus četl "setrit" místo plánovaného "normal" (až 60s do resetu plánovačem)
+  - Bug 2: Override Normal→Šetřit při běhu čerpadla/auta — Šetřit nastavil `max_discharge_power=0`
+    a `scheduled_soc=currentSoc`, čímž solar nabíjel baterii a spotřeba šla ze sítě
+  - Fix: planMode se čte z `plan.currentMode` (immutable), override odstraněn
+  - Jednotlivé módy (Nabíjet) již interně řeší high-priority consumers
 
 ---
 
