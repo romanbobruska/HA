@@ -41,7 +41,7 @@
             "402735a3f30a84e8",
             "f1cea1e4214578c4"
         ],
-        "x": 24,
+        "x": 14,
         "y": 279,
         "w": 822,
         "h": 82
@@ -171,7 +171,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 140,
         "y": 320,
         "wires": [
             [
@@ -192,7 +192,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 530,
+        "x": 520,
         "y": 320,
         "wires": [
             [
@@ -214,7 +214,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 720,
+        "x": 710,
         "y": 320,
         "wires": []
     },
@@ -326,7 +326,7 @@
         "sqlquery": "fixed",
         "sql": "SELECT * FROM \"own_energy_prices_total\";\n",
         "name": "Vyber tabulku cen",
-        "x": 350,
+        "x": 340,
         "y": 320,
         "wires": [
             [
@@ -533,7 +533,7 @@
         "mode": "RWC"
     },
     {
-        "id": "4b99422bc2057b70",
+        "id": "c9609127c99c5c7c",
         "type": "global-config",
         "env": [],
         "modules": {

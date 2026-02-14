@@ -117,12 +117,15 @@
             "75d1f9e77bc15e0a",
             "21e5f570ecff7fb5",
             "c900a46800b30516",
-            "8db6ee5fbb848b8b"
+            "8db6ee5fbb848b8b",
+            "zakaz_sched_soc_0",
+            "zakaz_sched_day_m7",
+            "zakaz_max_disch_0"
         ],
         "x": 14,
         "y": 739,
         "w": 952,
-        "h": 142
+        "h": 202
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -159,6 +162,10 @@
         "wires": [
             [
                 "a613f38251bd9e72",
+                "a3a0aeac0fbd3e99",
+                "246063034880ca80",
+                "702b8ef11c8c396c",
+                "3a87476592bc532f",
                 "84c9363491961540"
             ]
         ]
@@ -192,9 +199,7 @@
         "x": 360,
         "y": 40,
         "wires": [
-            [
-                "a3a0aeac0fbd3e99"
-            ]
+            []
         ]
     },
     {
@@ -226,9 +231,7 @@
         "x": 620,
         "y": 40,
         "wires": [
-            [
-                "246063034880ca80"
-            ]
+            []
         ]
     },
     {
@@ -260,9 +263,7 @@
         "x": 850,
         "y": 40,
         "wires": [
-            [
-                "702b8ef11c8c396c"
-            ]
+            []
         ]
     },
     {
@@ -294,9 +295,7 @@
         "x": 570,
         "y": 120,
         "wires": [
-            [
-                "3a87476592bc532f"
-            ]
+            []
         ]
     },
     {
@@ -384,6 +383,10 @@
         "wires": [
             [
                 "17f08b797c764787",
+                "6e319aa534013af8",
+                "6d2e2f534bf9e398",
+                "906ece2b651b5a64",
+                "a1b2c3d4e5f60002",
                 "176abc1b75a23fb4"
             ]
         ]
@@ -417,9 +420,7 @@
         "x": 370,
         "y": 220,
         "wires": [
-            [
-                "6e319aa534013af8"
-            ]
+            []
         ]
     },
     {
@@ -451,9 +452,7 @@
         "x": 650,
         "y": 220,
         "wires": [
-            [
-                "6d2e2f534bf9e398"
-            ]
+            []
         ]
     },
     {
@@ -485,9 +484,7 @@
         "x": 600,
         "y": 280,
         "wires": [
-            [
-                "906ece2b651b5a64"
-            ]
+            []
         ]
     },
     {
@@ -519,9 +516,7 @@
         "x": 850,
         "y": 280,
         "wires": [
-            [
-                "a1b2c3d4e5f60002"
-            ]
+            []
         ]
     },
     {
@@ -609,6 +604,10 @@
         "wires": [
             [
                 "11f838e573d16c9f",
+                "9cb53882cac5a9e2",
+                "cf1085b95156e10a",
+                "fc83a9cf78db7a97",
+                "a1b2c3d4e5f60001",
                 "6598def5a6b435a3"
             ]
         ]
@@ -642,9 +641,7 @@
         "x": 370,
         "y": 400,
         "wires": [
-            [
-                "9cb53882cac5a9e2"
-            ]
+            []
         ]
     },
     {
@@ -676,9 +673,7 @@
         "x": 640,
         "y": 400,
         "wires": [
-            [
-                "cf1085b95156e10a"
-            ]
+            []
         ]
     },
     {
@@ -710,9 +705,7 @@
         "x": 600,
         "y": 460,
         "wires": [
-            [
-                "fc83a9cf78db7a97"
-            ]
+            []
         ]
     },
     {
@@ -744,9 +737,7 @@
         "x": 850,
         "y": 460,
         "wires": [
-            [
-                "a1b2c3d4e5f60001"
-            ]
+            []
         ]
     },
     {
@@ -834,6 +825,10 @@
         "wires": [
             [
                 "52d5e20c2cede1f3",
+                "9c7ee4010ab79e98",
+                "53cd1a74ee8332ac",
+                "e12fd7a540b89f05",
+                "9bd525cb24b06701",
                 "86d71450ca024a50"
             ]
         ]
@@ -867,9 +862,7 @@
         "x": 370,
         "y": 580,
         "wires": [
-            [
-                "9c7ee4010ab79e98"
-            ]
+            []
         ]
     },
     {
@@ -901,9 +894,7 @@
         "x": 640,
         "y": 580,
         "wires": [
-            [
-                "53cd1a74ee8332ac"
-            ]
+            []
         ]
     },
     {
@@ -935,9 +926,7 @@
         "x": 410,
         "y": 640,
         "wires": [
-            [
-                "e12fd7a540b89f05"
-            ]
+            []
         ]
     },
     {
@@ -969,9 +958,7 @@
         "x": 630,
         "y": 640,
         "wires": [
-            [
-                "9bd525cb24b06701"
-            ]
+            []
         ]
     },
     {
@@ -1059,6 +1046,10 @@
         "wires": [
             [
                 "21e5f570ecff7fb5",
+                "c900a46800b30516",
+                "zakaz_sched_soc_0",
+                "zakaz_sched_day_m7",
+                "zakaz_max_disch_0",
                 "8db6ee5fbb848b8b"
             ]
         ]
@@ -1092,9 +1083,7 @@
         "x": 480,
         "y": 780,
         "wires": [
-            [
-                "c900a46800b30516"
-            ]
+            []
         ]
     },
     {
@@ -1146,6 +1135,102 @@
         "x": 460,
         "y": 840,
         "wires": []
+    },
+    {
+        "id": "zakaz_sched_soc_0",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Schedule SOC = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 480,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "zakaz_sched_day_m7",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Schedule Day = -7",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 720,
+        "y": 840,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "zakaz_max_disch_0",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "MaxDischargePower = 0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_discharge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 940,
+        "y": 840,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "c7421fe2.cb11c",

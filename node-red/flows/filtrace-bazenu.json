@@ -24,10 +24,10 @@
             "filtrace_st_auto",
             "filtrace_st_flag"
         ],
-        "x": 294,
+        "x": 274,
         "y": 119,
-        "w": 632,
-        "h": 222
+        "w": 602,
+        "h": 182
     },
     {
         "id": "filtrace_grp_logic",
@@ -41,10 +41,10 @@
         "nodes": [
             "filtrace_decision"
         ],
-        "x": 294,
-        "y": 359,
-        "w": 432,
-        "h": 82
+        "x": 474,
+        "y": 344,
+        "w": 232,
+        "h": 112
     },
     {
         "id": "filtrace_grp_actions",
@@ -61,16 +61,16 @@
             "filtrace_flag_on",
             "filtrace_flag_off"
         ],
-        "x": 294,
-        "y": 459,
-        "w": 632,
+        "x": 364,
+        "y": 499,
+        "w": 452,
         "h": 182
     },
     {
         "id": "e840eaa72d311da7",
         "type": "inject",
         "z": "ea6d31715793bece",
-        "name": "1 minuta",
+        "name": "2 minuty",
         "props": [
             {
                 "p": "payload"
@@ -80,7 +80,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "60",
+        "repeat": "120",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -381,7 +381,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 500,
+        "x": 590,
         "y": 400,
         "wires": [
             [
@@ -424,8 +424,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 370,
-        "y": 500,
+        "x": 490,
+        "y": 540,
         "wires": [
             []
         ]
@@ -456,8 +456,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 570,
-        "y": 500,
+        "x": 690,
+        "y": 540,
         "wires": [
             []
         ]
@@ -488,8 +488,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 370,
-        "y": 600,
+        "x": 490,
+        "y": 640,
         "wires": [
             []
         ]
@@ -520,8 +520,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 570,
-        "y": 600,
+        "x": 690,
+        "y": 640,
         "wires": [
             []
         ]
@@ -541,7 +541,7 @@
         "enableGlobalContextStore": false
     },
     {
-        "id": "96048a5ab4ac149f",
+        "id": "46f74c8e57a22280",
         "type": "global-config",
         "env": [],
         "modules": {
