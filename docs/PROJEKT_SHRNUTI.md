@@ -321,6 +321,14 @@ rm -rf /tmp/HA
     a `scheduled_soc=currentSoc`, čímž solar nabíjel baterii a spotřeba šla ze sítě
   - Fix: planMode se čte z `plan.currentMode` (immutable), override odstraněn
   - Jednotlivé módy (Nabíjet) již interně řeší high-priority consumers
+- **Fix fve-orchestrator.json** — SOC oscilace v plánovači (~5 min přerušení vybíjení):
+  - Bug 3: PRIORITA 3 (`simulatedSoc <= minSoc + 3` → Šetřit) způsobovala oscilaci:
+    Normal → baterie vybíjí → SOC klesne pod práh → Šetřit (max_discharge=0) →
+    solar trochu nabije → SOC stoupne → Normal → opakuj (~5 min cyklus)
+  - Bug 4: Solar offsets se vytvořily jen když `remainingSolarKwh > 0` —
+    odpoledne s 0 zbývajícím forecastem → hodina NENÍ solární → default Šetřit
+  - Fix KROK 6: Solar offsets vždy pro hodiny v solárním okně (9-17)
+  - Fix PRIORITA 3: Během solárních hodin ochrana baterie jen při absolutním minSoc
 
 ---
 
