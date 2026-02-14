@@ -302,6 +302,19 @@ rm -rf /tmp/HA
   - Timezone-safe (Europe/Prague via Intl)
   - Nepotřebuje `node-red-contrib-moment` ani `node-red-contrib-time-range-switch`
 
+### Session 6: 2026-02-14
+- **Problém**: V režimu Normal solární výroba nabíjela baterii a spotřeba šla ze sítě
+- **Příčina**: Sekvenční řetězení Victron service callů — pokud jeden selže, zbytek se neprovede.
+  Po přechodu Šetřit→Normal zůstaly na Victronu staré nastavení (scheduled_soc, max_discharge_power=0).
+- **Fix fve-modes.json** — paralelní service cally:
+  - Všech 5 módů: Logic funkce → ALL service cally paralelně (ne řetězově)
+  - Pokud jeden service call selže, ostatní se stále provedou
+  - Při dalším 15s cyklu se neúspěšný call zopakuje
+- **Fix Zákaz přetoků** — doplněny 3 chybějící service cally:
+  - Schedule SOC = 0, Schedule Day = -7, MaxDischargePower = 0
+  - Předtím měl jen 2 ze 5 potřebných nastavení
+- **HA obnovena ze zálohy** (v9 → v13.1 přes deploy.sh)
+
 ---
 
 ## 11. Známé limitace a budoucí práce
