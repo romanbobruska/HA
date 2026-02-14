@@ -3,7 +3,7 @@
 ## Aktuální stav (Session 6, 2026-02-14)
 
 ### Hlavní problém
-V Normal režimu se občas nabíjí baterie ze solaru a spotřeba jde ze sítě místo z baterie.
+V Normal režimu baterie občas přestane vybíjet (~každých 5 minut). Příčiny identifikovány a opraveny.
 
 ### Co bylo opraveno (v kódu, čeká na deploy)
 
@@ -18,8 +18,17 @@ V Normal režimu se občas nabíjí baterie ze solaru a spotřeba jde ze sítě 
   - Feedback loop: override zapisoval "setrit" zpět do `fve_current_mode`, takže i po skončení podmínky zůstalo "setrit" (až 60s).
 - **Fix**: `planMode` se čte z `plan.currentMode` (immutable, nastavuje plánovač). Override odstraněn.
 
-### Co ještě NEBYLO nasazeno na HA
-**Žádný z fixů nebyl nasazen!** HA stále běží na starém kódu. Uživatel obnovil HA ze zálohy (v9).
+#### Fix 3: fve-orchestrator.json — SOC oscilace v plánovači (~5 min přerušení)
+- **Problém 1**: PRIORITA 3 (`simulatedSoc <= minSoc + 3` → ŠETŘIT) způsobovala oscilaci:
+  - Normal → baterie vybíjí → SOC klesne pod práh → Šetřit (max_discharge=0)
+  - Solar trochu nabije → SOC stoupne → Normal → opakuj (~5 min cyklus)
+- **Problém 2**: Solar offsets se vytvořily jen když `remainingSolarKwh > 0`.
+  Odpoledne s 0 zbývajícím forecastem → hodina NENÍ solární → default ŠETŘIT.
+- **Fix KROK 6**: Solar offsets vždy pro hodiny v solárním okně (9-17), bez ohledu na forecast.
+- **Fix PRIORITA 3**: Během solárních hodin ochrana baterie jen při absolutním minSoc (ne minSoc+3).
+
+### Stav nasazení
+**Fixy čekají na deploy.** Deploy příkaz: viz sekce Deploy pravidla.
 
 ### Deploy pravidla
 - **NIKDY nerestartovat HA** (`deploy.sh` BEZ `--with-ha`)
@@ -84,14 +93,23 @@ FVE Modes → Link In → Logic funkce → 5× paralelní service cally:
 - Deploy troubleshooting (divergent branches, missing YAML files)
 
 ### Session 6: 2026-02-14 (aktuální)
-- Fix: paralelní Victron service cally
-- Fix: override Normal→Šetřit (root cause nabíjení baterie)
+- Fix 1: paralelní Victron service cally (fve-modes.json)
+- Fix 2: override Normal→Šetřit odstraněn (fve-orchestrator.json)
+- Fix 3: SOC oscilace v plánovači — solar offsets vždy + PRIORITA 3 relaxace (fve-orchestrator.json)
 - Fix: deploy_from_scratch.sh bez --with-ha
 - TODO: nasadit fixy na HA
 
 ---
 
+## Ověřená fakta
+- Victron řídící entity (`number.power_set_point` atd.) se nastavují **výhradně** v `fve-modes.json`
+- `init-set-victron.json` (1s repeat) zapisuje jen do `input_number.*` (statistiky), ne do Victron řízení
+- Žádný jiný flow nemění Victron ESS nastavení
+- Normal mode service cally mají **hardcoded** hodnoty (ne z msg)
+- Šetřit/Nabíjet čtou dynamické hodnoty z `msg.victron` (template `{{victron.*}}`)
+- Výchozí mód plánovače je ŠETŘIT (PRIORITA 7), NORMAL jen pro solar/expensive/peak hodiny
+
 ## Otevřené otázky
-1. Je PSP=0 správné chování pro Normal režim? (Solar přebytek nabíjí baterii — je to žádoucí?)
-2. Měl by Normal režim umožnit přebytek solaru do sítě místo baterie?
-3. Jak se chová Victron ESS když scheduled_soc=0 a schedule_charge_duration=0?
+1. Je PSP=0 správné chování pro Normal režim? → ANO, self-consumption: solar→domácnost, přebytek→baterie
+2. Jak se chová Victron s scheduled_soc=0 + schedule_charge_duration=0? → Scheduling vypnutý
+3. Stačí opravy v Node-RED, nebo je potřeba ověřit i nastavení na Victron GX?
