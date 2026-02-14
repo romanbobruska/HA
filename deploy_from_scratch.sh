@@ -39,7 +39,7 @@ echo "Latest commit: $(git log -1 --oneline)"
 # Run deploy script
 echo ""
 echo "=== Running deploy.sh ==="
-bash deploy.sh --with-ha
+bash deploy.sh
 
 echo ""
 echo "=== Deploy completed ==="
