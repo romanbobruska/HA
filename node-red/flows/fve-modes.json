@@ -1253,5 +1253,72 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "0aa9e57f66f7d429",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: SOLÁRNÍ NABÍJENÍ - Levná energie + solar",
+        "style": {
+            "fill": "#fffacd",
+            "label": true
+        },
+        "nodes": [
+            "e93b8f3e662c6190",
+            "d27d27bacf98eec0",
+            "84587c2adc4e04bc"
+        ],
+        "x": 14,
+        "y": 961,
+        "w": 952,
+        "h": 182
+    },
+    {
+        "id": "e93b8f3e662c6190",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "solar_charging",
+        "links": [],
+        "x": 235,
+        "y": 1041,
+        "wires": [
+            [
+                "d27d27bacf98eec0"
+            ]
+        ]
+    },
+    {
+        "id": "d27d27bacf98eec0",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Solární nabíjení Logic",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\n\n// SOLAR_CHARGING mode: Lock SOC to prevent discharge, allow solar charging\n// If consumption > production → import from grid (battery does NOT discharge)\nmsg.victron = { \n    power_set_point: 0,           // Let ESS manage\n    min_soc: minSoc,              // Standard protection\n    schedule_soc: currentSoc      // Lock SOC - prevent discharge!\n};\n\nmsg.mode = \"solar_charging\";\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\", \n    shape: \"ring\", \n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"% (locked)\"\n});\n\n// Energy arbiter - battery locked, no discharge allowed\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: true,          // Can charge from solar\n    battery_discharging: false,      // CANNOT discharge\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: false,    // Discharge blocked\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1041,
+        "wires": [
+            [
+                "84587c2adc4e04bc"
+            ]
+        ]
+    },
+    {
+        "id": "84587c2adc4e04bc",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "solar_charging_out",
+        "mode": "link",
+        "links": [],
+        "x": 675,
+        "y": 1041,
+        "wires": []
     }
 ]
