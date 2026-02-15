@@ -1,7 +1,7 @@
 # FVE Automatizace — Kompletní shrnutí projektu
 
 > Tento dokument slouží jako kontext pro pokračování práce na jiném OS/stroji.
-> Poslední aktualizace: 2026-02-12
+> Poslední aktualizace: 2026-02-15
 
 ---
 
@@ -109,11 +109,12 @@ HA/
 ### Módy
 | Mód | PSP | Scheduled Charge | MaxDischarge | Kdy |
 |-----|-----|------------------|--------------|-----|
-| **Normal** | 0 | ne | povoleno | Solar hodiny, drahé hodiny (vybíjení) |
+| **Normal** | 0 | ne | povoleno | Solar hodiny (drahé), drahé hodiny (vybíjení) |
 | **Šetřit** | 0 | ne | 0 (zakázáno) | Výchozí mód, šetří baterii |
 | **Nabíjet ze sítě** | dynamický | dynamický | 0 | Velmi levná energie |
 | **Prodávat** | +maxFeedIn | ne | povoleno | Velmi drahá energie, prodej |
 | **Zákaz přetoků** | 0 | ne | povoleno | Dobrá prodejní cena |
+| **Solární nabíjení** | 0 | schedule_soc=current | 0 (zakázáno) | Levné solar hodiny (level≤4) |
 
 ### Prioritní systém spotřebičů
 ```
@@ -329,6 +330,38 @@ rm -rf /tmp/HA
     odpoledne s 0 zbývajícím forecastem → hodina NENÍ solární → default Šetřit
   - Fix KROK 6: Solar offsets vždy pro hodiny v solárním okně (9-17)
   - Fix PRIORITA 3: Během solárních hodin ochrana baterie jen při absolutním minSoc
+
+### Session 7: 2026-02-15
+- **Problém 1**: minSOC stále osciloval (19%), přestože předchozí fixy měly zamknout na 20%
+- **Root cause minSOC**:
+  - `fve-config.json` četl `input_number.fve_min_soc` z HA → `config.min_soc`
+  - HA automatizace/skripty měnily input_number → config se aktualizoval
+  - `fve-modes.json` Nabíjet Logic používal `config.min_soc` (dynamické čtení)
+- **Fix minSOC** (2 commits):
+  - `fve-config.json`: Odstraněn case pro `input_number.fve_min_soc` → config IGNORUJE HA změny
+  - `fve-modes.json`: Nabíjet Logic používá lokální `var minSoc = config.min_soc || 20` (read once)
+  - Výsledek: minSOC natvrdo 20%, ŽÁDNÉ externí změny možné
+- **Problém 2**: Baterie se nenabíjela v nejlevnějších hodinách (12:00 level 2, 14:00 level 1)
+- **Root cause nabíjení**:
+  - KROK 4 ochranné nabíjení: `targetSocFromGrid = 27%` (jen 1 hodina)
+  - KROK 5 opportunistická logika: `if (gridChargeNeeded === 0 && ...)` → přeskočeno (gridChargeNeeded=1.9)
+  - KROK 7 PRIORITA 1: `if (simulatedSoc < targetSocFromGrid)` → 27 < 27 = false → mode=setrit
+- **Fix opportunistické nabíjení**:
+  - KROK 5: `if (currentSoc < optimalSoc && targetSocFromGrid < optimalSoc)` — funguje i s aktivním ochranným nabíjením
+  - Zvyšuje `targetSocFromGrid` z 27% na 60-80%, přiřadí více levných hodin (~8 místo 1)
+  - Výsledek: Baterie se nabije na optimální SOC v levných hodinách
+- **Nový mód**: SOLAR_CHARGING (per user request)
+  - **Účel**: Ochrana baterie během levných solárních hodin
+  - **Aktivace**: `level <= prah_levna_energie` AND solární výroba (9-17h)
+  - **Chování**: Baterie může nabíjet ze solaru, ale NEMŮŽE vybíjet. Pokud spotřeba > výroba → dovoz ze sítě
+  - **Implementace**:
+    - `fve-orchestrator.json`: Přidán `MODY.SOLAR_CHARGING`, KROK 7 PRIORITA 4 rozlišuje levné/drahé solární hodiny
+    - `fve-orchestrator.json`: Switch node rozšířen na 6 výstupů (modeIndex=5)
+    - `fve-modes.json`: Nová group "Solární nabíjení Logic" s Victron nastavením:
+      - `schedule_soc: currentSoc` (zamkne SOC, zabrání vybíjení)
+      - `power_set_point: 0` (ESS řídí, povolí nabíjení ze solaru)
+      - `energy_arbiter`: `battery_discharging: false`
+  - **Výsledek**: Během levných solárních hodin baterie chráněna, deficit ze sítě
 
 ---
 
