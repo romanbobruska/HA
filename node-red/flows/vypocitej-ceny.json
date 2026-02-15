@@ -679,7 +679,7 @@
         "g": "0c2e8e7121147d0a",
         "mydb": "6d97960f9560e05b",
         "sqlquery": "fixed",
-        "sql": "SELECT day, hour, minute, priceCZKhourBuy, priceCZKquarterBuy, priceCZKhourProd, priceCZKquarterProd,\n       dense_rank() OVER (ORDER BY priceCZKhourBuy) levelCheapestHourBuy,\n       dense_rank() OVER (ORDER BY priceCZKquarterBuy) levelCheapestQuarterBuy,\n       dense_rank() OVER (ORDER BY priceCZKhourProd desc) levelMostExpensiveHourProd,\n       dense_rank() OVER (ORDER BY priceCZKquarterProd desc) levelMostExpensiveQuarterProd\nFROM \"own_energy_prices_total\" ",
+        "sql": "SELECT day, hour, minute, priceCZKhourBuy, priceCZKquarterBuy, priceCZKhourProd, priceCZKquarterProd,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKhourBuy) levelCheapestHourBuy,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKquarterBuy) levelCheapestQuarterBuy,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKhourProd desc) levelMostExpensiveHourProd,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKquarterProd desc) levelMostExpensiveQuarterProd\nFROM \"own_energy_prices_total\" ",
         "name": "Spočítej levely cen",
         "x": 130,
         "y": 440,
