@@ -1,37 +1,5 @@
 [
     {
-        "id": "d32891aad318f0e3",
-        "type": "tab",
-        "label": "Vypočítej ceny",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "f3b107d658fd3d97",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Výpočet vstupní ceny",
-        "style": {
-            "label": true,
-            "color": "#000000",
-            "fill": "#ffefbf",
-            "label-position": "n"
-        },
-        "nodes": [
-            "20afdbcb97fc200c",
-            "9f764aa37d5d6306",
-            "90f59037daf537b9",
-            "7e338e3827c2fb15",
-            "6f9d67a8012a6eb6",
-            "4f702344aaf9fca2"
-        ],
-        "x": 14,
-        "y": 239,
-        "w": 992,
-        "h": 142
-    },
-    {
         "id": "b44cdb66e54727f6",
         "type": "group",
         "z": "d32891aad318f0e3",
@@ -54,318 +22,13 @@
             "0dccef44f2f263b7",
             "ae99347c2a610653",
             "8cf74ed44cce80e6",
-            "9866761975399c7f"
+            "9866761975399c7f",
+            "aa44087d63024639"
         ],
         "x": 15,
         "y": 19,
-        "w": 989,
+        "w": 999,
         "h": 202
-    },
-    {
-        "id": "1de9e9b5f7d0b99b",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Nastavení hodnot v HA",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true,
-            "label-position": "n",
-            "color": "#000000"
-        },
-        "nodes": [
-            "5a22ed0e7c4d5702",
-            "6fe01f7863dcb990",
-            "b359790448907d03",
-            "3804dae5e1238219",
-            "6e5e0e1e73619d88",
-            "44373b9aeb728378",
-            "6a8bdcb07260ad46",
-            "7b088fc43e03bf25",
-            "e6adfa0d8b466c82",
-            "066e002ec5e2bf91",
-            "387ff685c8cf03fa",
-            "d173bd3e17fdc145",
-            "d5fa96c6f4f58178",
-            "155a17c737dae05c",
-            "1b7a9a50b5223ade",
-            "edd5f8a98135c890",
-            "6b80d46b88a7b7f4",
-            "4f7ccdc7d353ca8f",
-            "7fcb518ffcddab0a",
-            "b09c70d2e97274ae",
-            "20578829b67ce0e5",
-            "9b1d4e00a2b10c24",
-            "fb19e54c699bb253"
-        ],
-        "x": 14,
-        "y": 539,
-        "w": 1012,
-        "h": 762
-    },
-    {
-        "id": "0c2e8e7121147d0a",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Spočítej levely cen",
-        "style": {
-            "fill": "#ffcf3f",
-            "label": true,
-            "label-position": "n",
-            "color": "#000000"
-        },
-        "nodes": [
-            "5399c8ddb45ab412",
-            "107622cfabfa9725",
-            "3884e595660a1150",
-            "6efbe1cbe0b8efcb",
-            "e3701f53a6d9c32d",
-            "aa11bb22cc33dd44",
-            "ee55ff66aa77bb88"
-        ],
-        "x": 14,
-        "y": 399,
-        "w": 992,
-        "h": 122
-    },
-    {
-        "id": "20afdbcb97fc200c",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "fixed",
-        "sql": "SELECT  p.day, p.hour, p.minute, p.priceCZK, ph.priceCZKhour, f.*\nFROM own_energy_prices p INNER JOIN own_energy_fees f ON 1 = 1 INNER JOIN (SELECT day, hour, avg(priceCZK) priceCZKhour \nFROM own_energy_prices GROUP BY day, hour) ph ON p.day = ph.day and p.hour = ph.hour ",
-        "name": "Vyber spotové ceny",
-        "x": 330,
-        "y": 280,
-        "wires": [
-            [
-                "9f764aa37d5d6306"
-            ]
-        ]
-    },
-    {
-        "id": "9f764aa37d5d6306",
-        "type": "split",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "name": "Iteruj pole",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "payload",
-        "x": 535,
-        "y": 280,
-        "wires": [
-            [
-                "90f59037daf537b9"
-            ]
-        ]
-    },
-    {
-        "id": "90f59037daf537b9",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "name": "Sestav insert (ceny_total)",
-        "func": "let day = msg.payload.day\nlet hour = msg.payload.hour\nlet minute = msg.payload.minute\nlet marginBuy = msg.payload.marginBuy\nlet marginProd = msg.payload.marginProd\nlet distrVT = msg.payload.distrVT\nlet distrNT = msg.payload.distrNT\nlet tax = msg.payload.tax\nlet sys_services = msg.payload.sys_services\nlet poze = msg.payload.poze\nlet priceCZKquarter = msg.payload.priceCZK\nlet priceCZKhour = msg.payload.priceCZKhour\nlet priceCZKhourBuy = 0\nlet priceCZKhourProd = 0\nlet priceCZKquarterBuy = 0\nlet priceCZKquarterProd = 0\nlet distr = 0\nlet insert = \"\"\n\nflow.set(\"myCount\", 1)\n\nif ([6,9,13,16].includes(hour)) {\n    distr = distrVT\n} else {\n    distr = distrNT\n}\n\npriceCZKhourBuy = (((priceCZKhour / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2)\npriceCZKquarterBuy = (((priceCZKquarter / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2)\npriceCZKhourProd = Math.floor(((priceCZKhour / 1000) - marginProd) * 100 + Number.EPSILON) / 100\npriceCZKquarterProd = Math.floor(((priceCZKquarter / 1000) - marginProd) * 100 + Number.EPSILON) /100\n\n\n\ninsert = \n`INSERT INTO \"own_energy_prices_total\" (\"day\", \"hour\", \"minute\", \"priceCZKhourBuy\", \\\n \"priceCZKhourProd\", \"priceCZKquarterBuy\", \"priceCZKquarterProd\") VALUES  \\\n (\"${day}\", ${hour}, ${minute}, ${priceCZKhourBuy}, ${priceCZKhourProd}, ${priceCZKquarterBuy}, ${priceCZKquarterProd})`\n\nmsg.payload = insert\nmsg.topic = insert\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 710,
-        "y": 280,
-        "wires": [
-            [
-                "6f9d67a8012a6eb6"
-            ]
-        ]
-    },
-    {
-        "id": "7e338e3827c2fb15",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "fixed",
-        "sql": "DELETE FROM \"own_energy_prices_total\"\n",
-        "name": "Vymaž tabulku",
-        "x": 120,
-        "y": 280,
-        "wires": [
-            [
-                "20afdbcb97fc200c"
-            ]
-        ]
-    },
-    {
-        "id": "6f9d67a8012a6eb6",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "msg.topic",
-        "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
-        "name": "Proveď insert",
-        "x": 650,
-        "y": 340,
-        "wires": [
-            [
-                "4f702344aaf9fca2"
-            ]
-        ]
-    },
-    {
-        "id": "5a22ed0e7c4d5702",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav aktuální cenu nákupu / hodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.aktualni_cena_kwh"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].priceCZKhourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 580,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6fe01f7863dcb990",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav aktuální cenu nákupu / čtvrthodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.aktualni_cena_kwh_q"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].priceCZKquarterBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 800,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "b359790448907d03",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Čti ceny z global",
-        "func": "// Čtení aktuálních cen z globální proměnné (bez dotazu do DB)\nconst prices = global.get(\"fve_prices_forecast\") || [];\nconst now = new Date();\nconst hour = now.getHours();\nconst minute = now.getMinutes();\n\nlet minuteStart = 0;\nif (minute >= 0 && minute < 15) minuteStart = 0;\nelse if (minute >= 15 && minute < 30) minuteStart = 15;\nelse if (minute >= 30 && minute < 45) minuteStart = 30;\nelse minuteStart = 45;\n\n// Find current row\nlet currentRow = null;\nfor (const row of prices) {\n    if (row.day === \"hoursToday\" && row.hour === hour && row.minute >= minuteStart && row.minute < minuteStart + 15) {\n        currentRow = row;\n        break;\n    }\n}\n// Fallback: match just by hour\nif (!currentRow) {\n    for (const row of prices) {\n        if (row.hour === hour) {\n            currentRow = row;\n            break;\n        }\n    }\n}\n\nif (!currentRow) {\n    node.status({fill: \"red\", shape: \"dot\", text: \"Žádná data pro \" + hour + \"h\"});\n    return null;\n}\n\n// Find cheapest hours for today\nconst todayPrices = prices.filter(r => r.day === \"hoursToday\" || r.day === (currentRow ? currentRow.day : \"\"));\nconst hourMap = {};\nfor (const r of todayPrices) {\n    if (!hourMap[r.hour] || r.priceCZKhourBuy < hourMap[r.hour]) {\n        hourMap[r.hour] = r.priceCZKhourBuy;\n    }\n}\nconst sorted = Object.entries(hourMap).sort((a, b) => a[1] - b[1]);\nconst cheapestHourBuy = sorted.length > 0 ? parseInt(sorted[0][0]) : 0;\nconst cheapestSecondHourBuy = sorted.length > 1 ? parseInt(sorted[1][0]) : 0;\n\nconst result = {\n    priceCZKhourBuy: currentRow.priceCZKhourBuy,\n    priceCZKquarterBuy: currentRow.priceCZKquarterBuy,\n    priceCZKhourProd: currentRow.priceCZKhourProd,\n    priceCZKquarterProd: currentRow.priceCZKquarterProd,\n    levelCheapestHourBuy: currentRow.levelCheapestHourBuy,\n    levelCheapestQuarterBuy: currentRow.levelCheapestQuarterBuy,\n    levelMostExpensiveHourProd: currentRow.levelMostExpensiveHourProd,\n    levelMostExpensiveQuarterProd: currentRow.levelMostExpensiveQuarterProd,\n    isCheapestHourBuy: currentRow.levelCheapestHourBuy === 1 ? 1 : 0,\n    isCheapestSecondHourBuy: currentRow.levelCheapestHourBuy === 2 ? 1 : 0,\n    isMostExpensiveHourProd: currentRow.levelMostExpensiveHourProd === 1 ? 1 : 0,\n    isMostExpensiveSecondHourProd: currentRow.levelMostExpensiveHourProd === 2 ? 1 : 0,\n    isCheapestQuarterBuy: currentRow.levelCheapestQuarterBuy === 1 ? 1 : 0,\n    isCheapestSecondQuarterBuy: currentRow.levelCheapestQuarterBuy === 2 ? 1 : 0,\n    isMostExpensiveQuarterProd: currentRow.levelMostExpensiveQuarterProd === 1 ? 1 : 0,\n    isMostExpensiveSecondQuarterProd: currentRow.levelMostExpensiveQuarterProd === 2 ? 1 : 0,\n    cheapestHourBuy: cheapestHourBuy,\n    cheapestSecondHourBuy: cheapestSecondHourBuy\n};\n\nmsg.payload = [result];\n\n// Also update global price level\nglobal.set(\"fve_current_price\", {\n    buy: result.priceCZKhourBuy,\n    sell: result.priceCZKhourProd,\n    levelBuy: result.levelCheapestHourBuy,\n    levelSell: result.levelMostExpensiveHourProd\n});\nglobal.set(\"fve_price_level\", result.levelCheapestHourBuy);\n\nnode.status({fill: result.levelCheapestHourBuy <= 4 ? \"green\" : (result.levelCheapestHourBuy >= 7 ? \"red\" : \"yellow\"), shape: \"dot\", text: \"Level \" + result.levelCheapestHourBuy + \" @ \" + hour + \"h | \" + prices.length + \" rows\"});\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 360,
-        "y": 860,
-        "wires": [
-            [
-                "5a22ed0e7c4d5702",
-                "6fe01f7863dcb990",
-                "6a8bdcb07260ad46",
-                "44373b9aeb728378",
-                "e6adfa0d8b466c82",
-                "066e002ec5e2bf91",
-                "387ff685c8cf03fa",
-                "d173bd3e17fdc145",
-                "d5fa96c6f4f58178",
-                "155a17c737dae05c",
-                "1b7a9a50b5223ade",
-                "edd5f8a98135c890",
-                "6b80d46b88a7b7f4",
-                "4f7ccdc7d353ca8f",
-                "7fcb518ffcddab0a",
-                "b09c70d2e97274ae",
-                "20578829b67ce0e5",
-                "9b1d4e00a2b10c24"
-            ]
-        ]
-    },
-    {
-        "id": "3804dae5e1238219",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "msg.topic",
-        "sql": "SELECT * FROM \"own_energy_prices_total\" where day = \"hoursToday\" and hour = 17 and minute = 16",
-        "name": "Vyber hodnoty",
-        "x": 460,
-        "y": 920,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6e5e0e1e73619d88",
-        "type": "inject",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "1 sekunda",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "1",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 130,
-        "y": 580,
-        "wires": [
-            [
-                "7b088fc43e03bf25"
-            ]
-        ]
     },
     {
         "id": "19c197e0feac1b52",
@@ -558,546 +221,12 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 321,
+        "x": 430,
         "y": 60,
         "wires": [
             [
                 "8cf74ed44cce80e6"
             ]
-        ]
-    },
-    {
-        "id": "44373b9aeb728378",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav aktuální cenu prodej / čtvrthodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.aktualni_cena_prodej_kwh_q"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].priceCZKquarterProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 800,
-        "y": 700,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6a8bdcb07260ad46",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav aktuální cenu prodej / hodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.aktualni_cena_prodej_kwh_h"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].priceCZKhourProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 660,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7b088fc43e03bf25",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Má se spustit?",
-        "func": "let d = new Date()\nlet current_minute = d.getMinutes()\nlet current_hour = d.getHours()\nlet spusteno_minutou = flow.get(\"spusteno_minutou\")\n\nif ([0, 15, 30, 45].includes(current_minute) && spusteno_minutou != current_minute) {\n    flow.set(\"spusteno_minutou\", current_minute)\n    return msg;\n} \n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 320,
-        "y": 580,
-        "wires": [
-            [
-                "b359790448907d03"
-            ]
-        ]
-    },
-    {
-        "id": "4f702344aaf9fca2",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "f3b107d658fd3d97",
-        "name": "Počkej na insert (ceny_total)",
-        "func": "let myCount = flow.get(\"myCount\")\nlet count = msg.parts.count\n\nif (myCount == count) {\n  return msg;\n} else flow.set(\"myCount\", ++myCount)\n\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 340,
-        "wires": [
-            [
-                "5399c8ddb45ab412"
-            ]
-        ]
-    },
-    {
-        "id": "5399c8ddb45ab412",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "fixed",
-        "sql": "SELECT day, hour, minute, priceCZKhourBuy, priceCZKquarterBuy, priceCZKhourProd, priceCZKquarterProd,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKhourBuy) levelCheapestHourBuy,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKquarterBuy) levelCheapestQuarterBuy,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKhourProd desc) levelMostExpensiveHourProd,\n       dense_rank() OVER (PARTITION BY day ORDER BY priceCZKquarterProd desc) levelMostExpensiveQuarterProd\nFROM \"own_energy_prices_total\" ",
-        "name": "Spočítej levely cen",
-        "x": 130,
-        "y": 440,
-        "wires": [
-            [
-                "107622cfabfa9725"
-            ]
-        ]
-    },
-    {
-        "id": "107622cfabfa9725",
-        "type": "split",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "name": "Iteruj pole",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": 1,
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "property": "payload",
-        "x": 300,
-        "y": 440,
-        "wires": [
-            [
-                "3884e595660a1150"
-            ]
-        ]
-    },
-    {
-        "id": "3884e595660a1150",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "name": "Sestav update",
-        "func": "let day = msg.payload.day\nlet hour = msg.payload.hour\nlet minute = msg.payload.minute\nlet levelCheapestHourBuy = msg.payload.levelCheapestHourBuy\nlet levelCheapestQuarterBuy = msg.payload.levelCheapestQuarterBuy\nlet levelMostExpensiveHourProd = msg.payload.levelMostExpensiveHourProd\nlet levelMostExpensiveQuarterProd = msg.payload.levelMostExpensiveQuarterProd\nlet update = \"\"\n\nflow.set(\"myCount\", 1)\n\nupdate = \n`UPDATE \"own_energy_prices_total\" \n SET levelCheapestHourBuy = ${levelCheapestHourBuy},\n     levelCheapestQuarterBuy = ${levelCheapestQuarterBuy},\n     levelMostExpensiveHourProd = ${levelMostExpensiveHourProd},\n     levelMostExpensiveQuarterProd = ${levelMostExpensiveQuarterProd}\n WHERE day = \"${day}\" AND hour = ${hour} AND minute = ${minute}`       \n\nmsg.payload = update\nmsg.topic = update\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 460,
-        "y": 440,
-        "wires": [
-            [
-                "6efbe1cbe0b8efcb"
-            ]
-        ]
-    },
-    {
-        "id": "6efbe1cbe0b8efcb",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "msg.topic",
-        "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
-        "name": "Proveď update",
-        "x": 651,
-        "y": 440,
-        "wires": [
-            [
-                "e3701f53a6d9c32d"
-            ]
-        ]
-    },
-    {
-        "id": "e6adfa0d8b466c82",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejlevnější druhá hodina nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.cheapestsecondhourbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isCheapestSecondHourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 810,
-        "y": 860,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "066e002ec5e2bf91",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejdražší hodina výroby",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.mostexpensivehourprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isMostExpensiveHourProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 780,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "387ff685c8cf03fa",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejdražší druhá hodina výroby",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.mostexpensivesecondhourprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isMostExpensiveSecondHourProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 800,
-        "y": 940,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d173bd3e17fdc145",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejlevnější čtrvthodina nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.cheapestquarterbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isCheapestQuarterBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 800,
-        "y": 980,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "d5fa96c6f4f58178",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejlevnější druhá čtvrthodina nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.cheapestsecondquarterbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isCheapestSecondQuarterBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 820,
-        "y": 1020,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "155a17c737dae05c",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejdražší čtvrthodina výroby",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.mostexpensivequarterprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isMostExpensiveQuarterProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 1060,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "1b7a9a50b5223ade",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejdražší druhá čtvrthodina výroby",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.mostexpensivesecondquarterprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isMostExpensiveSecondQuarterProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 810,
-        "y": 1100,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "edd5f8a98135c890",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav level ceny nákupu / hodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.levelcheapesthourbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].levelCheapestHourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 780,
-        "y": 1140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6b80d46b88a7b7f4",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav level ceny nákupu / čtvrthodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.levelcheapestquarterbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].levelCheapestQuarterBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 1180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "4f7ccdc7d353ca8f",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav level ceny prodeje / hodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.levelmostexpensivehourprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].levelMostExpensiveHourProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 780,
-        "y": 1220,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "7fcb518ffcddab0a",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav level ceny prodeje / čtvrthodinu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.levelmostexpensivequarterprod"
-        ],
-        "labelId": [],
-        "data": "{\"value\":payload[0].levelMostExpensiveQuarterProd}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 1260,
-        "wires": [
-            []
         ]
     },
     {
@@ -1143,128 +272,11 @@
         ]
     },
     {
-        "id": "e3701f53a6d9c32d",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "name": "Počkej, až skončí update",
-        "func": "let myCount = flow.get(\"myCount\")\nlet count = msg.parts.count\n\nif (myCount == count) {\n  return msg;\n} else flow.set(\"myCount\", ++myCount)\n\n\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 870,
-        "y": 440,
-        "wires": [
-            [
-                "aa11bb22cc33dd44"
-            ]
-        ]
-    },
-    {
-        "id": "b09c70d2e97274ae",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav nejlevnější hodinu nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.hourcheapesthourbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].cheapestHourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 780,
-        "y": 740,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "20578829b67ce0e5",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav je nejlevnější hodina nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.cheapesthourbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].isCheapestHourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 790,
-        "y": 820,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9b1d4e00a2b10c24",
-        "type": "api-call-service",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "Nastav druhou nejlevnější hodinu nákupu",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_number.hourcheapestsecondhourbuy"
-        ],
-        "labelId": [],
-        "data": "{\"value\": payload[0].cheapestSecondHourBuy}",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_number",
-        "service": "set_value",
-        "x": 800,
-        "y": 780,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fb19e54c699bb253",
+        "id": "aa44087d63024639",
         "type": "inject",
         "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "name": "",
+        "g": "b44cdb66e54727f6",
+        "name": "15:00",
         "props": [
             {
                 "p": "payload"
@@ -1275,55 +287,17 @@
             }
         ],
         "repeat": "",
-        "crontab": "",
+        "crontab": "00 15 * * *",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 860,
+        "x": 270,
+        "y": 60,
         "wires": [
             [
-                "b359790448907d03"
-            ]
-        ]
-    },
-    {
-        "id": "aa11bb22cc33dd44",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "fixed",
-        "sql": "SELECT * FROM \"own_energy_prices_total\"",
-        "name": "Načti ceny pro global",
-        "x": 140,
-        "y": 480,
-        "wires": [
-            [
-                "ee55ff66aa77bb88"
-            ]
-        ]
-    },
-    {
-        "id": "ee55ff66aa77bb88",
-        "type": "function",
-        "z": "d32891aad318f0e3",
-        "g": "0c2e8e7121147d0a",
-        "name": "Ulož ceny do global",
-        "func": "// Po výpočtu levelů: uložit všechny ceny do globální proměnné\nconst prices = msg.payload || [];\nglobal.set(\"fve_prices_forecast\", prices);\n\n// Find and set current price\nconst now = new Date();\nconst hour = now.getHours();\nlet currentLevel = 5;\nfor (const row of prices) {\n    if (row.hour === hour && row.day === \"hoursToday\") {\n        currentLevel = row.levelCheapestHourBuy || 5;\n        global.set(\"fve_current_price\", {\n            buy: row.priceCZKhourBuy,\n            sell: row.priceCZKhourProd,\n            levelBuy: row.levelCheapestHourBuy,\n            levelSell: row.levelMostExpensiveHourProd\n        });\n        break;\n    }\n}\nglobal.set(\"fve_price_level\", currentLevel);\nnode.status({fill: \"green\", shape: \"dot\", text: prices.length + \" cen uloženo do global\"});\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 480,
-        "wires": [
-            [
-                "b359790448907d03"
+                "8cf74ed44cce80e6"
             ]
         ]
     },
@@ -1334,26 +308,89 @@
         "mode": "RWC"
     },
     {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "8db803bfebc102cf",
+        "id": "23b6b827a7b0e6e5",
         "type": "global-config",
         "env": [],
         "modules": {
-            "node-red-node-sqlite": "1.1.1",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
+            "node-red-node-sqlite": "1.1.1"
         }
+    },
+    {
+        "id": "7e338e3827c2fb15",
+        "type": "sqlite",
+        "z": "d32891aad318f0e3",
+        "g": "b44cdb66e54727f6",
+        "mydb": "6d97960f9560e05b",
+        "sqlquery": "fixed",
+        "sql": "SELECT p.day, p.hour, p.minute, p.priceCZK, ph.priceCZKhour, f.*\nFROM own_energy_prices p \nINNER JOIN own_energy_fees f ON 1 = 1 \nINNER JOIN (\n    SELECT day, hour, avg(priceCZK) priceCZKhour \n    FROM own_energy_prices \n    GROUP BY day, hour\n) ph ON p.day = ph.day and p.hour = ph.hour",
+        "name": "Načti ceny + poplatky",
+        "x": 140,
+        "y": 280,
+        "wires": [
+            [
+                "calc_total_prices"
+            ]
+        ]
+    },
+    {
+        "id": "calc_total_prices",
+        "type": "function",
+        "z": "d32891aad318f0e3",
+        "g": "b44cdb66e54727f6",
+        "name": "Vypočítej celkové ceny",
+        "func": "// Calculate total buy/sell prices with fees and margins\nconst rows = msg.payload || [];\nconst results = [];\n\nfor (const row of rows) {\n    const { day, hour, minute, priceCZK, priceCZKhour } = row;\n    const { marginBuy, marginProd, distrVT, distrNT, tax, sys_services, poze } = row;\n    \n    // Distribution tariff depends on hour\n    const distr = [6,9,13,16].includes(hour) ? distrVT : distrNT;\n    \n    // Buy prices (with all fees + VAT)\n    const priceCZKhourBuy = (((priceCZKhour / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2);\n    const priceCZKquarterBuy = (((priceCZK / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2);\n    \n    // Sell prices (minus margin, no VAT)\n    const priceCZKhourProd = Math.floor(((priceCZKhour / 1000) - marginProd) * 100 + Number.EPSILON) / 100;\n    const priceCZKquarterProd = Math.floor(((priceCZK / 1000) - marginProd) * 100 + Number.EPSILON) / 100;\n    \n    results.push({\n        day, hour, minute,\n        priceCZKhourBuy: parseFloat(priceCZKhourBuy),\n        priceCZKquarterBuy: parseFloat(priceCZKquarterBuy),\n        priceCZKhourProd,\n        priceCZKquarterProd\n    });\n}\n\nmsg.payload = results;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "calc_global_ranks"
+            ]
+        ]
+    },
+    {
+        "id": "calc_global_ranks",
+        "type": "function",
+        "z": "d32891aad318f0e3",
+        "g": "b44cdb66e54727f6",
+        "name": "Vypočítej GLOBÁLNÍ ranky",
+        "func": "// Calculate GLOBAL ranks across ALL available hours (today + tomorrow)\n// CRITICAL: Do NOT partition by day! Rank all hours together.\nconst rows = msg.payload || [];\n\n// Sort by each price dimension\nconst sortedHourBuy = rows.slice().sort((a, b) => a.priceCZKhourBuy - b.priceCZKhourBuy);\nconst sortedQuarterBuy = rows.slice().sort((a, b) => a.priceCZKquarterBuy - b.priceCZKquarterBuy);\nconst sortedHourProd = rows.slice().sort((a, b) => b.priceCZKhourProd - a.priceCZKhourProd);\nconst sortedQuarterProd = rows.slice().sort((a, b) => b.priceCZKquarterProd - a.priceCZKquarterProd);\n\n// Assign GLOBAL ranks (dense_rank equivalent)\nfunction assignRanks(sorted, priceField) {\n    const ranks = {};\n    let rank = 1;\n    let lastPrice = null;\n    \n    for (const row of sorted) {\n        const price = row[priceField];\n        if (lastPrice !== null && price !== lastPrice) {\n            rank++;\n        }\n        const key = row.day + '_' + row.hour + '_' + row.minute;\n        ranks[key] = rank;\n        lastPrice = price;\n    }\n    return ranks;\n}\n\nconst ranksHourBuy = assignRanks(sortedHourBuy, 'priceCZKhourBuy');\nconst ranksQuarterBuy = assignRanks(sortedQuarterBuy, 'priceCZKquarterBuy');\nconst ranksHourProd = assignRanks(sortedHourProd, 'priceCZKhourProd');\nconst ranksQuarterProd = assignRanks(sortedQuarterProd, 'priceCZKquarterProd');\n\n// Add ranks to rows\nfor (const row of rows) {\n    const key = row.day + '_' + row.hour + '_' + row.minute;\n    row.levelCheapestHourBuy = ranksHourBuy[key] || 99;\n    row.levelCheapestQuarterBuy = ranksQuarterBuy[key] || 99;\n    row.levelMostExpensiveHourProd = ranksHourProd[key] || 99;\n    row.levelMostExpensiveQuarterProd = ranksQuarterProd[key] || 99;\n}\n\nmsg.payload = rows;\nnode.status({fill: 'green', shape: 'dot', text: rows.length + ' cen s globálními ranky'});\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 280,
+        "wires": [
+            [
+                "store_to_global"
+            ]
+        ]
+    },
+    {
+        "id": "store_to_global",
+        "type": "function",
+        "z": "d32891aad318f0e3",
+        "g": "b44cdb66e54727f6",
+        "name": "Ulož do global",
+        "func": "// Store prices with GLOBAL ranks to global variable\nconst prices = msg.payload || [];\nglobal.set('fve_prices_forecast', prices);\n\n// Find and set current price\nconst now = new Date();\nconst hour = now.getHours();\nlet currentLevel = 5;\n\nfor (const row of prices) {\n    if (row.hour === hour && row.day === 'hoursToday') {\n        currentLevel = row.levelCheapestHourBuy || 5;\n        global.set('fve_current_price', {\n            buy: row.priceCZKhourBuy,\n            sell: row.priceCZKhourProd,\n            levelBuy: row.levelCheapestHourBuy,\n            levelSell: row.levelMostExpensiveHourProd\n        });\n        break;\n    }\n}\n\nglobal.set('fve_price_level', currentLevel);\nnode.status({fill: 'green', shape: 'dot', text: prices.length + ' cen uloženo (GLOBAL ranks)'});\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 900,
+        "y": 280,
+        "wires": [
+            []
+        ]
     }
 ]
