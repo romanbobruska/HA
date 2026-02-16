@@ -369,7 +369,7 @@
                 "a86bc5233cfa0458"
             ],
             [
-                "e93b8f3e662c6190"
+                "solar123456789abc"
             ]
         ]
     },
@@ -583,6 +583,20 @@
         ]
     },
     {
+        "id": "solar123456789abc",
+        "type": "link out",
+        "z": "d86bb11fab512182",
+        "g": "c0d4d6462d4ebded",
+        "name": "→ Solární nabíjení",
+        "mode": "link",
+        "links": [
+            "e93b8f3e662c6190"
+        ],
+        "x": 845,
+        "y": 460,
+        "wires": []
+    },
+    {
         "id": "c7421fe2.cb11c",
         "type": "server",
         "name": "Home Assistant",
@@ -603,26 +617,12 @@
         "mode": "RWC"
     },
     {
-        "id": "2f65d436b2bf6251",
+        "id": "3e053bdac00312e5",
         "type": "global-config",
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-node-sqlite": "1.1.1"
         }
-    },
-    {
-        "id": "solar123456789abc",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Solární nabíjení",
-        "mode": "link",
-        "links": [
-            "e93b8f3e662c6190"
-        ],
-        "x": 845,
-        "y": 460,
-        "wires": []
     }
 ]
