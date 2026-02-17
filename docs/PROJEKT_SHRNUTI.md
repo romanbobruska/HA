@@ -404,19 +404,24 @@ rm -rf /tmp/HA
 - **Planner verze**: v13.1 → v14.0
 - **Soubory**: fve-modes.json, nabijeni-auta-sit.json, fve-orchestrator.json
 
-### Session 9 (pokračování): Zjednodušení logiky topení
-- **Problém**: Předehřev čerpadla nefungoval - čerpadlo bylo blokované i při středních cenách
-- **Root cause**: Složitá redundantní logika s 4 oddělenými podmínkami pro různé kombinace cen/teplot
-  - `currentPriceLevel < PRAH_DRAHA && temp <= TEMP_HYSTERESIS` (řádek 112)
-  - `currentPriceLevel <= PRAH_LEVNA && temp < TEMP_TARGET` (řádek 115)
-  - `currentPriceLevel < PRAH_DRAHA && temp < TEMP_TARGET` (řádek 118)
-  - Podmínky se překrývaly a způsobovaly blokování při středních cenách
-- **Fix**: `fve-heating.json` Rozhodnuti topeni/chlazeni — zjednodušená logika
-  - **Nouzové topení** (temp ≤ 22°C): VŽDY zapnuto bez ohledu na cenu
-  - **Levné + střední** (level < 12): VŽDY zapnuto při temp < 23.5°C
-  - **Drahé** (level ≥ 12): BLOKOVÁNO (jen nouzové topení)
-  - Odstraněny všechny redundantní podmínky, nahrazeny 2 jednoduchými pravidly
-- **Výsledek**: Čerpadlo nyní funguje správně při levných i středních cenách
+### Session 9 (pokračování): Přepis logiky topení v2 s debug logováním
+- **Problém**: Předehřev čerpadla nefungoval - čerpadlo bylo blokované
+- **Analýza**: Důkladná analýza celého flow řetězce (inject → 7x api-current-state → rozhodnutí → switch → akce)
+  - Propojení nodů je správné
+  - Logika rozhodování byla zjednodušena ale bez diagnostiky
+  - Bez debug logování nelze identifikovat runtime příčinu blokování
+- **Fix v2**: `fve-heating.json` Rozhodnuti topeni/chlazeni — kompletní přepis s debug logováním
+  - **Strict boolean**: `config.letni_rezim === true` (místo `|| false` — truthy check)
+  - **Default price level**: 99 (blokovat) pokud ceny nenalezeny, pak fallback na 1
+  - **isDraha flag**: `currentPriceLevel >= PRAH_DRAHA` pro jasnou logiku
+  - **node.warn()**: Každý cyklus loguje VŠECHNY rozhodovací proměnné do Node-RED debug sidebar:
+    - action, reason, režim, temp, venku, level, PRAH_DRAHA, isDraha, switch stav, pump stav, kompresor, krb, priceFound, prices.length
+  - **Logika** (zimní režim):
+    - Nouzové (temp ≤ 22°C): VŽDY zapnout
+    - Levné + střední (level < PRAH_DRAHA): VŽDY zapnout při temp < 23.5°C
+    - Drahé (level ≥ PRAH_DRAHA): BLOKOVÁNO (jen nouzové)
+  - **Každá větev** má explicitní reason text
+- **Výsledek**: Po deployi bude v Node-RED debug sidebar vidět přesně proč je topení ON/OFF/BLOKOVÁNO
 
 ---
 
