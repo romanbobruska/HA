@@ -447,15 +447,19 @@ rm -rf /tmp/HA
       - **Solární nabíjení**: žádný `schedule_soc` lock při aktivním čerpadle/autu
       - **Nabíjet**: `safeImport = maxGrid - safetyMargin` při aktivním čerpadle/autu
     - Výsledek: solární energie se použije na spotřebu, přebytek do baterie, deficit ze sítě
-- **Fix v5** — tři cenová pásma pro topení:
-  - Problém: PRAH=9 blokoval střední levely (11, 13, 17). Uživatel chtěl topení i ve středních cenách.
-  - Navíc `temp=23.6 > TEMP_TARGET=23.5` → topení se nezapínalo i při levných cenách.
-  - **Nová logika** s třemi pásmy (daily rank 1-24):
-    - **LEVNÉ** (level 1-9): Předtápění na **24.5°C** (`TEMP_PREHEAT`)
-    - **STŘEDNÍ** (level 10-17): Udržení na **23.5°C** (`TEMP_TARGET`)
-    - **DRAHÉ** (level 18-24): **BLOKOVÁNO** (jen nouzové pod 22°C)
-  - Config: `prah_levna_topeni: 9`, `prah_draha_topeni: 17`
-  - Soubory: `fve-heating.json`, `fve-config.json`
+- **Fix v6 (FINÁLNÍ)** — topení VŽDY ON při level < 12, baterie zamčená při topení:
+  - **Topení** (`fve-heating.json`):
+    - Používá existující `prah_draha_energie: 12` z configu (smazány vlastní prahy)
+    - Level < 12: čerpadlo **VŽDY ON bez ohledu na teplotu**
+    - Level >= 12: **BLOKOVÁNO** (jen nouzové pod 22°C)
+    - Žádné teplotní kontroly pro levné/střední ceny
+  - **Baterie** (`fve-modes.json`):
+    - Problém: `schedule_soc = 0` v Normal mode → ESS normálně nabíjí baterii ze solaru
+    - Fix: Při topení čerpadlem `schedule_soc = currentSoc` (zamknout baterii)
+    - Opravena HA node "Schedule SOC" v Normal mode: hardcoded 0 → `{{victron.schedule_soc}}`
+    - Solár → spotřeba (čerpadlo), přebytek → síť (prodej), deficit → síť (import)
+    - Baterie se NENABÍJÍ ani NEVYBÍJÍ při topení
+  - **Config** (`fve-config.json`): Smazány `prah_levna_topeni`, `prah_draha_topeni`
 
 ---
 
