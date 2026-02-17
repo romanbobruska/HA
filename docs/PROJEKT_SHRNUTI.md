@@ -466,6 +466,18 @@ rm -rf /tmp/HA
     - `Set Power Point = 0`, `Schedule SOC = {{victron.schedule_soc}}` (lock)
     - `Schedule Duration = 0`, `Schedule Day = -7`, `Max Discharge Power = 0`
   - Výsledek: Solár → spotřeba, přebytek → síť (prodej), baterie zamčená
+- **Fix v8** — plán vybíjí při levných cenách + baterie se stále nabíjí ze solaru:
+  - **Plán** (`fve-orchestrator.json` v15.0):
+    - `peakDischargeOffsets` vybíjel baterii na minSOC **bez ohledu na cenu** (i při 3.52 Kč)
+    - Fix: peakDischarge POUZE při drahých cenách (`levelBuy >= PRAH_DRAHA`)
+    - Levné/střední hodiny → Šetřit (výchozí mód)
+  - **Baterie** (`fve-modes.json`):
+    - **Root cause**: Victron ESS **IGNORUJE** `scheduled_soc` když `schedule_charge_duration=0`!
+    - Fix: Při zamykání baterie aktivovat scheduled charging:
+      - `schedule_charge_duration: 86399`, `schedule_charge_day: 7`, `scheduled_soc: currentSoc`
+    - Při normálním provozu (bez topení): `duration: 0`, `day: -7`, `soc: 0`
+    - Opraveny HA nodes v Normal/Šetřit/Solar: Schedule Duration a Day nyní **dynamické**
+  - **Nový komunikační mód**: zakázáno měnit předchozí požadavky, max 1 dotaz po analýze
 
 ---
 
