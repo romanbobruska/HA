@@ -404,6 +404,20 @@ rm -rf /tmp/HA
 - **Planner verze**: v13.1 → v14.0
 - **Soubory**: fve-modes.json, nabijeni-auta-sit.json, fve-orchestrator.json
 
+### Session 9 (pokračování): Zjednodušení logiky topení
+- **Problém**: Předehřev čerpadla nefungoval - čerpadlo bylo blokované i při středních cenách
+- **Root cause**: Složitá redundantní logika s 4 oddělenými podmínkami pro různé kombinace cen/teplot
+  - `currentPriceLevel < PRAH_DRAHA && temp <= TEMP_HYSTERESIS` (řádek 112)
+  - `currentPriceLevel <= PRAH_LEVNA && temp < TEMP_TARGET` (řádek 115)
+  - `currentPriceLevel < PRAH_DRAHA && temp < TEMP_TARGET` (řádek 118)
+  - Podmínky se překrývaly a způsobovaly blokování při středních cenách
+- **Fix**: `fve-heating.json` Rozhodnuti topeni/chlazeni — zjednodušená logika
+  - **Nouzové topení** (temp ≤ 22°C): VŽDY zapnuto bez ohledu na cenu
+  - **Levné + střední** (level < 12): VŽDY zapnuto při temp < 23.5°C
+  - **Drahé** (level ≥ 12): BLOKOVÁNO (jen nouzové topení)
+  - Odstraněny všechny redundantní podmínky, nahrazeny 2 jednoduchými pravidly
+- **Výsledek**: Čerpadlo nyní funguje správně při levných i středních cenách
+
 ---
 
 ## 11. Známé limitace a budoucí práce
