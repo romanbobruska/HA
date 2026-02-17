@@ -422,6 +422,14 @@ rm -rf /tmp/HA
     - Drahé (level ≥ PRAH_DRAHA): BLOKOVÁNO (jen nouzové)
   - **Každá větev** má explicitní reason text
 - **Výsledek**: Po deployi bude v Node-RED debug sidebar vidět přesně proč je topení ON/OFF/BLOKOVÁNO
+- **Fix v3** (po debug logu z runtime):
+  - Debug log ukázal: `HEATING: none | Teplota OK (23.5°C >= 23.5°C) | Lv=9 (PRAH=12)`
+  - **BUG 1**: `temp < TEMP_TARGET` → `23.5 < 23.5 = false` → topení se nezapne. Fix: `temp <= TEMP_TARGET`
+  - **BUG 2**: `PRAH_DRAHA = config.prah_draha_energie || 12` — špatný práh!
+    - `levelCheapestHourBuy` je rank per day (1-24), ne globální level
+    - Uživatel: prah pro topení je 9 (9 nejlevnějších hodin = topení, 15 nejdražších = blokovat)
+    - Fix: `PRAH_DRAHA = config.prah_draha_topeni || 9` — nový config parametr
+  - Přidán `prah_draha_topeni: 9` do default configu v `fve-config.json`
 
 ---
 
