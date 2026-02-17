@@ -363,6 +363,47 @@ rm -rf /tmp/HA
       - `energy_arbiter`: `battery_discharging: false`
   - **Výsledek**: Během levných solárních hodin baterie chráněna, deficit ze sítě
 
+### Session 8: 2026-02-16
+- **Problém 1**: Baterie se vybíjela při topení čerpadlem (porušení historického požadavku)
+- **Fix**: `fve-modes.json` Normal Logic — `blockDischarge = cerpadloTopi || autoNabijeniAktivni`
+  - `max_discharge_allowed: !blockDischarge` v energy_arbiter
+  - `msg.maxDischargePower = blockDischarge ? 0 : -1` → dynamický MaxDischargePower node
+- **Problém 2**: Při drahých cenách (level > 12) se šetřila baterie při SOC 25%
+- **Root cause**: Podmínka `simulatedSoc > minSoc + 5` → 25 > 25 = false → ŠETŘIT místo NORMAL
+- **Fix**: Odstraněn margin `minSoc + 5`, nahrazen `minSoc` (vybíjení až do minSoc)
+- **Problém 3**: minSoc hardcoded na 20%, ignorovalo se `number.min_soc` z HA
+- **Fix**: `fve-config.json` Zpracuj HA stavy — odkomentován case pro `number.min_soc`
+  - minSoc nyní dynamicky čte z HA entity
+
+### Session 9: 2026-02-17 — Hloubková analýza + 4 kritické opravy
+- **Hloubková analýza**: Kompletní audit PROJEKT_SHRNUTI.md + kódu všech relevantních flows
+- **BUG 1 (KRITICKÝ)**: Baterie přestala nabíjet když se začalo nabíjet auto
+  - **Root cause**: Nabíjet Logic vypínal scheduled charging při aktivním autu/čerpadle
+    - `schedule_charge_soc: 0`, `duration: 0`, `day: -7` → Victron nenabíjí baterii z gridu
+    - PSP = +20000W jen povolí import, ale bez scheduled charging baterie nic nedostane
+    - Po skončení auta je levná hodina pryč → baterie se nikdy nenabije
+  - **Fix**: `fve-modes.json` Nabíjet Logic — scheduled charging VŽDY zapnuté
+    - Odstraněn if/else branch pro high-priority consumers
+    - Baterie i auto se nabíjejí současně v rámci limitu sítě
+  - **Fix**: `nabijeni-auta-sit.json` — headroom počítá s nabíjením baterie
+    - Čte `energy_arbiter.battery_charging` a odečítá `charge_rate_kwh * 1000`
+    - Zabraňuje přetížení sítě když se současně nabíjí auto i baterie
+- **BUG 2 (KLARIFIKACE)**: Solar při topení/nabíjení auta
+  - Implementace je SPRÁVNÁ (PSP=0, max_discharge=0)
+  - Solar pokrývá spotřebu ✅, přebytek nabíjí baterii ✅, deficit ze sítě ✅
+- **BUG 3 (REGRESE)**: cheapHours filter v KROK 5 nefungoval
+  - `hp.day === "hoursToday"` ale hourPrices nemá field `day` → vždy undefined
+  - cheapHours byl VŽDY prázdný → KROK 5 opportunistické nabíjení nikdy nefungovalo
+  - **Fix**: Nahrazeno `(currentHour + hp.offset) < 24` (offset-based day check)
+- **BUG 4 (DESIGN)**: optimalSoc byl statický (minSoc + 40 = 60%)
+  - Nepočítal s počtem drahých hodin, spotřebou, solarem
+  - Poslední 2 dny baterie došla dříve → drahá energie ze sítě
+  - **Fix**: Dynamický výpočet: `minSoc + ceil(baseDrain + expensiveDrain - solarContrib) + safetyMargin`
+    - Více drahých hodin = vyšší target SOC
+    - Více solaru = nižší target SOC (šetří peníze)
+- **Planner verze**: v13.1 → v14.0
+- **Soubory**: fve-modes.json, nabijeni-auta-sit.json, fve-orchestrator.json
+
 ---
 
 ## 11. Známé limitace a budoucí práce
@@ -370,6 +411,7 @@ rm -rf /tmp/HA
 1. ~~**Hardcoded konstanty**~~: ✅ Vyřešeno v Session 4 (refaktoring)
 2. ~~**Duplikátní kód**~~: ✅ Částečně vyřešeno (přejmenování, centralizace configu)
 3. **Predikce spotřeby**: `dailyConsumptionKwh=20` je statická, fve-history-learning.json zatím učí vzory ale nepoužívá je aktivně
-4. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
-5. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
-6. **Vytápění**: Logika v `fve-heating.json` závisí na `letni_rezim` a cenových levelech — potřeba ověřit runtime chování
+4. ~~**optimalSoc statický**~~: ✅ Vyřešeno v Session 9 (dynamický výpočet z reálné potřeby)
+5. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
+6. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
+7. ~~**Vytápění**~~: ✅ Logika v `fve-heating.json` opravena v Session 8 (podmínka pro střední ceny)
