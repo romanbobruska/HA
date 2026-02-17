@@ -430,6 +430,23 @@ rm -rf /tmp/HA
     - Uživatel: prah pro topení je 9 (9 nejlevnějších hodin = topení, 15 nejdražších = blokovat)
     - Fix: `PRAH_DRAHA = config.prah_draha_topeni || 9` — nový config parametr
   - Přidán `prah_draha_topeni: 9` do default configu v `fve-config.json`
+- **Fix v4** (po dalším debug logu z runtime):
+  - Debug log: `HEATING: none | Čekám na interval (180s) | Lv=9 (PRAH=9) | isDraha=true | switch=OFF`
+  - **BUG KRITICKÝ**: Čerpadlo bylo vypnuto během provozu → může zničit kompresory!
+    - Ochrana čerpadla kontrolovala stav, ale nebyla dostatečně přísná
+    - Fix: **ABSOLUTNÍ ochrana** — NIKDY nevypnout pokud `pumpRealState` není "Klidový"
+    - Kontroluje `pumpIsWorking = !pumpIsIdle && pumpRealState !== ""`
+    - Loguje `node.warn()` při každém blokování
+  - **BUG**: `isDraha = currentPriceLevel >= PRAH_DRAHA` → `9 >= 9 = true` → blokováno!
+    - Fix: `isDraha = currentPriceLevel > PRAH_DRAHA` (level 9 při prahu 9 = povoleno)
+  - **BUG**: Při topení čerpadlem se baterie nabíjela místo aby solár pokryl spotřebu
+    - Root cause: `schedule_soc: currentSoc` v módech zamkne SOC → solár jde do baterie
+    - Fix v `fve-modes.json` — všechny módy:
+      - **Normal**: žádný `schedule_soc`, PSP=0, ESS řídí tok (solár→spotřeba→přebytek→baterie)
+      - **Šetřit**: žádný `schedule_soc` lock při aktivním čerpadle/autu
+      - **Solární nabíjení**: žádný `schedule_soc` lock při aktivním čerpadle/autu
+      - **Nabíjet**: `safeImport = maxGrid - safetyMargin` při aktivním čerpadle/autu
+    - Výsledek: solární energie se použije na spotřebu, přebytek do baterie, deficit ze sítě
 
 ---
 
