@@ -139,12 +139,17 @@
         "nodes": [
             "e93b8f3e662c6190",
             "d27d27bacf98eec0",
-            "84587c2adc4e04bc"
+            "84587c2adc4e04bc",
+            "solar_psp_node_001",
+            "solar_sched_soc_001",
+            "solar_sched_dur_001",
+            "solar_sched_day_001",
+            "solar_max_disch_001"
         ],
         "x": 14,
         "y": 887,
-        "w": 522,
-        "h": 82
+        "w": 1100,
+        "h": 122
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -1272,7 +1277,7 @@
         "z": "bb3654998a6bf514",
         "g": "0aa9e57f66f7d429",
         "name": "Solární nabíjení Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n\n// SOLAR_CHARGING: Baterie se zamkne na aktuálním SOC\n// Při topení čerpadlem: solár → spotřeba, přebytek → síť (prodej)\n// Bez topení: solár → spotřeba, přebytek → síť (baterie zamčená)\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: currentSoc\n};\n\nmsg.mode = \"solar_charging\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"% (locked)\"\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: false,\n    battery_discharging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: false,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n\n// SOLAR_CHARGING: Baterie se zamkne na aktuálním SOC\n// Při topení čerpadlem: solár → spotřeba, přebytek → síť (prodej)\n// Bez topení: solár → spotřeba, přebytek → síť (baterie zamčená)\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: currentSoc\n};\n\nmsg.mode = \"solar_charging\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"% (locked)\"\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: false,\n    battery_discharging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: false,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = true;\nmsg.maxDischargePower = 0;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1283,21 +1288,13 @@
         "y": 928,
         "wires": [
             [
-                "84587c2adc4e04bc"
+                "solar_psp_node_001",
+                "solar_sched_soc_001",
+                "solar_sched_dur_001",
+                "solar_sched_day_001",
+                "solar_max_disch_001"
             ]
         ]
-    },
-    {
-        "id": "84587c2adc4e04bc",
-        "type": "link out",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "solar_charging_out",
-        "mode": "link",
-        "links": [],
-        "x": 495,
-        "y": 928,
-        "wires": []
     },
     {
         "id": "c7421fe2.cb11c",
@@ -1320,5 +1317,165 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "solar_psp_node_001",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Set Power Point = 0 (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.power_set_point"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 500,
+        "y": 888,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "solar_sched_soc_001",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Schedule SOC = locked (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.schedule_soc}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 500,
+        "y": 928,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "solar_sched_dur_001",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Schedule Duration = 0 (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 750,
+        "y": 888,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "solar_sched_day_001",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Schedule Day = -7 (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -7}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 750,
+        "y": 928,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "solar_max_disch_001",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "MaxDischargePower = 0 (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_discharge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 1000,
+        "y": 888,
+        "wires": [
+            []
+        ]
     }
 ]
