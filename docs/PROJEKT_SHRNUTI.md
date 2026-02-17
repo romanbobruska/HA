@@ -460,6 +460,12 @@ rm -rf /tmp/HA
     - Solár → spotřeba (čerpadlo), přebytek → síť (prodej), deficit → síť (import)
     - Baterie se NENABÍJÍ ani NEVYBÍJÍ při topení
   - **Config** (`fve-config.json`): Smazány `prah_levna_topeni`, `prah_draha_topeni`
+- **Fix v7** — Solární nabíjení mód neměl HA service nodes:
+  - **Root cause**: Funkce nastavila `msg.victron.schedule_soc = currentSoc`, ale link out měl `links: []` → výstup šel **nikam** → ESS zůstával v předchozím stavu → baterie se nabíjela ze solaru
+  - Fix: Přidáno 5 HA service nodes do skupiny Solární nabíjení:
+    - `Set Power Point = 0`, `Schedule SOC = {{victron.schedule_soc}}` (lock)
+    - `Schedule Duration = 0`, `Schedule Day = -7`, `Max Discharge Power = 0`
+  - Výsledek: Solár → spotřeba, přebytek → síť (prodej), baterie zamčená
 
 ---
 
