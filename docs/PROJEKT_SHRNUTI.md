@@ -490,6 +490,17 @@ rm -rf /tmp/HA
   - Odstraněn `peakDischargeOffsets` (nahrazen dynamickým prahem)
   - Výsledek: čím větší výroba/kapacita → nižší práh → více Normal → méně odběr ze sítě
   - Debug výstup: `dischargeDebug` s detaily pro každou hodinu
+- **v16.1 — Solární nabíjení má VŽDY přednost** (`fve-orchestrator.json`):
+  - **Problém**: targetSocFromGrid=71%, ale zítra ~20 kWh solární výroby → zbytečné nabíjení ze sítě
+  - **Root cause**: `targetSocFromGrid` nezohledňoval zítřejší solární předpověď
+  - Fix:
+    - `solarCoversConsumption = forecastZitra >= 70% dailyConsumption`
+    - Pokud solár pokryje: **žádné nabíjení ze sítě** (baterie se dobije solarem zadarmo)
+    - Pokud SOC klesne pod `minMorningSoc`: nabít jen na minimum
+    - Pokud solár nestačí: nabít ze sítě jen **deficit** (snížený o solární přebytek)
+    - Opportunistické nabíjení **blokováno** při dobré solární předpovědi
+    - Safety margin: 5% (dobrý solár), 10% (střední), 15% (špatný)
+  - Nové proměnné: `solarChargePct`, `expensiveBeforeSolar`, `minMorningSoc`
 
 ---
 
