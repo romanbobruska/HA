@@ -478,6 +478,18 @@ rm -rf /tmp/HA
     - Při normálním provozu (bez topení): `duration: 0`, `day: -7`, `soc: 0`
     - Opraveny HA nodes v Normal/Šetřit/Solar: Schedule Duration a Day nyní **dynamické**
   - **Nový komunikační mód**: zakázáno měnit předchozí požadavky, max 1 dotaz po analýze
+- **v16.0 — Dynamický práh vybíjení** (`fve-orchestrator.json`):
+  - Uživatel explicitně změnil požadavek: baterie se má vybíjet i při středních cenách pokud kapacita stačí
+  - Config prahy (`PRAH_LEVNA=4`, `PRAH_DRAHA=12`) **beze změny**
+  - Nový algoritmus:
+    1. Spočítá energetický budget: `(currentSoc - minSoc) * kapacita * efficiency`
+    2. Seřadí ne-solární, ne-nabíjecí hodiny od **nejdražšího levelu dolů**
+    3. Přidává hodiny do Normal (vybíjení) od nejdražších dolů
+    4. Zastaví se když budget vyčerpán
+    5. `effectiveThreshold` se automaticky snižuje (12 → 9 → 5...)
+  - Odstraněn `peakDischargeOffsets` (nahrazen dynamickým prahem)
+  - Výsledek: čím větší výroba/kapacita → nižší práh → více Normal → méně odběr ze sítě
+  - Debug výstup: `dischargeDebug` s detaily pro každou hodinu
 
 ---
 
