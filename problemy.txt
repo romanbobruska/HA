@@ -1,9 +1,25 @@
-menim pozadavek - nechci tuto informaci ve sloupci v tebulce, ale chci tuto informaci mit v hlaviččce nad tabulkou
-:
+zobrazuje se mi toto:
 
 Aktuální mód: 🟢 Normální
 
-Aktualizováno: 19.02.2026 22:54:03
+Aktualizováno: 19.02.2026 23:00:11
 
-A teď tam bude ta blokace: napr. Blokace vybíjení baterie: NE nebo ANO - sauna atd. Pokud bude konbinace blokaci,
-tak tam bude napr. ANO - sauna + auto
+Blokace vybíjení baterie: None
+
+Hodina	Mód	Důvod	Level	Cena
+23:00	🟢 Normální	střední (Lv4≥eff4), vybíjení SOC 79% → ~74%	4	3.44 Kč
+00:00 +1	🟢 Normální	střední (Lv9≥eff4), vybíjení SOC 74% → ~69%	9	3.46 Kč
+01:00 +1	🟢 Normální	střední (Lv7≥eff4), vybíjení SOC 69% → ~64%	7	3.44 Kč
+02:00 +1	🟢 Normální	střední (Lv6≥eff4), vybíjení SOC 64% → ~59%	6	3.43 Kč
+03:00 +1	🟢 Normální	střední (Lv8≥eff4), vybíjení SOC 59% → ~54%	8	3.45 Kč
+04:00 +1	🟢 Normální	střední (Lv6≥eff4), vybíjení SOC 54% → ~49%	6	3.43 Kč
+05:00 +1	🟢 Normální	střední (Lv11≥eff4), vybíjení SOC 49% → ~44%	11	3.62 Kč
+06:00 +1	🟢 Normální	drahá (Lv23≥eff4), vybíjení SOC 44% → ~39%	23	5.08 Kč
+07:00 +1	🟢 Normální	drahá (Lv20≥eff4), vybíjení SOC 39% → ~34%	20	4.81 Kč
+08:00 +1	🟢 Normální	Solární hodina, SOC 34% → ~34%	18	4.50 Kč
+09:00 +1	🟢 Normální	Solární hodina, SOC 29% → ~29%	21	4.90 Kč
+10:00 +1	🟢 Normální	Solární hodina, SOC 24% → ~24%	14	3.75 Kč
+
+druhy problem mam v tom, ze po pridani te blokace se tabulka nevejde na stranku, zobrazuje se mi vertikalni scroll bar, ktery nechci,
+
+Zarid, aby to tak nebylo - napr. nepotrebuji v tomto dashboardu zapati ani zahlavi

@@ -45,6 +45,7 @@ command_line:
         - current_hour
         - plan
         - last_update
+        - blokace_text
       scan_interval: 30
 
 # -----------------------------------------------------------------------------
