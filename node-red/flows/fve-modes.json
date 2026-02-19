@@ -1512,7 +1512,8 @@
         "y": 180,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "max_charge_b49b9676",
@@ -1541,7 +1542,8 @@
         "y": 340,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "max_charge_2767feb2",
@@ -1570,7 +1572,8 @@
         "y": 520,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "max_charge_7ce258be",
@@ -1599,7 +1602,8 @@
         "y": 760,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "max_charge_12a3795b",
@@ -1628,7 +1632,8 @@
         "y": 900,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "max_charge_0aa9e57f",
@@ -1657,7 +1662,8 @@
         "y": 948,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "solar_debug_001",
