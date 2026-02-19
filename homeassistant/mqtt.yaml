@@ -190,6 +190,20 @@ number:
     icon: mdi:battery-arrow-down
     mode: box
 
+  # Max Charge Power - maximální výkon nabíjení baterie (-1 = neomezeno, 0 = zakázáno)
+  - name: "Max Charge Power"
+    unique_id: "max_charge_power"
+    state_topic: "victron/N/c0619ab69c71/settings/0/Settings/CGwacs/MaxChargePower"
+    command_topic: "victron/W/c0619ab69c71/settings/0/Settings/CGwacs/MaxChargePower"
+    value_template: "{{ value_json.value }}"
+    command_template: '{"value": {{ value }} }'
+    min: -1
+    max: 1000000
+    step: 1
+    unit_of_measurement: "W"
+    icon: mdi:battery-arrow-up
+    mode: box
+
   # AC Power Set Point - řízení toku energie (záporná = odběr, kladná = export)
   - name: "Power Set Point"
     unique_id: "power_set_point"

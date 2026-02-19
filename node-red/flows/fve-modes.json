@@ -174,7 +174,7 @@
         "z": "bb3654998a6bf514",
         "g": "432ef0e12c1fccd9",
         "name": "Normal Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n\nvar blockDischarge = cerpadloTopi || autoCharging;\n\nif (blockDischarge) {\n    // ČERPADLO TOPÍ nebo AUTO NABÍJÍ:\n    // Zamknout baterii na aktuálním SOC - MUSÍ aktivovat scheduled charging!\n    // Bez schedule_charge_duration > 0 se scheduled_soc IGNORUJE!\n    // Solár → spotřeba (čerpadlo), přebytek → síť (prodej)\n    // Deficit → import ze sítě\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: currentSoc,\n        schedule_charge_duration: 86399,\n        schedule_charge_day: 7\n    };\n} else {\n    // NORMÁLNÍ PROVOZ:\n    // Deaktivovat scheduled charging, ESS normálně řídí\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n}\n\nmsg.mode = \"normal\";\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nvar consText = consumers.length > 0 ? \" + \" + consumers.join(\"+\") : \"\";\nvar lockText = blockDischarge ? \" (BAT LOCKED)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + \" | SOC: \" + currentSoc + \"%\" + lockText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n\nvar blockDischarge = cerpadloTopi || autoCharging;\n\nif (blockDischarge) {\n    // ČERPADLO TOPÍ nebo AUTO NABÍJÍ:\n    // Zamknout baterii na aktuálním SOC - MUSÍ aktivovat scheduled charging!\n    // Bez schedule_charge_duration > 0 se scheduled_soc IGNORUJE!\n    // Solár → spotřeba (čerpadlo), přebytek → síť (prodej)\n    // Deficit → import ze sítě\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: currentSoc,\n        schedule_charge_duration: 86399,\n        schedule_charge_day: 7\n    };\n} else {\n    // NORMÁLNÍ PROVOZ:\n    // Deaktivovat scheduled charging, ESS normálně řídí\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n}\n\nmsg.mode = \"normal\";\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nvar consText = consumers.length > 0 ? \" + \" + consumers.join(\"+\") : \"\";\nvar lockText = blockDischarge ? \" (BAT LOCKED)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + \" | SOC: \" + currentSoc + \"%\" + lockText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -190,7 +190,8 @@
                 "246063034880ca80",
                 "702b8ef11c8c396c",
                 "3a87476592bc532f",
-                "84c9363491961540"
+                "84c9363491961540",
+                "max_charge_432ef0e1"
             ]
         ]
     },
@@ -411,7 +412,8 @@
                 "6d2e2f534bf9e398",
                 "906ece2b651b5a64",
                 "a1b2c3d4e5f60002",
-                "176abc1b75a23fb4"
+                "176abc1b75a23fb4",
+                "max_charge_b49b9676"
             ]
         ]
     },
@@ -632,7 +634,8 @@
                 "cf1085b95156e10a",
                 "fc83a9cf78db7a97",
                 "a1b2c3d4e5f60001",
-                "6598def5a6b435a3"
+                "6598def5a6b435a3",
+                "max_charge_2767feb2"
             ]
         ]
     },
@@ -837,7 +840,7 @@
         "z": "bb3654998a6bf514",
         "g": "7ce258bed914f262",
         "name": "Prodávat Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\n// Při nabíjení auta neprodáváme z baterie\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nmsg.victron = { power_set_point: -maxFeedIn, min_soc: minSoc };\nmsg.mode = \"prodavat\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat | \" + maxFeedIn + \"W | SOC: \" + currentSoc + \"%\"});\n\n// === ENERGY ARBITER ===\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\n// Při nabíjení auta neprodáváme z baterie\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nmsg.victron = { power_set_point: -maxFeedIn, min_soc: minSoc };\nmsg.mode = \"prodavat\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat | \" + maxFeedIn + \"W | SOC: \" + currentSoc + \"%\"});\n\n// === ENERGY ARBITER ===\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.maxChargePower = 0;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -853,7 +856,8 @@
                 "53cd1a74ee8332ac",
                 "e12fd7a540b89f05",
                 "9bd525cb24b06701",
-                "86d71450ca024a50"
+                "86d71450ca024a50",
+                "max_charge_7ce258be"
             ]
         ]
     },
@@ -1074,7 +1078,8 @@
                 "zakaz_sched_soc_0",
                 "zakaz_sched_day_m7",
                 "zakaz_max_disch_0",
-                "8db6ee5fbb848b8b"
+                "8db6ee5fbb848b8b",
+                "max_charge_12a3795b"
             ]
         ]
     },
@@ -1292,7 +1297,8 @@
                 "solar_sched_soc_001",
                 "solar_sched_dur_001",
                 "solar_sched_day_001",
-                "solar_max_disch_001"
+                "solar_max_disch_001",
+                "max_charge_0aa9e57f"
             ]
         ]
     },
@@ -1474,6 +1480,180 @@
         "service": "set_value",
         "x": 1000,
         "y": 888,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_432ef0e1",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "432ef0e12c1fccd9",
+        "name": "MaxChargePower (dynamic)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{maxChargePower}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 830,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_b49b9676",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "b49b9676d4dbdff1",
+        "name": "MaxChargePower = 0 (šetřit)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1090,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_2767feb2",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "2767feb260d6904c",
+        "name": "MaxChargePower = -1 (nabíjení)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": -1}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1090,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_7ce258be",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "7ce258bed914f262",
+        "name": "MaxChargePower = 0 (prodej)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 830,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_12a3795b",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "MaxChargePower = 0 (zákaz)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 940,
+        "y": 900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "max_charge_0aa9e57f",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "MaxChargePower = 0 (solar)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "domain": "number",
+        "service": "set_value",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1000,
+        "y": 948,
         "wires": [
             []
         ]
