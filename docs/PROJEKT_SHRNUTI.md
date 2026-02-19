@@ -530,13 +530,35 @@ rm -rf /tmp/HA
   - Výsledek: Solár → spotřeba (čerpadlo/auto), přebytek → baterie nebo síť dle módu
   - Odstraněny `node.warn` debugy z `fve-heating.json` (použít debug nodes místo toho)
 
+### v18.1 — Dynamická solární predikce z historie
+- Problém: Plánovač používal konstantní `solarGainEst = 3 kWh` pro každou solární hodinu
+  - Výsledek: SOC +3% každou hodinu bez ohledu na reálnou výrobu a spotřebu
+  - Plán ukazoval nerealistické SOC odhady (např. 29% → 56% za 9 solárních hodin)
+- Fix:
+  - **fve-history-learning.json**: Rozšířen sběr dat o hodinovou výrobu a spotřebu
+    - `Sbírka aktuálních dat (v18)`: Počítá delta za hodinu z kumulativních Victron dat
+    - `Uložit do historie (v18)`: Ukládá `avgSolarKwh`, `avgConsumptionKwh`, `avgSurplusKwh` per hodinu
+    - `Výpočet predikce (v18)`: Generuje `netSolarGainKwh` per hodinu (výroba - spotřeba)
+    - `Analýza vzorců (v18)`: Přidány `solarPattern`, `consumptionPattern`, `surplusPattern`
+  - **fve-orchestrator.json**: Plánovač v18.0
+    - Nová funkce `getSolarGainForHour(hour, remainingSolar, solarHours)`:
+      - Pokud historie >= 3 vzorky: použije `netSolarGainKwh` z predikce
+      - Fallback: rovnoměrné rozdělení `remainingSolarKwh / solarHoursCount - avgHourlyConsumption`
+    - Odstraněn hardcoded `soc + 3` v `simulateSocChange()`
+    - Odstraněn hardcoded `solarGainEst = 3` v `calculateModeForHour()`
+  - **Modbus**: Přidán sensor `Nibe - Degree Minutes` (registr 43005, 16bit, scale 0.1)
+    - Entita: `sensor.nibe_degree_minutes`
+    - Template sensor: `sensor.nibe_degree_minutes_status` (červená ikona při záporných DM)
+- Výsledek: SOC odhady v plánu odpovídají reálné výrobě a spotřebě
+- Poznámka: Historie se musí nejdřív nasbírat (min. 3 vzorky per hodinu), do té doby fallback
+
 ---
 
 ## 11. Známé limitace a budoucí práce
 
 1. ~~**Hardcoded konstanty**~~: ✅ Vyřešeno v Session 4 (refaktoring)
 2. ~~**Duplikátní kód**~~: ✅ Částečně vyřešeno (přejmenování, centralizace configu)
-3. **Predikce spotřeby**: `dailyConsumptionKwh=20` je statická, fve-history-learning.json zatím učí vzory ale nepoužívá je aktivně
+3. ~~**Predikce spotřeby**~~: ✅ Vyřešeno v v18.1 (dynamická predikce z historie)
 4. ~~**optimalSoc statický**~~: ✅ Vyřešeno v Session 9 (dynamický výpočet z reálné potřeby)
 5. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
 6. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
