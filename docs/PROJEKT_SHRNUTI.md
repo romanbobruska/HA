@@ -577,6 +577,12 @@ rm -rf /tmp/HA
   - **template_sensors.yaml**: Přidán `blokace_text` atribut do FVE Plan sensoru
 - Výsledek: Blokace se aktualizuje do 15-30s po změně stavu spotřebiče (sauna ON/OFF, topení, auto)
 
+### v18.4 — Oprava SOC poklesu v solárních hodinách
+- Problém: V solárních hodinách (08-10) plán ukazoval klesající SOC (34→29→24), přestože reason text říkal "SOC zůstane ~34%"
+- Root cause: `simulateSocChange` kontroloval `remainingSolarKwh > 0` pro solární hodiny. V noci (23:00) je `remainingSolarKwh=0` (dnešní zbytek), takže spadl do `soc - socDropNormal` místo použití `getSolarGainForHour`
+- Fix: `simulateSocChange` nyní v solárních hodinách vždy volá `getSolarGainForHour` (konzistentní s `calculateModeForHour`). Pokud gain=0, SOC zůstane nezměněn (solár pokryje spotřebu)
+- Výsledek: SOC simulace v plánu je konzistentní s reason textem
+
 ---
 
 ## 11. Známé limitace a budoucí práce
