@@ -1298,7 +1298,8 @@
                 "solar_sched_dur_001",
                 "solar_sched_day_001",
                 "solar_max_disch_001",
-                "max_charge_0aa9e57f"
+                "max_charge_0aa9e57f",
+                "solar_debug_001"
             ]
         ]
     },
@@ -1657,5 +1658,23 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "solar_debug_001",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "0aa9e57f66f7d429",
+        "name": "Solar Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 968,
+        "wires": []
     }
 ]
