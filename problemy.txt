@@ -1,2 +1,28 @@
-ted jsem vypnul switch sauny - je off - a blokace je stale zapnuta. oprav problem a bud konecne peclivy a nedelj chyby. Radsi
-si to reseni po sobe vzdycky peclive zkontroluj, nez das deployment.
+nechapu tvuj vyopocet planu>
+
+Aktuální mód: 🟢 Normální | Blokace vybíjení baterie: ANO - sauna
+
+Aktualizováno: 19.02.2026 23:24:18
+
+Hodina	Mód	Důvod	Level	Cena
+23:00	🟢 Normální	střední (Lv4≥eff4), vybíjení SOC 79% → ~74%	4	3.44 Kč
+00:00 +1	🟢 Normální	střední (Lv9≥eff4), vybíjení SOC 74% → ~69%	9	3.46 Kč
+01:00 +1	🟢 Normální	střední (Lv7≥eff4), vybíjení SOC 69% → ~64%	7	3.44 Kč
+02:00 +1	🟢 Normální	střední (Lv6≥eff4), vybíjení SOC 64% → ~59%	6	3.43 Kč
+03:00 +1	🟢 Normální	střední (Lv8≥eff4), vybíjení SOC 59% → ~54%	8	3.45 Kč
+04:00 +1	🟢 Normální	střední (Lv6≥eff4), vybíjení SOC 54% → ~49%	6	3.43 Kč
+05:00 +1	🟢 Normální	střední (Lv11≥eff4), vybíjení SOC 49% → ~44%	11	3.62 Kč
+06:00 +1	🟢 Normální	drahá (Lv23≥eff4), vybíjení SOC 44% → ~39%	23	5.08 Kč
+07:00 +1	🟢 Normální	drahá (Lv20≥eff4), vybíjení SOC 39% → ~34%	20	4.81 Kč
+08:00 +1	🟢 Normální	Solární hodina, SOC 34% → ~34%	18	4.50 Kč
+09:00 +1	🟢 Normální	Solární hodina, SOC 29% → ~29%	21	4.90 Kč
+10:00 +1	🟢 Normální	Solární hodina, SOC 24% → ~24%	14	3.75 Kč
+
+Proc rikas toto>
+
+08:00 +1	🟢 Normální	Solární hodina, SOC 34% → ~34%	18	4.50 Kč
+09:00 +1	🟢 Normální	Solární hodina, SOC 29% → ~29%	21	4.90 Kč
+10:00 +1	🟢 Normální	Solární hodina, SOC 24% → ~24%	14	3.75 Kč
+
+Vzdyt pokud solarni vyroba pokryje spotrebu, jak asi spravne v techto rannich hodinach predpokladas,
+ma dalsi hodina, napr. z 8 hodin na 9 hodin rano mensi SOC baterie? SOC 34% → ~34%, pote SOC 29% → ~29%.
