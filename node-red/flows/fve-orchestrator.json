@@ -273,7 +273,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Kontrola podmínek",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\nglobal.set(\"fve_current_mode\", currentMode);\n\n// v18.2: Blokace text pro dashboard\nvar blokaceItems = [];\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\n\nmsg.blokaceText = blokaceText;\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.saunaAktivni = saunaAktivni;\nmsg.currentMode = currentMode;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (saunaAktivni) infoText += \" | Sauna\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\nreturn msg;",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\nglobal.set(\"fve_current_mode\", currentMode);\n\n// v18.2: Blokace text pro dashboard\nvar blokaceItems = [];\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\n\n// Update blokaceText in global fve_plan for real-time file updates\nvar currentPlan = global.get(\"fve_plan\") || {};\nif (!currentPlan.status) currentPlan.status = {};\ncurrentPlan.status.blokaceText = blokaceText;\nglobal.set(\"fve_plan\", currentPlan);\n\nmsg.blokaceText = blokaceText;\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.saunaAktivni = saunaAktivni;\nmsg.currentMode = currentMode;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (saunaAktivni) infoText += \" | Sauna\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -284,7 +284,8 @@
         "y": 260,
         "wires": [
             [
-                "8eef6d1d51c9c644"
+                "8eef6d1d51c9c644",
+                "blokace_file_update"
             ]
         ]
     },
@@ -689,6 +690,45 @@
         "libs": [],
         "x": 540,
         "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "blokace_file_update",
+        "type": "function",
+        "z": "d86bb11fab512182",
+        "g": "c0d4d6462d4ebded",
+        "name": "Aktualizuj blokaci v souboru",
+        "func": "var planData = global.get(\"fve_plan\") || {};\nvar currentMode = planData.currentMode || \"normal\";\nvar currentHour = planData.currentHour || new Date().getHours();\nvar planArray = planData.plan || [];\nvar blokaceText = (planData.status && planData.status.blokaceText) ? planData.status.blokaceText : \"NE\";\n\nmsg.payload = JSON.stringify({\n    current_mode: currentMode,\n    current_reason: planData.currentReason || \"\",\n    current_hour: currentHour,\n    plan: planArray,\n    soc: planData.status ? planData.status.soc : null,\n    forecast_dnes: planData.status ? planData.status.forecastDnes : null,\n    forecast_zitra: planData.status ? planData.status.forecastZitra : null,\n    debug: planData.debug || \"\",\n    blokace_text: blokaceText,\n    last_update: new Date().toISOString()\n}, null, 2);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 320,
+        "wires": [
+            [
+                "blokace_file_write"
+            ]
+        ]
+    },
+    {
+        "id": "blokace_file_write",
+        "type": "file",
+        "z": "d86bb11fab512182",
+        "g": "c0d4d6462d4ebded",
+        "name": "Zapiš blokaci",
+        "filename": "/homeassistant/fve_plan.json",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 1130,
+        "y": 320,
         "wires": [
             []
         ]
