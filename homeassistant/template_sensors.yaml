@@ -323,3 +323,4 @@
     current_hour: "{{ state_attr('sensor.fve_plan_data', 'current_hour') | default(now().hour) }}"
     plan: "{{ state_attr('sensor.fve_plan_data', 'plan') | default([]) }}"
     last_update: "{{ state_attr('sensor.fve_plan_data', 'last_update') | default(now().isoformat()) }}"
+    blokace_text: "{{ state_attr('sensor.fve_plan_data', 'blokace_text') | default('NE') }}"
