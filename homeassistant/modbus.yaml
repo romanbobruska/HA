@@ -100,3 +100,15 @@
       input_type: holding
       data_type: uint16
       scan_interval: 30
+
+    # Degree Minutes - stupeň minut při topení (akumulovaná hodnota pro řízení topení)
+    - name: "Nibe - Degree Minutes"
+      unique_id: "nibe_degree_minutes"
+      address: 43122
+      slave: 1
+      input_type: holding
+      data_type: int16
+      scale: 0.1
+      precision: 1
+      unit_of_measurement: "DM"
+      scan_interval: 60
