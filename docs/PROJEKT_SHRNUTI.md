@@ -522,10 +522,12 @@ rm -rf /tmp/HA
     - 6 nových HA service nodes v `fve-modes.json` (jeden pro každý mód)
     - Normal (topení/auto): `MaxChargePower=0` + `MaxDischargePower=0` → baterie zamčená
     - Normal (bez spotřebičů): `MaxChargePower=-1` + `MaxDischargePower=-1` → neomezeno
-    - Šetřit / Zákaz přetoků / Solární nabíjení: `MaxChargePower=0`
-    - Nabíjet ze sítě: `MaxChargePower=-1` (nabíjení povoleno)
-    - Prodávat: `MaxChargePower=0` (jen vybíjení)
-  - Výsledek: Solár → spotřeba (čerpadlo/auto), přebytek → síť, baterie se NEMĚNÍ
+    - Šetřit: `MaxChargePower=0` + `MaxDischargePower=0` → baterie zamčená
+    - Nabíjet ze sítě: `MaxChargePower=-1` + `MaxDischargePower=0` → nabíjení povoleno
+    - Prodávat: `MaxChargePower=0` + `MaxDischargePower=-1` → jen vybíjení
+    - Zákaz přetoků: `MaxChargePower=-1` + `MaxDischargePower=-1` → baterie neomezena (řídí se feed-in)
+    - Solární nabíjení: `MaxChargePower=-1` + `MaxDischargePower=0` → solár nabíjí baterii, nevybíjí se
+  - Výsledek: Solár → spotřeba (čerpadlo/auto), přebytek → baterie nebo síť dle módu
   - Odstraněny `node.warn` debugy z `fve-heating.json` (použít debug nodes místo toho)
 
 ---
