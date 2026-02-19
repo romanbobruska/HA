@@ -514,6 +514,19 @@ rm -rf /tmp/HA
   - **Problém 3**: Maintenance charge příliš častý
     - Změna: 10 → **20 dní**, pouze v **zimě** (říjen-březen)
     - V létě solár udržuje baterii zdravou přirozeně
+- **v18.0 — MaxChargePower + zamčení baterie při topení/nabíjení auta** (`fve-modes.json`, `mqtt.yaml`):
+  - **Problém**: Baterie se nabíjela ze solaru i při topení/nabíjení auta (MaxDischargePower=0 nestačí)
+  - **Root cause**: Chyběla MQTT entita `MaxChargePower` — bez ní Victron ESS nabíjí baterii ze solaru
+  - Fix:
+    - Přidána MQTT entita `number.max_charge_power` (`Settings/CGwacs/MaxChargePower`)
+    - 6 nových HA service nodes v `fve-modes.json` (jeden pro každý mód)
+    - Normal (topení/auto): `MaxChargePower=0` + `MaxDischargePower=0` → baterie zamčená
+    - Normal (bez spotřebičů): `MaxChargePower=-1` + `MaxDischargePower=-1` → neomezeno
+    - Šetřit / Zákaz přetoků / Solární nabíjení: `MaxChargePower=0`
+    - Nabíjet ze sítě: `MaxChargePower=-1` (nabíjení povoleno)
+    - Prodávat: `MaxChargePower=0` (jen vybíjení)
+  - Výsledek: Solár → spotřeba (čerpadlo/auto), přebytek → síť, baterie se NEMĚNÍ
+  - Odstraněny `node.warn` debugy z `fve-heating.json` (použít debug nodes místo toho)
 
 ---
 
