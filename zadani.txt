@@ -1,18 +1,4 @@
-Jedná se vytápění bazénu, jen je napojené na ohrev vody. Zapamatuj si tuto entitu, pouzijeme ji priste pro ohrev bazenu.
-Uprav hodnoty následovně:
+chtel bych, aby kdyz se blokuje vybijeni baterie jako ted, abych to videl v planu na dashboardu v novem sloupci "blokace".
 
-Hodnota	Režim	Popis
-0	Ekonomický	Start teplota 5°C
-1	Normální	Start teplota 6°C (default)
-2	Luxusní	Start teplota 50°C
-4	Smart Control	Řízení Nibe
-
-Pokud prepnu komfortni rezim, pise mi to varovani: 
-
-Logger: homeassistant.components.automation.nibe_tuv_komfort_zapis_do_modbus
-Zdroj: helpers/script.py:2098
-integrace: Automatizace (dokumentace, problémy)
-První výskyt: 23:51:28 (1 výskyt)
-Naposledy logováno: 23:51:28
-
-Nibe TUV komfort - zapis do modbus: Already running
+Pokud blokace bude aktivni, text bude neco jako ANO - sauna nebo ANO - auto nebo ANO - topeni. Pokud blokace nebude,
+text bude NE

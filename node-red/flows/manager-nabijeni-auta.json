@@ -638,14 +638,15 @@
         "id": "8f1a7b3a93bc777c",
         "type": "server-state-changed",
         "z": "7ceb7c5337692ae5",
-        "name": "Světla TV",
+        "name": "Stav wallboxu",
         "server": "c7421fe2.cb11c",
         "version": 6,
         "outputs": 1,
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "sensor.charger_state_garage"
+                "sensor.charger_state_garage",
+                "sensor.stav_wallboxu_venek"
             ],
             "substring": [],
             "regex": []
@@ -684,7 +685,7 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 280,
+        "x": 290,
         "y": 20,
         "wires": [
             [
@@ -707,7 +708,7 @@
         "enableGlobalContextStore": false
     },
     {
-        "id": "b90c4657d2aa4c4b",
+        "id": "ef7e88d904689f1b",
         "type": "global-config",
         "env": [],
         "modules": {
