@@ -90,6 +90,26 @@
     {% else %} Neznámý ({{ val }})
     {% endif %}
 
+- name: "Nibe - Degree Minutes Status"
+  unique_id: nibe_degree_minutes_status
+  unit_of_measurement: "DM"
+  state: "{{ states('sensor.nibe_degree_minutes') | int(0) }}"
+  icon: >
+    {% set val = states('sensor.nibe_degree_minutes') | int(0) %}
+    {% if val < 0 %}
+      mdi:thermometer-minus
+    {% else %}
+      mdi:thermometer-plus
+    {% endif %}
+  attributes:
+    icon_color: >
+      {% set val = states('sensor.nibe_degree_minutes') | int(0) %}
+      {% if val < 0 %}
+        red
+      {% else %}
+        green
+      {% endif %}
+
 #FVE
 
 - name: "Stav wallboxu garáž popis"
