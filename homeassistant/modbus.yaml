@@ -112,4 +112,4 @@
       scale: 1
       precision: 0
       unit_of_measurement: "DM"
-      scan_interval: 60
+      scan_interval: 30
