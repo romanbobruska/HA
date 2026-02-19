@@ -70,12 +70,14 @@
         "nodes": [
             "fc848e97e2c781c1",
             "376106d716756636",
-            "dc8da09248ec1e29"
+            "dc8da09248ec1e29",
+            "sauna_state_changed",
+            "sauna_set_global"
         ],
         "x": 174,
         "y": 519,
         "w": 672,
-        "h": 82
+        "h": 142
     },
     {
         "id": "22e7b3b8965c20db",
@@ -271,7 +273,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Kontrola podmínek",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\nglobal.set(\"fve_current_mode\", currentMode);\n\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.currentMode = currentMode;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\nreturn msg;",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\nglobal.set(\"fve_current_mode\", currentMode);\n\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.saunaAktivni = saunaAktivni;\nmsg.currentMode = currentMode;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (saunaAktivni) infoText += \" | Sauna\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -624,5 +626,71 @@
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-node-sqlite": "1.1.1"
         }
+    },
+    {
+        "id": "sauna_state_changed",
+        "type": "server-state-changed",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Změna stavu sauny",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.sauna"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 300,
+        "y": 620,
+        "wires": [
+            [
+                "sauna_set_global"
+            ]
+        ]
+    },
+    {
+        "id": "sauna_set_global",
+        "type": "function",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Nastav global sauna",
+        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 620,
+        "wires": [
+            []
+        ]
     }
 ]

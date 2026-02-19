@@ -552,6 +552,18 @@ rm -rf /tmp/HA
 - Výsledek: SOC odhady v plánu odpovídají reálné výrobě a spotřebě
 - Poznámka: Historie se musí nejdřív nasbírat (min. 3 vzorky per hodinu), do té doby fallback
 
+### v18.2 — Sauna jako spotřebič blokující vybíjení baterie
+- Požadavek: Nový HA switch `input_boolean.sauna` — při ON blokovat vybíjení baterie (stejně jako topení/auto)
+- Fix:
+  - **fve-orchestrator.json**:
+    - `Kontrola podmínek`: čte `global.sauna_aktivni`, předává `msg.saunaAktivni`
+    - Nové nody: `Změna stavu sauny` (server-state-changed) → `Nastav global sauna` (nastaví `global.sauna_aktivni`)
+  - **fve-modes.json**: Všech 6 módů (Normal, Šetřit, Nabíjet, Prodávat, Zákaz přetoků, Solární nabíjení):
+    - `saunaAktivni` přidáno do `blockDischarge` podmínky
+    - `"Sauna"` přidáno do `consumers` pole pro energy arbiter
+  - **fve-modes.json**: Opraveno chybějící `"action": "number.set_value"` v 6 MaxChargePower nodech (ValidationError fix)
+- Výsledek: Při zapnutí sauny se baterie zamkne na aktuálním SOC, spotřeba jde ze sítě/solaru
+
 ---
 
 ## 11. Známé limitace a budoucí práce
