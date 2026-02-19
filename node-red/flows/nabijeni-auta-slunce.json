@@ -719,7 +719,7 @@
         "halt_if": "",
         "halt_if_type": "str",
         "halt_if_compare": "is",
-        "entity_id": "number.wallbox_garaz_ameprace_slider",
+        "entity_id": "select.wallboxu_garaz_amperace",
         "state_type": "num",
         "blockInputOverrides": true,
         "outputProperties": [
@@ -857,7 +857,7 @@
         "enableGlobalContextStore": false
     },
     {
-        "id": "5fb4be35ef446029",
+        "id": "c10a96016983ea1f",
         "type": "global-config",
         "env": [],
         "modules": {

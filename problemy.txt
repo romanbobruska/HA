@@ -1,5 +1,2 @@
-- vzdy pouzivej svuj md file pro kontext, abys videl historii pozadavku. nevidim ho v browseru
-- rekni mi, jaky md file pouzivas pro kontext
-- po kazdem promptu aktualizuj md file
-- nechapu, proc se dnes baterie nabila na 70 procent
-- pokud jsi si jist, ze refactoring zafunguje, dej to do produkce
+provedl jsi spatne commit do gitu. Vsiml sis, ze jsem provedl nejake rucni zmeny v manageru nabijeni a nabijeni auta ze slunce? Me zmeny jsi mi v HA prepsal starou 
+verzi. Dej si na to priste pozor a zahrn do pushe i zmeny, ktere provedu rucne.
