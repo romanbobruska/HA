@@ -101,15 +101,15 @@
       data_type: uint16
       scan_interval: 30
 
-    # Degree Minutes - stupeň minut při topení (akumulovaná hodnota pro řízení topení)
-    # 32bit hodnota s plnou přesností, rozsah -3000.0 až 3000.0 DM
+    # Degree Minutes (16 bit) - stupeň minut při topení
+    # Rozsah: -32768 až 32767, hodnoty mimo rozsah se zaokrouhlují
     - name: "Nibe - Degree Minutes"
       unique_id: "nibe_degree_minutes"
-      address: 40940
+      address: 43005
       slave: 1
       input_type: holding
-      data_type: int32
-      scale: 0.1
-      precision: 1
+      data_type: int16
+      scale: 1
+      precision: 0
       unit_of_measurement: "DM"
       scan_interval: 60
