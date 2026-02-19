@@ -501,6 +501,19 @@ rm -rf /tmp/HA
     - Opportunistické nabíjení **blokováno** při dobré solární předpovědi
     - Safety margin: 5% (dobrý solár), 10% (střední), 15% (špatný)
   - Nové proměnné: `solarChargePct`, `expensiveBeforeSolar`, `minMorningSoc`
+- **v17.0 — Přesné nabíjení + dynamické solární hodiny** (`fve-orchestrator.json`):
+  - **Problém 1**: Baterie se nabíjí ze sítě na 52%, ale SOC 42% stačí na 3 drahé hodiny (15% drain → 27% > 25%)
+    - **Root cause**: `projectedEndSoc = currentSoc - horizont*socDropSetrit` je ŠPATNĚ — v Šetřit se SOC nemění!
+    - Fix: `realDrain = drahé hodiny PŘED solarem × socDropNormal`
+    - Nabíjet ze sítě JEN pokud `currentSoc - drain < minSoc + safety`
+    - Výsledek: baterie často blízko minSoc před solárním nabíjením
+  - **Problém 2**: Hardcoded `solar_start_hour=9`, `solar_end_hour=17`
+    - Fix: Čtení z HA entit `sensor.sun_next_rising` / `sensor.sun_next_setting`
+    - Parsování hodiny z ISO datetime, fallback na config
+    - Přidáno do "Sbírka dat pro plánování" node
+  - **Problém 3**: Maintenance charge příliš častý
+    - Změna: 10 → **20 dní**, pouze v **zimě** (říjen-březen)
+    - V létě solár udržuje baterii zdravou přirozeně
 
 ---
 
