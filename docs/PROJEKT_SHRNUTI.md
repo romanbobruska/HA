@@ -564,6 +564,16 @@ rm -rf /tmp/HA
   - **fve-modes.json**: Opraveno chybějící `"action": "number.set_value"` v 6 MaxChargePower nodech (ValidationError fix)
 - Výsledek: Při zapnutí sauny se baterie zamkne na aktuálním SOC, spotřeba jde ze sítě/solaru
 
+### v18.3 — Sloupec "blokace" v plánu pro dashboard
+- Požadavek: Zobrazit na dashboardu v plánu nový sloupec "blokace" s informací o aktivních spotřebičích
+- Fix:
+  - **fve-orchestrator.json / Výpočet plánu**: Každý řádek plánu (`plan.push`) obsahuje nové pole `blokace`
+    - Hodnota: `"ANO - topení, auto, sauna"` (kombinace aktivních) nebo `"NE"`
+    - Čte `global.cerpadlo_topi`, `global.auto_nabijeni_aktivni`, `global.sauna_aktivni`
+  - **fve-orchestrator.json / Kontrola podmínek**: Přidán `msg.blokaceText` pro předání do módů
+  - Pole `blokaceText` přidáno i do `msg.payload.status` pro další použití
+- Výsledek: Dashboard zobrazuje aktuální stav blokace vybíjení baterie v každém řádku plánu
+
 ---
 
 ## 11. Známé limitace a budoucí práce
