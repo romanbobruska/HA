@@ -564,15 +564,18 @@ rm -rf /tmp/HA
   - **fve-modes.json**: Opraveno chybějící `"action": "number.set_value"` v 6 MaxChargePower nodech (ValidationError fix)
 - Výsledek: Při zapnutí sauny se baterie zamkne na aktuálním SOC, spotřeba jde ze sítě/solaru
 
-### v18.3 — Sloupec "blokace" v plánu pro dashboard
-- Požadavek: Zobrazit na dashboardu v plánu nový sloupec "blokace" s informací o aktivních spotřebičích
+### v18.3 — Blokace vybíjení baterie na dashboardu (real-time)
+- Požadavek: Zobrazit na dashboardu v hlavičce plánu stav blokace vybíjení baterie
+- Zobrazení: `Aktuální mód: 🟢 Normální | Blokace vybíjení baterie: NE` (nebo `ANO - sauna, auto, topení`)
 - Fix:
-  - **fve-orchestrator.json / Výpočet plánu**: Každý řádek plánu (`plan.push`) obsahuje nové pole `blokace`
-    - Hodnota: `"ANO - topení, auto, sauna"` (kombinace aktivních) nebo `"NE"`
-    - Čte `global.cerpadlo_topi`, `global.auto_nabijeni_aktivni`, `global.sauna_aktivni`
-  - **fve-orchestrator.json / Kontrola podmínek**: Přidán `msg.blokaceText` pro předání do módů
-  - Pole `blokaceText` přidáno i do `msg.payload.status` pro další použití
-- Výsledek: Dashboard zobrazuje aktuální stav blokace vybíjení baterie v každém řádku plánu
+  - **fve-orchestrator.json / Kontrola podmínek** (běží každých 15s):
+    - Počítá `blokaceText` z `global.cerpadlo_topi`, `global.auto_nabijeni_aktivni`, `global.sauna_aktivni`
+    - Aktualizuje `global.fve_plan.status.blokaceText` v reálném čase
+    - Nový wire na `Aktualizuj blokaci v souboru` → `Zapiš blokaci` (přepíše `fve_plan.json` každých 15s)
+  - **fve-orchestrator.json / Aktualizuj HA sensor**: Přidán `blokace_text` do JSON výstupu
+  - **configuration.yaml**: Přidán `blokace_text` do `json_attributes` command_line sensoru
+  - **template_sensors.yaml**: Přidán `blokace_text` atribut do FVE Plan sensoru
+- Výsledek: Blokace se aktualizuje do 15-30s po změně stavu spotřebiče (sauna ON/OFF, topení, auto)
 
 ---
 
