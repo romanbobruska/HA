@@ -1,5 +1,9 @@
-samozrejme, pokud v tu danou dobu, kdy bude blokace, bude solarni vyroba dostatecna, nechci vybijet baterii vubec. 
+mame problem ve vyhrivani bojleru. Chci, aby se hodnota teploty nahrati boileru nenastavovala, pokud bude mensi, nez je aktualni.
 
-Tzn. pokud bude vyroba priklad 700Wh, povinna spotreba je 1,3 kWh, tak se vezme z baterie jen rozdil mezi 1,3 a 0,7 kWh.
+priklad: termostat boiler ma aktualni hodnotu 62. Ve flow je nastaveno, ze se ma ohrat voda na 58. Neposilam zmenu.
 
-To jsi doufam pochopil. zkontroluj reseni, ze to takto bude.
+Jde mi o to, abychom neposili casto zmeny v nastaveni do merossu. Videl jsem v logu, ze to obcas odmitne, protoze jsme prekrocili pocet povolenych zmen.
+
+Obecne - nemen hodnotu teploty v boileru, pokud to neni nutne - jinak - zapis hodnotu do boileru, pokud bude potreba, jinak ne.
+
+Rozumime si? kdyztak se zeptej

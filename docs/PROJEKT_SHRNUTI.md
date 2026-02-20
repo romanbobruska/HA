@@ -621,6 +621,15 @@ rm -rf /tmp/HA
 - Dotčené soubory: `fve-config.json`, `fve-modes.json` (Normal Logic, Solární nabíjení Logic), `fve-orchestrator.json` (socDropBlokace)
 - Knowledge base: Uložena NIBE F1345 Modbus registrová mapa + Victron Venus OS dbus API
 
+### v18.9 — Guard proti zbytečným zápisům teploty bojleru (Meross rate limit)
+- Problém: Flow posílal `climate.set_temperature` každý cyklus, i když nová cílová teplota ≤ aktuální nastavená. Meross odmítal požadavky kvůli překročení limitu změn
+- Fix: V rozhodovací logice (`boiler.json`) přidán guard:
+  - Čte aktuální nastavenou teplotu termostatu z `climate.smart_socket_thermostat_...` (HA global)
+  - Pokud `cilova_teplota <= aktualni_nastavena_teplota` → `return null` (flow se zastaví, žádný zápis)
+  - Změna se pošle pouze pokud je nová teplota **vyšší** než aktuální nastavení
+  - Status node zobrazuje "BEZ ZMĚNY" modře při přeskočení
+- Dotčené soubory: `boiler.json` (node "🧠 Rozhodovací logika")
+
 ---
 
 ## 11. Známé limitace a budoucí práce
