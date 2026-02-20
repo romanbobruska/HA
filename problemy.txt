@@ -1,5 +1,4 @@
-a ted se vrat k zadani na 
-
-⚫ solar_charging	Solární nabíjení (levná energie), SOC 100% → ~100%
-
-mnluvili jsme o prodeji v tomto miste
+Celkový instalovaný výkon (kWp) je 17 kWh v peaku 
+ Orientace panelů (azimut: jih=180°, jihozápad=225°, jihovýchod=135°, východ=90°, západ=270°) - orientaace je 190 stupnu (jihozápad)
+ Sklon panelů (stupně od horizontály, typicky 15-45°) - sklon je cca 45 stupnu
+ Rozdělení na více střech? (pokud ano, kolik kWp na každé střeše a jejich orientace/sklon) ne, zanedbej tuto hodnotu

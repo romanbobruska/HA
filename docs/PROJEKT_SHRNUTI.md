@@ -647,6 +647,16 @@ rm -rf /tmp/HA
 - Dashboard úprava: přidán sloupec "Cena prodej" (`item.priceSell`), "Cena" přejmenována na "Cena nákup"
 - Dotčené soubory: `homeassistant/dashboard_fve_plan.md` (nová šablona pro Lovelace markdown card)
 
+### v18.12 — Solární křivka pro konkrétní instalaci (Horoušany)
+- Problém: Generická křivka pro střední Evropu neodpovídala reálné instalaci
+- Parametry instalace: **17 kWp**, azimut **190°** (mírně JZ), sklon **45°**, Horoušany (50.08°N, 14.62°E)
+- Nová křivka vypočtena ze solárního modelu (roční průměr):
+  - Širší rozsah: **5:00-18:00** místo 6:00-17:00
+  - Plošší profil: maximum 13% (h12) místo 16%
+  - Silnější odpoledne: h15=9%, h16=5%, h17=3% (JZ orientace)
+  - Silnější ráno: h8=7% místo 6% (strmý sklon zachytí nízké slunce)
+- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+
 ---
 
 ## 11. Známé limitace a budoucí práce
