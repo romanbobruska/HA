@@ -1,26 +1,11 @@
-podivej se na svuj plan:
+super,ale my mame mod na prodej. pises mi 
 
-Aktuální mód: 🟢 Normální | Blokace vybíjení baterie: NE
+14:00	🟢 Normální	Solarni hodina, baterie plna -> prodej prebytku, SOC 100%	4	3.34 Kč
+15:00	🟢 Normální	Solarni hodina, baterie plna -> prodej prebytku, SOC 100%	12	3.64 Kč
+16:00	🟢 Normální	Solarni hodina, baterie plna -> prodej prebytku, SOC 100%	22	4.91 Kč
+17:00	🟢 Normální	drahá (Lv19≥eff12), vybíjení SOC 100% → ~95%	19	4.74 Kč
 
-Aktualizováno: 20.02.2026 05:36:48
+nemel by se zmenit mod na prodavat (samozrejme pokud uz nemam jiny odber a ceny za prodej jsou vyssi nez 0)
 
-Hodina	Mód	Důvod	Level	Cena
-05:00	🟢 Normální	střední (Lv11≥eff11), vybíjení SOC 48% → ~46%	11	3.62 Kč
-06:00	🟢 Normální	drahá (Lv23≥eff11), vybíjení SOC 46% → ~41%	23	5.08 Kč
-07:00	🟢 Normální	drahá (Lv20≥eff11), vybíjení SOC 41% → ~36%	20	4.81 Kč
-08:00	🟢 Normální	Solární hodina, SOC 36% → ~40%	18	4.50 Kč
-09:00	🟢 Normální	Solární hodina, SOC 40% → ~48%	21	4.90 Kč
-10:00	🟢 Normální	Solární hodina, SOC 48% → ~60%	14	3.75 Kč
-11:00	🟢 Normální	Solární hodina, SOC 60% → ~75%	10	3.55 Kč
-12:00	🟢 Normální	Solární hodina, SOC 75% → ~91%	5	3.38 Kč
-13:00	🟢 Normální	Solární hodina, SOC 91% → ~100%	16	4.10 Kč
-14:00	⚫ solar_charging	Solární nabíjení (levná energie), SOC 100% → ~100%	4	3.34 Kč
-15:00	🟢 Normální	Solární hodina, SOC 100% → ~100%	12	3.64 Kč
-16:00	🟢 Normální	Solární hodina, SOC 100% → ~100%	22	4.91 K
-
-konkretne tato radka:
-14:00	⚫ solar_charging	Solární nabíjení (levná energie), SOC 100% → ~100%	4	3.34 Kč
-
-Pokud toto nastane, nemel byh jsi se nastavit do prodeje energie do site? Samozrejme jen kdyz neni poadavek na odber z jineho zdroje v dome.
-
-Obecne - pokud je vyroba vyssi nez pozadovana, prodavej. Samozrejme plati, ze nebudes prodavat za zaporne ceny. Prodejni ceny najdes v sqllite databazi.
+prodej energie do site je az v prioritach tedn nejposlednesji. Obence - pokujd tu energgi uz nemam, kam dat, tak ji prodam. melo 
+by se to stavat co nejmenne, pokjd zoptimalizujeme nase fungovani.

@@ -631,11 +631,13 @@ rm -rf /tmp/HA
 - Dotčené soubory: `boiler.json` (node "🧠 Rozhodovací logika")
 
 ### v18.10 — Prodej solárních přebytků při plné baterii
-- Problém: Při SOC ≥ 98% a solární hodině s levnou cenou planner nastavil `solar_charging` (blokuje vybíjení). Přebytky neměly kam jít — baterie plná, feed-in blokovaný
-- Fix: V plánovací logice (`fve-orchestrator.json`, PRIORITA 4) přidán guard:
-  - Pokud `simulatedSoc >= 98` → vrátí `normal` mód místo `solar_charging`
-  - V normal módu ESS s `power_set_point: 0` automaticky pouští přebytky do sítě
-  - Záporné prodejní ceny jsou ošetřeny PRIORITOU 0 (`zakaz_pretoku`)
+- Problém: Při SOC ≥ 98% a solární hodině planner nastavil `solar_charging` nebo `normal`. Přebytky se neprodávaly aktivně do sítě
+- v18.10b: Oprava — při plné baterii se nastaví mód `prodavat` (ne `normal`):
+  - Podmínka: `simulatedSoc >= 98 && priceSell > 0`
+  - Mód `prodavat` nastaví `power_set_point: -maxFeedIn` (aktivní prodej do sítě)
+  - Prodej je **poslední priorita** — jen když energii nemáme kam dát
+  - Záporné prodejní ceny ošetřeny PRIORITOU 0 (`zakaz_pretoku`)
+  - Mód `prodavat` v `fve-modes.json` kontroluje spotřebiče (auto nabíjení → skip prodej)
 - Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
 
 ---
