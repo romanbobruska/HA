@@ -630,6 +630,14 @@ rm -rf /tmp/HA
   - Status node zobrazuje "BEZ ZMĚNY" modře při přeskočení
 - Dotčené soubory: `boiler.json` (node "🧠 Rozhodovací logika")
 
+### v18.10 — Prodej solárních přebytků při plné baterii
+- Problém: Při SOC ≥ 98% a solární hodině s levnou cenou planner nastavil `solar_charging` (blokuje vybíjení). Přebytky neměly kam jít — baterie plná, feed-in blokovaný
+- Fix: V plánovací logice (`fve-orchestrator.json`, PRIORITA 4) přidán guard:
+  - Pokud `simulatedSoc >= 98` → vrátí `normal` mód místo `solar_charging`
+  - V normal módu ESS s `power_set_point: 0` automaticky pouští přebytky do sítě
+  - Záporné prodejní ceny jsou ošetřeny PRIORITOU 0 (`zakaz_pretoku`)
+- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+
 ---
 
 ## 11. Známé limitace a budoucí práce
