@@ -674,9 +674,26 @@ rm -rf /tmp/HA
 - Problém: V plánu se zobrazoval mód `solar_charging` (v 14:00 při levné energii), ale uživatel chce používat pouze definované FVE módy (`normal`, `setrit`, `nabijet_ze_site`, `prodavat`, `zakaz_pretoku`)
 - Fix: Odstraněn `MODY.SOLAR_CHARGING` z PRIORITY 4 v `calculateModeForHour`
 - V solárních hodinách se nyní vždy vrací `MODY.NORMAL` (solár automaticky pokrývá spotřebu a nabíjí baterii)
-- Výjimka: `MODY.PRODAVAT` při SOC >= 98% a prodejní ceně > 0 (v18.10c zůstává)
+- ~~Výjimka: `MODY.PRODAVAT` při SOC >= 98% a prodejní ceně > 0 (v18.10c)~~ → odstraněno v v18.15
 - `SOLAR_CHARGING` mód v `fve-modes.json` ponechán pro zpětnou kompatibilitu (deprecated)
 - Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+
+### v18.15 — Oprava Prodávat módu (baterie se vybíjela při solárním přebytku)
+- **Root cause**: `Prodávat Logic` nastavoval `power_set_point: -7600W` → Victron aktivně exportoval z baterie
+  - Při SOC 98% a solárním přebytku se baterie vybíjela místo aby se dobila na 100%
+  - `maxChargePower = 0` navíc blokoval nabíjení baterie ze solaru
+- **Fix 1** (`fve-modes.json` - Prodávat Logic):
+  - `power_set_point: 0` místo `-maxFeedIn` — ESS automaticky posílá přebytky do sítě
+  - `min_soc: effectiveMinSoc` (= max(minSoc, currentSoc - 1)) — baterie se nesmí vybíjet
+  - `maxChargePower = -1` — povoleno nabíjení ze solaru (baterie se dobije na 100%)
+  - `msg.feedInExcess = true` — flag pro povolení feed-in přebytků
+- **Fix 2** (`fve-orchestrator.json` - PRIORITA 4):
+  - Odstraněn v18.10c guard `MODY.PRODAVAT` při SOC >= 98%
+  - V solárních hodinách vždy `MODY.NORMAL` — Victron ESS s `power_set_point: 0` automaticky:
+    1. Solár → spotřeba domu
+    2. Přebytek → nabíjení baterie
+    3. Baterie plná → přebytek do sítě
+- Dotčené soubory: `fve-modes.json`, `fve-orchestrator.json`
 
 ---
 
