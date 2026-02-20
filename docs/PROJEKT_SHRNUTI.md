@@ -598,6 +598,17 @@ rm -rf /tmp/HA
 - Fix 2: `getSolarGainForHour` nyní preferuje `pred.avgConsumptionKwh` z historie, fallback na denní průměr
 - Dotčené funkce: `simulateSocChange(mode, hour, soc, hFraction)`, `getSolarGainForHour(hour, remainingSolar, solarHours, hFraction)`, `calculateModeForHour(offset, priceData, simulatedSoc, hFraction)`
 
+### v18.7 — Max teplota topení z configu
+- Problém: V zimním režimu se čerpadlo zapínalo BEZ OHLEDU NA TEPLOTU při levné/střední ceně. Při 23.5°C a střední ceně se zbytečně topilo
+- Root cause: Logika v "Rozhodnuti topeni/chlazeni" měla `!isDraha → VŽDY ON` bez kontroly teploty
+- Fix: Přidán parametr `max_teplota_topeni: 23.5` do `fve-config.json`
+- Nová logika zimního režimu:
+  - `temp <= TEMP_EMERGENCY (22°C)` → VŽDY ON (i při drahé energii) — beze změny
+  - `temp < TEMP_MAX (23.5°C) && !isDraha` → zapnout topení
+  - `temp >= TEMP_MAX` → topení nepotřebné (i při levné energii)
+  - `isDraha && temp > TEMP_EMERGENCY` → BLOKOVÁNO — beze změny
+- Dotčené soubory: `fve-config.json` (nový parametr), `fve-heating.json` (logika v7)
+
 ---
 
 ## 11. Známé limitace a budoucí práce
@@ -608,4 +619,4 @@ rm -rf /tmp/HA
 4. ~~**optimalSoc statický**~~: ✅ Vyřešeno v Session 9 (dynamický výpočet z reálné potřeby)
 5. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
 6. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
-7. ~~**Vytápění**~~: ✅ Logika v `fve-heating.json` opravena v Session 8 (podmínka pro střední ceny)
+7. ~~**Vytápění**~~: ✅ Logika v `fve-heating.json` opravena v Session 8 + v18.7 (max teplota z configu)

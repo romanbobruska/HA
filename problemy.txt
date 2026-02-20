@@ -1,17 +1,2 @@
-ted vypada plan verohodneji, ale:
-- prihlednul si v simulaci ke spotrebe domu? Tu vidis z historie...
-
-08:00	🟢 Normální	Solární hodina, SOC 30% → ~34%	18	4.50 Kč
-09:00	🟢 Normální	Solární hodina, SOC 34% → ~42%	21	4.90 Kč
-
-- podivej se na svou simulaci:
-
-Hodina	Mód	Důvod	Level	Cena
-01:00	🟢 Normální	střední (Lv7≥eff6), vybíjení SOC 65% → ~60%	7	3.44 Kč
-02:00	🟢 Normální	střední (Lv6≥eff6), vybíjení SOC 60% → ~55%	6	3.43 Kč
-03:00	🟢 Normální	střední (Lv8≥eff6), vybíjení SOC 55% → ~50%	8	3.45 Kč
-
-Nezanedbavas v ramci kazde hodiny to, ze je aktualne napr. 01:38 jako ted a na 01:00, tzn. uz asi nespotrebuju pokazde minus 5 procent baterie.
-Zahrn i aktualni cas do simulace, aby plan byl co nejverohodnejsi.
-
-Pokud jsi nepochopil zadani, zeptej se, pokud to bude nutne
+dnes se mi stalo, ze byla teplota v dome 23,5 stupne a byla draha energie - nad prah strednich levelu. Cerpadlo bylo zapnuto a dotopilo se z drahych hodin.
+over, zda mas topeni spravne nastaveno, aby se nezapinalo pri drahych cenach.
