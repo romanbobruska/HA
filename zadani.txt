@@ -1,4 +1,3 @@
-chtel bych, aby kdyz se blokuje vybijeni baterie jako ted, abych to videl v planu na dashboardu v novem sloupci "blokace".
+samozrejme, pokud v tu danou dobu, kdy bude blokace, bude solarni vyroba dostatecna, nechci vybijet baterii vubec.
 
-Pokud blokace bude aktivni, text bude neco jako ANO - sauna nebo ANO - auto nebo ANO - topeni. Pokud blokace nebude,
-text bude NE
+To jsi doufam pochopil. zkontroluj reseni, ze to takto bude.

@@ -609,6 +609,16 @@ rm -rf /tmp/HA
   - `isDraha && temp > TEMP_EMERGENCY` → BLOKOVÁNO — beze změny
 - Dotčené soubory: `fve-config.json` (nový parametr), `fve-heating.json` (logika v7)
 
+### v18.8 — Částečné vybíjení baterie při blokaci (povinná spotřeba domu)
+- Problém: Při blokaci (topení/auto/sauna) se baterie vůbec nevybíjela (`maxDischargePower=0`). Uživatel chce, aby baterie pokrývala základní spotřebu domu (1.3 kW) i při blokaci
+- Fix: Přidán parametr `min_vybijeni_blokace_w: 1300` do `fve-config.json`
+- Nová logika při blokaci:
+  - `maxDischargePower = 1300W` (místo 0) — baterie pokrývá spotřebu domu
+  - Žádné scheduled charging — SOC pomalu klesá (~4.6%/h při 28kWh baterii)
+  - Velké spotřebiče (sauna, auto, topení) jedou ze sítě
+- Dotčené soubory: `fve-config.json`, `fve-modes.json` (Normal Logic, Solární nabíjení Logic), `fve-orchestrator.json` (socDropBlokace)
+- Knowledge base: Uložena NIBE F1345 Modbus registrová mapa + Victron Venus OS dbus API
+
 ---
 
 ## 11. Známé limitace a budoucí práce
