@@ -640,6 +640,15 @@ rm -rf /tmp/HA
   - Mód `prodavat` v `fve-modes.json` kontroluje spotřebiče (auto nabíjení → skip prodej)
 - Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
 
+### v18.11 — Dashboard: sloupec prodejní ceny v plánu
+- Kontrola prodejních cen v plánovací logice: **VŠE OK**
+  - PRIORITA 0: `priceSell <= 0` → `zakaz_pretoku` (blokuje prodej při záporných cenách)
+  - PRIORITA 2: prodej z baterie kontroluje `priceSell * efficiency > costPerKwh`
+  - v18.10b: prodej přebytků kontroluje `priceSell > 0`
+  - Prodejní ceny čteny z DB (`priceCZKhourProd` z `fve_prices_forecast`)
+- Dashboard úprava: přidán sloupec "Cena prodej" (`item.priceSell`), "Cena" přejmenována na "Cena nákup"
+- Dotčené soubory: `homeassistant/dashboard_fve_plan.md` (nová šablona pro Lovelace markdown card)
+
 ---
 
 ## 11. Známé limitace a budoucí práce

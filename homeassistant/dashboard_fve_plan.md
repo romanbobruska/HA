@@ -1,7 +1,3 @@
-zkontroluj , ZDA uvaszujes pri prodeji prodejni ceny a zda blokujes prodej do site pri zapornych cenach - myslim tim prodejni ceny, mas je v tabulce v databazi.
-
-Zaroven mi uprav tabulku v dashbordu, aby se zobrazovala i prodejni cena z db.
-
 {% set plan = state_attr('sensor.fve_plan_data', 'plan') %}
 {% set last_update = state_attr('sensor.fve_plan_data', 'last_update') %}
 {% set current_mode = state_attr('sensor.fve_plan_data', 'current_mode') %}
@@ -31,7 +27,7 @@ Zaroven mi uprav tabulku v dashbordu, aby se zobrazovala i prodejni cena z db.
 
 {% if plan and plan | length > 0 %}
 <table>
-<tr><th>Hodina</th><th>Mód</th><th>Důvod</th><th>Level</th><th>Cena</th></tr>
+<tr><th>Hodina</th><th>Mód</th><th>Důvod</th><th>Level</th><th>Cena nákup</th><th>Cena prodej</th></tr>
 {% for item in plan %}
 <tr>
 <td>{{ '%02d' | format(item.hour) }}:00{% if item.isNextDay %} +1{% endif %}</td>
@@ -39,12 +35,10 @@ Zaroven mi uprav tabulku v dashbordu, aby se zobrazovala i prodejni cena z db.
 <td>{{ item.reason }}</td>
 <td>{{ item.priceLevel }}</td>
 <td>{{ '%.2f' | format(item.priceBuy) }} Kč</td>
+<td>{{ '%.2f' | format(item.priceSell) }} Kč</td>
 </tr>
 {% endfor %}
 </table>
 {% else %}
 Plán není k dispozici
 {% endif %}
-
-
-Prodejni cennu chchi mit za slloupcem cena s nazvem Cena prodej, puvodni sloupec cena prejmenuj na Cena nákup
