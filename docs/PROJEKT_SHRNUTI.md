@@ -630,15 +630,11 @@ rm -rf /tmp/HA
   - Status node zobrazuje "BEZ ZMĚNY" modře při přeskočení
 - Dotčené soubory: `boiler.json` (node "🧠 Rozhodovací logika")
 
-### v18.10 — Prodej solárních přebytků při plné baterii
-- Problém: Při SOC ≥ 98% a solární hodině planner nastavil `solar_charging` nebo `normal`. Přebytky se neprodávaly aktivně do sítě
-- v18.10b: Oprava — při plné baterii se nastaví mód `prodavat` (ne `normal`):
-  - Podmínka: `simulatedSoc >= 98 && priceSell > 0`
-  - Mód `prodavat` nastaví `power_set_point: -maxFeedIn` (aktivní prodej do sítě)
-  - Prodej je **poslední priorita** — jen když energii nemáme kam dát
-  - Záporné prodejní ceny ošetřeny PRIORITOU 0 (`zakaz_pretoku`)
-  - Mód `prodavat` v `fve-modes.json` kontroluje spotřebiče (auto nabíjení → skip prodej)
-- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+### ~~v18.10 — Prodej solárních přebytků při plné baterii~~ (REVERTOVÁNO)
+- ~~v18.10: SOC >= 98% → normal mód~~
+- ~~v18.10b: SOC >= 98% && priceSell > 0 → prodavat mód~~
+- **Revert**: Obě změny revertovány — PRIORITA 4 vrácena do původního stavu
+- Důvod: Prodej přebytků vyžaduje promyšlenější řešení
 
 ### v18.11 — Dashboard: sloupec prodejní ceny v plánu
 - Kontrola prodejních cen v plánovací logice: **VŠE OK**
