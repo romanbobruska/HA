@@ -670,6 +670,14 @@ rm -rf /tmp/HA
 - Výsledek: SOC 39%→41% místo 39%→100% pro únorový den (realistické)
 - Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
 
+### v18.14 — Odstranění SOLAR_CHARGING z plánu
+- Problém: V plánu se zobrazoval mód `solar_charging` (v 14:00 při levné energii), ale uživatel chce používat pouze definované FVE módy (`normal`, `setrit`, `nabijet_ze_site`, `prodavat`, `zakaz_pretoku`)
+- Fix: Odstraněn `MODY.SOLAR_CHARGING` z PRIORITY 4 v `calculateModeForHour`
+- V solárních hodinách se nyní vždy vrací `MODY.NORMAL` (solár automaticky pokrývá spotřebu a nabíjí baterii)
+- Výjimka: `MODY.PRODAVAT` při SOC >= 98% a prodejní ceně > 0 (v18.10c zůstává)
+- `SOLAR_CHARGING` mód v `fve-modes.json` ponechán pro zpětnou kompatibilitu (deprecated)
+- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+
 ---
 
 ## 11. Známé limitace a budoucí práce

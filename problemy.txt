@@ -1,7 +1,14 @@
-aktualne jsem na 8me hodine. ani nahodou nepokryvam spotrebu solarni vyrobou.
+08:00	🟢 Normální	Solární hodina, SOC 38% → ~39%	18	4.50 Kč	2.61 Kč
+09:00	🟢 Normální	Solární hodina, SOC 39% → ~41%	21	4.90 Kč	2.30 Kč
+10:00	🟢 Normální	Solární hodina, SOC 41% → ~45%	14	3.75 Kč	1.99 Kč
+11:00	🟢 Normální	Solární hodina, SOC 45% → ~49%	10	3.55 Kč	1.82 Kč
+12:00	🟢 Normální	Solární hodina, SOC 49% → ~53%	5	3.38 Kč	1.68 Kč
+13:00	🟢 Normální	Solární hodina, SOC 53% → ~57%	16	4.10 Kč	1.64 Kč
+14:00	⚫ solar_charging	Solární nabíjení (levná energie), SOC 57% → ~60%	4	3.34 Kč	1.65 Kč
+15:00	🟢 Normální	Solární hodina, SOC 57% → ~59%	12	3.64 Kč	1.89 Kč
+16:00	🟢 Normální	Solární hodina, SOC 59% → ~59%	22	4.91 Kč	2.31 Kč
+17:00	🟢 Normální	drahá (Lv19≥eff12), vybíjení SOC 59% → ~54%	19	4.74 Kč	2.80 Kč
+18:00	🟢 Normální	drahá (Lv17≥eff12), vybíjení SOC 54% → ~49%	17	4.20 Kč	2.36 Kč
+19:00	🟢 Normální	drahá (Lv15≥eff12), vybíjení SOC 49% → ~44%	15	3.96 Kč	2.16 Kč
 
-tvuj plan 
-
-08:00	🟢 Normální	Solární hodina, SOC 39% → ~44%	18	4.50 Kč	2.61 Kč
-
-se zda byt nerealisticky. proved hloubkovou ananluzu a uprav simulaci
+ted je to asi ok, ale zapomel si na ten mod prodej... podivej se, jak ten plan vypada... nechci videt solar_charhing v planu. mame fve mody a tech wes drzme
