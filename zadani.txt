@@ -1,3 +1,5 @@
-samozrejme, pokud v tu danou dobu, kdy bude blokace, bude solarni vyroba dostatecna, nechci vybijet baterii vubec.
+samozrejme, pokud v tu danou dobu, kdy bude blokace, bude solarni vyroba dostatecna, nechci vybijet baterii vubec. 
+
+Tzn. pokud bude vyroba priklad 700Wh, povinna spotreba je 1,3 kWh, tak se vezme z baterie jen rozdil mezi 1,3 a 0,7 kWh.
 
 To jsi doufam pochopil. zkontroluj reseni, ze to takto bude.

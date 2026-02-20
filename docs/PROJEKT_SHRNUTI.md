@@ -613,9 +613,11 @@ rm -rf /tmp/HA
 - Problém: Při blokaci (topení/auto/sauna) se baterie vůbec nevybíjela (`maxDischargePower=0`). Uživatel chce, aby baterie pokrývala základní spotřebu domu (1.3 kW) i při blokaci
 - Fix: Přidán parametr `min_vybijeni_blokace_w: 1300` do `fve-config.json`
 - Nová logika při blokaci:
-  - `maxDischargePower = 1300W` (místo 0) — baterie pokrývá spotřebu domu
-  - Žádné scheduled charging — SOC pomalu klesá (~4.6%/h při 28kWh baterii)
+  - `maxDischargePower = max(0, 1300 - aktuální_PV_výkon)` — dynamický limit
+  - Příklad: PV=700W → baterie dodá jen 600W; PV≥1300W → baterie se nevybíjí
+  - Žádné scheduled charging — SOC pomalu klesá (max ~4.6%/h při 28kWh baterii)
   - Velké spotřebiče (sauna, auto, topení) jedou ze sítě
+  - PV výkon čten z `sensor.solar_power` (MQTT: `victron/N/.../Dc/Pv/Power`)
 - Dotčené soubory: `fve-config.json`, `fve-modes.json` (Normal Logic, Solární nabíjení Logic), `fve-orchestrator.json` (socDropBlokace)
 - Knowledge base: Uložena NIBE F1345 Modbus registrová mapa + Victron Venus OS dbus API
 
