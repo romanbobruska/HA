@@ -1,4 +1,7 @@
-Celkový instalovaný výkon (kWp) je 17 kWh v peaku 
- Orientace panelů (azimut: jih=180°, jihozápad=225°, jihovýchod=135°, východ=90°, západ=270°) - orientaace je 190 stupnu (jihozápad)
- Sklon panelů (stupně od horizontály, typicky 15-45°) - sklon je cca 45 stupnu
- Rozdělení na více střech? (pokud ano, kolik kWp na každé střeše a jejich orientace/sklon) ne, zanedbej tuto hodnotu
+aktualne jsem na 8me hodine. ani nahodou nepokryvam spotrebu solarni vyrobou.
+
+tvuj plan 
+
+08:00	🟢 Normální	Solární hodina, SOC 39% → ~44%	18	4.50 Kč	2.61 Kč
+
+se zda byt nerealisticky. proved hloubkovou ananluzu a uprav simulaci

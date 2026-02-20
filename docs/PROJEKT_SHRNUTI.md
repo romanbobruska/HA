@@ -657,6 +657,19 @@ rm -rf /tmp/HA
   - Silnější ráno: h8=7% místo 6% (strmý sklon zachytí nízké slunce)
 - Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
 
+### v18.13 — Oprava simulace solárního zisku (3 root causes)
+- Problém: Plán predikoval +5% SOC/h v 08:00, ale reálně solár nepokryl ani spotřebu domu
+- **Root cause 1**: `getSolarGainForHour` fallback používal `Math.max(0, ...)` — záporný zisk (spotřeba > výroba) se ignoroval → SOC se nikdy nesnížil v solární hodině
+  - Fix: Odstraněn `Math.max(0, ...)` ve všech 3 větvích (fallback, forecast, historická)
+  - Nyní záporný netKwh = baterie dodává rozdíl mezi spotřebou a výrobou
+- **Root cause 2**: `simulateSocChange` pro NORMAL+solar ignoroval záporný gain (`if (solarGainSim > 0)`)
+  - Fix: Nahrazeno `Math.min(100, Math.max(minSoc, soc + solarGainSim))` — SOC klesá i roste
+- **Root cause 3**: `remainingSolarKwh` z VRM API forecastu byl ~34 kWh pro únor (reálně max 15 kWh)
+  - Fix: Sanity check `monthMaxSolarKwh` — max denní výroba dle měsíce pro 17kWp instalaci
+  - Leden: 8, Únor: 15, Březen: 30, ..., Červen: 75, ..., Prosinec: 6 kWh
+- Výsledek: SOC 39%→41% místo 39%→100% pro únorový den (realistické)
+- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
+
 ---
 
 ## 11. Známé limitace a budoucí práce
