@@ -1,1 +1,5 @@
-tohle se mi nelibi. vrat se o k krok zpet ale uvazuj s tim prodejem energie.
+a ted se vrat k zadani na 
+
+⚫ solar_charging	Solární nabíjení (levná energie), SOC 100% → ~100%
+
+mnluvili jsme o prodeji v tomto miste

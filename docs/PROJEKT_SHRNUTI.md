@@ -630,11 +630,13 @@ rm -rf /tmp/HA
   - Status node zobrazuje "BEZ ZMĚNY" modře při přeskočení
 - Dotčené soubory: `boiler.json` (node "🧠 Rozhodovací logika")
 
-### ~~v18.10 — Prodej solárních přebytků při plné baterii~~ (REVERTOVÁNO)
-- ~~v18.10: SOC >= 98% → normal mód~~
-- ~~v18.10b: SOC >= 98% && priceSell > 0 → prodavat mód~~
-- **Revert**: Obě změny revertovány — PRIORITA 4 vrácena do původního stavu
-- Důvod: Prodej přebytků vyžaduje promyšlenější řešení
+### v18.10c — Aktivní prodej do sítě při plné baterii a solární hodině
+- Historie: v18.10 (normal) → v18.10b (prodavat) → revert → v18.10c (prodavat, finální)
+- Fix: V PRIORITĚ 4 (`fve-orchestrator.json`) přidán guard:
+  - Podmínka: `simulatedSoc >= 98 && priceSell > 0`
+  - Mód `PRODAVAT` nastaví `power_set_point: -maxFeedIn` (aktivní feed-in do sítě)
+  - Záporné prodejní ceny ošetřeny PRIORITOU 0 (`zakaz_pretoku`)
+- Dotčené soubory: `fve-orchestrator.json` (node "Výpočet plánu na 12h")
 
 ### v18.11 — Dashboard: sloupec prodejní ceny v plánu
 - Kontrola prodejních cen v plánovací logice: **VŠE OK**
