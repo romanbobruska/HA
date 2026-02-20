@@ -583,6 +583,14 @@ rm -rf /tmp/HA
 - Fix: `simulateSocChange` nyní v solárních hodinách vždy volá `getSolarGainForHour` (konzistentní s `calculateModeForHour`). Pokud gain=0, SOC zůstane nezměněn (solár pokryje spotřebu)
 - Výsledek: SOC simulace v plánu je konzistentní s reason textem
 
+### v18.5 — Realistická solární denní křivka
+- Problém: `getSolarGainForHour` rozdělovala výrobu rovnoměrně mezi solární hodiny. 8:00 dostala stejný podíl jako 12:00, což vedlo k nerealistickým SOC skokům (31%→51% v 8h ráno)
+- Fix: Přidána bell-curve váhová tabulka (`solarCurveWeights`) odpovídající typickému FV profilu ve střední Evropě:
+  - 8h=6%, 9h=9%, 10h=12%, 11h=15%, 12h=16%, 13h=15%, 14h=12%, 15h=8%...
+- Přidán fallback na `forecastZitra` — když se plán počítá v noci (`remainingSolarKwh=0`), použije zítřejší forecast s křivkou
+- Sanity check: historický gain omezen křivkou (max 2× podíl z celkového solaru)
+- Výsledek: S 15kWh forecast: 8h: 31→31.3%, 9h: 31.3→33.2% (realistické)
+
 ---
 
 ## 11. Známé limitace a budoucí práce
