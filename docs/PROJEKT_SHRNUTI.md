@@ -591,6 +591,13 @@ rm -rf /tmp/HA
 - Sanity check: historický gain omezen křivkou (max 2× podíl z celkového solaru)
 - Výsledek: S 15kWh forecast: 8h: 31→31.3%, 9h: 31.3→33.2% (realistické)
 
+### v18.6 — Zlomek první hodiny + historická spotřeba per hodina
+- Problém 1: Plán generovaný v 01:38 ukazoval plný SOC drop 5% pro hodinu 01:00, přestože zbývalo jen 22 minut. Výsledek: 65→60% místo realistických 65→63.2%
+- Fix 1: Přidán `firstHourFraction = (60 - currentMinute) / 60`. Pro offset=0 se všechny SOC změny (drop, nabíjení, solární gain) násobí tímto zlomkem
+- Problém 2: `getSolarGainForHour` odečítala průměrnou spotřebu (`daily_consumption_kwh / 24 ≈ 0.83 kWh`), ale historická data mají `avgConsumptionKwh` per hodina — přesnější
+- Fix 2: `getSolarGainForHour` nyní preferuje `pred.avgConsumptionKwh` z historie, fallback na denní průměr
+- Dotčené funkce: `simulateSocChange(mode, hour, soc, hFraction)`, `getSolarGainForHour(hour, remainingSolar, solarHours, hFraction)`, `calculateModeForHour(offset, priceData, simulatedSoc, hFraction)`
+
 ---
 
 ## 11. Známé limitace a budoucí práce

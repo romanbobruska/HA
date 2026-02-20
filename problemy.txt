@@ -1,24 +1,17 @@
-- pro priste - az budes potrebovat restartovat HA, tak to zahrn do deply sciptu. Nerestartuj HA, pokud to neni potreba
-- podivej se na svuj plan:
+ted vypada plan verohodneji, ale:
+- prihlednul si v simulaci ke spotrebe domu? Tu vidis z historie...
+
+08:00	🟢 Normální	Solární hodina, SOC 30% → ~34%	18	4.50 Kč
+09:00	🟢 Normální	Solární hodina, SOC 34% → ~42%	21	4.90 Kč
+
+- podivej se na svou simulaci:
 
 Hodina	Mód	Důvod	Level	Cena
-01:00	🟢 Normální	střední (Lv7≥eff6), vybíjení SOC 66% → ~61%	7	3.44 Kč
-02:00	🟢 Normální	střední (Lv6≥eff6), vybíjení SOC 61% → ~56%	6	3.43 Kč
-03:00	🟢 Normální	střední (Lv8≥eff6), vybíjení SOC 56% → ~51%	8	3.45 Kč
-04:00	🟢 Normální	střední (Lv6≥eff6), vybíjení SOC 51% → ~46%	6	3.43 Kč
-05:00	🟢 Normální	střední (Lv11≥eff6), vybíjení SOC 46% → ~41%	11	3.62 Kč
-06:00	🟢 Normální	drahá (Lv23≥eff6), vybíjení SOC 41% → ~36%	23	5.08 Kč
-07:00	🟢 Normální	drahá (Lv20≥eff6), vybíjení SOC 36% → ~31%	20	4.81 Kč
-08:00	🟢 Normální	Solární hodina, SOC 31% → ~51%	18	4.50 Kč
-09:00	🟢 Normální	Solární hodina, SOC 51% → ~70%	21	4.90 Kč
-10:00	🟢 Normální	Solární hodina, SOC 70% → ~90%	14	3.75 Kč
-11:00	🟢 Normální	Solární hodina, SOC 90% → ~100%	10	3.55 Kč
-12:00	🟢 Normální	Solární hodina, SOC 100% → ~100%	5	3.38 Kč
+01:00	🟢 Normální	střední (Lv7≥eff6), vybíjení SOC 65% → ~60%	7	3.44 Kč
+02:00	🟢 Normální	střední (Lv6≥eff6), vybíjení SOC 60% → ~55%	6	3.43 Kč
+03:00	🟢 Normální	střední (Lv8≥eff6), vybíjení SOC 55% → ~50%	8	3.45 Kč
 
-opravdu si myslis, ze v rannich hodinach bude takova velka vyroba?
+Nezanedbavas v ramci kazde hodiny to, ze je aktualne napr. 01:38 jako ted a na 01:00, tzn. uz asi nespotrebuju pokazde minus 5 procent baterie.
+Zahrn i aktualni cas do simulace, aby plan byl co nejverohodnejsi.
 
-08:00	🟢 Normální	Solární hodina, SOC 31% → ~51%	18	4.50 Kč
-09:00	🟢 Normální	Solární hodina, SOC 51% → ~70%	21	4.90 Kč
-
-Podle me je ten predpoklad chybny. Pouzij solarni denni krivku vyroby z dostupnych zdroju a uprav simulaci,
-aby ten plan vypadal verohodnejsi.
+Pokud jsi nepochopil zadani, zeptej se, pokud to bude nutne
