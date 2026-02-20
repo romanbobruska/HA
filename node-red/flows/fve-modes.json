@@ -1580,7 +1580,7 @@
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
         "g": "7ce258bed914f262",
-        "name": "MaxChargePower = 0 (prodej)",
+        "name": "MaxChargePower (dynamic prodej)",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -1592,7 +1592,7 @@
             "number.max_charge_power"
         ],
         "labelId": [],
-        "data": "{\"value\": 0}",
+        "data": "{\"value\": {{maxChargePower}}}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,

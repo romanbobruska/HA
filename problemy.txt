@@ -1,14 +1,19 @@
-08:00	🟢 Normální	Solární hodina, SOC 38% → ~39%	18	4.50 Kč	2.61 Kč
-09:00	🟢 Normální	Solární hodina, SOC 39% → ~41%	21	4.90 Kč	2.30 Kč
-10:00	🟢 Normální	Solární hodina, SOC 41% → ~45%	14	3.75 Kč	1.99 Kč
-11:00	🟢 Normální	Solární hodina, SOC 45% → ~49%	10	3.55 Kč	1.82 Kč
-12:00	🟢 Normální	Solární hodina, SOC 49% → ~53%	5	3.38 Kč	1.68 Kč
-13:00	🟢 Normální	Solární hodina, SOC 53% → ~57%	16	4.10 Kč	1.64 Kč
-14:00	⚫ solar_charging	Solární nabíjení (levná energie), SOC 57% → ~60%	4	3.34 Kč	1.65 Kč
-15:00	🟢 Normální	Solární hodina, SOC 57% → ~59%	12	3.64 Kč	1.89 Kč
-16:00	🟢 Normální	Solární hodina, SOC 59% → ~59%	22	4.91 Kč	2.31 Kč
-17:00	🟢 Normální	drahá (Lv19≥eff12), vybíjení SOC 59% → ~54%	19	4.74 Kč	2.80 Kč
-18:00	🟢 Normální	drahá (Lv17≥eff12), vybíjení SOC 54% → ~49%	17	4.20 Kč	2.36 Kč
-19:00	🟢 Normální	drahá (Lv15≥eff12), vybíjení SOC 49% → ~44%	15	3.96 Kč	2.16 Kč
+Aktuální mód: 🟢 Normální | Blokace vybíjení baterie: NE
 
-ted je to asi ok, ale zapomel si na ten mod prodej... podivej se, jak ten plan vypada... nechci videt solar_charhing v planu. mame fve mody a tech wes drzme
+Aktualizováno: 20.02.2026 15:14:48
+
+Hodina	Mód	Důvod	Level	Cena nákup	Cena prodej
+15:00	🟢 Normální	Solární hodina, SOC 99% → ~99%	12	3.64 Kč	1.89 Kč
+16:00	🟢 Normální	Solární hodina, SOC 99% → ~97%	22	4.91 Kč	2.31 Kč
+17:00	🟢 Normální	drahá (Lv19≥eff1), vybíjení SOC 97% → ~92%	19	4.74 Kč	2.80 Kč
+18:00	🟢 Normální	drahá (Lv17≥eff1), vybíjení SOC 92% → ~87%	17	4.20 Kč	2.36 Kč
+19:00	🟢 Normální	drahá (Lv15≥eff1), vybíjení SOC 87% → ~82%	15	3.96 Kč	2.16 Kč
+20:00	🟢 Normální	drahá (Lv13≥eff1), vybíjení SOC 82% → ~77%	13	3.72 Kč	1.96 Kč
+21:00	🟢 Normální	střední (Lv3≥eff1), vybíjení SOC 77% → ~72%	3	3.12 Kč	1.47 Kč
+22:00	🟢 Normální	střední (Lv2≥eff1), vybíjení SOC 72% → ~67%	2	2.89 Kč	1.28 Kč
+23:00	🟢 Normální	střední (Lv1≥eff1), vybíjení SOC 67% → ~62%	1	2.51 Kč	0.96 Kč
+00:00 +1	🟢 Normální	střední (Lv9≥eff1), vybíjení SOC 62% → ~57%	9	3.46 Kč	1.75 Kč
+01:00 +1	🟢 Normální	střední (Lv7≥eff1), vybíjení SOC 57% → ~52%	7	3.44 Kč	1.73 Kč
+02:00 +1	🟢 Normální	střední (Lv6≥eff1), vybíjení SOC 52% → ~47%	6	3.43 Kč	1.72 Kč
+
+jsem na verzi planu v18.0
