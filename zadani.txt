@@ -1,9 +1,7 @@
-mame problem ve vyhrivani bojleru. Chci, aby se hodnota teploty nahrati boileru nenastavovala, pokud bude mensi, nez je aktualni.
+teed je boiler nastaveny na 58 stupnu, i kdyz by mel nyt nastaveny na 20 - to vycetes ze flow.
 
-priklad: termostat boiler ma aktualni hodnotu 62. Ve flow je nastaveno, ze se ma ohrat voda na 58. Neposilam zmenu.
+To znamena, ze se boiler bude natapet stale na tu hodnotu, pokud to nezmenis.
 
-Jde mi o to, abychom neposili casto zmeny v nastaveni do merossu. Videl jsem v logu, ze to obcas odmitne, protoze jsme prekrocili pocet povolenych zmen.
+JDE MI O TO, ABY TAM BYLA STALE AKTUALNI HODNOTA, NA KTEROU JE POTREBA BOILER NASTAVIT.  A ZAROVEN TO NEMUSIME POSILAT CASTO, JEN, KDYZ JE POTREBA TO ZMENIT.
 
-Obecne - nemen hodnotu teploty v boileru, pokud to neni nutne - jinak - zapis hodnotu do boileru, pokud bude potreba, jinak ne.
-
-Rozumime si? kdyztak se zeptej
+Rozumime si?
