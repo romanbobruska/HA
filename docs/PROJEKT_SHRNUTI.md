@@ -705,15 +705,16 @@ rm -rf /tmp/HA
 - **Fix PRIORITA 6**: Reason text opraven na `Šetřím (Lv5<12)` — používá PRAH_DRAHA místo effectiveThreshold
 - Dotčené soubory: `fve-orchestrator.json`
 
-### v18.18/v18.18b — Šetření baterie v solárních hodinách s nízkým ziskem
-- **Problém**: Solární hodiny vždy NORMAL → baterie se vybíjí na spotřebu domu, i když solár sotva pokryje spotřebu (zisk +1%). Lepší je šetřit baterii na dražší hodiny.
-- **Fix** (PRIORITA 4): Tři větve rozhodování:
-  1. `solarGainEst > socDropNormal` (vysoký zisk) → **NORMAL** (solár výrazně nabíjí baterii)
-  2. Nízký zisk + `dischargeOffsets[offset]` (drahá hodina) → **NORMAL** (vybíjet, je to drahé)
-  3. Nízký zisk + levná hodina + **`budgetExhausted`** → **ŠETŘIT** (šetřit na dražší hodiny)
-  4. Nízký zisk + levná hodina + budget OK → **NORMAL** (baterie má dost energie)
-- **v18.18b**: Přidán flag `budgetExhausted` — ŠETŘIT pouze pokud existují drahé hodiny (levelBuy >= PRAH_DRAHA) bez budgetu na vybíjení. Při vysokém SOC (budget stačí) zůstává NORMAL.
-- **Příklad**: SOC 23%, budget vyčerpaný, Lv9 → ŠETŘIT ✅ | SOC 80%, budget OK, Lv9 → NORMAL ✅
+### v18.18-v18.19 — Šetření baterie + drahé hodiny vždy vybíjet
+- **Klíčové pravidlo v18.19**: `levelBuy >= PRAH_DRAHA` → **VŽDY NORMAL** (vybíjet), bez ohledu na budget, solární hodinu, nebo cokoliv jiného. Jediná výjimka: `SOC <= minSoc`.
+- **PRIORITA 4** (solární hodiny):
+  1. Vysoký solární zisk (`> socDropNormal`) → **NORMAL**
+  2. Nízký zisk + `levelBuy >= PRAH_DRAHA` → **NORMAL** (drahá hodina, vybíjet!)
+  3. Nízký zisk + levná + `budgetExhausted` → **ŠETŘIT** (šetřit na dražší hodiny)
+  4. Nízký zisk + levná + budget OK → **NORMAL**
+- **PRIORITA 5b** (ne-solární hodiny): `levelBuy >= PRAH_DRAHA && SOC > minSoc` → **NORMAL**
+- **PRIORITA 6**: ŠETŘIT pouze pro levné hodiny (`levelBuy < PRAH_DRAHA`)
+- **Příklad**: Lv23 solar (4.45 Kč) → NORMAL ✅ | Lv21 (4.08 Kč) → NORMAL ✅ | Lv9 solar → ŠETŘIT ✅
 - Dotčené soubory: `fve-orchestrator.json`
 
 ---

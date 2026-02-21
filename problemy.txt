@@ -1,1 +1,9 @@
-zkontroluj, ze toto posledni pravdilo plati pouze pro situace, kdy je takto nizke SOC baterie pred koncem solarnich hodin, tzn. kdy je velke riziko, ze se z baterie nepokryji drahe hodiny
+proc setris tady
+
+16:00	🟡 Šetřit	Solární (nízký zisk +-1.2%), šetřím na dražší hodiny, SOC 24%	23	4.45 Kč	1.92 Kč
+
+a tady 
+
+18:00	🟡 Šetřit	Šetřím (Lv21<12), SOC 24%	21	4.08 Kč	2.26 Kč
+
+To jsou prece drahe hodiny doprdele!!!
