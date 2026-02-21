@@ -705,6 +705,15 @@ rm -rf /tmp/HA
 - **Fix PRIORITA 6**: Reason text opraven na `Šetřím (Lv5<12)` — používá PRAH_DRAHA místo effectiveThreshold
 - Dotčené soubory: `fve-orchestrator.json`
 
+### v18.18 — Šetření baterie v solárních hodinách s nízkým ziskem
+- **Problém**: Solární hodiny vždy NORMAL → baterie se vybíjí na spotřebu domu, i když solár sotva pokryje spotřebu (zisk +1%). Lepší je šetřit baterii na dražší hodiny.
+- **Fix** (PRIORITA 4): Tři větve rozhodování:
+  1. `solarGainEst > socDropNormal` (vysoký zisk) → **NORMAL** (solár výrazně nabíjí baterii)
+  2. Nízký zisk + `dischargeOffsets[offset]` (drahá hodina) → **NORMAL** (vybíjet, je to drahé)
+  3. Nízký zisk + levná hodina → **ŠETŘIT** (solár pokryje spotřebu, baterie se šetří na dražší hodiny)
+- **Příklad**: SOC 23%, solární zisk +1%, Lv9 (3.15 Kč) → ŠETŘIT ✅ (baterie na Lv22 večer)
+- Dotčené soubory: `fve-orchestrator.json`
+
 ---
 
 ## 11. Známé limitace a budoucí práce

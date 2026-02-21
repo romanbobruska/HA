@@ -1,7 +1,1 @@
-kdyz ti takto dojde baterie - coz by se melo stavat vyjimecne, bylo by lepsi, abys zbyvajici energii v baterii vyuzil na nejedrazsi hodiny, a ne na levnejsi:
-
-tady by se melo setrit: 17:00	🟢 Normální	drahá (Lv18≥12), vybíjení SOC 23% → ~20%	18	3.91 Kč	2.12 Kč
-
-a tady normal: 19:00	🟡 Šetřit	Ochrana baterie (SOC 20% ≤ 20%)	22	4.11 Kč	2.28 Kč
-
-Obecne je pravidlo, ze setrit pri levnejsich modech, vybijim baterii pri drazsich, ale to uz ti rikam po nekolikate
+zkontroluj, ze toto posledni pravdilo plati pouze pro situace, kdy je takto nizke SOC baterie, tzn. kdy je velke riziko, ze se z baterie nepokryji drahe hodiny
