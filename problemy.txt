@@ -1,19 +1,11 @@
-Aktuální mód: 🟢 Normální | Blokace vybíjení baterie: NE
+podivej se na plan:
 
-Aktualizováno: 20.02.2026 15:14:48
+17:00	🟡 Šetřit	Šetřím (Lv18<eff12), SOC 23%	18	3.91 Kč	2.12 Kč
+18:00	🟡 Šetřit	Šetřím (Lv21<eff12), SOC 23%	21	4.08 Kč	2.26 Kč
+19:00	🟡 Šetřit	Šetřím (Lv22<eff12), SOC 23%	22	4.11 Kč	2.28 Kč
+20:00	🟡 Šetřit	Šetřím (Lv19<eff12), SOC 23%	19	3.92 Kč	2.12 Kč
+21:00	🟡 Šetřit	Šetřím (Lv14<eff12), SOC 23%	14	3.40 Kč	1.70 Kč
 
-Hodina	Mód	Důvod	Level	Cena nákup	Cena prodej
-15:00	🟢 Normální	Solární hodina, SOC 99% → ~99%	12	3.64 Kč	1.89 Kč
-16:00	🟢 Normální	Solární hodina, SOC 99% → ~97%	22	4.91 Kč	2.31 Kč
-17:00	🟢 Normální	drahá (Lv19≥eff1), vybíjení SOC 97% → ~92%	19	4.74 Kč	2.80 Kč
-18:00	🟢 Normální	drahá (Lv17≥eff1), vybíjení SOC 92% → ~87%	17	4.20 Kč	2.36 Kč
-19:00	🟢 Normální	drahá (Lv15≥eff1), vybíjení SOC 87% → ~82%	15	3.96 Kč	2.16 Kč
-20:00	🟢 Normální	drahá (Lv13≥eff1), vybíjení SOC 82% → ~77%	13	3.72 Kč	1.96 Kč
-21:00	🟢 Normální	střední (Lv3≥eff1), vybíjení SOC 77% → ~72%	3	3.12 Kč	1.47 Kč
-22:00	🟢 Normální	střední (Lv2≥eff1), vybíjení SOC 72% → ~67%	2	2.89 Kč	1.28 Kč
-23:00	🟢 Normální	střední (Lv1≥eff1), vybíjení SOC 67% → ~62%	1	2.51 Kč	0.96 Kč
-00:00 +1	🟢 Normální	střední (Lv9≥eff1), vybíjení SOC 62% → ~57%	9	3.46 Kč	1.75 Kč
-01:00 +1	🟢 Normální	střední (Lv7≥eff1), vybíjení SOC 57% → ~52%	7	3.44 Kč	1.73 Kč
-02:00 +1	🟢 Normální	střední (Lv6≥eff1), vybíjení SOC 52% → ~47%	6	3.43 Kč	1.72 Kč
+toto tvrzeni neni pravda: Lv18<eff12
 
-jsem na verzi planu v18.0
+V techto hodinach my mel byt plan normalni

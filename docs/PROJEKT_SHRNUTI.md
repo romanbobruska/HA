@@ -695,6 +695,15 @@ rm -rf /tmp/HA
     3. Baterie plná → přebytek do sítě
 - Dotčené soubory: `fve-modes.json`, `fve-orchestrator.json`
 
+### v18.16 — Vybíjení v drahých hodinách i při nízkém SOC
+- **Problém**: Při SOC 23% (minSoc=20%) byl energyBudget 0.76 kWh, ale jedna hodina vybíjení potřebuje 1.4 kWh → `dischargeOffsets` prázdný → **všechny hodiny ŠETŘIT**, i drahé (Lv18, Lv21, Lv22)
+- **Zavádějící reason text**: `Šetřím (Lv18<eff12)` — level 18 > 12, tvrzení nepravdivé
+- **Fix** (PRIORITA 5b): Pokud `levelBuy >= PRAH_DRAHA` a `SOC > minSoc`, vybíjet i bez budgetu
+  - Baterie se vybije co může (až na minSoc), i když to nestačí na celou hodinu
+  - Reason text opraven: `drahá (Lv18≥12)` místo `Šetřím (Lv18<eff12)`
+- **Fix PRIORITA 6**: Reason text opraven na `Šetřím (Lv5<12)` — používá PRAH_DRAHA místo effectiveThreshold
+- Dotčené soubory: `fve-orchestrator.json`
+
 ---
 
 ## 11. Známé limitace a budoucí práce
