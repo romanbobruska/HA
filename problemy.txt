@@ -1,11 +1,7 @@
-podivej se na plan:
+kdyz ti takto dojde baterie - coz by se melo stavat vyjimecne, bylo by lepsi, abys zbyvajici energii v baterii vyuzil na nejedrazsi hodiny, a ne na levnejsi:
 
-17:00	🟡 Šetřit	Šetřím (Lv18<eff12), SOC 23%	18	3.91 Kč	2.12 Kč
-18:00	🟡 Šetřit	Šetřím (Lv21<eff12), SOC 23%	21	4.08 Kč	2.26 Kč
-19:00	🟡 Šetřit	Šetřím (Lv22<eff12), SOC 23%	22	4.11 Kč	2.28 Kč
-20:00	🟡 Šetřit	Šetřím (Lv19<eff12), SOC 23%	19	3.92 Kč	2.12 Kč
-21:00	🟡 Šetřit	Šetřím (Lv14<eff12), SOC 23%	14	3.40 Kč	1.70 Kč
+tady by se melo setrit: 17:00	🟢 Normální	drahá (Lv18≥12), vybíjení SOC 23% → ~20%	18	3.91 Kč	2.12 Kč
 
-toto tvrzeni neni pravda: Lv18<eff12
+a tady normal: 19:00	🟡 Šetřit	Ochrana baterie (SOC 20% ≤ 20%)	22	4.11 Kč	2.28 Kč
 
-V techto hodinach my mel byt plan normalni
+Obecne je pravidlo, ze setrit pri levnejsich modech, vybijim baterii pri drazsich, ale to uz ti rikam po nekolikate
