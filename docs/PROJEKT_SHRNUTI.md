@@ -705,13 +705,15 @@ rm -rf /tmp/HA
 - **Fix PRIORITA 6**: Reason text opraven na `Šetřím (Lv5<12)` — používá PRAH_DRAHA místo effectiveThreshold
 - Dotčené soubory: `fve-orchestrator.json`
 
-### v18.18 — Šetření baterie v solárních hodinách s nízkým ziskem
+### v18.18/v18.18b — Šetření baterie v solárních hodinách s nízkým ziskem
 - **Problém**: Solární hodiny vždy NORMAL → baterie se vybíjí na spotřebu domu, i když solár sotva pokryje spotřebu (zisk +1%). Lepší je šetřit baterii na dražší hodiny.
 - **Fix** (PRIORITA 4): Tři větve rozhodování:
   1. `solarGainEst > socDropNormal` (vysoký zisk) → **NORMAL** (solár výrazně nabíjí baterii)
   2. Nízký zisk + `dischargeOffsets[offset]` (drahá hodina) → **NORMAL** (vybíjet, je to drahé)
-  3. Nízký zisk + levná hodina → **ŠETŘIT** (solár pokryje spotřebu, baterie se šetří na dražší hodiny)
-- **Příklad**: SOC 23%, solární zisk +1%, Lv9 (3.15 Kč) → ŠETŘIT ✅ (baterie na Lv22 večer)
+  3. Nízký zisk + levná hodina + **`budgetExhausted`** → **ŠETŘIT** (šetřit na dražší hodiny)
+  4. Nízký zisk + levná hodina + budget OK → **NORMAL** (baterie má dost energie)
+- **v18.18b**: Přidán flag `budgetExhausted` — ŠETŘIT pouze pokud existují drahé hodiny (levelBuy >= PRAH_DRAHA) bez budgetu na vybíjení. Při vysokém SOC (budget stačí) zůstává NORMAL.
+- **Příklad**: SOC 23%, budget vyčerpaný, Lv9 → ŠETŘIT ✅ | SOC 80%, budget OK, Lv9 → NORMAL ✅
 - Dotčené soubory: `fve-orchestrator.json`
 
 ---

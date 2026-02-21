@@ -1,1 +1,1 @@
-zkontroluj, ze toto posledni pravdilo plati pouze pro situace, kdy je takto nizke SOC baterie, tzn. kdy je velke riziko, ze se z baterie nepokryji drahe hodiny
+zkontroluj, ze toto posledni pravdilo plati pouze pro situace, kdy je takto nizke SOC baterie pred koncem solarnich hodin, tzn. kdy je velke riziko, ze se z baterie nepokryji drahe hodiny
