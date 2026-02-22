@@ -393,37 +393,5 @@
         "x": 860,
         "y": 460,
         "wires": []
-    },
-    {
-        "id": "htg_link_in_nibe_heating",
-        "type": "link in",
-        "z": "nibe_control_flow",
-        "name": "← Heating: NIBE topení",
-        "links": [
-            "htg_link_out_nibe_heating"
-        ],
-        "x": 140,
-        "y": 520,
-        "wires": [
-            [
-                "prepare_heating"
-            ]
-        ]
-    },
-    {
-        "id": "htg_link_in_nibe_cooling",
-        "type": "link in",
-        "z": "nibe_control_flow",
-        "name": "← Heating: NIBE chlazení",
-        "links": [
-            "htg_link_out_nibe_cooling"
-        ],
-        "x": 140,
-        "y": 560,
-        "wires": [
-            [
-                "prepare_cooling"
-            ]
-        ]
     }
 ]

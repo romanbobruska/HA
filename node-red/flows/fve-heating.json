@@ -32,9 +32,8 @@
         },
         "nodes": [
             "htg_action_switch",
-            "htg_nibe_on_func",
-            "htg_nibe_off_func",
-            "htg_link_out_nibe_heating",
+            "htg_svc_nibe_on",
+            "htg_svc_nibe_off",
             "htg_svc_obehove_on",
             "htg_svc_obehove_off",
             "htg_svc_p1_on",
@@ -44,9 +43,8 @@
             "htg_svc_p3_on",
             "htg_svc_p3_off",
             "htg_svc_ventil_off",
-            "htg_cool_on_func",
-            "htg_cool_off_func",
-            "htg_link_out_nibe_cooling"
+            "htg_svc_cool_on",
+            "htg_svc_cool_off"
         ]
     },
     {
@@ -279,10 +277,10 @@
         "y": 500,
         "wires": [
             [
-                "htg_nibe_on_func"
+                "htg_svc_nibe_on"
             ],
             [
-                "htg_nibe_off_func"
+                "htg_svc_nibe_off"
             ],
             [
                 "htg_svc_obehove_on"
@@ -312,10 +310,10 @@
                 "htg_svc_ventil_off"
             ],
             [
-                "htg_cool_on_func"
+                "htg_svc_cool_on"
             ],
             [
-                "htg_cool_off_func"
+                "htg_svc_cool_off"
             ]
         ]
     },
@@ -736,115 +734,131 @@
         "enableGlobalContextStore": true
     },
     {
-        "id": "htg_nibe_on_func",
-        "type": "function",
+        "id": "htg_svc_nibe_on",
+        "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
         "g": "heating_g_exec_v2",
-        "name": "NIBE ON (1)",
-        "func": "msg.payload = 1;\nnode.status({fill:'green',shape:'dot',text:'NIBE ON'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
+        "name": "NIBE ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "labelId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
         "x": 380,
         "y": 340,
         "wires": [
-            [
-                "htg_link_out_nibe_heating"
-            ]
+            []
         ]
     },
     {
-        "id": "htg_nibe_off_func",
-        "type": "function",
+        "id": "htg_svc_nibe_off",
+        "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
         "g": "heating_g_exec_v2",
-        "name": "NIBE OFF (0)",
-        "func": "msg.payload = 0;\nnode.status({fill:'red',shape:'dot',text:'NIBE OFF'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
+        "name": "NIBE OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "labelId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
         "x": 380,
         "y": 390,
         "wires": [
-            [
-                "htg_link_out_nibe_heating"
-            ]
+            []
         ]
     },
     {
-        "id": "htg_link_out_nibe_heating",
-        "type": "link out",
+        "id": "htg_svc_cool_on",
+        "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
         "g": "heating_g_exec_v2",
-        "name": "→ NIBE topení Modbus",
-        "mode": "link",
-        "links": [
-            "htg_link_in_nibe_heating"
+        "name": "Chlazení ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "labelId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
         ],
-        "x": 580,
-        "y": 365,
-        "wires": []
-    },
-    {
-        "id": "htg_cool_on_func",
-        "type": "function",
-        "z": "f1e2d3c4b5a60001",
-        "g": "heating_g_exec_v2",
-        "name": "Chlazení ON (1)",
-        "func": "msg.payload = 1;\nnode.status({fill:'blue',shape:'dot',text:'Cool ON'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
         "x": 380,
         "y": 640,
         "wires": [
-            [
-                "htg_link_out_nibe_cooling"
-            ]
+            []
         ]
     },
     {
-        "id": "htg_cool_off_func",
-        "type": "function",
+        "id": "htg_svc_cool_off",
+        "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
         "g": "heating_g_exec_v2",
-        "name": "Chlazení OFF (0)",
-        "func": "msg.payload = 0;\nnode.status({fill:'grey',shape:'dot',text:'Cool OFF'});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
+        "name": "Chlazení OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "labelId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
+        ],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
         "x": 380,
         "y": 690,
         "wires": [
-            [
-                "htg_link_out_nibe_cooling"
-            ]
+            []
         ]
-    },
-    {
-        "id": "htg_link_out_nibe_cooling",
-        "type": "link out",
-        "z": "f1e2d3c4b5a60001",
-        "g": "heating_g_exec_v2",
-        "name": "→ NIBE chlazení Modbus",
-        "mode": "link",
-        "links": [
-            "htg_link_in_nibe_cooling"
-        ],
-        "x": 580,
-        "y": 665,
-        "wires": []
     }
 ]
