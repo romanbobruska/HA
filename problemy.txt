@@ -1,28 +1,12 @@
-tohle jsem nasel v configu fve - 
+a tady si asi nerozumime - plan musi odpovidat realite, a to i SIMULACE!!!
 
-    solar_start_hour: 9,           // FALLBACK - v17: přepsáno z HA entity sensor.sun_next_rising
-    solar_end_hour: 17,          // FALLBACK - v17: přepsáno z HA entity sensor.sun_next_setting
+tZN. pokud vypocitas, ze se baterie ma nabijet na SOC napr. 35 procent, tak ji tak taky nabijes a nebudes mi psat do simulace tyhle kraviny - JE TOTIZ DULEZITE,
+ABYS BRAL ZE SITE JEN TO, CO POTREBUJES A NEVYMLOUVAL JSI SE NA TO, ZE NABIJENI JEDE CELOU HODINU A TYS CHTEL VLASTNE POUZE JEN CAST!!!
 
-    To si delas prdel? Pozadavek byl, abys vzdy cetl hodnoty vychodu a zapadu slunce ze senzoru a nikdy je nemel v konfiguraci - 
-    takto, kdyz se prodlouzi den, tak si to budu prepisovat sam a deployovat?
+TO NE!!!
 
-    NIKDE NEPOUZIVEJ ZAPIS DO KONFIGU, POKUD NA TO MAS NEKDE POUZIVAT SENSOR NEBO CONTROL NEBO JINOU ENTITU, KTERA TI TO REKNE PRESNE.
+PORAD PLATI, ZE SI ZE SITE BERES JEN TO, CO OPRAVDU POTREBUJES A PLAN TOMU MUSI ODPOVIDAT!
 
-2. Podivej se na plan:
-
-Aktuální mód: 🟡 Šetřit | Blokace vybíjení baterie: NE
-
-Aktualizováno: 22.02.2026 23:03:58
-
-Hodina	Mód	Důvod	Level	Cena nákup	Cena prodej
-23:00	🟡 Šetřit	Ochrana baterie (SOC 20% ≤ 20%)	3	2.38 Kč	0.85 Kč
-00:00 +1	🟡 Šetřit	Ochrana baterie (SOC 20% ≤ 20%)	3	2.19 Kč	0.69 Kč
-01:00 +1	🟡 Šetřit	Ochrana baterie (SOC 20% ≤ 20%)	3	2.19 Kč	0.70 Kč
-02:00 +1	🔵 Nabíjet	Nabíjení na cíl 30% (nyní 20%)	1	2.14 Kč	0.65 Kč
-03:00 +1	🟡 Šetřit	Šetřím (Lv2<12), SOC 36%	2	2.18 Kč	0.69 Kč
-04:00 +1	🟡 Šetřit	Šetřím (Lv3<12), SOC 36%	3	2.19 Kč	0.69 Kč
-05:00 +1	🟡 Šetřit	Šetřím (Lv4<12), SOC 36%	4	2.60 Kč	1.03 Kč
-06:00 +1	🟢 Normální	drahá (Lv15≥12), vybíjení SOC 36% → ~31%	15	4.04 Kč	1.59 Kč
-
-proc je toto
-03:00 +1	🟡 Šetřit	Šetřím (Lv2<12), SOC 36%	2	2.18 Kč	0.69 Kč, pokud mas cil SOC na 30 procent?
+Takze - u te nabijeci hodiny - bud snizis charge rate, coz je blbost, protoze co kdyz ti do toho skoci treba cerpadlo, nemusel bys baterii nabit vubec, nebo
+se mod zmeni ve chvili, kdy baterie bude nabita do tveho pozadovaneho SOC, coz se mi jevi jako spravne. Kazdopadne, doufam, ze se divas do logu, jak ti vysla baterie napr. dnes a vcera - 
+brali jsme z drahych hodin ze site - a tomu doufam, ze se prizpusobujes, aby se to stavalo minimalne. Chapu, ze predpovedi solarni vyroby jsou nepresne, al ezkontroluj to.
