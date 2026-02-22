@@ -1,25 +1,18 @@
-1. Ano. Obehove cerpadlo nema s NIBE nic spolecneho. NIBE hřeje nádrž, oběhové čerpadlo pouští teplou vodu do domu.
-2. Jen povolujeme/blokujeme topení přes 47371. DM nebudeme ovlivnovat, nechame to na cerpadle. Ovládáme oběhové čerpadlo nezávisle na NIBE - samozrejme v zavislosti
-na teplote v nadrzi atd (teplota v dome, venku, cena apod.). Jde o to, ze kdyz odebereme teplo z nadrze a cerpadlo bude zapnuto na topeni,
-tak si nibe zacne odpocet DM a az se dopocita k -30, tak zacne natapet nadrz. Kdy my tu teplotu odebereme je ciste na nas.
-3. A je spravne - cerpadlo ma odber v peaku cca 14kWh, obehove cerpadlo cca 300W.
-4. Ten co jsem ti napsal - sensor.hp2551ae_pro_v2_1_0_indoor_temperature
-5. 22:00–6:00 - ale uvedom si, ze v nocnich hodinach jsou casto levne energie - aby sis neblokoval cerpadlo kvuli tomu, ze muze byt o pul stupne mene a 
-ve dne si nemel nahratou nadrz - je dobre si nahrat nadrz - at uz z pretoku nebo v levnych hodinach a pak pouzit, kdy je potreba. V tom je ta flexibilita.
-Take je potreba si uvedomit, ze napr. pri venkovni teplote cca 0 stupnu potrebujeme denne nahrat nadrz 2 - 3x, pri 10 stupnich cca 1x (velmi zhruba)
-6. 
-Přebytek	Fáze
-< 3 kW	0
-3–5.9 kW	1
-6–8,9 kW	1+2
-≥ 9 kW	1+2+3
+Problem pri nasazeni>
 
-A co je "přebytek" — solární výroba minus spotřeba domu minus nabíjení baterie je spravne. Pokud se nabiji baterie, nevyuziva se cely pretok - samozrejme, 
-pokud se baterie nabiji ze slunce. Pokud ze site, i kdyz jsou pretoky, tak mas nekde chybu v nastaveni Victronu. 
-7. Nevim, proc se me na to ptas - co pouzivas u FVE? Ja pouzivam pro vyroby v dashboardu tento: sensor.vyroba_fve. Ostatni podobne.
-Pouzij overene sensory, ktere pouzivame u rizeni FVE flows. Pokud tam pouzivame nejake spatne nebo si nejsi jisty, tak to nam nefunguje ani rizeni FVE
-8. Ano, Myslím tím NIBE (47371=0, tepelné čerpadlo nesmí hřát nádrž současně s patronami). Bud patrony, nebo nibe.
-9. Ano, pokud bude switch.bazen_ventil_smesovac, tak se pri topeni do domu vypne, aby nesla tepla voda do bazenu misto do domu. Jinak se na nej nesaha
-10. NIBE nastavis na vytapeni vody (pokud nebude pracovat, jinak ho nechas byt), obehove cerpadlo vypnes, vsechny faze u patron vypnes a ventil bazen nechas tak, jak je
+  /tmp cd /root/HA && git pull
+cd /root/HA/node-red && docker restart node-red
+cd: no such file or directory: /root/HA
+cd: no such file or directory: /root/HA/node-red
+➜  /tmp 
 
-Pokud budes mit jeste nejakou nejasnost, zeptej se - zase najednou s vice otazkami - ale snad je to ted jasne
+Dale zkontroluj, ze:
+
+1. NIBE nastavis na vytapeni vody (pokud nebude pracovat, jinak ho nechas byt), obehove cerpadlo vypnes, vsechny faze u patron vypnes a ventil bazen nechas tak, jak je
+A uz na nic potom nesahas
+
+2. pokud se topi v krbu, tak logika zustava jake predtim - tzn. cerpadlo se blokuje na vytapeni
+
+3. Pokud je letni rezim, nastavis vytapeni do default stavu jako v bodu 1 POUZE JEDNOU, jakmile zjistit, ze jsme v letnim rezimu a pak uz na nic nesahnes KROME CHLAZENI.
+TO JEDE DAL V LETE!
+Pokud se zase rezim zmeni na zimni, jedes normalne vytapeni.
