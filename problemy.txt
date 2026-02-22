@@ -1,3 +1,1 @@
-K bugu 2 — upřesni: při krbu blokuješ NIBE (47371=0, zakázat hřát nádrž) je spravne - proc nemas tento pozadavek zalogovany v md filu z historie?. 
-Blokujes pouze NIBE, NIC DALSIHO NEBLOKUJES, protoze krbem se nahriva nadrz. Na obehove cerpadlo v tomto rezimu take nesahas - to si ridi jina automatika dle nahrati 
-vymeniku v krbu.
+ted se zatopilo pri levelu 15 - tzn. odblokovalo NIBE - proc? vzdyt se kurva ma setrit, jsou drahe hodiny a navic je vecer!!!!
