@@ -1,0 +1,18 @@
+automaticke_barvy:
+  card-mod-theme: automaticke_barvy
+  card-mod-card: |
+    ha-card {
+      {% set d = config.entity.split('.')[0] %}
+      {% if d in ['input_number', 'input_boolean', 'input_select', 'select', 'switch', 'light', 'fan', 'cover', 'lock', 'climate', 'alarm_control_panel'] %}
+        /* --- STYL PRO OVLÁDACÍ PRVKY --- */
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15) !important;
+        border-left: 4px solid var(--state-icon-color, #44739e) !important;
+        background: var(--ha-card-background, var(--card-background-color, white)) !important;
+        filter: contrast(1.02) brightness(1.03);
+      {% else %}
+        /* --- STYL PRO SENZORY --- */
+        box-shadow: none !important;
+        border-left: 4px solid transparent !important;
+        opacity: 0.85;
+      {% endif %}
+    }

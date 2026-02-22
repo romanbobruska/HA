@@ -717,6 +717,28 @@ rm -rf /tmp/HA
 - **Příklad**: Lv23 solar (4.45 Kč) → NORMAL ✅ | Lv21 (4.08 Kč) → NORMAL ✅ | Lv9 solar → ŠETŘIT ✅
 - Dotčené soubory: `fve-orchestrator.json`
 
+### v2.0 — Kompletní přepis řízení topení domu
+- **Kompletní nová architektura** řízení topení v `fve-heating.json`
+- **NIBE řízení** (reg 47371): povolení/blokace v závislosti na ceně elektřiny
+  - Levné hodiny → NIBE povoleno (hřeje nádrž autonomně přes DM)
+  - Drahé hodiny → NIBE blokováno (výjimka: nouzová teplota < 18°C)
+  - Vzájemná exkluzivita s patronami
+- **Oběhové čerpadlo** (`switch.horousany_termostat_prizemi_kote`): nezávislé řízení
+  - Zapnout: teplota v domě < cíl AND nádrž 30–50°C AND ne krb
+  - Strategické odebírání tepla z nádrže v levných hodinách
+- **Patrony** (3-fázové, 9 kW): přetokové vytápění z přebytků solaru
+  - Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 60°C
+  - Stupňování: <3kW=0, 3–5.9kW=1f, 6–8.9kW=1+2f, ≥9kW=1+2+3f
+- **Noční režim** (22:00–6:00): cílová teplota -0.5°C
+- **Bazénový ventil**: kontrola OFF při topení domu
+- **Chlazení**: řízeno stejnou cílovou teplotou z `input_number.nastavena_teplota_v_dome`
+- **Nové konfigurační parametry** v `fve-config.json`:
+  - `topeni_min/max_teplota_nadrze`, `topeni_nocni_snizeni/od/do`
+  - `topeni_nouzova_teplota`, `topeni_min_pretok_patron_w`, `topeni_patron_faze_w`
+  - `topeni_min_soc_patron`, `topeni_max_teplota_patron`
+- **Požadavky**: dokumentováno v `docs/TOPENI_POZADAVKY.md`
+- Dotčené soubory: `fve-heating.json`, `fve-config.json`, `docs/TOPENI_POZADAVKY.md`
+
 ---
 
 ## 11. Známé limitace a budoucí práce
@@ -727,4 +749,4 @@ rm -rf /tmp/HA
 4. ~~**optimalSoc statický**~~: ✅ Vyřešeno v Session 9 (dynamický výpočet z reálné potřeby)
 5. **Bazénový ohřev**: Registr 47041 připraven ale neintegrován do automatizace
 6. **Round-trip loss**: 81% (90% × 90%) — zohledněno ve finanční kalkulaci ale ne ve vizualizaci
-7. ~~**Vytápění**~~: ✅ Logika v `fve-heating.json` opravena v Session 8 + v18.7 (max teplota z configu)
+7. ~~**Vytápění**~~: ✅ Kompletně přepsáno v v2.0 (NIBE + oběhové + patrony + ventil + chlazení)
