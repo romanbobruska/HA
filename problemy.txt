@@ -1,18 +1,3 @@
-Problem pri nasazeni>
-
-  /tmp cd /root/HA && git pull
-cd /root/HA/node-red && docker restart node-red
-cd: no such file or directory: /root/HA
-cd: no such file or directory: /root/HA/node-red
-➜  /tmp 
-
-Dale zkontroluj, ze:
-
-1. NIBE nastavis na vytapeni vody (pokud nebude pracovat, jinak ho nechas byt), obehove cerpadlo vypnes, vsechny faze u patron vypnes a ventil bazen nechas tak, jak je
-A uz na nic potom nesahas
-
-2. pokud se topi v krbu, tak logika zustava jake predtim - tzn. cerpadlo se blokuje na vytapeni
-
-3. Pokud je letni rezim, nastavis vytapeni do default stavu jako v bodu 1 POUZE JEDNOU, jakmile zjistit, ze jsme v letnim rezimu a pak uz na nic nesahnes KROME CHLAZENI.
-TO JEDE DAL V LETE!
-Pokud se zase rezim zmeni na zimni, jedes normalne vytapeni.
+K bugu 2 — upřesni: při krbu blokuješ NIBE (47371=0, zakázat hřát nádrž) je spravne - proc nemas tento pozadavek zalogovany v md filu z historie?. 
+Blokujes pouze NIBE, NIC DALSIHO NEBLOKUJES, protoze krbem se nahriva nadrz. Na obehove cerpadlo v tomto rezimu take nesahas - to si ridi jina automatika dle nahrati 
+vymeniku v krbu.

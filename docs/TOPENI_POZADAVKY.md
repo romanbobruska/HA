@@ -99,7 +99,9 @@ Jednorázová akce:
 - `levelBuy < prah_draha_energie` → POVOLIT (47371=1)
   - V nejlevnějších hodinách vždy povolit — lepší než riskovat topení v drahých
 
-**Vzájemná exkluzivita:** Pokud patrony aktivní → NIBE MUSÍ být OFF (47371=0)
+**Vzájemná exkluzivita:**
+- Pokud patrony aktivní → NIBE MUSÍ být OFF (47371=0)
+- Pokud krb aktivní → NIBE MUSÍ být OFF (47371=0) — krb nahřívá nádrž místo NIBE
 
 **Ochrana:** NIKDY nevypínat (47371=0) pokud kompresor běží!
 
@@ -109,13 +111,13 @@ Jednorázová akce:
 - Teplota v domě < cílová teplota (s nočním snížením)
 - Teplota v nádrži >= `topeni_min_teplota_nadrze` (30°C)
 - Teplota v nádrži <= `topeni_max_teplota_nadrze` (50°C)
-- Krb neaktivní (pokud topí krb, čerpadlo nepotřebné)
+- Krb **NEAKTIVNÍ** — při krbu na oběhové čerpadlo NESAHAT (řídí jiná automatika dle výměníku v krbu)
 - Automatizace ON
 
 **Vypnout** pokud:
 - Teplota v domě >= cílová teplota
 - Teplota v nádrži mimo rozsah 30-50°C
-- Krb aktivní
+- **POZOR:** Při krbu na oběhové čerpadlo NESAHAT
 
 **Strategie odběru tepla dle ceny:**
 - Levné hodiny: agresivněji odebírat (i mírně pod cílem)
