@@ -739,6 +739,27 @@ rm -rf /tmp/HA
 - **Požadavky**: dokumentováno v `docs/TOPENI_POZADAVKY.md`
 - Dotčené soubory: `fve-heating.json`, `fve-config.json`, `docs/TOPENI_POZADAVKY.md`
 
+### v2.1 — Nabíjení přesně na cílový SOC + oprava nočního topení + oprava módu Šetřit
+- **Problém 1**: Nabíjení ze sítě nabíjelo celou hodinu na 100% místo na cílový SOC
+  - Fix: `Kontrola podmínek` (15s cyklus) přepne z `nabijet_ze_site` na `setrit` jakmile SOC >= targetSocFromGrid
+  - Fix: `Nabíjet Logic` nastaví `schedule_charge_soc = targetSocFromGrid` (ne 100%)
+  - Fix: Simulace v plánu: `Math.min(targetSoc, soc + chargeRate)` — plán odpovídá realitě
+- **Problém 2**: Noční topení — oběhové čerpadlo se nespouštělo při 22.9/23.0°C v NOC režimu
+  - Root cause: `effTarget = targetTemp - 0.5 = 22.5°C` → `22.9 < 22.5 = false` → čerpadlo nejede
+  - Požadavek: Noční snížení je **hystereze pro balancing** — v levných hodinách topit na plnou teplotu
+  - Fix: `effTarget = (isNight && isDraha) ? (targetTemp - NOCNI_SNIZ) : targetTemp`
+  - Levné hodiny + noc → topit na plnou teplotu (23.0°C)
+  - Drahé hodiny + noc → topit na sníženou teplotu (22.5°C)
+- **Problém 3**: Mód Šetřit — solar šel celý do baterie, spotřeba ze sítě
+  - Root cause: Scheduled charging (`schedule_soc: currentSoc`, `duration: 86399`) nutilo Victron nabíjet baterii
+  - Ověřeno z Victron dbus wiki: scheduled charging aktivně nabíjí ze sítě
+  - Fix: Šetřit Logic — **žádný scheduled charging** (`schedule_soc: 0`, `duration: 0`, `day: -7`)
+  - `power_set_point: 0` — ESS normálně řídí (solar → spotřeba, přebytek → baterie)
+  - `min_soc: Math.max(minSoc, currentSoc)` — ESS nebude vybíjet pod aktuální SOC
+  - `MaxDischargePower: 0` — baterie se nesmí vybíjet (hardcoded v service call node)
+  - Výsledek: solar pokrývá spotřebu, přebytek do baterie, deficit ze sítě
+- Dotčené soubory: `fve-orchestrator.json`, `fve-modes.json`, `fve-heating.json`
+
 ---
 
 ## 11. Známé limitace a budoucí práce
