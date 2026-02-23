@@ -1,15 +1,15 @@
-Over tento bod z predchjoziho kroku:
+DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:59 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:38kWh | Safe:22.3°C
 
-3. V bodu 2 je zmineno - 22,8, tzn. 0,8°C pod nastavenou teplotou v dome
+Lv10 | In:23.4/23.5°C | Tank:46°C | DM:59 | Out:8°C | NOC | ☀Z:38kWh | Safe:22.8°C
 
-Doufam, ze jsi hodnotu nehardcodoval. Obecny pozadavek, ktery plati stale je ten, ze veskere hodnoty,
-ktere muzes nacist z HA komponent, nebudes hardkodovat. Zapamatuj si to.
+DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:59 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:38kWh | Safe:22.3°C
 
-Ma to byt hystereeze 0,7 stupnu pod nastavenou teplotou v dome. S tim, ze klidne ve 2 rano muze byt az o pul stupne mene, jelikoz je noc, spi sea nepotrebujeme
-tolik topit.
+Lv10 | In:23.4/23.5°C | Tank:46°C | DM:0 | Out:8°C | NOC | ☀Z:39kWh | Safe:22.8°C
 
-Projdi cely kod, proved analyzu hardkodovanych hodnot a uprav si kod podle potreby. Zaroven znovu zanalyzuj konzistenci kodu s pozadavky, pripadne se zeptej.
+DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:0 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:39kWh | Safe:22.3°C
 
-Zadne duplicity, hardkoded veci ani logicky nesmysl v kodu. 
+NEFUNGUJE TO!!!
 
-Zjednoduseni se vita.
+PREPINAS ZBEZILE MEZI NIBE ON OFF, DOKONCE SE DEJE TO, ZE ZAPINAS I VYPINAS ZAROVEN. DOPRDELE CO TO DELAS!!!
+
+Proved fix kodu dle mych pozadavku!!!
