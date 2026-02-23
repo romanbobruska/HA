@@ -1,26 +1,3 @@
- - proc mi zase vole pises toto> Home Assistant NEBYL restartován (použijte --with-ha pro restart HA) - rikal jse, abys restartoval HA, pokud to budes potrebovat ve skriptu rovnou NE!!!
-- pozadavek byl, ze v noci ma byt minimalne pul stupne pod nastavenou teplotou. ted je 22,9 - podivej se na debug:
+stale se divim, proc ted neni zapnuto obehove cerpadlo:
 
-Lv3 | In:22.9/23.0°C | Tank:51°C | DM:100 | Out:10°C | NOC
-
-a obehove cerpadlo se nespustilo, aby se odebrala teplota. Proc - vzdyt jsou levne hodiny, krasne se muze odebrat teplota z nadrze a pravdepodobne se jeste zatopi 
-z levnych hodin. Tech pul stupne je hystereze, kterou muzes pouzit pro balancing mezi drahymi a levnymi hodinami (typicky, pokud nadrz bude chladna a budou drahe hodiny), ne jako prikaz, ze v noci ma byt presne takto, nebo dokonce
-chladneji.
-
-- posledni problem - stale se pri modu setreni pri solarnim zisku ve skutecnosti nabiji baterie CELYM SOLARNIM ZISKEM A CELA SPOTREBA JDE ZE SITE.
-To nechci - mod setreni je vzdy o tom, ze se hlavne nema vybijet baterie - tzn. baterie se nabiji, pokud je solarni zisk vetsi nez spotreba domu. 
-pokud je soalrni zisk stejny jako spotreba domu, pak se baterie nenabiji, spotreba je 0.
-
-priklad:
-
-solar 1 kWh, spotreba domu 1 kWh - baterie nic nedela, solar jde na pokryti spotreby domu
-soalr 2 kWh, spotreba domu 1 kWh - baterie nabiji 1 kWh ze solarniho zisku, 1 kWh jde na pokryti spotreby domu
-solar 0,5 kWh, spotreba domu 1 kWh - baterie nic nedela, 0,5 kWh solar jde na pokryti spotreby domu a zbytek 0,5kWh se bere ze site
-
-Tady je vytah z AI:
-
-Vybíjení baterie do zátěže lze zamezit nastavením AcPowerSetPoint na vysokou kladnou hodnotu a MaxFeedInPower na 0, čímž se 
-veškerá solární výroba přesměruje do baterie a spotřeba je pokryta ze sítě [1]. Pro zajištění trvalého nabíjení a 
-absolutního zákazu vybíjení je nutné aktivovat ScheduleCharge na 100 % a povolit OvervoltageFeedIn [1].
-
-Over toto tvrzeni u victronu na https://github.com/victronenergy/venus/wiki/dbus#vebus-systems-multis-quattros-inverters a implementuj upravu naseho flow
+debug: Lv1 | In:22.9/23.5°C | Tank:50°C | DM:100 | Out:9°C | NOC
