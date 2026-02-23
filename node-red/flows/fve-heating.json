@@ -888,5 +888,123 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "heating_g_away",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Režim nepřítomnosti",
+        "style": {
+            "stroke": "#ff9900",
+            "label": true,
+            "color": "#ff9900"
+        },
+        "nodes": [
+            "htg_away_trigger",
+            "htg_away_func",
+            "htg_away_set_temp"
+        ],
+        "x": 14,
+        "y": 259,
+        "w": 692,
+        "h": 82
+    },
+    {
+        "id": "htg_away_trigger",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Jsme doma změna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.jsme_doma"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 120,
+        "y": 300,
+        "wires": [
+            [
+                "htg_away_func"
+            ]
+        ]
+    },
+    {
+        "id": "htg_away_func",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Away mode",
+        "func": "// Režim nepřítomnosti — snížení teploty když nejsme doma\nvar config = global.get(\"fve_config\") || {};\nvar AWAY_TEMP = config.topeni_teplota_nepritomnost || 21;\nvar letniRezim = config.letni_rezim === true;\n\nfunction getState(id) {\n    var e = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {};\n    return e.state;\n}\nfunction getFloat(id, def) {\n    var v = parseFloat(getState(id));\n    return isNaN(v) ? (def || 0) : v;\n}\n\nvar jsme_doma = getState(\"input_boolean.jsme_doma\") === \"on\";\nvar currentTemp = getFloat(\"input_number.nastavena_teplota_v_dome\", 22);\nvar savedTemp = flow.get(\"away_saved_temp\");\n\nif (!jsme_doma && !letniRezim) {\n    // Odchod z domu v zimě → snížit teplotu\n    if (currentTemp > AWAY_TEMP) {\n        // Uložit aktuální teplotu jen pokud jsme ji ještě neuložili\n        if (!savedTemp || savedTemp <= AWAY_TEMP) {\n            flow.set(\"away_saved_temp\", currentTemp);\n        }\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"PRYČ → \" + AWAY_TEMP + \"°C (uloženo \" + currentTemp + \"°C)\"});\n        return {payload: AWAY_TEMP};\n    } else {\n        node.status({fill:\"yellow\", shape:\"ring\", text:\"PRYČ | teplota už \" + currentTemp + \"°C\"});\n        return null;\n    }\n} else if (jsme_doma && savedTemp && savedTemp > AWAY_TEMP) {\n    // Příchod domů → obnovit uloženou teplotu\n    var restoreTemp = savedTemp;\n    flow.set(\"away_saved_temp\", null);\n    node.status({fill:\"green\", shape:\"dot\", text:\"DOMA → \" + restoreTemp + \"°C (obnoveno)\"});\n    return {payload: restoreTemp};\n} else {\n    node.status({fill:\"grey\", shape:\"ring\", text: jsme_doma ? \"DOMA\" : (letniRezim ? \"LÉTO\" : \"PRYČ\")});\n    return null;\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 300,
+        "wires": [
+            [
+                "htg_away_set_temp"
+            ]
+        ]
+    },
+    {
+        "id": "htg_away_set_temp",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Nastav teplotu",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.nastavena_teplota_v_dome"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{payload}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 560,
+        "y": 300,
+        "wires": [
+            []
+        ]
     }
 ]

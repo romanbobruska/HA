@@ -1,84 +1,62 @@
-kompletně změníme logiku topení do domu. Prechazi na tebe a automatizaci v node red cela odpovednost za teplotu v dome a za odber elektriny. Buď pečlivý, dobře si zanalyzuj řešení a případně se zeptej, pokud budeš potřebovat - idealne jednim promptem, 
-klidne s vice otazkami najednou.
+dalsi novy pozadavek na topeni.
 
-Pozadavky a pravidla, ktere zde nebudou nove zminene, plati z puvodniho flow topeni.
+Pokud nejsme doma - input_boolean.jsme_doma - a je zaroven zimni obdobi - input_boolean.letni_rezim - tak se teplota v dome - input_number.nastavena_teplota_v_dome snizi automaticky na 21 stupnu.
 
-Pozadavky si zapisuj do MD souboru podobne jako u FVE, at je potom nemenis, pripadne se zeptas, pokud je budes chtit zmenit (viz vyse).
+Pokud jsme doma - tak se teplota obnovi na predchozi nastavenou hodnotu.
 
-Pokud uvadim v textu dale ciselne hodnoty, bydou vzdy dostupne jako parametry (mohou se menit). NIC NEHARDKODUJ!
+Testuji vypnuti automatizace a toto mi to napsalo:
 
-Vstupy:
+{"__enc__":true,"type":"error","data":{"name":"HomeAssistantError","message":"Request is not valid, please review provided parameters.","stack":"HomeAssistantError: Request is not valid, please review provided parameters.\n    at p (/opt/node_modules/node-red-contrib-home-assistant-websocket/dist/common/errors/inputErrorHandler.js:1:1032)\n    at m (/opt/node_modules/node-red-contrib-home-assistant-websocket/dist/common/errors/inputErrorHandler.js:1:1318)\n    at C.#t (/opt/node_modules/node-red-contrib-home-assistant-websocket/dist/common/controllers/InputOutputController.js:1:1340)"}}
 
-input_number.nastavena_teplota_v_dome
-skutecna teplota v dome: sensor.hp2551ae_pro_v2_1_0_indoor_temperature
-teplota ve smesovaci nadrzi: sensor.teplota_smesovac_teplota
-teplota venku: sensor.hp2551ae_pro_v2_1_0_outdoor_temperature
-Cepradlo stupne minuty: sensor.nibe_degree_minutes
-Obehove cerpadlo domu: switch.horousany_termostat_prizemi_kote
-patrony vytapejici smesovaci nadrz: switch.patrona_faze_1, switch.patrona_faze_3_2, switch.patrona_faze_3
-ventil, ktery prepina teplou vodu z vytapeni domu na vytapeni bazenu: switch.bazen_ventil_smesovac
-switch, zda se topi v krbu: input_boolean.topi_se_v_krbu
-switch pro chlazeni domu: input_boolean.chlazeni
-switch pro zapnuti nebo vypnuti cele automatizace vytapeni domu: input_boolean.automatizovat_topeni
+zkus se podivat i na tuto chybu, zda s tim nesouvisi:
 
-Pozadavky:
+Detaily logování (CHYBA)
+Logger: homeassistant.components.websocket_api.http.connection
+Zdroj: components/websocket_api/commands.py:278
+integrace: Home Assistant WebSocket API (dokumentace, problémy)
+První výskyt: 03:34:28 (1 výskyt)
+Naposledy logováno: 03:34:28
 
-Vytapeni:
-
-1. Pokud celou automatizaci vytapeni domu vypnu, tak se vytapeni domu i smesovaci nadrz vypne jednou, pote se jiz nic nedeje, nezasahuje se do toho.
-2. Teplota v dome se musi blizit, pres den musi dosahnout teploty v input_number.nastavena_teplota_v_dome, pres noc (cca ve 2:00) muze klesnout o 0,5 stupne
-3. Vytapi se pouze v zimnim rezimu
-4. Stupne minuty rikaji, za jak dlouho se bude natapet nadrz - rozsah je +100 az -30. Pokud dosahneme -30DM, tak se zacne vytapet smesovaci nadrz
-5. Max. teplota ve smesovaci nadrzi pro topeni domu je 50 stupnu, minimalni je 30 stupnu. Obehove cerpadlo zapnes vzdy az v rozmezi techto hodnot, 
-pokud bude treba topit v dome.
-6. Pravidla pro blokovani cerpadla plati - zkontroluj, ze se cerpadlo blokuje v drahych hodinach. Zkontroluj, ze se cerpadlo zapina od nejlevnejsich hodin 
-nahoru v zavisloti na teplotach v dome a venku, na teplote vody ve smesovaci nadrzi. Je vzdy lepsi cerpadlo neblokovat v nejlevnejsich hodinach, nez ho blokovat 
-a potom zjistit, ze musis topit v drahych hodinach, protoze nejsou dostupne nejblizsi levne hodiny a v dome je zima.
-7. Pokud budou pretoky, baterie bude nabita na min. 95% a auto nebude mit hlad (pokud chces, mam na to komponentu input_boolean.auto_ma_hlad, ale je to na tobe), toto je hned 
-dalsi priorita po aute a baterii - vytapeni smesovaci nadrze z pretoku. - JAK? Mas k dispozici 3 fazovou vyhrivaci patronu nadrze, kazda bere 3kWh, takze
-dohoromady 9kWh. podle toho, kolik bude rozdil vyroby a spotreby, tak se smesovaci nadrz bude nahrivat.
-
-Priklad 
-- pretok bude 2kWh - nenahrivame vubec
-- pretok bude 4kWh - nahrivame 1 fazove
-- pretok bude 6kWh - nahrivame 2 fazove
-- pretok bude 8kWh - nahrivame 2 fazove
-- pretok bude 9kWh a vice - nahrivame 3 fazove
-
-U tohoto modu plati, ze cerpadlo musi byt blokovane - samozrejme stale plati, ze pokud pracuje, tak se blokovat nesmi.
-
-ventil, ktery prepina teplou vodu z vytapeni domu na vytapeni bazenu se u vytapeni domu nepouziva, ten pouzijeme u vytapeni bazenu. 
-Pouze si zkotroluj, ze je vypnuty - pokud by nebyl, vypni ho (tim se zajisti, ze tepla voda z nadrze pujde do domu a ne do bazenu)
-8. U chlazeni je vse pri starem, pouze uprav, ze teplota v dome ma byt rizena stejnou logikou jako u topeni domu - tzn. potrebujeme
-pouze jeden parametr na nastaveni teploty v dome
-
-Odpovedi: 
-
-1. Ano. Obehove cerpadlo nema s NIBE nic spolecneho. NIBE hřeje nádrž, oběhové čerpadlo pouští teplou vodu do domu.
-2. Jen povolujeme/blokujeme topení přes 47371. DM nebudeme ovlivnovat, nechame to na cerpadle. Ovládáme oběhové čerpadlo nezávisle na NIBE - samozrejme v zavislosti
-na teplote v nadrzi atd (teplota v dome, venku, cena apod.). Jde o to, ze kdyz odebereme teplo z nadrze a cerpadlo bude zapnuto na topeni,
-tak si nibe zacne odpocet DM a az se dopocita k -30, tak zacne natapet nadrz. Kdy my tu teplotu odebereme je ciste na nas.
-3. A je spravne - cerpadlo ma odber v peaku cca 14kWh, obehove cerpadlo cca 300W.
-4. Ten co jsem ti napsal - sensor.hp2551ae_pro_v2_1_0_indoor_temperature
-5. 22:00–6:00 - ale uvedom si, ze v nocnich hodinach jsou casto levne energie - aby sis neblokoval cerpadlo kvuli tomu, ze muze byt o pul stupne mene a 
-ve dne si nemel nahratou nadrz - je dobre si nahrat nadrz - at uz z pretoku nebo v levnych hodinach a pak pouzit, kdy je potreba. V tom je ta flexibilita.
-Take je potreba si uvedomit, ze napr. pri venkovni teplote cca 0 stupnu potrebujeme denne nahrat nadrz 2 - 3x, pri 10 stupnich cca 1x (velmi zhruba)
-6. 
-Přebytek	Fáze
-< 3 kW	0
-3–5.9 kW	1
-6–8,9 kW	1+2
-≥ 9 kW	1+2+3
-
-A co je "přebytek" — solární výroba minus spotřeba domu minus nabíjení baterie je spravne. Pokud se nabiji baterie, nevyuziva se cely pretok - samozrejme, 
-pokud se baterie nabiji ze slunce. Pokud ze site, i kdyz jsou pretoky, tak mas nekde chybu v nastaveni Victronu. 
-7. Nevim, proc se me na to ptas - co pouzivas u FVE? Ja pouzivam pro vyroby v dashboardu tento: sensor.vyroba_fve. Ostatni podobne.
-Pouzij overene sensory, ktere pouzivame u rizeni FVE flows. Pokud tam pouzivame nejake spatne nebo si nejsi jisty, tak to nam nefunguje ani rizeni FVE
-8. Ano, Myslím tím NIBE (47371=0, tepelné čerpadlo nesmí hřát nádrž současně s patronami). Bud patrony, nebo nibe.
-9. Ano, pokud bude switch.bazen_ventil_smesovac, tak se pri topeni do domu vypne, aby nesla tepla voda do bazenu misto do domu. Jinak se na nej nesaha
-10. NIBE nastavis na vytapeni vody (pokud nebude pracovat, jinak ho nechas byt), obehove cerpadlo vypnes, vsechny faze u patron vypnes a ventil bazen nechas tak, jak je
-
-Pokud budes mit jeste nejakou nejasnost, zeptej se - zase najednou s vice otazkami - ale snad je to ted jasne
-
-
-
+[140524469902432] Unexpected exception
+Traceback (most recent call last):
+  File "/usr/src/homeassistant/homeassistant/components/websocket_api/commands.py", line 278, in handle_call_service
+    response = await hass.services.async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "/usr/src/homeassistant/homeassistant/core.py", line 2817, in async_call
+    response_data = await coro
+                    ^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/core.py", line 2860, in _execute_service
+    return await target(service_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/helpers/service.py", line 832, in entity_service_call
+    single_response = await _handle_entity_call(
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+        hass, entity, func, data, call.context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/usr/src/homeassistant/homeassistant/helpers/service.py", line 904, in _handle_entity_call
+    result = await task
+             ^^^^^^^^^^
+  File "/usr/src/homeassistant/homeassistant/helpers/entity.py", line 1703, in async_turn_off
+    await self.hass.async_add_executor_job(ft.partial(self.turn_off, **kwargs))
+  File "/usr/local/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/config/custom_components/jablotron_cloud/switch.py", line 165, in turn_off
+    turn_off_successful = bridge.control_programmable_gate(
+        service_id=self._service_id,
+    ...<2 lines>...
+        state="OFF"
+    )
+  File "/usr/local/lib/python3.13/site-packages/jablotronpy/jablotronpy.py", line 323, in control_programmable_gate
+    response = self._send_request(
+        endpoint=f"{service_type}/controlComponent.json",
+    ...<8 lines>...
+        }
+    )
+  File "/usr/local/lib/python3.13/site-packages/jablotronpy/jablotronpy.py", line 63, in _send_request
+    raise BadRequestException("Request is not valid, please review provided parameters.")
+jablotronpy.exceptions.BadRequestException: Request is not valid, please review provided parameters.
