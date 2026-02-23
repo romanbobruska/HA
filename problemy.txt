@@ -1,1 +1,4 @@
-PUMP_DIAG: obehOn=false tankOk=false needsHeat=true fireplace=false tankT=50.38 MIN=30 MAX=50 indoor=22.9 effT=23.5
+hodnota maximalni teploty v nadrzi byla zminena z duvodu topeni pomoci pretoku a patrony, abys nenatopil nadrz prilis pro topeni domu.
+Ale vubec se tato horni hodnota netyka toho, zda se ma topit, nebo ne. Takze i kdyz pri vyhrevu nadrze pres patronu dojde k tomu,
+ze se nadrz natopi o trochu vic, stejne topime - o to se postara smesovaci cerpadlo. Oprav logiku a zapamatuj si ji do budoucna i pro vytapeni 
+bazenu, ktere budeme delat brzy v budoucnu.
