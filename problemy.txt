@@ -1,3 +1,1 @@
-stale se divim, proc ted neni zapnuto obehove cerpadlo:
-
-debug: Lv1 | In:22.9/23.5°C | Tank:50°C | DM:100 | Out:9°C | NOC
+PUMP_DIAG: obehOn=false tankOk=false needsHeat=true fireplace=false tankT=50.38 MIN=30 MAX=50 indoor=22.9 effT=23.5
