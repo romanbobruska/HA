@@ -1,4 +1,6 @@
-hodnota maximalni teploty v nadrzi byla zminena z duvodu topeni pomoci pretoku a patrony, abys nenatopil nadrz prilis pro topeni domu.
-Ale vubec se tato horni hodnota netyka toho, zda se ma topit, nebo ne. Takze i kdyz pri vyhrevu nadrze pres patronu dojde k tomu,
-ze se nadrz natopi o trochu vic, stejne topime - o to se postara smesovaci cerpadlo. Oprav logiku a zapamatuj si ji do budoucna i pro vytapeni 
-bazenu, ktere budeme delat brzy v budoucnu.
+1. samozrejme NIBE. kdybych rekl OBEHOVE CERPADLO, JE TO NECO JINEHO. KDYZ REKNU CERPADLO, JE TO VZDY NIBE
+2. Vsechny pravidla implementuj zaroven:
+ - Pokud je teplota v domě blízko targetu (např. 23.4 vs target 23.5) a existují levnější hodiny v budoucnu → POČKAT na levnější hodiny
+- Pokud zítra velká solární výroba → být ještě méně agresivní (dům se dohřeje ze soláru)
+-Topit v drahé hodině JEN pokud teplota klesne pod bezpečnou mez ( 22,7°C)
+3. V bodu 2 je zmineno - 22,8, tzn. 0,8°C pod nastavenou teplotou v dome
