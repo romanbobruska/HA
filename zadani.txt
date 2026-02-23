@@ -1,3 +1,25 @@
-nemam deploy script - PROC?
+modelova situace, ktera se stala pred chvili:
 
-Zaroven tu logiku spinani kazdoj minutu nech pouze u pozadavku na topeni - obehove cerpadlo ON - u off nech puvodni, tzn. volat jen jednou, kdyz je potreba
+Solarni vyroba cca 9kWh, Teplota v dome 23,8 stupnu, teplota venku 12 stupnu. Spustilo se cerpadlo, protoze bylo zapnuto na vytapeni,
+takze se zablokovalo vybijeni baterie. Tim padem se zacalo brat ze site.
+
+V tomto pripade, kdy je solarni vyroba velka a teplota v dome je vetsi nez nastavena teplota, cerpadlo bude zablokovano. Bude se cekat, pokud nedojde k tomu,
+ze budeme moct nahrivat nadrz pomoci patrony.
+
+Priklady chovani v soalrnich hodinach:
+
+cas	solar	cerpadlo stav	nadrz t	baterie	patrona	teplota v dome	poznamka
+10:00	9kWh	blokovano	30°C	40%	n/A	23,7°C	cekame na vyhrev pomoci patrony
+12:00	10kWh	blokovano	30°C	60%	n/A	23,6°C	cekame na vyhrev pomoci patrony
+13:00	10kWh	blokovano	30°C	96%	2 nebo 3 faze (podle spotreby)	23,5°C	Vyhrivame pres patronu, tim setrime kompresor cerpadla
+				NEBO			
+15:00	10kWh	zapnuto	30°C	60%	n/A	23,5°C	Asi uz nadrz nedohrejeme pres patronu, tak zapneme cerpadlo, ale NEBUDEME BLOKOVAT VYBIJENI BATERIE, PROTOZE JE SOLARNI ZISK VELKY!!!
+				NEBO			
+15:00	10kWh	blokovano	30°C	96%	2 nebo 3 faze (podle spotreby)	23,5°C	Vyhrivame pres patronu, tim setrime kompresor cerpadla
+				NEBO			
+15:00	2kWh	zapnuto	30°C	80%	n/a	23,3°C	Zapiname cerpadlo s blokaci vybijeni, pokud je cena nizka nebo stredni
+
+
+Vsimni si, te hodiny 15:00. To je marginalni hodina pro rozhodnuti, jak nadrz nahrat pres patronu nebo cerpadlo. Ta hodina je
+odvozena od konce solarnich hodin - v prikladu je to 2. solarni hodina pred koncem solarni vyroby (posledni je 16. hodina, predposledni je 15. hodina).
+
