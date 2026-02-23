@@ -1,3 +1,7 @@
-nemam deploy script - PROC?
+zarid, aby v pripade, ze vypadne sit jako ted - sensor.stav_rozvodne_site_grid_status je "Výpadek (Grid Lost)" (klidne si zaloz ciselny sensor v mqtt.yaml),
+a neni solarni vyroba, tak nechci, aby se spustilo ZADNE ZARIZENI, KTERE MA VELKOU SPOTREBU - TZN. AUTO SE NESMI NABIJET, NIBE JE BLOKOVANE, NESMI SE NABIJET BATERIE atd.
 
-Zaroven tu logiku spinani kazdoj minutu nech pouze u pozadavku na topeni - obehove cerpadlo ON - u off nech puvodni, tzn. volat jen jednou, kdyz je potreba
+Pokud je solarni vyroba, tak muze bezet pouze to, na co solarni vyroba staci. chapeme se? Kdyztak se zeptej:
+
+NIBE - odber v peaku 14kWh
+AUTO - to se ridi pomoci amperace

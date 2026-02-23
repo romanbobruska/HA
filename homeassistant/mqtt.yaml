@@ -500,3 +500,33 @@ sensor:
     unit_of_measurement: "W"
     device_class: power
     value_template: "{{ value_json.value | round }}"
+
+  - name: "Stav rozvodné sítě (Grid Status)"
+    unique_id: "victron_grid_detailed_status"
+    state_topic: "victron/N/c0619ab69c71/vebus/276/Alarms/GridLost"
+    value_template: >
+      {% set status = value_json.value | int %}
+      {% if status == 0 %}
+        Připojeno (OK)
+      {% elif status == 1 %}
+        Varování (Warning)
+      {% elif status == 2 %}
+        Výpadek (Grid Lost)
+      {% else %}
+        Neznámý stav ({{ status }})
+      {% endif %}
+    icon: >
+      {% set status = value_json.value | int %}
+      {% if status == 0 %}
+        mdi:transmission-tower
+      {% elif status == 1 %}
+        mdi:transmission-tower-export
+      {% else %}
+        mdi:transmission-tower-off
+      {% endif %}
+
+  - name: "Grid Lost (číselný)"
+    unique_id: "victron_grid_lost_numeric"
+    state_topic: "victron/N/c0619ab69c71/vebus/276/Alarms/GridLost"
+    value_template: "{{ value_json.value | int }}"
+    icon: mdi:transmission-tower-off
