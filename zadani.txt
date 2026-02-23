@@ -1,1 +1,3 @@
-uprav logiku zapinani obehoveho cerparla tak, aby se vzdy volal On v pripade, ze ma byt obehove cerpadlo zapnuto a OFF, pokud nema byt zapnuto (aktualne 1x za minutu)
+nemam deploy script - PROC?
+
+Zaroven tu logiku spinani kazdoj minutu nech pouze u pozadavku na topeni - obehove cerpadlo ON - u off nech puvodni, tzn. volat jen jednou, kdyz je potreba
