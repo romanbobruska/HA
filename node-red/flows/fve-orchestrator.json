@@ -13,7 +13,7 @@
     "z": "d86bb11fab512182",
     "name": "Plánování",
     "style": {
-      "fill": "#e3f3d3",
+      "fill": "#fff3cd",
       "label": true
     },
     "nodes": [
@@ -39,7 +39,7 @@
     "z": "d86bb11fab512182",
     "name": "Exekuce plánu",
     "style": {
-      "fill": "#d3e8f3",
+      "fill": "#d4edda",
       "label": true
     },
     "nodes": [
@@ -67,7 +67,7 @@
     "z": "d86bb11fab512182",
     "name": "Kontrola priorit",
     "style": {
-      "fill": "#f3e8d3",
+      "fill": "#d1ecf1",
       "label": true
     },
     "nodes": [
