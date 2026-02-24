@@ -52,19 +52,24 @@ fi
 # --- 2. Úklid starých záloh ---
 echo ""
 echo "🧹 Mažu staré zálohy..."
-rm -rf /config/backup_* 2>/dev/null && echo "   ✅ Zálohy smazány" || echo "   ℹ️  Žádné zálohy k smazání"
+sudo -n rm -rf /config/backup_* 2>/dev/null && echo "   ✅ Zálohy smazány" || echo "   ℹ️  Žádné zálohy k smazání"
 
 # --- 3. Kopie HA konfiguračních souborů ---
 echo ""
 echo "📋 Kopíruji HA konfiguraci..."
-for f in configuration.yaml automations.yaml scripts.yaml scenes.yaml mqtt.yaml modbus.yaml input_numbers.yaml template_sensors.yaml template_switches.yaml; do
-    if [ -f "$REPO_DIR/homeassistant/$f" ]; then
-        sudo -n bash -c "cat '$REPO_DIR/homeassistant/$f' > '$HA_CONFIG/$f'" || true
-        echo "   ✅ $f"
-    else
-        echo "   ⚠️  $f nenalezen v repo"
-    fi
-done
+sudo -n python3 << 'PYEOF'
+import os, shutil, sys
+repo = '/tmp/HA/homeassistant'
+dst = '/config'
+files = ['configuration.yaml','automations.yaml','scripts.yaml','scenes.yaml','mqtt.yaml','modbus.yaml','input_numbers.yaml','template_sensors.yaml','template_switches.yaml']
+for f in files:
+    src = os.path.join(repo, f)
+    if os.path.exists(src):
+        shutil.copy2(src, os.path.join(dst, f))
+        print('   ✅ ' + f)
+    else:
+        print('   ⚠️  ' + f + ' nenalezen v repo')
+PYEOF
 
 # --- 4. Sloučení všech Node-RED flows do jednoho flows.json ---
 echo ""
