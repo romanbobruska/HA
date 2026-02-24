@@ -1,0 +1,145 @@
+[
+  {
+    "id": "4580a451a0858d03",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Plâ”śĂ­novâ”śĂ­nâ”śĹź",
+    "style": {
+      "fill": "#fff3cd",
+      "label": true
+    },
+    "nodes": [
+      "22e7b3b8965c20db",
+      "f037d87ec94c7da2",
+      "9333668b1d326a83",
+      "9e0b46a9dfedea33",
+      "df085ac4da095340",
+      "39019d1a78677231",
+      "517215d5f730e80c",
+      "701e94d82c3aead0",
+      "aabb001122334455",
+      "aabb001122334466"
+    ],
+    "x": 14,
+    "y": 19,
+    "w": 1032,
+    "h": 262
+  },
+  {
+    "id": "c0d4d6462d4ebded",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Exekuce plâ”śĂ­nu",
+    "style": {
+      "fill": "#d4edda",
+      "label": true
+    },
+    "nodes": [
+      "44d31ff3c04741b7",
+      "c36915a8599c5282",
+      "8eef6d1d51c9c644",
+      "19a783a61de3519b",
+      "f10a91fcb4de6bd3",
+      "7f051a6595e57c3e",
+      "185f95d7c56fe799",
+      "a706b353f30c25d1",
+      "a86bc5233cfa0458",
+      "solar123456789abc",
+      "blokace_file_update",
+      "blokace_file_write"
+    ],
+    "x": 14,
+    "y": 299,
+    "w": 1092,
+    "h": 282
+  },
+  {
+    "id": "66210c073baa5af0",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Kontrola priorit",
+    "style": {
+      "fill": "#d1ecf1",
+      "label": true
+    },
+    "nodes": [
+      "fc848e97e2c781c1",
+      "376106d716756636",
+      "dc8da09248ec1e29",
+      "sauna_state_changed",
+      "sauna_set_global"
+    ],
+    "x": 14,
+    "y": 599,
+    "w": 672,
+    "h": 142
+  },
+  {
+    "id": "22e7b3b8965c20db",
+    "type": "inject",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Kaâ”ĽĹĽdou minutu",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "15",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 60,
+    "wires": [
+      [
+        "9333668b1d326a83"
+      ]
+    ]
+  },
+  {
+    "id": "f037d87ec94c7da2",
+    "type": "link in",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Ă”Ä‡Ă‰ Manuâ”śĂ­lnâ”śĹź trigger",
+    "links": [],
+    "x": 55,
+    "y": 120,
+    "wires": [
+      [
+        "9333668b1d326a83"
+      ]
+    ]
+  },
+  {
+    "id": "9333668b1d326a83",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Sbâ”śĹźrka dat pro plâ”śĂ­novâ”śĂ­nâ”śĹź",
+    "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar prices = global.get(\"fve_prices_forecast\") || [];\n// v18.21: Forecast z input_number entit (primâ”śĂ­rnâ”śĹź zdroj)\nvar forecastZitraIN = global.get(\"homeassistant.homeAssistant.states['input_number.predpoved_solarni_vyroby_zitra']\");\nvar forecastZitraKwh = (forecastZitraIN && forecastZitraIN.state && !isNaN(parseFloat(forecastZitraIN.state)))\n    ? parseFloat(forecastZitraIN.state) : 0;\nvar forecastZitra = (forecastZitraKwh > 0) ? forecastZitraKwh : (global.get(\"forecast_vyroba_zitra\") || 0);\n// v18.21: Zbâ”śĹ»vajâ”śĹźcâ”śĹź vâ”śĹ»roba z input_number entity (primâ”śĂ­rnâ”śĹź zdroj)\nvar zbyvajiciIN = global.get(\"homeassistant.homeAssistant.states['input_number.zbyvajici_solarni_vyroba_dnes']\");\nvar zbyvajiciKwh = (zbyvajiciIN && zbyvajiciIN.state && !isNaN(parseFloat(zbyvajiciIN.state)))\n    ? parseFloat(zbyvajiciIN.state) : 0;\nvar zbyvajiciSolar = (zbyvajiciKwh > 0) ? zbyvajiciKwh : (global.get(\"zbyvajici_solar_dnes\") || 0);\nvar consumptionAnalysis = global.get(\"fve_consumption_analysis\") || {};\nvar consumptionPredictions = global.get(\"fve_consumption_predictions\") || [];\n\n// v17: â”€Ă®tenâ”śĹź vâ”śĹ»chodu/zâ”śĂ­padu slunce z HA entit\n// Tyto entity obsahujâ”śĹź ISO datetime string, extrahujeme hodinu\nvar sunRising = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_rising']\") || {};\nvar sunSetting = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_setting']\") || {};\nvar sunNoon = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_noon']\") || {};\n\n// Parsovâ”śĂ­nâ”śĹź hodiny z ISO stringu nebo state value\nfunction parseHourFromEntity(entity) {\n    var state = (entity && entity.state) ? entity.state : null;\n    if (!state) return null;\n    // State je ISO datetime: \"2026-02-19T06:45:00+01:00\" nebo podobnâ”śĹ» formâ”śĂ­t\n    var d = new Date(state);\n    if (isNaN(d.getTime())) return null;\n    return d.getHours();\n}\n\nvar sunriseHour = parseHourFromEntity(sunRising);\nvar sunsetHour = parseHourFromEntity(sunSetting);\n\n// Solâ”śĂ­rnâ”śĹź okno: sunrise + 1h offset (slunce musâ”śĹź bâ”śĹ»t vâ”śĹ»â”ĽĂ­) aâ”ĽĹĽ sunset\n// Fallback na config hodnoty pokud entity nejsou dostupnâ”śÄ™\nvar solarStart = (sunriseHour !== null) ? Math.max(sunriseHour + 1, 7) : 9;\nvar solarEnd = (sunsetHour !== null) ? Math.min(sunsetHour, 20) : 17;\n\nmsg.planData = {\n    config: config,\n    status: status,\n    prices: prices,\n    forecast: {\n        zitra: forecastZitra,\n        dnes: (function() {\n    var dnesIN = global.get(\"homeassistant.homeAssistant.states['input_number.predpoved_solarni_vyroby_dnes']\");\n    var dnesKwh = (dnesIN && dnesIN.state && !isNaN(parseFloat(dnesIN.state))) ? parseFloat(dnesIN.state) : 0;\n    return (dnesKwh > 0) ? dnesKwh : (global.get(\"forecast_vyroba_dnes\") || 0);\n})()\n    },\n    zbyvajiciSolar: zbyvajiciSolar,\n    consumptionAnalysis: consumptionAnalysis,\n    consumptionPredictions: consumptionPredictions,\n    // v17: Dynamickâ”śÄ™ solâ”śĂ­rnâ”śĹź hodiny z HA\n    solarStartHour: solarStart,\n    solarEndHour: solarEnd,\n    sunriseHour: sunriseHour,\n    sunsetHour: sunsetHour,\n    timestamp: new Date().toISOString()\n};\n\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Solar: \" + Math.round(zbyvajiciSolar) + \"kWh | Ă”Ĺ›Ă‡\" + solarStart + \"-\" + solarEnd + \"h\"});\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 100,
+    "wires": [
+      [
+        "aabb001122334455"
+      ]
+    ]
+  },
+  {
+    "id": "9e0b46a9dfedea33",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Vâ”śĹ»poâ”€Ĺąet plâ”śĂ­nu na 12h (v18.0)",
+    "func": 

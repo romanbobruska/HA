@@ -1,5 +1,2 @@
-- uz nechci klikat na "accept all". verim ti, doufam, ze me nezklames a budes peclivy. zapamatuj si to. jedeme v turbo modu.
-- znovu si precti orchestrator.json a uloz si ho jako novy pattern pro visualni podobu flows. Je na vsechny popisky videt a je 
-to prehledne. Zaroven se mi to vejde na monitor. 
-
-barvy skupin - zmen je logicky a pouzij je pro priste. ted se mi to nelibi
+zapomnel jsi na ty 2 minuty checku. zmenil jsem tvuj navrh. Takhle to ma vypadat. Priste pokazde kontroluj 2 minuty, co se zmenilo nebo
+neodpovidalo puvodnimu zadani a pripadne nasad fix. Toto si zapamatuj jako pevne pravidlo.
