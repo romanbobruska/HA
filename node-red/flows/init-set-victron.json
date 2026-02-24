@@ -158,7 +158,7 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "forecast_vyroba_dnes",
                 "pt": "global",
                 "to": "payload.totals.solar_yield_forecast",
                 "tot": "msg"
@@ -169,8 +169,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 450,
+        "y": 140,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -188,7 +188,7 @@
                 "t": "set",
                 "p": "max_spotreba_sit",
                 "pt": "global",
-                "to": "22000",
+                "to": "24000",
                 "tot": "num"
             }
         ],
@@ -273,9 +273,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "grid_direct_use",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Gc",
                 "tot": "msg"
             }
         ],
@@ -284,8 +284,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 260,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -301,9 +301,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "grid_to_battery",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Gb",
                 "tot": "msg"
             }
         ],
@@ -312,8 +312,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 320,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -391,9 +391,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "ev_consumption",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.evE",
                 "tot": "msg"
             }
         ],
@@ -402,8 +402,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 380,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -481,9 +481,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "solar_consumption",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Pc",
                 "tot": "msg"
             }
         ],
@@ -492,8 +492,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 440,
+        "y": 440,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -540,9 +540,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "solar_to_battery",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Pb",
                 "tot": "msg"
             }
         ],
@@ -551,8 +551,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 500,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -661,9 +661,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "battery_consumption",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Bc",
                 "tot": "msg"
             }
         ],
@@ -672,8 +672,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 440,
+        "y": 560,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -720,9 +720,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "battery_to_grid",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.Bg",
                 "tot": "msg"
             }
         ],
@@ -731,8 +731,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 620,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -810,9 +810,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "total_solar_yield",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.totals.total_solar_yield",
                 "tot": "msg"
             }
         ],
@@ -821,8 +821,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 430,
+        "y": 680,
         "wires": [
             [
                 "815f4827fac6b509",
@@ -869,9 +869,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "forecast_zbytek_vyroba_dnes",
+                "p": "forecast_vyroba_zitra",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.records.solar_yield_forecast[0][1]",
                 "tot": "msg"
             }
         ],
@@ -880,8 +880,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 480,
-        "y": 740,
+        "x": 450,
+        "y": 200,
         "wires": [
             [
                 "815f4827fac6b509",
