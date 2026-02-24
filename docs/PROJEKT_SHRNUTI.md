@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (po půlnoci)
+> Poslední aktualizace: 2026-02-25 (01:00)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -9,7 +9,8 @@
 > - Pokud je otázka nutná, položit max. 1× po kompletní analýze
 > - **Každých 5 promptů projít HA Core logy a opravit co se dá**
 > - **NIKDY nečíst HA entitu přes `api-current-state` pokud je dostupná v `fve_config` nebo `homeassistant.homeAssistant.states` globálu** — ale pouze pokud nepotřebuješ aktuální hodnotu přímo v daný okamžik; pokud ano, číst přes `api-current-state`
-> - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu
+> - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu — groups řadit vertikálně, mezera ~18px, x=14-24
+> - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
 
 ---
 
@@ -43,9 +44,9 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
   "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash deploy.sh 2>&1"
 ```
 - Deploy skript **automaticky** zastaví NR, nahraje flows, restartuje NR přes HA API
+- **Krok 4 (nový):** `deploy_sync_server.py` — před nasazením načte `/addon_configs/a0d7b954_nodered/flows.json` a přepíše git verze flows pozicemi/obsahem ze serveru → **ruční změny v NR UI se nikdy neztratí**
 - HA konfigurační soubory se kopírují automaticky
 - **POZOR**: `ha core check` v deploy.sh nesahat — visí, nahrazeno HA REST API
-- **INFO**: Oprava `nabijeni_baterii_minus` (2026-02-24) — dříve vracelo záporné hodnoty, nyní kladné
 
 ---
 
