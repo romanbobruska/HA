@@ -1,15 +1,11 @@
-DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:59 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:38kWh | Safe:22.3°C
+nezda se mi, ze pocitas plan spravne. pocitas se zbyvajici vyrobou, jak byl pozadavek?
 
-Lv10 | In:23.4/23.5°C | Tank:46°C | DM:59 | Out:8°C | NOC | ☀Z:38kWh | Safe:22.8°C
+Doufam, ze ho mas ulozen v md filu.
 
-DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:59 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:38kWh | Safe:22.3°C
+Protoze plan vypada tak, jako by nesvitilo - ale vypada to podle zbyvajici solarni energie, ze svitit bude.
 
-Lv10 | In:23.4/23.5°C | Tank:46°C | DM:0 | Out:8°C | NOC | ☀Z:39kWh | Safe:22.8°C
+goal: POCITAS PRI VYPOCTU PLANU DOSTATECNE S VYROBOU NA DNES, ZITRA, A HLAVNE SE ZBYVAJICI VYROBOU NA DNES JAK BYL POZADAVEK?
 
-DRAHÁ(Lv12) | In:23.4/23.0°C | Tank:46°C | DM:0 | Out:8°C | NOC | LEVNĚJŠÍ↓ | ☀Z:39kWh | Safe:22.3°C
+proved nasazeni uprav a vse, co, jsme si rekli minule. uz to nebudu opakovat, bude to automaticky.
 
-NEFUNGUJE TO!!!
 
-PREPINAS ZBEZILE MEZI NIBE ON OFF, DOKONCE SE DEJE TO, ZE ZAPINAS I VYPINAS ZAROVEN. DOPRDELE CO TO DELAS!!!
-
-Proved fix kodu dle mych pozadavku!!!mnoden

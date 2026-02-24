@@ -1,736 +1,736 @@
 [
-    {
-        "id": "d86bb11fab512182",
-        "type": "tab",
-        "label": "FVE Orchestrator",
-        "disabled": false,
-        "info": "Hlavní orchestrace FVE - plánování a rozhodování o módech",
-        "env": []
+  {
+    "id": "d86bb11fab512182",
+    "type": "tab",
+    "label": "FVE Orchestrator",
+    "disabled": false,
+    "info": "Hlavní orchestrace FVE - plánování a rozhodování o módech",
+    "env": []
+  },
+  {
+    "id": "4580a451a0858d03",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Plánování",
+    "style": {
+      "fill": "#e3f3d3",
+      "label": true
     },
-    {
-        "id": "4580a451a0858d03",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Plánování",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "22e7b3b8965c20db",
-            "f037d87ec94c7da2",
-            "9333668b1d326a83",
-            "9e0b46a9dfedea33",
-            "df085ac4da095340",
-            "39019d1a78677231",
-            "517215d5f730e80c",
-            "701e94d82c3aead0",
-            "aabb001122334455",
-            "aabb001122334466"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 1292,
-        "h": 162
+    "nodes": [
+      "22e7b3b8965c20db",
+      "f037d87ec94c7da2",
+      "9333668b1d326a83",
+      "9e0b46a9dfedea33",
+      "df085ac4da095340",
+      "39019d1a78677231",
+      "517215d5f730e80c",
+      "701e94d82c3aead0",
+      "aabb001122334455",
+      "aabb001122334466"
+    ],
+    "x": 14,
+    "y": 19,
+    "w": 1292,
+    "h": 162
+  },
+  {
+    "id": "c0d4d6462d4ebded",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Exekuce plánu",
+    "style": {
+      "fill": "#d3e8f3",
+      "label": true
     },
-    {
-        "id": "c0d4d6462d4ebded",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Exekuce plánu",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "44d31ff3c04741b7",
-            "c36915a8599c5282",
-            "8eef6d1d51c9c644",
-            "19a783a61de3519b",
-            "f10a91fcb4de6bd3",
-            "7f051a6595e57c3e",
-            "185f95d7c56fe799",
-            "a706b353f30c25d1",
-            "a86bc5233cfa0458"
-        ],
-        "x": 134,
-        "y": 219,
-        "w": 752,
-        "h": 242
+    "nodes": [
+      "44d31ff3c04741b7",
+      "c36915a8599c5282",
+      "8eef6d1d51c9c644",
+      "19a783a61de3519b",
+      "f10a91fcb4de6bd3",
+      "7f051a6595e57c3e",
+      "185f95d7c56fe799",
+      "a706b353f30c25d1",
+      "a86bc5233cfa0458"
+    ],
+    "x": 134,
+    "y": 219,
+    "w": 752,
+    "h": 242
+  },
+  {
+    "id": "66210c073baa5af0",
+    "type": "group",
+    "z": "d86bb11fab512182",
+    "name": "Kontrola priorit",
+    "style": {
+      "fill": "#f3e8d3",
+      "label": true
     },
-    {
-        "id": "66210c073baa5af0",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Kontrola priorit",
-        "style": {
-            "fill": "#f3e8d3",
-            "label": true
-        },
-        "nodes": [
-            "fc848e97e2c781c1",
-            "376106d716756636",
-            "dc8da09248ec1e29",
-            "sauna_state_changed",
-            "sauna_set_global"
-        ],
-        "x": 174,
-        "y": 519,
-        "w": 672,
-        "h": 142
+    "nodes": [
+      "fc848e97e2c781c1",
+      "376106d716756636",
+      "dc8da09248ec1e29",
+      "sauna_state_changed",
+      "sauna_set_global"
+    ],
+    "x": 174,
+    "y": 519,
+    "w": 672,
+    "h": 142
+  },
+  {
+    "id": "22e7b3b8965c20db",
+    "type": "inject",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Každou minutu",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "60",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "15",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 140,
+    "y": 60,
+    "wires": [
+      [
+        "9333668b1d326a83"
+      ]
+    ]
+  },
+  {
+    "id": "f037d87ec94c7da2",
+    "type": "link in",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "← Manuální trigger",
+    "links": [],
+    "x": 145,
+    "y": 100,
+    "wires": [
+      [
+        "9333668b1d326a83"
+      ]
+    ]
+  },
+  {
+    "id": "9333668b1d326a83",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Sbírka dat pro plánování",
+    "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar forecastZitra = global.get(\"forecast_vyroba_zitra\") || 0;\n// v18.20: Solcast forecast jako primární zdroj zbývající výroby dnes\n// Fallback na VRM API (zbyvajici_solar_dnes) pokud Solcast není dostupný\nvar solcastZbytek = global.get(\"homeassistant.homeAssistant.states['sensor.energy_production_today_remaining_2']\");\nvar solcastZbytekKwh = (solcastZbytek && solcastZbytek.state && !isNaN(parseFloat(solcastZbytek.state)))\n    ? parseFloat(solcastZbytek.state)\n    : 0;\nvar zbyvajiciSolar = (solcastZbytekKwh > 0) ? solcastZbytekKwh : (global.get(\"zbyvajici_solar_dnes\") || 0);\nvar consumptionAnalysis = global.get(\"fve_consumption_analysis\") || {};\nvar consumptionPredictions = global.get(\"fve_consumption_predictions\") || [];\n\n// v17: Čtení východu/západu slunce z HA entit\n// Tyto entity obsahují ISO datetime string, extrahujeme hodinu\nvar sunRising = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_rising']\") || {};\nvar sunSetting = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_setting']\") || {};\nvar sunNoon = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_noon']\") || {};\n\n// Parsování hodiny z ISO stringu nebo state value\nfunction parseHourFromEntity(entity) {\n    var state = (entity && entity.state) ? entity.state : null;\n    if (!state) return null;\n    // State je ISO datetime: \"2026-02-19T06:45:00+01:00\" nebo podobný formát\n    var d = new Date(state);\n    if (isNaN(d.getTime())) return null;\n    return d.getHours();\n}\n\nvar sunriseHour = parseHourFromEntity(sunRising);\nvar sunsetHour = parseHourFromEntity(sunSetting);\n\n// Solární okno: sunrise + 1h offset (slunce musí být výš) až sunset\n// Fallback na config hodnoty pokud entity nejsou dostupné\nvar solarStart = (sunriseHour !== null) ? Math.max(sunriseHour + 1, 7) : 9;\nvar solarEnd = (sunsetHour !== null) ? Math.min(sunsetHour, 20) : 17;\n\nmsg.planData = {\n    config: config,\n    status: status,\n    prices: prices,\n    forecast: {\n        zitra: forecastZitra,\n        dnes: global.get(\"forecast_vyroba_dnes\") || 0\n    },\n    zbyvajiciSolar: zbyvajiciSolar,\n    consumptionAnalysis: consumptionAnalysis,\n    consumptionPredictions: consumptionPredictions,\n    // v17: Dynamické solární hodiny z HA\n    solarStartHour: solarStart,\n    solarEndHour: solarEnd,\n    sunriseHour: sunriseHour,\n    sunsetHour: sunsetHour,\n    timestamp: new Date().toISOString()\n};\n\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Solar: \" + Math.round(zbyvajiciSolar) + \"kWh | ☀\" + solarStart + \"-\" + solarEnd + \"h\"});\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 380,
+    "y": 60,
+    "wires": [
+      [
+        "aabb001122334455"
+      ]
+    ]
+  },
+  {
+    "id": "9e0b46a9dfedea33",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Výpočet plánu na 12h (v18.0)",
+    "func": "// FVE Smart Plan v18.0 - přesný výpočet nabíjení + dynamické solární hodiny\n// v17.0 Opravy:\n//   1. targetSocFromGrid: nabíjet JEN pokud currentSoc nestačí na drahé hodiny před solarem\n//      - Starý projectedEndSoc byl špatně (počítal drain i v Šetřit kde SOC zůstává)\n//      - Nový: realDrain = POUZE drahé hodiny * socDropNormal\n//   2. solar_start/end_hour z HA entit (sensor.sun_next_rising/setting)\n//   3. Maintenance charge: 20 dní, pouze v zimě (říjen-březen)\n// Pravidla:\n//   - Solární nabíjení má VŽDY přednost před nabíjením ze sítě\n//   - Nabíjet ze sítě POUZE pokud baterie nestačí do solaru\n//   - Baterie by měla být často blízko minSoc před solárním nabíjením\n//   - NORMAL = vybíjení baterie (drahé + střední hodiny dle kapacity)\n//   - ŠETŘIT = baterie zamčená (SOC se nemění)\n\nvar data = msg.planData;\nvar config = data.config || {};\nvar status = data.status || {};\nvar forecast = data.forecast || {};\n\nvar prices = data.prices || global.get(\"fve_prices_forecast\") || [];\n\nvar MODY = {\n    NORMAL: \"normal\",\n    SETRIT: \"setrit\",\n    NABIJET_ZE_SITE: \"nabijet_ze_site\",\n    PRODAVAT: \"prodavat\",\n    ZAKAZ_PRETOKU: \"zakaz_pretoku\",\n    SOLAR_CHARGING: \"solar_charging\"\n};\n\n// === PARAMETRY Z CONFIGU ===\nvar kapacitaBaterie = config.kapacita_baterie_kwh || 28;\nvar minSoc = config.min_soc || 20;\nvar maxDailySoc = config.max_daily_soc || 80;\nvar amortizace = config.amortizace_baterie_czk_kwh || 1.5;\nvar chargeEfficiency = config.charge_efficiency || 0.90;\nvar dischargeEfficiency = config.discharge_efficiency || 0.90;\nvar roundTripEfficiency = chargeEfficiency * dischargeEfficiency;\nvar chargeRateKwh = config.charge_rate_kwh || 5;\nvar socDropNormal = config.soc_drop_normal_pct || 5;\nvar dailyConsumptionKwh = config.daily_consumption_kwh || 20;\nvar PRAH_LEVNA = config.prah_levna_energie || 4;\nvar PRAH_DRAHA = config.prah_draha_energie || 12;\nvar horizont = config.plan_horizon_hours || 12;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar maxFeedInW = config.max_feed_in_w || 7600;\nvar prodejZBaterieEnabled = config.prodej_z_baterie_enabled === true;\nvar blokaceVybijeni = config.blokace_vybijeni === true;\nvar manualMod = config.manual_mod || \"auto\";\nvar letniRezim = config.letni_rezim === true;\nvar socDropSetrit = config.soc_drop_setrit_pct || 1;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n// v18.8: SOC drop při blokaci (1.3kW povinná spotřeba domu)\nvar socDropBlokace = (minDischargeBlokaceW / 1000 / kapacitaBaterie) * 100;\n\n// v17: Dynamické solární hodiny z HA (předané z Sbírka dat)\nvar solarStartHour = data.solarStartHour || config.solar_start_hour || 9;\nvar solarEndHour = data.solarEndHour || config.solar_end_hour || 17;\n\n// === AKTUÁLNÍ STAV ===\nvar currentSoc = status.battery_soc || 50;\n\n// v18.2: Blokace info pro dashboard\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\nvar blokaceItems = [];\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\nvar forecastZitra = forecast.zitra || 0;\nvar remainingSolarKwh = data.zbyvajiciSolar || 0;\n\n// v18.13: Sanity check - max denní výroba dle měsíce pro 17kWp, az190, sklon45, 50N\n// Hodnoty odpovídají realistickému maximu pro daný měsíc\n// v18.20: Realistická maxima pro 17kWp, az190, sklon45, 50N (Horoušany)\nvar monthMaxSolarKwh = [15, 35, 60, 90, 110, 120, 115, 105, 75, 50, 20, 12];\nvar currentMonth = new Date().getMonth(); // 0-11\nvar maxSolarToday = monthMaxSolarKwh[currentMonth];\nif (remainingSolarKwh > maxSolarToday) {\n    remainingSolarKwh = maxSolarToday;\n}\n\n// v18: Predikce výroby a spotřeby per hodinu z historie\nvar consumptionPredictions = data.consumptionPredictions || [];\n\n// v18: Pomocná funkce - získej predikci pro danou hodinu\nfunction getPredictionForHour(hour) {\n    for (var pi = 0; pi < consumptionPredictions.length; pi++) {\n        if (consumptionPredictions[pi].hour === hour) {\n            return consumptionPredictions[pi];\n        }\n    }\n    return null;\n}\n\n// v18: Výpočet solárního přírůstku per hodinu\n// v18.12: Solarni krivka pro Horousany (50.105N, 14.741E)\n// Azimut 190 (mirne JZ), sklon 45 stupnu, 17 kWp\n// Vypocteno ze solarniho modelu pro rocni prumer\nvar solarCurveWeights = {\n    5: 0.01, 6: 0.01, 7: 0.03, 8: 0.07, 9: 0.09, 10: 0.11,\n    11: 0.12, 12: 0.13, 13: 0.12, 14: 0.11, 15: 0.09,\n    16: 0.05, 17: 0.03, 18: 0.01\n};\n\n// Spočítej celkovou váhu pro aktivní solární hodiny v plánu\nvar totalCurveWeight = 0;\nfor (var cwh = solarStartHour; cwh < solarEndHour; cwh++) {\n    totalCurveWeight += solarCurveWeights[cwh] || 0;\n}\nif (totalCurveWeight === 0) totalCurveWeight = 1; // safety\n\nfunction getSolarCurveShare(hour) {\n    // Vrátí podíl hodiny na celkové výrobě (0-1) v rámci aktivních solárních hodin\n    var weight = solarCurveWeights[hour] || 0;\n    return weight / totalCurveWeight;\n}\n\nfunction getSolarGainForHour(hour, remainingSolar, solarHours, hFraction) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    var curveShare = getSolarCurveShare(hour);\n\n    // v18.6: Historická spotřeba per hodina (přesnější než denní průměr)\n    var pred = getPredictionForHour(hour);\n    var hourlyConsumption = (pred && pred.avgConsumptionKwh > 0)\n        ? pred.avgConsumptionKwh\n        : (config.daily_consumption_kwh || 20) / 24;\n\n    if (pred && pred.sampleCount >= 3 && pred.avgSolarKwh > 0) {\n        // Historická data: čistý přebytek solaru (výroba - spotřeba)\n        var netGain = pred.netSolarGainKwh || 0;\n        // v18.5: Sanity check - omezit historický gain křivkou\n        if (remainingSolar > 0 && solarHours > 0) {\n            var maxFromCurve = remainingSolar * curveShare;\n            var maxNetKwh = maxFromCurve - hourlyConsumption;\n            if (netGain > maxNetKwh * 2 && maxNetKwh > 0) {\n                netGain = maxNetKwh;\n            }\n        }\n        // v18.6: Aplikovat zlomek hodiny\n        return (netGain * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    // Fallback: rozdělení zbývajícího solaru podle křivky\n    if (solarHours > 0 && remainingSolar > 0) {\n        var hourKwh = remainingSolar * curveShare;\n        // v18.13: Záporný netKwh = spotřeba > výroba, baterie dodá rozdíl\n        var netKwh = hourKwh - hourlyConsumption * frac;\n        return (netKwh * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    // Plán v noci pro zítřek - použít forecast\n    if (forecastZitra > 0 && curveShare > 0) {\n        var hourKwhForecast = forecastZitra * curveShare;\n        // v18.13: Záporný = spotřeba > forecast výroba\n        var netKwhForecast = hourKwhForecast - hourlyConsumption * frac;\n        return (netKwhForecast * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    return 0;\n}\n\n// v17: Maintenance charge - 20 dní, pouze v zimě (říjen-březen)\nvar lastFullCharge = global.get(\"fve_last_full_charge\") || null;\nif (!lastFullCharge) {\n    global.set(\"fve_last_full_charge\", new Date().toISOString());\n    lastFullCharge = global.get(\"fve_last_full_charge\");\n}\nvar daysSinceFullCharge = lastFullCharge\n    ? Math.floor((Date.now() - new Date(lastFullCharge).getTime()) / (1000 * 60 * 60 * 24))\n    : 999;\nif (currentSoc >= 99) {\n    global.set(\"fve_last_full_charge\", new Date().toISOString());\n}\n\nvar now = new Date();\nvar currentHour = now.getHours();\nvar currentMinute = now.getMinutes();\nvar firstHourFraction = (60 - currentMinute) / 60; // v18.6: zlomek zbývající první hodiny\nvar currentMonth = now.getMonth() + 1; // 1-12\nvar isWinter = (currentMonth >= 10 || currentMonth <= 3); // říjen-březen\n\n// === POMOCNÁ FUNKCE: NAJDI CENOVÝ ZÁZNAM ===\nfunction findPriceEntry(hour, offset) {\n    var isNextDay = (currentHour + (offset || 0)) >= 24;\n    var preferDay = isNextDay ? \"hoursTomorrow\" : \"hoursToday\";\n    var otherDay = isNextDay ? \"hoursToday\" : \"hoursTomorrow\";\n    \n    for (var i = 0; i < prices.length; i++) {\n        if (prices[i].day === preferDay && prices[i].hour === hour && prices[i].minute === 0) {\n            return { entry: prices[i], method: \"exact_\" + preferDay };\n        }\n    }\n    for (var j = 0; j < prices.length; j++) {\n        if (prices[j].day === preferDay && prices[j].hour === hour) {\n            return { entry: prices[j], method: \"dayHour_\" + preferDay };\n        }\n    }\n    for (var k = 0; k < prices.length; k++) {\n        if (prices[k].day === otherDay && prices[k].hour === hour && prices[k].minute === 0) {\n            return { entry: prices[k], method: \"exact_\" + otherDay };\n        }\n    }\n    for (var m = 0; m < prices.length; m++) {\n        if (prices[m].day === otherDay && prices[m].hour === hour) {\n            return { entry: prices[m], method: \"dayHour_\" + otherDay };\n        }\n    }\n    for (var n = 0; n < prices.length; n++) {\n        if (prices[n].hour === hour) {\n            return { entry: prices[n], method: \"any_\" + (prices[n].day || \"noday\") };\n        }\n    }\n    return { entry: null, method: \"none\" };\n}\n\n// === KROK 1: CENOVÁ MAPA HORIZONTU ===\nvar hourPrices = [];\nvar debugMatches = [];\nfor (var hi = 0; hi < horizont; hi++) {\n    var hh = (currentHour + hi) % 24;\n    var found = findPriceEntry(hh, hi);\n    var entry = found.entry;\n    hourPrices.push({\n        offset: hi,\n        hour: hh,\n        buy: entry ? (parseFloat(entry.priceCZKhourBuy) || 0) : 0,\n        sell: entry ? (parseFloat(entry.priceCZKhourProd) || 0) : 0,\n        levelBuy: entry ? (entry.levelCheapestHourBuy || 5) : 5,\n        levelSell: entry ? (entry.levelMostExpensiveHourProd || 5) : 5\n    });\n    debugMatches.push({\n        offset: hi, hour: hh, method: found.method,\n        day: entry ? entry.day : null, min: entry ? entry.minute : null,\n        buy: entry ? entry.priceCZKhourBuy : null, lvl: entry ? entry.levelCheapestHourBuy : null\n    });\n}\n\n// === KROK 2: IDENTIFIKUJ SOLÁRNÍ HODINY (potřebuji je dříve pro výpočet nabíjení) ===\nvar solarOffsets = {};\nvar solarHoursCount = 0;\nfor (var sh = 0; sh < horizont; sh++) {\n    var shh = (currentHour + sh) % 24;\n    if (shh >= solarStartHour && shh < solarEndHour) {\n        solarOffsets[sh] = true;\n        solarHoursCount++;\n    }\n}\n\n// === KROK 3: NAJDI DRAHÉ HODINY PŘED SOLAREM ===\n// Klíčový výpočet: kolik drahých hodin je PŘED dalším solárním oknem?\n// Tyto hodiny MUSÍ pokrýt baterie (vybíjením)\nvar expensiveBeforeSolar = [];\nvar firstSolarOffset = horizont;\nfor (var fso = 0; fso < horizont; fso++) {\n    if (solarOffsets[fso]) {\n        firstSolarOffset = fso;\n        break;\n    }\n}\n\nfor (var eo = 0; eo < hourPrices.length; eo++) {\n    var hp = hourPrices[eo];\n    var isSolarHour = solarOffsets[eo];\n    if (hp.levelBuy >= PRAH_DRAHA && !isSolarHour && eo < firstSolarOffset) {\n        expensiveBeforeSolar.push(hp);\n    }\n}\n\n// Všechny drahé hodiny (pro finanční kalkulaci)\nvar allExpensiveHours = hourPrices.filter(function(hp) {\n    return hp.levelBuy >= PRAH_DRAHA && !solarOffsets[hp.offset];\n});\nvar avgExpensivePrice = 0;\nif (allExpensiveHours.length > 0) {\n    var sum = 0;\n    for (var ei = 0; ei < allExpensiveHours.length; ei++) {\n        sum += allExpensiveHours[ei].buy;\n    }\n    avgExpensivePrice = sum / allExpensiveHours.length;\n}\n\n// === KROK 4: KOLIK ENERGIE POTŘEBUJI ZE SÍTĚ? ===\n// v17: PŘESNÝ výpočet - nabíjet JEN pokud currentSoc nestačí\n//\n// Logika:\n// 1. Spočítej reálný drain do solaru = drahé hodiny před solarem × socDropNormal\n// 2. SOC po vybíjení = currentSoc - drain\n// 3. Pokud SOC po vybíjení >= minSoc + safety → NENABÍJET (solár dobije)\n// 4. Pokud SOC po vybíjení < minSoc + safety → nabít JEN deficit\n//\n// Příklad z problemy.txt:\n//   currentSoc=42%, drahé hodiny před solarem=3 (06,07,08), drain=15%\n//   SOC po vybíjení = 42% - 15% = 27%\n//   minSoc + safety = 20% + 5% = 25%\n//   27% > 25% → NENABÍJET ✓\n\nvar drainBeforeSolarPct = expensiveBeforeSolar.length * socDropNormal;\nvar socAfterDrain = currentSoc - drainBeforeSolarPct;\n\n// Safety margin závisí na solární předpovědi\nvar safetyMargin = 5;\nif (forecastZitra < dailyConsumptionKwh * 0.3) {\n    safetyMargin = 10; // špatná předpověď\n} else if (forecastZitra < dailyConsumptionKwh * 0.5) {\n    safetyMargin = 7; // střední předpověď\n}\n\nvar minRequiredSoc = minSoc + safetyMargin;\nvar gridChargeNeeded = 0;\nvar targetSocFromGrid = currentSoc; // default: nenabíjet\n\n// Nabíjet ze sítě JEN pokud SOC po vybíjení drahých hodin nestačí\nif (socAfterDrain < minRequiredSoc) {\n    // Deficit: kolik % chybí?\n    var deficitPct = minRequiredSoc - socAfterDrain;\n    // Nabít tak, aby po vybíjení drahých hodin zůstalo minRequiredSoc\n    targetSocFromGrid = Math.min(maxDailySoc, currentSoc + Math.ceil(deficitPct));\n    gridChargeNeeded = Math.max(0, ((targetSocFromGrid - currentSoc) / 100) * kapacitaBaterie / chargeEfficiency);\n}\n\n// Pokud target je moc blízko currentSoc, nenabíjet\nif (targetSocFromGrid <= currentSoc + 3) {\n    gridChargeNeeded = 0;\n    targetSocFromGrid = currentSoc;\n}\n\n// v17: Maintenance charge - 20 dní, pouze v zimě\nvar maintenanceCharge = false;\nif (isWinter && daysSinceFullCharge >= 20 && targetSocFromGrid < 100) {\n    targetSocFromGrid = 100;\n    gridChargeNeeded = ((100 - currentSoc) / 100) * kapacitaBaterie / chargeEfficiency;\n    maintenanceCharge = true;\n}\n\n// === KROK 4b: FINANČNÍ SMYSLUPLNOST NABÍJENÍ ===\nvar viableChargingHours = [];\nif (gridChargeNeeded > 0) {\n    for (var vi = 0; vi < hourPrices.length; vi++) {\n        var chp = hourPrices[vi];\n        if (chp.levelBuy > PRAH_LEVNA) continue;\n        if (!solarOffsets[chp.offset]) { // nenabíjet v solárních hodinách ze sítě\n            var effectiveCost = chp.buy / roundTripEfficiency + amortizace;\n            if (effectiveCost < avgExpensivePrice || avgExpensivePrice === 0 || maintenanceCharge) {\n                viableChargingHours.push(chp);\n            }\n        }\n    }\n    viableChargingHours.sort(function(a, b) { return a.buy - b.buy; });\n}\n\nvar hoursNeeded = Math.ceil(gridChargeNeeded / chargeRateKwh);\n\n// === KROK 5: PŘIŘAĎ NABÍJECÍ HODINY ===\nvar chargingOffsets = {};\nvar assignedHours = 0;\n\nif (viableChargingHours.length > 0) {\n    for (var ci = 0; ci < viableChargingHours.length && assignedHours < hoursNeeded; ci++) {\n        chargingOffsets[viableChargingHours[ci].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Fallback: pokud nestačí viable hours, hledej další levné\nif (assignedHours < hoursNeeded) {\n    var cheapestAvail = hourPrices.slice().filter(function(hp) {\n        return !chargingOffsets[hp.offset] && hp.levelBuy <= PRAH_LEVNA && !solarOffsets[hp.offset];\n    });\n    cheapestAvail.sort(function(a, b) { return a.buy - b.buy; });\n    for (var ca = 0; ca < cheapestAvail.length && assignedHours < hoursNeeded; ca++) {\n        chargingOffsets[cheapestAvail[ca].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Maintenance: pokud stále nestačí, použij i dražší hodiny\nif (maintenanceCharge && assignedHours < hoursNeeded) {\n    var remaining = hourPrices.filter(function(hp) {\n        return !chargingOffsets[hp.offset] && hp.levelBuy < PRAH_DRAHA && !solarOffsets[hp.offset];\n    });\n    remaining.sort(function(a, b) { return a.buy - b.buy; });\n    for (var ri = 0; ri < remaining.length && assignedHours < hoursNeeded; ri++) {\n        chargingOffsets[remaining[ri].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Upravit target pokud se nepodařilo přiřadit dost hodin\nif (assignedHours < hoursNeeded && !maintenanceCharge) {\n    var actualChargeKwh = assignedHours * chargeRateKwh * chargeEfficiency;\n    targetSocFromGrid = Math.min(targetSocFromGrid,\n        currentSoc + Math.round(actualChargeKwh / kapacitaBaterie * 100));\n    gridChargeNeeded = actualChargeKwh;\n}\n\n// Odstraň solární hodiny z chargingOffsets (pro jistotu)\nfor (var cso in chargingOffsets) {\n    if (solarOffsets[cso]) {\n        delete chargingOffsets[cso];\n    }\n}\n\n// === KROK 6: SOLÁRNÍ SOC GAIN ===\nvar solarSocGainTotal = 0;\nif (solarHoursCount > 0 && remainingSolarKwh > 0) {\n    solarSocGainTotal = (remainingSolarKwh * chargeEfficiency / kapacitaBaterie) * 100;\n}\n\n// === KROK 7: DYNAMICKÝ PRÁH VYBÍJENÍ ===\nvar dischargeCandidate = [];\nfor (var dc = 0; dc < hourPrices.length; dc++) {\n    if (!solarOffsets[dc] && !chargingOffsets[dc]) {\n        dischargeCandidate.push({\n            offset: dc,\n            hour: hourPrices[dc].hour,\n            levelBuy: hourPrices[dc].levelBuy,\n            buy: hourPrices[dc].buy\n        });\n    }\n}\n\ndischargeCandidate.sort(function(a, b) {\n    if (b.levelBuy !== a.levelBuy) return b.levelBuy - a.levelBuy;\n    return b.buy - a.buy;\n});\n\nvar availableBatteryKwh = Math.max(0, (currentSoc - minSoc) / 100 * kapacitaBaterie * dischargeEfficiency);\nvar energyBudgetKwh = availableBatteryKwh;\n\nvar dischargeOffsets = {};\nvar effectiveThreshold = PRAH_DRAHA;\nvar usedEnergyKwh = 0;\nvar dischargeDebug = [];\n\nfor (var di = 0; di < dischargeCandidate.length; di++) {\n    var cand = dischargeCandidate[di];\n    var energyForThisHour = socDropNormal / 100 * kapacitaBaterie;\n    \n    if (usedEnergyKwh + energyForThisHour <= energyBudgetKwh) {\n        dischargeOffsets[cand.offset] = true;\n        usedEnergyKwh += energyForThisHour;\n        effectiveThreshold = Math.min(effectiveThreshold, cand.levelBuy);\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"NORMAL\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    } else if (cand.levelBuy >= PRAH_DRAHA && usedEnergyKwh < energyBudgetKwh) {\n        // v18.17: Budget nestačí na celou hodinu, ale levelBuy je drahý\n        // Přidáme hodinu - baterie se vybije co může (až na minSoc)\n        dischargeOffsets[cand.offset] = true;\n        usedEnergyKwh = energyBudgetKwh; // vyčerpáme zbytek budgetu\n        effectiveThreshold = Math.min(effectiveThreshold, cand.levelBuy);\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"NORMAL (partial, budget limit)\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    } else {\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"SETRIT (budget exceeded)\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    }\n}\n\n// v18.18b: Flag - existují drahé hodiny bez budgetu na vybíjení?\nvar budgetExhausted = false;\nfor (var be = 0; be < dischargeCandidate.length; be++) {\n    if (!dischargeOffsets[dischargeCandidate[be].offset] && dischargeCandidate[be].levelBuy >= PRAH_DRAHA) {\n        budgetExhausted = true;\n        break;\n    }\n}\n\n// === KROK 8: VÝPOČET MÓDU PRO KAŽDOU HODINU ===\nfunction calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    if (manualMod !== \"auto\") {\n        return { mode: manualMod, reason: \"Manuální mód\" };\n    }\n\n    var priceSell = priceData.sell;\n    var levelSell = priceData.levelSell;\n    var levelBuy = priceData.levelBuy;\n\n    // PRIORITA 0: Záporná prodejní cena\n    if (priceSell <= 0) {\n        return { mode: MODY.ZAKAZ_PRETOKU, reason: \"Záporná prodejní cena\" };\n    }\n\n    // PRIORITA 1: Nabíjení ze sítě\n    if (chargingOffsets[offset] && simulatedSoc < targetSocFromGrid) {\n        return {\n            mode: MODY.NABIJET_ZE_SITE,\n            reason: \"Nabíjení na cíl \" + Math.round(targetSocFromGrid) + \"% (nyní \" + Math.round(simulatedSoc) + \"%)\"\n        };\n    }\n\n    // PRIORITA 2: Prodej z baterie při výhodné ceně\n    if (prodejZBaterieEnabled && levelSell <= 2 && simulatedSoc > minSoc + 20) {\n        var avgChargeCost = 0;\n        if (viableChargingHours.length > 0) {\n            var s = 0;\n            for (var ac = 0; ac < viableChargingHours.length; ac++) {\n                s += viableChargingHours[ac].buy;\n            }\n            avgChargeCost = s / viableChargingHours.length;\n        }\n        var revenuePerKwh = priceSell * dischargeEfficiency;\n        var costPerKwh = avgChargeCost / roundTripEfficiency + amortizace;\n        if (revenuePerKwh > costPerKwh) {\n            var dischRateKwh = maxFeedInW / 1000;\n            var socAfter = Math.max(minSoc,\n                simulatedSoc - (dischRateKwh / dischargeEfficiency / kapacitaBaterie * 100));\n            return {\n                mode: MODY.PRODAVAT,\n                reason: \"Prodej, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(socAfter) + \"%\"\n            };\n        }\n    }\n\n    // PRIORITA 3: Ochrana baterie - příliš nízký SOC\n    if (simulatedSoc <= minSoc) {\n        return {\n            mode: MODY.SETRIT,\n            reason: \"Ochrana baterie (SOC \" + Math.round(simulatedSoc) + \"% ≤ \" + minSoc + \"%)\"\n        };\n    }\n\n    // PRIORITA 4: Solární hodiny - v18.18: ŠETŘIT při nízkém zisku, NORMAL při vysokém\n    if (solarOffsets[offset]) {\n        var planHourForSolar = (currentHour + offset) % 24;\n        var solarGainPct = getSolarGainForHour(planHourForSolar, remainingSolarKwh, solarHoursCount, frac);\n        var solarGainEst = Math.round(solarGainPct * 10) / 10;\n        var expectedSocSolar = Math.min(100, simulatedSoc + solarGainEst);\n\n        // v18.18: Pokud solární zisk výrazně nabíjí baterii, vždy NORMAL\n        if (solarGainEst > socDropNormal) {\n            return {\n                mode: MODY.NORMAL,\n                reason: \"Solární hodina, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n            };\n        }\n\n        // Nízký solární zisk - rozhodnutí dle ceny (viz v18.19 výše)\n\n        // v18.19: Drahá hodina (levelBuy >= PRAH_DRAHA) - vždy NORMAL (vybíjet)\n        if (levelBuy >= PRAH_DRAHA && simulatedSoc > minSoc) {\n            return {\n                mode: MODY.NORMAL,\n                reason: \"Solární+drahá (Lv\" + levelBuy + \"≥\" + PRAH_DRAHA + \"), SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n            };\n        }\n\n        // Nízký zisk a levná hodina - ŠETŘIT pouze pokud budget nestačí\n        if (budgetExhausted) {\n            return {\n                mode: MODY.SETRIT,\n                reason: \"Solární (nízký zisk +\" + solarGainEst + \"%), šetřím na dražší hodiny, SOC \" + Math.round(simulatedSoc) + \"%\"\n            };\n        }\n        // Budget stačí - NORMAL\n        return {\n            mode: MODY.NORMAL,\n            reason: \"Solární hodina, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n        };\n    }\n\n    // PRIORITA 5: NORMAL pro hodiny vybrané dynamickým prahem (vybíjení)\n    if (dischargeOffsets[offset] && simulatedSoc > minSoc) {\n        var expectedSocDischarge = Math.max(minSoc, simulatedSoc - socDropNormal * frac);\n        var priceInfo = levelBuy >= PRAH_DRAHA ? \"drahá\" : \"střední\";\n        return {\n            mode: MODY.NORMAL,\n            reason: priceInfo + \" (Lv\" + levelBuy + \"≥eff\" + effectiveThreshold + \"), vybíjení SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocDischarge) + \"%\"\n        };\n    }\n\n    // PRIORITA 5b: v18.19 - Drahé hodiny VŽDY vybíjet (i bez budgetu)\n    if (levelBuy >= PRAH_DRAHA && simulatedSoc > minSoc) {\n        var expectedSocForced = Math.max(minSoc, simulatedSoc - socDropNormal * frac);\n        return {\n            mode: MODY.NORMAL,\n            reason: \"drahá (Lv\" + levelBuy + \"≥\" + PRAH_DRAHA + \"), vybíjení SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocForced) + \"%\"\n        };\n    }\n\n    // PRIORITA 6: ŠETŘIT (výchozí mód) - pouze levné hodiny (levelBuy < PRAH_DRAHA)\n    return {\n        mode: MODY.SETRIT,\n        reason: \"Šetřím (Lv\" + levelBuy + \"<\" + PRAH_DRAHA + \"), SOC \" + Math.round(simulatedSoc) + \"%\"\n    };\n}\n\n// === SIMULACE SOC ===\nfunction simulateSocChange(mode, hour, soc, hFraction, chargeTarget) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    var isSolar = hour >= solarStartHour && hour < solarEndHour;\n    switch (mode) {\n        case MODY.NABIJET_ZE_SITE:\n            var maxChargeSoc = (chargeTarget && chargeTarget > 0) ? chargeTarget : 100;\n            return Math.min(maxChargeSoc, soc + (chargeRateKwh * frac * chargeEfficiency / kapacitaBaterie * 100));\n        case MODY.PRODAVAT:\n            var dischRateKwh = maxFeedInW / 1000;\n            return Math.max(minSoc, soc - (dischRateKwh * frac / dischargeEfficiency / kapacitaBaterie * 100));\n        case MODY.SETRIT:\n            return soc;\n        case MODY.ZAKAZ_PRETOKU:\n            return Math.max(minSoc, soc - socDropSetrit * frac);\n        case MODY.NORMAL:\n            if (isSolar) {\n                var solarGainSim = getSolarGainForHour(hour, remainingSolarKwh, solarHoursCount, frac);\n                // v18.13: Záporný gain = spotřeba > výroba, SOC klesá\n                return Math.min(100, Math.max(minSoc, soc + solarGainSim));\n            }\n            return Math.max(minSoc, soc - socDropNormal * frac);\n        default:\n            return soc;\n    }\n}\n\n// === GENEROVÁNÍ PLÁNU ===\nvar modeNamesCZ = {\n    normal: \"Normální provoz\",\n    setrit: \"Šetřit baterii\",\n    nabijet_ze_site: \"Nabíjet ze sítě\",\n    prodavat: \"Prodávat do sítě\",\n    zakaz_pretoku: \"Zákaz přetoků\"\n};\n\nvar plan = [];\nvar simulatedSoc = currentSoc;\n\nfor (var pi = 0; pi < horizont; pi++) {\n    var planHour = (currentHour + pi) % 24;\n    var isNextDay = (currentHour + pi) >= 24;\n    var priceData = hourPrices[pi];\n    var hFrac = (pi === 0) ? firstHourFraction : 1.0;\n    var result = calculateModeForHour(pi, priceData, simulatedSoc, hFrac);\n    simulatedSoc = simulateSocChange(result.mode, planHour, simulatedSoc, hFrac, targetSocFromGrid);\n    plan.push({\n        hour: planHour,\n        offset: pi,\n        mode: result.mode,\n        modeCZ: modeNamesCZ[result.mode] || result.mode,\n        reason: result.reason,\n        priceLevel: priceData.levelBuy,\n        priceBuy: priceData.buy,\n        priceSell: priceData.sell,\n        simulatedSoc: Math.round(simulatedSoc),\n        isNextDay: isNextDay,\n        isChargingHour: chargingOffsets[pi] || false,\n        isSolarHour: solarOffsets[pi] || false,\n        isDischargeHour: dischargeOffsets[pi] || false\n    });\n}\n\n// === LOGOVÁNÍ ===\nvar countSetrit = 0, countNormal = 0, countNabijet = 0;\nfor (var cs = 0; cs < plan.length; cs++) {\n    if (plan[cs].mode === MODY.SETRIT) countSetrit++;\n    else if (plan[cs].mode === MODY.NORMAL) countNormal++;\n    else if (plan[cs].mode === MODY.NABIJET_ZE_SITE) countNabijet++;\n}\n\n// === VÝSTUP ===\nvar currentMode = plan.length > 0 ? plan[0].mode : MODY.NORMAL;\nvar currentReason = plan.length > 0 ? plan[0].reason : \"\";\n\nmsg.payload = {\n    currentMode: currentMode,\n    currentReason: currentReason,\n    currentHour: currentHour,\n    plan: plan,\n    dischargeDebug: dischargeDebug,\n    config: { \n        prah_levna: PRAH_LEVNA,\n        prah_draha: PRAH_DRAHA,\n        effective_threshold: effectiveThreshold,\n        solarStartHour: solarStartHour,\n        solarEndHour: solarEndHour\n    },\n    proteus: {\n        firstSolarOffset: firstSolarOffset,\n        dischargeHoursCount: Object.keys(dischargeOffsets).length,\n        solarHoursCount: Object.keys(solarOffsets).length,\n        energyBudgetKwh: Math.round(energyBudgetKwh * 10) / 10,\n        usedEnergyKwh: Math.round(usedEnergyKwh * 10) / 10,\n        effectiveThreshold: effectiveThreshold,\n        peakSoc: Math.round(currentSoc + solarSocGainTotal),\n        totalSolarAvailable: Math.round((remainingSolarKwh + forecastZitra) * 10) / 10,\n        forecastZitra: forecastZitra,\n        drainBeforeSolarPct: drainBeforeSolarPct,\n        socAfterDrain: Math.round(socAfterDrain),\n        minRequiredSoc: minRequiredSoc\n    },\n    smartCharging: {\n        targetSocFromGrid: Math.round(targetSocFromGrid),\n        gridChargeNeeded: Math.round(gridChargeNeeded * 10) / 10,\n        hoursNeeded: hoursNeeded,\n        assignedHours: assignedHours,\n        viableHoursAvailable: viableChargingHours.length,\n        remainingSolar: Math.round(remainingSolarKwh * 10) / 10,\n        roundTripEfficiency: Math.round(roundTripEfficiency * 100),\n        amortizace: amortizace,\n        daysToFullCharge: daysSinceFullCharge,\n        maintenanceCharge: maintenanceCharge,\n        isWinter: isWinter,\n        chargingReason: gridChargeNeeded > 0 \n            ? (maintenanceCharge ? \"maintenance (20d)\" : \"deficit \" + Math.round(minRequiredSoc - socAfterDrain) + \"%\")\n            : \"nepotřeba (SOC \" + Math.round(socAfterDrain) + \"% > min \" + minRequiredSoc + \"%)\"\n    },\n    planSummary: {\n        setritHours: countSetrit,\n        normalHours: countNormal,\n        nabijetHours: countNabijet\n    },\n    status: {\n        soc: currentSoc,\n        remainingSolar: remainingSolarKwh,\n        forecastZitra: forecastZitra,\n        forecastDnes: forecast.dnes || 0,\n        prodejEnabled: prodejZBaterieEnabled,\n        blokaceVybijeni: blokaceVybijeni,\n        blokaceText: blokaceText\n    },\n    generatedAt: now.toISOString()\n};\n\nvar modeColors = {\n    normal: \"green\",\n    setrit: \"yellow\",\n    nabijet_ze_site: \"blue\",\n    prodavat: \"red\",\n    zakaz_pretoku: \"purple\"\n};\nnode.status({\n    fill: modeColors[currentMode] || \"grey\",\n    shape: \"dot\",\n    text: \"v18 \" + currentMode\n        + \" | Š:\" + countSetrit + \" N:\" + countNormal + \" Nab:\" + countNabijet\n        + \" | effThr:\" + effectiveThreshold\n        + \" | SOC:\" + currentSoc + \"% drn:\" + drainBeforeSolarPct + \"% →\" + Math.round(socAfterDrain) + \"%\"\n        + \" | ☀\" + solarStartHour + \"-\" + solarEndHour + \"h\"\n        + (gridChargeNeeded > 0 ? \" | ⚡\" + Math.round(targetSocFromGrid) + \"%\" : \"\")\n});\n\nreturn msg;\n",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1160,
+    "y": 60,
+    "wires": [
+      [
+        "df085ac4da095340",
+        "39019d1a78677231"
+      ]
+    ]
+  },
+  {
+    "id": "df085ac4da095340",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Ulož plán",
+    "func": "global.set(\"fve_plan\", msg.payload);\nglobal.set(\"fve_current_mode\", msg.payload.currentMode);\n\nmsg.ha_update = {\n    state: msg.payload.currentMode,\n    attributes: {\n        current_mode: msg.payload.currentMode,\n        current_reason: msg.payload.currentReason,\n        current_hour: msg.payload.currentHour,\n        plan: msg.payload.plan,\n        soc: msg.payload.status.soc,\n        forecast_dnes: msg.payload.status.forecastDnes,\n        forecast_zitra: msg.payload.status.forecastZitra,\n        last_update: msg.payload.generatedAt,\n        debug: msg.payload.debug || {},\n        blokace_text: msg.payload.status.blokaceText || \"NE\"\n    }\n};\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 140,
+    "wires": [
+      [
+        "517215d5f730e80c"
+      ]
+    ]
+  },
+  {
+    "id": "39019d1a78677231",
+    "type": "debug",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Plan Debug",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1170,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "517215d5f730e80c",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Aktualizuj HA sensor",
+    "func": "var planData = msg.payload || {};\nvar currentMode = planData.currentMode || \"normal\";\nvar currentHour = planData.currentHour || new Date().getHours();\nvar planArray = planData.plan || [];\n\nnode.status({fill:\"green\", shape:\"dot\", text: \"Mód: \" + currentMode + \", hodina: \" + currentHour});\n\nmsg.payload = JSON.stringify({\n    current_mode: currentMode,\n    current_reason: planData.currentReason || \"\",\n    current_hour: currentHour,\n    plan: planArray,\n    soc: planData.status ? planData.status.soc : null,\n    forecast_dnes: planData.status ? planData.status.forecastDnes : null,\n    forecast_zitra: planData.status ? planData.status.forecastZitra : null,\n    debug: planData.debug || \"\",\n    blokace_text: planData.status ? (planData.status.blokaceText || \"NE\") : \"NE\",\n    last_update: new Date().toISOString()\n}, null, 2);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 140,
+    "wires": [
+      [
+        "701e94d82c3aead0"
+      ]
+    ]
+  },
+  {
+    "id": "701e94d82c3aead0",
+    "type": "file",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Zapiš plán do souboru",
+    "filename": "/homeassistant/fve_plan.json",
+    "filenameType": "str",
+    "appendNewline": false,
+    "createDir": false,
+    "overwriteFile": "true",
+    "encoding": "utf8",
+    "x": 880,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "44d31ff3c04741b7",
+    "type": "inject",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Každých 15 sekund",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "15",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "20",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 280,
+    "y": 260,
+    "wires": [
+      [
+        "c36915a8599c5282"
+      ]
+    ]
+  },
+  {
+    "id": "c36915a8599c5282",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Kontrola podmínek",
+    "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\n\n// Grid Lost ochrana\nvar gridLostState = global.get(\"homeassistant.homeAssistant.states['sensor.grid_lost_ciselny']\") || {};\nvar gridLost = parseInt(gridLostState.state || \"0\") >= 2;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\n// Grid Lost: přepnout na šetřit (žádné nabíjení ze sítě, baterie se nevybíjí)\nif (gridLost && currentMode === \"nabijet_ze_site\") {\n    currentMode = \"setrit\";\n    node.status({fill:\"red\", shape:\"dot\", text:\"GRID LOST → Šetřit (blokace nabíjení)\"});\n}\nglobal.set(\"fve_current_mode\", currentMode);\n\n// v18.2: Blokace text pro dashboard\nvar blokaceItems = [];\nif (gridLost) blokaceItems.push(\"GRID LOST\");\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\n\n// Update blokaceText in global fve_plan for real-time file updates\nvar currentPlan = global.get(\"fve_plan\") || {};\nif (!currentPlan.status) currentPlan.status = {};\ncurrentPlan.status.blokaceText = blokaceText;\nglobal.set(\"fve_plan\", currentPlan);\n\nmsg.blokaceText = blokaceText;\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.gridLost = gridLost;\nmsg.saunaAktivni = saunaAktivni;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (gridLost) infoText += \" | ⚡GRID LOST\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (saunaAktivni) infoText += \" | Sauna\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\n// v2.1: Přepnout z nabíjení na šetřit jakmile SOC dosáhne cíle\nif (currentMode === \"nabijet_ze_site\" && manualMod === \"auto\") {\n    var targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 0;\n    var currentSoc = (global.get(\"fve_status\") || {}).battery_soc || 0;\n    if (targetSoc > 0 && currentSoc >= targetSoc) {\n        currentMode = \"setrit\";\n        global.set(\"fve_current_mode\", currentMode);\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"SOC \" + Math.round(currentSoc) + \"% >= cíl \" + targetSoc + \"% → Šetřit\"});\n    }\n}\n\nmsg.currentMode = currentMode;\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 530,
+    "y": 260,
+    "wires": [
+      [
+        "8eef6d1d51c9c644",
+        "blokace_file_update"
+      ]
+    ]
+  },
+  {
+    "id": "8eef6d1d51c9c644",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Rozhodnutí o akci",
+    "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    default: msg.modeIndex = 0;\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 340,
+    "wires": [
+      [
+        "19a783a61de3519b"
+      ]
+    ]
+  },
+  {
+    "id": "19a783a61de3519b",
+    "type": "switch",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Směrování podle módu",
+    "property": "modeIndex",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "0",
+        "vt": "num"
+      },
+      {
+        "t": "eq",
+        "v": "1",
+        "vt": "num"
+      },
+      {
+        "t": "eq",
+        "v": "2",
+        "vt": "num"
+      },
+      {
+        "t": "eq",
+        "v": "3",
+        "vt": "num"
+      },
+      {
+        "t": "eq",
+        "v": "4",
+        "vt": "num"
+      },
+      {
+        "t": "eq",
+        "v": "5",
+        "vt": "num"
+      }
+    ],
+    "checkall": "false",
+    "repair": false,
+    "outputs": 6,
+    "x": 670,
+    "y": 340,
+    "wires": [
+      [
+        "f10a91fcb4de6bd3"
+      ],
+      [
+        "7f051a6595e57c3e"
+      ],
+      [
+        "185f95d7c56fe799"
+      ],
+      [
+        "a706b353f30c25d1"
+      ],
+      [
+        "a86bc5233cfa0458"
+      ],
+      [
+        "solar123456789abc"
+      ]
+    ]
+  },
+  {
+    "id": "f10a91fcb4de6bd3",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Normal",
+    "mode": "link",
+    "links": [
+      "8b55cfc5181b9eb7"
+    ],
+    "x": 845,
+    "y": 260,
+    "wires": []
+  },
+  {
+    "id": "7f051a6595e57c3e",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Šetřit",
+    "mode": "link",
+    "links": [
+      "ec611f6aba7d5c59"
+    ],
+    "x": 845,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "185f95d7c56fe799",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Nabíjet",
+    "mode": "link",
+    "links": [
+      "1d98a0541716ce58"
+    ],
+    "x": 845,
+    "y": 340,
+    "wires": []
+  },
+  {
+    "id": "a706b353f30c25d1",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Prodávat",
+    "mode": "link",
+    "links": [
+      "179ed150020d459c"
+    ],
+    "x": 845,
+    "y": 380,
+    "wires": []
+  },
+  {
+    "id": "a86bc5233cfa0458",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Zákaz přetoků",
+    "mode": "link",
+    "links": [
+      "c682224043634fcd"
+    ],
+    "x": 845,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "fc848e97e2c781c1",
+    "type": "server-state-changed",
+    "z": "d86bb11fab512182",
+    "g": "66210c073baa5af0",
+    "name": "Změna stavu wallboxu",
+    "server": "c7421fe2.cb11c",
+    "version": 6,
+    "outputs": 1,
+    "exposeAsEntityConfig": "",
+    "entities": {
+      "entity": [
+        "sensor.charger_state_garage",
+        "sensor.stav_wallboxu_venek"
+      ],
+      "substring": [],
+      "regex": []
     },
-    {
-        "id": "22e7b3b8965c20db",
-        "type": "inject",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Každou minutu",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "60",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "15",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 60,
-        "wires": [
-            [
-                "9333668b1d326a83"
-            ]
-        ]
-    },
-    {
-        "id": "f037d87ec94c7da2",
-        "type": "link in",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "← Manuální trigger",
-        "links": [],
-        "x": 145,
-        "y": 100,
-        "wires": [
-            [
-                "9333668b1d326a83"
-            ]
-        ]
-    },
-    {
-        "id": "9333668b1d326a83",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Sbírka dat pro plánování",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar forecastZitra = global.get(\"forecast_vyroba_zitra\") || 0;\nvar zbyvajiciSolar = global.get(\"zbyvajici_solar_dnes\") || 0;\nvar consumptionAnalysis = global.get(\"fve_consumption_analysis\") || {};\nvar consumptionPredictions = global.get(\"fve_consumption_predictions\") || [];\n\n// v17: Čtení východu/západu slunce z HA entit\n// Tyto entity obsahují ISO datetime string, extrahujeme hodinu\nvar sunRising = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_rising']\") || {};\nvar sunSetting = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_setting']\") || {};\nvar sunNoon = global.get(\"homeassistant.homeAssistant.states['sensor.sun_next_noon']\") || {};\n\n// Parsování hodiny z ISO stringu nebo state value\nfunction parseHourFromEntity(entity) {\n    var state = (entity && entity.state) ? entity.state : null;\n    if (!state) return null;\n    // State je ISO datetime: \"2026-02-19T06:45:00+01:00\" nebo podobný formát\n    var d = new Date(state);\n    if (isNaN(d.getTime())) return null;\n    return d.getHours();\n}\n\nvar sunriseHour = parseHourFromEntity(sunRising);\nvar sunsetHour = parseHourFromEntity(sunSetting);\n\n// Solární okno: sunrise + 1h offset (slunce musí být výš) až sunset\n// Fallback na config hodnoty pokud entity nejsou dostupné\nvar solarStart = (sunriseHour !== null) ? Math.max(sunriseHour + 1, 7) : 9;\nvar solarEnd = (sunsetHour !== null) ? Math.min(sunsetHour, 20) : 17;\n\nmsg.planData = {\n    config: config,\n    status: status,\n    prices: prices,\n    forecast: {\n        zitra: forecastZitra,\n        dnes: global.get(\"forecast_vyroba_dnes\") || 0\n    },\n    zbyvajiciSolar: zbyvajiciSolar,\n    consumptionAnalysis: consumptionAnalysis,\n    consumptionPredictions: consumptionPredictions,\n    // v17: Dynamické solární hodiny z HA\n    solarStartHour: solarStart,\n    solarEndHour: solarEnd,\n    sunriseHour: sunriseHour,\n    sunsetHour: sunsetHour,\n    timestamp: new Date().toISOString()\n};\n\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Solar: \" + Math.round(zbyvajiciSolar) + \"kWh | ☀\" + solarStart + \"-\" + solarEnd + \"h\"});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 380,
-        "y": 60,
-        "wires": [
-            [
-                "aabb001122334455"
-            ]
-        ]
-    },
-    {
-        "id": "9e0b46a9dfedea33",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Výpočet plánu na 12h (v18.0)",
-        "func": "// FVE Smart Plan v18.0 - přesný výpočet nabíjení + dynamické solární hodiny\n// v17.0 Opravy:\n//   1. targetSocFromGrid: nabíjet JEN pokud currentSoc nestačí na drahé hodiny před solarem\n//      - Starý projectedEndSoc byl špatně (počítal drain i v Šetřit kde SOC zůstává)\n//      - Nový: realDrain = POUZE drahé hodiny * socDropNormal\n//   2. solar_start/end_hour z HA entit (sensor.sun_next_rising/setting)\n//   3. Maintenance charge: 20 dní, pouze v zimě (říjen-březen)\n// Pravidla:\n//   - Solární nabíjení má VŽDY přednost před nabíjením ze sítě\n//   - Nabíjet ze sítě POUZE pokud baterie nestačí do solaru\n//   - Baterie by měla být často blízko minSoc před solárním nabíjením\n//   - NORMAL = vybíjení baterie (drahé + střední hodiny dle kapacity)\n//   - ŠETŘIT = baterie zamčená (SOC se nemění)\n\nvar data = msg.planData;\nvar config = data.config || {};\nvar status = data.status || {};\nvar forecast = data.forecast || {};\n\nvar prices = data.prices || global.get(\"fve_prices_forecast\") || [];\n\nvar MODY = {\n    NORMAL: \"normal\",\n    SETRIT: \"setrit\",\n    NABIJET_ZE_SITE: \"nabijet_ze_site\",\n    PRODAVAT: \"prodavat\",\n    ZAKAZ_PRETOKU: \"zakaz_pretoku\",\n    SOLAR_CHARGING: \"solar_charging\"\n};\n\n// === PARAMETRY Z CONFIGU ===\nvar kapacitaBaterie = config.kapacita_baterie_kwh || 28;\nvar minSoc = config.min_soc || 20;\nvar maxDailySoc = config.max_daily_soc || 80;\nvar amortizace = config.amortizace_baterie_czk_kwh || 1.5;\nvar chargeEfficiency = config.charge_efficiency || 0.90;\nvar dischargeEfficiency = config.discharge_efficiency || 0.90;\nvar roundTripEfficiency = chargeEfficiency * dischargeEfficiency;\nvar chargeRateKwh = config.charge_rate_kwh || 5;\nvar socDropNormal = config.soc_drop_normal_pct || 5;\nvar dailyConsumptionKwh = config.daily_consumption_kwh || 20;\nvar PRAH_LEVNA = config.prah_levna_energie || 4;\nvar PRAH_DRAHA = config.prah_draha_energie || 12;\nvar horizont = config.plan_horizon_hours || 12;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar maxFeedInW = config.max_feed_in_w || 7600;\nvar prodejZBaterieEnabled = config.prodej_z_baterie_enabled === true;\nvar blokaceVybijeni = config.blokace_vybijeni === true;\nvar manualMod = config.manual_mod || \"auto\";\nvar letniRezim = config.letni_rezim === true;\nvar socDropSetrit = config.soc_drop_setrit_pct || 1;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n// v18.8: SOC drop při blokaci (1.3kW povinná spotřeba domu)\nvar socDropBlokace = (minDischargeBlokaceW / 1000 / kapacitaBaterie) * 100;\n\n// v17: Dynamické solární hodiny z HA (předané z Sbírka dat)\nvar solarStartHour = data.solarStartHour || config.solar_start_hour || 9;\nvar solarEndHour = data.solarEndHour || config.solar_end_hour || 17;\n\n// === AKTUÁLNÍ STAV ===\nvar currentSoc = status.battery_soc || 50;\n\n// v18.2: Blokace info pro dashboard\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\nvar blokaceItems = [];\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\nvar forecastZitra = forecast.zitra || 0;\nvar remainingSolarKwh = data.zbyvajiciSolar || 0;\n\n// v18.13: Sanity check - max denní výroba dle měsíce pro 17kWp, az190, sklon45, 50N\n// Hodnoty odpovídají realistickému maximu pro daný měsíc\nvar monthMaxSolarKwh = [8, 15, 30, 50, 65, 75, 70, 60, 40, 25, 10, 6];\nvar currentMonth = new Date().getMonth(); // 0-11\nvar maxSolarToday = monthMaxSolarKwh[currentMonth];\nif (remainingSolarKwh > maxSolarToday) {\n    remainingSolarKwh = maxSolarToday;\n}\n\n// v18: Predikce výroby a spotřeby per hodinu z historie\nvar consumptionPredictions = data.consumptionPredictions || [];\n\n// v18: Pomocná funkce - získej predikci pro danou hodinu\nfunction getPredictionForHour(hour) {\n    for (var pi = 0; pi < consumptionPredictions.length; pi++) {\n        if (consumptionPredictions[pi].hour === hour) {\n            return consumptionPredictions[pi];\n        }\n    }\n    return null;\n}\n\n// v18: Výpočet solárního přírůstku per hodinu\n// v18.12: Solarni krivka pro Horousany (50.105N, 14.741E)\n// Azimut 190 (mirne JZ), sklon 45 stupnu, 17 kWp\n// Vypocteno ze solarniho modelu pro rocni prumer\nvar solarCurveWeights = {\n    5: 0.01, 6: 0.01, 7: 0.03, 8: 0.07, 9: 0.09, 10: 0.11,\n    11: 0.12, 12: 0.13, 13: 0.12, 14: 0.11, 15: 0.09,\n    16: 0.05, 17: 0.03, 18: 0.01\n};\n\n// Spočítej celkovou váhu pro aktivní solární hodiny v plánu\nvar totalCurveWeight = 0;\nfor (var cwh = solarStartHour; cwh < solarEndHour; cwh++) {\n    totalCurveWeight += solarCurveWeights[cwh] || 0;\n}\nif (totalCurveWeight === 0) totalCurveWeight = 1; // safety\n\nfunction getSolarCurveShare(hour) {\n    // Vrátí podíl hodiny na celkové výrobě (0-1) v rámci aktivních solárních hodin\n    var weight = solarCurveWeights[hour] || 0;\n    return weight / totalCurveWeight;\n}\n\nfunction getSolarGainForHour(hour, remainingSolar, solarHours, hFraction) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    var curveShare = getSolarCurveShare(hour);\n\n    // v18.6: Historická spotřeba per hodina (přesnější než denní průměr)\n    var pred = getPredictionForHour(hour);\n    var hourlyConsumption = (pred && pred.avgConsumptionKwh > 0)\n        ? pred.avgConsumptionKwh\n        : (config.daily_consumption_kwh || 20) / 24;\n\n    if (pred && pred.sampleCount >= 3 && pred.avgSolarKwh > 0) {\n        // Historická data: čistý přebytek solaru (výroba - spotřeba)\n        var netGain = pred.netSolarGainKwh || 0;\n        // v18.5: Sanity check - omezit historický gain křivkou\n        if (remainingSolar > 0 && solarHours > 0) {\n            var maxFromCurve = remainingSolar * curveShare;\n            var maxNetKwh = maxFromCurve - hourlyConsumption;\n            if (netGain > maxNetKwh * 2 && maxNetKwh > 0) {\n                netGain = maxNetKwh;\n            }\n        }\n        // v18.6: Aplikovat zlomek hodiny\n        return (netGain * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    // Fallback: rozdělení zbývajícího solaru podle křivky\n    if (solarHours > 0 && remainingSolar > 0) {\n        var hourKwh = remainingSolar * curveShare;\n        // v18.13: Záporný netKwh = spotřeba > výroba, baterie dodá rozdíl\n        var netKwh = hourKwh - hourlyConsumption * frac;\n        return (netKwh * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    // Plán v noci pro zítřek - použít forecast\n    if (forecastZitra > 0 && curveShare > 0) {\n        var hourKwhForecast = forecastZitra * curveShare;\n        // v18.13: Záporný = spotřeba > forecast výroba\n        var netKwhForecast = hourKwhForecast - hourlyConsumption * frac;\n        return (netKwhForecast * frac * chargeEfficiency / kapacitaBaterie) * 100;\n    }\n    return 0;\n}\n\n// v17: Maintenance charge - 20 dní, pouze v zimě (říjen-březen)\nvar lastFullCharge = global.get(\"fve_last_full_charge\") || null;\nif (!lastFullCharge) {\n    global.set(\"fve_last_full_charge\", new Date().toISOString());\n    lastFullCharge = global.get(\"fve_last_full_charge\");\n}\nvar daysSinceFullCharge = lastFullCharge\n    ? Math.floor((Date.now() - new Date(lastFullCharge).getTime()) / (1000 * 60 * 60 * 24))\n    : 999;\nif (currentSoc >= 99) {\n    global.set(\"fve_last_full_charge\", new Date().toISOString());\n}\n\nvar now = new Date();\nvar currentHour = now.getHours();\nvar currentMinute = now.getMinutes();\nvar firstHourFraction = (60 - currentMinute) / 60; // v18.6: zlomek zbývající první hodiny\nvar currentMonth = now.getMonth() + 1; // 1-12\nvar isWinter = (currentMonth >= 10 || currentMonth <= 3); // říjen-březen\n\n// === POMOCNÁ FUNKCE: NAJDI CENOVÝ ZÁZNAM ===\nfunction findPriceEntry(hour, offset) {\n    var isNextDay = (currentHour + (offset || 0)) >= 24;\n    var preferDay = isNextDay ? \"hoursTomorrow\" : \"hoursToday\";\n    var otherDay = isNextDay ? \"hoursToday\" : \"hoursTomorrow\";\n    \n    for (var i = 0; i < prices.length; i++) {\n        if (prices[i].day === preferDay && prices[i].hour === hour && prices[i].minute === 0) {\n            return { entry: prices[i], method: \"exact_\" + preferDay };\n        }\n    }\n    for (var j = 0; j < prices.length; j++) {\n        if (prices[j].day === preferDay && prices[j].hour === hour) {\n            return { entry: prices[j], method: \"dayHour_\" + preferDay };\n        }\n    }\n    for (var k = 0; k < prices.length; k++) {\n        if (prices[k].day === otherDay && prices[k].hour === hour && prices[k].minute === 0) {\n            return { entry: prices[k], method: \"exact_\" + otherDay };\n        }\n    }\n    for (var m = 0; m < prices.length; m++) {\n        if (prices[m].day === otherDay && prices[m].hour === hour) {\n            return { entry: prices[m], method: \"dayHour_\" + otherDay };\n        }\n    }\n    for (var n = 0; n < prices.length; n++) {\n        if (prices[n].hour === hour) {\n            return { entry: prices[n], method: \"any_\" + (prices[n].day || \"noday\") };\n        }\n    }\n    return { entry: null, method: \"none\" };\n}\n\n// === KROK 1: CENOVÁ MAPA HORIZONTU ===\nvar hourPrices = [];\nvar debugMatches = [];\nfor (var hi = 0; hi < horizont; hi++) {\n    var hh = (currentHour + hi) % 24;\n    var found = findPriceEntry(hh, hi);\n    var entry = found.entry;\n    hourPrices.push({\n        offset: hi,\n        hour: hh,\n        buy: entry ? (parseFloat(entry.priceCZKhourBuy) || 0) : 0,\n        sell: entry ? (parseFloat(entry.priceCZKhourProd) || 0) : 0,\n        levelBuy: entry ? (entry.levelCheapestHourBuy || 5) : 5,\n        levelSell: entry ? (entry.levelMostExpensiveHourProd || 5) : 5\n    });\n    debugMatches.push({\n        offset: hi, hour: hh, method: found.method,\n        day: entry ? entry.day : null, min: entry ? entry.minute : null,\n        buy: entry ? entry.priceCZKhourBuy : null, lvl: entry ? entry.levelCheapestHourBuy : null\n    });\n}\n\n// === KROK 2: IDENTIFIKUJ SOLÁRNÍ HODINY (potřebuji je dříve pro výpočet nabíjení) ===\nvar solarOffsets = {};\nvar solarHoursCount = 0;\nfor (var sh = 0; sh < horizont; sh++) {\n    var shh = (currentHour + sh) % 24;\n    if (shh >= solarStartHour && shh < solarEndHour) {\n        solarOffsets[sh] = true;\n        solarHoursCount++;\n    }\n}\n\n// === KROK 3: NAJDI DRAHÉ HODINY PŘED SOLAREM ===\n// Klíčový výpočet: kolik drahých hodin je PŘED dalším solárním oknem?\n// Tyto hodiny MUSÍ pokrýt baterie (vybíjením)\nvar expensiveBeforeSolar = [];\nvar firstSolarOffset = horizont;\nfor (var fso = 0; fso < horizont; fso++) {\n    if (solarOffsets[fso]) {\n        firstSolarOffset = fso;\n        break;\n    }\n}\n\nfor (var eo = 0; eo < hourPrices.length; eo++) {\n    var hp = hourPrices[eo];\n    var isSolarHour = solarOffsets[eo];\n    if (hp.levelBuy >= PRAH_DRAHA && !isSolarHour && eo < firstSolarOffset) {\n        expensiveBeforeSolar.push(hp);\n    }\n}\n\n// Všechny drahé hodiny (pro finanční kalkulaci)\nvar allExpensiveHours = hourPrices.filter(function(hp) {\n    return hp.levelBuy >= PRAH_DRAHA && !solarOffsets[hp.offset];\n});\nvar avgExpensivePrice = 0;\nif (allExpensiveHours.length > 0) {\n    var sum = 0;\n    for (var ei = 0; ei < allExpensiveHours.length; ei++) {\n        sum += allExpensiveHours[ei].buy;\n    }\n    avgExpensivePrice = sum / allExpensiveHours.length;\n}\n\n// === KROK 4: KOLIK ENERGIE POTŘEBUJI ZE SÍTĚ? ===\n// v17: PŘESNÝ výpočet - nabíjet JEN pokud currentSoc nestačí\n//\n// Logika:\n// 1. Spočítej reálný drain do solaru = drahé hodiny před solarem × socDropNormal\n// 2. SOC po vybíjení = currentSoc - drain\n// 3. Pokud SOC po vybíjení >= minSoc + safety → NENABÍJET (solár dobije)\n// 4. Pokud SOC po vybíjení < minSoc + safety → nabít JEN deficit\n//\n// Příklad z problemy.txt:\n//   currentSoc=42%, drahé hodiny před solarem=3 (06,07,08), drain=15%\n//   SOC po vybíjení = 42% - 15% = 27%\n//   minSoc + safety = 20% + 5% = 25%\n//   27% > 25% → NENABÍJET ✓\n\nvar drainBeforeSolarPct = expensiveBeforeSolar.length * socDropNormal;\nvar socAfterDrain = currentSoc - drainBeforeSolarPct;\n\n// Safety margin závisí na solární předpovědi\nvar safetyMargin = 5;\nif (forecastZitra < dailyConsumptionKwh * 0.3) {\n    safetyMargin = 10; // špatná předpověď\n} else if (forecastZitra < dailyConsumptionKwh * 0.5) {\n    safetyMargin = 7; // střední předpověď\n}\n\nvar minRequiredSoc = minSoc + safetyMargin;\nvar gridChargeNeeded = 0;\nvar targetSocFromGrid = currentSoc; // default: nenabíjet\n\n// Nabíjet ze sítě JEN pokud SOC po vybíjení drahých hodin nestačí\nif (socAfterDrain < minRequiredSoc) {\n    // Deficit: kolik % chybí?\n    var deficitPct = minRequiredSoc - socAfterDrain;\n    // Nabít tak, aby po vybíjení drahých hodin zůstalo minRequiredSoc\n    targetSocFromGrid = Math.min(maxDailySoc, currentSoc + Math.ceil(deficitPct));\n    gridChargeNeeded = Math.max(0, ((targetSocFromGrid - currentSoc) / 100) * kapacitaBaterie / chargeEfficiency);\n}\n\n// Pokud target je moc blízko currentSoc, nenabíjet\nif (targetSocFromGrid <= currentSoc + 3) {\n    gridChargeNeeded = 0;\n    targetSocFromGrid = currentSoc;\n}\n\n// v17: Maintenance charge - 20 dní, pouze v zimě\nvar maintenanceCharge = false;\nif (isWinter && daysSinceFullCharge >= 20 && targetSocFromGrid < 100) {\n    targetSocFromGrid = 100;\n    gridChargeNeeded = ((100 - currentSoc) / 100) * kapacitaBaterie / chargeEfficiency;\n    maintenanceCharge = true;\n}\n\n// === KROK 4b: FINANČNÍ SMYSLUPLNOST NABÍJENÍ ===\nvar viableChargingHours = [];\nif (gridChargeNeeded > 0) {\n    for (var vi = 0; vi < hourPrices.length; vi++) {\n        var chp = hourPrices[vi];\n        if (chp.levelBuy > PRAH_LEVNA) continue;\n        if (!solarOffsets[chp.offset]) { // nenabíjet v solárních hodinách ze sítě\n            var effectiveCost = chp.buy / roundTripEfficiency + amortizace;\n            if (effectiveCost < avgExpensivePrice || avgExpensivePrice === 0 || maintenanceCharge) {\n                viableChargingHours.push(chp);\n            }\n        }\n    }\n    viableChargingHours.sort(function(a, b) { return a.buy - b.buy; });\n}\n\nvar hoursNeeded = Math.ceil(gridChargeNeeded / chargeRateKwh);\n\n// === KROK 5: PŘIŘAĎ NABÍJECÍ HODINY ===\nvar chargingOffsets = {};\nvar assignedHours = 0;\n\nif (viableChargingHours.length > 0) {\n    for (var ci = 0; ci < viableChargingHours.length && assignedHours < hoursNeeded; ci++) {\n        chargingOffsets[viableChargingHours[ci].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Fallback: pokud nestačí viable hours, hledej další levné\nif (assignedHours < hoursNeeded) {\n    var cheapestAvail = hourPrices.slice().filter(function(hp) {\n        return !chargingOffsets[hp.offset] && hp.levelBuy <= PRAH_LEVNA && !solarOffsets[hp.offset];\n    });\n    cheapestAvail.sort(function(a, b) { return a.buy - b.buy; });\n    for (var ca = 0; ca < cheapestAvail.length && assignedHours < hoursNeeded; ca++) {\n        chargingOffsets[cheapestAvail[ca].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Maintenance: pokud stále nestačí, použij i dražší hodiny\nif (maintenanceCharge && assignedHours < hoursNeeded) {\n    var remaining = hourPrices.filter(function(hp) {\n        return !chargingOffsets[hp.offset] && hp.levelBuy < PRAH_DRAHA && !solarOffsets[hp.offset];\n    });\n    remaining.sort(function(a, b) { return a.buy - b.buy; });\n    for (var ri = 0; ri < remaining.length && assignedHours < hoursNeeded; ri++) {\n        chargingOffsets[remaining[ri].offset] = true;\n        assignedHours++;\n    }\n}\n\n// Upravit target pokud se nepodařilo přiřadit dost hodin\nif (assignedHours < hoursNeeded && !maintenanceCharge) {\n    var actualChargeKwh = assignedHours * chargeRateKwh * chargeEfficiency;\n    targetSocFromGrid = Math.min(targetSocFromGrid,\n        currentSoc + Math.round(actualChargeKwh / kapacitaBaterie * 100));\n    gridChargeNeeded = actualChargeKwh;\n}\n\n// Odstraň solární hodiny z chargingOffsets (pro jistotu)\nfor (var cso in chargingOffsets) {\n    if (solarOffsets[cso]) {\n        delete chargingOffsets[cso];\n    }\n}\n\n// === KROK 6: SOLÁRNÍ SOC GAIN ===\nvar solarSocGainTotal = 0;\nif (solarHoursCount > 0 && remainingSolarKwh > 0) {\n    solarSocGainTotal = (remainingSolarKwh * chargeEfficiency / kapacitaBaterie) * 100;\n}\n\n// === KROK 7: DYNAMICKÝ PRÁH VYBÍJENÍ ===\nvar dischargeCandidate = [];\nfor (var dc = 0; dc < hourPrices.length; dc++) {\n    if (!solarOffsets[dc] && !chargingOffsets[dc]) {\n        dischargeCandidate.push({\n            offset: dc,\n            hour: hourPrices[dc].hour,\n            levelBuy: hourPrices[dc].levelBuy,\n            buy: hourPrices[dc].buy\n        });\n    }\n}\n\ndischargeCandidate.sort(function(a, b) {\n    if (b.levelBuy !== a.levelBuy) return b.levelBuy - a.levelBuy;\n    return b.buy - a.buy;\n});\n\nvar availableBatteryKwh = Math.max(0, (currentSoc - minSoc) / 100 * kapacitaBaterie * dischargeEfficiency);\nvar energyBudgetKwh = availableBatteryKwh;\n\nvar dischargeOffsets = {};\nvar effectiveThreshold = PRAH_DRAHA;\nvar usedEnergyKwh = 0;\nvar dischargeDebug = [];\n\nfor (var di = 0; di < dischargeCandidate.length; di++) {\n    var cand = dischargeCandidate[di];\n    var energyForThisHour = socDropNormal / 100 * kapacitaBaterie;\n    \n    if (usedEnergyKwh + energyForThisHour <= energyBudgetKwh) {\n        dischargeOffsets[cand.offset] = true;\n        usedEnergyKwh += energyForThisHour;\n        effectiveThreshold = Math.min(effectiveThreshold, cand.levelBuy);\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"NORMAL\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    } else if (cand.levelBuy >= PRAH_DRAHA && usedEnergyKwh < energyBudgetKwh) {\n        // v18.17: Budget nestačí na celou hodinu, ale levelBuy je drahý\n        // Přidáme hodinu - baterie se vybije co může (až na minSoc)\n        dischargeOffsets[cand.offset] = true;\n        usedEnergyKwh = energyBudgetKwh; // vyčerpáme zbytek budgetu\n        effectiveThreshold = Math.min(effectiveThreshold, cand.levelBuy);\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"NORMAL (partial, budget limit)\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    } else {\n        dischargeDebug.push({\n            offset: cand.offset, hour: cand.hour, level: cand.levelBuy,\n            price: cand.buy, action: \"SETRIT (budget exceeded)\",\n            usedKwh: Math.round(usedEnergyKwh * 10) / 10,\n            budgetKwh: Math.round(energyBudgetKwh * 10) / 10\n        });\n    }\n}\n\n// v18.18b: Flag - existují drahé hodiny bez budgetu na vybíjení?\nvar budgetExhausted = false;\nfor (var be = 0; be < dischargeCandidate.length; be++) {\n    if (!dischargeOffsets[dischargeCandidate[be].offset] && dischargeCandidate[be].levelBuy >= PRAH_DRAHA) {\n        budgetExhausted = true;\n        break;\n    }\n}\n\n// === KROK 8: VÝPOČET MÓDU PRO KAŽDOU HODINU ===\nfunction calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    if (manualMod !== \"auto\") {\n        return { mode: manualMod, reason: \"Manuální mód\" };\n    }\n\n    var priceSell = priceData.sell;\n    var levelSell = priceData.levelSell;\n    var levelBuy = priceData.levelBuy;\n\n    // PRIORITA 0: Záporná prodejní cena\n    if (priceSell <= 0) {\n        return { mode: MODY.ZAKAZ_PRETOKU, reason: \"Záporná prodejní cena\" };\n    }\n\n    // PRIORITA 1: Nabíjení ze sítě\n    if (chargingOffsets[offset] && simulatedSoc < targetSocFromGrid) {\n        return {\n            mode: MODY.NABIJET_ZE_SITE,\n            reason: \"Nabíjení na cíl \" + Math.round(targetSocFromGrid) + \"% (nyní \" + Math.round(simulatedSoc) + \"%)\"\n        };\n    }\n\n    // PRIORITA 2: Prodej z baterie při výhodné ceně\n    if (prodejZBaterieEnabled && levelSell <= 2 && simulatedSoc > minSoc + 20) {\n        var avgChargeCost = 0;\n        if (viableChargingHours.length > 0) {\n            var s = 0;\n            for (var ac = 0; ac < viableChargingHours.length; ac++) {\n                s += viableChargingHours[ac].buy;\n            }\n            avgChargeCost = s / viableChargingHours.length;\n        }\n        var revenuePerKwh = priceSell * dischargeEfficiency;\n        var costPerKwh = avgChargeCost / roundTripEfficiency + amortizace;\n        if (revenuePerKwh > costPerKwh) {\n            var dischRateKwh = maxFeedInW / 1000;\n            var socAfter = Math.max(minSoc,\n                simulatedSoc - (dischRateKwh / dischargeEfficiency / kapacitaBaterie * 100));\n            return {\n                mode: MODY.PRODAVAT,\n                reason: \"Prodej, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(socAfter) + \"%\"\n            };\n        }\n    }\n\n    // PRIORITA 3: Ochrana baterie - příliš nízký SOC\n    if (simulatedSoc <= minSoc) {\n        return {\n            mode: MODY.SETRIT,\n            reason: \"Ochrana baterie (SOC \" + Math.round(simulatedSoc) + \"% ≤ \" + minSoc + \"%)\"\n        };\n    }\n\n    // PRIORITA 4: Solární hodiny - v18.18: ŠETŘIT při nízkém zisku, NORMAL při vysokém\n    if (solarOffsets[offset]) {\n        var planHourForSolar = (currentHour + offset) % 24;\n        var solarGainPct = getSolarGainForHour(planHourForSolar, remainingSolarKwh, solarHoursCount, frac);\n        var solarGainEst = Math.round(solarGainPct * 10) / 10;\n        var expectedSocSolar = Math.min(100, simulatedSoc + solarGainEst);\n\n        // v18.18: Pokud solární zisk výrazně nabíjí baterii, vždy NORMAL\n        if (solarGainEst > socDropNormal) {\n            return {\n                mode: MODY.NORMAL,\n                reason: \"Solární hodina, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n            };\n        }\n\n        // Nízký solární zisk - rozhodnutí dle ceny (viz v18.19 výše)\n\n        // v18.19: Drahá hodina (levelBuy >= PRAH_DRAHA) - vždy NORMAL (vybíjet)\n        if (levelBuy >= PRAH_DRAHA && simulatedSoc > minSoc) {\n            return {\n                mode: MODY.NORMAL,\n                reason: \"Solární+drahá (Lv\" + levelBuy + \"≥\" + PRAH_DRAHA + \"), SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n            };\n        }\n\n        // Nízký zisk a levná hodina - ŠETŘIT pouze pokud budget nestačí\n        if (budgetExhausted) {\n            return {\n                mode: MODY.SETRIT,\n                reason: \"Solární (nízký zisk +\" + solarGainEst + \"%), šetřím na dražší hodiny, SOC \" + Math.round(simulatedSoc) + \"%\"\n            };\n        }\n        // Budget stačí - NORMAL\n        return {\n            mode: MODY.NORMAL,\n            reason: \"Solární hodina, SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocSolar) + \"%\"\n        };\n    }\n\n    // PRIORITA 5: NORMAL pro hodiny vybrané dynamickým prahem (vybíjení)\n    if (dischargeOffsets[offset] && simulatedSoc > minSoc) {\n        var expectedSocDischarge = Math.max(minSoc, simulatedSoc - socDropNormal * frac);\n        var priceInfo = levelBuy >= PRAH_DRAHA ? \"drahá\" : \"střední\";\n        return {\n            mode: MODY.NORMAL,\n            reason: priceInfo + \" (Lv\" + levelBuy + \"≥eff\" + effectiveThreshold + \"), vybíjení SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocDischarge) + \"%\"\n        };\n    }\n\n    // PRIORITA 5b: v18.19 - Drahé hodiny VŽDY vybíjet (i bez budgetu)\n    if (levelBuy >= PRAH_DRAHA && simulatedSoc > minSoc) {\n        var expectedSocForced = Math.max(minSoc, simulatedSoc - socDropNormal * frac);\n        return {\n            mode: MODY.NORMAL,\n            reason: \"drahá (Lv\" + levelBuy + \"≥\" + PRAH_DRAHA + \"), vybíjení SOC \" + Math.round(simulatedSoc) + \"% → ~\" + Math.round(expectedSocForced) + \"%\"\n        };\n    }\n\n    // PRIORITA 6: ŠETŘIT (výchozí mód) - pouze levné hodiny (levelBuy < PRAH_DRAHA)\n    return {\n        mode: MODY.SETRIT,\n        reason: \"Šetřím (Lv\" + levelBuy + \"<\" + PRAH_DRAHA + \"), SOC \" + Math.round(simulatedSoc) + \"%\"\n    };\n}\n\n// === SIMULACE SOC ===\nfunction simulateSocChange(mode, hour, soc, hFraction, chargeTarget) {\n    var frac = (hFraction !== undefined) ? hFraction : 1.0;\n    var isSolar = hour >= solarStartHour && hour < solarEndHour;\n    switch (mode) {\n        case MODY.NABIJET_ZE_SITE:\n            var maxChargeSoc = (chargeTarget && chargeTarget > 0) ? chargeTarget : 100;\n            return Math.min(maxChargeSoc, soc + (chargeRateKwh * frac * chargeEfficiency / kapacitaBaterie * 100));\n        case MODY.PRODAVAT:\n            var dischRateKwh = maxFeedInW / 1000;\n            return Math.max(minSoc, soc - (dischRateKwh * frac / dischargeEfficiency / kapacitaBaterie * 100));\n        case MODY.SETRIT:\n            return soc;\n        case MODY.ZAKAZ_PRETOKU:\n            return Math.max(minSoc, soc - socDropSetrit * frac);\n        case MODY.NORMAL:\n            if (isSolar) {\n                var solarGainSim = getSolarGainForHour(hour, remainingSolarKwh, solarHoursCount, frac);\n                // v18.13: Záporný gain = spotřeba > výroba, SOC klesá\n                return Math.min(100, Math.max(minSoc, soc + solarGainSim));\n            }\n            return Math.max(minSoc, soc - socDropNormal * frac);\n        default:\n            return soc;\n    }\n}\n\n// === GENEROVÁNÍ PLÁNU ===\nvar modeNamesCZ = {\n    normal: \"Normální provoz\",\n    setrit: \"Šetřit baterii\",\n    nabijet_ze_site: \"Nabíjet ze sítě\",\n    prodavat: \"Prodávat do sítě\",\n    zakaz_pretoku: \"Zákaz přetoků\"\n};\n\nvar plan = [];\nvar simulatedSoc = currentSoc;\n\nfor (var pi = 0; pi < horizont; pi++) {\n    var planHour = (currentHour + pi) % 24;\n    var isNextDay = (currentHour + pi) >= 24;\n    var priceData = hourPrices[pi];\n    var hFrac = (pi === 0) ? firstHourFraction : 1.0;\n    var result = calculateModeForHour(pi, priceData, simulatedSoc, hFrac);\n    simulatedSoc = simulateSocChange(result.mode, planHour, simulatedSoc, hFrac, targetSocFromGrid);\n    plan.push({\n        hour: planHour,\n        offset: pi,\n        mode: result.mode,\n        modeCZ: modeNamesCZ[result.mode] || result.mode,\n        reason: result.reason,\n        priceLevel: priceData.levelBuy,\n        priceBuy: priceData.buy,\n        priceSell: priceData.sell,\n        simulatedSoc: Math.round(simulatedSoc),\n        isNextDay: isNextDay,\n        isChargingHour: chargingOffsets[pi] || false,\n        isSolarHour: solarOffsets[pi] || false,\n        isDischargeHour: dischargeOffsets[pi] || false\n    });\n}\n\n// === LOGOVÁNÍ ===\nvar countSetrit = 0, countNormal = 0, countNabijet = 0;\nfor (var cs = 0; cs < plan.length; cs++) {\n    if (plan[cs].mode === MODY.SETRIT) countSetrit++;\n    else if (plan[cs].mode === MODY.NORMAL) countNormal++;\n    else if (plan[cs].mode === MODY.NABIJET_ZE_SITE) countNabijet++;\n}\n\n// === VÝSTUP ===\nvar currentMode = plan.length > 0 ? plan[0].mode : MODY.NORMAL;\nvar currentReason = plan.length > 0 ? plan[0].reason : \"\";\n\nmsg.payload = {\n    currentMode: currentMode,\n    currentReason: currentReason,\n    currentHour: currentHour,\n    plan: plan,\n    dischargeDebug: dischargeDebug,\n    config: { \n        prah_levna: PRAH_LEVNA,\n        prah_draha: PRAH_DRAHA,\n        effective_threshold: effectiveThreshold,\n        solarStartHour: solarStartHour,\n        solarEndHour: solarEndHour\n    },\n    proteus: {\n        firstSolarOffset: firstSolarOffset,\n        dischargeHoursCount: Object.keys(dischargeOffsets).length,\n        solarHoursCount: Object.keys(solarOffsets).length,\n        energyBudgetKwh: Math.round(energyBudgetKwh * 10) / 10,\n        usedEnergyKwh: Math.round(usedEnergyKwh * 10) / 10,\n        effectiveThreshold: effectiveThreshold,\n        peakSoc: Math.round(currentSoc + solarSocGainTotal),\n        totalSolarAvailable: Math.round((remainingSolarKwh + forecastZitra) * 10) / 10,\n        forecastZitra: forecastZitra,\n        drainBeforeSolarPct: drainBeforeSolarPct,\n        socAfterDrain: Math.round(socAfterDrain),\n        minRequiredSoc: minRequiredSoc\n    },\n    smartCharging: {\n        targetSocFromGrid: Math.round(targetSocFromGrid),\n        gridChargeNeeded: Math.round(gridChargeNeeded * 10) / 10,\n        hoursNeeded: hoursNeeded,\n        assignedHours: assignedHours,\n        viableHoursAvailable: viableChargingHours.length,\n        remainingSolar: Math.round(remainingSolarKwh * 10) / 10,\n        roundTripEfficiency: Math.round(roundTripEfficiency * 100),\n        amortizace: amortizace,\n        daysToFullCharge: daysSinceFullCharge,\n        maintenanceCharge: maintenanceCharge,\n        isWinter: isWinter,\n        chargingReason: gridChargeNeeded > 0 \n            ? (maintenanceCharge ? \"maintenance (20d)\" : \"deficit \" + Math.round(minRequiredSoc - socAfterDrain) + \"%\")\n            : \"nepotřeba (SOC \" + Math.round(socAfterDrain) + \"% > min \" + minRequiredSoc + \"%)\"\n    },\n    planSummary: {\n        setritHours: countSetrit,\n        normalHours: countNormal,\n        nabijetHours: countNabijet\n    },\n    status: {\n        soc: currentSoc,\n        remainingSolar: remainingSolarKwh,\n        forecastZitra: forecastZitra,\n        forecastDnes: forecast.dnes || 0,\n        prodejEnabled: prodejZBaterieEnabled,\n        blokaceVybijeni: blokaceVybijeni,\n        blokaceText: blokaceText\n    },\n    generatedAt: now.toISOString()\n};\n\nvar modeColors = {\n    normal: \"green\",\n    setrit: \"yellow\",\n    nabijet_ze_site: \"blue\",\n    prodavat: \"red\",\n    zakaz_pretoku: \"purple\"\n};\nnode.status({\n    fill: modeColors[currentMode] || \"grey\",\n    shape: \"dot\",\n    text: \"v18 \" + currentMode\n        + \" | Š:\" + countSetrit + \" N:\" + countNormal + \" Nab:\" + countNabijet\n        + \" | effThr:\" + effectiveThreshold\n        + \" | SOC:\" + currentSoc + \"% drn:\" + drainBeforeSolarPct + \"% →\" + Math.round(socAfterDrain) + \"%\"\n        + \" | ☀\" + solarStartHour + \"-\" + solarEndHour + \"h\"\n        + (gridChargeNeeded > 0 ? \" | ⚡\" + Math.round(targetSocFromGrid) + \"%\" : \"\")\n});\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1160,
-        "y": 60,
-        "wires": [
-            [
-                "df085ac4da095340",
-                "39019d1a78677231"
-            ]
-        ]
-    },
-    {
-        "id": "df085ac4da095340",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Ulož plán",
-        "func": "global.set(\"fve_plan\", msg.payload);\nglobal.set(\"fve_current_mode\", msg.payload.currentMode);\n\nmsg.ha_update = {\n    state: msg.payload.currentMode,\n    attributes: {\n        current_mode: msg.payload.currentMode,\n        current_reason: msg.payload.currentReason,\n        current_hour: msg.payload.currentHour,\n        plan: msg.payload.plan,\n        soc: msg.payload.status.soc,\n        forecast_dnes: msg.payload.status.forecastDnes,\n        forecast_zitra: msg.payload.status.forecastZitra,\n        last_update: msg.payload.generatedAt,\n        debug: msg.payload.debug || {},\n        blokace_text: msg.payload.status.blokaceText || \"NE\"\n    }\n};\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 400,
-        "y": 140,
-        "wires": [
-            [
-                "517215d5f730e80c"
-            ]
-        ]
-    },
-    {
-        "id": "39019d1a78677231",
-        "type": "debug",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Plan Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1170,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "517215d5f730e80c",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Aktualizuj HA sensor",
-        "func": "var planData = msg.payload || {};\nvar currentMode = planData.currentMode || \"normal\";\nvar currentHour = planData.currentHour || new Date().getHours();\nvar planArray = planData.plan || [];\n\nnode.status({fill:\"green\", shape:\"dot\", text: \"Mód: \" + currentMode + \", hodina: \" + currentHour});\n\nmsg.payload = JSON.stringify({\n    current_mode: currentMode,\n    current_reason: planData.currentReason || \"\",\n    current_hour: currentHour,\n    plan: planArray,\n    soc: planData.status ? planData.status.soc : null,\n    forecast_dnes: planData.status ? planData.status.forecastDnes : null,\n    forecast_zitra: planData.status ? planData.status.forecastZitra : null,\n    debug: planData.debug || \"\",\n    blokace_text: planData.status ? (planData.status.blokaceText || \"NE\") : \"NE\",\n    last_update: new Date().toISOString()\n}, null, 2);\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 620,
-        "y": 140,
-        "wires": [
-            [
-                "701e94d82c3aead0"
-            ]
-        ]
-    },
-    {
-        "id": "701e94d82c3aead0",
-        "type": "file",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Zapiš plán do souboru",
-        "filename": "/homeassistant/fve_plan.json",
-        "filenameType": "str",
-        "appendNewline": false,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "utf8",
-        "x": 880,
-        "y": 140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "44d31ff3c04741b7",
-        "type": "inject",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Každých 15 sekund",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "15",
-        "crontab": "",
-        "once": true,
-        "onceDelay": "20",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 280,
-        "y": 260,
-        "wires": [
-            [
-                "c36915a8599c5282"
-            ]
-        ]
-    },
-    {
-        "id": "c36915a8599c5282",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Kontrola podmínek",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar plan = global.get(\"fve_plan\") || {};\n// FIX: Read planned mode from plan object (immutable, set by planner only)\n// Previously read from fve_current_mode which was overwritten by override logic\nvar planMode = (plan && plan.currentMode) ? plan.currentMode : \"normal\";\nvar manualMod = config.manual_mod || \"auto\";\n\nvar currentMode = planMode;\nif (manualMod !== \"auto\") {\n    currentMode = manualMod;\n}\n\nvar wasEnabled = flow.get(\"automatizace_was_enabled\") || false;\nif (config.automatizace_enabled === false) {\n    if (wasEnabled) {\n        flow.set(\"automatizace_was_enabled\", false);\n        global.set(\"fve_current_mode\", \"normal\");\n        msg.currentMode = \"normal\";\n        msg.doReset = true;\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"Reset do normalniho modu\"});\n        return msg;\n    }\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace vypnuta\"});\n    return null;\n}\nflow.set(\"automatizace_was_enabled\", true);\n\nvar autoNabijeni = global.get(\"auto_nabijeni_aktivni\") || false;\n\n// Grid Lost ochrana\nvar gridLostState = global.get(\"homeassistant.homeAssistant.states['sensor.grid_lost_ciselny']\") || {};\nvar gridLost = parseInt(gridLostState.state || \"0\") >= 2;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nvar saunaAktivni = global.get(\"sauna_aktivni\") || false;\n\n// FIX: Removed override normal->setrit when heat pump/car active.\n// Root cause of battery charging in Normal mode:\n//   Override switched to Setrit which set max_discharge_power=0 and\n//   scheduled_soc=currentSoc, causing solar->battery and grid->consumption.\n// The planner already assigns correct modes. Individual modes (e.g. Nabijet)\n// already adjust power_set_point for high-priority consumers.\n\n// Update display mode\n// Grid Lost: přepnout na šetřit (žádné nabíjení ze sítě, baterie se nevybíjí)\nif (gridLost && currentMode === \"nabijet_ze_site\") {\n    currentMode = \"setrit\";\n    node.status({fill:\"red\", shape:\"dot\", text:\"GRID LOST → Šetřit (blokace nabíjení)\"});\n}\nglobal.set(\"fve_current_mode\", currentMode);\n\n// v18.2: Blokace text pro dashboard\nvar blokaceItems = [];\nif (gridLost) blokaceItems.push(\"GRID LOST\");\nif (cerpadloTopi) blokaceItems.push(\"topení\");\nif (autoNabijeni) blokaceItems.push(\"auto\");\nif (saunaAktivni) blokaceItems.push(\"sauna\");\nvar blokaceText = blokaceItems.length > 0 ? \"ANO - \" + blokaceItems.join(\", \") : \"NE\";\n\n// Update blokaceText in global fve_plan for real-time file updates\nvar currentPlan = global.get(\"fve_plan\") || {};\nif (!currentPlan.status) currentPlan.status = {};\ncurrentPlan.status.blokaceText = blokaceText;\nglobal.set(\"fve_plan\", currentPlan);\n\nmsg.blokaceText = blokaceText;\nmsg.autoNabijeniAktivni = autoNabijeni;\nmsg.cerpadloTopi = cerpadloTopi;\nmsg.gridLost = gridLost;\nmsg.saunaAktivni = saunaAktivni;\nmsg.config = config;\nmsg.plan = plan;\n\nvar modeSource = manualMod !== \"auto\" ? \"(manualni)\" : \"(auto)\";\nvar infoText = \"\";\nif (gridLost) infoText += \" | ⚡GRID LOST\";\nif (cerpadloTopi) infoText += \" | Cerpadlo topi\";\nif (saunaAktivni) infoText += \" | Sauna\";\nif (autoNabijeni) infoText += \" | Auto nabiji\";\nnode.status({fill: manualMod !== \"auto\" ? \"blue\" : \"green\", shape:\"dot\", text: \"Mod: \" + currentMode + \" \" + modeSource + infoText});\n\n// v2.1: Přepnout z nabíjení na šetřit jakmile SOC dosáhne cíle\nif (currentMode === \"nabijet_ze_site\" && manualMod === \"auto\") {\n    var targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 0;\n    var currentSoc = (global.get(\"fve_status\") || {}).battery_soc || 0;\n    if (targetSoc > 0 && currentSoc >= targetSoc) {\n        currentMode = \"setrit\";\n        global.set(\"fve_current_mode\", currentMode);\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"SOC \" + Math.round(currentSoc) + \"% >= cíl \" + targetSoc + \"% → Šetřit\"});\n    }\n}\n\nmsg.currentMode = currentMode;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 530,
-        "y": 260,
-        "wires": [
-            [
-                "8eef6d1d51c9c644",
-                "blokace_file_update"
-            ]
-        ]
-    },
-    {
-        "id": "8eef6d1d51c9c644",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Rozhodnutí o akci",
-        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    default: msg.modeIndex = 0;\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 390,
-        "y": 340,
-        "wires": [
-            [
-                "19a783a61de3519b"
-            ]
-        ]
-    },
-    {
-        "id": "19a783a61de3519b",
-        "type": "switch",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Směrování podle módu",
-        "property": "modeIndex",
+    "outputInitially": true,
+    "stateType": "str",
+    "ifState": "",
+    "ifStateType": "str",
+    "ifStateOperator": "is",
+    "outputOnlyOnStateChange": true,
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes",
+    "ignorePrevStateNull": false,
+    "ignorePrevStateUnknown": false,
+    "ignorePrevStateUnavailable": false,
+    "ignoreCurrentStateUnknown": false,
+    "ignoreCurrentStateUnavailable": false,
+    "outputProperties": [
+      {
+        "property": "payload",
         "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "3",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "4",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "5",
-                "vt": "num"
-            }
-        ],
-        "checkall": "false",
-        "repair": false,
-        "outputs": 6,
-        "x": 670,
-        "y": 340,
-        "wires": [
-            [
-                "f10a91fcb4de6bd3"
-            ],
-            [
-                "7f051a6595e57c3e"
-            ],
-            [
-                "185f95d7c56fe799"
-            ],
-            [
-                "a706b353f30c25d1"
-            ],
-            [
-                "a86bc5233cfa0458"
-            ],
-            [
-                "solar123456789abc"
-            ]
-        ]
-    },
-    {
-        "id": "f10a91fcb4de6bd3",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Normal",
-        "mode": "link",
-        "links": [
-            "8b55cfc5181b9eb7"
-        ],
-        "x": 845,
-        "y": 260,
-        "wires": []
-    },
-    {
-        "id": "7f051a6595e57c3e",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Šetřit",
-        "mode": "link",
-        "links": [
-            "ec611f6aba7d5c59"
-        ],
-        "x": 845,
-        "y": 300,
-        "wires": []
-    },
-    {
-        "id": "185f95d7c56fe799",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Nabíjet",
-        "mode": "link",
-        "links": [
-            "1d98a0541716ce58"
-        ],
-        "x": 845,
-        "y": 340,
-        "wires": []
-    },
-    {
-        "id": "a706b353f30c25d1",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Prodávat",
-        "mode": "link",
-        "links": [
-            "179ed150020d459c"
-        ],
-        "x": 845,
-        "y": 380,
-        "wires": []
-    },
-    {
-        "id": "a86bc5233cfa0458",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Zákaz přetoků",
-        "mode": "link",
-        "links": [
-            "c682224043634fcd"
-        ],
-        "x": 845,
-        "y": 420,
-        "wires": []
-    },
-    {
-        "id": "fc848e97e2c781c1",
-        "type": "server-state-changed",
-        "z": "d86bb11fab512182",
-        "g": "66210c073baa5af0",
-        "name": "Změna stavu wallboxu",
-        "server": "c7421fe2.cb11c",
-        "version": 6,
-        "outputs": 1,
-        "exposeAsEntityConfig": "",
-        "entities": {
-            "entity": [
-                "sensor.charger_state_garage",
-                "sensor.stav_wallboxu_venek"
-            ],
-            "substring": [],
-            "regex": []
-        },
-        "outputInitially": true,
-        "stateType": "str",
-        "ifState": "",
-        "ifStateType": "str",
-        "ifStateOperator": "is",
-        "outputOnlyOnStateChange": true,
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "ignorePrevStateNull": false,
-        "ignorePrevStateUnknown": false,
-        "ignorePrevStateUnavailable": false,
-        "ignoreCurrentStateUnknown": false,
-        "ignoreCurrentStateUnavailable": false,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            },
-            {
-                "property": "entity_id",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "str"
-            }
-        ],
-        "x": 300,
-        "y": 560,
-        "wires": [
-            [
-                "376106d716756636"
-            ]
-        ]
-    },
-    {
-        "id": "376106d716756636",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "66210c073baa5af0",
-        "name": "Kontrola nabíjení auta",
-        "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 532,
-        "y": 560,
-        "wires": [
-            [
-                "dc8da09248ec1e29"
-            ]
-        ]
-    },
-    {
-        "id": "dc8da09248ec1e29",
-        "type": "change",
-        "z": "d86bb11fab512182",
-        "g": "66210c073baa5af0",
-        "name": "Nastav global",
-        "rules": [
-            {
-                "t": "set",
-                "p": "auto_nabijeni_aktivni",
-                "pt": "global",
-                "to": "autoNabijeni",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 740,
-        "y": 560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "aabb001122334455",
-        "type": "sqlite",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "fixed",
-        "sql": "SELECT * FROM \"own_energy_prices_total\"",
-        "name": "Čti čerstvé ceny z DB",
-        "x": 620,
-        "y": 60,
-        "wires": [
-            [
-                "aabb001122334466"
-            ]
-        ]
-    },
-    {
-        "id": "aabb001122334466",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "4580a451a0858d03",
-        "name": "Aktualizuj ceny v planData",
-        "func": "// Nahraď stará data čerstvými z DB\nvar freshPrices = msg.payload || [];\nif (freshPrices.length > 0) {\n    msg.planData.prices = freshPrices;\n    // Aktualizuj i global pro ostatní\n    global.set(\"fve_prices_forecast\", freshPrices);\n    node.status({fill:\"green\", shape:\"dot\", text: freshPrices.length + \" cen z DB\"});\n} else {\n    node.status({fill:\"yellow\", shape:\"dot\", text: \"DB prázdná, použit global\"});\n}\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 880,
-        "y": 60,
-        "wires": [
-            [
-                "9e0b46a9dfedea33"
-            ]
-        ]
-    },
-    {
-        "id": "solar123456789abc",
-        "type": "link out",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "→ Solární nabíjení",
-        "mode": "link",
-        "links": [
-            "e93b8f3e662c6190"
-        ],
-        "x": 845,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "6d97960f9560e05b",
-        "type": "sqlitedb",
-        "db": "/homeassistant/home-assistant_v2.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "3e053bdac00312e5",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-node-sqlite": "1.1.1"
-        }
-    },
-    {
-        "id": "sauna_state_changed",
-        "type": "server-state-changed",
-        "z": "d86bb11fab512182",
-        "g": "66210c073baa5af0",
-        "name": "Změna stavu sauny",
-        "server": "c7421fe2.cb11c",
-        "version": 6,
-        "outputs": 1,
-        "exposeAsEntityConfig": "",
-        "entities": {
-            "entity": [
-                "input_boolean.sauna"
-            ],
-            "substring": [],
-            "regex": []
-        },
-        "outputInitially": true,
-        "stateType": "str",
-        "ifState": "",
-        "ifStateType": "str",
-        "ifStateOperator": "is",
-        "outputOnlyOnStateChange": true,
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "ignorePrevStateNull": false,
-        "ignorePrevStateUnknown": false,
-        "ignorePrevStateUnavailable": false,
-        "ignoreCurrentStateUnknown": false,
-        "ignoreCurrentStateUnavailable": false,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            }
-        ],
-        "x": 300,
-        "y": 620,
-        "wires": [
-            [
-                "sauna_set_global"
-            ]
-        ]
-    },
-    {
-        "id": "sauna_set_global",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "66210c073baa5af0",
-        "name": "Nastav global sauna",
-        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "blokace_file_update",
-        "type": "function",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Aktualizuj blokaci v souboru",
-        "func": "var planData = global.get(\"fve_plan\") || {};\nvar currentMode = planData.currentMode || \"normal\";\nvar currentHour = planData.currentHour || new Date().getHours();\nvar planArray = planData.plan || [];\nvar blokaceText = (planData.status && planData.status.blokaceText) ? planData.status.blokaceText : \"NE\";\n\nmsg.payload = JSON.stringify({\n    current_mode: currentMode,\n    current_reason: planData.currentReason || \"\",\n    current_hour: currentHour,\n    plan: planArray,\n    soc: planData.status ? planData.status.soc : null,\n    forecast_dnes: planData.status ? planData.status.forecastDnes : null,\n    forecast_zitra: planData.status ? planData.status.forecastZitra : null,\n    debug: planData.debug || \"\",\n    blokace_text: blokaceText,\n    last_update: new Date().toISOString()\n}, null, 2);\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 830,
-        "y": 320,
-        "wires": [
-            [
-                "blokace_file_write"
-            ]
-        ]
-    },
-    {
-        "id": "blokace_file_write",
-        "type": "file",
-        "z": "d86bb11fab512182",
-        "g": "c0d4d6462d4ebded",
-        "name": "Zapiš blokaci",
-        "filename": "/homeassistant/fve_plan.json",
-        "filenameType": "str",
-        "appendNewline": false,
-        "createDir": false,
-        "overwriteFile": "true",
-        "encoding": "utf8",
-        "x": 1130,
-        "y": 320,
-        "wires": [
-            []
-        ]
+        "value": "string",
+        "valueType": "entityState"
+      },
+      {
+        "property": "entity_id",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "str"
+      }
+    ],
+    "x": 300,
+    "y": 560,
+    "wires": [
+      [
+        "376106d716756636"
+      ]
+    ]
+  },
+  {
+    "id": "376106d716756636",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "66210c073baa5af0",
+    "name": "Kontrola nabíjení auta",
+    "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 532,
+    "y": 560,
+    "wires": [
+      [
+        "dc8da09248ec1e29"
+      ]
+    ]
+  },
+  {
+    "id": "dc8da09248ec1e29",
+    "type": "change",
+    "z": "d86bb11fab512182",
+    "g": "66210c073baa5af0",
+    "name": "Nastav global",
+    "rules": [
+      {
+        "t": "set",
+        "p": "auto_nabijeni_aktivni",
+        "pt": "global",
+        "to": "autoNabijeni",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 740,
+    "y": 560,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "aabb001122334455",
+    "type": "sqlite",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "mydb": "6d97960f9560e05b",
+    "sqlquery": "fixed",
+    "sql": "SELECT * FROM \"own_energy_prices_total\"",
+    "name": "Čti čerstvé ceny z DB",
+    "x": 620,
+    "y": 60,
+    "wires": [
+      [
+        "aabb001122334466"
+      ]
+    ]
+  },
+  {
+    "id": "aabb001122334466",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "4580a451a0858d03",
+    "name": "Aktualizuj ceny v planData",
+    "func": "// Nahraď stará data čerstvými z DB\nvar freshPrices = msg.payload || [];\nif (freshPrices.length > 0) {\n    msg.planData.prices = freshPrices;\n    // Aktualizuj i global pro ostatní\n    global.set(\"fve_prices_forecast\", freshPrices);\n    node.status({fill:\"green\", shape:\"dot\", text: freshPrices.length + \" cen z DB\"});\n} else {\n    node.status({fill:\"yellow\", shape:\"dot\", text: \"DB prázdná, použit global\"});\n}\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 880,
+    "y": 60,
+    "wires": [
+      [
+        "9e0b46a9dfedea33"
+      ]
+    ]
+  },
+  {
+    "id": "solar123456789abc",
+    "type": "link out",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "→ Solární nabíjení",
+    "mode": "link",
+    "links": [
+      "e93b8f3e662c6190"
+    ],
+    "x": 845,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "c7421fe2.cb11c",
+    "type": "server",
+    "name": "Home Assistant",
+    "addon": true,
+    "rejectUnauthorizedCerts": true,
+    "ha_boolean": "",
+    "connectionDelay": false,
+    "cacheJson": false,
+    "heartbeat": false,
+    "heartbeatInterval": "",
+    "statusSeparator": "",
+    "enableGlobalContextStore": false
+  },
+  {
+    "id": "6d97960f9560e05b",
+    "type": "sqlitedb",
+    "db": "/homeassistant/home-assistant_v2.db",
+    "mode": "RWC"
+  },
+  {
+    "id": "3e053bdac00312e5",
+    "type": "global-config",
+    "env": [],
+    "modules": {
+      "node-red-contrib-home-assistant-websocket": "0.80.3",
+      "node-red-node-sqlite": "1.1.1"
     }
+  },
+  {
+    "id": "sauna_state_changed",
+    "type": "server-state-changed",
+    "z": "d86bb11fab512182",
+    "g": "66210c073baa5af0",
+    "name": "Změna stavu sauny",
+    "server": "c7421fe2.cb11c",
+    "version": 6,
+    "outputs": 1,
+    "exposeAsEntityConfig": "",
+    "entities": {
+      "entity": [
+        "input_boolean.sauna"
+      ],
+      "substring": [],
+      "regex": []
+    },
+    "outputInitially": true,
+    "stateType": "str",
+    "ifState": "",
+    "ifStateType": "str",
+    "ifStateOperator": "is",
+    "outputOnlyOnStateChange": true,
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes",
+    "ignorePrevStateNull": false,
+    "ignorePrevStateUnknown": false,
+    "ignorePrevStateUnavailable": false,
+    "ignoreCurrentStateUnknown": false,
+    "ignoreCurrentStateUnavailable": false,
+    "outputProperties": [
+      {
+        "property": "payload",
+        "propertyType": "msg",
+        "value": "string",
+        "valueType": "entityState"
+      }
+    ],
+    "x": 300,
+    "y": 620,
+    "wires": [
+      [
+        "sauna_set_global"
+      ]
+    ]
+  },
+  {
+    "id": "sauna_set_global",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "66210c073baa5af0",
+    "name": "Nastav global sauna",
+    "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 620,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "blokace_file_update",
+    "type": "function",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Aktualizuj blokaci v souboru",
+    "func": "var planData = global.get(\"fve_plan\") || {};\nvar currentMode = planData.currentMode || \"normal\";\nvar currentHour = planData.currentHour || new Date().getHours();\nvar planArray = planData.plan || [];\nvar blokaceText = (planData.status && planData.status.blokaceText) ? planData.status.blokaceText : \"NE\";\n\nmsg.payload = JSON.stringify({\n    current_mode: currentMode,\n    current_reason: planData.currentReason || \"\",\n    current_hour: currentHour,\n    plan: planArray,\n    soc: planData.status ? planData.status.soc : null,\n    forecast_dnes: planData.status ? planData.status.forecastDnes : null,\n    forecast_zitra: planData.status ? planData.status.forecastZitra : null,\n    debug: planData.debug || \"\",\n    blokace_text: blokaceText,\n    last_update: new Date().toISOString()\n}, null, 2);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 830,
+    "y": 320,
+    "wires": [
+      [
+        "blokace_file_write"
+      ]
+    ]
+  },
+  {
+    "id": "blokace_file_write",
+    "type": "file",
+    "z": "d86bb11fab512182",
+    "g": "c0d4d6462d4ebded",
+    "name": "Zapiš blokaci",
+    "filename": "/homeassistant/fve_plan.json",
+    "filenameType": "str",
+    "appendNewline": false,
+    "createDir": false,
+    "overwriteFile": "true",
+    "encoding": "utf8",
+    "x": 1130,
+    "y": 320,
+    "wires": [
+      []
+    ]
+  }
 ]

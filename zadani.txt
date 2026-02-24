@@ -1,5 +1,6 @@
-asi jsem prisel na to, proc nam nefunguje nasazovani, spatnyu uzivatel.
+podivej se do logu a zkus vyresit problemy, ktere vyresis bez zmeny logiky nebo toho visualu. Chapu, ze nektere problemy nevyresis,
+budou to problemy integrace jinych systemu.
 
-Zmenil jsem na uzivatele roman. predtim tam byl romanbobr.
+Proste zkus vyresit backgroud problemy. Zaroven to zkus vzdy po nasazeni v ramci 2 minutoveho intervalu.
 
-Pokud to mohl byt ten problem, zkusme proces jeste jednou.
+Po dokonceni mi vzdy dej kratky report s vysledkem. 
