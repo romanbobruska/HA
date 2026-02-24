@@ -871,7 +871,7 @@
                 "t": "set",
                 "p": "forecast_vyroba_zitra",
                 "pt": "global",
-                "to": "payload.records.solar_yield_forecast[0][1]",
+                "to": "payload.totals.solar_yield_forecast",
                 "tot": "msg"
             }
         ],
