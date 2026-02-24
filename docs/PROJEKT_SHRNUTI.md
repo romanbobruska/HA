@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-24 (noc)
+> Poslední aktualizace: 2026-02-24 (pozdní noc)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -61,8 +61,8 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta — 1 function node čtoucí z globálů |
-| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet) |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru |
+| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
