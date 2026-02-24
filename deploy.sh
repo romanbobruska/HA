@@ -59,7 +59,7 @@ echo ""
 echo "📋 Kopíruji HA konfiguraci..."
 for f in configuration.yaml automations.yaml scripts.yaml scenes.yaml mqtt.yaml modbus.yaml input_numbers.yaml template_sensors.yaml template_switches.yaml; do
     if [ -f "$REPO_DIR/homeassistant/$f" ]; then
-        sudo cp -f "$REPO_DIR/homeassistant/$f" "$HA_CONFIG/$f"
+        sudo -n cp -f "$REPO_DIR/homeassistant/$f" "$HA_CONFIG/$f"
         echo "   ✅ $f"
     else
         echo "   ⚠️  $f nenalezen v repo"
@@ -72,7 +72,7 @@ echo "🔧 Slučuji Node-RED flows..."
 
 # Zastav Node-RED PŘED zápisem (jinak při restartu přepíše flows.json starými daty)
 echo "   ⏹️  Zastavuji Node-RED..."
-sudo ha apps stop a0d7b954_nodered 2>/dev/null || sudo ha addons stop a0d7b954_nodered 2>/dev/null || true
+sudo -n ha apps stop a0d7b954_nodered 2>/dev/null || sudo -n ha addons stop a0d7b954_nodered 2>/dev/null || true
 sleep 3
 
 # Najdi Node-RED adresář
@@ -159,7 +159,7 @@ fi
 if $RESTART_HA; then
     echo ""
     echo "🔍 Kontroluji HA konfiguraci..."
-    sudo ha core check 2>/dev/null
+    sudo -n ha core check 2>/dev/null
     if [ $? -eq 0 ]; then
         echo "   ✅ Konfigurace OK"
     else
@@ -171,11 +171,11 @@ fi
 echo ""
 echo "🔄 Restartuji služby..."
 echo "   Spouštím Node-RED..."
-sudo ha apps start a0d7b954_nodered 2>/dev/null || sudo ha addons start a0d7b954_nodered 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
+sudo -n ha apps start a0d7b954_nodered 2>/dev/null || sudo -n ha addons start a0d7b954_nodered 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
 
 if $RESTART_HA; then
     echo "   Restartuji Home Assistant..."
-    sudo ha core restart 2>/dev/null || echo "   ⚠️  Restartujte HA ručně: Nastavení → Systém → Restartovat"
+    sudo -n ha core restart 2>/dev/null || echo "   ⚠️  Restartujte HA ručně: Nastavení → Systém → Restartovat"
 else
     echo "   ℹ️  Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)"
 fi
