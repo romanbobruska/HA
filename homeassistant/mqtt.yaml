@@ -397,7 +397,7 @@ sensor:
     device_class: power
     value_template: >-
       {% set power = (value_json.value[0].power) %}
-      {{ 0 if power >= 0 else power }}
+      {{ 0 if power >= 0 else (power | abs) }}
 
   # Spotřeba AC
   - name: "AC Loads L1"
