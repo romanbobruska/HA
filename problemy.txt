@@ -1,8 +1,4 @@
-ale ty nemas pouzit pro predpoved solcast, ale 
+podivej se napr. na fve ochestator - neni to spravne zgroupovano. Chci, abys pri zmene node red flows
+vzdy zkontroloval, zda se da na to koukat. tmeplate si muzes vzit z jinych flows. 
 
-input_number.predpoved_solarni_vyroby_dnes
-
-input_number.predpoved_solarni_vyroby_zitra
-
-a hlavne input_number.zbyvajici_solarni_vyroba_dnes
-
+Dodruzj zavedeny design a zapamatuji se na to. 

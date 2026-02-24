@@ -28,10 +28,10 @@
       "aabb001122334455",
       "aabb001122334466"
     ],
-    "x": 14,
-    "y": 19,
-    "w": 1292,
-    "h": 162
+    "x": 110,
+    "y": 50,
+    "w": 1540,
+    "h": 170
   },
   {
     "id": "c0d4d6462d4ebded",
@@ -53,10 +53,10 @@
       "a706b353f30c25d1",
       "a86bc5233cfa0458"
     ],
-    "x": 134,
-    "y": 219,
-    "w": 752,
-    "h": 242
+    "x": 170,
+    "y": 230,
+    "w": 1020,
+    "h": 290
   },
   {
     "id": "66210c073baa5af0",
@@ -74,10 +74,10 @@
       "sauna_state_changed",
       "sauna_set_global"
     ],
-    "x": 174,
-    "y": 519,
-    "w": 672,
-    "h": 142
+    "x": 170,
+    "y": 550,
+    "w": 660,
+    "h": 150
   },
   {
     "id": "22e7b3b8965c20db",
@@ -98,7 +98,7 @@
     "payload": "",
     "payloadType": "date",
     "x": 140,
-    "y": 60,
+    "y": 80,
     "wires": [
       [
         "9333668b1d326a83"
@@ -112,8 +112,8 @@
     "g": "4580a451a0858d03",
     "name": "← Manuální trigger",
     "links": [],
-    "x": 145,
-    "y": 100,
+    "x": 140,
+    "y": 120,
     "wires": [
       [
         "9333668b1d326a83"
@@ -133,8 +133,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 380,
-    "y": 60,
+    "x": 360,
+    "y": 80,
     "wires": [
       [
         "aabb001122334455"
@@ -154,8 +154,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1160,
-    "y": 60,
+    "x": 1020,
+    "y": 80,
     "wires": [
       [
         "df085ac4da095340",
@@ -176,8 +176,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 400,
-    "y": 140,
+    "x": 1020,
+    "y": 160,
     "wires": [
       [
         "517215d5f730e80c"
@@ -198,8 +198,8 @@
     "targetType": "msg",
     "statusVal": "",
     "statusType": "auto",
-    "x": 1170,
-    "y": 140,
+    "x": 1240,
+    "y": 80,
     "wires": []
   },
   {
@@ -215,8 +215,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 620,
-    "y": 140,
+    "x": 1240,
+    "y": 160,
     "wires": [
       [
         "701e94d82c3aead0"
@@ -235,8 +235,8 @@
     "createDir": false,
     "overwriteFile": "true",
     "encoding": "utf8",
-    "x": 880,
-    "y": 140,
+    "x": 1460,
+    "y": 160,
     "wires": [
       []
     ]
@@ -259,8 +259,8 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 280,
-    "y": 260,
+    "x": 200,
+    "y": 300,
     "wires": [
       [
         "c36915a8599c5282"
@@ -280,8 +280,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 530,
-    "y": 260,
+    "x": 400,
+    "y": 300,
     "wires": [
       [
         "8eef6d1d51c9c644",
@@ -302,8 +302,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 390,
-    "y": 340,
+    "x": 600,
+    "y": 300,
     "wires": [
       [
         "19a783a61de3519b"
@@ -353,8 +353,8 @@
     "checkall": "false",
     "repair": false,
     "outputs": 6,
-    "x": 670,
-    "y": 340,
+    "x": 800,
+    "y": 300,
     "wires": [
       [
         "f10a91fcb4de6bd3"
@@ -386,7 +386,7 @@
     "links": [
       "8b55cfc5181b9eb7"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 260,
     "wires": []
   },
@@ -400,7 +400,7 @@
     "links": [
       "ec611f6aba7d5c59"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 300,
     "wires": []
   },
@@ -414,7 +414,7 @@
     "links": [
       "1d98a0541716ce58"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 340,
     "wires": []
   },
@@ -428,7 +428,7 @@
     "links": [
       "179ed150020d459c"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 380,
     "wires": []
   },
@@ -442,7 +442,7 @@
     "links": [
       "c682224043634fcd"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 420,
     "wires": []
   },
@@ -492,8 +492,8 @@
         "valueType": "str"
       }
     ],
-    "x": 300,
-    "y": 560,
+    "x": 200,
+    "y": 580,
     "wires": [
       [
         "376106d716756636"
@@ -513,8 +513,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 532,
-    "y": 560,
+    "x": 420,
+    "y": 580,
     "wires": [
       [
         "dc8da09248ec1e29"
@@ -541,8 +541,8 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 740,
-    "y": 560,
+    "x": 640,
+    "y": 580,
     "wires": [
       []
     ]
@@ -556,8 +556,8 @@
     "sqlquery": "fixed",
     "sql": "SELECT * FROM \"own_energy_prices_total\"",
     "name": "Čti čerstvé ceny z DB",
-    "x": 620,
-    "y": 60,
+    "x": 580,
+    "y": 80,
     "wires": [
       [
         "aabb001122334466"
@@ -577,8 +577,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 880,
-    "y": 60,
+    "x": 800,
+    "y": 80,
     "wires": [
       [
         "9e0b46a9dfedea33"
@@ -595,7 +595,7 @@
     "links": [
       "e93b8f3e662c6190"
     ],
-    "x": 845,
+    "x": 1000,
     "y": 460,
     "wires": []
   },
@@ -667,8 +667,8 @@
         "valueType": "entityState"
       }
     ],
-    "x": 300,
-    "y": 620,
+    "x": 200,
+    "y": 640,
     "wires": [
       [
         "sauna_set_global"
@@ -688,8 +688,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 540,
-    "y": 620,
+    "x": 420,
+    "y": 640,
     "wires": [
       []
     ]
@@ -707,8 +707,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 830,
-    "y": 320,
+    "x": 600,
+    "y": 380,
     "wires": [
       [
         "blokace_file_write"
@@ -727,8 +727,8 @@
     "createDir": false,
     "overwriteFile": "true",
     "encoding": "utf8",
-    "x": 1130,
-    "y": 320,
+    "x": 800,
+    "y": 380,
     "wires": [
       []
     ]
