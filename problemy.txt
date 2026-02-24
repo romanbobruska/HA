@@ -1,5 +1,1 @@
-zkontroluj logiku nabijeni auta - fungovalo mi to. stava se mi, ze ted, kdyz je zapnuto solarni nabijeni auta, tak se mi stale spusti 
-wallbox v garazi, i kdyz by nemel. Solarni nabijeni auta znamena, ze se auto bude nabijet pouze z prebytku solarni vyroby, jinak ne.
-
-Nejdrive zanalyzuj logiku, pripadne se zeptej - jsou to moje automatizace, ktere jsi netvoril - jedna se o flows managera nabijeni,
-nabijeni auta ze site a nabijeni auta ze slunce.
+potrebujeme flow nibe control? neni to obsolete? Pokud ano, odstran ho. 
