@@ -1,11 +1,8 @@
-nezda se mi, ze pocitas plan spravne. pocitas se zbyvajici vyrobou, jak byl pozadavek?
+ale ty nemas pouzit pro predpoved solcast, ale 
 
-Doufam, ze ho mas ulozen v md filu.
+input_number.predpoved_solarni_vyroby_dnes
 
-Protoze plan vypada tak, jako by nesvitilo - ale vypada to podle zbyvajici solarni energie, ze svitit bude.
+input_number.predpoved_solarni_vyroby_zitra
 
-goal: POCITAS PRI VYPOCTU PLANU DOSTATECNE S VYROBOU NA DNES, ZITRA, A HLAVNE SE ZBYVAJICI VYROBOU NA DNES JAK BYL POZADAVEK?
-
-proved nasazeni uprav a vse, co, jsme si rekli minule. uz to nebudu opakovat, bude to automaticky.
-
+a hlavne input_number.zbyvajici_solarni_vyroba_dnes
 
