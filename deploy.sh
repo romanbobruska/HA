@@ -107,7 +107,7 @@ if [ ! -d "$NODERED_DIR" ]; then
     echo "   Tip: spusťte 'find / -name flows.json 2>/dev/null' a upravte NODERED_DIR v tomto skriptu"
 else
     # Python skript pro sloučení JSON souborů
-    python3 -c "
+    sudo -n python3 -c "
 import json, glob, os, sys
 
 flows_dir = '$REPO_DIR/node-red/flows'
