@@ -1,4 +1,9 @@
-zanalyzuj pozadavky. Chci, aby se kupovala energie za co nejnizsi cenu. Mas pro topeni hysterezi 0,7 stupne od teploty nastavene
-v dome. Chci, abys hospodaril s energii. Aktualne - pokud ma zitra byt vyroba velka, proc nahrivat nadrz pres NIBE za stredni ceny?
+kdo ti rekl toto:
 
-Uprav logiku tak, aby jsme topili zas co nejmensi ceny a zaroven meli v dome komfortni teplotu, ale ne pretopeno.
+ům bude přirozeně chladnout směrem k safeTemp (21.3°C). NIBE se znovu spustí jen pokud teplota klesne pod 21.3°C.
+
+mame definovan hysterezi 0,7 stupne oproti nastavené teplotě v domě.
+
+doprdele.
+
+zanalyzuj znovu pozadavky a uprav logiku. pripadne se zeptej.
