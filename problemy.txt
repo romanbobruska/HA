@@ -1,3 +1,5 @@
-mam problem - v NR mi zmizelo flow pro nabijeni auta ze slunce. V nasem lokalnim repu je nabijeni auta ze slunce
-nahrazeno managerem - duplicita. vytahni posledni verzi nabijeni auta ze slunce z gitu a zkotroluj, ze nabijeni auta bude v NR fungovat.
+pri blokaci vybijeni baterie, mozna i pri setreni se stale stava, ze se baterie nabiji plnym solarnim ziskem a 
+ze site jde cela spotreba. Zkontroluj mody a znovu zanalyzuj https://github.com/victronenergy/venus/wiki/dbus#vebus-systems-multis-quattros-inverters.
 
+Pozadavek je, aby pri blokaci vybijeni nebo pri modu setreni se pouzil soalrni zisk na spotrebu a zbytek se vzal ze site. 
+Baterie se v techto modech nesmi vybijet. Pokud budes muset, pouzij zmenu minSOC. at uz nam to funguje, prosim
