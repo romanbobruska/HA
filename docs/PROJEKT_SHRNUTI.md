@@ -63,7 +63,6 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta — 1 function node čtoucí z globálů |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru |
-| `nibe-control.json` | Modbus zápis do NIBE (reg 47371 topení, 47372 chlazení) |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
