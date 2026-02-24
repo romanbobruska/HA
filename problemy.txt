@@ -1,2 +1,4 @@
-zapomnel jsi na ty 2 minuty checku. zmenil jsem tvuj navrh. Takhle to ma vypadat. Priste pokazde kontroluj 2 minuty, co se zmenilo nebo
-neodpovidalo puvodnimu zadani a pripadne nasad fix. Toto si zapamatuj jako pevne pravidlo.
+zanalyzuj pozadavky. Chci, aby se kupovala energie za co nejnizsi cenu. Mas pro topeni hysterezi 0,7 stupne od teploty nastavene
+v dome. Chci, abys hospodaril s energii. Aktualne - pokud ma zitra byt vyroba velka, proc nahrivat nadrz pres NIBE za stredni ceny?
+
+Uprav logiku tak, aby jsme topili zas co nejmensi ceny a zaroven meli v dome komfortni teplotu, ale ne pretopeno.
