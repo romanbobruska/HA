@@ -62,31 +62,11 @@ echo ""
 echo "📋 Kopíruji HA konfiguraci..."
 sudo -n python3 /tmp/HA/deploy_copy_ha.py || true
 
-# --- 4. Kontrola novosti server flows vs. git ---
+# --- 4. Sync server flows → git (zachování ručních změn uživatele) ---
 echo ""
-echo "🔍 Kontroluji server flows..."
-NODERED_FLOWS="/addon_configs/a0d7b954_nodered/flows.json"
-if [ -f "$NODERED_FLOWS" ] && [ "$FORCE" = "false" ]; then
-    # Zjisti timestamp flows.json na serveru
-    SERVER_TS=$(stat -c %Y "$NODERED_FLOWS" 2>/dev/null || echo 0)
-    # Zjisti timestamp posledniho git commitu
-    GIT_TS=$(git -C /tmp/HA log -1 --format=%ct 2>/dev/null || echo 0)
-    if [ "$SERVER_TS" -gt "$GIT_TS" ]; then
-        DIFF_SEC=$((SERVER_TS - GIT_TS))
-        echo "   ⚠️  Server flows jsou novější o ${DIFF_SEC}s než git commit!"
-        echo "   ⚠️  Server flows: $(date -d @$SERVER_TS '+%H:%M:%S')"
-        echo "   ⚠️  Git commit:    $(date -d @$GIT_TS '+%H:%M:%S')"
-        echo "   ⚠️  Možná máš neuložené změny v NR UI."
-        echo "   ⚠️  Použij --force pro přepsání, nebo nejprve exportuj flows z NR UI."
-        exit 1
-    else
-        echo "   ✅ Server flows jsou starší nebo shodné s gitem (OK)"
-    fi
-else
-    if [ "$FORCE" = "true" ]; then
-        echo "   ℹ️  --force: přeskakuji kontrolu server flows"
-    fi
-fi
+echo "🔄 Synchronizuji server flows do git..."
+python3 /tmp/HA/deploy_sync_server.py || true
+
 
 # --- 5. Sloučení všech Node-RED flows do jednoho flows.json ---
 echo ""
