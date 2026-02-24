@@ -7,6 +7,8 @@
 > - Aktualizovat tento soubor po každém deployi (commit + push)
 > - Uživatel nevyžaduje potvrzení každého kroku — vše provádět bez čekání na Accept v IDE
 > - Pokud je otázka nutná, položit max. 1× po kompletní analýze
+> - **NIKDY nečíst HA entitu přes `api-current-state` pokud je dostupná v `fve_config` nebo `homeassistant.homeAssistant.states` globálu** — použít vždy globální proměnnou
+> - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu
 
 ---
 
@@ -57,7 +59,7 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta — 1 function node čtoucí z globálů |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru |
 | `nibe-control.json` | Modbus zápis do NIBE (reg 47371 topení, 47372 chlazení) |
