@@ -2,17 +2,43 @@ automaticke_barvy:
   card-mod-theme: automaticke_barvy
   card-mod-card: |
     ha-card {
-      {% set d = config.entity.split('.')[0] %}
-      {% if d in ['input_number', 'input_boolean', 'input_select', 'select', 'switch', 'light', 'fan', 'cover', 'lock', 'climate', 'alarm_control_panel'] %}
-        /* --- STYL PRO OVLÁDACÍ PRVKY --- */
+      /* 1. Definice proměnných */
+      {% set entity = config.entity if config.entity is defined else '' %}
+      {% set d = entity.split('.') | first if '.' in entity else '' %}
+      {% set ovladace = ['number', 'input_number', 'input_boolean', 'input_select', 'select', 'switch', 'light', 'fan', 'cover', 'lock', 'climate', 'alarm_control_panel'] %}
+
+      /* Příznaky z card_modu */
+      {% set _cm = config.card_mod if config.card_mod is defined else none %}
+      {% set manual = _cm and _cm.style is defined and '--manual' in _cm.style %}
+      {% set forced_sensor = _cm and _cm.style is defined and '--sensor' in _cm.style %}
+
+      /* 2. ROZHODOVACÍ LOGIKA */
+
+      /* A. VÝJIMKA PRO TITULKY */
+      {% if config.type == 'heading' %}
+        box-shadow: none !important;
+        border: none !important;
+        background: none !important;
+
+      /* B. OVLADAČE */
+      {% elif not forced_sensor and (d in ovladace or manual) %}
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.15) !important;
-        border-left: 4px solid var(--state-icon-color, #44739e) !important;
         background: var(--ha-card-background, var(--card-background-color, white)) !important;
         filter: contrast(1.02) brightness(1.03);
+        {% if manual %}
+          border-left: 4px solid #9c27b0 !important;
+        {% else %}
+          border-left: 4px solid var(--state-icon-color, #44739e) !important;
+        {% endif %}
+        border-top: 1px solid var(--ha-card-border-color, var(--divider-color, rgba(0,0,0,0.12))) !important;
+        border-right: 1px solid var(--ha-card-border-color, var(--divider-color, rgba(0,0,0,0.12))) !important;
+        border-bottom: 1px solid var(--ha-card-border-color, var(--divider-color, rgba(0,0,0,0.12))) !important;
+
+      /* C. VŠE OSTATNÍ */
       {% else %}
-        /* --- STYL PRO SENZORY --- */
         box-shadow: none !important;
-        border-left: 4px solid transparent !important;
-        opacity: 0.85;
+        border: 1px solid var(--ha-card-border-color, var(--divider-color, rgba(0,0,0,0.12))) !important;
+        background: var(--ha-card-background, var(--card-background-color, white)) !important;
+        filter: none !important;
       {% endif %}
     }
