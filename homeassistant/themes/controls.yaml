@@ -8,9 +8,9 @@ automaticke_barvy:
       {% set ovladace = ['number', 'input_number', 'input_boolean', 'input_select', 'select', 'switch', 'light', 'fan', 'cover', 'lock', 'climate', 'alarm_control_panel'] %}
 
       /* Příznaky z card_modu */
-      {% set _cm = config.card_mod if config.card_mod is defined else none %}
-      {% set manual = _cm and _cm.style is defined and '--manual' in _cm.style %}
-      {% set forced_sensor = _cm and _cm.style is defined and '--sensor' in _cm.style %}
+      {% set _cm_style = config.card_mod.style | default('') if config.card_mod is defined else '' %}
+      {% set manual = '--manual' in _cm_style %}
+      {% set forced_sensor = '--sensor' in _cm_style %}
 
       /* 2. ROZHODOVACÍ LOGIKA */
 
