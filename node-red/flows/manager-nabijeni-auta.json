@@ -117,7 +117,7 @@
                 "svc_solar_off_slunce"
             ],
             [
-                "svc_grid_off_sit"
+                "svc_solar_off_sit"
             ]
         ]
     },
@@ -232,6 +232,39 @@
         "wires": []
     },
     {
+        "id": "svc_solar_off_sit",
+        "type": "api-call-service",
+        "z": "7ceb7c5337692ae5",
+        "name": "Solar OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_solar"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 800,
+        "y": 200,
+        "wires": [
+            [
+                "svc_grid_off_sit"
+            ]
+        ]
+    },
+    {
         "id": "svc_grid_off_sit",
         "type": "api-call-service",
         "z": "7ceb7c5337692ae5",
@@ -256,7 +289,7 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 800,
+        "x": 1020,
         "y": 200,
         "wires": [
             [
