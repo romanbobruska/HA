@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (01:00)
+> Poslední aktualizace: 2026-02-25 (00:35)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -54,6 +54,13 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 4. Pak teprve nasadím deploy z gitu
 - `deploy_sync_server.py` = **samostatný nástroj**, nespouští se automaticky při deployi
 - Deploy nikdy nespouští sync automaticky — jinak by přepsal git serverovou (potenciálně starou) verzí
+
+### Kritická pravidla pro sync server→git
+- **Sync matchuje vždy podle ID nodu** — nikdy nepřepisovat `rules`/`func`/`wires` z jednoho nodu na jiný
+- **`rules`, `func`, `wires`, `links`** smí být synced jen pokud patří ke správnému ID
+- Pozice (`x`,`y`,`w`,`h`) synced normálně podle ID
+- **Zachovej layout uživatele**: pokud uživatel ručně přesunul nody, zachovat jejich `x`,`y` při dalších úpravách logiky
+- Při opravě change nodů: vždy mapovat ID→ID z originálu, ne klíčovat podle pořadí nebo pozice
 
 ---
 
