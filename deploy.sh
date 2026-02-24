@@ -177,12 +177,15 @@ echo ""
 echo "🔄 Restartuji služby..."
 echo "   Restartuji Node-RED přes HA API..."
 HA_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIyYzg3OGM0MGM4MzU0MzI1OGZiZDcxODFhM2ZlZTQyZiIsImlhdCI6MTc3MTg4NzE0MywiZXhwIjoyMDg3MjQ3MTQzfQ.y2NTKxC9b67IlReCS6e-S2TVNCiv1mc1-RGSFUcnwuc"
-curl -s -X POST "http://localhost:8123/api/services/hassio/addon_restart" \
+RESULT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/hassio/addon_restart" \
     -H "Authorization: Bearer $HA_TOKEN" \
     -H "Content-Type: application/json" \
-    -d '{"addon":"a0d7b954_nodered"}' > /dev/null 2>&1 \
-    && echo "   ✅ Node-RED restartován" \
-    || echo "   ⚠️  Spusťte Node-RED ručně v HA UI"
+    --data-raw "{\"addon\":\"a0d7b954_nodered\"}")
+if [ "$RESULT" = "200" ] || [ "$RESULT" = "201" ]; then
+    echo "   ✅ Node-RED restartován (HTTP $RESULT)"
+else
+    echo "   ⚠️  Restart selhal (HTTP $RESULT), spusťte Node-RED ručně v HA UI"
+fi
 
 if $RESTART_HA; then
     echo "   Restartuji Home Assistant..."
