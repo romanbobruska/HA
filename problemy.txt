@@ -1,4 +1,5 @@
-podivej se napr. na fve ochestator - neni to spravne zgroupovano. Chci, abys pri zmene node red flows
-vzdy zkontroloval, zda se da na to koukat. tmeplate si muzes vzit z jinych flows. 
+podivej se do orchestratoru, takhle by se mi to narychlo libilo - muze to byt i lepsi.
 
-Dodruzj zavedeny design a zapamatuji se na to. 
+mam problem, se v tomto flow se po smerovani modu node → Solární nabíjení nechce zaradit do groupy, tzn. obdelnicek se nezvetsi.
+
+Ber toto jako takovy pattern pro tvorbu a upravu flows. chceme to mit prehledne.
