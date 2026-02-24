@@ -11,7 +11,7 @@
         "id": "60ea726b8bbc5fbc",
         "type": "group",
         "z": "e451448d0e5cd53a",
-        "name": "Spouštěcí algoritmus",
+        "name": "Spou┼ít─Ťc├ş algoritmus",
         "style": {
             "fill": "#e3f3d3",
             "label": true
@@ -31,7 +31,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Předpověď výroby solar dnes",
+        "name": "P┼Öedpov─Ť─Ć v├Żroby solar dnes",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -62,7 +62,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Předpověď výroby solar zítra",
+        "name": "P┼Öedpov─Ť─Ć v├Żroby solar z├ştra",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -92,7 +92,7 @@
         "id": "82516184e2da4aba",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav forecast výrobu dnes",
+        "name": "Nastav forecast v├Żrobu dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -123,7 +123,7 @@
         "id": "5bc15235de0be6d7",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav forecast výrobu zítra",
+        "name": "Nastav forecast v├Żrobu z├ştra",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -173,8 +173,7 @@
         "y": 140,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "a9f0fdbe34b08f42"
             ]
         ]
     },
@@ -188,7 +187,7 @@
                 "t": "set",
                 "p": "max_spotreba_sit",
                 "pt": "global",
-                "to": "24000",
+                "to": "22000",
                 "tot": "num"
             }
         ],
@@ -208,7 +207,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Spotřeba ze sítě",
+        "name": "Spot┼Öeba ze s├şt─Ť",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -239,7 +238,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Nabíjení bat. ze sítě",
+        "name": "Nab├şjen├ş bat. ze s├şt─Ť",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -288,8 +287,7 @@
         "y": 260,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "510d8c7a6922180c"
             ]
         ]
     },
@@ -316,8 +314,7 @@
         "y": 320,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "a55129e755036403"
             ]
         ]
     },
@@ -325,7 +322,7 @@
         "id": "cbe7aadb6a9789fb",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav spotřebu dnes",
+        "name": "Nastav spot┼Öebu dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -357,7 +354,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "EV spotřeba",
+        "name": "EV spot┼Öeba",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -406,8 +403,7 @@
         "y": 380,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "90ecdd0dbac92033"
             ]
         ]
     },
@@ -415,7 +411,7 @@
         "id": "cf10227596934c6b",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav spotřebu EV dnes",
+        "name": "Nastav spot┼Öebu EV dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -447,7 +443,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Spotřeba solar dnes",
+        "name": "Spot┼Öeba solar dnes",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -496,8 +492,7 @@
         "y": 440,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "c3dbf47b62785eff"
             ]
         ]
     },
@@ -506,7 +501,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Nabíjení bat. ze solaru",
+        "name": "Nab├şjen├ş bat. ze solaru",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -555,8 +550,7 @@
         "y": 500,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "4236d9de7efc61ec"
             ]
         ]
     },
@@ -564,7 +558,7 @@
         "id": "94b7b011f71e932d",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav výrobu solar dnes",
+        "name": "Nastav v├Żrobu solar dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -595,7 +589,7 @@
         "id": "492bb8db67a996d6",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav nabíjení baterie dnes",
+        "name": "Nastav nab├şjen├ş baterie dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -627,7 +621,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Spotřeba z baterie",
+        "name": "Spot┼Öeba z baterie",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -676,8 +670,7 @@
         "y": 560,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "4245e7094a4f80b7"
             ]
         ]
     },
@@ -686,7 +679,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Baterie do sítě",
+        "name": "Baterie do s├şt─Ť",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -735,8 +728,7 @@
         "y": 620,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "3a3fb82b0bca8580"
             ]
         ]
     },
@@ -744,7 +736,7 @@
         "id": "4356e0d632c43221",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav vybíjení baterie dnes",
+        "name": "Nastav vyb├şjen├ş baterie dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -776,7 +768,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Celková solární spotřeba",
+        "name": "Celkov├í sol├írn├ş spot┼Öeba",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -825,8 +817,7 @@
         "y": 680,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "ea8178ed56fc307d"
             ]
         ]
     },
@@ -834,7 +825,7 @@
         "id": "0924d118225c702a",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
-        "name": "Nastav prodej do sítě dnes",
+        "name": "Nastav prodej do s├şt─Ť dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -871,7 +862,7 @@
                 "t": "set",
                 "p": "forecast_vyroba_zitra",
                 "pt": "global",
-                "to": "payload.totals.solar_yield_forecast",
+                "to": "payload.records.solar_yield_forecast[0][1]",
                 "tot": "msg"
             }
         ],
@@ -884,8 +875,7 @@
         "y": 200,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "f75eb57b02744611"
             ]
         ]
     },
@@ -893,7 +883,7 @@
         "id": "815f4827fac6b509",
         "type": "function",
         "z": "e451448d0e5cd53a",
-        "name": "Spočítej hodnoty",
+        "name": "Spo─Ź├ştej hodnoty",
         "func": "let forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") \nlet forecast_vyroba_zitra = global.get(\"forecast_vyroba_zitra\") \nlet grid_direct_use = global.get(\"grid_direct_use\")\nlet grid_to_battery = global.get(\"grid_to_battery\")\nlet ev_consumption = global.get(\"ev_consumption\")\nlet solar_consumption = global.get(\"solar_consumption\")\nlet solar_to_battery = global.get(\"solar_to_battery\")\nlet battery_consumption = global.get(\"battery_consumption\")\nlet battery_to_grid = global.get(\"battery_to_grid\")\nlet total_solar_yield = global.get(\"total_solar_yield\")\nlet forecast_vyroba_dnes_zbytek = global.get(\"forecast_zbytek_vyroba_dnes\") \n\n\nif (!Number.isFinite(forecast_vyroba_dnes)) {\n    forecast_vyroba_dnes = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_zitra)) {\n    forecast_vyroba_zitra = 0\n}\n\nif (!Number.isFinite(grid_direct_use)) {\n    grid_direct_use = 0\n}\n\nif (!Number.isFinite(grid_to_battery)) {\n    grid_to_battery = 0\n}\n\nif (!Number.isFinite(ev_consumption)) {\n    ev_consumption = 0\n}\n\nif (!Number.isFinite(solar_consumption)) {\n    solar_consumption = 0\n}\n\nif (!Number.isFinite(solar_to_battery)) {\n    solar_to_battery = 0\n}\n\nif (!Number.isFinite(battery_consumption)) {\n    battery_consumption = 0\n}\n\nif (!Number.isFinite(battery_to_grid)) {\n    battery_to_grid = 0\n}\n\nif (!Number.isFinite(total_solar_yield)) {\n    total_solar_yield = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_dnes_zbytek)) {\n    forecast_vyroba_dnes_zbytek = 0\n}\n\nmsg.payload_forecast_vyroba_dnes = (forecast_vyroba_dnes / 1000).toFixed(2)\n\nmsg.payload_forecast_vyroba_zitra = (forecast_vyroba_zitra / 1000).toFixed(2)\n\nmsg.payload_grid = (grid_direct_use +\n    grid_to_battery).toFixed(2)\n\nmsg.payload_ev = ev_consumption.toFixed(2)\n\nmsg.payload_solar = total_solar_yield.toFixed(2)\n\nmsg.payload_battery_plus = (solar_to_battery + grid_to_battery).toFixed(2)\n\nmsg.payload_battery_minus = (battery_consumption + battery_to_grid).toFixed(2)\n\nmsg.payload_vyroba = ((total_solar_yield - (solar_to_battery + solar_consumption))\n    + battery_to_grid).toFixed(2)\n\nmsg.payload_forecast_vyroba_dnes_zbytek = (forecast_vyroba_dnes_zbytek / 1000).toFixed(2)\n\n// Store computed values in global for other flows\nglobal.set(\"fve_spotreba_sit_kwh\", parseFloat(msg.payload_grid))\nglobal.set(\"fve_spotreba_ev_kwh\", parseFloat(msg.payload_ev))\nglobal.set(\"fve_vyroba_solar_kwh\", parseFloat(msg.payload_solar))\nglobal.set(\"fve_nabijeni_bat_kwh\", parseFloat(msg.payload_battery_plus))\nglobal.set(\"fve_vybijeni_bat_kwh\", parseFloat(msg.payload_battery_minus))\nglobal.set(\"fve_prodej_sit_kwh\", parseFloat(msg.payload_vyroba))\n    \nreturn msg",
         "outputs": 1,
         "timeout": 0,
@@ -952,7 +942,7 @@
         "type": "function",
         "z": "e451448d0e5cd53a",
         "g": "60ea726b8bbc5fbc",
-        "name": "Má se spustit?",
+        "name": "M├í se spustit?",
         "func": "let d = new Date()\nlet current_minute = d.getMinutes()\nlet spusteno_minutou = flow.get(\"spusteno_minutou\")\n\nif ([0, 10, 20, 30, 40, 50, 58, 59].includes(current_minute) && spusteno_minutou != current_minute) {\n    flow.set(\"spusteno_minutou\", current_minute)\n    return msg;\n} \n\n",
         "outputs": 1,
         "timeout": 0,
@@ -973,7 +963,7 @@
         "type": "inject",
         "z": "e451448d0e5cd53a",
         "g": "60ea726b8bbc5fbc",
-        "name": "Manuálně",
+        "name": "Manu├íln─Ť",
         "props": [
             {
                 "p": "payload"
@@ -1034,7 +1024,7 @@
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Zbývající solární spotřeba",
+        "name": "Zb├Żvaj├şc├ş sol├írn├ş spot┼Öeba",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
