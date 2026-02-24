@@ -59,7 +59,7 @@ echo ""
 echo "📋 Kopíruji HA konfiguraci..."
 for f in configuration.yaml automations.yaml scripts.yaml scenes.yaml mqtt.yaml modbus.yaml input_numbers.yaml template_sensors.yaml template_switches.yaml; do
     if [ -f "$REPO_DIR/homeassistant/$f" ]; then
-        sudo -n bash -c "cat '$REPO_DIR/homeassistant/$f' > '$HA_CONFIG/$f'"
+        sudo -n bash -c "cat '$REPO_DIR/homeassistant/$f' > '$HA_CONFIG/$f'" || true
         echo "   ✅ $f"
     else
         echo "   ⚠️  $f nenalezen v repo"
