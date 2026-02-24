@@ -57,28 +57,20 @@ sudo -n rm -rf /config/backup_* 2>/dev/null && echo "   ✅ Zálohy smazány" ||
 # --- 3. Kopie HA konfiguračních souborů ---
 echo ""
 echo "📋 Kopíruji HA konfiguraci..."
-sudo -n python3 << 'PYEOF'
-import os, shutil, sys
-repo = '/tmp/HA/homeassistant'
-dst = '/config'
-files = ['configuration.yaml','automations.yaml','scripts.yaml','scenes.yaml','mqtt.yaml','modbus.yaml','input_numbers.yaml','template_sensors.yaml','template_switches.yaml']
-for f in files:
-    src = os.path.join(repo, f)
-    if os.path.exists(src):
-        shutil.copy2(src, os.path.join(dst, f))
-        print('   ✅ ' + f)
-    else:
-        print('   ⚠️  ' + f + ' nenalezen v repo')
-PYEOF
+sudo -n python3 /tmp/HA/deploy_copy_ha.py || true
 
 # --- 4. Sloučení všech Node-RED flows do jednoho flows.json ---
 echo ""
 echo "🔧 Slučuji Node-RED flows..."
 
-# Zastav Node-RED PŘED zápisem (jinak při restartu přepíše flows.json starými daty)
+# Zastav Node-RED PŘED zápisem přes HA API
 echo "   ⏹️  Zastavuji Node-RED..."
-sudo -n ha apps stop a0d7b954_nodered 2>/dev/null || sudo -n ha addons stop a0d7b954_nodered 2>/dev/null || true
-sleep 3
+HA_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIyYzg3OGM0MGM4MzU0MzI1OGZiZDcxODFhM2ZlZTQyZiIsImlhdCI6MTc3MTg4NzE0MywiZXhwIjoyMDg3MjQ3MTQzfQ.y2NTKxC9b67IlReCS6e-S2TVNCiv1mc1-RGSFUcnwuc"
+curl -s -o /dev/null -X POST "http://localhost:8123/api/services/hassio/addon_stop" \
+    -H "Authorization: Bearer $HA_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data-raw '{"addon":"a0d7b954_nodered"}' || true
+sleep 5
 
 # Najdi Node-RED adresář
 if [ ! -d "$NODERED_DIR" ]; then
@@ -111,47 +103,8 @@ if [ ! -d "$NODERED_DIR" ]; then
     echo "   ❌ Node-RED adresář nenalezen! Flows musíte importovat ručně."
     echo "   Tip: spusťte 'find / -name flows.json 2>/dev/null' a upravte NODERED_DIR v tomto skriptu"
 else
-    # Python skript pro sloučení JSON souborů
-    sudo -n python3 -c "
-import json, glob, os, sys
-
-flows_dir = '$REPO_DIR/node-red/flows'
-output_file = '$NODERED_DIR/flows.json'
-
-all_nodes = []
-seen_ids = set()
-files_merged = 0
-
-for fpath in sorted(glob.glob(os.path.join(flows_dir, '*.json'))):
-    fname = os.path.basename(fpath)
-    try:
-        with open(fpath, 'r', encoding='utf-8-sig') as f:
-            content = f.read().rstrip().rstrip('.')
-            nodes = json.loads(content)
-        
-        added = 0
-        for node in nodes:
-            nid = node.get('id', '')
-            # Přeskočit duplicitní globální konfigurační nody (server, global-config)
-            if nid in seen_ids:
-                continue
-            seen_ids.add(nid)
-            all_nodes.append(node)
-            added += 1
-        
-        files_merged += 1
-        print(f'   ✅ {fname} ({added} nodes)')
-    except Exception as e:
-        print(f'   ❌ {fname}: {e}', file=sys.stderr)
-
-with open(output_file, 'w', encoding='utf-8') as f:
-    json.dump(all_nodes, f, ensure_ascii=False, indent=4)
-
-print(f'')
-print(f'   📊 Celkem: {files_merged} flows, {len(all_nodes)} nodes')
-print(f'   📁 Uloženo do: {output_file}')
-" 2>&1
-
+    FLOWS_DIR="$REPO_DIR/node-red/flows" OUTPUT_FILE="$NODERED_DIR/flows.json" \
+        sudo -n -E python3 /tmp/HA/deploy_merge_flows.py 2>&1
     if [ $? -eq 0 ]; then
         echo "   ✅ Flows sloučeny úspěšně"
     else
