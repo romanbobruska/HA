@@ -1,7 +1,19 @@
-zarid, aby v pripade, ze vypadne sit jako ted - sensor.stav_rozvodne_site_grid_status je "Výpadek (Grid Lost)" (klidne si zaloz ciselny sensor v mqtt.yaml),
-a neni solarni vyroba, tak nechci, aby se spustilo ZADNE ZARIZENI, KTERE MA VELKOU SPOTREBU - TZN. AUTO SE NESMI NABIJET, NIBE JE BLOKOVANE, NESMI SE NABIJET BATERIE atd.
+Ano, chci, aby v modu setrit se nabijela baterie ze slunce, ale hlavne se nevybijela. Zbytek spotreby - 
+pokud bude vetsi nez vyroba - jde ze site. Pokud neni zadna solarni vyroba, spotreba jde ze site.
 
-Pokud je solarni vyroba, tak muze bezet pouze to, na co solarni vyroba staci. chapeme se? Kdyztak se zeptej:
+V modu Normal chci to same:
 
-NIBE - odber v peaku 14kWh
-AUTO - to se ridi pomoci amperace
+Normal bez blokovani vybijeni baterie je jasny - vybiji se baterie nebo nabiji, podle aktualnich podminek - na 
+tom se nic nemeni.
+
+Zmena nastava, pokud zacneme blokovat vybijeni baterie - to mi potom prijde, ze je totozne s setricim modem.
+
+Goal je, aby v setricim modu sla veskera solarni vyroba nejprve do baterie, pokud nebude
+solarni vyroba dostatecna, pak se vezme ze site. BATERIE SE NEVYBIJI.
+
+Basic goal je:
+NECHCI, ABY NASTAVALO, ZE PRI JAKEMKOLIV MODU SE BATERIE ZACNE NABIJET VESKEROU SOLARNI VYROBOU, A 
+SPOTREBA DOMU PUJDE CELA ZE SITE. TAKOVY MOD ZATIM NEMAME POZADOVANY. Zaroven bych chtel, aby se neovlivnovalo
+minSOC baterie, pokud to neni bezpodminecne nutne.
+
+Pokud tam mezi mody setrit a normal + blokovani vybijeni baterie je, tak mi to rekni, pripadne se zeptej. jinak implementuj.
