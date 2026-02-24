@@ -44,9 +44,16 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
   "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash deploy.sh 2>&1"
 ```
 - Deploy skript **automaticky** zastaví NR, nahraje flows, restartuje NR přes HA API
-- **Krok 4 (nový):** `deploy_sync_server.py` — před nasazením načte `/addon_configs/a0d7b954_nodered/flows.json` a přepíše git verze flows pozicemi/obsahem ze serveru → **ruční změny v NR UI se nikdy neztratí**
 - HA konfigurační soubory se kopírují automaticky
 - **POZOR**: `ha core check` v deploy.sh nesahat — visí, nahrazeno HA REST API
+
+### Workflow pro zachycení ručních změn z NR UI
+1. Provedeš změny v NR UI → klikneš **Deploy** v NR UI
+2. Řekneš mi "hotovo"
+3. Já stáhnu server flows přes SSH (base64), porovnám s gitem a commitnu změny
+4. Pak teprve nasadím deploy z gitu
+- `deploy_sync_server.py` = **samostatný nástroj**, nespouští se automaticky při deployi
+- Deploy nikdy nespouští sync automaticky — jinak by přepsal git serverovou (potenciálně starou) verzí
 
 ---
 
