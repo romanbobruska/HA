@@ -39,8 +39,10 @@ Automatizuje FVE elektrárnu (17 kWp), tepelné čerpadlo NIBE, nabíjení elekt
 ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 \
   "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash deploy.sh 2>&1"
 ```
-- Automaticky: zastaví NR, nahraje flows + HA config, restartuje NR přes HA REST API
-- S restartem HA: přidat `--with-ha`
+- Deploy skript **automaticky** zastaví NR, nahraje flows, restartuje NR přes HA API
+- HA konfigurační soubory se kopírují automaticky
+- **POZOR**: `ha core check` v deploy.sh nesahat — visí, nahrazeno HA REST API
+- **INFO**: Oprava `nabijeni_baterii_minus` (2026-02-24) — dříve vracelo záporné hodnoty, nyní kladné
 
 ---
 
@@ -140,6 +142,12 @@ Noční snížení (`topeni_nocni_snizeni: 0.5°C`) platí jen při **drahých**
 ---
 
 ## 8. Aktuální stav integrací
+
+**sensor.nabijeni_baterii_minus** (`unique_id: battery_power_minus`):
+- MQTT topic: `victron/N/c0619ab69c71/system/0/Batteries`
+- Vrací **kladnou hodnotu W** při vybíjení baterie (abs), 0 při nabíjení
+- Používá se v `nabijeni-auta-slunce.json` vzorec: `11040 - spotreba_sit - batt_minus` (kladné = odečítáme)
+- Oprava 2026-02-24: dříve vracelo záporné hodnoty, vzorec v flow opraven koordinovaně
 
 **Meross termostat** (`climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53`):
 - MAC: `c4:e7:ae:0a:2e:53`, IP: `192.168.0.185`
