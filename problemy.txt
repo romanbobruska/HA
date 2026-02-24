@@ -1,5 +1,5 @@
-podivej se do orchestratoru, takhle by se mi to narychlo libilo - muze to byt i lepsi.
+precti orchestrator, zhluboka ho zanalyzuj a nauc se, jak bys mel tvorit a upravovat flows.
 
-mam problem, se v tomto flow se po smerovani modu node → Solární nabíjení nechce zaradit do groupy, tzn. obdelnicek se nezvetsi.
+takhle se mi to libi finalne. porovnej to s tvym predchozim vystupem.
 
-Ber toto jako takovy pattern pro tvorbu a upravu flows. chceme to mit prehledne.
+Jediny problem u tohoto flow je, ze → Solární nabíjení se nechce zaradit do skupiny, jinak ok.
