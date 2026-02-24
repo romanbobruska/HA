@@ -1,13 +1,14 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-24
+> Poslední aktualizace: 2026-02-24 (večer)
 >
 > **Provozní pravidla pro AI:**
-> - Aktualizovat tento soubor po každém deployi (commit + push)
+> - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
 > - Uživatel nevyžaduje potvrzení každého kroku — vše provádět bez čekání na Accept v IDE
 > - Pokud je otázka nutná, položit max. 1× po kompletní analýze
-> - **NIKDY nečíst HA entitu přes `api-current-state` pokud je dostupná v `fve_config` nebo `homeassistant.homeAssistant.states` globálu** — použít vždy globální proměnnou
+> - **Každých 5 promptů projít HA Core logy a opravit co se dá**
+> - **NIKDY nečíst HA entitu přes `api-current-state` pokud je dostupná v `fve_config` nebo `homeassistant.homeAssistant.states` globálu** — ale pouze pokud nepotřebuješ aktuální hodnotu přímo v daný okamžik; pokud ano, číst přes `api-current-state`
 > - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu
 
 ---
