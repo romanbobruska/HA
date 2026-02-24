@@ -1,7 +1,7 @@
 # FVE Automatizace — Kompletní shrnutí projektu
 
 > Tento dokument slouží jako kontext pro pokračování práce na jiném OS/stroji.
-> Poslední aktualizace: 2026-02-15
+> Poslední aktualizace: 2026-02-24
 
 ---
 
@@ -770,6 +770,58 @@ rm -rf /tmp/HA
   - Normal Logic blokace: `MaxDischargePower = 0` (bylo `dynamicDischargeW`) — baterie se nevybíjí
 - **Výsledek**: Šetřit = Normal+blokace — identické chování baterie v obou módech
 - Dotčené soubory: `fve-modes.json`
+
+### Session 2026-02-24 — Meross unavailable fix + opravy topení + deploy fix
+
+#### Meross termostat unavailable (4× za hodinu)
+- **Entita**: `climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53` (MTS960, MAC: `c4:e7:ae:0a:2e:53`, IP: `192.168.0.185`)
+- **Root cause**: Meross LAN integrace v5.8.0 měla `protocol: http` — MTS960 firmware v4.2.11 má bug kdy periodicky přestane odpovídat na HTTP požadavky (ale zůstane ping dostupný)
+- **Fix**: `/config/.storage/core.config_entries` — změněno přes Python (sudo):
+  - `protocol: "http"` → `protocol: "auto"` (integrace preferuje MQTT push přes HA broker místo HTTP pollingu)
+  - `polling_period: 60` → `polling_period: 30` (rychlejší fallback polling)
+- **Výsledek**: Po restartu HA — 15+ minut bez jediného výpadku (vs. dříve každých 6–7 minut)
+- **Záloha**: `/config/.storage/core.config_entries.bak`
+
+#### Opravy řízení topení domu (`fve-heating.json`, `htg_main_func`)
+
+**Fix 1 — Vypnutí automatizace**:
+- **Bug**: Při vypnutí automatizace se volalo `actions.push("nibe_on")` místo `nibe_off`
+- **Fix**: Změněno na `if (nibeOn && canOffNibe) actions.push("nibe_off")`
+- **Chování**: Vypnutí = NIBE OFF, oběhové OFF, patrony OFF — jednorázově
+
+**Fix 2 — Zapnutí automatizace přeskočí COOLDOWN**:
+- **Bug**: COOLDOWN (`nibeCooldownOk`) blokoval akce i při prvním běhu po zapnutí automatizace
+- **Fix**: Přidán `forceStart = flow.get("shutdown_done") === true` při zapnutí
+- **COOLDOWN podmínka**: `!nibeCooldownOk && !forceStart` — přeskočí COOLDOWN při prvním běhu
+
+**Fix 3 — Oběhové čerpadlo nezávislé na `needsHeat`**:
+- **Bug**: Oběhové se zapínalo jen pokud `tankOk && needsHeat` — při teplotě v domě nad cílem čerpadlo nejezdilo i když nádrž měla 35°C
+- **Fix**: Podmínka změněna na `if (tankOk)` — čerpadlo čerpá teplo z nádrže do domu kdykoli nádrž > MIN_TANK (30°C), nezávisle na teplotě v domě
+
+**Fix 4 — Odstranění `bigSolarTomorrow` omezení z oběhového**:
+- **Bug**: Podmínka `bigSolarTomorrow && !isSolarHour` bránila zapnutí oběhového i při velké solární předpovědi
+- **Root cause**: Toto omezení patří jen NIBE (šetří energii), ne oběhovému čerpadlu (minimální spotřeba)
+- **Fix**: Celá větev `bigSolarTomorrow && indoorTemp >= safeTemp && !isSolarHour` odstraněna z oběhového
+- **Výsledek**: Oběhové se okamžitě zapnulo (nádrž 35.4°C > 30°C)
+
+#### Oprava deploy procesu (`deploy.sh`, nové soubory)
+- **Bug**: `sudo -n python3 << 'PYEOF'` heredoc nefungoval v bash — deploy padal na `cp configuration.yaml: File exists` (set -e)
+- **Bug**: Node-RED stop/start přes `ha addons/apps` vracel "unauthorized"
+- **Fix**: `deploy.sh` upraven:
+  - HA konfigurace: `sudo -n python3 /tmp/HA/deploy_copy_ha.py` (samostatný soubor)
+  - Merge flows: `sudo -n -E python3 /tmp/HA/deploy_merge_flows.py` (env proměnné FLOWS_DIR, OUTPUT_FILE)
+  - NR stop: `curl .../api/services/hassio/addon_stop` (HA REST API)
+  - NR restart: `curl .../api/services/hassio/addon_restart` (HTTP 200 = OK)
+- **Nové soubory**: `deploy_copy_ha.py`, `deploy_merge_flows.py`
+
+#### Správný způsob deploye (od 2026-02-24)
+```bash
+ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 \
+  "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash deploy.sh 2>&1"
+```
+- Deploy skript **automaticky** zastaví NR, nahraje flows, restartuje NR přes HA API
+- HA konfigurační soubory se kopírují automaticky
+- Pro restart HA přidat `--with-ha` argument
 
 ---
 
