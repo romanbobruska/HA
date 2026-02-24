@@ -28,7 +28,7 @@
             "max_charge_432ef0e1"
         ],
         "x": 14,
-        "y": -1,
+        "y": 19,
         "w": 972,
         "h": 222
     },
@@ -52,8 +52,8 @@
             "a1b2c3d4e5f60002",
             "max_charge_b49b9676"
         ],
-        "x": 24,
-        "y": 239,
+        "x": 14,
+        "y": 259,
         "w": 1232,
         "h": 202
     },
@@ -77,8 +77,8 @@
             "a1b2c3d4e5f60001",
             "max_charge_2767feb2"
         ],
-        "x": 24,
-        "y": 459,
+        "x": 14,
+        "y": 479,
         "w": 1242,
         "h": 202
     },
@@ -102,8 +102,8 @@
             "86d71450ca024a50",
             "max_charge_7ce258be"
         ],
-        "x": 24,
-        "y": 679,
+        "x": 14,
+        "y": 699,
         "w": 982,
         "h": 262
     },
@@ -127,8 +127,8 @@
             "zakaz_max_disch_0",
             "max_charge_12a3795b"
         ],
-        "x": 24,
-        "y": 959,
+        "x": 14,
+        "y": 979,
         "w": 1092,
         "h": 202
     },
@@ -152,10 +152,10 @@
             "max_charge_0aa9e57f",
             "solar_debug_001"
         ],
-        "x": 24,
-        "y": 1179,
-        "w": 1142,
-        "h": 162
+        "x": 14,
+        "y": 1199,
+        "w": 1092,
+        "h": 322
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -167,7 +167,7 @@
             "f10a91fcb4de6bd3"
         ],
         "x": 55,
-        "y": 80,
+        "y": 100,
         "wires": [
             [
                 "670432a909cf3b26"
@@ -188,7 +188,7 @@
         "finalize": "",
         "libs": [],
         "x": 170,
-        "y": 80,
+        "y": 100,
         "wires": [
             [
                 "a613f38251bd9e72",
@@ -228,7 +228,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 360,
-        "y": 40,
+        "y": 60,
         "wires": [
             []
         ]
@@ -260,7 +260,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 620,
-        "y": 40,
+        "y": 60,
         "wires": [
             []
         ]
@@ -292,7 +292,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 850,
-        "y": 40,
+        "y": 60,
         "wires": [
             []
         ]
@@ -324,7 +324,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 570,
-        "y": 120,
+        "y": 140,
         "wires": [
             []
         ]
@@ -356,7 +356,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 830,
-        "y": 120,
+        "y": 140,
         "wires": [
             []
         ]
@@ -376,7 +376,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 280,
-        "y": 140,
+        "y": 160,
         "wires": []
     },
     {
@@ -389,7 +389,7 @@
             "7f051a6595e57c3e"
         ],
         "x": 55,
-        "y": 320,
+        "y": 340,
         "wires": [
             [
                 "139cd450edbbde37"
@@ -410,7 +410,7 @@
         "finalize": "",
         "libs": [],
         "x": 170,
-        "y": 320,
+        "y": 340,
         "wires": [
             [
                 "17f08b797c764787",
@@ -450,7 +450,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 370,
-        "y": 280,
+        "y": 300,
         "wires": [
             []
         ]
@@ -482,7 +482,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 650,
-        "y": 280,
+        "y": 300,
         "wires": [
             []
         ]
@@ -514,7 +514,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 600,
-        "y": 340,
+        "y": 360,
         "wires": [
             []
         ]
@@ -546,7 +546,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 850,
-        "y": 340,
+        "y": 360,
         "wires": [
             []
         ]
@@ -566,7 +566,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 270,
-        "y": 380,
+        "y": 400,
         "wires": []
     },
     {
@@ -596,7 +596,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 1090,
-        "y": 340,
+        "y": 360,
         "wires": [
             []
         ]
@@ -611,7 +611,7 @@
             "185f95d7c56fe799"
         ],
         "x": 55,
-        "y": 540,
+        "y": 560,
         "wires": [
             [
                 "ebcf9e560f598c02"
@@ -632,7 +632,7 @@
         "finalize": "",
         "libs": [],
         "x": 170,
-        "y": 540,
+        "y": 560,
         "wires": [
             [
                 "11f838e573d16c9f",
@@ -672,7 +672,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 370,
-        "y": 500,
+        "y": 520,
         "wires": [
             []
         ]
@@ -704,7 +704,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 640,
-        "y": 500,
+        "y": 520,
         "wires": [
             []
         ]
@@ -736,7 +736,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 600,
-        "y": 560,
+        "y": 580,
         "wires": [
             []
         ]
@@ -768,7 +768,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 850,
-        "y": 560,
+        "y": 580,
         "wires": [
             []
         ]
@@ -788,7 +788,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 280,
-        "y": 600,
+        "y": 620,
         "wires": []
     },
     {
@@ -818,7 +818,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 1090,
-        "y": 560,
+        "y": 580,
         "wires": [
             []
         ]
@@ -833,7 +833,7 @@
             "a706b353f30c25d1"
         ],
         "x": 55,
-        "y": 780,
+        "y": 800,
         "wires": [
             [
                 "68992d178ce105ed"
@@ -854,7 +854,7 @@
         "finalize": "",
         "libs": [],
         "x": 180,
-        "y": 780,
+        "y": 800,
         "wires": [
             [
                 "52d5e20c2cede1f3",
@@ -894,7 +894,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 370,
-        "y": 720,
+        "y": 740,
         "wires": [
             []
         ]
@@ -926,7 +926,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 640,
-        "y": 720,
+        "y": 740,
         "wires": [
             []
         ]
@@ -958,7 +958,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 410,
-        "y": 780,
+        "y": 800,
         "wires": [
             []
         ]
@@ -990,7 +990,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 630,
-        "y": 780,
+        "y": 800,
         "wires": [
             []
         ]
@@ -1022,7 +1022,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 830,
-        "y": 840,
+        "y": 860,
         "wires": [
             []
         ]
@@ -1042,7 +1042,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 280,
-        "y": 840,
+        "y": 860,
         "wires": []
     },
     {
@@ -1055,7 +1055,7 @@
             "a86bc5233cfa0458"
         ],
         "x": 55,
-        "y": 1040,
+        "y": 1060,
         "wires": [
             [
                 "75d1f9e77bc15e0a"
@@ -1076,7 +1076,7 @@
         "finalize": "",
         "libs": [],
         "x": 200,
-        "y": 1040,
+        "y": 1060,
         "wires": [
             [
                 "21e5f570ecff7fb5",
@@ -1116,7 +1116,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 480,
-        "y": 1000,
+        "y": 1020,
         "wires": [
             []
         ]
@@ -1148,7 +1148,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 840,
-        "y": 1000,
+        "y": 1020,
         "wires": [
             []
         ]
@@ -1168,7 +1168,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 460,
-        "y": 1060,
+        "y": 1080,
         "wires": []
     },
     {
@@ -1198,7 +1198,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 480,
-        "y": 1060,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -1230,7 +1230,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 720,
-        "y": 1060,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -1262,7 +1262,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 940,
-        "y": 1060,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -1275,7 +1275,7 @@
         "name": "solar_charging",
         "links": [],
         "x": 55,
-        "y": 1220,
+        "y": 1280,
         "wires": [
             [
                 "d27d27bacf98eec0"
@@ -1296,7 +1296,7 @@
         "finalize": "",
         "libs": [],
         "x": 270,
-        "y": 1220,
+        "y": 1280,
         "wires": [
             [
                 "solar_psp_node_001",
@@ -1358,7 +1358,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 500,
-        "y": 1180,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -1389,8 +1389,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 500,
-        "y": 1220,
+        "x": 490,
+        "y": 1480,
         "wires": [
             []
         ]
@@ -1421,8 +1421,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 750,
-        "y": 1180,
+        "x": 760,
+        "y": 1320,
         "wires": [
             []
         ]
@@ -1453,8 +1453,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 750,
-        "y": 1220,
+        "x": 610,
+        "y": 1280,
         "wires": [
             []
         ]
@@ -1485,8 +1485,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1000,
-        "y": 1180,
+        "x": 870,
+        "y": 1380,
         "wires": [
             []
         ]
@@ -1515,7 +1515,7 @@
         "outputProperties": [],
         "queue": "none",
         "x": 830,
-        "y": 180,
+        "y": 200,
         "wires": [
             []
         ],
@@ -1545,7 +1545,7 @@
         "outputProperties": [],
         "queue": "none",
         "x": 1090,
-        "y": 400,
+        "y": 420,
         "wires": [
             []
         ],
@@ -1575,7 +1575,7 @@
         "outputProperties": [],
         "queue": "none",
         "x": 1090,
-        "y": 620,
+        "y": 640,
         "wires": [
             []
         ],
@@ -1605,7 +1605,7 @@
         "outputProperties": [],
         "queue": "none",
         "x": 830,
-        "y": 900,
+        "y": 920,
         "wires": [
             []
         ],
@@ -1635,7 +1635,7 @@
         "outputProperties": [],
         "queue": "none",
         "x": 940,
-        "y": 1120,
+        "y": 1140,
         "wires": [
             []
         ],
@@ -1664,8 +1664,8 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1000,
-        "y": 1240,
+        "x": 950,
+        "y": 1440,
         "wires": [
             []
         ],
@@ -1685,8 +1685,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 1260,
+        "x": 510,
+        "y": 1420,
         "wires": []
     }
 ]

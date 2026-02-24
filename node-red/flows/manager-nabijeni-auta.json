@@ -107,8 +107,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 80,
+        "x": 310,
+        "y": 200,
         "wires": [
             [
                 "svc_solar_off_stop"
@@ -146,8 +146,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 1020,
-        "y": 200,
+        "x": 740,
+        "y": 160,
         "wires": [
             []
         ]
@@ -177,8 +177,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 800,
-        "y": 200,
+        "x": 550,
+        "y": 160,
         "wires": [
             [
                 "svc_grid_off"
@@ -210,8 +210,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 800,
-        "y": 120,
+        "x": 550,
+        "y": 200,
         "wires": [
             [
                 "svc_grid_off_slunce"
@@ -243,8 +243,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 1020,
-        "y": 120,
+        "x": 740,
+        "y": 200,
         "wires": [
             [
                 "link_out_slunce"
@@ -260,8 +260,8 @@
         "links": [
             "bd970168cfe6cecf"
         ],
-        "x": 1020,
-        "y": 120,
+        "x": 865,
+        "y": 200,
         "wires": []
     },
     {
@@ -289,8 +289,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 800,
-        "y": 200,
+        "x": 550,
+        "y": 240,
         "wires": [
             [
                 "svc_grid_off_sit"
@@ -322,8 +322,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 1020,
-        "y": 200,
+        "x": 740,
+        "y": 240,
         "wires": [
             [
                 "link_out_sit"
@@ -339,8 +339,8 @@
         "links": [
             "4c0ccbe3229bb4f8"
         ],
-        "x": 1020,
-        "y": 200,
+        "x": 865,
+        "y": 240,
         "wires": []
     },
     {
