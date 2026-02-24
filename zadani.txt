@@ -1,12 +1,5 @@
-problem je v tom, ze se snazim hlasit do HA jako root, ja se hlasim jako uzivatel roman
+asi jsem prisel na to, proc nam nefunguje nasazovani, spatnyu uzivatel.
 
-PS C:\Windows\System32> Get-Content "$env:USERPROFILE\.ssh\id_ha.pub"
-ssh-ed25519 fdsdfasdfassda roman@ROMAN-ASUS
-PS C:\Windows\System32> ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com root@192.168.0.30 "echo OK"
-root@192.168.0.30's password:
-Permission denied, please try again.
-root@192.168.0.30's password:
-Permission denied, please try again.
-root@192.168.0.30's password:
-root@192.168.0.30: Permission denied (publickey,password).
-PS C:\Windows\System32>
+Zmenil jsem na uzivatele roman. predtim tam byl romanbobr.
+
+Pokud to mohl byt ten problem, zkusme proces jeste jednou.
