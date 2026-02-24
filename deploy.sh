@@ -175,8 +175,14 @@ fi
 # --- 6. Restart ---
 echo ""
 echo "🔄 Restartuji služby..."
-echo "   Spouštím Node-RED..."
-sudo -n ha apps start a0d7b954_nodered 2>/dev/null || sudo -n ha addons start a0d7b954_nodered 2>/dev/null || echo "   ⚠️  Spusťte Node-RED ručně"
+echo "   Restartuji Node-RED přes HA API..."
+HA_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIyYzg3OGM0MGM4MzU0MzI1OGZiZDcxODFhM2ZlZTQyZiIsImlhdCI6MTc3MTg4NzE0MywiZXhwIjoyMDg3MjQ3MTQzfQ.y2NTKxC9b67IlReCS6e-S2TVNCiv1mc1-RGSFUcnwuc"
+curl -s -X POST "http://localhost:8123/api/services/hassio/addon_restart" \
+    -H "Authorization: Bearer $HA_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"addon":"a0d7b954_nodered"}' > /dev/null 2>&1 \
+    && echo "   ✅ Node-RED restartován" \
+    || echo "   ⚠️  Spusťte Node-RED ručně v HA UI"
 
 if $RESTART_HA; then
     echo "   Restartuji Home Assistant..."
