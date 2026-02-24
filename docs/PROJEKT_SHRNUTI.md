@@ -120,9 +120,9 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - OCHRANA: nikdy nevypnout pokud kompresor běží nebo čerpadlo není v Klidovém stavu
 
 **Oběhové čerpadlo** (`switch.horousany_termostat_prizemi_kote`):
-- ON: `tankTemp > MIN_TANK (30°C)` — nezávisle na teplotě v domě, nezávisle na NIBE
-- OFF: `tankTemp ≤ MIN_TANK` nebo krb aktivní
-- Čerpá teplo z nádrže do domu kdykoli nádrž má co dát
+- ON: `MIN_TANK (30°C) ≤ tankTemp ≤ MAX_TANK (50°C)` — nezávisle na teplotě v domě, nezávisle na NIBE
+- OFF: nádrž mimo rozsah 30–50°C nebo krb aktivní
+- Čerpá teplo z nádrže do domu kdykoli nádrž má co dát (nad 50°C → fyzické riziko, pod 30°C → není co čerpat)
 
 **Patrony** (3 fáze × 3 kW, `switch.patrona_faze_1/3_2/3`):
 - Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 60°C
