@@ -113,19 +113,7 @@ else
     fi
 fi
 
-# --- 5. Kontrola HA konfigurace ---
-if $RESTART_HA; then
-    echo ""
-    echo "🔍 Kontroluji HA konfiguraci..."
-    sudo -n ha core check 2>/dev/null
-    if [ $? -eq 0 ]; then
-        echo "   ✅ Konfigurace OK"
-    else
-        echo "   ⚠️  ha core check selhal (může být OK pokud nejste na HA OS)"
-    fi
-fi
-
-# --- 6. Restart ---
+# --- 5. Restart Node-RED ---
 echo ""
 echo "🔄 Restartuji služby..."
 echo "   Restartuji Node-RED přes HA API..."
@@ -140,9 +128,30 @@ else
     echo "   ⚠️  Restart selhal (HTTP $RESULT), spusťte Node-RED ručně v HA UI"
 fi
 
+# --- 6. Reload/Restart HA ---
 if $RESTART_HA; then
+    echo ""
+    echo "🔍 Reloaduji HA konfiguraci přes API..."
+    RESULT_HA=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/homeassistant/reload_config_entry" \
+        -H "Authorization: Bearer $HA_TOKEN" \
+        -H "Content-Type: application/json" \
+        --data-raw '{}' 2>/dev/null || echo "0")
+    # Reload MQTT sensor
+    RESULT_MQTT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/mqtt/reload" \
+        -H "Authorization: Bearer $HA_TOKEN" \
+        -H "Content-Type: application/json" \
+        --data-raw '{}' 2>/dev/null || echo "0")
+    echo "   Reload config: HTTP $RESULT_HA | MQTT reload: HTTP $RESULT_MQTT"
     echo "   Restartuji Home Assistant..."
-    sudo -n ha core restart 2>/dev/null || echo "   ⚠️  Restartujte HA ručně: Nastavení → Systém → Restartovat"
+    HA_RESTART=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/homeassistant/restart" \
+        -H "Authorization: Bearer $HA_TOKEN" \
+        -H "Content-Type: application/json" \
+        --data-raw '{}' 2>/dev/null || echo "0")
+    if [ "$HA_RESTART" = "200" ] || [ "$HA_RESTART" = "201" ]; then
+        echo "   ✅ Home Assistant restartován (HTTP $HA_RESTART)"
+    else
+        echo "   ⚠️  HA restart přes API selhal (HTTP $HA_RESTART) — restartujte ručně: Nastavení → Systém → Restartovat"
+    fi
 else
     echo "   ℹ️  Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)"
 fi
