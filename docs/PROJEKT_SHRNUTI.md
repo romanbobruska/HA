@@ -760,6 +760,17 @@ rm -rf /tmp/HA
   - Výsledek: solar pokrývá spotřebu, přebytek do baterie, deficit ze sítě
 - Dotčené soubory: `fve-orchestrator.json`, `fve-modes.json`, `fve-heating.json`
 
+### v2.2 — Sjednocení módu Šetřit a Normal+blokace vybíjení
+- **Analýza**: Mód Šetřit a Normal+blokace vybíjení měly drobné rozdíly:
+  - Šetřit: `min_soc = Math.max(minSoc, currentSoc)` — zbytečně ovlivňoval minSOC baterie
+  - Normal+blokace: `MaxDischargePower = dynamicDischargeW (1300 - PV)` — baterie se minimálně vybíjela
+- **Požadavek**: Oba módy identické — solar → spotřeba, přebytek → baterie, deficit → síť, **baterie se NEVYBÍJÍ**
+- **Fix** (`fve-modes.json`):
+  - Šetřit Logic: `min_soc: minSoc` (bylo `Math.max(minSoc, currentSoc)`) — minSOC se neovlivňuje
+  - Normal Logic blokace: `MaxDischargePower = 0` (bylo `dynamicDischargeW`) — baterie se nevybíjí
+- **Výsledek**: Šetřit = Normal+blokace — identické chování baterie v obou módech
+- Dotčené soubory: `fve-modes.json`
+
 ---
 
 ## 11. Známé limitace a budoucí práce
