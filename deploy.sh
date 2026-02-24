@@ -62,13 +62,7 @@ echo ""
 echo "📋 Kopíruji HA konfiguraci..."
 sudo -n python3 /tmp/HA/deploy_copy_ha.py || true
 
-# --- 4. Sync server flows → git (zachování ručních změn uživatele) ---
-echo ""
-echo "🔄 Synchronizuji server flows do git..."
-python3 /tmp/HA/deploy_sync_server.py || true
-
-
-# --- 5. Sloučení všech Node-RED flows do jednoho flows.json ---
+# --- 4. Sloučení všech Node-RED flows do jednoho flows.json ---
 echo ""
 echo "🔧 Slučuji Node-RED flows..."
 
