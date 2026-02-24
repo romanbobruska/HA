@@ -1,149 +1,55 @@
 [
     {
-        "id": "7ceb7c5337692ae5",
+        "id": "49921d17efb0cefe",
         "type": "tab",
-        "label": "Manager nabíjení auta",
+        "label": "Automatizuj nabíjení auta ze slunce",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "40686c99d0404f36",
-        "type": "inject",
-        "z": "7ceb7c5337692ae5",
-        "name": "5 minut",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
+        "id": "68ded079ca35f344",
+        "type": "group",
+        "z": "49921d17efb0cefe",
+        "name": "Cyklus nabíjení",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true,
+            "label-position": "n",
+            "color": "#3f3f3f"
+        },
+        "nodes": [
+            "788e188fae8d1fca",
+            "41a9b59ceb3ddd02",
+            "44281067ced2dc56",
+            "0ef0c77eb8bb4570",
+            "82f8a5c6cfa6c254",
+            "67d2ddc059b23ea8",
+            "f4f87ba21653eda5",
+            "98dc3d2a8b804b92",
+            "b2f8f7968bd30604",
+            "795e263cb06160dd",
+            "04485a466ad52c1e"
         ],
-        "repeat": "300",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 100,
-        "y": 20,
-        "wires": [
-            [
-                "87012b2267d8121f"
-            ]
-        ]
+        "x": 34,
+        "y": 399,
+        "w": 1072,
+        "h": 382
     },
     {
-        "id": "1c84bf271f2f30c7",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Je letní režim?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "on",
-        "halt_if_type": "str",
-        "halt_if_compare": "is",
-        "entity_id": "input_boolean.letni_rezim",
-        "state_type": "str",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 140,
-        "y": 340,
-        "wires": [
-            [
-                "8a1f0da73ddcb9b3"
-            ],
-            [
-                "e4c5457ab8bf0ee4"
-            ]
-        ]
-    },
-    {
-        "id": "87012b2267d8121f",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Má auto hlad?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "on",
-        "halt_if_type": "str",
-        "halt_if_compare": "is",
-        "entity_id": "input_boolean.auto_ma_hlad",
-        "state_type": "str",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 160,
-        "y": 140,
-        "wires": [
-            [
-                "ebbc496d80bbab6d"
-            ],
-            [
-                "e4f6e3314f5c9c87"
-            ]
-        ]
-    },
-    {
-        "id": "8a1f0da73ddcb9b3",
+        "id": "459839492fb6e054",
         "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci grid OFF",
+        "z": "49921d17efb0cefe",
+        "name": "Vypni nabíjení",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
-        "action": "input_boolean.turn_off",
+        "action": "switch.turn_off",
         "floorId": [],
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
+            "switch.wallbox_garaz_start_stop"
         ],
         "labelId": [],
         "data": "",
@@ -153,263 +59,23 @@
         "outputProperties": [],
         "queue": "none",
         "blockInputOverrides": true,
-        "domain": "input_boolean",
+        "domain": "switch",
         "service": "turn_off",
-        "x": 540,
-        "y": 333,
-        "wires": [
-            [
-                "b93fcfaab9446ec2"
-            ]
-        ]
-    },
-    {
-        "id": "3878ec09713571e0",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 540,
-        "y": 660,
-        "wires": [
-            [
-                "1d157953ff3063c3"
-            ]
-        ]
-    },
-    {
-        "id": "ebbc496d80bbab6d",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Automatizovat nabíjení auta?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "on",
-        "halt_if_type": "str",
-        "halt_if_compare": "is",
-        "entity_id": "input_boolean.automatizovat_nabijeni_auta",
-        "state_type": "str",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 520,
-        "y": 60,
-        "wires": [
-            [
-                "b08dca89a423c971"
-            ],
-            [
-                "e4f6e3314f5c9c87"
-            ]
-        ]
-    },
-    {
-        "id": "e4f6e3314f5c9c87",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci grid OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 900,
-        "y": 140,
-        "wires": [
-            [
-                "192a87f3950b733b"
-            ]
-        ]
-    },
-    {
-        "id": "192a87f3950b733b",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 900,
-        "y": 220,
+        "x": 1000,
+        "y": 360,
         "wires": [
             []
         ]
     },
     {
-        "id": "e4c5457ab8bf0ee4",
+        "id": "d027326abd49e85d",
         "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Výroba dnes bude > 40kWh?",
+        "z": "49921d17efb0cefe",
+        "name": "Baterky jsou > 85%?",
         "server": "c7421fe2.cb11c",
         "version": 3,
         "outputs": 2,
-        "halt_if": "40",
-        "halt_if_type": "num",
-        "halt_if_compare": "gt",
-        "entity_id": "input_number.predpoved_solarni_vyroby_dnes",
-        "state_type": "num",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 180,
-        "y": 460,
-        "wires": [
-            [
-                "8a1f0da73ddcb9b3"
-            ],
-            [
-                "ecb66bb0fe1006aa"
-            ]
-        ]
-    },
-    {
-        "id": "2394fd8696831091",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Výroba zítra bude > 40kWh?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "40",
-        "halt_if_type": "num",
-        "halt_if_compare": "gt",
-        "entity_id": "input_number.predpoved_solarni_vyroby_zitra",
-        "state_type": "num",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 180,
-        "y": 540,
-        "wires": [
-            [
-                "8a1f0da73ddcb9b3"
-            ],
-            [
-                "3878ec09713571e0"
-            ]
-        ]
-    },
-    {
-        "id": "ecb66bb0fe1006aa",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Baterky jsou > 95%?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "95",
+        "halt_if": "85",
         "halt_if_type": "num",
         "halt_if_compare": "gt",
         "entity_id": "sensor.battery_percent",
@@ -437,168 +103,60 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 520,
-        "y": 460,
+        "x": 340,
+        "y": 220,
         "wires": [
             [
-                "053b82ee8bc77afc"
+                "b007af166f6ef45c"
             ],
             [
-                "2394fd8696831091"
+                "5ae66c11fe946b89"
             ]
         ]
     },
     {
-        "id": "053b82ee8bc77afc",
-        "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Rozdíl výroby a spotřeby > 4000W?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
-        "outputs": 2,
-        "halt_if": "4000",
-        "halt_if_type": "num",
-        "halt_if_compare": "gt",
-        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
-        "state_type": "num",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
-        "x": 520,
-        "y": 540,
-        "wires": [
-            [
-                "8a1f0da73ddcb9b3"
-            ],
-            [
-                "2394fd8696831091"
-            ]
-        ]
-    },
-    {
-        "id": "1d157953ff3063c3",
+        "id": "7e1e1d4a89bf0bc1",
         "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci grid OFF",
+        "z": "49921d17efb0cefe",
+        "name": "Spusť nabíjení auta manuálně",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
-        "action": "input_boolean.turn_off",
+        "action": "automation.trigger",
         "floorId": [],
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
+            "automation.spust_nabijeni_auta_manualne"
         ],
         "labelId": [],
-        "data": "",
+        "data": "run",
         "dataType": "jsonata",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
         "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 900,
-        "y": 660,
+        "domain": "automation",
+        "service": "trigger",
+        "x": 950,
+        "y": 168,
         "wires": [
-            [
-                "f95d3971ad3d46f7"
-            ]
+            []
         ]
     },
     {
-        "id": "b93fcfaab9446ec2",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Nastavuj amperaci solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 900,
-        "y": 333,
-        "wires": [
-            [
-                "a8fa70c2e6e05ec5"
-            ]
-        ]
-    },
-    {
-        "id": "a8fa70c2e6e05ec5",
-        "type": "link out",
-        "z": "7ceb7c5337692ae5",
-        "name": "Spusť nabíjení ze slunce",
-        "mode": "link",
-        "links": [
-            "bd970168cfe6cecf"
-        ],
-        "x": 835,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "f95d3971ad3d46f7",
-        "type": "link out",
-        "z": "7ceb7c5337692ae5",
-        "name": "Spusť nabíjení ze sítě",
-        "mode": "link",
-        "links": [
-            "4c0ccbe3229bb4f8"
-        ],
-        "x": 825,
-        "y": 732,
-        "wires": []
-    },
-    {
-        "id": "b08dca89a423c971",
+        "id": "3ae97b682b8fceee",
         "type": "api-current-state",
-        "z": "7ceb7c5337692ae5",
-        "name": "Solární režim nabíjení auta?",
+        "z": "49921d17efb0cefe",
+        "name": "Chci nabít auto ráno?",
         "server": "c7421fe2.cb11c",
         "version": 3,
         "outputs": 2,
         "halt_if": "on",
         "halt_if_type": "str",
         "halt_if_compare": "is",
-        "entity_id": "input_boolean.solarni_rezim_nabijeni_auta",
+        "entity_id": "input_boolean.nabijet_auto_rano_3h",
         "state_type": "str",
         "blockInputOverrides": true,
         "outputProperties": [
@@ -623,37 +181,241 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 520,
-        "y": 200,
+        "x": 340,
+        "y": 60,
         "wires": [
             [
-                "8a1f0da73ddcb9b3"
+                "d83891ae820948bf"
             ],
             [
-                "1c84bf271f2f30c7"
+                "49cb84e8d86431ed"
             ]
         ]
     },
     {
-        "id": "8f1a7b3a93bc777c",
+        "id": "e7b12c271da1e268",
+        "type": "time-range-switch",
+        "z": "49921d17efb0cefe",
+        "name": "Je 8:00 - 11:00?",
+        "lat": "50.1064015",
+        "lon": "14.7405731",
+        "startTime": "07:59",
+        "endTime": "11:01",
+        "startOffset": "0",
+        "endOffset": "0",
+        "x": 800,
+        "y": 60,
+        "wires": [
+            [
+                "c1b904a337bbf0a5"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d83891ae820948bf",
+        "type": "moment",
+        "z": "49921d17efb0cefe",
+        "name": "",
+        "topic": "",
+        "input": "",
+        "inputType": "date",
+        "inTz": "Europe/Prague",
+        "adjAmount": "0",
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "HH:mm",
+        "locale": "cs-CZ",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/Prague",
+        "x": 580,
+        "y": 40,
+        "wires": [
+            [
+                "e7b12c271da1e268"
+            ]
+        ]
+    },
+    {
+        "id": "788e188fae8d1fca",
+        "type": "function",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Vypočítej max amperaci",
+        "func": "let spotreba_sit = msg.payload_spotreba\nlet max_amper = 0\nlet battpct = msg.payload_battpct\nlet chargeramp = msg.payload_charger * 3 * 230\nconst config = global.get(\"fve_config\") || {};\nlet max_spotreba = config.max_spotreba_sit_w || 22000;\nconst SAFETY_MARGIN = config.safety_margin_w || 2000\nlet batt_minus = msg.payload_batt_minus\nlet rozdil_vyroby_spotreby = msg.payload\n\nif (battpct > 95)  {\n    max_amper = Math.floor((11040 - \n                            spotreba_sit + batt_minus) \n                            / 230 / 3)\n} else {\n    max_amper = Math.floor((rozdil_vyroby_spotreby \n                            + chargeramp) / 230 / 3)\n}\n\nif (max_amper > 16) {\n    msg.payload = 16\n} else if (max_amper < 6) {\n    msg.payload = 0\n} else {\n    msg.payload = max_amper\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 600,
+        "wires": [
+            [
+                "82f8a5c6cfa6c254"
+            ]
+        ]
+    },
+    {
+        "id": "41a9b59ceb3ddd02",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Rozdíl výroby a spotřeby",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.rozdil_vyroby_a_spotreby",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 730,
+        "y": 600,
+        "wires": [
+            [
+                "788e188fae8d1fca"
+            ]
+        ]
+    },
+    {
+        "id": "44281067ced2dc56",
+        "type": "api-call-service",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Nastav amperaci na chargeru",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "select.select_option",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "select.wallboxu_garaz_amperace",
+            "select.wallbox_venek_amperace"
+        ],
+        "labelId": [],
+        "data": "{\"option\":msg.payload & 'A'}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "select",
+        "service": "select_option",
+        "x": 950,
+        "y": 740,
+        "wires": [
+            [
+                "0ef0c77eb8bb4570"
+            ]
+        ]
+    },
+    {
+        "id": "0ef0c77eb8bb4570",
+        "type": "delay",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 120,
+        "y": 740,
+        "wires": [
+            [
+                "f4f87ba21653eda5"
+            ]
+        ]
+    },
+    {
+        "id": "82f8a5c6cfa6c254",
+        "type": "switch",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Amperace < 6?",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "6",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1000,
+        "y": 669,
+        "wires": [
+            [
+                "5ae66c11fe946b89"
+            ],
+            [
+                "44281067ced2dc56"
+            ]
+        ]
+    },
+    {
+        "id": "67d2ddc059b23ea8",
         "type": "server-state-changed",
-        "z": "7ceb7c5337692ae5",
-        "name": "Stav wallboxu",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Nastavuj amperaci?",
         "server": "c7421fe2.cb11c",
         "version": 6,
-        "outputs": 1,
+        "outputs": 2,
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "sensor.charger_state_garage",
-                "sensor.stav_wallboxu_venek"
+                "input_boolean.nastavuj_amperaci_chargeru_solar"
             ],
             "substring": [],
             "regex": []
         },
         "outputInitially": false,
         "stateType": "str",
-        "ifState": "",
+        "ifState": "on",
         "ifStateType": "str",
         "ifStateOperator": "is",
         "outputOnlyOnStateChange": true,
@@ -669,7 +431,7 @@
             {
                 "property": "payload",
                 "propertyType": "msg",
-                "value": "string",
+                "value": "",
                 "valueType": "entityState"
             },
             {
@@ -685,11 +447,398 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 290,
+        "x": 150,
+        "y": 440,
+        "wires": [
+            [
+                "04485a466ad52c1e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "f4f87ba21653eda5",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Nastavuj amperaci?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.nastavuj_amperaci_chargeru_solar",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 160,
+        "y": 669,
+        "wires": [
+            [
+                "04485a466ad52c1e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "c1b904a337bbf0a5",
+        "type": "api-call-service",
+        "z": "49921d17efb0cefe",
+        "name": "Nastav charger na 6A",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "select.select_option",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"option\":'6A'}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "select",
+        "service": "select_option",
+        "x": 980,
+        "y": 120,
+        "wires": [
+            [
+                "7e1e1d4a89bf0bc1"
+            ]
+        ]
+    },
+    {
+        "id": "5ae66c11fe946b89",
+        "type": "api-call-service",
+        "z": "49921d17efb0cefe",
+        "name": "Nastavuj amperaci OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_solar"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 970,
+        "y": 280,
+        "wires": [
+            [
+                "459839492fb6e054"
+            ]
+        ]
+    },
+    {
+        "id": "b007af166f6ef45c",
+        "type": "api-call-service",
+        "z": "49921d17efb0cefe",
+        "name": "Nastavuj amperaci ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_solar"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_on",
+        "x": 980,
+        "y": 220,
+        "wires": [
+            [
+                "7e1e1d4a89bf0bc1"
+            ]
+        ]
+    },
+    {
+        "id": "98dc3d2a8b804b92",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Procento baterií",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.battery_percent",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload_battpct",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_battpct",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 520,
+        "y": 600,
+        "wires": [
+            [
+                "41a9b59ceb3ddd02"
+            ]
+        ]
+    },
+    {
+        "id": "bd970168cfe6cecf",
+        "type": "link in",
+        "z": "49921d17efb0cefe",
+        "name": "IN nabíjení ze slunce",
+        "links": [
+            "a8fa70c2e6e05ec5"
+        ],
+        "x": 45,
         "y": 20,
         "wires": [
             [
-                "87012b2267d8121f"
+                "3ae97b682b8fceee"
+            ]
+        ]
+    },
+    {
+        "id": "49cb84e8d86431ed",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "name": "Chci rychle nabít auto?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "on",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "input_boolean.chci_rychle_nabit_auto",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 340,
+        "y": 140,
+        "wires": [
+            [
+                "b007af166f6ef45c"
+            ],
+            [
+                "d027326abd49e85d"
+            ]
+        ]
+    },
+    {
+        "id": "b2f8f7968bd30604",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Charger",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "select.wallboxu_garaz_amperace",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload_charger",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_charger",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 480,
+        "y": 520,
+        "wires": [
+            [
+                "98dc3d2a8b804b92"
+            ]
+        ]
+    },
+    {
+        "id": "795e263cb06160dd",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Spotřeba ze sítě",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.spotreba_ze_site",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload_spotreba",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_spotreba",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 320,
+        "y": 520,
+        "wires": [
+            [
+                "b2f8f7968bd30604"
+            ]
+        ]
+    },
+    {
+        "id": "04485a466ad52c1e",
+        "type": "api-current-state",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "Baterie mínus",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.nabijeni_baterii_minus",
+        "state_type": "num",
+        "blockInputOverrides": false,
+        "outputProperties": [
+            {
+                "property": "payload_batt_minus",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data_batt_minus",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "795e263cb06160dd"
             ]
         ]
     },
@@ -708,11 +857,13 @@
         "enableGlobalContextStore": false
     },
     {
-        "id": "40ac0e30c58cfed8",
+        "id": "c10a96016983ea1f",
         "type": "global-config",
         "env": [],
         "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-time-range-switch": "1.2.0",
+            "node-red-contrib-moment": "5.0.0"
         }
     }
 ]

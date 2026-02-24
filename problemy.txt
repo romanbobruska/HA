@@ -1,3 +1,3 @@
-podivej se na plan. proc pises u nejlevnejsi hodiny ve sloupci duvod stredni? vzdyt je to level 1, patri do levnych hodin. mluivim o pulnoci.
+mam problem - v NR mi zmizelo flow pro nabijeni auta ze slunce. V nasem lokalnim repu je nabijeni auta ze slunce
+nahrazeno managerem - duplicita. vytahni posledni verzi nabijeni auta ze slunce z gitu a zkotroluj, ze nabijeni auta bude v NR fungovat.
 
-zanalyzuj plan, pokud je to dobre, vysvetli mi duvod - ale chci, aby duvod v planu byl v syncu mimo jine s cenovym levelem.
