@@ -1,9 +1,19 @@
-kdo ti rekl toto:
+Situace	Před	Po
+Teplota 23.5°C, střední cena	NIBE ON (23.5 < 22 = false... ale byl spuštěn dříve)	NIBE OFF po cyklu
+Teplota 21.5°C, střední cena	NIBE ON	NIBE OFF (21.5 > 21.3)
+Teplota 21.0°C, střední cena	NIBE ON	NIBE ON (21.0 < 21.3)
+bigSolarTomorrow + 21.5°C	NIBE ON	NIBE OFF (šetříme)
+bigSolarTomorrow + 20.0°C	NIBE ON	NIBE ON (pod safeTemp)
+¨
+Co to placas...
 
-ům bude přirozeně chladnout směrem k safeTemp (21.3°C). NIBE se znovu spustí jen pokud teplota klesne pod 21.3°C.
+tohle neexistuje: IBE ON	NIBE OFF (21.5 > 21.3)
 
-mame definovan hysterezi 0,7 stupne oproti nastavené teplotě v domě.
+mame nastavenou teplotu v dome, ktera je dana v input_number.nastavena_teplota_v_dome. mas hysterezi 0,7 stupnu.
 
-doprdele.
+Co vic resis kurva?
 
-zanalyzuj znovu pozadavky a uprav logiku. pripadne se zeptej.
+v te hysterezi ty budes mit flexibilitu na natopeni domu. Podle pravidel nejnizsich cen, jak jsme si rekli.
+
+cO TI JE NEJASNE?
+
