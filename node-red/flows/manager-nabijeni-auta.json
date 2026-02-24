@@ -146,11 +146,11 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 800,
-        "y": 40,
+        "x": 1020,
+        "y": 200,
         "wires": [
             [
-                "svc_solar_off_stop"
+                "link_out_sit"
             ]
         ]
     },
@@ -179,10 +179,12 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 1020,
-        "y": 40,
+        "x": 800,
+        "y": 200,
         "wires": [
-            []
+            [
+                "svc_grid_off_sit"
+            ]
         ]
     },
     {
@@ -211,10 +213,10 @@
         "domain": "input_boolean",
         "service": "turn_off",
         "x": 800,
-        "y": 120,
+        "y": 200,
         "wires": [
             [
-                "link_out_slunce"
+                "svc_grid_off_sit"
             ]
         ]
     },

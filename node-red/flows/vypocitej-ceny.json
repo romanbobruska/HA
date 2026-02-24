@@ -157,11 +157,11 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 535,
-        "y": 280,
+        "x": 300,
+        "y": 440,
         "wires": [
             [
-                "90f59037daf537b9"
+                "3884e595660a1150"
             ]
         ]
     },
@@ -195,11 +195,11 @@
         "sqlquery": "fixed",
         "sql": "DELETE FROM \"own_energy_prices_total\"\n",
         "name": "Vymaž tabulku",
-        "x": 120,
-        "y": 280,
+        "x": 311,
+        "y": 120,
         "wires": [
             [
-                "20afdbcb97fc200c"
+                "13d6e53e918e0d48"
             ]
         ]
     },
@@ -212,11 +212,11 @@
         "sqlquery": "msg.topic",
         "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
         "name": "Proveď insert",
-        "x": 650,
-        "y": 340,
+        "x": 648,
+        "y": 180,
         "wires": [
             [
-                "4f702344aaf9fca2"
+                "9866761975399c7f"
             ]
         ]
     },
@@ -494,11 +494,11 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 298,
-        "y": 180,
+        "x": 300,
+        "y": 440,
         "wires": [
             [
-                "7b8e1478ae7abdcf"
+                "3884e595660a1150"
             ]
         ]
     },

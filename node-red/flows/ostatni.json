@@ -298,14 +298,14 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 540,
-        "y": 213,
+        "x": 460,
+        "y": 420,
         "wires": [
             [
-                "4d56aa02abf550cf"
+                "2d1eda397588e770"
             ],
             [
-                "02750065ac5e632a"
+                "a25c4f2c2d82868b"
             ]
         ]
     },
@@ -328,10 +328,10 @@
         "outputType": "msg",
         "outTz": "Europe/Prague",
         "x": 160,
-        "y": 300,
+        "y": 480,
         "wires": [
             [
-                "6d245da5ca53613e"
+                "e9bfb79af53f16df"
             ]
         ]
     },
