@@ -65,7 +65,8 @@
         "y": 360,
         "wires": [
             []
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "d027326abd49e85d",
@@ -88,7 +89,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": []
+        "libs": [],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "7e1e1d4a89bf0bc1",
@@ -119,7 +121,8 @@
         "y": 168,
         "wires": [
             []
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "3ae97b682b8fceee",
@@ -166,7 +169,8 @@
             [
                 "49cb84e8d86431ed"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "e7b12c271da1e268",
@@ -186,7 +190,8 @@
                 "c1b904a337bbf0a5"
             ],
             []
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "d83891ae820948bf",
@@ -211,7 +216,8 @@
             [
                 "e7b12c271da1e268"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "788e188fae8d1fca",
@@ -507,7 +513,8 @@
             [
                 "7e1e1d4a89bf0bc1"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "5ae66c11fe946b89",
@@ -540,7 +547,8 @@
             [
                 "459839492fb6e054"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "b007af166f6ef45c",
@@ -573,7 +581,8 @@
             [
                 "7e1e1d4a89bf0bc1"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "98dc3d2a8b804b92",
@@ -632,7 +641,8 @@
             [
                 "3ae97b682b8fceee"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "49cb84e8d86431ed",
@@ -679,7 +689,8 @@
             [
                 "d027326abd49e85d"
             ]
-        ]
+        ],
+        "g": "nabijeni_slunce_grp_vstup"
     },
     {
         "id": "b2f8f7968bd30604",
@@ -839,5 +850,32 @@
             "node-red-contrib-time-range-switch": "1.2.0",
             "node-red-contrib-moment": "5.0.0"
         }
+    },
+    {
+        "id": "nabijeni_slunce_grp_vstup",
+        "type": "group",
+        "z": "49921d17efb0cefe",
+        "name": "Vstupní logika",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "459839492fb6e054",
+            "d027326abd49e85d",
+            "7e1e1d4a89bf0bc1",
+            "3ae97b682b8fceee",
+            "e7b12c271da1e268",
+            "d83891ae820948bf",
+            "c1b904a337bbf0a5",
+            "5ae66c11fe946b89",
+            "b007af166f6ef45c",
+            "bd970168cfe6cecf",
+            "49cb84e8d86431ed"
+        ],
+        "x": 14,
+        "y": 0,
+        "w": 1175,
+        "h": 400
     }
 ]

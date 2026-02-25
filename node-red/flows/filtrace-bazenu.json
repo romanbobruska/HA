@@ -93,7 +93,8 @@
             [
                 "filtrace_auto_check"
             ]
-        ]
+        ],
+        "g": "filtrace_grp_trigger"
     },
     {
         "id": "filtrace_auto_check",
@@ -132,7 +133,8 @@
                 "filtrace_st_state"
             ],
             []
-        ]
+        ],
+        "g": "filtrace_grp_trigger"
     },
     {
         "id": "filtrace_st_state",
@@ -547,5 +549,23 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "filtrace_grp_trigger",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Trigger",
+        "style": {
+            "fill": "#f3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "e840eaa72d311da7",
+            "filtrace_auto_check"
+        ],
+        "x": 14,
+        "y": 40,
+        "w": 420,
+        "h": 60
     }
 ]

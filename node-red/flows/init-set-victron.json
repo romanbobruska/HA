@@ -117,7 +117,8 @@
         "y": 100,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "5bc15235de0be6d7",
@@ -148,7 +149,8 @@
         "y": 160,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "94fad41d26e0cad6",
@@ -175,7 +177,8 @@
             [
                 "a9f0fdbe34b08f42"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "b3489292b6b19a0a",
@@ -200,7 +203,8 @@
         "y": 820,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "f75eb57b02744611",
@@ -289,7 +293,8 @@
             [
                 "510d8c7a6922180c"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "12e5622470d1810f",
@@ -316,7 +321,8 @@
             [
                 "a55129e755036403"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "cbe7aadb6a9789fb",
@@ -347,7 +353,8 @@
         "y": 240,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "a55129e755036403",
@@ -405,7 +412,8 @@
             [
                 "90ecdd0dbac92033"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "cf10227596934c6b",
@@ -436,7 +444,8 @@
         "y": 320,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "90ecdd0dbac92033",
@@ -494,7 +503,8 @@
             [
                 "c3dbf47b62785eff"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "c3dbf47b62785eff",
@@ -552,7 +562,8 @@
             [
                 "4236d9de7efc61ec"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "94b7b011f71e932d",
@@ -583,7 +594,8 @@
         "y": 400,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "492bb8db67a996d6",
@@ -614,7 +626,8 @@
         "y": 480,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "4236d9de7efc61ec",
@@ -672,7 +685,8 @@
             [
                 "4245e7094a4f80b7"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "4245e7094a4f80b7",
@@ -730,7 +744,8 @@
             [
                 "3a3fb82b0bca8580"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "4356e0d632c43221",
@@ -761,7 +776,8 @@
         "y": 560,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "3a3fb82b0bca8580",
@@ -819,7 +835,8 @@
             [
                 "ea8178ed56fc307d"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "0924d118225c702a",
@@ -850,7 +867,8 @@
         "y": 640,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "d4aa59089ba5e79a",
@@ -877,7 +895,8 @@
             [
                 "f75eb57b02744611"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "815f4827fac6b509",
@@ -905,7 +924,8 @@
                 "0924d118225c702a",
                 "5efc09c5570e0e2d"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "d90b66fb1f48e589",
@@ -1017,7 +1037,8 @@
         "y": 700,
         "wires": [
             []
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "ea8178ed56fc307d",
@@ -1078,7 +1099,8 @@
                 "815f4827fac6b509",
                 "b3489292b6b19a0a"
             ]
-        ]
+        ],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "06bafcba794da9e5",
@@ -1095,7 +1117,8 @@
         "statusType": "auto",
         "x": 370,
         "y": 820,
-        "wires": []
+        "wires": [],
+        "g": "init_grp_pipeline"
     },
     {
         "id": "e1bd0d865b19d57e",
@@ -1124,5 +1147,44 @@
             "victron-vrm-api": "0.3.11",
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "init_grp_pipeline",
+        "type": "group",
+        "z": "e451448d0e5cd53a",
+        "name": "VRM Data Pipeline",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "82516184e2da4aba",
+            "5bc15235de0be6d7",
+            "94fad41d26e0cad6",
+            "b3489292b6b19a0a",
+            "e898a34c99d763a9",
+            "12e5622470d1810f",
+            "cbe7aadb6a9789fb",
+            "ef45bce4eeb696b2",
+            "cf10227596934c6b",
+            "7de54d464c4599ae",
+            "b6bcdbf86abcbeb8",
+            "94b7b011f71e932d",
+            "492bb8db67a996d6",
+            "214177b52b123155",
+            "3bfaab9a23737f7e",
+            "4356e0d632c43221",
+            "d0cec879a0aa07e1",
+            "0924d118225c702a",
+            "d4aa59089ba5e79a",
+            "815f4827fac6b509",
+            "5efc09c5570e0e2d",
+            "7a40f647c053ea8e",
+            "06bafcba794da9e5"
+        ],
+        "x": 14,
+        "y": 80,
+        "w": 1090,
+        "h": 780
     }
 ]

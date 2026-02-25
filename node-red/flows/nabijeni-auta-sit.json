@@ -78,7 +78,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "49fdcac28d31c133",
@@ -165,7 +166,8 @@
         "y": 220,
         "wires": [
             []
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "d3c7e952ee2fc2a4",
@@ -196,7 +198,8 @@
         "y": 440,
         "wires": [
             []
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "0360f471b476ef16",
@@ -347,7 +350,8 @@
             [
                 "5ddb5d94494bcb4d"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "0e9ad909cb38430e",
@@ -391,7 +395,8 @@
             [
                 "e2fbe35de1091fa3"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "d59cea4bd7885a65",
@@ -438,7 +443,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "b19eb944cb946785",
@@ -485,7 +491,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "2ab649c94e2517e5",
@@ -532,7 +539,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "d26f96e53531f384",
@@ -565,7 +573,8 @@
             [
                 "7612c188de813d7c"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "707a53451c626ff1",
@@ -598,7 +607,8 @@
             [
                 "d3c7e952ee2fc2a4"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "d31a8b64172a3eab",
@@ -677,7 +687,8 @@
             [
                 "0e9ad909cb38430e"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "a9e5aa5fbd19b5c0",
@@ -737,7 +748,8 @@
             [
                 "542205d3587ae7f0"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "5ddb5d94494bcb4d",
@@ -784,7 +796,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "22e344a6bf0c5b70",
@@ -831,7 +844,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "8518fd99f86a1202",
@@ -944,7 +958,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": []
+        "libs": [],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "96f43cae137cc3b1",
@@ -967,7 +982,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "libs": []
+        "libs": [],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "c7421fe2.cb11c",
@@ -1035,7 +1051,8 @@
             [
                 "nabijeni_sit_pretizeni_filter"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
     },
     {
         "id": "nabijeni_sit_pretizeni_filter",
@@ -1055,6 +1072,41 @@
             [
                 "a9e5aa5fbd19b5c0"
             ]
-        ]
+        ],
+        "g": "nabijeni_sit_grp_vstup"
+    },
+    {
+        "id": "nabijeni_sit_grp_vstup",
+        "type": "group",
+        "z": "a86ad952ad7756aa",
+        "name": "Vstupní logika",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "0f16dca17f84783e",
+            "7612c188de813d7c",
+            "d3c7e952ee2fc2a4",
+            "e2fbe35de1091fa3",
+            "0e9ad909cb38430e",
+            "d59cea4bd7885a65",
+            "b19eb944cb946785",
+            "2ab649c94e2517e5",
+            "d26f96e53531f384",
+            "707a53451c626ff1",
+            "542205d3587ae7f0",
+            "4c0ccbe3229bb4f8",
+            "5ddb5d94494bcb4d",
+            "22e344a6bf0c5b70",
+            "b542785e15e32db7",
+            "96f43cae137cc3b1",
+            "b1c2d3e4f5060003",
+            "nabijeni_sit_pretizeni_filter"
+        ],
+        "x": 14,
+        "y": 20,
+        "w": 1165,
+        "h": 460
     }
 ]

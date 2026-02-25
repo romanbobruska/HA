@@ -34,7 +34,8 @@
             [
                 "main_logic_func"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "8f1a7b3a93bc777c",
@@ -93,7 +94,8 @@
             [
                 "main_logic_func"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "main_logic_func",
@@ -119,7 +121,8 @@
             [
                 "svc_solar_off_sit"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_grid_off",
@@ -150,7 +153,8 @@
         "y": 160,
         "wires": [
             []
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_solar_off_stop",
@@ -183,7 +187,8 @@
             [
                 "svc_grid_off"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_solar_off_slunce",
@@ -216,7 +221,8 @@
             [
                 "svc_grid_off_slunce"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_grid_off_slunce",
@@ -249,7 +255,8 @@
             [
                 "link_out_slunce"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "link_out_slunce",
@@ -262,7 +269,8 @@
         ],
         "x": 865,
         "y": 200,
-        "wires": []
+        "wires": [],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_solar_off_sit",
@@ -295,7 +303,8 @@
             [
                 "svc_grid_off_sit"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "svc_grid_off_sit",
@@ -328,7 +337,8 @@
             [
                 "link_out_sit"
             ]
-        ]
+        ],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "link_out_sit",
@@ -341,7 +351,8 @@
         ],
         "x": 865,
         "y": 240,
-        "wires": []
+        "wires": [],
+        "g": "mgr_grp_logic"
     },
     {
         "id": "c7421fe2.cb11c",
@@ -364,5 +375,32 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "mgr_grp_logic",
+        "type": "group",
+        "z": "7ceb7c5337692ae5",
+        "name": "Rozhodovací logika",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "40686c99d0404f36",
+            "8f1a7b3a93bc777c",
+            "main_logic_func",
+            "svc_grid_off",
+            "svc_solar_off_stop",
+            "svc_solar_off_slunce",
+            "svc_grid_off_slunce",
+            "link_out_slunce",
+            "svc_solar_off_sit",
+            "svc_grid_off_sit",
+            "link_out_sit"
+        ],
+        "x": 14,
+        "y": 60,
+        "w": 965,
+        "h": 220
     }
 ]
