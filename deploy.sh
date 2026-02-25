@@ -118,17 +118,26 @@ fi
 
 # --- 5. Restart Node-RED ---
 echo ""
-echo "🔄 Restartuji služby..."
-echo "   Restartuji Node-RED přes HA API..."
+echo "🔄 Restartuji Node-RED..."
 HA_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIyYzg3OGM0MGM4MzU0MzI1OGZiZDcxODFhM2ZlZTQyZiIsImlhdCI6MTc3MTg4NzE0MywiZXhwIjoyMDg3MjQ3MTQzfQ.y2NTKxC9b67IlReCS6e-S2TVNCiv1mc1-RGSFUcnwuc"
-RESULT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/hassio/addon_restart" \
+
+# Stop addon → flows.json již zapsán → Start addon: NR načte flows čistě bez banneru
+echo "   ⏹️  Zastavuji Node-RED..."
+curl -s -o /dev/null -X POST "http://localhost:8123/api/services/hassio/addon_stop" \
     -H "Authorization: Bearer $HA_TOKEN" \
     -H "Content-Type: application/json" \
-    --data-raw "{\"addon\":\"a0d7b954_nodered\"}")
+    --data-raw '{"addon":"a0d7b954_nodered"}' || true
+sleep 3
+
+echo "   ▶️  Spouštím Node-RED..."
+RESULT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://localhost:8123/api/services/hassio/addon_start" \
+    -H "Authorization: Bearer $HA_TOKEN" \
+    -H "Content-Type: application/json" \
+    --data-raw '{"addon":"a0d7b954_nodered"}')
 if [ "$RESULT" = "200" ] || [ "$RESULT" = "201" ]; then
-    echo "   ✅ Node-RED restartován (HTTP $RESULT)"
+    echo "   ✅ Node-RED spuštěn (HTTP $RESULT) — flows načteny čistě, bez banneru"
 else
-    echo "   ⚠️  Restart selhal (HTTP $RESULT), spusťte Node-RED ručně v HA UI"
+    echo "   ⚠️  Start selhal (HTTP $RESULT), spusťte Node-RED ručně v HA UI"
 fi
 
 # --- 6. Reload/Restart HA ---
