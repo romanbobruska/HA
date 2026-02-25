@@ -71,7 +71,7 @@
         "stats_interval": "days",
         "show_instance": false,
         "stats_start": "bot",
-        "stats_end": "172800",
+        "stats_end": "eot",
         "use_utc": false,
         "gps_start": "",
         "gps_end": "",
