@@ -198,7 +198,8 @@
                 "3a87476592bc532f",
                 "84c9363491961540",
                 "max_charge_432ef0e1",
-                "blok_minsoc_normal_001"
+                "blok_minsoc_normal_001",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -420,7 +421,8 @@
                 "906ece2b651b5a64",
                 "a1b2c3d4e5f60002",
                 "176abc1b75a23fb4",
-                "max_charge_b49b9676"
+                "max_charge_b49b9676",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -642,7 +644,8 @@
                 "fc83a9cf78db7a97",
                 "a1b2c3d4e5f60001",
                 "6598def5a6b435a3",
-                "max_charge_2767feb2"
+                "max_charge_2767feb2",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -864,7 +867,8 @@
                 "e12fd7a540b89f05",
                 "9bd525cb24b06701",
                 "86d71450ca024a50",
-                "max_charge_7ce258be"
+                "max_charge_7ce258be",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -1086,7 +1090,8 @@
                 "zakaz_sched_day_m7",
                 "zakaz_max_disch_0",
                 "8db6ee5fbb848b8b",
-                "max_charge_12a3795b"
+                "max_charge_12a3795b",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -1307,7 +1312,8 @@
                 "solar_max_disch_001",
                 "max_charge_0aa9e57f",
                 "solar_debug_001",
-                "blok_minsoc_solar_001"
+                "blok_minsoc_solar_001",
+                "fve_log_writer_001"
             ]
         ]
     },
@@ -1750,5 +1756,21 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "fve_log_writer_001",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "name": "FVE Logger (3 dny)",
+        "func": "// FVE Logger - zapisuje stav do /config/fve_log.jsonl, max 3 dny\nvar fs = global.get(\"fs\") || require(\"fs\");\n\nvar now = new Date();\nvar ts = now.toISOString();\n\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\nvar plan    = global.get(\"fve_plan\") || {};\n\nvar entry = {\n    ts: ts,\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    pv_w: status.pv_power || 0,\n    grid_w: status.grid_power || 0,\n    prebytek_w: global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\")\n                    ? parseFloat(global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\").state || 0) : 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    max_discharge_w: msg.maxDischargePower,\n    nibe: global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\")\n            ? global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\").state : \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nvar line = JSON.stringify(entry) + \"\\n\";\nvar logFile = \"/config/fve_log.jsonl\";\n\ntry {\n    // Rotace: smazat radky starsi nez 3 dny\n    var cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString();\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    \n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try {\n            var e = JSON.parse(l);\n            return e.ts >= cutoff;\n        } catch(e) { return false; }\n    });\n    \n    lines.push(line.trim());\n    // Max 10000 radku jako pojistka\n    if (lines.length > 10000) lines = lines.slice(lines.length - 10000);\n    \n    fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n} catch(e) {\n    node.warn(\"FVE Log error: \" + e.message);\n}\n\nreturn null; // log node nic dalsiho neposilá\n",
+        "outputs": 0,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 100,
+        "wires": []
     }
 ]
