@@ -54,7 +54,8 @@
             "0dccef44f2f263b7",
             "ae99347c2a610653",
             "8cf74ed44cce80e6",
-            "9866761975399c7f"
+            "9866761975399c7f",
+            "a32eeea0e1e3c08c"
         ],
         "x": 15,
         "y": 19,
@@ -98,7 +99,7 @@
         ],
         "x": 14,
         "y": 559,
-        "w": 1012,
+        "w": 992,
         "h": 762
     },
     {
@@ -245,7 +246,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 600,
         "wires": [
             []
@@ -277,7 +278,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 800,
+        "x": 780,
         "y": 640,
         "wires": [
             []
@@ -296,8 +297,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 210,
-        "y": 660,
+        "x": 360,
+        "y": 920,
         "wires": [
             [
                 "5a22ed0e7c4d5702",
@@ -576,7 +577,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 800,
+        "x": 780,
         "y": 720,
         "wires": [
             []
@@ -608,7 +609,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 680,
         "wires": [
             []
@@ -758,7 +759,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 810,
+        "x": 790,
         "y": 880,
         "wires": [
             []
@@ -790,7 +791,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 780,
+        "x": 760,
         "y": 920,
         "wires": [
             []
@@ -822,7 +823,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 800,
+        "x": 780,
         "y": 960,
         "wires": [
             []
@@ -854,7 +855,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 800,
+        "x": 780,
         "y": 1000,
         "wires": [
             []
@@ -886,7 +887,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 820,
+        "x": 800,
         "y": 1040,
         "wires": [
             []
@@ -918,7 +919,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 1080,
         "wires": [
             []
@@ -950,7 +951,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 810,
+        "x": 790,
         "y": 1120,
         "wires": [
             []
@@ -982,7 +983,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 780,
+        "x": 760,
         "y": 1160,
         "wires": [
             []
@@ -1014,7 +1015,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 1200,
         "wires": [
             []
@@ -1046,7 +1047,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 780,
+        "x": 760,
         "y": 1240,
         "wires": [
             []
@@ -1078,7 +1079,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 1280,
         "wires": [
             []
@@ -1173,7 +1174,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 780,
+        "x": 760,
         "y": 760,
         "wires": [
             []
@@ -1205,7 +1206,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 790,
+        "x": 770,
         "y": 840,
         "wires": [
             []
@@ -1237,7 +1238,7 @@
         "blockInputOverrides": true,
         "domain": "input_number",
         "service": "set_value",
-        "x": 800,
+        "x": 780,
         "y": 800,
         "wires": [
             []
@@ -1265,8 +1266,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 880,
+        "x": 120,
+        "y": 720,
         "wires": [
             [
                 "b359790448907d03"
@@ -1312,7 +1313,7 @@
         "sql": "SELECT * FROM \"own_energy_prices_total\"",
         "name": "Načti ceny pro global",
         "x": 140,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "ee55ff66aa77bb88"
@@ -1332,11 +1333,41 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 480,
+        "x": 390,
+        "y": 500,
         "wires": [
             [
                 "b359790448907d03"
+            ]
+        ]
+    },
+    {
+        "id": "a32eeea0e1e3c08c",
+        "type": "inject",
+        "z": "d32891aad318f0e3",
+        "g": "b44cdb66e54727f6",
+        "name": "16:30",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "30 16 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 490,
+        "y": 60,
+        "wires": [
+            [
+                "8cf74ed44cce80e6"
             ]
         ]
     }
