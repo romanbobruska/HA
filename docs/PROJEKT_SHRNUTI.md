@@ -169,7 +169,7 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 **Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) = manuální mód:
 - Flow čte `input_select.topeni_mod` — nastavíš ho ručně v HA dashboardu
 - Flow **NEPŘEPISUJE** mod, jen provádí příkazy dle něj
-- `Vypnuto` → vše zastavit (NIBE, oběhové, patrony)
+- `Vypnuto` → **žádné zásahy** — plně manuální ovládání, flow nic nemění
 - `NIBE` → topit jen z NIBE dle pravidel (teplota vs. target), patrony blokované
 - `Patrony` → topit jen z patron dle solárního přebytku, NIBE blokované
 - `Obehove` → jen oběhové čerpadlo, NIBE i patrony off
