@@ -75,11 +75,13 @@
             "376106d716756636",
             "dc8da09248ec1e29",
             "sauna_state_changed",
-            "sauna_set_global"
+            "sauna_set_global",
+            "sauna_reset_minsoc",
+            "sauna_trigger_plan"
         ],
         "x": 14,
         "y": 599,
-        "w": 672,
+        "w": 1006,
         "h": 142
     },
     {
@@ -684,8 +686,8 @@
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
         "name": "Nastav global sauna",
-        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\nreturn msg;",
-        "outputs": 1,
+        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\n// Output 1: vždy (logování)\n// Output 2: pouze při vypnutí → reset min_soc + přepočet plánu\nif (!isActive) {\n    // Resetuj config.min_soc v globálu na výchozí hodnotu (předejde planování s min_soc=74%)\n    var config = global.get(\"fve_config\") || {};\n    var defaultMinSoc = 20;\n    config.min_soc = defaultMinSoc;\n    global.set(\"fve_config\", config);\n    node.status({fill: \"green\", shape: \"dot\", text: \"Sauna OFF → reset minSoc=\" + defaultMinSoc + \"%, retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -694,7 +696,10 @@
         "x": 360,
         "y": 700,
         "wires": [
-            []
+            [],
+            [
+                "sauna_reset_minsoc"
+            ]
         ]
     },
     {
@@ -734,6 +739,61 @@
         "y": 500,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "sauna_reset_minsoc",
+        "type": "api-call-service",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Reset min_soc = 20",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.min_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 20}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 580,
+        "y": 700,
+        "wires": [
+            [
+                "sauna_trigger_plan"
+            ]
+        ]
+    },
+    {
+        "id": "sauna_trigger_plan",
+        "type": "function",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Trigger přepočet plánu",
+        "func": "// Po vypnutí sauny okamžitě přepočítej plán\n// (aby se min_soc=20% projevilo hned, ne až za minutu)\nnode.status({fill:\"blue\", shape:\"dot\", text:\"→ přepočet plánu\"});\nmsg.payload = Date.now();\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 700,
+        "wires": [
+            [
+                "9333668b1d326a83"
+            ]
         ]
     }
 ]
