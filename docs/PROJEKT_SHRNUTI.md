@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (19:00)
+> Poslední aktualizace: 2026-02-25 (20:00)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -176,7 +176,23 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 ---
 
-## 8. Aktuální stav integrací
+## 8. FVE Logging (`/homeassistant/fve_log.jsonl`)
+
+- Každý cyklus módů (Normal/Šetřit/Nabíjet/Prodávat/Solární/Zákaz) zapisuje JSON řádek
+- Pole: `ts, mode, soc, prebytek_w, block_discharge, block_min_soc, nibe, topeni_mod, consumers`
+- Rotace 1× denně ve 04:00 — zachovají se záznamy max 3 dny dozadu (max 10000 řádků)
+- Soubor: `/homeassistant/fve_log.jsonl`
+- Čtení: `tail -20 /homeassistant/fve_log.jsonl | python3 -c "import sys,json; [print(json.dumps(json.loads(l))) for l in sys.stdin]"`
+
+---
+
+## 9. Aktuální stav integrací
+
+**Blokace vybíjení baterie** (oprava 2026-02-25):
+- **CHYBA**: `MaxDischargePower=0` škrtilo celý DC→AC tok invertoru včetně průchodu solární energie → solar výkon klesl na ~2kW
+- **OPRAVA**: `MaxDischargePower=-1` vždy (bez limitu), blokace vybíjení baterie přes `number.min_soc = currentSoc+1`
+- Při uvolnění blokace: `min_soc` se resetuje zpět na `config.min_soc` (20%)
+- Dotčené módy: Normal Logic, Solární nabíjení Logic, Šetřit, Nabíjet
 
 **sensor.nabijeni_baterii_minus** (`unique_id: battery_power_minus`):
 - MQTT topic: `victron/N/c0619ab69c71/system/0/Batteries`
