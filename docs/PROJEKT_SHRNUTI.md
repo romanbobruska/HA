@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (20:30)
+> Poslední aktualizace: 2026-02-25 (20:45)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -164,9 +164,10 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - MOD_PATRONY → NIBE blokováno (bezpečnost jističe)
 - **Korekce vybíjení baterie** (5s smyčka, `pat_korekce_inject/func/router`):
   - Každých 5s čte `sensor.nabijeni_baterii_minus`
-  - Pokud vybíjení > 200W a nějaká fáze běží → sníží počet fází o 1 (až na 0)
+  - Pokud vybíjení > 200W → sníží `pat_korekce_max` o 1, vypne nejvyšší fázi (až na 0)
+  - Pokud vybíjení ≤ 200W → resetuje `pat_korekce_max = 3` (hlavní loop může znovu zapnout tolik fází kolik přebytek dovoluje)
   - Hlavní loop (60s) respektuje `flow.pat_korekce_max` jako strop fází
-  - Reset korekce na 3 pokud patrony nevyhovují podmínkám nebo jsou OFF
+  - Reset nastane jen v 5s smyčce — nikdy v hlavním loopu
   - Platí pro automatický i manuální mód
 
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
