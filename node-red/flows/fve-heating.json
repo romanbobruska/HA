@@ -235,7 +235,8 @@
                 "htg_action_switch"
             ],
             [
-                "htg_debug"
+                "htg_debug",
+                "htg_topeni_mod_change"
             ]
         ]
     },
@@ -1006,5 +1007,59 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
         }
+    },
+    {
+        "id": "htg_topeni_mod_change",
+        "type": "change",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Nastav topeni_mod",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "topeni_mod",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 860,
+        "y": 200,
+        "wires": [
+            [
+                "htg_topeni_mod_api"
+            ]
+        ]
+    },
+    {
+        "id": "htg_topeni_mod_api",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Set topeni_mod",
+        "server": "c7421fe2.cb11c",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.topeni_mod"
+        ],
+        "data": "{\"option\": \"{{payload}}\"}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 1060,
+        "y": 200,
+        "wires": [
+            []
+        ]
     }
 ]
