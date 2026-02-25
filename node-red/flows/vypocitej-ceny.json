@@ -98,7 +98,7 @@
             "fb19e54c699bb253"
         ],
         "x": 14,
-        "y": 539,
+        "y": 559,
         "w": 1012,
         "h": 762
     },
@@ -125,7 +125,7 @@
         "x": 14,
         "y": 399,
         "w": 992,
-        "h": 122
+        "h": 142
     },
     {
         "id": "20afdbcb97fc200c",
@@ -157,11 +157,11 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 300,
-        "y": 440,
+        "x": 535,
+        "y": 280,
         "wires": [
             [
-                "3884e595660a1150"
+                "90f59037daf537b9"
             ]
         ]
     },
@@ -170,7 +170,7 @@
         "type": "function",
         "z": "d32891aad318f0e3",
         "g": "f3b107d658fd3d97",
-        "name": "Sestav insert (ceny_total)",
+        "name": "Sestav insert",
         "func": "let day = msg.payload.day\nlet hour = msg.payload.hour\nlet minute = msg.payload.minute\nlet marginBuy = msg.payload.marginBuy\nlet marginProd = msg.payload.marginProd\nlet distrVT = msg.payload.distrVT\nlet distrNT = msg.payload.distrNT\nlet tax = msg.payload.tax\nlet sys_services = msg.payload.sys_services\nlet poze = msg.payload.poze\nlet priceCZKquarter = msg.payload.priceCZK\nlet priceCZKhour = msg.payload.priceCZKhour\nlet priceCZKhourBuy = 0\nlet priceCZKhourProd = 0\nlet priceCZKquarterBuy = 0\nlet priceCZKquarterProd = 0\nlet distr = 0\nlet insert = \"\"\n\nflow.set(\"myCount\", 1)\n\nif ([6,9,13,16].includes(hour)) {\n    distr = distrVT\n} else {\n    distr = distrNT\n}\n\npriceCZKhourBuy = (((priceCZKhour / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2)\npriceCZKquarterBuy = (((priceCZKquarter / 1000) + marginBuy + distr + tax + sys_services + poze) * 1.21).toFixed(2)\npriceCZKhourProd = Math.floor(((priceCZKhour / 1000) - marginProd) * 100 + Number.EPSILON) / 100\npriceCZKquarterProd = Math.floor(((priceCZKquarter / 1000) - marginProd) * 100 + Number.EPSILON) /100\n\n\n\ninsert = \n`INSERT INTO \"own_energy_prices_total\" (\"day\", \"hour\", \"minute\", \"priceCZKhourBuy\", \\\n \"priceCZKhourProd\", \"priceCZKquarterBuy\", \"priceCZKquarterProd\") VALUES  \\\n (\"${day}\", ${hour}, ${minute}, ${priceCZKhourBuy}, ${priceCZKhourProd}, ${priceCZKquarterBuy}, ${priceCZKquarterProd})`\n\nmsg.payload = insert\nmsg.topic = insert\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -195,11 +195,11 @@
         "sqlquery": "fixed",
         "sql": "DELETE FROM \"own_energy_prices_total\"\n",
         "name": "Vymaž tabulku",
-        "x": 311,
-        "y": 120,
+        "x": 120,
+        "y": 280,
         "wires": [
             [
-                "13d6e53e918e0d48"
+                "20afdbcb97fc200c"
             ]
         ]
     },
@@ -212,11 +212,11 @@
         "sqlquery": "msg.topic",
         "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
         "name": "Proveď insert",
-        "x": 648,
-        "y": 180,
+        "x": 650,
+        "y": 340,
         "wires": [
             [
-                "9866761975399c7f"
+                "4f702344aaf9fca2"
             ]
         ]
     },
@@ -247,7 +247,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 580,
+        "y": 600,
         "wires": [
             []
         ]
@@ -279,7 +279,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 800,
-        "y": 620,
+        "y": 640,
         "wires": [
             []
         ]
@@ -297,8 +297,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 860,
+        "x": 210,
+        "y": 660,
         "wires": [
             [
                 "5a22ed0e7c4d5702",
@@ -332,7 +332,7 @@
         "sql": "SELECT * FROM \"own_energy_prices_total\" where day = \"hoursToday\" and hour = 17 and minute = 16",
         "name": "Vyber hodnoty",
         "x": 460,
-        "y": 920,
+        "y": 940,
         "wires": [
             []
         ]
@@ -360,7 +360,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 130,
-        "y": 580,
+        "y": 600,
         "wires": [
             [
                 "7b088fc43e03bf25"
@@ -465,7 +465,7 @@
         "type": "function",
         "z": "d32891aad318f0e3",
         "g": "b44cdb66e54727f6",
-        "name": "Sestav insert (ceny_raw)",
+        "name": "Sestav insert",
         "func": "let day = msg.day\nlet hour = msg.payload.hour\nlet minute = msg.payload.minute\nlet priceEur = msg.payload.priceEur\nlet priceCZK = msg.payload.priceCZK\nlet level = msg.payload.level\nlet levelNum = msg.payload.levelNum\nlet insert = \"\"\nlet myRecordCount = flow.get(\"myRecordCount\")\n\ninsert = \n`INSERT INTO \"own_energy_prices\" (\"day\", \"hour\", \"minute\", \"priceEur\", \\\n \"priceCZK\", \"level\", \"levelNum\") VALUES (\"${day}\", ${hour}, ${minute}, \\\n ${priceEur}, ${priceCZK}, \"${level}\", ${levelNum})`\n\nflow.set(\"myRecordCount\", ++myRecordCount)\n\nmsg.payload = insert\nmsg.topic = insert\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -494,11 +494,11 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 300,
-        "y": 440,
+        "x": 298,
+        "y": 180,
         "wires": [
             [
-                "3884e595660a1150"
+                "7b8e1478ae7abdcf"
             ]
         ]
     },
@@ -593,7 +593,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 800,
-        "y": 700,
+        "y": 720,
         "wires": [
             []
         ]
@@ -625,7 +625,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 660,
+        "y": 680,
         "wires": [
             []
         ]
@@ -644,7 +644,7 @@
         "finalize": "",
         "libs": [],
         "x": 320,
-        "y": 580,
+        "y": 600,
         "wires": [
             [
                 "b359790448907d03"
@@ -656,7 +656,7 @@
         "type": "function",
         "z": "d32891aad318f0e3",
         "g": "f3b107d658fd3d97",
-        "name": "Počkej na insert (ceny_total)",
+        "name": "Počkej, až skončí insert",
         "func": "let myCount = flow.get(\"myCount\")\nlet count = msg.parts.count\n\nif (myCount == count) {\n  return msg;\n} else flow.set(\"myCount\", ++myCount)\n\n\n",
         "outputs": 1,
         "timeout": 0,
@@ -775,7 +775,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 810,
-        "y": 860,
+        "y": 880,
         "wires": [
             []
         ]
@@ -807,7 +807,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 780,
-        "y": 900,
+        "y": 920,
         "wires": [
             []
         ]
@@ -839,7 +839,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 800,
-        "y": 940,
+        "y": 960,
         "wires": [
             []
         ]
@@ -871,7 +871,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 800,
-        "y": 980,
+        "y": 1000,
         "wires": [
             []
         ]
@@ -903,7 +903,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 820,
-        "y": 1020,
+        "y": 1040,
         "wires": [
             []
         ]
@@ -935,7 +935,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 1060,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -967,7 +967,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 810,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -999,7 +999,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 780,
-        "y": 1140,
+        "y": 1160,
         "wires": [
             []
         ]
@@ -1031,7 +1031,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 1180,
+        "y": 1200,
         "wires": [
             []
         ]
@@ -1063,7 +1063,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 780,
-        "y": 1220,
+        "y": 1240,
         "wires": [
             []
         ]
@@ -1095,7 +1095,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 1260,
+        "y": 1280,
         "wires": [
             []
         ]
@@ -1126,7 +1126,7 @@
         "type": "function",
         "z": "d32891aad318f0e3",
         "g": "b44cdb66e54727f6",
-        "name": "Počkej na insert (ceny_raw)",
+        "name": "Počkej, až skončí insert",
         "func": "let myCount = flow.get(\"myCount\")\nlet myRecordCount = flow.get(\"myRecordCount\")\n\nif (myCount == myRecordCount) {\n  msg.payload = \"ahoj\"\n  return msg;\n} else flow.set(\"myCount\", ++myCount)\n\n\n",
         "outputs": 1,
         "timeout": 0,
@@ -1190,7 +1190,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 780,
-        "y": 740,
+        "y": 760,
         "wires": [
             []
         ]
@@ -1222,7 +1222,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 790,
-        "y": 820,
+        "y": 840,
         "wires": [
             []
         ]
@@ -1254,7 +1254,7 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 800,
-        "y": 780,
+        "y": 800,
         "wires": [
             []
         ]
@@ -1282,12 +1282,41 @@
         "payload": "",
         "payloadType": "date",
         "x": 140,
-        "y": 860,
+        "y": 880,
         "wires": [
             [
                 "b359790448907d03"
             ]
         ]
+    },
+    {
+        "id": "6d97960f9560e05b",
+        "type": "sqlitedb",
+        "db": "/homeassistant/home-assistant_v2.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "bc29fc50a7482dd1",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-sqlite": "1.1.1",
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     },
     {
         "id": "aa11bb22cc33dd44",
@@ -1326,34 +1355,5 @@
                 "b359790448907d03"
             ]
         ]
-    },
-    {
-        "id": "6d97960f9560e05b",
-        "type": "sqlitedb",
-        "db": "/homeassistant/home-assistant_v2.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "8db803bfebc102cf",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-node-sqlite": "1.1.1",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
     }
 ]
