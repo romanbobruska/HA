@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (18:20)
+> Poslední aktualizace: 2026-02-25 (19:00)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -165,6 +165,14 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
 Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhové čerpadlo.
+
+**Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) = manuální mód:
+- Flow čte `input_select.topeni_mod` — nastavíš ho ručně v HA dashboardu
+- Flow **NEPŘEPISUJE** mod, jen provádí příkazy dle něj
+- `Vypnuto` → vše zastavit (NIBE, oběhové, patrony)
+- `NIBE` → topit jen z NIBE dle pravidel (teplota vs. target), patrony blokované
+- `Patrony` → topit jen z patron dle solárního přebytku, NIBE blokované
+- `Obehove` → jen oběhové čerpadlo, NIBE i patrony off
 
 ---
 
