@@ -47,9 +47,9 @@
             "5d99886761325d1d"
         ],
         "x": 14,
-        "y": 172,
-        "w": 872,
-        "h": 189
+        "y": 179,
+        "w": 832,
+        "h": 202
     },
     {
         "id": "c7058c6bcde0cfc8",
@@ -70,7 +70,7 @@
             "5c777d8344b192ab"
         ],
         "x": 14,
-        "y": 373,
+        "y": 413,
         "w": 852,
         "h": 148
     },
@@ -254,10 +254,10 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 220,
+        "y": 240,
         "wires": [
             [
-                "7cab9c28a5473d81"
+                "5d99886761325d1d"
             ]
         ]
     },
@@ -298,14 +298,14 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 540,
-        "y": 213,
+        "x": 600,
+        "y": 220,
         "wires": [
             [
                 "4d56aa02abf550cf"
             ],
             [
-                "9750b05dcbbff9f7"
+                "02750065ac5e632a"
             ]
         ]
     },
@@ -328,7 +328,7 @@
         "outputType": "msg",
         "outTz": "Europe/Prague",
         "x": 160,
-        "y": 300,
+        "y": 320,
         "wires": [
             [
                 "6d245da5ca53613e"
@@ -348,7 +348,7 @@
         "startOffset": "0",
         "endOffset": "0",
         "x": 440,
-        "y": 300,
+        "y": 320,
         "wires": [
             [
                 "9750b05dcbbff9f7"
@@ -384,8 +384,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 780,
-        "y": 260,
+        "x": 740,
+        "y": 280,
         "wires": [
             []
         ]
@@ -416,8 +416,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 770,
-        "y": 320,
+        "x": 730,
+        "y": 340,
         "wires": [
             []
         ]
@@ -460,7 +460,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 320,
-        "y": 220,
+        "y": 240,
         "wires": [
             [
                 "7cab9c28a5473d81"
@@ -493,7 +493,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 120,
-        "y": 420,
+        "y": 460,
         "wires": [
             [
                 "79b4a2cb676426f1"
@@ -538,13 +538,13 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 460,
-        "y": 420,
+        "y": 460,
         "wires": [
             [
                 "2d1eda397588e770"
             ],
             [
-                "5c777d8344b192ab"
+                "a25c4f2c2d82868b"
             ]
         ]
     },
@@ -567,7 +567,7 @@
         "outputType": "msg",
         "outTz": "Europe/Prague",
         "x": 160,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "e9bfb79af53f16df"
@@ -587,7 +587,7 @@
         "startOffset": "0",
         "endOffset": "0",
         "x": 460,
-        "y": 480,
+        "y": 520,
         "wires": [
             [
                 "5c777d8344b192ab"
@@ -624,7 +624,7 @@
         "domain": "switch",
         "service": "turn_off",
         "x": 770,
-        "y": 414,
+        "y": 454,
         "wires": [
             []
         ]
@@ -656,7 +656,7 @@
         "domain": "switch",
         "service": "turn_on",
         "x": 770,
-        "y": 480,
+        "y": 520,
         "wires": [
             []
         ]
