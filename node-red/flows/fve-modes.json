@@ -1763,8 +1763,70 @@
         "id": "fve_log_writer_001",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "name": "FVE Logger (3 dny)",
-        "func": "// FVE Logger - zapisuje stav do /config/fve_log.jsonl, max 3 dny\nvar now = new Date();\nvar ts = now.toISOString();\n\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\n\nvar pvState  = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar nibeState = global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\") || {};\n\nvar entry = {\n    ts: ts,\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    prebytek_w: parseFloat(pvState.state) || 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    nibe: nibeState.state || \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nvar line = JSON.stringify(entry);\nvar logFile = \"/config/fve_log.jsonl\";\nvar cutoff = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString();\n\ntry {\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    \n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try { return JSON.parse(l).ts >= cutoff; } catch(e) { return false; }\n    });\n    \n    lines.push(line);\n    if (lines.length > 10000) lines = lines.slice(lines.length - 10000);\n    fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n    node.status({fill:\"green\", shape:\"dot\", text: \"OK \" + lines.length + \" radku @ \" + ts.substr(11,8)});\n} catch(e) {\n    node.warn(\"FVE Log error: \" + e.message);\n    node.status({fill:\"red\", shape:\"dot\", text: e.message});\n}\n\nreturn null;\n",
+        "name": "FVE Log Prep",
+        "func": "// FVE Logger - pripravi log radek\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\nvar pvState  = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar nibeState = global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\") || {};\n\nvar entry = {\n    ts: new Date().toISOString(),\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    prebytek_w: parseFloat(pvState.state) || 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    nibe: nibeState.state || \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nmsg.payload = JSON.stringify(entry);\nmsg.filename = \"/config/fve_log.jsonl\";\nmsg.encoding = \"utf8\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1400,
+        "y": 100,
+        "wires": [
+            [
+                "fve_log_file_001"
+            ]
+        ]
+    },
+    {
+        "id": "fve_log_file_001",
+        "type": "file",
+        "z": "bb3654998a6bf514",
+        "name": "FVE Log File",
+        "filename": "",
+        "filenameType": "msg",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 1600,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fve_log_rotate_inject",
+        "type": "inject",
+        "z": "bb3654998a6bf514",
+        "name": "Rotace logu (denně 04:00)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "0 4 * * *",
+        "once": false,
+        "onceDelay": 0,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1200,
+        "y": 200,
+        "wires": [
+            [
+                "fve_log_rotate_func"
+            ]
+        ]
+    },
+    {
+        "id": "fve_log_rotate_func",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "name": "Rotace (3 dny)",
+        "func": "// FVE Logger - rotace souboru (odstran zaznamy starsi 3 dny)\nvar fs = require('fs');\nvar logFile = \"/config/fve_log.jsonl\";\nvar cutoff = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();\n\ntry {\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try { return JSON.parse(l).ts >= cutoff; } catch(e) { return false; }\n    });\n    if (lines.length > 0) {\n        fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n        node.status({fill:\"green\", shape:\"dot\", text: lines.length + \" radku zachovano\"});\n    }\n} catch(e) {\n    node.warn(\"Rotace log error: \" + e.message);\n}\nreturn null;\n",
         "outputs": 0,
         "timeout": "",
         "noerr": 0,
@@ -1776,8 +1838,8 @@
                 "module": "fs"
             }
         ],
-        "x": 1400,
-        "y": 100,
+        "x": 1450,
+        "y": 200,
         "wires": []
     }
 ]
