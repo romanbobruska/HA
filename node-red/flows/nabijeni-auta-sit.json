@@ -730,9 +730,7 @@
         "type": "link in",
         "z": "a86ad952ad7756aa",
         "name": "IN nabíjení ze sítě",
-        "links": [
-            "f95d3971ad3d46f7"
-        ],
+        "links": [],
         "x": 55,
         "y": 40,
         "wires": [

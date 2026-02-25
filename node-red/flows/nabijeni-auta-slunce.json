@@ -625,9 +625,7 @@
         "type": "link in",
         "z": "49921d17efb0cefe",
         "name": "IN nabíjení ze slunce",
-        "links": [
-            "a8fa70c2e6e05ec5"
-        ],
+        "links": [],
         "x": 45,
         "y": 20,
         "wires": [

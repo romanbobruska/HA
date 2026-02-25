@@ -29,7 +29,7 @@
         ],
         "x": 14,
         "y": 19,
-        "w": 972,
+        "w": 1072,
         "h": 222
     },
     {
@@ -54,7 +54,7 @@
         ],
         "x": 14,
         "y": 259,
-        "w": 1232,
+        "w": 1272,
         "h": 202
     },
     {
@@ -79,7 +79,7 @@
         ],
         "x": 14,
         "y": 479,
-        "w": 1242,
+        "w": 1292,
         "h": 202
     },
     {
@@ -129,7 +129,7 @@
         ],
         "x": 14,
         "y": 979,
-        "w": 1092,
+        "w": 1132,
         "h": 202
     },
     {
@@ -291,7 +291,7 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 850,
+        "x": 930,
         "y": 60,
         "wires": [
             []
@@ -355,7 +355,7 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 830,
+        "x": 930,
         "y": 140,
         "wires": [
             []
@@ -595,7 +595,7 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1090,
+        "x": 1130,
         "y": 360,
         "wires": [
             []
@@ -817,7 +817,7 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1090,
+        "x": 1140,
         "y": 580,
         "wires": [
             []
@@ -1261,7 +1261,7 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 940,
+        "x": 980,
         "y": 1080,
         "wires": [
             []
@@ -1514,7 +1514,7 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 830,
+        "x": 860,
         "y": 200,
         "wires": [
             []
@@ -1544,7 +1544,7 @@
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 1090,
+        "x": 1100,
         "y": 420,
         "wires": [
             []

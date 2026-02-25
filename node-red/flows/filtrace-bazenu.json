@@ -63,7 +63,7 @@
         ],
         "x": 364,
         "y": 499,
-        "w": 452,
+        "w": 502,
         "h": 182
     },
     {
@@ -520,7 +520,7 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 690,
+        "x": 740,
         "y": 640,
         "wires": [
             []
