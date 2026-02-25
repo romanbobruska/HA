@@ -25,12 +25,13 @@
             "702b8ef11c8c396c",
             "3a87476592bc532f",
             "84c9363491961540",
-            "max_charge_432ef0e1"
+            "max_charge_432ef0e1",
+            "blok_minsoc_normal_001"
         ],
         "x": 14,
         "y": 19,
-        "w": 1235,
-        "h": 122
+        "w": 1092,
+        "h": 262
     },
     {
         "id": "b49b9676d4dbdff1",
@@ -53,9 +54,9 @@
             "max_charge_b49b9676"
         ],
         "x": 14,
-        "y": 159,
-        "w": 1015,
-        "h": 122
+        "y": 299,
+        "w": 1272,
+        "h": 202
     },
     {
         "id": "2767feb260d6904c",
@@ -78,9 +79,9 @@
             "max_charge_2767feb2"
         ],
         "x": 14,
-        "y": 299,
-        "w": 1015,
-        "h": 122
+        "y": 519,
+        "w": 1292,
+        "h": 202
     },
     {
         "id": "7ce258bed914f262",
@@ -103,9 +104,9 @@
             "max_charge_7ce258be"
         ],
         "x": 14,
-        "y": 439,
-        "w": 1015,
-        "h": 122
+        "y": 739,
+        "w": 982,
+        "h": 262
     },
     {
         "id": "12a3795b66ec7d44",
@@ -128,9 +129,9 @@
             "max_charge_12a3795b"
         ],
         "x": 14,
-        "y": 579,
-        "w": 1015,
-        "h": 122
+        "y": 1019,
+        "w": 1132,
+        "h": 202
     },
     {
         "id": "0aa9e57f66f7d429",
@@ -150,12 +151,33 @@
             "solar_sched_day_001",
             "solar_max_disch_001",
             "max_charge_0aa9e57f",
-            "solar_debug_001"
+            "solar_debug_001",
+            "blok_minsoc_solar_001"
         ],
         "x": 14,
-        "y": 719,
-        "w": 1235,
-        "h": 122
+        "y": 1239,
+        "w": 1092,
+        "h": 322
+    },
+    {
+        "id": "fve_modes_g_log",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Log",
+        "style": {
+            "fill": "#e8e8e8",
+            "label": true
+        },
+        "nodes": [
+            "fve_log_writer_001",
+            "fve_log_file_001",
+            "fve_log_rotate_inject",
+            "fve_log_rotate_func"
+        ],
+        "x": 1014,
+        "y": 779,
+        "w": 662,
+        "h": 182
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -166,8 +188,8 @@
         "links": [
             "f10a91fcb4de6bd3"
         ],
-        "x": 69,
-        "y": 59,
+        "x": 55,
+        "y": 100,
         "wires": [
             [
                 "670432a909cf3b26"
@@ -187,8 +209,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 59,
+        "x": 170,
+        "y": 100,
         "wires": [
             [
                 "a613f38251bd9e72",
@@ -357,8 +379,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 99,
+        "x": 950,
+        "y": 180,
         "wires": [
             []
         ]
@@ -377,8 +399,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 99,
+        "x": 280,
+        "y": 160,
         "wires": []
     },
     {
@@ -390,8 +412,8 @@
         "links": [
             "7f051a6595e57c3e"
         ],
-        "x": 69,
-        "y": 199,
+        "x": 55,
+        "y": 380,
         "wires": [
             [
                 "139cd450edbbde37"
@@ -411,8 +433,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 199,
+        "x": 170,
+        "y": 380,
         "wires": [
             [
                 "17f08b797c764787",
@@ -452,8 +474,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 199,
+        "x": 370,
+        "y": 340,
         "wires": [
             []
         ]
@@ -485,7 +507,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 650,
-        "y": 300,
+        "y": 340,
         "wires": [
             []
         ]
@@ -517,7 +539,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 600,
-        "y": 360,
+        "y": 400,
         "wires": [
             []
         ]
@@ -549,7 +571,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 850,
-        "y": 360,
+        "y": 400,
         "wires": [
             []
         ]
@@ -568,8 +590,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 239,
+        "x": 270,
+        "y": 440,
         "wires": []
     },
     {
@@ -598,8 +620,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 199,
+        "x": 1130,
+        "y": 400,
         "wires": [
             []
         ]
@@ -613,8 +635,8 @@
         "links": [
             "185f95d7c56fe799"
         ],
-        "x": 69,
-        "y": 339,
+        "x": 55,
+        "y": 600,
         "wires": [
             [
                 "ebcf9e560f598c02"
@@ -634,8 +656,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 339,
+        "x": 170,
+        "y": 600,
         "wires": [
             [
                 "11f838e573d16c9f",
@@ -675,8 +697,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 339,
+        "x": 370,
+        "y": 560,
         "wires": [
             []
         ]
@@ -707,8 +729,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 339,
+        "x": 640,
+        "y": 560,
         "wires": [
             []
         ]
@@ -739,8 +761,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 379,
+        "x": 600,
+        "y": 620,
         "wires": [
             []
         ]
@@ -771,8 +793,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 379,
+        "x": 850,
+        "y": 620,
         "wires": [
             []
         ]
@@ -791,8 +813,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 379,
+        "x": 280,
+        "y": 660,
         "wires": []
     },
     {
@@ -821,8 +843,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 339,
+        "x": 1140,
+        "y": 620,
         "wires": [
             []
         ]
@@ -836,8 +858,8 @@
         "links": [
             "a706b353f30c25d1"
         ],
-        "x": 69,
-        "y": 479,
+        "x": 55,
+        "y": 840,
         "wires": [
             [
                 "68992d178ce105ed"
@@ -857,8 +879,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 479,
+        "x": 180,
+        "y": 840,
         "wires": [
             [
                 "52d5e20c2cede1f3",
@@ -898,8 +920,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 479,
+        "x": 370,
+        "y": 780,
         "wires": [
             []
         ]
@@ -931,7 +953,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 640,
-        "y": 740,
+        "y": 780,
         "wires": [
             []
         ]
@@ -962,8 +984,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 519,
+        "x": 410,
+        "y": 840,
         "wires": [
             []
         ]
@@ -995,7 +1017,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 630,
-        "y": 800,
+        "y": 840,
         "wires": [
             []
         ]
@@ -1026,8 +1048,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 479,
+        "x": 830,
+        "y": 900,
         "wires": [
             []
         ]
@@ -1046,8 +1068,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 519,
+        "x": 280,
+        "y": 900,
         "wires": []
     },
     {
@@ -1059,8 +1081,8 @@
         "links": [
             "a86bc5233cfa0458"
         ],
-        "x": 69,
-        "y": 619,
+        "x": 55,
+        "y": 1100,
         "wires": [
             [
                 "75d1f9e77bc15e0a"
@@ -1080,8 +1102,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 619,
+        "x": 200,
+        "y": 1100,
         "wires": [
             [
                 "21e5f570ecff7fb5",
@@ -1121,8 +1143,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 619,
+        "x": 480,
+        "y": 1060,
         "wires": [
             []
         ]
@@ -1153,8 +1175,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 619,
+        "x": 840,
+        "y": 1060,
         "wires": [
             []
         ]
@@ -1173,8 +1195,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 659,
+        "x": 460,
+        "y": 1120,
         "wires": []
     },
     {
@@ -1203,8 +1225,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 659,
+        "x": 480,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -1235,8 +1257,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 659,
+        "x": 720,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -1267,8 +1289,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 619,
+        "x": 980,
+        "y": 1120,
         "wires": [
             []
         ]
@@ -1280,8 +1302,8 @@
         "g": "0aa9e57f66f7d429",
         "name": "solar_charging",
         "links": [],
-        "x": 69,
-        "y": 759,
+        "x": 55,
+        "y": 1320,
         "wires": [
             [
                 "d27d27bacf98eec0"
@@ -1301,8 +1323,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 189,
-        "y": 759,
+        "x": 270,
+        "y": 1320,
         "wires": [
             [
                 "solar_psp_node_001",
@@ -1343,8 +1365,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 759,
+        "x": 540,
+        "y": 1280,
         "wires": [
             []
         ]
@@ -1375,8 +1397,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 799,
+        "x": 490,
+        "y": 1520,
         "wires": [
             []
         ]
@@ -1407,8 +1429,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 759,
+        "x": 760,
+        "y": 1360,
         "wires": [
             []
         ]
@@ -1439,8 +1461,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 629,
-        "y": 759,
+        "x": 610,
+        "y": 1320,
         "wires": [
             []
         ]
@@ -1471,8 +1493,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1069,
-        "y": 759,
+        "x": 870,
+        "y": 1420,
         "wires": [
             []
         ]
@@ -1501,8 +1523,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 1069,
-        "y": 99,
+        "x": 940,
+        "y": 240,
         "wires": [
             []
         ]
@@ -1531,8 +1553,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 239,
+        "x": 1100,
+        "y": 460,
         "wires": [
             []
         ]
@@ -1561,8 +1583,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 379,
+        "x": 1090,
+        "y": 680,
         "wires": [
             []
         ]
@@ -1591,8 +1613,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 519,
+        "x": 830,
+        "y": 960,
         "wires": [
             []
         ]
@@ -1621,8 +1643,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 659,
+        "x": 940,
+        "y": 1180,
         "wires": [
             []
         ]
@@ -1651,8 +1673,8 @@
         "queue": "none",
         "domain": "number",
         "service": "set_value",
-        "x": 849,
-        "y": 799,
+        "x": 950,
+        "y": 1480,
         "wires": [
             []
         ]
@@ -1671,8 +1693,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 189,
-        "y": 799,
+        "x": 510,
+        "y": 1460,
         "wires": []
     },
     {
@@ -1700,8 +1722,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1069,
-        "y": 59,
+        "x": 930,
+        "y": 120,
         "wires": [
             []
         ]
@@ -1731,8 +1753,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 409,
-        "y": 799,
+        "x": 950,
+        "y": 1280,
         "wires": [
             []
         ]
@@ -1741,6 +1763,7 @@
         "id": "fve_log_writer_001",
         "type": "function",
         "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
         "name": "FVE Log Prep",
         "func": "// FVE Logger - pripravi log radek\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\nvar pvState  = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar nibeState = global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\") || {};\n\nvar entry = {\n    ts: new Date().toISOString(),\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    prebytek_w: parseFloat(pvState.state) || 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    nibe: nibeState.state || \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nmsg.payload = JSON.stringify(entry);\nreturn msg;\n",
         "outputs": 1,
@@ -1749,19 +1772,19 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 409,
-        "y": 899,
+        "x": 1380,
+        "y": 820,
         "wires": [
             [
                 "fve_log_file_001"
             ]
-        ],
-        "g": "fve_modes_g_log"
+        ]
     },
     {
         "id": "fve_log_file_001",
         "type": "file",
         "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
         "name": "FVE Log File",
         "filename": "/homeassistant/fve_log.jsonl",
         "filenameType": "str",
@@ -1769,17 +1792,17 @@
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "utf8",
-        "x": 629,
-        "y": 899,
+        "x": 1580,
+        "y": 820,
         "wires": [
             []
-        ],
-        "g": "fve_modes_g_log"
+        ]
     },
     {
         "id": "fve_log_rotate_inject",
         "type": "inject",
         "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
         "name": "Rotace logu (denně 04:00)",
         "props": [
             {
@@ -1793,19 +1816,19 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 69,
-        "y": 899,
+        "x": 1180,
+        "y": 920,
         "wires": [
             [
                 "fve_log_rotate_func"
             ]
-        ],
-        "g": "fve_modes_g_log"
+        ]
     },
     {
         "id": "fve_log_rotate_func",
         "type": "function",
         "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
         "name": "Rotace (3 dny)",
         "func": "// FVE Logger - rotace souboru (odstran zaznamy starsi 3 dny)\nvar fs = require('fs');\nvar logFile = \"/homeassistant/fve_log.jsonl\";\nvar cutoff = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();\n\ntry {\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try { return JSON.parse(l).ts >= cutoff; } catch(e) { return false; }\n    });\n    if (lines.length > 0) {\n        fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n        node.status({fill:\"green\", shape:\"dot\", text: lines.length + \" radku zachovano\"});\n    }\n} catch(e) {\n    node.warn(\"Rotace log error: \" + e.message);\n}\nreturn null;\n",
         "outputs": 0,
@@ -1819,29 +1842,8 @@
                 "module": "fs"
             }
         ],
-        "x": 189,
-        "y": 899,
-        "wires": [],
-        "g": "fve_modes_g_log"
-    },
-    {
-        "id": "fve_modes_g_log",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Log",
-        "style": {
-            "fill": "#e8e8e8",
-            "label": true
-        },
-        "nodes": [
-            "fve_log_writer_001",
-            "fve_log_file_001",
-            "fve_log_rotate_inject",
-            "fve_log_rotate_func"
-        ],
-        "x": 14,
-        "y": 859,
-        "w": 795,
-        "h": 82
+        "x": 1430,
+        "y": 920,
+        "wires": []
     }
 ]
