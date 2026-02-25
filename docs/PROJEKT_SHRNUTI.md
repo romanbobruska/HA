@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (21:50)
+> Poslední aktualizace: 2026-02-25 (23:07)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -182,7 +182,13 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení**: při aktivním NIBE topení, nabíjení auta nebo sauně → `MaxDischargePower=0`, `MaxChargePower=0`
+**Blokace vybíjení**: při aktivním NIBE topení, nabíjení auta nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`
+
+**Po vypnutí sauny** (cf3302d):
+- `sauna_set_global` resetuje `config.min_soc = 20` v globálu
+- Zapíše `number.min_soc = 20` do HA entity (Victron)
+- Okamžitě triggeruje přepočet plánu (→ `Sbírka dat`)
+- **Bez toho**: plánovač viděl `minSoc=74%` a generoval plán "Šetřit (Ochrana baterie SOC≤74%)" i po vypnutí sauny
 
 ---
 
