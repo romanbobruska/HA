@@ -1725,7 +1725,8 @@
         "y": 100,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "blok_minsoc_solar_001",
@@ -1755,7 +1756,8 @@
         "y": 1280,
         "wires": [
             []
-        ]
+        ],
+        "action": "number.set_value"
     },
     {
         "id": "fve_log_writer_001",
