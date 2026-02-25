@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (21:15)
+> Poslední aktualizace: 2026-02-25 (21:30)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -159,7 +159,10 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - OFF: nádrž < 32°C nebo krb aktivní
 
 **Patrony** (3 fáze × 3 kW, `switch.patrona_faze_1/3_2/3`):
-- Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 50°C, solární přebytek
+- **Priorita nejnižší** — zapnou se pouze pokud už není kam dát solární energii
+- Podmínky (`patronyMohou`): SOC ≥ 95% + auto nenabíjí + `auto_ma_hlad=OFF` + nádrž < 50°C + solární přebytek
+  - `auto_nabijeni_aktivni` (global) = wallbox fyzicky nabíjí (`Charging`) — blokuje patrony i při solárním nabíjení auta
+  - `auto_ma_hlad` = ránní rychlé síťové nabíjení auta
 - Stupňování: přebytek ≥ 3kW=1f, ≥6kW=2f, ≥9kW=3f
 - MOD_PATRONY → NIBE blokováno (bezpečnost jističe)
 - **Korekce vybíjení baterie** — vzor z `nabijeni-auta-slunce.json`:
