@@ -110,3 +110,12 @@ input_select:
       - "prodavat"
       - "zakaz_pretoku"
     icon: mdi:calendar-clock
+
+  topeni_mod:
+    name: "Topení - aktuální mód"
+    options:
+      - "Patrony"
+      - "NIBE"
+      - "Obehove"
+      - "Vypnuto"
+    icon: mdi:radiator
