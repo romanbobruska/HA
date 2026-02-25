@@ -96,6 +96,76 @@
         "h": 82
     },
     {
+        "id": "htg_g_pat_korekce",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Patrony korekce vybíjení (5s)",
+        "style": {
+            "stroke": "#ff7f0e",
+            "stroke-opacity": "1",
+            "fill": "#fff3e6",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#ff7f0e"
+        },
+        "nodes": [
+            "pat_korekce_inject",
+            "pat_korekce_func",
+            "pat_korekce_router"
+        ],
+        "x": 14,
+        "y": 231.5,
+        "w": 852,
+        "h": 97
+    },
+    {
+        "id": "htg_g_topeni_mod",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Topení MOD → HA sync",
+        "style": {
+            "stroke": "#1f77b4",
+            "stroke-opacity": "1",
+            "fill": "#e8f4fd",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#1f77b4"
+        },
+        "nodes": [
+            "htg_topeni_mod_change",
+            "htg_topeni_mod_api"
+        ],
+        "x": 14,
+        "y": 1139,
+        "w": 442,
+        "h": 82
+    },
+    {
+        "id": "htg_g_reload",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Inicializace (startup)",
+        "style": {
+            "stroke": "#2ca02c",
+            "stroke-opacity": "1",
+            "fill": "#e8f8e8",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#2ca02c"
+        },
+        "nodes": [
+            "htg_reload_input_select_inject",
+            "htg_reload_input_select_api"
+        ],
+        "x": 14,
+        "y": 1239,
+        "w": 502,
+        "h": 82
+    },
+    {
         "id": "htg_inject_60s",
         "type": "inject",
         "z": "f1e2d3c4b5a60001",
@@ -705,7 +775,7 @@
                 "valueType": "entityState"
             }
         ],
-        "x": 160,
+        "x": 120,
         "y": 1080,
         "wires": [
             [
@@ -726,7 +796,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
+        "x": 360,
         "y": 1080,
         "wires": [
             [
@@ -754,7 +824,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 620,
+        "x": 580,
         "y": 1080,
         "wires": [
             []
@@ -925,8 +995,8 @@
                 "valueType": "entityState"
             }
         ],
-        "x": 170,
-        "y": 1400,
+        "x": 130,
+        "y": 1380,
         "wires": [
             [
                 "htg_away_func"
@@ -946,8 +1016,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 1400,
+        "x": 350,
+        "y": 1380,
         "wires": [
             [
                 "htg_away_set_temp"
@@ -980,38 +1050,17 @@
         "blockInputOverrides": false,
         "domain": "input_number",
         "service": "set_value",
-        "x": 610,
-        "y": 1400,
+        "x": 570,
+        "y": 1380,
         "wires": [
             []
         ]
     },
     {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "d291a07dcab752d6",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
         "id": "htg_topeni_mod_change",
         "type": "change",
         "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_topeni_mod",
         "name": "Nastav topeni_mod",
         "rules": [
             {
@@ -1027,47 +1076,51 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 180,
-        "y": 1159,
+        "x": 130,
+        "y": 1180,
         "wires": [
             [
                 "htg_topeni_mod_api"
             ]
-        ],
-        "g": "htg_g_topeni_mod"
+        ]
     },
     {
         "id": "htg_topeni_mod_api",
         "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_topeni_mod",
         "name": "Set topeni_mod",
         "server": "c7421fe2.cb11c",
-        "version": 5,
+        "version": 7,
         "debugenabled": false,
-        "domain": "input_select",
-        "service": "select_option",
+        "action": "input_select.select_option",
+        "floorId": [],
         "areaId": [],
         "deviceId": [],
         "entityId": [
             "input_select.topeni_mod"
         ],
+        "labelId": [],
         "data": "{\"option\": \"{{payload}}\"}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
-        "x": 400,
-        "y": 1159,
+        "blockInputOverrides": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "x": 350,
+        "y": 1180,
         "wires": [
             []
-        ],
-        "g": "htg_g_topeni_mod"
+        ]
     },
     {
         "id": "htg_reload_input_select_inject",
         "type": "inject",
         "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_reload",
         "name": "Reload input_select (startup)",
         "props": [
             {
@@ -1082,39 +1135,42 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 1267,
+        "y": 1280,
         "wires": [
             [
                 "htg_reload_input_select_api"
             ]
-        ],
-        "g": "htg_g_reload"
+        ]
     },
     {
         "id": "htg_reload_input_select_api",
         "type": "api-call-service",
         "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_reload",
         "name": "Reload input_select",
         "server": "c7421fe2.cb11c",
-        "version": 5,
+        "version": 7,
         "debugenabled": false,
-        "domain": "input_select",
-        "service": "reload",
+        "action": "input_select.reload",
+        "floorId": [],
         "areaId": [],
         "deviceId": [],
         "entityId": [],
+        "labelId": [],
         "data": "",
         "dataType": "jsonata",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
         "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_select",
+        "service": "reload",
         "x": 400,
-        "y": 1267,
+        "y": 1280,
         "wires": [
             []
-        ],
-        "g": "htg_g_reload"
+        ]
     },
     {
         "id": "pat_korekce_inject",
@@ -1135,7 +1191,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 160,
-        "y": 247,
+        "y": 280,
         "wires": [
             [
                 "pat_korekce_func"
@@ -1156,7 +1212,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 247,
+        "y": 280,
         "wires": [
             [
                 "pat_korekce_router"
@@ -1192,7 +1248,7 @@
         "repair": false,
         "outputs": 3,
         "x": 760,
-        "y": 247,
+        "y": 280,
         "wires": [
             [
                 "htg_svc_p1_off"
@@ -1204,76 +1260,5 @@
                 "htg_svc_p3_off"
             ]
         ]
-    },
-    {
-        "id": "htg_g_pat_korekce",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Patrony korekce vybíjení (5s)",
-        "style": {
-            "stroke": "#ff7f0e",
-            "stroke-opacity": "1",
-            "fill": "#fff3e6",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#ff7f0e"
-        },
-        "nodes": [
-            "pat_korekce_inject",
-            "pat_korekce_func",
-            "pat_korekce_split",
-            "pat_korekce_router"
-        ],
-        "x": 14,
-        "y": 227,
-        "w": 852,
-        "h": 97
-    },
-    {
-        "id": "htg_g_topeni_mod",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Topení MOD → HA sync",
-        "style": {
-            "stroke": "#1f77b4",
-            "stroke-opacity": "1",
-            "fill": "#e8f4fd",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#1f77b4"
-        },
-        "nodes": [
-            "htg_topeni_mod_change",
-            "htg_topeni_mod_api"
-        ],
-        "x": 14,
-        "y": 1139,
-        "w": 442,
-        "h": 82
-    },
-    {
-        "id": "htg_g_reload",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Inicializace (startup)",
-        "style": {
-            "stroke": "#2ca02c",
-            "stroke-opacity": "1",
-            "fill": "#e8f8e8",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#2ca02c"
-        },
-        "nodes": [
-            "htg_reload_input_select_inject",
-            "htg_reload_input_select_api"
-        ],
-        "x": 14,
-        "y": 1247,
-        "w": 502,
-        "h": 82
     }
 ]
