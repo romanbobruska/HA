@@ -66,6 +66,39 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 ---
 
+## Node-RED Design Patterns (POVINNÉ DODRŽOVAT)
+
+### Layout pravidla
+- **Každý node MUSÍ mít `g` property** → přiřazen do group. Žádné "volné" nody na canvasu.
+- **Groups se nesmí překrývat** — řadit výhradně vertikálně
+- **Group `x` = 14** (ne 54, ne jiné — vždy 14)
+- **Mezera mezi groups = 18px** (group_y_prev + group_h_prev + 18 = group_y_next)
+- **Nody uvnitř group**: `y` = group_y + 18 (první řada), group_y + 58 (druhá řada), atd.
+- **Nody uvnitř group**: `x` začíná od ~160 (kvůli labelu skupiny), krok ~200px
+- Referenční vzor layoutu: `fve-config.json`
+
+### Group struktura
+- Každá logická funkce = jedna group (např. "Řízení topení", "Exekuce akcí")
+- Group `w` = šířka podle nejpravějšího nodu + ~60px margin
+- Group `h` = výška podle počtu řad nodů (1 řada = 82px, 2 řady = 122px, atd.)
+- Group `style.label = true`, `style.label-position = "nw"`
+
+### Wiring pravidla
+- **Každý inject/trigger** smí volat pouze nody ve **své vlastní skupině** — žádné cross-group wire z triggeru
+- **Žádné duplicitní triggery** na stejný cílový node — jeden inject = jeden cíl nebo logicky odůvodněné více cílů
+- **Orphan nody** (bez vstupu, mimo trigger types) = chyba, odstranit nebo napojit
+- Inject nody v různých skupinách se nesmí křížit (každá skupina má svůj inject)
+
+### Příklady správného layoutu (fve-config.json)
+```
+Group "Konfigurace FVE"         x:14 y:19  w:702 h:82
+Group "Synchronizace s HA"      x:14 y:119 w:832 h:142  (y = 19+82+18)
+Group "Aktuální ceny energie"   x:14 y:279 w:822 h:182  (y = 119+142+18)
+Group "Aktuální stav systému"   x:14 y:479 w:832 h:82   (y = 279+182+18 = 479)
+```
+
+---
+
 ## 3. Struktura Node-RED flows
 
 | Soubor | Co dělá |
