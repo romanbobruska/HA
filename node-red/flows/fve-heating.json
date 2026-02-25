@@ -1061,5 +1061,55 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "htg_reload_input_select_inject",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Reload input_select (startup)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 2,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 600,
+        "wires": [
+            [
+                "htg_reload_input_select_api"
+            ]
+        ]
+    },
+    {
+        "id": "htg_reload_input_select_api",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Reload input_select",
+        "server": "c7421fe2.cb11c",
+        "version": 5,
+        "debugenabled": false,
+        "domain": "input_select",
+        "service": "reload",
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "x": 420,
+        "y": 600,
+        "wires": [
+            []
+        ]
     }
 ]
