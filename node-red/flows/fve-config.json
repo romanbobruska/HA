@@ -172,10 +172,9 @@
         "payload": "",
         "payloadType": "date",
         "x": 140,
-        "y": 420,
+        "y": 320,
         "wires": [
             [
-                "90dca62607936795",
                 "f1cea1e4214578c4"
             ]
         ]
