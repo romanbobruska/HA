@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (00:35)
+> Poslední aktualizace: 2026-02-25 (18:20)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -105,9 +105,9 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 kapacita_baterie_kwh: 28      min_soc: 20 (čte z HA number.min_soc)
 prah_levna_energie: 4         prah_draha_energie: 12
 max_spotreba_sit_w: 22000     safety_margin_w: 2000
-topeni_min_teplota_nadrze: 30 topeni_max_teplota_nadrze: 50
-topeni_nouzova_teplota: 18    topeni_nocni_snizeni: 0.5 (jen drahé hodiny v noci)
-topeni_min_soc_patron: 95     topeni_max_teplota_patron: 60
+topeni_min_teplota_nadrze: 32 topeni_max_teplota_nadrze: 50
+topeni_nouzova_teplota: 18    topeni_nocni_snizeni: 0.5 (vždy v noci 22-6h)
+topeni_min_soc_patron: 95     topeni_max_teplota_patron: 50
 topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 ```
 
@@ -130,31 +130,41 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 
 ## 7. Řízení topení domu (`fve-heating.json`)
 
-**Architektura**: inject 60s + trigger na změnu automatizace → `htg_main_func` → actions array → switch router → service calls
+**Architektura**: inject 60s + trigger na změnu automatizace → `Řízení topení v2.0` → actions array → switch router → service calls
+
+### Topení MOD (klíčový koncept)
+`input_select.topeni_mod` v HA zobrazuje aktuální mód. `flow.set("topeni_mod_active")` řídí blokaci.
+
+| Mód | Podmínka | Blokace |
+|-----|----------|---------|
+| **Patrony** | solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
+| **NIBE** | potřeba topit, žádný přebytek | Patrony zakázány |
+| **Vypnuto** | teplota OK | obojí vypnuto |
+
+**BEZPEČNOST**: NIBE a patrony NIKDY současně (přetížení jističe). Trojvrstvá ochrana:
+1. Patrony: `!nibeBlockedByMod` podmínka
+2. NIBE: `nibeBlockedByPatrony = nibeBlockedByMod`
+3. Finální mutex v actions array
 
 **NIBE** (`switch.nibe_topeni`, reg 47371):
-- Levné/střední hodiny → ON (pokud není solární hodina s přebytkem pro patrony)
-- Drahé hodiny (`levelBuy >= prah_draha`) → OFF (výjimka: indoor < nouzová teplota 18°C)
+- Levné/střední hodiny → ON (pokud MOD = NIBE)
+- Drahé hodiny → OFF (výjimka: indoor < nouzová teplota 18°C)
 - COOLDOWN: min. 10 minut mezi přepnutími
-- OCHRANA: nikdy nevypnout pokud kompresor běží nebo čerpadlo není v Klidovém stavu
+- OCHRANA: nevypnout pokud kompresor běží nebo čerpadlo není v Klidovém stavu
 
 **Oběhové čerpadlo** (`switch.horousany_termostat_prizemi_kote`):
-- ON: `MIN_TANK (30°C) ≤ tankTemp ≤ MAX_TANK (50°C)` — nezávisle na teplotě v domě, nezávisle na NIBE
-- OFF: nádrž mimo rozsah 30–50°C nebo krb aktivní
-- Čerpá teplo z nádrže do domu kdykoli nádrž má co dát (nad 50°C → fyzické riziko, pod 30°C → není co čerpat)
+- ON: `tankTemp >= MIN_TANK (32°C)` — **bez horního limitu** (horní limit platí jen pro patrony)
+- Noční omezení (22:00–6:00): spustí jen pokud `indoorTemp < targetTemp - 0.5°C`
+- Nezávislé na NIBE, čerpá teplo z nádrže kdykoli je k dispozici
+- OFF: nádrž < 32°C nebo krb aktivní
 
 **Patrony** (3 fáze × 3 kW, `switch.patrona_faze_1/3_2/3`):
-- Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 60°C
+- Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 50°C, solární přebytek
 - Stupňování: přebytek ≥ 3kW=1f, ≥6kW=2f, ≥9kW=3f
-- Vzájemně exkluzivní s NIBE
+- MOD_PATRONY → NIBE blokováno (bezpečnost jističe)
 
-**Vypnutí automatizace** (`input_boolean.automatizovat_topeni` → OFF):
-- Jednorázově: NIBE OFF, oběhové OFF, patrony OFF → pak žádné zásahy
-
-**Zapnutí automatizace** → ihned spustí správnou logiku (zimní/letní dle `config.letni_rezim`), COOLDOWN přeskočen
-
-**Cílová teplota**: čte se z `input_number.nastavena_teplota_v_dome` (žádná hardcoded hodnota!)
-Noční snížení (`topeni_nocni_snizeni: 0.5°C`) platí jen při **drahých** hodinách v noci.
+**Cílová teplota**: `input_number.nastavena_teplota_v_dome`
+Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhové čerpadlo.
 
 ---
 
