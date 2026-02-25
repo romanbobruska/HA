@@ -76,7 +76,6 @@
             "5a22ed0e7c4d5702",
             "6fe01f7863dcb990",
             "b359790448907d03",
-            "3804dae5e1238219",
             "6e5e0e1e73619d88",
             "44373b9aeb728378",
             "6a8bdcb07260ad46",
@@ -320,21 +319,6 @@
                 "20578829b67ce0e5",
                 "9b1d4e00a2b10c24"
             ]
-        ]
-    },
-    {
-        "id": "3804dae5e1238219",
-        "type": "sqlite",
-        "z": "d32891aad318f0e3",
-        "g": "1de9e9b5f7d0b99b",
-        "mydb": "6d97960f9560e05b",
-        "sqlquery": "msg.topic",
-        "sql": "SELECT * FROM \"own_energy_prices_total\" where day = \"hoursToday\" and hour = 17 and minute = 16",
-        "name": "Vyber hodnoty",
-        "x": 460,
-        "y": 940,
-        "wires": [
-            []
         ]
     },
     {
