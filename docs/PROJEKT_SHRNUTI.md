@@ -68,33 +68,56 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 ## Node-RED Design Patterns (POVINNÉ DODRŽOVAT)
 
-### Layout pravidla
-- **Každý node MUSÍ mít `g` property** → přiřazen do group. Žádné "volné" nody na canvasu.
+### Layout pravidla — přesné hodnoty
+- **Každý node MUSÍ mít `g` property** → přiřazen do group. Žádné volné nody na canvasu.
 - **Groups se nesmí překrývat** — řadit výhradně vertikálně
-- **Group `x` = 14** (ne 54, ne jiné — vždy 14)
-- **Mezera mezi groups = 18px** (group_y_prev + group_h_prev + 18 = group_y_next)
-- **Nody uvnitř group**: `y` = group_y + 18 (první řada), group_y + 58 (druhá řada), atd.
-- **Nody uvnitř group**: `x` začíná od ~160 (kvůli labelu skupiny), krok ~200px
-- Referenční vzor layoutu: `fve-config.json`
+- **Group `x` = 14** (vždy, bez výjimky)
+- **Mezera mezi groups = 18px**: `next_group_y = prev_group_y + prev_group_h + 18`
+- **Group `y` první skupiny = 19**
+
+### Pozice nodů uvnitř group (ověřeno na fve-config + fve-modes)
+```
+node_y (řada 0) = group_y + 40
+node_y (řada 1) = group_y + 80
+node_y (řada 2) = group_y + 120
+```
+- **Node `x` offsety od group `x`**: col0=55 (link in), col1=175 (func), col2=395, col3=615, col4=835, col5=1055, col6=1275
+- Krok mezi sloupci = **220px**
+- Maximálně **2 řady** nodů na skupinu (výjimečně 3 pro složité skupiny)
+
+### Group rozměry — vzorec
+```
+group_h = 42 + rows * 40
+  → 1 řada: h = 82
+  → 2 řady: h = 122
+  → 3 řady: h = 162
+
+group_w = rightmost_col_offset + 160 (node_width) + 20 (margin)
+```
 
 ### Group struktura
-- Každá logická funkce = jedna group (např. "Řízení topení", "Exekuce akcí")
-- Group `w` = šířka podle nejpravějšího nodu + ~60px margin
-- Group `h` = výška podle počtu řad nodů (1 řada = 82px, 2 řady = 122px, atd.)
-- Group `style.label = true`, `style.label-position = "nw"`
+- Každá logická funkce = jedna group
+- Group `style.label = true`
+- Barvy: zelená=#d3f3d3 (Normal), žlutá=#f3f3d3 (Šetřit/upozornění), modrá=#d3e8f3 (HA sync), červená=#f3d3d3 (stav), šedá=#e8e8e8 (Log/pomocné)
 
 ### Wiring pravidla
-- **Každý inject/trigger** smí volat pouze nody ve **své vlastní skupině** — žádné cross-group wire z triggeru
-- **Žádné duplicitní triggery** na stejný cílový node — jeden inject = jeden cíl nebo logicky odůvodněné více cílů
-- **Orphan nody** (bez vstupu, mimo trigger types) = chyba, odstranit nebo napojit
-- Inject nody v různých skupinách se nesmí křížit (každá skupina má svůj inject)
+- **Každý inject/trigger** volá pouze nody ve **své vlastní skupině** — žádné cross-group wire z triggeru
+- **Žádné duplicitní triggery** na stejný cílový node
+- **Orphan nody** (bez vstupu, mimo trigger types) = přesunout do skupiny nebo odstranit
+- Inject nody v různých skupinách se nesmí křížit
 
-### Příklady správného layoutu (fve-config.json)
+### Příklady správného layoutu
 ```
-Group "Konfigurace FVE"         x:14 y:19  w:702 h:82
-Group "Synchronizace s HA"      x:14 y:119 w:832 h:142  (y = 19+82+18)
-Group "Aktuální ceny energie"   x:14 y:279 w:822 h:182  (y = 119+142+18)
-Group "Aktuální stav systému"   x:14 y:479 w:832 h:82   (y = 279+182+18 = 479)
+# fve-config.json (1 řada na skupinu)
+Group "Konfigurace FVE"         x=14 y=19  w=702  h=82
+Group "Synchronizace s HA"      x=14 y=119 w=832  h=142
+Group "Aktuální ceny energie"   x=14 y=279 w=822  h=82
+Group "Aktuální stav systému"   x=14 y=379 w=832  h=82
+
+# fve-modes.json (2 řady na skupinu)
+Group "Mód: NORMAL"             x=14 y=19  w=1235 h=122
+Group "Mód: ŠETŘIT"             x=14 y=159 w=1015 h=122  (y=19+122+18)
+Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 ```
 
 ---
