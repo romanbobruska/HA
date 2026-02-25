@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (21:00)
+> Poslední aktualizace: 2026-02-25 (21:15)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -162,10 +162,13 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Podmínky: SOC ≥ 95%, auto nemá hlad, nádrž < 50°C, solární přebytek
 - Stupňování: přebytek ≥ 3kW=1f, ≥6kW=2f, ≥9kW=3f
 - MOD_PATRONY → NIBE blokováno (bezpečnost jističe)
-- **Korekce vybíjení baterie** (5s smyčka + hlavní loop):
-  - **5s smyčka** (`pat_korekce_func`): pouze snižuje — pokud `batt_minus > 200W` → sníží `pat_korekce_max` o 1 a vypne fázi; jinak jen zobrazí status
-  - **Hlavní loop (60s)**: uvolní strop pokud přebytek vzrostl — `patTarget > pat_korekce_max` → zvýší strop na `patTarget`; reset stropu na 3 pouze když patrony nevyhovují podmínkám (SOC, tank, přebytek)
-  - Výsledek: počet fází se ustálí na hodnotě kde se baterie přestala vybíjet, a zvýší se teprve když vzroste přebytek
+- **Korekce vybíjení baterie** — vzor z `nabijeni-auta-slunce.json`:
+  - **Hlavní loop (60s)**: zapne fáze dle přebytku **pouze pokud `actPat === 0`** (patrony neběží); pokud běží, jen zaznamená stav
+  - **5s smyčka** (`pat_korekce_func`): jakmile patrony běží, přebírá řízení:
+    - `batt_minus > 200W` → sníží o 1 fázi
+    - přebytek vzrostl → zvýší o 1 fázi
+    - přebytek klesl → sníží na to co přebytek dovolí
+    - vydíjení OK + přebytek OK → ustálený stav, nic nedělá
   - Platí pro automatický i manuální mód
 
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
