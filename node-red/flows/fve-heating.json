@@ -1051,7 +1051,7 @@
             "input_select.topeni_mod"
         ],
         "data": "{\"option\": \"{{payload}}\"}",
-        "dataType": "jsonata",
+        "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
         "outputProperties": [],
@@ -1075,7 +1075,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": 2,
+        "onceDelay": 8,
         "topic": "",
         "payload": "",
         "payloadType": "date",
