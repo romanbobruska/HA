@@ -114,6 +114,9 @@ else
         echo "   ❌ Chyba při slučování flows"
         exit 1
     fi
+
+    # Audit: oprav neshody g property vs nodes[] array ve skupinách
+    OUTPUT_FILE="$NODERED_DIR/flows.json" sudo -n -E python3 /tmp/HA/deploy_audit_groups.py 2>&1 || true
 fi
 
 # --- 5. Restart Node-RED ---
