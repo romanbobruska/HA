@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (03:40)
+> Poslední aktualizace: 2026-02-26 (13:30)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -136,7 +136,7 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` (`nabijeni_auta_min_soc_slunce`) |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` (`nabijeni_auta_min_soc_slunce`); damping ±2A/cyklus, delay 20s |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
@@ -210,10 +210,15 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | **Šetřit** | Výchozí, levné hodiny | Nečerpá |
 | **Nabíjet ze sítě** | Nejlevnější hodiny | Nabíjí ze sítě |
 | **Prodávat** | Velmi drahé + plná baterie | Prodej přebytků |
-| **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS |
+| **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení**: při aktivním NIBE topení, nabíjení auta nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`
+**Blokace vybíjení**: při aktivním NIBE topení (jen ze sítě, solar<500W), nabíjení auta ze sítě nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`. Solární nabíjení auta a NIBE ze solaru NEBLOKUJÍ.
+
+**Feed-in control** (oprava 2026-02-26, commit 4714012):
+- Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` → žádný přebytek do sítě
+- Všechny ostatní módy (Normal, Šetřit, Nabíjet, Prodávat, Solární): obnovují `switch.overvoltage_feed_in = ON` + `number.max_feed_in_power = 7600`
+- Bez této opravy MPPT solární přebytek obcházel ESS a unikal do sítě i v "zákaz přetoků" módu
 
 **Po vypnutí sauny / zastavení nabíjení auta** (cf3302d, 3326bb6):
 - `sauna_set_global` (sauna OFF) / `Kontrola nabíjení auta` (auto STOP) resetují `config.min_soc = 20` v globálu
@@ -317,10 +322,17 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 - Sensor stavu: `sensor.nibe_aktualni_realny_stav` (Vytápění / Ohřev vody / Klidový / ...)
 - Degree Minutes: `sensor.nibe_degree_minutes` (reg 43005)
 
-**Victron ESS** (MQTT):
-- MaxChargePower: `Settings/CGwacs/MaxChargePower`
-- MaxDischargePower: `hub4/0/Overrides/MaxDischargePower`
-- Power Setpoint: `Settings/CGwacs/AcPowerSetPoint`
+**Victron ESS** (MQTT + HA entities):
+- MaxChargePower: `number.max_charge_power` / `Settings/CGwacs/MaxChargePower`
+- MaxDischargePower: `number.max_discharge_power` / `hub4/0/Overrides/MaxDischargePower`
+- Power Setpoint: `number.power_set_point` / `Settings/CGwacs/AcPowerSetPoint`
+- Feed-in excess solar: `switch.overvoltage_feed_in` / `Settings/CGwacs/OvervoltageFeedIn`
+- Max feed-in power: `number.max_feed_in_power` / `Settings/CGwacs/MaxFeedInPower`
+
+**Wallbox ampérace** (oprava 2026-02-26, commit 7c641cf+e34050c):
+- `select.wallboxu_garaz_amperace` vrací string "16A" — parsovat přes `parseInt(rawCharger.replace(/[^0-9]/g, ''), 10)`
+- Damping: max ±2A změna za cyklus, delay 20s mezi cykly
+- Bez opravy: ampérace oscilovala 6→16→6 každou 1-2s
 
 ---
 
