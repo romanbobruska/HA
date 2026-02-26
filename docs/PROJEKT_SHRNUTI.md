@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-25 (23:07)
+> Poslední aktualizace: 2026-02-26 (02:30)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -184,11 +184,12 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 
 **Blokace vybíjení**: při aktivním NIBE topení, nabíjení auta nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`
 
-**Po vypnutí sauny** (cf3302d):
-- `sauna_set_global` resetuje `config.min_soc = 20` v globálu
-- Zapíše `number.min_soc = 20` do HA entity (Victron)
-- Okamžitě triggeruje přepočet plánu (→ `Sbírka dat`)
-- **Bez toho**: plánovač viděl `minSoc=74%` a generoval plán "Šetřit (Ochrana baterie SOC≤74%)" i po vypnutí sauny
+**Po vypnutí sauny / zastavení nabíjení auta** (cf3302d, 3326bb6):
+- `sauna_set_global` (sauna OFF) / `Kontrola nabíjení auta` (auto STOP) resetují `config.min_soc = 20` v globálu
+- Zapíší `number.min_soc = 20` do HA entity (Victron) přes nové nody `sauna_reset_minsoc` / `auto_reset_minsoc`
+- Okamžitě triggerují přepočet plánu (→ `Sbírka dat`) přes `sauna_trigger_plan` / `auto_trigger_plan`
+- **Bez toho**: plánovač viděl `minSoc=currentSoc+1` (74%/64%) a generoval plán "Šetřit (Ochrana baterie)" i po deaktivaci
+- **Pravidlo**: každý blokátor (sauna, auto, cerpadlo) musí po deaktivaci resetovat `number.min_soc = 20` a retriggerovat plán
 
 ---
 
