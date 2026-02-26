@@ -78,8 +78,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "49fdcac28d31c133",
@@ -166,8 +165,7 @@
         "y": 220,
         "wires": [
             []
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "d3c7e952ee2fc2a4",
@@ -198,8 +196,7 @@
         "y": 440,
         "wires": [
             []
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "0360f471b476ef16",
@@ -350,8 +347,7 @@
             [
                 "5ddb5d94494bcb4d"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "0e9ad909cb38430e",
@@ -395,8 +391,7 @@
             [
                 "e2fbe35de1091fa3"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "d59cea4bd7885a65",
@@ -443,8 +438,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "b19eb944cb946785",
@@ -491,8 +485,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "2ab649c94e2517e5",
@@ -539,8 +532,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "d26f96e53531f384",
@@ -573,8 +565,7 @@
             [
                 "7612c188de813d7c"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "707a53451c626ff1",
@@ -607,8 +598,7 @@
             [
                 "d3c7e952ee2fc2a4"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "d31a8b64172a3eab",
@@ -687,8 +677,7 @@
             [
                 "0e9ad909cb38430e"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "a9e5aa5fbd19b5c0",
@@ -741,15 +730,16 @@
         "type": "link in",
         "z": "a86ad952ad7756aa",
         "name": "IN nabíjení ze sítě",
-        "links": [],
+        "links": [
+            "f95d3971ad3d46f7"
+        ],
         "x": 55,
         "y": 40,
         "wires": [
             [
                 "542205d3587ae7f0"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "5ddb5d94494bcb4d",
@@ -796,8 +786,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "22e344a6bf0c5b70",
@@ -844,8 +833,7 @@
             [
                 "b542785e15e32db7"
             ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "8518fd99f86a1202",
@@ -939,10 +927,40 @@
     },
     {
         "id": "b542785e15e32db7",
-        "type": "function",
+        "type": "api-current-state",
         "z": "a86ad952ad7756aa",
-        "name": "kWh <= prah_nizsi?",
+        "name": "kWh <= 3 Kč?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
         "outputs": 2,
+        "halt_if": "3",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.aktualni_cena_kwh",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
         "x": 780,
         "y": 40,
         "wires": [
@@ -952,21 +970,44 @@
             [
                 "d26f96e53531f384"
             ]
-        ],
-        "func": "// Čte aktuální cenu z HA a porovná s nižším prahem z fve_config\n// Výstup 1: cena <= práh (velmi levná) → pokračuj\n// Výstup 2: cena > práh → zastav\nconst config = global.get(\"fve_config\") || {};\nconst prah = config.nabijeni_auta_cena_prah_nizsi || 3.0;\nconst stateObj = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nconst cena = parseFloat(stateObj.state || \"99\");\nmsg.payload = cena;\nnode.status({fill: cena <= prah ? \"green\" : \"red\", shape: \"dot\", text: cena.toFixed(2) + \" Kč (\" + (cena <= prah ? \"levná\" : \"drahá\") + \", práh \" + prah + \")\"});\nif (cena <= prah) return [msg, null];\nreturn [null, msg];\n",
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "96f43cae137cc3b1",
-        "type": "function",
+        "type": "api-current-state",
         "z": "a86ad952ad7756aa",
-        "name": "kWh <= prah_vyssi?",
+        "name": "kWh <= 4.30 Kč?",
+        "server": "c7421fe2.cb11c",
+        "version": 3,
         "outputs": 2,
+        "halt_if": "4.3",
+        "halt_if_type": "num",
+        "halt_if_compare": "lte",
+        "entity_id": "input_number.aktualni_cena_kwh",
+        "state_type": "num",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
         "x": 790,
         "y": 380,
         "wires": [
@@ -976,14 +1017,7 @@
             [
                 "d26f96e53531f384"
             ]
-        ],
-        "func": "// Čte aktuální cenu z HA a porovná s prahem z fve_config\n// Výstup 1: cena <= práh (levná) → pokračuj\n// Výstup 2: cena > práh (drahá) → zastav\nconst config = global.get(\"fve_config\") || {};\nconst prah = config.nabijeni_auta_cena_prah_vyssi || 4.3;\nconst stateObj = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nconst cena = parseFloat(stateObj.state || \"99\");\nmsg.payload = cena;\nnode.status({fill: cena <= prah ? \"green\" : \"red\", shape: \"dot\", text: cena.toFixed(2) + \" Kč (\" + (cena <= prah ? \"levná\" : \"drahá\") + \", práh \" + prah + \")\"});\nif (cena <= prah) return [msg, null];\nreturn [null, msg];\n",
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "g": "nabijeni_sit_grp_vstup"
+        ]
     },
     {
         "id": "c7421fe2.cb11c",
@@ -1014,7 +1048,7 @@
         "name": "⚡ Přetížení sítě",
         "server": "c7421fe2.cb11c",
         "version": 6,
-        "outputs": 1,
+        "outputs": 2,
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
@@ -1025,9 +1059,9 @@
         },
         "outputInitially": false,
         "stateType": "num",
-        "ifState": "",
-        "ifStateType": "str",
-        "ifStateOperator": "is",
+        "ifState": "18000",
+        "ifStateType": "num",
+        "ifStateOperator": "gt",
         "outputOnlyOnStateChange": true,
         "for": "0",
         "forType": "num",
@@ -1049,64 +1083,9 @@
         "y": 440,
         "wires": [
             [
-                "nabijeni_sit_pretizeni_filter"
-            ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
-    },
-    {
-        "id": "nabijeni_sit_pretizeni_filter",
-        "type": "function",
-        "z": "a86ad952ad7756aa",
-        "name": "Filtruj přetížení",
-        "func": "// Propustí zprávu pouze pokud spotreba přesáhla práh přetížení z fve_config\nconst config = global.get(\"fve_config\") || {};\nconst prah = config.nabijeni_auta_pretizeni_w || 18000;\nconst spotreba = parseFloat(msg.payload || 0);\nnode.status({fill: spotreba > prah ? \"red\" : \"green\", shape: \"dot\", text: Math.round(spotreba) + \"W / \" + prah + \"W\"});\nif (spotreba > prah) return msg;\nreturn null;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 330,
-        "y": 440,
-        "wires": [
-            [
                 "a9e5aa5fbd19b5c0"
-            ]
-        ],
-        "g": "nabijeni_sit_grp_vstup"
-    },
-    {
-        "id": "nabijeni_sit_grp_vstup",
-        "type": "group",
-        "z": "a86ad952ad7756aa",
-        "name": "Vstupní logika",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "0f16dca17f84783e",
-            "7612c188de813d7c",
-            "d3c7e952ee2fc2a4",
-            "e2fbe35de1091fa3",
-            "0e9ad909cb38430e",
-            "d59cea4bd7885a65",
-            "b19eb944cb946785",
-            "2ab649c94e2517e5",
-            "d26f96e53531f384",
-            "707a53451c626ff1",
-            "542205d3587ae7f0",
-            "4c0ccbe3229bb4f8",
-            "5ddb5d94494bcb4d",
-            "22e344a6bf0c5b70",
-            "b542785e15e32db7",
-            "96f43cae137cc3b1",
-            "b1c2d3e4f5060003",
-            "nabijeni_sit_pretizeni_filter"
-        ],
-        "x": 14,
-        "y": 20,
-        "w": 1165,
-        "h": 460
+            ],
+            []
+        ]
     }
 ]
