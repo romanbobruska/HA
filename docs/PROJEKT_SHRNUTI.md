@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (14:40)
+> Poslední aktualizace: 2026-02-26 (14:50)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -242,11 +242,11 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 
 | Mód | Podmínka | Blokace |
 |-----|----------|--------|
-| **NIBE** | dům potřebuje topit (`needsHeat = indoorTemp < effTarget`) | Patrony zakázány |
-| **Patrony** | dům NEPOTŘEBUJE topit + solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
-| **Vypnuto** | dům nepotřebuje topit + žádný přebytek | obojí vypnuto |
+| **NIBE** | `tempGap > 0.2°C` (teplota domu je víc než 0.2°C pod cílem) | Patrony zakázány |
+| **Patrony** | `tempGap ≤ 0.2°C` + solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
+| **Vypnuto** | teplota OK + žádný přebytek | obojí vypnuto |
 
-**PRIORITA**: NIBE (topení domu) má VŽDY přednost před patronami (ohřev nádrže). Patrony běží POUZE pokud dům nepotřebuje topit a je solární přebytek.
+**PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.2°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
 **BEZPEČNOST**: NIBE a patrony NIKDY současně (přetížení jističe). Trojvrstvá ochrana:
 1. Patrony: `!nibeBlockedByMod` podmínka
