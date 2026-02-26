@@ -126,12 +126,14 @@
             "zakaz_sched_soc_0",
             "zakaz_sched_day_m7",
             "zakaz_max_disch_0",
-            "max_charge_12a3795b"
+            "max_charge_12a3795b",
+            "zakaz_feedin_off",
+            "zakaz_maxfeedin_0"
         ],
         "x": 14,
         "y": 1019,
         "w": 1132,
-        "h": 202
+        "h": 222
     },
     {
         "id": "0aa9e57f66f7d429",
@@ -202,7 +204,7 @@
         "z": "bb3654998a6bf514",
         "g": "432ef0e12c1fccd9",
         "name": "Normal Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\n// Dynamický limit: baterie pokryje jen rozdíl mezi povinnou spotřebou a solární výrobou\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\n// NIBE: blokovat vybijeni jen kdyz NIBE bere ciste ze site (solar < 500W)\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nif (blockDischarge) {\n    // v18.8: BLOKACE - omezit vybíjení na povinnou spotřebu domu\n    // Baterie se pomalu vybíjí (1.3kW), velké spotřebiče jedou ze sítě\n    // BEZ scheduled charging - SOC pomalu klesá\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n} else {\n    // NORMÁLNÍ PROVOZ:\n    // Deaktivovat scheduled charging, ESS normálně řídí\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n}\n\nmsg.mode = \"normal\";\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(autoChargingFromGrid ? \"Auto(sit)\" : \"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" + \" + consumers.join(\"+\") : \"\";\nvar lockText = blockDischarge ? \" (BAT \" + dynamicDischargeW + \"W, PV:\" + Math.round(currentPvPower) + \"W)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + \" | SOC: \" + currentSoc + \"%\" + lockText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\n// Blokace vybijeni: pouzij min_soc=currentSoc (ne MaxDischargePower=0 ktere skrtí solar prutok)\n// MaxDischargePower=-1 vzdy (bez limitu na DC discharge)\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = blockDischarge ? Math.min(100, currentSoc + 1) : minSoc;\nmsg.maxChargePower = -1; // Nabijeni ze solaru vzdy povoleno\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\n// Dynamický limit: baterie pokryje jen rozdíl mezi povinnou spotřebou a solární výrobou\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\n// NIBE: blokovat vybijeni jen kdyz NIBE bere ciste ze site (solar < 500W)\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nif (blockDischarge) {\n    // v18.8: BLOKACE - omezit vybíjení na povinnou spotřebu domu\n    // Baterie se pomalu vybíjí (1.3kW), velké spotřebiče jedou ze sítě\n    // BEZ scheduled charging - SOC pomalu klesá\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n} else {\n    // NORMÁLNÍ PROVOZ:\n    // Deaktivovat scheduled charging, ESS normálně řídí\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n}\nmsg.mode = \"normal\";\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(autoChargingFromGrid ? \"Auto(sit)\" : \"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" + \" + consumers.join(\"+\") : \"\";\nvar lockText = blockDischarge ? \" (BAT \" + dynamicDischargeW + \"W, PV:\" + Math.round(currentPvPower) + \"W)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + \" | SOC: \" + currentSoc + \"%\" + lockText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\n// Blokace vybijeni: pouzij min_soc=currentSoc (ne MaxDischargePower=0 ktere skrtí solar prutok)\n// MaxDischargePower=-1 vzdy (bez limitu na DC discharge)\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = blockDischarge ? Math.min(100, currentSoc + 1) : minSoc;\nmsg.maxChargePower = -1; // Nabijeni ze solaru vzdy povoleno\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -221,6 +223,8 @@
                 "84c9363491961540",
                 "max_charge_432ef0e1",
                 "blok_minsoc_normal_001",
+                "restore_feedin_on",
+                "restore_maxfeedin",
                 "fve_log_writer_001"
             ]
         ]
@@ -444,6 +448,8 @@
                 "a1b2c3d4e5f60002",
                 "176abc1b75a23fb4",
                 "max_charge_b49b9676",
+                "restore_feedin_on",
+                "restore_maxfeedin",
                 "fve_log_writer_001"
             ]
         ]
@@ -667,6 +673,8 @@
                 "a1b2c3d4e5f60001",
                 "6598def5a6b435a3",
                 "max_charge_2767feb2",
+                "restore_feedin_on",
+                "restore_maxfeedin",
                 "fve_log_writer_001"
             ]
         ]
@@ -890,6 +898,8 @@
                 "9bd525cb24b06701",
                 "86d71450ca024a50",
                 "max_charge_7ce258be",
+                "restore_feedin_on",
+                "restore_maxfeedin",
                 "fve_log_writer_001"
             ]
         ]
@@ -1113,6 +1123,8 @@
                 "zakaz_max_disch_0",
                 "8db6ee5fbb848b8b",
                 "max_charge_12a3795b",
+                "zakaz_feedin_off",
+                "zakaz_maxfeedin_0",
                 "fve_log_writer_001"
             ]
         ]
@@ -1335,6 +1347,8 @@
                 "max_charge_0aa9e57f",
                 "solar_debug_001",
                 "blok_minsoc_solar_001",
+                "restore_feedin_on",
+                "restore_maxfeedin",
                 "fve_log_writer_001"
             ]
         ]
@@ -1845,5 +1859,131 @@
         "x": 1430,
         "y": 920,
         "wires": []
+    },
+    {
+        "id": "zakaz_feedin_off",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "Feed-in OFF (zákaz)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.overvoltage_feed_in"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 480,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "zakaz_maxfeedin_0",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "12a3795b66ec7d44",
+        "name": "MaxFeedIn = 0 (zákaz)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_feed_in_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 0}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 720,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "restore_feedin_on",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "name": "Feed-in ON (restore)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.overvoltage_feed_in"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 1300,
+        "y": 60,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "restore_maxfeedin",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "name": "MaxFeedIn = 7600 (restore)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_feed_in_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 7600}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 1300,
+        "y": 100,
+        "wires": [
+            []
+        ]
     }
 ]
