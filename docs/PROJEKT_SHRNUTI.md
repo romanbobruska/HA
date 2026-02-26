@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (14:10)
+> Poslední aktualizace: 2026-02-26 (14:35)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -241,10 +241,12 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 `input_select.topeni_mod` v HA zobrazuje aktuální mód. `flow.set("topeni_mod_active")` řídí blokaci.
 
 | Mód | Podmínka | Blokace |
-|-----|----------|---------|
-| **Patrony** | solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
-| **NIBE** | potřeba topit, žádný přebytek | Patrony zakázány |
-| **Vypnuto** | teplota OK | obojí vypnuto |
+|-----|----------|--------|
+| **NIBE** | dům potřebuje topit (`needsHeat = indoorTemp < effTarget`) | Patrony zakázány |
+| **Patrony** | dům NEPOTŘEBUJE topit + solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
+| **Vypnuto** | dům nepotřebuje topit + žádný přebytek | obojí vypnuto |
+
+**PRIORITA**: NIBE (topení domu) má VŽDY přednost před patronami (ohřev nádrže). Patrony běží POUZE pokud dům nepotřebuje topit a je solární přebytek.
 
 **BEZPEČNOST**: NIBE a patrony NIKDY současně (přetížení jističe). Trojvrstvá ochrana:
 1. Patrony: `!nibeBlockedByMod` podmínka
