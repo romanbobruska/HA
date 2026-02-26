@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (13:30)
+> Poslední aktualizace: 2026-02-26 (14:10)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -136,7 +136,7 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` (`nabijeni_auta_min_soc_slunce`); damping ±2A/cyklus, delay 20s |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **SOC>95% drain mód** (+300W z baterie) |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
@@ -165,6 +165,8 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 - `nabijeni_auta_cena_prah_nizsi: 3.0` — max cena kWh pro nabíjení ze sítě, nižší práh (nabijeni-sit)
 - `nabijeni_auta_min_soc_slunce: 85` — min SOC baterie pro povolení solárního nabíjení (nabijeni-slunce)
 - `nabijeni_auta_pretizeni_w: 18000` — práh přetížení sítě při nabíjení auta W (nabijeni-sit)
+- `nabijeni_auta_soc_drain_prah: 95` — SOC práh pro drain mód solárního nabíjení (%)
+- `nabijeni_auta_soc_drain_w: 300` — cílový odběr z baterie v drain módu (W, doporučeno 100-500)
 
 **Odkud čte data**:
 - `vyrobaDnes` = `getFloat("input_number.predpoved_solarni_vyroby_dnes")` → přes HA websocket (vždy aktuální)
@@ -182,7 +184,7 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 | `fve_plan` | Aktuální plán na 12h (mód per hodina, SOC simulace) |
 | `fve_current_mode` | Aktuální mód FVE |
 | `energy_arbiter` | Stav blokace vybíjení, aktivní spotřebiče |
-| `cerpadlo_topi` | Flag: topí NIBE? (blokuje vybíjení baterie) |
+| `cerpadlo_topi` | Flag: NIBE topí (Vytápění/TUV)? Blokuje vybíjení baterie + blokuje nabíjení auta. **Neplatí pro chlazení.** |
 | `auto_nabijeni_aktivni` | Flag: nabíjí se auto? |
 | `sauna_aktivni` | Flag: zapnuta sauna? |
 
@@ -215,10 +217,12 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 
 **Blokace vybíjení**: při aktivním NIBE topení (jen ze sítě, solar<500W), nabíjení auta ze sítě nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`. Solární nabíjení auta a NIBE ze solaru NEBLOKUJÍ.
 
-**Feed-in control** (oprava 2026-02-26, commit 4714012):
-- Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` → žádný přebytek do sítě
-- Všechny ostatní módy (Normal, Šetřit, Nabíjet, Prodávat, Solární): obnovují `switch.overvoltage_feed_in = ON` + `number.max_feed_in_power = 7600`
-- Bez této opravy MPPT solární přebytek obcházel ESS a unikal do sítě i v "zákaz přetoků" módu
+**Feed-in control** (oprava 2026-02-26):
+- Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` + `power_set_point = 100W` + **`PreventFeedback = 1` přes MQTT** (`victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback`)
+- `PreventFeedback` je klíčový — omezuje MPPT výkon na firmware úrovni Victronu, zabraňuje exportu i na úrovni jednotlivých fází
+- `power_set_point = 100W` (ne 0) — ESS cílí na mírný odběr ze sítě, absorbuje regulační oscilaci
+- Všechny ostatní módy: obnovují `overvoltage_feed_in = ON` + `max_feed_in_power = 7600` + `PreventFeedback = 0`
+- Výsledek: **export = 0W** (ověřeno 12/12 vzorků minutového monitoringu)
 
 **Po vypnutí sauny / zastavení nabíjení auta** (cf3302d, 3326bb6):
 - `sauna_set_global` (sauna OFF) / `Kontrola nabíjení auta` (auto STOP) resetují `config.min_soc = 20` v globálu
@@ -246,6 +250,12 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 1. Patrony: `!nibeBlockedByMod` podmínka
 2. NIBE: `nibeBlockedByPatrony = nibeBlockedByMod`
 3. Finální mutex v actions array
+
+**PRIORITA TOPENÍ > NABÍJENÍ AUTA** (oprava 2026-02-26):
+- Platí POUZE pro topení (Vytápění/TUV), **NE pro chlazení** (letní režim)
+- Pokud NIBE potřebuje topit a auto nabíjí → akce `stop_auto_nabijeni` vypne `input_boolean.nastavuj_amperaci_chargeru_solar` + `input_boolean.nastavuj_amperaci_chargeru_grid`
+- `global.cerpadlo_topi` = `(isHeating || isTUV) && nibeBlkDisch` → blokuje auto v `manager-nabijeni-auta.json`
+- Manager (krok 3): kontroluje `cerpadlo_topi` → pokud true, auto STOP
 
 **NIBE** (`switch.nibe_topeni`, reg 47371):
 - Levné/střední hodiny → ON (pokud MOD = NIBE)
