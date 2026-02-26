@@ -77,12 +77,14 @@
             "sauna_state_changed",
             "sauna_set_global",
             "sauna_reset_minsoc",
-            "sauna_trigger_plan"
+            "sauna_trigger_plan",
+            "auto_reset_minsoc",
+            "auto_trigger_plan"
         ],
         "x": 14,
         "y": 599,
-        "w": 1006,
-        "h": 142
+        "w": 1036,
+        "h": 162
     },
     {
         "id": "22e7b3b8965c20db",
@@ -511,8 +513,8 @@
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
         "name": "Kontrola nabíjení auta",
-        "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\nreturn msg;",
-        "outputs": 1,
+        "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\n// Output 2: pouze při zastavení nabíjení → reset min_soc + přepočet plánu\nif (!isCharging) {\n    // Resetuj config.min_soc v globálu na výchozí hodnotu\n    var config = global.get(\"fve_config\") || {};\n    var defaultMinSoc = 20;\n    config.min_soc = defaultMinSoc;\n    global.set(\"fve_config\", config);\n    node.status({fill: \"green\", shape: \"dot\", text: \"Auto STOP → reset minSoc=\" + defaultMinSoc + \"%, retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -523,6 +525,9 @@
         "wires": [
             [
                 "dc8da09248ec1e29"
+            ],
+            [
+                "auto_reset_minsoc"
             ]
         ]
     },
@@ -790,6 +795,61 @@
         "libs": [],
         "x": 800,
         "y": 700,
+        "wires": [
+            [
+                "9333668b1d326a83"
+            ]
+        ]
+    },
+    {
+        "id": "auto_reset_minsoc",
+        "type": "api-call-service",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Reset min_soc = 20 (auto)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.min_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": 20}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 580,
+        "y": 680,
+        "wires": [
+            [
+                "auto_trigger_plan"
+            ]
+        ]
+    },
+    {
+        "id": "auto_trigger_plan",
+        "type": "function",
+        "z": "d86bb11fab512182",
+        "g": "66210c073baa5af0",
+        "name": "Trigger přepočet plánu (auto)",
+        "func": "// Po zastavení nabíjení auta okamžitě přepočítej plán\nnode.status({fill:\"blue\", shape:\"dot\", text:\"→ přepočet plánu\"});\nmsg.payload = Date.now();\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 680,
         "wires": [
             [
                 "9333668b1d326a83"
