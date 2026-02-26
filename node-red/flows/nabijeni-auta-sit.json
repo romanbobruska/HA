@@ -927,40 +927,16 @@
     },
     {
         "id": "b542785e15e32db7",
-        "type": "api-current-state",
+        "type": "function",
         "z": "a86ad952ad7756aa",
-        "name": "kWh <= 3 Kč?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
+        "name": "kWh <= prah_nizsi?",
+        "func": "var config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_nizsi || 3.0;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
         "outputs": 2,
-        "halt_if": "3",
-        "halt_if_type": "num",
-        "halt_if_compare": "lte",
-        "entity_id": "input_number.aktualni_cena_kwh",
-        "state_type": "num",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 780,
         "y": 40,
         "wires": [
@@ -974,40 +950,16 @@
     },
     {
         "id": "96f43cae137cc3b1",
-        "type": "api-current-state",
+        "type": "function",
         "z": "a86ad952ad7756aa",
-        "name": "kWh <= 4.30 Kč?",
-        "server": "c7421fe2.cb11c",
-        "version": 3,
+        "name": "kWh <= prah_vyssi?",
+        "func": "var config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_vyssi || 4.3;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
         "outputs": 2,
-        "halt_if": "4.3",
-        "halt_if_type": "num",
-        "halt_if_compare": "lte",
-        "entity_id": "input_number.aktualni_cena_kwh",
-        "state_type": "num",
-        "blockInputOverrides": true,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "entity"
-            }
-        ],
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "override_topic": false,
-        "state_location": "payload",
-        "override_payload": "msg",
-        "entity_location": "data",
-        "override_data": "msg",
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
         "x": 790,
         "y": 380,
         "wires": [
@@ -1048,7 +1000,7 @@
         "name": "⚡ Přetížení sítě",
         "server": "c7421fe2.cb11c",
         "version": 6,
-        "outputs": 2,
+        "outputs": 1,
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
@@ -1059,10 +1011,10 @@
         },
         "outputInitially": false,
         "stateType": "num",
-        "ifState": "18000",
-        "ifStateType": "num",
-        "ifStateOperator": "gt",
-        "outputOnlyOnStateChange": true,
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": false,
         "for": "0",
         "forType": "num",
         "forUnits": "minutes",
@@ -1080,6 +1032,26 @@
             }
         ],
         "x": 130,
+        "y": 440,
+        "wires": [
+            [
+                "pretizeni_check_func"
+            ]
+        ]
+    },
+    {
+        "id": "pretizeni_check_func",
+        "type": "function",
+        "z": "a86ad952ad7756aa",
+        "name": "Přetížení check",
+        "func": "var config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_pretizeni_w || 18000;\nvar spotreba = parseFloat(msg.payload);\nif (isNaN(spotreba)) { return [null, null]; }\nnode.status({fill: spotreba > prah ? 'red' : 'green', shape:'dot', text: Math.round(spotreba) + 'W (prah ' + prah + 'W)'});\nif (spotreba > prah) { return [msg, null]; }\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
         "y": 440,
         "wires": [
             [
