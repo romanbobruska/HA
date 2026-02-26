@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (02:30)
+> Poslední aktualizace: 2026-02-26 (02:50)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -133,12 +133,35 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta — 1 function node čtoucí z globálů |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.2 — prioritní logika níže |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
+
+### Manager nabíjení auta v2.2 — prioritní logika
+
+Rozhodovací pořadí (první splněná podmínka vyhraje):
+
+1. Auto nemá hlad → **STOP**
+2. Automatizace OFF → **STOP**
+3. `solarni_rezim ON` → **SLUNCE**
+4. `letni_rezim ON` → **SLUNCE**
+5. `zbyvajiciSolar > nabijeni_auta_zbytek_kwh (35 kWh)` → **STOP** (čekej na slunce dnes)
+6. `vyrobaDnes > nabijeni_auta_forecast_kwh (40 kWh)` → **SLUNCE**
+7. `batSoc > 95%` + přebytek `> 4000W` → **SLUNCE**
+8. `vyrobaZitra > 40 kWh` → **SLUNCE**
+9. Nic → **SÍŤ**
+
+**Klíčová proměnná**: `zbyvajiciSolar` = `config.zbyvajici_solar_dnes` = `input_number.zbyvajici_solarni_vyroba_dnes`
+= skutečná zbývající předpověď od teď do konce dne (v noci = celá předpověď; přes den = zbývající část)
+
+**Config parametry** (`fve_config`):
+- `nabijeni_auta_zbytek_kwh: 35` — primary threshold pro zbývající solár
+- `nabijeni_auta_forecast_kwh: 40` — sekundární threshold pro celkovou výrobu dne
+- `nabijeni_auta_min_soc: 95` — min SOC baterie pro solární větev s přebytkem
+- `nabijeni_auta_solar_w: 4000` — min aktuální přebytek (W) pro solární nabíjení
 
 ---
 
