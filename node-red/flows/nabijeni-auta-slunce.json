@@ -321,7 +321,7 @@
         "g": "68ded079ca35f344",
         "name": "",
         "pauseType": "delay",
-        "timeout": "30",
+        "timeout": "20",
         "timeoutUnits": "seconds",
         "rate": "1",
         "nbRateUnits": "1",
