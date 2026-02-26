@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (15:45)
+> Poslední aktualizace: 2026-02-26 (16:55)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -259,10 +259,19 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - `global.cerpadlo_topi` = `(isHeating || isTUV) && nibeBlkDisch` → blokuje auto v `manager-nabijeni-auta.json`
 - Manager (krok 3): kontroluje `cerpadlo_topi` → pokud true, auto STOP
 
-**NIBE** (`switch.nibe_topeni`, reg 47371):
-- **SOLAR OVERRIDE** (nejvyšší priorita v NIBE stromu): `needsHeat && prebytek >= MIN_PRETOK && batSoc >= MIN_SOC_PAT` → NIBE ON bez ohledu na cenovou optimalizaci, `nibeBlockDischarge = false`. Důvod: energii bychom jinak prodali za zlomek.
-- Levné/střední hodiny → ON (pokud MOD = NIBE)
-- Drahé hodiny → OFF (výjimka: indoor < nouzová teplota 18°C)
+**NIBE** (`switch.nibe_topeni`, reg 47371) — rozhodovací strom (v2, 2026-02-26):
+1. **Bezpečnostní kontroly** (vždy první): Grid Lost, Krb, Nádrž > MAX_TANK, Patrony blokují → NIBE OFF
+2. **needsHeat && !isDraha** (levná/střední hodina + potřeba topit):
+   - `prebytek >= SOLAR_OVERRIDE_W (8kW, config)` → NIBE ON, `nibeBlockDischarge = false` (velký solár stačí)
+   - `prebytek < SOLAR_OVERRIDE_W` → NIBE ON, `nibeBlockDischarge = true` (solár + síť, baterie se šetří)
+3. **needsHeat && isDraha && nibeOn** (drahá hodina + NIBE už běží):
+   - NIBE **pokračuje**, `nibeBlockDischarge = false` (solár + baterie kryjí spotřebu, nekupovat drahou energii ze sítě)
+4. **needsHeat && isDraha && !nibeOn** (drahá hodina + NIBE neběží):
+   - `prebytek >= SOLAR_OVERRIDE_W` → NIBE ON bez blokace (velký solár i v drahé hodině)
+   - `indoorTemp < safeTemp` → NIBE ON nouzově (teplota pod bezpečným prahem)
+   - Jinak: **čekat** na levnější hodiny nebo větší solár
+5. **!needsHeat** → NIBE OFF
+- Config: `topeni_solar_override_w = 8000` (W) — práh přebytku pro NIBE bez blokace vybíjení
 - COOLDOWN: min. 10 minut mezi přepnutími
 - OCHRANA: nevypnout pokud kompresor běží nebo čerpadlo není v Klidovém stavu
 
