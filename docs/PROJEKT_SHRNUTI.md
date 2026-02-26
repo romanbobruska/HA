@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (03:20)
+> Poslední aktualizace: 2026-02-26 (03:40)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -135,8 +135,8 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
-| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy **hardcoded** (4.30 Kč / 3 Kč) — původní uživatelská verze |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` |
+| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` (`nabijeni_auta_min_soc_slunce`) |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
@@ -157,10 +157,14 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 7. `vyrobaZitra > 40 kWh` → **SLUNCE**
 8. Nic → **SÍŤ**
 
-**Config parametry** (`fve_config`):
-- `nabijeni_auta_forecast_kwh: 40` — threshold pro celkovou výrobu dne (dnes/zítra)
-- `nabijeni_auta_min_soc: 95` — min SOC baterie pro solární větev s přebytkem
-- `nabijeni_auta_solar_w: 4000` — min aktuální přebytek (W) pro solární nabíjení
+**Config parametry** (`fve_config`) — kompletní seznam pro nabíjení auta:
+- `nabijeni_auta_forecast_kwh: 40` — threshold pro celkovou výrobu dne (manager)
+- `nabijeni_auta_min_soc: 95` — min SOC baterie pro solární větev s přebytkem (manager)
+- `nabijeni_auta_solar_w: 4000` — min aktuální přebytek W pro solární nabíjení (manager)
+- `nabijeni_auta_cena_prah_vyssi: 4.3` — max cena kWh pro nabíjení ze sítě, vyšší práh (nabijeni-sit)
+- `nabijeni_auta_cena_prah_nizsi: 3.0` — max cena kWh pro nabíjení ze sítě, nižší práh (nabijeni-sit)
+- `nabijeni_auta_min_soc_slunce: 85` — min SOC baterie pro povolení solárního nabíjení (nabijeni-slunce)
+- `nabijeni_auta_pretizeni_w: 18000` — práh přetížení sítě při nabíjení auta W (nabijeni-sit)
 
 **Odkud čte data**:
 - `vyrobaDnes` = `getFloat("input_number.predpoved_solarni_vyroby_dnes")` → přes HA websocket (vždy aktuální)
