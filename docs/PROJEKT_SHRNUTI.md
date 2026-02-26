@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (16:55)
+> Poslední aktualizace: 2026-02-26 (19:40)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -137,9 +137,33 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **SOC>95% drain mód** (+300W z baterie) |
-| `boiler.json` | Automatizace bojleru (Meross termostat) |
+| `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
+
+### Bojler (boiler.json) — rozhodovací logika (v2, 2026-02-26)
+
+**Meross termostat** `climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53`, cyklus 2 min.
+
+Rozhodovací pořadí (první splněná podmínka vyhraje):
+
+1. **Nejsme doma** → MIN (20°C)
+2. **Rychle teplá voda** (override) → MAX (69°C)
+3. **Povinný čas 17:00–19:30** + voda < 58°C:
+   - Zítra velký solár (`forecast_vyroba_zitra > FORECAST_THRESHOLD`) → jen **40°C** (`TEPLOTA_POVINNY_SOLAR`), zbytek dohřeje solár
+   - Zítra malý solár → VYSOKA (60°C)
+4. **NIBE topí** (`cerpadlo_topi`) + přebytek nestačí → MIN (bojler čeká, NIBE má přednost)
+5. **Baterie > 96%** + solární přebytek → MAX/VYSOKA dle velikosti přebytku
+6. **Baterie < 96%** + přebytek → VYSOKA
+7. **Levná elektřina** (ne v letním režimu) → STREDNI (58°C)
+8. Jinak → MIN
+
+**Guardy**:
+- Meross **unavailable** → přeskočit zápis (zabránit chybám)
+- Cílová teplota === aktuální nastavená → přeskočit zápis (zbytečné volání Meross API)
+- Ochrana přetížení sítě: `celkova_spotreba + SPOTREBA_BOJLER > SAFE_LIMIT` → neohřívat
+
+**Config** (flow proměnné): `TEPLOTA_MAX=69, VYSOKA=60, STREDNI=58, MIN=20, POVINNY_SOLAR=40, FORECAST_THRESHOLD=35000Wh, PRICE_LEVEL_LEVNY=6, CENA_KWH_LEVNA=2.6`
 
 ### Manager nabíjení auta v2.3 — prioritní logika
 
