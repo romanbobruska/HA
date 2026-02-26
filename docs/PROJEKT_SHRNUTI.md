@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (14:35)
+> Poslední aktualizace: 2026-02-26 (14:40)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -276,15 +276,14 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Podmínky (`patronyMohou`): SOC ≥ 95% + auto nenabíjí + `auto_ma_hlad=OFF` + nádrž < 50°C + solární přebytek
   - `auto_nabijeni_aktivni` (global) = wallbox fyzicky nabíjí (`Charging`) — blokuje patrony i při solárním nabíjení auta
   - `auto_ma_hlad` = ránní rychlé síťové nabíjení auta
-- Stupňování: přebytek ≥ 3kW=1f, ≥6kW=2f, ≥9kW=3f
-- MOD_PATRONY → NIBE blokováno (bezpečnost jističe)
-- **Korekce vybíjení baterie** — vzor z `nabijeni-auta-slunce.json`:
-  - **Hlavní loop (60s)**: zapne fáze dle přebytku **pouze pokud `actPat === 0`** (patrony neběží); pokud běží, jen zaznamená stav
-  - **5s smyčka** (`pat_korekce_func`): jakmile patrony běží, přebírá řízení:
-    - `batt_minus > 200W` → sníží o 1 fázi
-    - přebytek vzrostl → zvýší o 1 fázi
-    - přebytek klesl → sníží na to co přebytek dovolí
-    - vydíjení OK + přebytek OK → ustálený stav, nic nedělá
+- **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka přidá další
+- MOD_PATRONY se aktivuje POUZE pokud `needsHeat = false` (dům nepotřebuje topit)
+- **Korekce vybíjení baterie** (`pat_korekce_func`, 5s cyklus):
+  - **Hystereze**: `battMinus > DISCHARGE_LIMIT` musí trvat **3 po sobě jdoucí cykly** (15s) před snížením fáze
+  - `DISCHARGE_LIMIT = 500W` (config: `topeni_patron_discharge_limit_w`)
+  - `DISCHARGE_HYST = 3` (config: `topeni_patron_discharge_hyst`)
+  - přebytek vzrostl → zvýší o 1 fázi
+  - přebytek klesl → sníží na to co přebytek dovolí
   - Platí pro automatický i manuální mód
 
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
