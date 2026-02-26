@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (14:50)
+> Poslední aktualizace: 2026-02-26 (15:45)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -260,6 +260,7 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Manager (krok 3): kontroluje `cerpadlo_topi` → pokud true, auto STOP
 
 **NIBE** (`switch.nibe_topeni`, reg 47371):
+- **SOLAR OVERRIDE** (nejvyšší priorita v NIBE stromu): `needsHeat && prebytek >= MIN_PRETOK && batSoc >= MIN_SOC_PAT` → NIBE ON bez ohledu na cenovou optimalizaci, `nibeBlockDischarge = false`. Důvod: energii bychom jinak prodali za zlomek.
 - Levné/střední hodiny → ON (pokud MOD = NIBE)
 - Drahé hodiny → OFF (výjimka: indoor < nouzová teplota 18°C)
 - COOLDOWN: min. 10 minut mezi přepnutími
