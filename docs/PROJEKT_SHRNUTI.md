@@ -1,18 +1,19 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-26 (02:50)
+> Poslední aktualizace: 2026-02-26 (03:20)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
 > - Uživatel nevyžaduje potvrzení každého kroku — vše provádět bez čekání na Accept v IDE
-> - Pokud je otázka nutná, položit max. 1× po kompletní analýze
+> - Pokud je otázka nutná, položit max. 1× po kompletní analýze — ideálně více otázek v jednom promptu
 > - **Každých 5 promptů projít HA Core logy a opravit co se dá**
 > - **NIKDY nečíst HA entitu přes `api-current-state` pokud je dostupná v `fve_config` nebo `homeassistant.homeAssistant.states` globálu** — ale pouze pokud nepotřebuješ aktuální hodnotu přímo v daný okamžik; pokud ano, číst přes `api-current-state`
 > - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu — groups řadit vertikálně, mezera ~18px, x=14
 > - **Design pattern pro NR flows:** každý node MUSÍ být v group (`g` property). Nové nody vždy přidat do existující nebo nové group. Vzor layoutu: `fve-config.json`
 > - **Deploy = stop + start** (ne restart) — NR načte flows čistě bez banneru "modified externally"
 > - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
+> - **KRITICKÉ: Flows které vytvořil uživatel** (`nabijeni-auta-sit.json`, `nabijeni-auta-slunce.json`, `manager-nabijeni-auta.json` — původní spaghetti logika) **NESMÍM měnit bez explicitního souhlasu uživatele.** Před jakoukoliv změnou logiky v těchto flows se ZEPTAT.
 
 ---
 
@@ -133,14 +134,17 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.2 — prioritní logika níže |
-| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
+| `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy **hardcoded** (4.30 Kč / 3 Kč) — původní uživatelská verze |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
 
-### Manager nabíjení auta v2.2 — prioritní logika
+### Manager nabíjení auta v2.3 — prioritní logika
+
+**Implementace**: 1 `function` node (`main_logic_func`), 3 výstupy: [stop, slunce, síť].
+**DŮLEŽITÉ**: čte `vyrobaDnes`/`vyrobaZitra` **přímo z `homeassistant.homeAssistant.states`** (HA websocket store) — NE z `fve_config`, protože `fve_config.forecast_vyroba_dnes` je po restartu NR = 0.
 
 Rozhodovací pořadí (první splněná podmínka vyhraje):
 
@@ -148,20 +152,20 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 2. Automatizace OFF → **STOP**
 3. `solarni_rezim ON` → **SLUNCE**
 4. `letni_rezim ON` → **SLUNCE**
-5. `zbyvajiciSolar > nabijeni_auta_zbytek_kwh (35 kWh)` → **STOP** (čekej na slunce dnes)
-6. `vyrobaDnes > nabijeni_auta_forecast_kwh (40 kWh)` → **SLUNCE**
-7. `batSoc > 95%` + přebytek `> 4000W` → **SLUNCE**
-8. `vyrobaZitra > 40 kWh` → **SLUNCE**
-9. Nic → **SÍŤ**
-
-**Klíčová proměnná**: `zbyvajiciSolar` = `config.zbyvajici_solar_dnes` = `input_number.zbyvajici_solarni_vyroba_dnes`
-= skutečná zbývající předpověď od teď do konce dne (v noci = celá předpověď; přes den = zbývající část)
+5. `vyrobaDnes > nabijeni_auta_forecast_kwh (40 kWh)` → **SLUNCE**
+6. `batSoc > 95%` + přebytek `> 4000W` → **SLUNCE**
+7. `vyrobaZitra > 40 kWh` → **SLUNCE**
+8. Nic → **SÍŤ**
 
 **Config parametry** (`fve_config`):
-- `nabijeni_auta_zbytek_kwh: 35` — primary threshold pro zbývající solár
-- `nabijeni_auta_forecast_kwh: 40` — sekundární threshold pro celkovou výrobu dne
+- `nabijeni_auta_forecast_kwh: 40` — threshold pro celkovou výrobu dne (dnes/zítra)
 - `nabijeni_auta_min_soc: 95` — min SOC baterie pro solární větev s přebytkem
 - `nabijeni_auta_solar_w: 4000` — min aktuální přebytek (W) pro solární nabíjení
+
+**Odkud čte data**:
+- `vyrobaDnes` = `getFloat("input_number.predpoved_solarni_vyroby_dnes")` → přes HA websocket (vždy aktuální)
+- `vyrobaZitra` = `getFloat("input_number.predpoved_solarni_vyroby_zitra")` → přes HA websocket
+- `letniRezim` = `getBool("input_boolean.letni_rezim")` → přes HA websocket
 
 ---
 
