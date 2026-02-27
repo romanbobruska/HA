@@ -1,1 +1,13 @@
-potrebujeme flow nibe control? neni to obsolete? Pokud ano, odstran ho. 
+koukam do flow fve modes.
+
+- nodes Feed-in ON (restore), MaxFeedIn = 7600 (restore) a PreventFeedback=0 (MQTT) jsou mimo groupu.
+to je proti memu pozadavku
+
+- zda se mi to cele flow moc slozite, je to ruzne propojene, neda se na to koukat, je to neprehledne.
+
+Zanalyzuj, zda se to neda zjednodusit. Over, ze zbytecne nemas v tom flow nody, ktere bys mohl najit jinde - napr. z 
+globalnich nebo flow promennych.
+
+samozrejme SE ZACHOVANIM LOGIKY A POTAZMO FUNkCNOSTI.
+
+Proved kompletni refaktoring flow a uprav ho tak, aby bylo co nejjednodussi a hlavne stale fukcni.

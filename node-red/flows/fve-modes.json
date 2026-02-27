@@ -4,11 +4,11 @@
         "type": "tab",
         "label": "FVE Modes",
         "disabled": false,
-        "info": "Implementace jednotlivých módů FVE automatizace",
+        "info": "Implementace jednotlivých módů FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
         "env": []
     },
     {
-        "id": "432ef0e12c1fccd9",
+        "id": "mode_grp_normal",
         "type": "group",
         "z": "bb3654998a6bf514",
         "name": "Mód: NORMAL - Standardní provoz",
@@ -18,134 +18,26 @@
         },
         "nodes": [
             "8b55cfc5181b9eb7",
-            "670432a909cf3b26"
+            "670432a909cf3b26",
+            "lo_victron_normal",
+            "lo_log_normal"
         ],
         "x": 14,
         "y": 19,
-        "w": 332,
+        "w": 572,
         "h": 82
-    },
-    {
-        "id": "b49b9676d4dbdff1",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: ŠETŘIT - Minimální vybíjení baterie",
-        "style": {
-            "fill": "#f3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "ec611f6aba7d5c59",
-            "139cd450edbbde37"
-        ],
-        "x": 14,
-        "y": 299,
-        "w": 332,
-        "h": 82
-    },
-    {
-        "id": "2767feb260d6904c",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
-        "style": {
-            "fill": "#d3d3f3",
-            "label": true
-        },
-        "nodes": [
-            "1d98a0541716ce58",
-            "ebcf9e560f598c02"
-        ],
-        "x": 14,
-        "y": 519,
-        "w": 332,
-        "h": 82
-    },
-    {
-        "id": "7ce258bed914f262",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: PRODÁVAT - Prodej z baterie do sítě",
-        "style": {
-            "fill": "#f3d3d3",
-            "label": true
-        },
-        "nodes": [
-            "179ed150020d459c",
-            "68992d178ce105ed"
-        ],
-        "x": 14,
-        "y": 739,
-        "w": 332,
-        "h": 82
-    },
-    {
-        "id": "12a3795b66ec7d44",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: ZÁKAZ PŘETOKŮ - Při záporné ceně",
-        "style": {
-            "fill": "#e3d3f3",
-            "label": true
-        },
-        "nodes": [
-            "c682224043634fcd",
-            "75d1f9e77bc15e0a"
-        ],
-        "x": 14,
-        "y": 1019,
-        "w": 332,
-        "h": 82
-    },
-    {
-        "id": "0aa9e57f66f7d429",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: SOLÁRNÍ NABÍJENÍ - Levná energie + solar",
-        "style": {
-            "fill": "#fffacd",
-            "label": true
-        },
-        "nodes": [
-            "e93b8f3e662c6190",
-            "d27d27bacf98eec0"
-        ],
-        "x": 14,
-        "y": 1239,
-        "w": 332,
-        "h": 82
-    },
-    {
-        "id": "fve_modes_g_log",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Log",
-        "style": {
-            "fill": "#e8e8e8",
-            "label": true
-        },
-        "nodes": [
-            "fve_log_writer_001",
-            "fve_log_file_001",
-            "fve_log_rotate_inject",
-            "fve_log_rotate_func"
-        ],
-        "x": 1014,
-        "y": 779,
-        "w": 662,
-        "h": 182
     },
     {
         "id": "8b55cfc5181b9eb7",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
+        "g": "mode_grp_normal",
         "name": "← Normal",
         "links": [
             "f10a91fcb4de6bd3"
         ],
         "x": 55,
-        "y": 100,
+        "y": 60,
         "wires": [
             [
                 "670432a909cf3b26"
@@ -156,8 +48,8 @@
         "id": "670432a909cf3b26",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Normal Logic",
+        "g": "mode_grp_normal",
+        "name": "NORMAL Logic",
         "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: blockDischarge ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar blkText = blockDischarge ? \" (BAT LOCK)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + blkText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -165,34 +57,74 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 170,
-        "y": 100,
+        "x": 210,
+        "y": 60,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_normal",
+                "lo_log_normal"
             ]
         ]
+    },
+    {
+        "id": "lo_victron_normal",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_normal",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 47,
+        "wires": []
+    },
+    {
+        "id": "lo_log_normal",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_normal",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 73,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_setrit",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ŠETŘIT - Minimální vybíjení",
+        "style": {
+            "fill": "#f3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "ec611f6aba7d5c59",
+            "139cd450edbbde37",
+            "lo_victron_setrit",
+            "lo_log_setrit"
+        ],
+        "x": 14,
+        "y": 119,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "ec611f6aba7d5c59",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
+        "g": "mode_grp_setrit",
         "name": "← Šetřit",
         "links": [
             "7f051a6595e57c3e"
         ],
         "x": 55,
-        "y": 380,
+        "y": 160,
         "wires": [
             [
                 "139cd450edbbde37"
@@ -203,8 +135,8 @@
         "id": "139cd450edbbde37",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Šetřit Logic",
+        "g": "mode_grp_setrit",
+        "name": "ŠETŘIT Logic",
         "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"setrit\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Setrit\" + consText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"% (NO SCHED)\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"setrit\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -212,34 +144,74 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 170,
-        "y": 380,
+        "x": 210,
+        "y": 160,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_setrit",
+                "lo_log_setrit"
             ]
         ]
+    },
+    {
+        "id": "lo_victron_setrit",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_setrit",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 147,
+        "wires": []
+    },
+    {
+        "id": "lo_log_setrit",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_setrit",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 173,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_nabijet",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
+        "style": {
+            "fill": "#d3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "1d98a0541716ce58",
+            "ebcf9e560f598c02",
+            "lo_victron_nabijet",
+            "lo_log_nabijet"
+        ],
+        "x": 14,
+        "y": 219,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "1d98a0541716ce58",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
+        "g": "mode_grp_nabijet",
         "name": "← Nabíjet",
         "links": [
             "185f95d7c56fe799"
         ],
         "x": 55,
-        "y": 600,
+        "y": 260,
         "wires": [
             [
                 "ebcf9e560f598c02"
@@ -250,8 +222,8 @@
         "id": "ebcf9e560f598c02",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Nabíjet Logic",
+        "g": "mode_grp_nabijet",
+        "name": "NABÍJET ZE SÍTĚ Logic",
         "func": "var config = global.get(\"fve_config\") || {};\nvar minSoc = config.min_soc || 20;\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar SAFETY_MARGIN = config.safety_margin_w || 2000;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar plan = global.get(\"fve_plan\") || {};\nvar targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 100;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\n\nvar psp, statusText;\nif (cerpadloTopi || autoCharging) {\n    var safeImport = maxGridW - SAFETY_MARGIN;\n    psp = safeImport;\n    statusText = \"Nabijet+\" + consumers.join(\"+\") + \" | PSP:\" + safeImport + \"W | SOC:\" + currentSoc + \"%\";\n} else {\n    psp = -maxGridW;\n    statusText = \"Nabijet | SCHED:\" + targetSoc + \"% | PSP:-\" + maxGridW + \"W | SOC:\" + currentSoc + \"%\";\n}\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: targetSoc,\n    schedule_charge_duration: 86399,\n    schedule_charge_day: 7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"nabijet_ze_site\";\nnode.status({fill:\"blue\", shape:\"dot\", text: statusText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"nabijet_ze_site\",\n    battery_charging: true,\n    battery_charge_rate_w: 5000,\n    power_set_point: psp,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -259,34 +231,74 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 170,
-        "y": 600,
+        "x": 210,
+        "y": 260,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_nabijet",
+                "lo_log_nabijet"
             ]
         ]
+    },
+    {
+        "id": "lo_victron_nabijet",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_nabijet",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 247,
+        "wires": []
+    },
+    {
+        "id": "lo_log_nabijet",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_nabijet",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 273,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_prodavat",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: PRODÁVAT - Prodej do sítě",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "179ed150020d459c",
+            "68992d178ce105ed",
+            "lo_victron_prodavat",
+            "lo_log_prodavat"
+        ],
+        "x": 14,
+        "y": 319,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "179ed150020d459c",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
+        "g": "mode_grp_prodavat",
         "name": "← Prodávat",
         "links": [
             "a706b353f30c25d1"
         ],
         "x": 55,
-        "y": 840,
+        "y": 360,
         "wires": [
             [
                 "68992d178ce105ed"
@@ -297,8 +309,8 @@
         "id": "68992d178ce105ed",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "Prodávat Logic",
+        "g": "mode_grp_prodavat",
+        "name": "PRODÁVAT Logic",
         "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nvar effectiveMinSoc = Math.max(minSoc, currentSoc - 1);\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: effectiveMinSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: effectiveMinSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"prodavat\";\nmsg.feedInExcess = true;\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat (solar) | SOC: \" + currentSoc + \"% (min:\" + effectiveMinSoc + \"%)\"});\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -306,34 +318,74 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 180,
-        "y": 840,
+        "x": 210,
+        "y": 360,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_prodavat",
+                "lo_log_prodavat"
             ]
         ]
+    },
+    {
+        "id": "lo_victron_prodavat",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodavat",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 347,
+        "wires": []
+    },
+    {
+        "id": "lo_log_prodavat",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodavat",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 373,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_zakaz",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ZÁKAZ PŘETOKŮ - Záporná cena",
+        "style": {
+            "fill": "#e3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "c682224043634fcd",
+            "75d1f9e77bc15e0a",
+            "lo_victron_zakaz",
+            "lo_log_zakaz"
+        ],
+        "x": 14,
+        "y": 419,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "c682224043634fcd",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
+        "g": "mode_grp_zakaz",
         "name": "← Zákaz přetoků",
         "links": [
             "a86bc5233cfa0458"
         ],
         "x": 55,
-        "y": 1100,
+        "y": 460,
         "wires": [
             [
                 "75d1f9e77bc15e0a"
@@ -344,8 +396,8 @@
         "id": "75d1f9e77bc15e0a",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Zákaz přetoků Logic",
+        "g": "mode_grp_zakaz",
+        "name": "ZÁKAZ PŘETOKŮ Logic",
         "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\nmsg.victron = {\n    power_set_point: 100,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -353,32 +405,72 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 200,
-        "y": 1100,
+        "x": 210,
+        "y": 460,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_zakaz",
+                "lo_log_zakaz"
             ]
         ]
+    },
+    {
+        "id": "lo_victron_zakaz",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_zakaz",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 447,
+        "wires": []
+    },
+    {
+        "id": "lo_log_zakaz",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_zakaz",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 473,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_solar",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: SOLÁRNÍ NABÍJENÍ",
+        "style": {
+            "fill": "#fffacd",
+            "label": true
+        },
+        "nodes": [
+            "e93b8f3e662c6190",
+            "d27d27bacf98eec0",
+            "lo_victron_solar",
+            "lo_log_solar"
+        ],
+        "x": 14,
+        "y": 519,
+        "w": 572,
+        "h": 82
     },
     {
         "id": "e93b8f3e662c6190",
         "type": "link in",
         "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
+        "g": "mode_grp_solar",
         "name": "solar_charging",
         "links": [],
         "x": 55,
-        "y": 1320,
+        "y": 560,
         "wires": [
             [
                 "d27d27bacf98eec0"
@@ -389,8 +481,8 @@
         "id": "d27d27bacf98eec0",
         "type": "function",
         "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Solární nabíjení Logic",
+        "g": "mode_grp_solar",
+        "name": "SOLÁRNÍ NABÍJENÍ Logic",
         "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -398,108 +490,41 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 270,
-        "y": 1320,
+        "x": 210,
+        "y": 560,
         "wires": [
             [
-                "shared_psp",
-                "shared_sched_soc",
-                "shared_sched_dur",
-                "shared_sched_day",
-                "shared_max_disch",
-                "shared_max_charge",
-                "shared_min_soc",
-                "shared_feedin_func",
-                "shared_debug",
-                "fve_log_writer_001"
+                "lo_victron_solar",
+                "lo_log_solar"
             ]
         ]
     },
     {
-        "id": "fve_log_writer_001",
-        "type": "function",
+        "id": "lo_victron_solar",
+        "type": "link out",
         "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_log",
-        "name": "FVE Log Prep",
-        "func": "// FVE Logger - pripravi log radek\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\nvar pvState  = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar nibeState = global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\") || {};\n\nvar entry = {\n    ts: new Date().toISOString(),\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    prebytek_w: parseFloat(pvState.state) || 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    nibe: nibeState.state || \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nmsg.payload = JSON.stringify(entry);\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1380,
-        "y": 820,
-        "wires": [
-            [
-                "fve_log_file_001"
-            ]
-        ]
-    },
-    {
-        "id": "fve_log_file_001",
-        "type": "file",
-        "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_log",
-        "name": "FVE Log File",
-        "filename": "/homeassistant/fve_log.jsonl",
-        "filenameType": "str",
-        "appendNewline": true,
-        "createDir": false,
-        "overwriteFile": "false",
-        "encoding": "utf8",
-        "x": 1580,
-        "y": 820,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fve_log_rotate_inject",
-        "type": "inject",
-        "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_log",
-        "name": "Rotace logu (denně 04:00)",
-        "props": [
-            {
-                "p": "payload"
-            }
+        "g": "mode_grp_solar",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
         ],
-        "repeat": "",
-        "crontab": "0 4 * * *",
-        "once": false,
-        "onceDelay": 0,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 1180,
-        "y": 920,
-        "wires": [
-            [
-                "fve_log_rotate_func"
-            ]
-        ]
+        "x": 425,
+        "y": 547,
+        "wires": []
     },
     {
-        "id": "fve_log_rotate_func",
-        "type": "function",
+        "id": "lo_log_solar",
+        "type": "link out",
         "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_log",
-        "name": "Rotace (3 dny)",
-        "func": "// FVE Logger - rotace souboru (odstran zaznamy starsi 3 dny)\nvar fs = require('fs');\nvar logFile = \"/homeassistant/fve_log.jsonl\";\nvar cutoff = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();\n\ntry {\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try { return JSON.parse(l).ts >= cutoff; } catch(e) { return false; }\n    });\n    if (lines.length > 0) {\n        fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n        node.status({fill:\"green\", shape:\"dot\", text: lines.length + \" radku zachovano\"});\n    }\n} catch(e) {\n    node.warn(\"Rotace log error: \" + e.message);\n}\nreturn null;\n",
-        "outputs": 0,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [
-            {
-                "var": "fs",
-                "module": "fs"
-            }
+        "g": "mode_grp_solar",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
         ],
-        "x": 1430,
-        "y": 920,
+        "x": 425,
+        "y": 573,
         "wires": []
     },
     {
@@ -512,6 +537,8 @@
             "label": true
         },
         "nodes": [
+            "li_victron_shared",
+            "shared_fanout_func",
             "shared_psp",
             "shared_sched_soc",
             "shared_sched_dur",
@@ -519,20 +546,69 @@
             "shared_max_disch",
             "shared_max_charge",
             "shared_min_soc",
-            "shared_feedin_func",
+            "shared_debug",
             "shared_feedin_switch",
             "shared_feedin_on",
             "shared_feedin_off",
-            "shared_maxfeedin_restore",
-            "shared_maxfeedin_0",
+            "shared_maxfeedin_val",
             "shared_prevent_off",
-            "shared_prevent_on",
-            "shared_debug"
+            "shared_prevent_on"
         ],
-        "x": 254,
-        "y": 1599,
-        "w": 1002,
-        "h": 322
+        "x": 634,
+        "y": 19,
+        "w": 772,
+        "h": 382
+    },
+    {
+        "id": "li_victron_shared",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "← Všechny módy",
+        "links": [
+            "lo_victron_normal",
+            "lo_victron_setrit",
+            "lo_victron_nabijet",
+            "lo_victron_prodavat",
+            "lo_victron_zakaz",
+            "lo_victron_solar"
+        ],
+        "x": 675,
+        "y": 60,
+        "wires": [
+            [
+                "shared_fanout_func"
+            ]
+        ]
+    },
+    {
+        "id": "shared_fanout_func",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Victron Fan-out",
+        "func": "// Fan-out: přečte msg.victron a nastaví msg properties pro Mustache templates\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 815,
+        "y": 60,
+        "wires": [
+            [
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_switch",
+                "shared_debug"
+            ]
+        ]
     },
     {
         "id": "shared_psp",
@@ -560,8 +636,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 340,
-        "y": 1640,
+        "x": 1015,
+        "y": 60,
         "wires": [
             []
         ]
@@ -592,8 +668,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 560,
-        "y": 1640,
+        "x": 1215,
+        "y": 60,
         "wires": [
             []
         ]
@@ -624,8 +700,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 340,
-        "y": 1700,
+        "x": 1015,
+        "y": 110,
         "wires": [
             []
         ]
@@ -656,8 +732,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 560,
-        "y": 1700,
+        "x": 1215,
+        "y": 110,
         "wires": [
             []
         ]
@@ -688,8 +764,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 340,
-        "y": 1760,
+        "x": 1015,
+        "y": 160,
         "wires": [
             []
         ]
@@ -720,8 +796,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 560,
-        "y": 1760,
+        "x": 1215,
+        "y": 160,
         "wires": [
             []
         ]
@@ -752,32 +828,29 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 780,
-        "y": 1640,
+        "x": 1015,
+        "y": 210,
         "wires": [
             []
         ]
     },
     {
-        "id": "shared_feedin_func",
-        "type": "function",
+        "id": "shared_debug",
+        "type": "debug",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
-        "name": "Feed-in Control",
-        "func": "// Nastaví feed-in dle msg.victron.feedin_on\nvar v = msg.victron || {};\nvar feedinOn = v.feedin_on !== false; // default true\nvar maxFeedIn = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nvar preventFb = v.prevent_feedback || 0;\n\nmsg.feedin_action = feedinOn ? \"on\" : \"off\";\nmsg.feedin_max = maxFeedIn;\nmsg.feedin_prevent = preventFb;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 340,
-        "y": 1820,
-        "wires": [
-            [
-                "shared_feedin_switch"
-            ]
-        ]
+        "name": "Mode Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1215,
+        "y": 210,
+        "wires": []
     },
     {
         "id": "shared_feedin_switch",
@@ -785,34 +858,30 @@
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
         "name": "Feed-in?",
-        "property": "feedin_action",
+        "property": "feedin_on",
         "propertyType": "msg",
         "rules": [
             {
-                "t": "eq",
-                "v": "on",
-                "vt": "str"
+                "t": "true"
             },
             {
-                "t": "eq",
-                "v": "off",
-                "vt": "str"
+                "t": "false"
             }
         ],
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 530,
-        "y": 1820,
+        "x": 1015,
+        "y": 260,
         "wires": [
             [
                 "shared_feedin_on",
-                "shared_maxfeedin_restore",
+                "shared_maxfeedin_val",
                 "shared_prevent_off"
             ],
             [
                 "shared_feedin_off",
-                "shared_maxfeedin_0",
+                "shared_maxfeedin_val",
                 "shared_prevent_on"
             ]
         ]
@@ -843,8 +912,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 720,
-        "y": 1800,
+        "x": 1215,
+        "y": 245,
         "wires": [
             []
         ]
@@ -875,18 +944,18 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 720,
-        "y": 1860,
+        "x": 1215,
+        "y": 275,
         "wires": [
             []
         ]
     },
     {
-        "id": "shared_maxfeedin_restore",
+        "id": "shared_maxfeedin_val",
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
-        "name": "MaxFeedIn=7600",
+        "name": "MaxFeedIn",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -907,40 +976,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 920,
-        "y": 1800,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "shared_maxfeedin_0",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_shared_svc",
-        "name": "MaxFeedIn=0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_feed_in_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{feedin_max}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 920,
-        "y": 1860,
+        "x": 1415,
+        "y": 260,
         "wires": [
             []
         ]
@@ -950,7 +987,7 @@
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
-        "name": "PreventFeedback=0",
+        "name": "PreventFb=0",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -969,8 +1006,8 @@
         "blockInputOverrides": true,
         "domain": "mqtt",
         "service": "publish",
-        "x": 1120,
-        "y": 1800,
+        "x": 1415,
+        "y": 230,
         "wires": [
             []
         ]
@@ -980,7 +1017,7 @@
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
-        "name": "PreventFeedback=1",
+        "name": "PreventFb=1",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -999,28 +1036,140 @@
         "blockInputOverrides": true,
         "domain": "mqtt",
         "service": "publish",
-        "x": 1120,
-        "y": 1860,
+        "x": 1415,
+        "y": 290,
         "wires": [
             []
         ]
     },
     {
-        "id": "shared_debug",
-        "type": "debug",
+        "id": "fve_modes_g_log",
+        "type": "group",
         "z": "bb3654998a6bf514",
-        "g": "fve_modes_g_shared_svc",
-        "name": "Mode Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 780,
-        "y": 1760,
+        "name": "Log",
+        "style": {
+            "fill": "#e8e8e8",
+            "label": true
+        },
+        "nodes": [
+            "li_log_shared",
+            "fve_log_writer_001",
+            "fve_log_file_001",
+            "fve_log_rotate_inject",
+            "fve_log_rotate_func"
+        ],
+        "x": 634,
+        "y": 419,
+        "w": 662,
+        "h": 142
+    },
+    {
+        "id": "li_log_shared",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
+        "name": "← Log",
+        "links": [
+            "lo_log_normal",
+            "lo_log_setrit",
+            "lo_log_nabijet",
+            "lo_log_prodavat",
+            "lo_log_zakaz",
+            "lo_log_solar"
+        ],
+        "x": 675,
+        "y": 460,
+        "wires": [
+            [
+                "fve_log_writer_001"
+            ]
+        ]
+    },
+    {
+        "id": "fve_log_writer_001",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
+        "name": "FVE Log Prep",
+        "func": "// FVE Logger - pripravi log radek\nvar arbiter = global.get(\"energy_arbiter\") || {};\nvar config  = global.get(\"fve_config\") || {};\nvar status  = global.get(\"fve_status\") || {};\nvar pvState  = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar nibeState = global.get(\"homeassistant.homeAssistant.states['switch.nibe_topeni']\") || {};\n\nvar entry = {\n    ts: new Date().toISOString(),\n    mode: msg.mode || arbiter.mode || \"?\",\n    soc: status.battery_soc || 0,\n    prebytek_w: parseFloat(pvState.state) || 0,\n    block_discharge: msg.blockDischarge || false,\n    block_min_soc: msg.blockMinSoc || config.min_soc || 20,\n    nibe: nibeState.state || \"?\",\n    topeni_mod: global.get(\"topeni_mod\") || \"?\",\n    consumers: (arbiter.consumers_active || []).join(\"+\") || \"-\"\n};\n\nmsg.payload = JSON.stringify(entry);\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 855,
+        "y": 460,
+        "wires": [
+            [
+                "fve_log_file_001"
+            ]
+        ]
+    },
+    {
+        "id": "fve_log_file_001",
+        "type": "file",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
+        "name": "FVE Log File",
+        "filename": "/homeassistant/fve_log.jsonl",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "utf8",
+        "x": 1095,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fve_log_rotate_inject",
+        "type": "inject",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
+        "name": "Rotace logu (denně 04:00)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "0 4 * * *",
+        "once": false,
+        "onceDelay": 0,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 795,
+        "y": 520,
+        "wires": [
+            [
+                "fve_log_rotate_func"
+            ]
+        ]
+    },
+    {
+        "id": "fve_log_rotate_func",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_log",
+        "name": "Rotace (3 dny)",
+        "func": "// FVE Logger - rotace souboru (odstran zaznamy starsi 3 dny)\nvar fs = require('fs');\nvar logFile = \"/homeassistant/fve_log.jsonl\";\nvar cutoff = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();\n\ntry {\n    var existing = \"\";\n    try { existing = fs.readFileSync(logFile, \"utf8\"); } catch(e) {}\n    var lines = existing.split(\"\\n\").filter(function(l) {\n        if (!l.trim()) return false;\n        try { return JSON.parse(l).ts >= cutoff; } catch(e) { return false; }\n    });\n    if (lines.length > 0) {\n        fs.writeFileSync(logFile, lines.join(\"\\n\") + \"\\n\", \"utf8\");\n        node.status({fill:\"green\", shape:\"dot\", text: lines.length + \" radku zachovano\"});\n    }\n} catch(e) {\n    node.warn(\"Rotace log error: \" + e.message);\n}\nreturn null;\n",
+        "outputs": 0,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 1055,
+        "y": 520,
         "wires": []
     }
 ]
