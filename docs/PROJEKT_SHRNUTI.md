@@ -286,8 +286,8 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 **NIBE** (`switch.nibe_topeni`, reg 47371) — rozhodovací strom (v2.1, 2026-02-27):
 1. **Bezpečnostní kontroly** (vždy první): Grid Lost, Krb, Nádrž > MAX_TANK, Patrony blokují → NIBE OFF
 2. **needsHeat && !isDraha** (levná/střední hodina + potřeba topit):
-   - `bigSolarTomorrow && indoorTemp >= safeTemp` → NIBE OFF (šetříme pro solární hodiny)
-   - `cheaperAhead && indoorTemp >= safeTemp` → NIBE OFF (počkáme na levnější hodiny)
+   - `bigSolarTomorrow && indoorTemp >= safeTemp && !(isSolarHour && SOC > 90%)` → NIBE OFF (šetříme pro solární hodiny; výjimka: v solárních hodinách při SOC > 90% topit)
+   - `cheaperAhead && indoorTemp >= safeTemp && !(isSolarHour && SOC > 90%)` → NIBE OFF (počkáme; výjimka: v solárních hodinách při SOC > 90% topit hned)
    - `prebytek >= SOLAR_OVERRIDE_W (8kW, config)` → NIBE ON, `nibeBlockDischarge = false`
    - jinak → NIBE ON, `nibeBlockDischarge = (batSoc <= 90)` — SOC > 90%: topit ze soláru + baterie; SOC ≤ 90%: šetřit baterii
 3. **needsHeat && isDraha && nibeOn** (drahá hodina + NIBE už běží):
