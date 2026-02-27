@@ -289,7 +289,7 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
    - `bigSolarTomorrow && indoorTemp >= safeTemp` → NIBE OFF (šetříme pro solární hodiny)
    - `cheaperAhead && indoorTemp >= safeTemp` → NIBE OFF (počkáme na levnější hodiny)
    - `prebytek >= SOLAR_OVERRIDE_W (8kW, config)` → NIBE ON, `nibeBlockDischarge = false`
-   - jinak → NIBE ON, `nibeBlockDischarge = true` (solár + síť, baterie se šetří)
+   - jinak → NIBE ON, `nibeBlockDischarge = (batSoc <= 90)` — SOC > 90%: topit ze soláru + baterie; SOC ≤ 90%: šetřit baterii
 3. **needsHeat && isDraha && nibeOn** (drahá hodina + NIBE už běží):
    - NIBE **pokračuje**, `nibeBlockDischarge = false`
 4. **needsHeat && isDraha && !nibeOn** (drahá hodina + NIBE neběží):
