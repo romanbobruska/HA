@@ -322,13 +322,16 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
   - nebo `!needsHeat` AND patrony fyzicky běží — teplota dosažena, patrony dál ohřívají nádrž
 - MOD_PATRONY = NIBE blokováno. Patrony fyzicky čekají na SOC ≥ 95%.
 - `PATRON_TEMP_MARGIN = 0.3°C` — max rozdíl indoor vs target pro přepnutí na patrony v solárních hodinách
-- **Korekce vybíjení baterie** (`pat_korekce_func`, 5s cyklus):
-  - **Hystereze**: `battMinus > DISCHARGE_LIMIT` musí trvat **3 po sobě jdoucí cykly** (15s) před snížením fáze
+- **Korekce fází** (`pat_korekce_func`, 5s cyklus) — **reaktivní logika** (bez predikce availPat):
+  - **Snížení**: `battMinus > DISCHARGE_LIMIT` musí trvat **3 po sobě jdoucí cykly** (15s) → sníží o 1 fázi
+  - **Zvýšení**: `battMinus === 0` musí trvat **6 po sobě jdoucích cyklů** (30s stability) → přidá 1 fázi
+  - **Minimum 1 fáze**: korekce nikdy nesníží pod 1 fázi. Pod 1 fázi může vypnout jen hlavní loop (patronyMohou = false).
+  - **Cooldown**: po každé změně fáze 30s pauza (6 cyklů × 5s) — zamezuje oscilaci
+  - **Startup cooldown**: hlavní loop při zapnutí patrony (actPat=0→1) nastaví cooldown 30s pro korekci
   - `DISCHARGE_LIMIT = 200W` (config: `topeni_patron_discharge_limit_w`)
   - `DISCHARGE_HYST = 3` (config: `topeni_patron_discharge_hyst`)
-  - `availPat = prebytek - battMinus` — skutečný dostupný výkon bez vybíjení baterie
-  - přebytek vzrostl AND `battMinus ≤ DISCHARGE_LIMIT` → zvýší o 1 fázi
-  - přebytek klesl → sníží na to co přebytek dovolí
+  - `STABLE_CYCLES = 6` (config: `topeni_patron_stable_cycles`)
+  - `CHANGE_COOLDOWN = 6` (config: `topeni_patron_change_cooldown`)
   - Korekce kontroluje SOC ≥ 95% (resp. ultraSocPrah) — pod prahem vypne všechny fáze
   - Platí pro automatický i manuální mód
 
