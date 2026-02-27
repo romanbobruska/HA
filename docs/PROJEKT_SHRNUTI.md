@@ -69,62 +69,55 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 ## Node-RED Design Patterns (POVINNÉ DODRŽOVAT)
 
-### Layout pravidla — přesné hodnoty
+### Layout pravidla
 - **Každý node MUSÍ mít `g` property** → přiřazen do group. Žádné volné nody na canvasu.
-- **Groups se nesmí překrývat** — řadit výhradně vertikálně
-- **Group `x` = 14** (vždy, bez výjimky)
-- **Mezera mezi groups = 18px**: `next_group_y = prev_group_y + prev_group_h + 18`
-- **Group `y` první skupiny = 19**
+- **Groups se nesmí překrývat** — řadit vertikálně nebo vedle sebe
+- **Groupy musí být vizuálně u sebe** — žádné velké mezery, rozesety po stránce
+- **Mezera mezi groups ~100px vertikálně** (přibližně, ne přesná hodnota)
+- **Uživatel si layout upravuje ručně** — při programatických změnách zachovat jeho pozice x,y,w,h
 
-### Pozice nodů uvnitř group (ověřeno na fve-config + fve-modes)
-```
-node_y (řada 0) = group_y + 40
-node_y (řada 1) = group_y + 80
-node_y (řada 2) = group_y + 120
-```
-- **Node `x` offsety od group `x`**: col0=55 (link in), col1=175 (func), col2=395, col3=615, col4=835, col5=1055, col6=1275
-- Krok mezi sloupci = **220px**
-- Maximálně **2 řady** nodů na skupinu (výjimečně 3 pro složité skupiny)
-
-### Group rozměry — vzorec
-```
-group_h = 42 + rows * 40
-  → 1 řada: h = 82
-  → 2 řady: h = 122
-  → 3 řady: h = 162
-
-group_w = rightmost_col_offset + 160 (node_width) + 20 (margin)
-```
+### Wiring pravidla — KLÍČOVÉ
+- **Žádné crossing wires** — pokud flow vyžaduje sdílené cíle z více zdrojů, MUSÍ se použít **link-out / link-in** nody
+- **link-out/link-in** = neviditelné propojení mezi grupami (žádné drátky přes canvas)
+- **Přímé wiry jen UVNITŘ skupiny** — nikdy mezi skupinami (výjimka: trivální 1 wire k sousední grupě)
+- **Sdílená logika** (service calls, log) = vlastní grupa s link-in sbírající ze všech zdrojů
+- **Inject nody** volají pouze nody ve **své vlastní skupině**
+- **Žádné duplicitní triggery** na stejný cílový node
+- **Orphan nody** (bez vstupu, mimo trigger types) = přesunout do skupiny nebo odstranit
 
 ### Group struktura
 - Každá logická funkce = jedna group
 - Group `style.label = true`
-- Barvy: zelená=#d3f3d3 (Normal), žlutá=#f3f3d3 (Šetřit/upozornění), modrá=#d3e8f3 (HA sync), červená=#f3d3d3 (stav), šedá=#e8e8e8 (Log/pomocné)
+- Barvy: zelená=#d3f3d3 (Normal), žlutá=#f3f3d3 (Šetřit/upozornění), modrá=#d3d3f3 (Nabíjet), červená=#f3d3d3 (Prodávat), fialová=#e3d3f3 (Zákaz), žluto-krém=#fffacd (Solar), světle modrá=#dce6f0 (sdílené), šedá=#e8e8e8 (Log/pomocné)
 
-### Wiring pravidla
-- **Každý inject/trigger** volá pouze nody ve **své vlastní skupině** — žádné cross-group wire z triggeru
-- **Žádné duplicitní triggery** na stejný cílový node
-- **Orphan nody** (bez vstupu, mimo trigger types) = přesunout do skupiny nebo odstranit
-- Inject nody v různých skupinách se nesmí křížit
+### Vzor pro multi-mode flow (fve-modes.json v3)
+```
+Každý mód = malá grupa: [link-in] → [Logic func] → [link-out → Victron] + [link-out → Log]
+Sdílená grupa = [link-in ← všechny módy] → [Fan-out func] → [service calls + feed-in switch]
+Log grupa = [link-in ← všechny módy] → [Log Prep] → [File] + [rotace]
+
+→ 0 viditelných wirů mezi grupami = čistý, přehledný layout
+```
 
 ### Příklady správného layoutu
 ```
-# fve-config.json (1 řada na skupinu)
-Group "Konfigurace FVE"         x=14 y=19  w=702  h=82
-Group "Synchronizace s HA"      x=14 y=119 w=832  h=142
-Group "Aktuální ceny energie"   x=14 y=279 w=822  h=82
-Group "Aktuální stav systému"   x=14 y=379 w=832  h=82
-
-# fve-modes.json (refaktor v2 - každý mód = 2 nody: link-in + Logic func)
-Group "Mód: NORMAL"             x=14 y=19  w=332 h=82
-Group "Mód: ŠETŘIT"             x=14 y=299 w=332 h=82
-Group "Mód: NABÍJET"            x=14 y=519 w=332 h=82
-Group "Mód: PRODÁVAT"           x=14 y=739 w=332 h=82
-Group "Mód: ZÁKAZ PŘETOKŮ"     x=14 y=1019 w=332 h=82
-Group "Mód: SOLÁRNÍ NABÍJENÍ" x=14 y=1239 w=332 h=82
-Group "Victron Actions (sdílené)" x=254 y=1599 w=1002 h=322  ← 1 sada service call nodů pro všechny módy
-Group "Log"                       x=1014 y=779 w=662 h=182
+# fve-modes.json v3 (uživatelem schválený layout)
+# Módové grupy vlevo vertikálně, sdílené vpravo
+Group "Mód: NORMAL"             x=24  y=6    w=442  h=108  (link-in + Logic + 2× link-out)
+Group "Mód: ŠETŘIT"             x=24  y=106  w=442  h=108
+Group "Mód: NABÍJET ZE SÍTĚ"   x=24  y=206  w=442  h=108
+Group "Mód: PRODÁVAT"           x=24  y=306  w=442  h=108
+Group "Mód: ZÁKAZ PŘETOKŮ"     x=24  y=406  w=442  h=108
+Group "Mód: SOLÁRNÍ NABÍJENÍ"  x=24  y=506  w=442  h=108
+Group "Victron Actions"         x=34  y=639  w=932  h=442  (pod módy, link-in + fan-out + service calls)
+Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů, link-in + log prep + file + rotace)
 ```
+
+### Pravidlo synchronizace před úpravou
+- **VŽDY nejdřív načíst aktuální stav ze serveru** (`cat /addon_configs/a0d7b954_nodered/flows.json`)
+- Uživatel může kdykoli provést ruční deploy v Node-RED nebo změnu v HA
+- Před jakoukoliv programatickou úpravou flow: stáhnout ze serveru → porovnat s git → mergovat změny
+- **NIKDY nepřepisovat uživatelovy ruční změny** — vždy je zachovat jako základ
 
 ---
 
