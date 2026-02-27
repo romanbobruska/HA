@@ -315,14 +315,21 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Podmínky (`patronyMohou`): SOC ≥ 95% + auto nenabíjí + `auto_ma_hlad=OFF` + nádrž < 50°C + solární přebytek
   - `auto_nabijeni_aktivni` (global) = wallbox fyzicky nabíjí (`Charging`) — blokuje patrony i při solárním nabíjení auta
   - `auto_ma_hlad` = ránní rychlé síťové nabíjení auta
-- **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka přidá další
-- MOD_PATRONY se aktivuje POUZE pokud `needsHeat = false` (dům nepotřebuje topit)
+- **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka (5s) přidá další
+- **Hlavní loop vs korekce**: hlavní loop jen startuje (actPat=0→1) nebo stopuje patrony. Jakmile patrony běží, počet fází řídí korekční smyčka (5s).
+- **MOD_PATRONY** se aktivuje pokud:
+  - `isSolarHour` AND `tempGap ≤ PATRON_TEMP_MARGIN (0.3°C)` AND `needsHeat` — solární hodiny, dům blízko cíle
+  - nebo `!needsHeat` AND patrony fyzicky běží — teplota dosažena, patrony dál ohřívají nádrž
+- MOD_PATRONY = NIBE blokováno. Patrony fyzicky čekají na SOC ≥ 95%.
+- `PATRON_TEMP_MARGIN = 0.3°C` — max rozdíl indoor vs target pro přepnutí na patrony v solárních hodinách
 - **Korekce vybíjení baterie** (`pat_korekce_func`, 5s cyklus):
   - **Hystereze**: `battMinus > DISCHARGE_LIMIT` musí trvat **3 po sobě jdoucí cykly** (15s) před snížením fáze
-  - `DISCHARGE_LIMIT = 500W` (config: `topeni_patron_discharge_limit_w`)
+  - `DISCHARGE_LIMIT = 200W` (config: `topeni_patron_discharge_limit_w`)
   - `DISCHARGE_HYST = 3` (config: `topeni_patron_discharge_hyst`)
-  - přebytek vzrostl → zvýší o 1 fázi
+  - `availPat = prebytek - battMinus` — skutečný dostupný výkon bez vybíjení baterie
+  - přebytek vzrostl AND `battMinus ≤ DISCHARGE_LIMIT` → zvýší o 1 fázi
   - přebytek klesl → sníží na to co přebytek dovolí
+  - Korekce kontroluje SOC ≥ 95% (resp. ultraSocPrah) — pod prahem vypne všechny fáze
   - Platí pro automatický i manuální mód
 
 **Ultra levná energie** (v2.2, 2026-02-27):
