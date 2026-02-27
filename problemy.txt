@@ -1,5 +1,29 @@
-upravil jsem flows, jak se mi to libi. precti si to a pouc se z toho - zaroven uprav md file v ramci
-design patternu, aby sis tyto designove pozadavky zapamatoval.
+Podivej se na plan:
 
-Zaroven zkontroluj pozadavej, ze kdyz provedu rucni deploy v NR nebo jinou zmenu v HA, tak si nactes aktualni
-stav a teprove potom budes menit ted aktualni stav - nechci, abys mi prepisoval zmeny.
+Aktuální mód: 🟢 Normální | Blokace: NE
+
+Aktualizováno: 27.02.2026 20:05:38 | Síť: 🟢 OK
+
+Hodina	Mód	Důvod	Level	Cena nákup	Cena prodej
+20:00	🟢 Normální	drahá (Lv18≥eff11), vybíjení SOC 74% → ~69%	18	3.92 Kč	2.13 Kč
+21:00	🟢 Normální	drahá (Lv17≥eff11), vybíjení SOC 69% → ~64%	17	3.63 Kč	1.89 Kč
+22:00	🟢 Normální	drahá (Lv14≥eff11), vybíjení SOC 64% → ~59%	14	3.49 Kč	1.77 Kč
+23:00	🟢 Normální	drahá (Lv12≥eff11), vybíjení SOC 59% → ~54%	12	3.25 Kč	1.57 Kč
+00:00 +1	🟢 Normální	drahá (Lv16≥eff11), vybíjení SOC 54% → ~49%	16	3.28 Kč	1.60 Kč
+01:00 +1	🟢 Normální	drahá (Lv14≥eff11), vybíjení SOC 49% → ~44%	14	3.19 Kč	1.52 Kč
+02:00 +1	🟢 Normální	drahá (Lv12≥eff11), vybíjení SOC 44% → ~39%	12	3.11 Kč	1.46 Kč
+03:00 +1	🟡 Šetřit	Šetřím (Lv10<12), SOC 39%	10	3.03 Kč	1.39 Kč
+04:00 +1	🟡 Šetřit	Šetřím (Lv10<12), SOC 39%	10	3.03 Kč	1.39 Kč
+05:00 +1	🟢 Normální	střední (Lv11≥eff11), vybíjení SOC 39% → ~34%	11	3.04 Kč	1.40 Kč
+06:00 +1	🟢 Normální	drahá (Lv21≥eff11), vybíjení SOC 34% → ~29%	21	3.85 Kč	1.43 Kč
+07:00 +1	🟢 Normální	Solární+drahá (Lv13≥12), SOC 29% → ~33%	13	3.17 Kč	1.51 Kč
+
+Opravdu si myslis, ze tohle plati?
+
+07:00 +1	🟢 Normální	Solární+drahá (Lv13≥12), SOC 29% → ~33%	13	3.17 Kč	1.51 Kč
+
+Ja si myslim, ze tahle rano budeme radi, ze nam solarni vyroba bude stacit na spotrebu domu.
+
+Pouzil jsi solarni krivku pro Horousany, Praha vychod? 
+
+Zanalyzuj reseni a pripadne uprav plan - pokud je to dobre, tak mi dej vysvetleni, proc to tak je.
