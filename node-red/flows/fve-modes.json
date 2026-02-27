@@ -18,20 +18,12 @@
         },
         "nodes": [
             "8b55cfc5181b9eb7",
-            "670432a909cf3b26",
-            "a613f38251bd9e72",
-            "a3a0aeac0fbd3e99",
-            "246063034880ca80",
-            "702b8ef11c8c396c",
-            "3a87476592bc532f",
-            "84c9363491961540",
-            "max_charge_432ef0e1",
-            "blok_minsoc_normal_001"
+            "670432a909cf3b26"
         ],
         "x": 14,
         "y": 19,
-        "w": 1092,
-        "h": 262
+        "w": 332,
+        "h": 82
     },
     {
         "id": "b49b9676d4dbdff1",
@@ -44,19 +36,12 @@
         },
         "nodes": [
             "ec611f6aba7d5c59",
-            "139cd450edbbde37",
-            "17f08b797c764787",
-            "6e319aa534013af8",
-            "6d2e2f534bf9e398",
-            "906ece2b651b5a64",
-            "176abc1b75a23fb4",
-            "a1b2c3d4e5f60002",
-            "max_charge_b49b9676"
+            "139cd450edbbde37"
         ],
         "x": 14,
         "y": 299,
-        "w": 1272,
-        "h": 202
+        "w": 332,
+        "h": 82
     },
     {
         "id": "2767feb260d6904c",
@@ -69,19 +54,12 @@
         },
         "nodes": [
             "1d98a0541716ce58",
-            "ebcf9e560f598c02",
-            "11f838e573d16c9f",
-            "9cb53882cac5a9e2",
-            "cf1085b95156e10a",
-            "fc83a9cf78db7a97",
-            "6598def5a6b435a3",
-            "a1b2c3d4e5f60001",
-            "max_charge_2767feb2"
+            "ebcf9e560f598c02"
         ],
         "x": 14,
         "y": 519,
-        "w": 1292,
-        "h": 202
+        "w": 332,
+        "h": 82
     },
     {
         "id": "7ce258bed914f262",
@@ -94,19 +72,12 @@
         },
         "nodes": [
             "179ed150020d459c",
-            "68992d178ce105ed",
-            "52d5e20c2cede1f3",
-            "9c7ee4010ab79e98",
-            "53cd1a74ee8332ac",
-            "e12fd7a540b89f05",
-            "9bd525cb24b06701",
-            "86d71450ca024a50",
-            "max_charge_7ce258be"
+            "68992d178ce105ed"
         ],
         "x": 14,
         "y": 739,
-        "w": 982,
-        "h": 262
+        "w": 332,
+        "h": 82
     },
     {
         "id": "12a3795b66ec7d44",
@@ -119,22 +90,12 @@
         },
         "nodes": [
             "c682224043634fcd",
-            "75d1f9e77bc15e0a",
-            "21e5f570ecff7fb5",
-            "c900a46800b30516",
-            "8db6ee5fbb848b8b",
-            "zakaz_sched_soc_0",
-            "zakaz_sched_day_m7",
-            "zakaz_max_disch_0",
-            "max_charge_12a3795b",
-            "zakaz_feedin_off",
-            "zakaz_maxfeedin_0",
-            "zakaz_prevent_feedback_on"
+            "75d1f9e77bc15e0a"
         ],
         "x": 14,
         "y": 1019,
-        "w": 1132,
-        "h": 222
+        "w": 332,
+        "h": 82
     },
     {
         "id": "0aa9e57f66f7d429",
@@ -147,20 +108,12 @@
         },
         "nodes": [
             "e93b8f3e662c6190",
-            "d27d27bacf98eec0",
-            "solar_psp_node_001",
-            "solar_sched_soc_001",
-            "solar_sched_dur_001",
-            "solar_sched_day_001",
-            "solar_max_disch_001",
-            "max_charge_0aa9e57f",
-            "solar_debug_001",
-            "blok_minsoc_solar_001"
+            "d27d27bacf98eec0"
         ],
         "x": 14,
         "y": 1239,
-        "w": 1092,
-        "h": 322
+        "w": 332,
+        "h": 82
     },
     {
         "id": "fve_modes_g_log",
@@ -205,7 +158,7 @@
         "z": "bb3654998a6bf514",
         "g": "432ef0e12c1fccd9",
         "name": "Normal Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\n// Dynamický limit: baterie pokryje jen rozdíl mezi povinnou spotřebou a solární výrobou\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\n// NIBE: blokovat vybijeni jen kdyz NIBE bere ciste ze site (solar < 500W)\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nif (blockDischarge) {\n    // v18.8: BLOKACE - omezit vybíjení na povinnou spotřebu domu\n    // Baterie se pomalu vybíjí (1.3kW), velké spotřebiče jedou ze sítě\n    // BEZ scheduled charging - SOC pomalu klesá\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n} else {\n    // NORMÁLNÍ PROVOZ:\n    // Deaktivovat scheduled charging, ESS normálně řídí\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7\n    };\n}\nmsg.mode = \"normal\";\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(autoChargingFromGrid ? \"Auto(sit)\" : \"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" + \" + consumers.join(\"+\") : \"\";\nvar lockText = blockDischarge ? \" (BAT \" + dynamicDischargeW + \"W, PV:\" + Math.round(currentPvPower) + \"W)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + \" | SOC: \" + currentSoc + \"%\" + lockText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\n// Blokace vybijeni: pouzij min_soc=currentSoc (ne MaxDischargePower=0 ktere skrtí solar prutok)\n// MaxDischargePower=-1 vzdy (bez limitu na DC discharge)\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = blockDischarge ? Math.min(100, currentSoc + 1) : minSoc;\nmsg.maxChargePower = -1; // Nabijeni ze solaru vzdy povoleno\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: blockDischarge ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar blkText = blockDischarge ? \" (BAT LOCK)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + blkText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -216,198 +169,18 @@
         "y": 100,
         "wires": [
             [
-                "a613f38251bd9e72",
-                "a3a0aeac0fbd3e99",
-                "246063034880ca80",
-                "702b8ef11c8c396c",
-                "3a87476592bc532f",
-                "84c9363491961540",
-                "max_charge_432ef0e1",
-                "blok_minsoc_normal_001",
-                "restore_feedin_on",
-                "restore_maxfeedin",
-                "restore_prevent_feedback_off",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
         ]
-    },
-    {
-        "id": "a613f38251bd9e72",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Set Power Point = 0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 360,
-        "y": 60,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "a3a0aeac0fbd3e99",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Schedule Duration (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_duration}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 620,
-        "y": 60,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "246063034880ca80",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Schedule SOC (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_soc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 930,
-        "y": 60,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "702b8ef11c8c396c",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Schedule Day (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_day}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 570,
-        "y": 140,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "3a87476592bc532f",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "MaxDischargePower (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{maxDischargePower}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 950,
-        "y": 180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "84c9363491961540",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "Normal Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 280,
-        "y": 160,
-        "wires": []
     },
     {
         "id": "ec611f6aba7d5c59",
@@ -432,7 +205,7 @@
         "z": "bb3654998a6bf514",
         "g": "b49b9676d4dbdff1",
         "name": "Šetřit Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\n// ŠETŘIT: Solar pokrývá spotřebu, přebytek do baterie, baterie se NEVYBÍJÍ\n// power_set_point = 0 → ESS normálně řídí (solar → spotřeba, přebytek → baterie)\n// BEZ scheduled charging! (scheduled charging způsobovalo nabíjení ze sítě)\n// MaxDischargePower = 0 → baterie se nesmí vybíjet (hardcoded v service call node)\n// min_soc = currentSoc → ESS nebude vybíjet pod aktuální SOC\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7\n};\nmsg.mode = \"setrit\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Setrit\" + consText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"% (NO SCHED)\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"setrit\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"setrit\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Setrit\" + consText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"% (NO SCHED)\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"setrit\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -443,196 +216,17 @@
         "y": 380,
         "wires": [
             [
-                "17f08b797c764787",
-                "6e319aa534013af8",
-                "6d2e2f534bf9e398",
-                "906ece2b651b5a64",
-                "a1b2c3d4e5f60002",
-                "176abc1b75a23fb4",
-                "max_charge_b49b9676",
-                "restore_feedin_on",
-                "restore_maxfeedin",
-                "restore_prevent_feedback_off",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
-        ]
-    },
-    {
-        "id": "17f08b797c764787",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Set Power Point (šetřit)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.power_set_point}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 370,
-        "y": 340,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6e319aa534013af8",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Schedule SOC (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_soc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 650,
-        "y": 340,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6d2e2f534bf9e398",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Schedule Duration (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_duration}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 600,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "906ece2b651b5a64",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Schedule Day (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_day}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 850,
-        "y": 400,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "176abc1b75a23fb4",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "Šetřit Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 270,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "a1b2c3d4e5f60002",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "MaxDischargePower = 0 (šetřit)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 1130,
-        "y": 400,
-        "wires": [
-            []
         ]
     },
     {
@@ -658,7 +252,7 @@
         "z": "bb3654998a6bf514",
         "g": "2767feb260d6904c",
         "name": "Nabíjet Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar minSoc = config.min_soc || 20;\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar SAFETY_MARGIN = config.safety_margin_w || 2000;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar plan = global.get(\"fve_plan\") || {};\nvar targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 100;\n// Pokud SOC už dosáhl cíle, neměli bychom být v tomto módu (Kontrola podmínek přepne)\n// Ale pro jistotu: schedule_charge_soc = targetSoc\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\n\nif (cerpadloTopi || autoCharging) {\n    // HIGH-PRIORITY CONSUMER ACTIVE\n    // Scheduled charging ON, ale s omezeným importem (safety margin)\n    var safeImport = maxGridW - SAFETY_MARGIN;\n    msg.victron = {\n        power_set_point: safeImport,\n        schedule_charge_soc: targetSoc,\n        schedule_charge_duration: 86399,\n        schedule_charge_day: 7,\n        min_soc: minSoc\n    };\n    node.status({fill:\"blue\", shape:\"dot\",\n        text:\"Nabijet+\" + consumers.join(\"+\") + \" | PSP:\" + safeImport + \"W | SOC:\" + currentSoc + \"%\"});\n} else {\n    // NO HIGH-PRIORITY CONSUMER\n    msg.victron = {\n        power_set_point: -maxGridW,\n        schedule_charge_soc: targetSoc,\n        schedule_charge_duration: 86399,\n        schedule_charge_day: 7,\n        min_soc: minSoc\n    };\n    node.status({fill:\"blue\", shape:\"dot\",\n        text:\"Nabijet | SCHED:\" + targetSoc + \"% | PSP:-\" + maxGridW + \"W | SOC:\" + currentSoc + \"%\"});\n}\nmsg.mode = \"nabijet_ze_site\";\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"nabijet_ze_site\",\n    battery_charging: true,\n    scheduled_charging: true,\n    power_set_point: msg.victron.power_set_point,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar minSoc = config.min_soc || 20;\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar SAFETY_MARGIN = config.safety_margin_w || 2000;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar plan = global.get(\"fve_plan\") || {};\nvar targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 100;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\n\nvar psp, statusText;\nif (cerpadloTopi || autoCharging) {\n    var safeImport = maxGridW - SAFETY_MARGIN;\n    psp = safeImport;\n    statusText = \"Nabijet+\" + consumers.join(\"+\") + \" | PSP:\" + safeImport + \"W | SOC:\" + currentSoc + \"%\";\n} else {\n    psp = -maxGridW;\n    statusText = \"Nabijet | SCHED:\" + targetSoc + \"% | PSP:-\" + maxGridW + \"W | SOC:\" + currentSoc + \"%\";\n}\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: targetSoc,\n    schedule_charge_duration: 86399,\n    schedule_charge_day: 7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"nabijet_ze_site\";\nnode.status({fill:\"blue\", shape:\"dot\", text: statusText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"nabijet_ze_site\",\n    battery_charging: true,\n    battery_charge_rate_w: 5000,\n    power_set_point: psp,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -669,196 +263,17 @@
         "y": 600,
         "wires": [
             [
-                "11f838e573d16c9f",
-                "9cb53882cac5a9e2",
-                "cf1085b95156e10a",
-                "fc83a9cf78db7a97",
-                "a1b2c3d4e5f60001",
-                "6598def5a6b435a3",
-                "max_charge_2767feb2",
-                "restore_feedin_on",
-                "restore_maxfeedin",
-                "restore_prevent_feedback_off",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
-        ]
-    },
-    {
-        "id": "11f838e573d16c9f",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Set Power Point (nabíjení)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.power_set_point}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 370,
-        "y": 560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9cb53882cac5a9e2",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Schedule SOC (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_soc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 640,
-        "y": 560,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "cf1085b95156e10a",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Schedule Duration (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_duration}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 600,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "fc83a9cf78db7a97",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Schedule Day (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_day}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 850,
-        "y": 620,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "6598def5a6b435a3",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "Nabíjet Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 280,
-        "y": 660,
-        "wires": []
-    },
-    {
-        "id": "a1b2c3d4e5f60001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "MaxDischargePower = 0 (nabíjení)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 1140,
-        "y": 620,
-        "wires": [
-            []
         ]
     },
     {
@@ -884,7 +299,7 @@
         "z": "bb3654998a6bf514",
         "g": "7ce258bed914f262",
         "name": "Prodávat Logic",
-        "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\n// Při nabíjení auta neprodáváme z baterie\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\n// v18.15: Prodej = pouze solarni prebytky, BEZ vybijeni baterie\n    // power_set_point: 0 = Victron ESS automaticky posila prebytky do site\n    // min_soc: currentSoc = baterie se nesmi vybijet pod aktualni SOC\n    var effectiveMinSoc = Math.max(minSoc, currentSoc - 1);\n    msg.victron = { power_set_point: 0, min_soc: effectiveMinSoc };\n    msg.feedInExcess = true;\nmsg.mode = \"prodavat\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat (solar) | SOC: \" + currentSoc + \"% (min:\" + effectiveMinSoc + \"%)\"});\n\n// === ENERGY ARBITER ===\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\n// v18.15: Povoleno nabijeni ze solaru (baterie se muze dobit na 100%)\n    msg.maxChargePower = -1;\n\nreturn msg;",
+        "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabíjí\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nvar effectiveMinSoc = Math.max(minSoc, currentSoc - 1);\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: effectiveMinSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: effectiveMinSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"prodavat\";\nmsg.feedInExcess = true;\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prodávat (solar) | SOC: \" + currentSoc + \"% (min:\" + effectiveMinSoc + \"%)\"});\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -895,197 +310,18 @@
         "y": 840,
         "wires": [
             [
-                "52d5e20c2cede1f3",
-                "9c7ee4010ab79e98",
-                "53cd1a74ee8332ac",
-                "e12fd7a540b89f05",
-                "9bd525cb24b06701",
-                "86d71450ca024a50",
-                "max_charge_7ce258be",
-                "restore_feedin_on",
-                "restore_maxfeedin",
-                "restore_prevent_feedback_off",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
         ]
-    },
-    {
-        "id": "52d5e20c2cede1f3",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "Set Power Point (prodej)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.power_set_point}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 370,
-        "y": 780,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9c7ee4010ab79e98",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "Schedule Duration = 0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 640,
-        "y": 780,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "53cd1a74ee8332ac",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "ScheduledSoc = 0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 410,
-        "y": 840,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "e12fd7a540b89f05",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "Schedule Day = -7",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -7}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 630,
-        "y": 840,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "9bd525cb24b06701",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "MaxDischargePower = -1",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 830,
-        "y": 900,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "86d71450ca024a50",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "Prodávat Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 280,
-        "y": 900,
-        "wires": []
     },
     {
         "id": "c682224043634fcd",
@@ -1110,7 +346,7 @@
         "z": "bb3654998a6bf514",
         "g": "12a3795b66ec7d44",
         "name": "Zákaz přetoků Logic",
-        "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\n// power_set_point = 100W (mirny odber ze site) aby ESS regulacni smycka\n// neoscilovala kolem nuly a nepoustela prebytek do site (spiky az -177W)\nmsg.victron = { power_set_point: 100, min_soc: minSoc };\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n}\n\n// === ENERGY ARBITER ===\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: false,\n    consumers_active: consumers,\n    ultra_levna: ultraLevna,\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "func": "var saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\nmsg.victron = {\n    power_set_point: 100,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: minSoc,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1121,196 +357,17 @@
         "y": 1100,
         "wires": [
             [
-                "21e5f570ecff7fb5",
-                "c900a46800b30516",
-                "zakaz_sched_soc_0",
-                "zakaz_sched_day_m7",
-                "zakaz_max_disch_0",
-                "8db6ee5fbb848b8b",
-                "max_charge_12a3795b",
-                "zakaz_feedin_off",
-                "zakaz_maxfeedin_0",
-                "zakaz_prevent_feedback_on",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
-        ]
-    },
-    {
-        "id": "21e5f570ecff7fb5",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Set Power Point = 100 (zákaz)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 100}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 480,
-        "y": 1060,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "c900a46800b30516",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Schedule Duration = 0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 840,
-        "y": 1060,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "8db6ee5fbb848b8b",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Zákaz Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 460,
-        "y": 1120,
-        "wires": []
-    },
-    {
-        "id": "zakaz_sched_soc_0",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Schedule SOC = 0",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 480,
-        "y": 1120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "zakaz_sched_day_m7",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Schedule Day = -7",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -7}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 720,
-        "y": 1120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "zakaz_max_disch_0",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "MaxDischargePower = -1 (zákaz)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 980,
-        "y": 1120,
-        "wires": [
-            []
         ]
     },
     {
@@ -1334,7 +391,7 @@
         "z": "bb3654998a6bf514",
         "g": "0aa9e57f66f7d429",
         "name": "Solární nabíjení Logic",
-        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: SOLAR_CHARGING: baterie se normalne nesmi blokovat\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7\n};\n\nmsg.mode = \"solar_charging\";\n\n// v19: NIBE blokuje vybijeni jen kdyz bere ciste ze site (solar < 500W)\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = blockDischarge ? Math.min(100, currentSoc + 1) : minSoc;\n\nreturn msg;\n",
+        "func": "var config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar⚡\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -1345,439 +402,17 @@
         "y": 1320,
         "wires": [
             [
-                "solar_psp_node_001",
-                "solar_sched_soc_001",
-                "solar_sched_dur_001",
-                "solar_sched_day_001",
-                "solar_max_disch_001",
-                "max_charge_0aa9e57f",
-                "solar_debug_001",
-                "blok_minsoc_solar_001",
-                "restore_feedin_on",
-                "restore_maxfeedin",
-                "restore_prevent_feedback_off",
+                "shared_psp",
+                "shared_sched_soc",
+                "shared_sched_dur",
+                "shared_sched_day",
+                "shared_max_disch",
+                "shared_max_charge",
+                "shared_min_soc",
+                "shared_feedin_func",
+                "shared_debug",
                 "fve_log_writer_001"
             ]
-        ]
-    },
-    {
-        "id": "solar_psp_node_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Set Power Point = 0 (solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.power_set_point"
-        ],
-        "labelId": [],
-        "data": "{\"value\": 0}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 540,
-        "y": 1280,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "solar_sched_soc_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Schedule SOC = locked (solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.scheduled_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_soc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 490,
-        "y": 1520,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "solar_sched_dur_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Schedule Duration (dynamic solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_duration"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_duration}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 760,
-        "y": 1360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "solar_sched_day_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Schedule Day (dynamic solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.schedule_charge_day"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{victron.schedule_charge_day}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 610,
-        "y": 1320,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "solar_max_disch_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "MaxDischargePower = 0 (solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_discharge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 870,
-        "y": 1420,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_432ef0e1",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "MaxChargePower (dynamic)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{maxChargePower}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 940,
-        "y": 240,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_b49b9676",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "b49b9676d4dbdff1",
-        "name": "MaxChargePower = 0 (šetřit)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 1100,
-        "y": 460,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_2767feb2",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "2767feb260d6904c",
-        "name": "MaxChargePower = -1 (nabíjení)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 1090,
-        "y": 680,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_7ce258be",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "7ce258bed914f262",
-        "name": "MaxChargePower (dynamic prodej)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{maxChargePower}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 830,
-        "y": 960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_12a3795b",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "MaxChargePower = -1 (zákaz)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 940,
-        "y": 1180,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "max_charge_0aa9e57f",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "MaxChargePower = -1 (solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.max_charge_power"
-        ],
-        "labelId": [],
-        "data": "{\"value\": -1}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "domain": "number",
-        "service": "set_value",
-        "x": 950,
-        "y": 1480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "solar_debug_001",
-        "type": "debug",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "Solar Debug",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 510,
-        "y": 1460,
-        "wires": []
-    },
-    {
-        "id": "blok_minsoc_normal_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "432ef0e12c1fccd9",
-        "name": "MinSoc blokace (Normal)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.min_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{blockMinSoc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 930,
-        "y": 120,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "blok_minsoc_solar_001",
-        "type": "api-call-service",
-        "z": "bb3654998a6bf514",
-        "g": "0aa9e57f66f7d429",
-        "name": "MinSoc blokace (Solar)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "number.set_value",
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "number.min_soc"
-        ],
-        "labelId": [],
-        "data": "{\"value\": {{blockMinSoc}}}",
-        "dataType": "json",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "number",
-        "service": "set_value",
-        "x": 950,
-        "y": 1280,
-        "wires": [
-            []
         ]
     },
     {
@@ -1868,43 +503,43 @@
         "wires": []
     },
     {
-        "id": "zakaz_feedin_off",
-        "type": "api-call-service",
+        "id": "fve_modes_g_shared_svc",
+        "type": "group",
         "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "Feed-in OFF (zákaz)",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "switch.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "switch.overvoltage_feed_in"
+        "name": "Victron Actions (sdílené)",
+        "style": {
+            "fill": "#dce6f0",
+            "label": true
+        },
+        "nodes": [
+            "shared_psp",
+            "shared_sched_soc",
+            "shared_sched_dur",
+            "shared_sched_day",
+            "shared_max_disch",
+            "shared_max_charge",
+            "shared_min_soc",
+            "shared_feedin_func",
+            "shared_feedin_switch",
+            "shared_feedin_on",
+            "shared_feedin_off",
+            "shared_maxfeedin_restore",
+            "shared_maxfeedin_0",
+            "shared_prevent_off",
+            "shared_prevent_on",
+            "shared_debug"
         ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "switch",
-        "service": "turn_off",
-        "x": 480,
-        "y": 1180,
-        "wires": [
-            []
-        ]
+        "x": 254,
+        "y": 1599,
+        "w": 1002,
+        "h": 322
     },
     {
-        "id": "zakaz_maxfeedin_0",
+        "id": "shared_psp",
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
-        "g": "12a3795b66ec7d44",
-        "name": "MaxFeedIn = 0 (zákaz)",
+        "g": "fve_modes_g_shared_svc",
+        "name": "PowerSetPoint",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -1913,10 +548,10 @@
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "number.max_feed_in_power"
+            "number.power_set_point"
         ],
         "labelId": [],
-        "data": "{\"value\": 0}",
+        "data": "{\"value\": {{victron.power_set_point}}}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
@@ -1925,17 +560,269 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 720,
-        "y": 1180,
+        "x": 340,
+        "y": 1640,
         "wires": [
             []
         ]
     },
     {
-        "id": "restore_feedin_on",
+        "id": "shared_sched_soc",
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
-        "name": "Feed-in ON (restore)",
+        "g": "fve_modes_g_shared_svc",
+        "name": "ScheduleSOC",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.scheduled_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.schedule_soc}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 560,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_sched_dur",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "ScheduleDuration",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_duration"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.schedule_charge_duration}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 340,
+        "y": 1700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_sched_day",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "ScheduleDay",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.schedule_charge_day"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.schedule_charge_day}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 560,
+        "y": 1700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_max_disch",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "MaxDischargePower",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_discharge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.max_discharge_power}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 340,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_max_charge",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "MaxChargePower",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.max_charge_power}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 560,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_min_soc",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "MinSoc",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.min_soc"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{victron.blockMinSoc}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 780,
+        "y": 1640,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_feedin_func",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Feed-in Control",
+        "func": "// Nastaví feed-in dle msg.victron.feedin_on\nvar v = msg.victron || {};\nvar feedinOn = v.feedin_on !== false; // default true\nvar maxFeedIn = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nvar preventFb = v.prevent_feedback || 0;\n\nmsg.feedin_action = feedinOn ? \"on\" : \"off\";\nmsg.feedin_max = maxFeedIn;\nmsg.feedin_prevent = preventFb;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 1820,
+        "wires": [
+            [
+                "shared_feedin_switch"
+            ]
+        ]
+    },
+    {
+        "id": "shared_feedin_switch",
+        "type": "switch",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Feed-in?",
+        "property": "feedin_action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 530,
+        "y": 1820,
+        "wires": [
+            [
+                "shared_feedin_on",
+                "shared_maxfeedin_restore",
+                "shared_prevent_off"
+            ],
+            [
+                "shared_feedin_off",
+                "shared_maxfeedin_0",
+                "shared_prevent_on"
+            ]
+        ]
+    },
+    {
+        "id": "shared_feedin_on",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Feed-in ON",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -1956,17 +843,50 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 1300,
-        "y": 60,
+        "x": 720,
+        "y": 1800,
         "wires": [
             []
         ]
     },
     {
-        "id": "restore_maxfeedin",
+        "id": "shared_feedin_off",
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
-        "name": "MaxFeedIn = 7600 (restore)",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Feed-in OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.overvoltage_feed_in"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 720,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_maxfeedin_restore",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "MaxFeedIn=7600",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -1978,7 +898,7 @@
             "number.max_feed_in_power"
         ],
         "labelId": [],
-        "data": "{\"value\": 7600}",
+        "data": "{\"value\": {{feedin_max}}}",
         "dataType": "json",
         "mergeContext": "",
         "mustacheAltTags": false,
@@ -1987,17 +907,50 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 1300,
-        "y": 100,
+        "x": 920,
+        "y": 1800,
         "wires": [
             []
         ]
     },
     {
-        "id": "restore_prevent_feedback_off",
+        "id": "shared_maxfeedin_0",
         "type": "api-call-service",
         "z": "bb3654998a6bf514",
-        "name": "PreventFeedback=0 (MQTT)",
+        "g": "fve_modes_g_shared_svc",
+        "name": "MaxFeedIn=0",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_feed_in_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{feedin_max}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 920,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_prevent_off",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "PreventFeedback=0",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -2016,10 +969,58 @@
         "blockInputOverrides": true,
         "domain": "mqtt",
         "service": "publish",
-        "x": 1100,
-        "y": 140,
+        "x": 1120,
+        "y": 1800,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "shared_prevent_on",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "PreventFeedback=1",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "mqtt.publish",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "{\"topic\": \"victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback\", \"payload\": \"{\\\"value\\\": 1}\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "mqtt",
+        "service": "publish",
+        "x": 1120,
+        "y": 1860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "shared_debug",
+        "type": "debug",
+        "z": "bb3654998a6bf514",
+        "g": "fve_modes_g_shared_svc",
+        "name": "Mode Debug",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 1760,
+        "wires": []
     }
 ]
