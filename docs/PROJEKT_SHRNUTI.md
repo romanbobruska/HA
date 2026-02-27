@@ -154,7 +154,7 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
    - Zítra malý solár → VYSOKA (60°C)
 4. **NIBE topí** (`cerpadlo_topi`) + přebytek nestačí → MIN (bojler čeká, NIBE má přednost)
 5. **Baterie > 96%** + solární přebytek → MAX/VYSOKA dle velikosti přebytku
-6. **Baterie < 96%** + přebytek → VYSOKA
+6. **Baterie < 96%** + velký přebytek (`> PRAH_MAX`) → **MAX (69°C)**; střední přebytek (`> PRAH_VYSOKA`) → VYSOKA (60°C)
 7. **Levná elektřina** (ne v letním režimu) → STREDNI (58°C)
 8. Jinak → MIN
 
@@ -165,21 +165,27 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 
 **Config** (flow proměnné): `TEPLOTA_MAX=69, VYSOKA=60, STREDNI=58, MIN=20, POVINNY_SOLAR=40, FORECAST_THRESHOLD=35000Wh, PRICE_LEVEL_LEVNY=6, CENA_KWH_LEVNA=2.6`
 
-### Manager nabíjení auta v2.3 — prioritní logika
+### Manager nabíjení auta v2.4 — prioritní logika (oprava 2026-02-27)
 
 **Implementace**: 1 `function` node (`main_logic_func`), 3 výstupy: [stop, slunce, síť].
 **DŮLEŽITÉ**: čte `vyrobaDnes`/`vyrobaZitra` **přímo z `homeassistant.homeAssistant.states`** (HA websocket store) — NE z `fve_config`, protože `fve_config.forecast_vyroba_dnes` je po restartu NR = 0.
 
+**KLÍČOVÁ OCHRANA (v2.4)**: Všechny cesty na SLUNCE vyžadují **reálný přebytek** (`rozdiVyroby > MIN_SOLAR_W = 4000W`). Bez přebytku auto NESMÍ nabíjet ze slunce (vybíjelo by baterii). Forecast/režim pouze POVOLUJÍ solární nabíjení, ale fyzický přebytek musí existovat.
+
+**Stop path fyzicky zastavuje wallbox** (`switch.wallbox_garaz_start_stop = OFF`) — oprava 2026-02-27.
+
 Rozhodovací pořadí (první splněná podmínka vyhraje):
 
-1. Auto nemá hlad → **STOP**
-2. Automatizace OFF → **STOP**
-3. `solarni_rezim ON` → **SLUNCE**
-4. `letni_rezim ON` → **SLUNCE**
-5. `vyrobaDnes > nabijeni_auta_forecast_kwh (40 kWh)` → **SLUNCE**
-6. `batSoc > 95%` + přebytek `> 4000W` → **SLUNCE**
-7. `vyrobaZitra > 40 kWh` → **SLUNCE**
-8. Nic → **SÍŤ**
+1. Auto nemá hlad → **STOP** (wallbox OFF)
+2. Automatizace OFF → **STOP** (wallbox OFF)
+3. NIBE topí (mutex) → **STOP** (wallbox OFF)
+4. `solarni_rezim ON` + **přebytek** → **SLUNCE**; bez přebytku → **STOP**
+5. `letni_rezim ON` + **přebytek** → **SLUNCE**; bez přebytku → falls through
+6. `vyrobaDnes > 40 kWh` + **přebytek** → **SLUNCE**
+7. `batSoc > 95%` + **přebytek** → **SLUNCE**
+8. `vyrobaZitra > 40 kWh` + **přebytek** → **SLUNCE**
+9. Forecast OK ale přebytek chybí → **STOP** (čeká na přebytek, nevybíjí baterii)
+10. Forecast špatný → **SÍŤ**
 
 **Config parametry** (`fve_config`) — kompletní seznam pro nabíjení auta:
 - `nabijeni_auta_forecast_kwh: 40` — threshold pro celkovou výrobu dne (manager)
