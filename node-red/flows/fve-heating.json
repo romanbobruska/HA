@@ -1253,6 +1253,21 @@
                 "t": "eq",
                 "v": "p3_off",
                 "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p1_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p2_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p3_on",
+                "vt": "str"
             }
         ],
         "checkall": "false",
@@ -1269,6 +1284,15 @@
             ],
             [
                 "htg_svc_p3_off"
+            ],
+            [
+                "htg_svc_p1_on"
+            ],
+            [
+                "htg_svc_p2_on"
+            ],
+            [
+                "htg_svc_p3_on"
             ]
         ]
     },
