@@ -325,6 +325,23 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
   - přebytek klesl → sníží na to co přebytek dovolí
   - Platí pro automatický i manuální mód
 
+**Ultra levná energie** (v2.2, 2026-02-27):
+- **Podmínka aktivace**: `priceBuy < prah_ultra_levna_nakup (1.0 Kč)` AND `priceSell ≤ 0` AND `isSolarHour`
+- **Kde**: detekce v `fve-modes.json` (Zákaz přetoků Logic), global flag `ultra_levna_energie`
+- **Deaktivované blokace**:
+  - Patrony SOC práh: 95% → `min_soc` (20%)
+  - Patrony nepotřebují solární přebytek (mohou čerpat ze sítě)
+  - Patrony neblokované autem (`!autoHlad`, `!autoNabiji` padá)
+  - NIBE nezastavuje auto nabíjení (`stop_auto_nabijeni` se neprovede)
+  - `cerpadlo_topi` neblokuje auto v `manager-nabijeni-auta.json`
+- **Zachované blokace** (bezpečnost):
+  - ⚡ NIBE + Patrony nikdy současně (jistič: 14kW + 9kW = 23kW > 22kW)
+  - `max_spotreba_sit_w` (22kW) stále respektováno
+  - Normální teplotní podmínky (`needsHeat`, `tankTemp`, `autoHlad`)
+  - Bezpečnostní kontroly (Krb, Grid Lost, tank > MAX, NIBE cooldown)
+- **Chování**: spotřebiče se nezapnou všechny naráz — jen se uvolní vzájemné blokace, zapnou se přirozeně pokud to dává smysl
+- Config: `prah_ultra_levna_nakup = 1.0` (Kč/kWh)
+
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
 Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhové čerpadlo.
 
