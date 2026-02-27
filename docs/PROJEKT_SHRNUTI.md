@@ -115,10 +115,15 @@ Group "Synchronizace s HA"      x=14 y=119 w=832  h=142
 Group "Aktuální ceny energie"   x=14 y=279 w=822  h=82
 Group "Aktuální stav systému"   x=14 y=379 w=832  h=82
 
-# fve-modes.json (2 řady na skupinu)
-Group "Mód: NORMAL"             x=14 y=19  w=1235 h=122
-Group "Mód: ŠETŘIT"             x=14 y=159 w=1015 h=122  (y=19+122+18)
-Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
+# fve-modes.json (refaktor v2 - každý mód = 2 nody: link-in + Logic func)
+Group "Mód: NORMAL"             x=14 y=19  w=332 h=82
+Group "Mód: ŠETŘIT"             x=14 y=299 w=332 h=82
+Group "Mód: NABÍJET"            x=14 y=519 w=332 h=82
+Group "Mód: PRODÁVAT"           x=14 y=739 w=332 h=82
+Group "Mód: ZÁKAZ PŘETOKŮ"     x=14 y=1019 w=332 h=82
+Group "Mód: SOLÁRNÍ NABÍJENÍ" x=14 y=1239 w=332 h=82
+Group "Victron Actions (sdílené)" x=254 y=1599 w=1002 h=322  ← 1 sada service call nodů pro všechny módy
+Group "Log"                       x=1014 y=779 w=662 h=182
 ```
 
 ---
@@ -128,7 +133,7 @@ Group "Mód: NABÍJET"            x=14 y=299 w=1015 h=122  (y=159+122+18)
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
-| `fve-modes.json` | Implementace 6 módů (Victron příkazy přes HA service calls) |
+| `fve-modes.json` | Implementace 6 módů (refaktor v2, 2026-02-27): každý mód = link-in + Logic func, sdílená grupa "Victron Actions" (32 nodů místo 65) |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
