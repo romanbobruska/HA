@@ -1,3 +1,13 @@
+topeni_max_teplota_patron:
+  name: "Max teplota nádrže pro patrony"
+  min: 40
+  max: 65
+  step: 1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer-high
+  mode: box
+  initial: 53
+
 fve_kapacita_baterie:
   name: "Kapacita baterie"
   min: 1
