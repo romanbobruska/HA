@@ -152,9 +152,7 @@
         "x": 740,
         "y": 160,
         "wires": [
-            [
-                "wallbox_stop_node"
-            ]
+            []
         ],
         "g": "mgr_grp_logic"
     },
@@ -398,44 +396,11 @@
             "link_out_slunce",
             "svc_solar_off_sit",
             "svc_grid_off_sit",
-            "link_out_sit",
-            "wallbox_stop_node"
+            "link_out_sit"
         ],
         "x": 14,
         "y": 60,
         "w": 1100,
         "h": 220
-    },
-    {
-        "id": "wallbox_stop_node",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Wallbox STOP",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "switch.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "switch.wallbox_garaz_start_stop"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "switch",
-        "service": "turn_off",
-        "x": 920,
-        "y": 160,
-        "wires": [
-            []
-        ],
-        "g": "mgr_grp_logic"
     }
 ]
