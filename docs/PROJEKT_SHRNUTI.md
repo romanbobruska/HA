@@ -127,7 +127,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
-| `fve-modes.json` | Implementace 6 módů (refaktor v4, 2026-03-02): každý mód = link-in + Logic func, sdílená grupa "Victron Actions". **`number.min_soc` se NEPŘEPISUJE** — service call `shared_min_soc` odpojen z fan-out, `blockMinSoc` odstraněn ze všech módů. Blokace vybíjení řešena přes `max_discharge_power: 0`. NABÍJET manual vždy targetSoc=100. Encoding opraveno. |
+| `fve-modes.json` | Implementace 6 módů (v5, 2026-03-02). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = `max_discharge_power: 0`. NABÍJET manual = targetSoc=100. Fan-out má diagnostický `node.warn`. Ověřeno end-to-end: NABÍJET(PSP=-22000,sched=100✓), ŠETŘIT(maxDisch=0✓), NORMAL(maxDisch=-1✓), PRODÁVAT(schedule cleared✓). |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
