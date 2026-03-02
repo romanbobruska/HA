@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-02-27 (03:05)
+> Poslední aktualizace: 2026-03-02
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -126,7 +126,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
-| `fve-modes.json` | Implementace 6 módů (refaktor v2, 2026-02-27): každý mód = link-in + Logic func, sdílená grupa "Victron Actions" (32 nodů místo 65) |
+| `fve-modes.json` | Implementace 6 módů (refaktor v3, 2026-03-02): každý mód = link-in + Logic func, sdílená grupa "Victron Actions". ŠETŘIT: blockMinSoc=SOC+1. NORMAL: nibeFromGrid=cerpadloTopi. Encoding opraveno. |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
@@ -170,7 +170,7 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 
 **KLÍČOVÁ OCHRANA (v2.4)**: Všechny cesty na SLUNCE vyžadují **reálný přebytek** (`rozdiVyroby > MIN_SOLAR_W = 4000W`). Bez přebytku auto NESMÍ nabíjet ze slunce (vybíjelo by baterii). Forecast/režim pouze POVOLUJÍ solární nabíjení, ale fyzický přebytek musí existovat.
 
-**Stop path fyzicky zastavuje wallbox** (`switch.wallbox_garaz_start_stop = OFF`) — oprava 2026-02-27.
+**Stop path fyzicky zastavuje wallbox** (`switch.wallbox_garaz_start_stop = OFF`) — oprava 2026-03-02 (wallbox_stop_svc_main node přidán za svc_grid_off).
 
 Rozhodovací pořadí (první splněná podmínka vyhraje):
 
@@ -243,7 +243,9 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení**: při aktivním NIBE topení (jen ze sítě, solar<500W), nabíjení auta ze sítě nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`. Solární nabíjení auta a NIBE ze solaru NEBLOKUJÍ.
+**Blokace vybíjení**: při aktivním NIBE topení (VŽDY když NIBE topí — oprava 2026-03-02, dříve chybně jen při solar<500W), nabíjení auta ze sítě nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`. Solární nabíjení auta NEBLOKUJE.
+
+**ŠETŘIT mód** (oprava 2026-03-02): `blockMinSoc = currentSoc+1` → baterie se NEVYBÍJÍ. Není solární nabíjení — jen normální provoz bez vybíjení. Dříve chybně nastavoval stejný `blockMinSoc` jako NORMAL bez blokace.
 
 **Feed-in control** (oprava 2026-02-26):
 - Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` + `power_set_point = 100W` + **`PreventFeedback = 1` přes MQTT** (`victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback`)
@@ -359,13 +361,11 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
 Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhové čerpadlo.
 
-**Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) = manuální mód:
-- Flow čte `input_select.topeni_mod` — nastavíš ho ručně v HA dashboardu
-- Flow **NEPŘEPISUJE** mod, jen provádí příkazy dle něj
-- `Vypnuto` → **žádné zásahy** — plně manuální ovládání, flow nic nemění
-- `NIBE` → topit jen z NIBE dle pravidel (teplota vs. target), patrony blokované
-- `Patrony` → topit jen z patron dle solárního přebytku, NIBE blokované
-- `Obehove` → jen oběhové čerpadlo, NIBE i patrony off
+**Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) = manuální mód (oprava 2026-03-02):
+- Flow **NEZASAHUJE do NIBE** — uživatel ovládá NIBE přímo v HA UI
+- Flow pouze 1× bezpečnostně zastaví patrony (prevence nekontrolovaného ohřevu)
+- `input_select.topeni_mod` se při vypnuté automatizaci **NEČTE** — flow nic neřídí
+- **OPRAVA**: dříve chybně vypínalo NIBE ve všech manuálních módech (NIBE, Patrony, Obehove větví všechny volaly `nibe_off`)
 
 ---
 
