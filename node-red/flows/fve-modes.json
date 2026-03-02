@@ -4,14 +4,14 @@
         "type": "tab",
         "label": "FVE Modes",
         "disabled": false,
-        "info": "Implementace jednotliv├Żch m├│d┼» FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
+        "info": "Implementace jednotlivÔöť┼╗ch mÔöťÔöédÔö╝┬╗ FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
         "env": []
     },
     {
         "id": "mode_grp_normal",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: NORMAL - Standardn├ş provoz",
+        "name": "Mód: NORMAL - Standardní provoz",
         "style": {
             "fill": "#d3f3d3",
             "label": true
@@ -31,7 +31,7 @@
         "id": "mode_grp_setrit",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: ┼áET┼śIT - Minim├íln├ş vyb├şjen├ş",
+        "name": "Mód: ŠETŘIT - Minimální vybíjení baterie",
         "style": {
             "fill": "#f3f3d3",
             "label": true
@@ -51,7 +51,7 @@
         "id": "mode_grp_nabijet",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: NAB├ŹJET ZE S├ŹT─Ü - Levn├í energie",
+        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
         "style": {
             "fill": "#d3d3f3",
             "label": true
@@ -71,7 +71,7 @@
         "id": "mode_grp_prodavat",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: PROD├üVAT - Prodej do s├şt─Ť",
+        "name": "Mód: PRODÁVAT - Prodej do sítě",
         "style": {
             "fill": "#f3d3d3",
             "label": true
@@ -91,7 +91,7 @@
         "id": "mode_grp_zakaz",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: Z├üKAZ P┼śETOK┼« - Z├íporn├í cena",
+        "name": "Mód: ZÁKAZ PŘETOKŮ - Záporná cena",
         "style": {
             "fill": "#e3d3f3",
             "label": true
@@ -111,7 +111,7 @@
         "id": "mode_grp_solar",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "M├│d: SOL├üRN├Ź NAB├ŹJEN├Ź",
+        "name": "Mód: SOLÁRNÍ NABÍJENÍ",
         "style": {
             "fill": "#fffacd",
             "label": true
@@ -131,7 +131,7 @@
         "id": "fve_modes_g_shared_svc",
         "type": "group",
         "z": "bb3654998a6bf514",
-        "name": "Victron Actions (sd├şlen├ę)",
+        "name": "Victron Actions (sdílený)",
         "style": {
             "fill": "#dce6f0",
             "label": true
@@ -156,8 +156,8 @@
         ],
         "x": 34,
         "y": 639,
-        "w": 932,
-        "h": 442
+        "w": 1052,
+        "h": 422
     },
     {
         "id": "fve_modes_g_log",
@@ -177,7 +177,7 @@
         ],
         "x": 494,
         "y": 159,
-        "w": 662,
+        "w": 492,
         "h": 182
     },
     {
@@ -185,7 +185,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_normal",
-        "name": "ÔćÉ Normal",
+        "name": "→ Normal",
         "links": [
             "f10a91fcb4de6bd3"
         ],
@@ -203,7 +203,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_normal",
         "name": "NORMAL Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar blkText = blockDischarge ? \" (BAT LOCK)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + blkText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\nvar gridChargingEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.nastavuj_amperaci_chargeru_grid']\") || {};\nvar autoChargingFromGrid = autoCharging && (gridChargingEntity.state === \"on\");\nvar nibeFromGrid = cerpadloTopi;  // NIBE topí → vždy blokovat vybíjení baterie\nvar blockDischarge = autoChargingFromGrid || nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar blkText = blockDischarge ? \" (BAT LOCK)\" : \"\";\nnode.status({fill:\"green\", shape:\"dot\", text:\"Normal\" + consText + blkText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -252,7 +252,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_setrit",
-        "name": "ÔćÉ ┼áet┼Öit",
+        "name": "→ Šetřit",
         "links": [
             "7f051a6595e57c3e"
         ],
@@ -269,8 +269,8 @@
         "type": "function",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_setrit",
-        "name": "┼áET┼śIT Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"setrit\";\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"Setrit\" + consText + \" | SOC:\" + currentSoc + \"% | minSOC:\" + minSoc + \"% (NO SCHED)\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"setrit\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "name": "ŠETŘIT Logic",
+        "func": "// === ŠETŘIT mód ===\n// Baterie se NEVYBÍJÍ - blockMinSoc = currentSoc+1\n// Není solární nabíjení - jen normální provoz bez vybíjení baterie\nvar patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// Blokace vybíjení: nastaví min_soc = currentSoc+1 → baterie se nemůže vybíjet\nvar blockMinSoc = Math.min(currentSoc + 1, 100);\n\n// Přebytky solaru stále jdou do sítě (feed-in ON)\nmsg.victron = {\n    power_set_point:           0,\n    min_soc:                   minSoc,\n    schedule_soc:              0,\n    schedule_charge_duration:  0,\n    schedule_charge_day:       -7,\n    max_discharge_power:       -1,\n    max_charge_power:          patBlockCharge ? 0 : -1,\n    blockMinSoc:               blockMinSoc,\n    feedin_on:                 true,\n    max_feed_in_power:         config.max_feed_in_w || 7600,\n    prevent_feedback:          0\n};\nmsg.mode = \"setrit\";\nmsg.blockDischarge = true;\nmsg.blockMinSoc = blockMinSoc;\n\nnode.status({fill:\"yellow\", shape:\"dot\", text:\"SETRIT | SOC:\" + currentSoc + \"% | minSOC:\" + blockMinSoc + \"% (blok vybij)\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"setrit\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: [],\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -319,7 +319,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_nabijet",
-        "name": "ÔćÉ Nab├şjet",
+        "name": "→ Nabíjet",
         "links": [
             "185f95d7c56fe799"
         ],
@@ -336,7 +336,7 @@
         "type": "function",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_nabijet",
-        "name": "NAB├ŹJET ZE S├ŹT─Ü Logic",
+        "name": "NABÍJET ZE SÍTĚ Logic",
         "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar minSoc = config.min_soc || 20;\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar maxGridW = config.max_spotreba_sit_w || 22000;\nvar SAFETY_MARGIN = config.safety_margin_w || 2000;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar plan = global.get(\"fve_plan\") || {};\nvar targetSoc = (plan && plan.smartCharging) ? plan.smartCharging.targetSocFromGrid : 100;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\n\nvar psp, statusText;\nif (cerpadloTopi || autoCharging) {\n    var safeImport = maxGridW - SAFETY_MARGIN;\n    psp = safeImport;\n    statusText = \"Nabijet+\" + consumers.join(\"+\") + \" | PSP:\" + safeImport + \"W | SOC:\" + currentSoc + \"%\";\n} else {\n    psp = -maxGridW;\n    statusText = \"Nabijet | SCHED:\" + targetSoc + \"% | PSP:-\" + maxGridW + \"W | SOC:\" + currentSoc + \"%\";\n}\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: targetSoc,\n    schedule_charge_duration: 86399,\n    schedule_charge_day: 7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"nabijet_ze_site\";\nnode.status({fill:\"blue\", shape:\"dot\", text: statusText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"nabijet_ze_site\",\n    battery_charging: true,\n    battery_charge_rate_w: 5000,\n    power_set_point: psp,\n    consumers_active: consumers,\n    max_discharge_allowed: false,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -386,7 +386,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_prodavat",
-        "name": "ÔćÉ Prod├ívat",
+        "name": "→ Prodávat",
         "links": [
             "a706b353f30c25d1"
         ],
@@ -403,8 +403,8 @@
         "type": "function",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_prodavat",
-        "name": "PROD├üVAT Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nab├şj├ş\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nvar effectiveMinSoc = Math.max(minSoc, currentSoc - 1);\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: effectiveMinSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: effectiveMinSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"prodavat\";\nmsg.feedInExcess = true;\nnode.status({fill:\"red\", shape:\"dot\", text:\"Prod├ívat (solar) | SOC: \" + currentSoc + \"% (min:\" + effectiveMinSoc + \"%)\"});\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "name": "PRODÁVAT Logic",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\n\nif (msg.autoNabijeniAktivni) {\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"Skip prodej - auto se nabÔöť┼čjÔöť┼č\"});\n    return null;\n}\n\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\nif (currentSoc <= minSoc + 1) {\n    node.status({fill:\"red\", shape:\"ring\", text:\"Nedostatek energie\"});\n    return null;\n}\n\nvar effectiveMinSoc = Math.max(minSoc, currentSoc - 1);\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: effectiveMinSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: effectiveMinSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"prodavat\";\nmsg.feedInExcess = true;\nnode.status({fill:\"red\", shape:\"dot\", text:\"ProdÔöť├şvat (solar) | SOC: \" + currentSoc + \"% (min:\" + effectiveMinSoc + \"%)\"});\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodavat\",\n    battery_charging: false,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -453,7 +453,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_zakaz",
-        "name": "ÔćÉ Z├íkaz p┼Öetok┼»",
+        "name": "→ Zákaz přetoků",
         "links": [
             "a86bc5233cfa0458"
         ],
@@ -470,7 +470,7 @@
         "type": "function",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_zakaz",
-        "name": "Z├üKAZ P┼śETOK┼« Logic",
+        "name": "ZÁKAZ PŘETOKŮ Logic",
         "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\nmsg.victron = {\n    power_set_point: 100,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: minSoc,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (msg.saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: true,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
@@ -520,7 +520,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_solar",
-        "name": "solar_charging",
+        "name": "→ Solární nabíjení",
         "links": [],
         "x": 65,
         "y": 560,
@@ -535,8 +535,8 @@
         "type": "function",
         "z": "bb3654998a6bf514",
         "g": "mode_grp_solar",
-        "name": "SOL├üRN├Ź NAB├ŹJEN├Ź Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"SolarÔÜí\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "name": "SOLÁRNÍ NABÍJENÍ Logic",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi && currentPvPower < 500;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    blockMinSoc: blockDischarge ? Math.min(currentSoc + 1, 100) : minSoc,\n    feedin_on: true,\n    max_feed_in_power: 7600,\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\nmsg.blockMinSoc = msg.victron.blockMinSoc;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solar├ö├ť├ş\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -585,7 +585,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
-        "name": "ÔćÉ V┼íechny m├│dy",
+        "name": "→ Všechny módy",
         "links": [
             "lo_victron_normal",
             "lo_victron_setrit",
@@ -608,7 +608,7 @@
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
         "name": "Victron Fan-out",
-        "func": "// Fan-out: p┼Öe─Źte msg.victron a nastav├ş msg properties pro Mustache templates\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
+        "func": "// Fan-out: pÔö╝├ľeÔöÇ┼╣te msg.victron a nastavÔöť┼č msg properties pro Mustache templates\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -892,7 +892,7 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 660,
+        "x": 640,
         "y": 860,
         "wires": [
             [
@@ -933,8 +933,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 870,
-        "y": 860,
+        "x": 990,
+        "y": 800,
         "wires": [
             []
         ]
@@ -965,8 +965,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 870,
-        "y": 920,
+        "x": 990,
+        "y": 880,
         "wires": [
             []
         ]
@@ -997,8 +997,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 870,
-        "y": 800,
+        "x": 990,
+        "y": 720,
         "wires": [
             []
         ]
@@ -1027,8 +1027,8 @@
         "blockInputOverrides": true,
         "domain": "mqtt",
         "service": "publish",
-        "x": 870,
-        "y": 980,
+        "x": 990,
+        "y": 940,
         "wires": [
             []
         ]
@@ -1057,8 +1057,8 @@
         "blockInputOverrides": true,
         "domain": "mqtt",
         "service": "publish",
-        "x": 870,
-        "y": 1040,
+        "x": 990,
+        "y": 1020,
         "wires": [
             []
         ]
@@ -1068,7 +1068,7 @@
         "type": "link in",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_log",
-        "name": "ÔćÉ Log",
+        "name": "→ Log",
         "links": [
             "lo_log_normal",
             "lo_log_setrit",
@@ -1077,7 +1077,7 @@
             "lo_log_zakaz",
             "lo_log_solar"
         ],
-        "x": 635,
+        "x": 565,
         "y": 200,
         "wires": [
             [
@@ -1098,7 +1098,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
+        "x": 700,
         "y": 200,
         "wires": [
             [
@@ -1118,7 +1118,7 @@
         "createDir": false,
         "overwriteFile": "false",
         "encoding": "utf8",
-        "x": 1060,
+        "x": 890,
         "y": 200,
         "wires": [
             []
@@ -1129,7 +1129,7 @@
         "type": "inject",
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_log",
-        "name": "Rotace logu (denn─Ť 04:00)",
+        "name": "Rotace logu (denně 04:00)",
         "props": [
             {
                 "p": "payload"
@@ -1168,7 +1168,7 @@
                 "module": "fs"
             }
         ],
-        "x": 910,
+        "x": 880,
         "y": 300,
         "wires": []
     }
