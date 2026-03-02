@@ -608,7 +608,7 @@
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
         "name": "Victron Fan-out",
-        "func": "// Fan-out: přečte msg.victron a nastaví msg properties pro Mustache templates\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
+        "func": "// Fan-out: přečte msg.victron a nastaví msg properties pro Mustache templates\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// DIAG: loguj co fan-out posílá do Victronu\nnode.warn(\"FANOUT: mode=\" + msg.mode + \" PSP=\" + v.power_set_point + \" schedSOC=\" + v.schedule_soc + \" schedDay=\" + v.schedule_charge_day + \" maxDisch=\" + v.max_discharge_power + \" maxChg=\" + v.max_charge_power + \" minSoc=\" + v.min_soc);\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : 7600;\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
