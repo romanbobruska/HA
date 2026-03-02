@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-02
+> Poslední aktualizace: 2026-03-02 (v4: min_soc fix)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -13,6 +13,7 @@
 > - **Design pattern pro NR flows:** každý node MUSÍ být v group (`g` property). Nové nody vždy přidat do existující nebo nové group. Vzor layoutu: `fve-config.json`
 > - **Deploy = stop + start** (ne restart) — NR načte flows čistě bez banneru "modified externally"
 > - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
+> - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes `max_discharge_power: 0`, NE přes změnu min_soc.
 > - **KRITICKÉ: Flows které vytvořil uživatel** (`nabijeni-auta-sit.json`, `nabijeni-auta-slunce.json`, `manager-nabijeni-auta.json` — původní spaghetti logika) **NESMÍM měnit bez explicitního souhlasu uživatele.** Před jakoukoliv změnou logiky v těchto flows se ZEPTAT.
 
 ---
@@ -126,7 +127,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
-| `fve-modes.json` | Implementace 6 módů (refaktor v3, 2026-03-02): každý mód = link-in + Logic func, sdílená grupa "Victron Actions". ŠETŘIT: blockMinSoc=SOC+1. NORMAL: nibeFromGrid=cerpadloTopi. Encoding opraveno. |
+| `fve-modes.json` | Implementace 6 módů (refaktor v4, 2026-03-02): každý mód = link-in + Logic func, sdílená grupa "Victron Actions". **`number.min_soc` se NEPŘEPISUJE** — service call `shared_min_soc` odpojen z fan-out, `blockMinSoc` odstraněn ze všech módů. Blokace vybíjení řešena přes `max_discharge_power: 0`. NABÍJET manual vždy targetSoc=100. Encoding opraveno. |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
