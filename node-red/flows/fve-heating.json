@@ -4,7 +4,7 @@
         "type": "tab",
         "label": "FVE Heating",
         "disabled": false,
-        "info": "Kompletn├ş ┼Ö├şzen├ş topen├ş domu v2.0\nNIBE + ob─Ťhov├ę ─Źerpadlo + patrony + ventil + chlazen├ş"
+        "info": "Kompletní řízení topení domu v2.0\nNIBE + oběhové čerpadlo + patrony + ventil + chlazení"
     },
     {
         "id": "heating_g_main_v2",

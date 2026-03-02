@@ -1,7 +1,9 @@
-- opet mi menis minSOC - nastavil jsem si minSOC na 17 procent, ale prepsal jsi mi ho na 20 procent. NECHCI, ABYS MI ZASAHOVAL DO minSOC, pokud to VYLOZENE
-NEPOTREBUJES KE SVEMU MODU!!! - REKNI MI, V JAKEM MODU HO POTREBUJES MENIT A OVER SI V DOKUMENTACI OD VICTRONU, ZE JE TO BEZPODMINECNE NUTNE
-- Zkontroluj si plan, minSOC a vybijeni baterie a SOC baterie - proc se ted aktualne baterie drzi na 21 procentech, kdyz je minSOC na 20 procentech a 
-mod je normalni?
-- uklid po sobe projekt, je tady strasny bordel!!! Odstran vsechny nepotrebne fily
+- zkousel jsem si zmenit minSOC na 17 procent, pan vypsal mod normal, SOC baterie byla na 20 procentech, ale vybijeni baterie nezacalo - nemas nekde 
+hardcoded minSOC? Ctes minSOC z HA?
+- prepnul jsem z manualniho nabijet do prodavat, stale se nabijelo - zkotroluj si to. Muzes si to i nasimulovat prepnutim modu a kontrolou nabijeni / vybijenibateri a gridem
+- zkontroluj si opet kodovani v celem projektu - flow v NR manager nabijeni se jmenuje Manager nab├şjen├ş auta
+- pri deployi v NR to pise {"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Unexpected token ')' (body:line 25)","stack":"Function node:d27d27bacf98eec0 [SOLÁRNÍ NABÍJENÍ Logic]:26\n    max_charge_power: patBlockCharge ? 0 : -1, 100) : minSoc,\n                                                  ^\n\nSyntaxError: Unexpected token ')'\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}}
+- zkontroluj aktualni stav - mod je normalni, SOC baterie je na 22 procentech, ale baterie se nevybiji
+
 
 
