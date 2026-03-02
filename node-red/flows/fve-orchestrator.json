@@ -513,7 +513,7 @@
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
         "name": "Kontrola nabíjení auta",
-        "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\n// Output 2: pouze při zastavení nabíjení → reset min_soc + přepočet plánu\nif (!isCharging) {\n    // Resetuj config.min_soc v globálu na výchozí hodnotu\n    var config = global.get(\"fve_config\") || {};\n    var defaultMinSoc = 20;\n    config.min_soc = defaultMinSoc;\n    global.set(\"fve_config\", config);\n    node.status({fill: \"green\", shape: \"dot\", text: \"Auto STOP → reset minSoc=\" + defaultMinSoc + \"%, retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
+        "func": "var state = msg.payload;\nvar chargingStates = [\"Charging\", \"Nabíjení\", \"2\"];\nvar isCharging = chargingStates.some(function(s) {\n    return state.toLowerCase().indexOf(s.toLowerCase()) !== -1 || state === s;\n});\nmsg.autoNabijeni = isCharging;\nnode.status({fill: isCharging ? \"yellow\" : \"green\", shape:\"dot\", text: isCharging ? \"Auto se nabíjí\" : \"Auto se nenabíjí\"});\n// Output 2: při zastavení nabíjení → přepočet plánu (BEZ resetu min_soc!)\nif (!isCharging) {\n    node.status({fill: \"green\", shape: \"dot\", text: \"Auto STOP → retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -527,7 +527,7 @@
                 "dc8da09248ec1e29"
             ],
             [
-                "auto_reset_minsoc"
+                "auto_trigger_plan"
             ]
         ]
     },
@@ -662,7 +662,7 @@
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
         "name": "Nastav global sauna",
-        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\n// Output 1: vždy (logování)\n// Output 2: pouze při vypnutí → reset min_soc + přepočet plánu\nif (!isActive) {\n    // Resetuj config.min_soc v globálu na výchozí hodnotu (předejde planování s min_soc=74%)\n    var config = global.get(\"fve_config\") || {};\n    var defaultMinSoc = 20;\n    config.min_soc = defaultMinSoc;\n    global.set(\"fve_config\", config);\n    node.status({fill: \"green\", shape: \"dot\", text: \"Sauna OFF → reset minSoc=\" + defaultMinSoc + \"%, retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
+        "func": "var state = msg.payload;\nvar isActive = (state === \"on\");\nglobal.set(\"sauna_aktivni\", isActive);\nnode.status({fill: isActive ? \"red\" : \"green\", shape: \"dot\", text: isActive ? \"Sauna ON\" : \"Sauna OFF\"});\n// Output 2: při vypnutí → přepočet plánu (BEZ resetu min_soc!)\nif (!isActive) {\n    node.status({fill: \"green\", shape: \"dot\", text: \"Sauna OFF → retrigger plan\"});\n    return [msg, msg];\n}\nreturn [msg, null];\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -674,7 +674,7 @@
         "wires": [
             [],
             [
-                "sauna_reset_minsoc"
+                "sauna_trigger_plan"
             ]
         ]
     },
