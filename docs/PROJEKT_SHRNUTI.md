@@ -274,10 +274,15 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | Mód | Podmínka | Blokace |
 |-----|----------|--------|
 | **NIBE** | `tempGap > 0.2°C` (teplota domu je víc než 0.2°C pod cílem) | Patrony zakázány |
-| **Patrony** | `tempGap ≤ 0.2°C` + solární přebytek ≥ 3kW + SOC ≥ 95% | NIBE zakázáno |
+| **Patrony** | `tempGap ≤ 0.3°C` + reálná šance na SOC ≥ 95% + solární přebytek ≥ 3kW | NIBE zakázáno |
 | **Vypnuto** | teplota OK + žádný přebytek | obojí vypnuto |
 
-**PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.2°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
+**PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
+
+**MOD_PATRONY reálnost** (oprava v2, 2026-03-03): MOD_PATRONY se aktivuje JEN pokud je reálná šance, že patrony poběží:
+- `patronySocReady = batSoc >= MIN_SOC_PAT - 15` — baterie musí být blízko cíle (≥80% při práhu 95%)
+- `zbyvajiciSolar > (battNeedWh + consumeEstWh) * 1.5` — zbývající solar musí pokrýt nabití baterie + spotřebu domu s 50% rezervou
+- Pokud patrony nejsou realistické → NIBE topí v levných hodinách (lepší než čekat na patrony, které se nespustí)
 
 **BEZPEČNOST**: NIBE a patrony NIKDY současně (přetížení jističe). Trojvrstvá ochrana:
 1. Patrony: `!nibeBlockedByMod` podmínka
