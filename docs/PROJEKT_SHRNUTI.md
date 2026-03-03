@@ -13,7 +13,7 @@
 > - **Design pattern pro NR flows:** každý node MUSÍ být v group (`g` property). Nové nody vždy přidat do existující nebo nové group. Vzor layoutu: `fve-config.json`
 > - **Deploy = stop + start** (ne restart) — NR načte flows čistě bez banneru "modified externally"
 > - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
-> - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes `max_discharge_power: 0`, NE přes změnu min_soc.
+> - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes dynamický `max_discharge_power = aktuální solar` (viz sekce 9), NE přes změnu min_soc. **NIKDY nepoužívat `max_discharge_power: 0`** — blokuje celý DC→AC tok invertoru.
 > - **KRITICKÉ: Flows které vytvořil uživatel** (`nabijeni-auta-sit.json`, `nabijeni-auta-slunce.json`, `manager-nabijeni-auta.json` — původní spaghetti logika) **NESMÍM měnit bez explicitního souhlasu uživatele.** Před jakoukoliv změnou logiky v těchto flows se ZEPTAT.
 
 ---
@@ -127,8 +127,8 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
-| `fve-modes.json` | Implementace 6 módů (v5, 2026-03-02). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = `max_discharge_power: 0`. NABÍJET manual = targetSoc=100. Fan-out má diagnostický `node.warn`. Ověřeno end-to-end: NABÍJET(PSP=-22000,sched=100✓), ŠETŘIT(maxDisch=0✓), NORMAL(maxDisch=-1✓), PRODÁVAT(schedule cleared✓). |
-| `fve-config.json` | Konfigurace + čtení HA stavů do globálů |
+| `fve-modes.json` | Implementace 6 módů (v6, 2026-03-03). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power = Math.max(50, currentSolar)`. NABÍJET manual = targetSoc=100. Fan-out bez diagnostického warn (odstraněn 2026-03-03). |
+| `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod` (oprava 2026-03-03). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
@@ -244,9 +244,9 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení**: při aktivním NIBE topení (VŽDY když NIBE topí — oprava 2026-03-02, dříve chybně jen při solar<500W), nabíjení auta ze sítě nebo sauně → `blockMinSoc = currentSoc+1` (baterie se nevybíjí pod aktuální SOC), `MaxDischargePower=-1`. Solární nabíjení auta NEBLOKUJE.
+**Blokace vybíjení** (oprava v3, 2026-03-03): při aktivním NIBE topení, nabíjení auta ze sítě nebo sauně → `max_discharge_power = Math.max(50, currentSolar)` (dynamicky = aktuální solární výkon). Solar prochází na AC zátěže, baterie se nevybíjí. **NIKDY nepoužívat `max_discharge_power: 0`** (blokuje celý DC→AC tok). Solární nabíjení auta NEBLOKUJE.
 
-**ŠETŘIT mód** (oprava 2026-03-02): `blockMinSoc = currentSoc+1` → baterie se NEVYBÍJÍ. Není solární nabíjení — jen normální provoz bez vybíjení. Dříve chybně nastavoval stejný `blockMinSoc` jako NORMAL bez blokace.
+**ŠETŘIT mód** (oprava v3, 2026-03-03): `max_discharge_power = Math.max(50, currentSolar)` → solar prochází na AC, baterie se nevybíjí. `min_soc` se NEMĚNÍ.
 
 **Feed-in control** (oprava 2026-02-26):
 - Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` + `power_set_point = 100W` + **`PreventFeedback = 1` přes MQTT** (`victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback`)
@@ -255,12 +255,10 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Všechny ostatní módy: obnovují `overvoltage_feed_in = ON` + `max_feed_in_power = 7600` + `PreventFeedback = 0`
 - Výsledek: **export = 0W** (ověřeno 12/12 vzorků minutového monitoringu)
 
-**Po vypnutí sauny / zastavení nabíjení auta** (cf3302d, 3326bb6):
-- `sauna_set_global` (sauna OFF) / `Kontrola nabíjení auta` (auto STOP) resetují `config.min_soc = 20` v globálu
-- Zapíší `number.min_soc = 20` do HA entity (Victron) přes nové nody `sauna_reset_minsoc` / `auto_reset_minsoc`
-- Okamžitě triggerují přepočet plánu (→ `Sbírka dat`) přes `sauna_trigger_plan` / `auto_trigger_plan`
-- **Bez toho**: plánovač viděl `minSoc=currentSoc+1` (74%/64%) a generoval plán "Šetřit (Ochrana baterie)" i po deaktivaci
-- **Pravidlo**: každý blokátor (sauna, auto, cerpadlo) musí po deaktivaci resetovat `number.min_soc = 20` a retriggerovat plán
+**Po vypnutí sauny / zastavení nabíjení auta**:
+- Triggerují přepočet plánu (→ `Sbírka dat`) přes `sauna_trigger_plan` / `auto_trigger_plan`
+- `number.min_soc` se NERESETUJE (uživatel kontroluje)
+- `max_discharge_power` se automaticky aktualizuje v dalším cyklu mód logiky
 
 ---
 
