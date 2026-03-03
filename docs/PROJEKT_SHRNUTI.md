@@ -384,12 +384,18 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 ## 9. Aktuální stav integrací
 
-**Blokace vybíjení baterie** (oprava v2, 2026-03-03):
-- **CHYBA v1 (2026-02-25)**: `MaxDischargePower=0` škrtilo celý DC→AC tok invertoru — solar nemůže projít na AC zátěže, celá výroba jde do baterie, dům se napájí z gridu
-- **Opravené řešení (v2)**: `MaxDischargePower=50` (50W) — DC→AC konverze funguje normálně (solar prochází), baterie se vybíjí max 50W (zanedbatelné)
+**Blokace vybíjení baterie** (oprava v3 — dynamická, 2026-03-03):
+- **PROBLÉM**: Victron DC bus — solar a baterie sdílí DC bus. Nízký `MaxDischargePower` (0 nebo 50) škrtí celý DC→AC tok invertoru, solar nemůže projít na AC zátěže.
+- **ŘEŠENÍ v3**: `MaxDischargePower = aktuální solární výkon` (dynamicky). Invertor může převést celou solární produkci na AC bez vybíjení baterie (solar pokrývá DC→AC tok). Min 50W pro noční provoz.
 - **NIKDY nepoužívat** `MaxDischargePower=0` — blokuje celý invertor!
 - **NIKDY nepoužívat** `min_soc` pro blokaci vybíjení — uživatel kontroluje `number.min_soc`
-- Dotčené módy: ŠETŘIT (vždy 50), NORMAL (blockDischarge ? 50 : -1), SOLÁRNÍ NABÍJENÍ (blockDischarge ? 50 : -1)
+- **ŠETŘIT Logic**: `max_discharge_power = Math.max(50, currentSolar)` (čte `sensor.vyroba_fve`)
+- **NORMAL Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
+- **SOLÁRNÍ NABÍJENÍ Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
+
+**Init konfigurace** (oprava 2026-03-03):
+- `Nastav konfiguraci` v `fve-config.json` čte `manual_mod` z `input_select.fve_manual_mod` při startu NR
+- Dříve hardcoded `"auto"` → manuální mód se ztratil po každém NR restartu
 
 **sensor.nabijeni_baterii_minus** (`unique_id: battery_power_minus`):
 - MQTT topic: `victron/N/c0619ab69c71/system/0/Batteries`
