@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-02 (v4: min_soc fix)
+> Poslední aktualizace: 2026-03-03 (v5: NIBE zákaz v drahých hodinách)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -290,7 +290,7 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - `global.cerpadlo_topi` = `(isHeating || isTUV) && nibeBlkDisch` → blokuje auto v `manager-nabijeni-auta.json`
 - Manager (krok 3): kontroluje `cerpadlo_topi` → pokud true, auto STOP
 
-**NIBE** (`switch.nibe_topeni`, reg 47371) — rozhodovací strom (v2.1, 2026-02-27):
+**NIBE** (`switch.nibe_topeni`, reg 47371) — rozhodovací strom (v2.2, 2026-03-03):
 1. **Bezpečnostní kontroly** (vždy první): Grid Lost, Krb, Nádrž > MAX_TANK, Patrony blokují → NIBE OFF
 2. **needsHeat && !isDraha** (levná/střední hodina + potřeba topit):
    - `bigSolarTomorrow && indoorTemp >= safeTemp && !(isSolarHour && SOC > 90%)` → NIBE OFF (šetříme pro solární hodiny; výjimka: v solárních hodinách při SOC > 90% topit)
@@ -298,12 +298,14 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
    - `prebytek >= SOLAR_OVERRIDE_W (8kW, config)` → NIBE ON, `nibeBlockDischarge = false`
    - jinak → NIBE ON, `nibeBlockDischarge = (batSoc <= 90)` — SOC > 90%: topit ze soláru + baterie; SOC ≤ 90%: šetřit baterii
 3. **needsHeat && isDraha && nibeOn** (drahá hodina + NIBE už běží):
-   - NIBE **pokračuje**, `nibeBlockDischarge = false`
+   - `prebytek >= SOLAR_OVERRIDE_W` → NIBE pokračuje (free energy), `nibeBlockDischarge = false`
+   - **Jinak → NIBE OFF** (žádná nouzová výjimka!)
 4. **needsHeat && isDraha && !nibeOn** (drahá hodina + NIBE neběží):
-   - `prebytek >= SOLAR_OVERRIDE_W` → NIBE ON bez blokace
-   - `indoorTemp < safeTemp` → NIBE ON nouzově
-   - Jinak: **čekat**
+   - `prebytek >= SOLAR_OVERRIDE_W` → NIBE ON bez blokace (free energy)
+   - **Jinak: čekat** (žádná nouzová výjimka!)
 5. **!needsHeat** → NIBE OFF
+
+**KRITICKÉ PRAVIDLO (v2.2)**: NIBE se NESMÍ spustit ani pokračovat v drahých hodinách. Jediná výjimka je velký solární přebytek (≥8kW = free energy). Nouzová teplota NENÍ výjimka — je dostatek levných/středních hodin na natopení nádrže. NIBE topí nádrž, oběhové čerpadlo topí dům z nádrže — jsou to nezávislé procesy.
 
 **Noční režim** (oprava v2.1): `effTarget = isNight ? (targetTemp - NOCNI_SNIZ) : targetTemp` — noční snížení platí **vždy** v noci (22:00–6:00), ne jen v drahých hodinách.
 **Price fallback** (oprava v2.1): pokud `lvl === 99` (hodina nenalezena v `fve_prices_forecast`), čte se z `input_number.levelcheapesthourbuy`.
