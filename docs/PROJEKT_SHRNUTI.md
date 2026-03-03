@@ -126,7 +126,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů na 12h (spotové ceny + solar forecast + SOC simulace) |
+| `fve-orchestrator.json` | Plánovač módů v19.0 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). |
 | `fve-modes.json` | Implementace 6 módů (v6, 2026-03-03). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power = Math.max(50, currentSolar)`. NABÍJET manual = targetSoc=100. Fan-out bez diagnostického warn (odstraněn 2026-03-03). |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod` (oprava 2026-03-03). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
@@ -229,6 +229,8 @@ topeni_min_teplota_nadrze: 32 topeni_max_teplota_nadrze: 50
 topeni_nouzova_teplota: 18    topeni_nocni_snizeni: 0.5 (vždy v noci 22-6h)
 topeni_min_soc_patron: 95     topeni_max_teplota_patron: 50
 topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
+min_arbitrage_profit_czk: 2   min_sell_profit_czk: 2
+night_reserve_kwh: 10         prodej_z_baterie_enabled: true
 ```
 
 ---
@@ -240,7 +242,7 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 | **Normal** | Drahé hodiny, vybíjení | Vybíjí |
 | **Šetřit** | Výchozí, levné hodiny | Nečerpá |
 | **Nabíjet ze sítě** | Nejlevnější hodiny | Nabíjí ze sítě |
-| **Prodávat** | Velmi drahé + plná baterie | Prodej přebytků |
+| **Prodávat** | Cenová arbitráž: prodejní zisk ≥ 2 CZK/kWh po amortizaci+ztrátách, SOC > minSoc + noční rezerva | Prodej do sítě |
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
@@ -259,6 +261,18 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 - Triggerují přepočet plánu (→ `Sbírka dat`) přes `sauna_trigger_plan` / `auto_trigger_plan`
 - `number.min_soc` se NERESETUJE (uživatel kontroluje)
 - `max_discharge_power` se automaticky aktualizuje v dalším cyklu mód logiky
+
+**Cenová arbitráž v19.0** (2026-03-03): Plánovač porovnává skutečné nákupní ceny (ne jen levely) a hledá ziskové páry levná→drahá hodina.
+
+- **Effective charge cost** = `nákupní_cena / roundTripEfficiency + amortizace` (CZK/kWh)
+- **Profit** = `drahá_nákupní_cena - effective_charge_cost`
+- Nabíjí z gridu JEN pokud `profit ≥ min_arbitrage_profit_czk` (default 2 CZK) A solar nepokryje
+- PRODÁVAT pokud `prodejní_cena × dischEff - costBasis ≥ min_sell_profit_czk` (default 2 CZK) A SOC po prodeji > minSoc + noční rezerva
+- **Rozšířený cenový pohled**: 36h (dnes + zítra) — arbitráž vidí zítřejší špičky i z dnešního plánu
+- **Solar coverage check**: `estimateSocAtExpHour()` — pokud solar naplní baterii dost, nechargrovat z gridu
+- **Noční rezerva**: `night_reserve_kwh = 10` → `nightReservePct = 10/28×100 ≈ 36%` — pod tuto hranici neprodávat
+
+Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit **2.77 CZK/kWh** → NABÍJET ✓
 
 ---
 
