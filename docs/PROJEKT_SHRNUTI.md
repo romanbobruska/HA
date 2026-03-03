@@ -384,11 +384,12 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 ## 9. Aktuální stav integrací
 
-**Blokace vybíjení baterie** (oprava 2026-02-25):
-- **CHYBA**: `MaxDischargePower=0` škrtilo celý DC→AC tok invertoru včetně průchodu solární energie → solar výkon klesl na ~2kW
-- **OPRAVA**: `MaxDischargePower=-1` vždy (bez limitu), blokace vybíjení baterie přes `number.min_soc = currentSoc+1`
-- Při uvolnění blokace: `min_soc` se resetuje zpět na `config.min_soc` (20%)
-- Dotčené módy: Normal Logic, Solární nabíjení Logic, Šetřit, Nabíjet
+**Blokace vybíjení baterie** (oprava v2, 2026-03-03):
+- **CHYBA v1 (2026-02-25)**: `MaxDischargePower=0` škrtilo celý DC→AC tok invertoru — solar nemůže projít na AC zátěže, celá výroba jde do baterie, dům se napájí z gridu
+- **Opravené řešení (v2)**: `MaxDischargePower=50` (50W) — DC→AC konverze funguje normálně (solar prochází), baterie se vybíjí max 50W (zanedbatelné)
+- **NIKDY nepoužívat** `MaxDischargePower=0` — blokuje celý invertor!
+- **NIKDY nepoužívat** `min_soc` pro blokaci vybíjení — uživatel kontroluje `number.min_soc`
+- Dotčené módy: ŠETŘIT (vždy 50), NORMAL (blockDischarge ? 50 : -1), SOLÁRNÍ NABÍJENÍ (blockDischarge ? 50 : -1)
 
 **sensor.nabijeni_baterii_minus** (`unique_id: battery_power_minus`):
 - MQTT topic: `victron/N/c0619ab69c71/system/0/Batteries`
