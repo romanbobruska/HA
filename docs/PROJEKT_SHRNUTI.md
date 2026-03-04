@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-04 (v19.4: NIBE cheaperAhead+canDeferHeat, arbitrage sell deferral, ŠETŘIT MaxDischargePower=0)
+> Poslední aktualizace: 2026-03-05 (v19.8: KROK 7 sort by absolute price, solar+drahá SOC ochrana)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -127,7 +127,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů v19.5 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO); OPEN_METEO: `forecastPerHour` z `wh_period` today+tomorrow, override aktuální hodiny z `energy_current_hour_3`. |
+| `fve-orchestrator.json` | Plánovač módů v19.8 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO). **v19.7**: KROK 7 řadí discharge kandidáty podle absolutní nákupní ceny (ne per-day levelBuy) — oprava midnight boundary. **v19.8**: Solární+drahá hodina s negativním solárním ziskem a SOC blízko minSoc → ŠETŘIT (ochrana baterie). |
 | `fve-modes.json` | Implementace 6 módů (v19.4, 2026-03-04). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. **PRODÁVAT: `PSP = -maxFeedIn`** (aktivní prodej z baterie do sítě, ne jen solar excess). |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod`. **v19.5**: `solar_forecast_source` config (VICTRON/OPEN_METEO); listener + handler pro Open Meteo entity (`energy_production_today/tomorrow_3`, `energy_production_today_remaining_3`, `energy_current_hour_3`). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
@@ -455,7 +455,7 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 - **NIKDY hardcodovat hodnoty** — vše z `fve_config` nebo HA entit
 - **"čerpadlo"** v kontextu topení = NIBE tepelné čerpadlo (ne oběhové čerpadlo)
-- `fve_prices_forecast` — `levelCheapestHourBuy` je rank per den (1–24), ne absolutní cena
+- `fve_prices_forecast` — `levelCheapestHourBuy` je rank per den (1–24), ne absolutní cena. **KROK 7 v19.7 řadí podle absolutní ceny** (b.buy - a.buy), ne podle levelBuy, aby discharge priority fungovalo správně přes půlnoc
 - Victron scheduled charging: aktivní jen pokud `duration > 0` — `duration: 0` = vypnuto
 - Deploy skript zastaví NR přes `hassio/addon_stop` API, restartuje přes `hassio/addon_restart`
 - `git status` před každým commitem — zahrnout i soubory které uživatel manuálně upravil
