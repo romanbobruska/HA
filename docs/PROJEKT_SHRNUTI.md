@@ -407,6 +407,7 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 - **NIKDY nepoužívat** `MaxDischargePower=0` — blokuje celý invertor!
 - **NIKDY nepoužívat** `min_soc` pro blokaci vybíjení — uživatel kontroluje `number.min_soc`
 - **ŠETŘIT Logic**: `max_discharge_power = Math.max(50, currentSolar)` (čte `sensor.vyroba_fve`)
+- **ŠETŘIT v19.3**: `power_set_point = config.setrit_grid_bias_w` (default 150W) — kompenzuje ~130W standby odběr invertoru z DC busu. Bez toho baterie vybíjí ~100-150W i při solar=0.
 - **NORMAL Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
 - **SOLÁRNÍ NABÍJENÍ Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
 
