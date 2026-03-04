@@ -134,9 +134,9 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.3 — prioritní logika níže |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6 — prioritní logika níže; **takeover** při car already charging + solar > 4kW |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **SOC>95% drain mód** (+300W z baterie) |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; min 6A při solar>2kW (anti-cycling) |
 | `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
@@ -196,7 +196,8 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 - `nabijeni_auta_min_soc_slunce: 85` — min SOC baterie pro povolení solárního nabíjení (nabijeni-slunce)
 - `nabijeni_auta_pretizeni_w: 18000` — práh přetížení sítě při nabíjení auta W (nabijeni-sit)
 - `nabijeni_auta_soc_drain_prah: 95` — SOC práh pro drain mód solárního nabíjení (%)
-- `nabijeni_auta_soc_drain_w: 300` — cílový odběr z baterie v drain módu (W, doporučeno 100-500)
+- `nabijeni_auta_soc_drain_w: 1000` — max odběr z baterie v drain módu při SOC≥95% (W)
+- `nabijeni_auta_soc_charge_w: 1000` — rezerva solaru pro nabíjení baterie při SOC<95% (W)
 
 **Odkud čte data**:
 - `vyrobaDnes` = `getFloat("input_number.predpoved_solarni_vyroby_dnes")` → přes HA websocket (vždy aktuální)
