@@ -91,13 +91,13 @@
         "type": "inject",
         "z": "d86bb11fab512182",
         "g": "4580a451a0858d03",
-        "name": "Každou minutu",
+        "name": "Každých 30 sekund",
         "props": [
             {
                 "p": "payload"
             }
         ],
-        "repeat": "60",
+        "repeat": "30",
         "crontab": "",
         "once": true,
         "onceDelay": "15",
