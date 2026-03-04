@@ -176,16 +176,15 @@ Všechny parametry najdete v Home Assistant pod "Nastavení" → "Zařízení a 
 ---
 
 ### ŠETŘIT (Setrit)
-**Co dělá:** Minimalizuje vybíjení baterie, spotřeba jde ze sítě.
+**Co dělá:** Minimalizuje vybíjení baterie, spotřeba jde ze sítě. Baterie se nevybíjí.
 
 **Kdy se aktivuje:** 
-- Energie je drahá (cenový level ≥ 7)
-- Baterie je málo nabitá
-- Očekává se levnější energie později
+- Levné/střední hodiny kde se nevyplatí vybíjet baterii
+- Očekává se dražší energie později (baterie se šetří pro ni)
 
-**Victron nastavení:**
-- Max Discharge Power: 0 W (baterie se nevybíjí)
-- Grid Set Point: 0 W
+**Victron nastavení (v19.3):**
+- Max Discharge Power: 0 W při solar ≤ 10W, jinak max(50, solar) W
+- Grid Set Point: 150 W (kompenzuje standby invertorů, konfigurovatelné přes `setrit_grid_bias_w`)
 
 ---
 
@@ -323,7 +322,7 @@ Pokud chcete dočasně přepsat automatiku:
 | **Feed In** | Dodávka energie do sítě (prodej) |
 | **Grid Set Point** | Cílový odběr/dodávka ze/do sítě |
 | **ESS** | Energy Storage System - systém ukládání energie |
-| **Cenový level** | Úroveň ceny 1-10, kde 1 = nejlevnější, 10 = nejdražší |
+| **Cenový level** | Úroveň ceny 1-24 (rank per den), kde 1 = nejlevnější, 24 = nejdražší |
 | **Přebytek** | Rozdíl mezi výrobou a spotřebou (kladný = vyrábíme více) |
 | **Amortizace** | Opotřebení baterie vyjádřené v Kč za každou kWh cyklu |
 
@@ -338,5 +337,5 @@ Pokud máte problémy:
 
 ---
 
-*Verze příručky: 1.0*
-*Poslední aktualizace: 2026-01-24*
+*Verze příručky: 1.1*
+*Poslední aktualizace: 2026-03-04*

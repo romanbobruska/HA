@@ -1,39 +1,28 @@
 # Kontext konverzace — FVE řízení
 
-## Aktuální stav (Session 6, 2026-02-14)
+## Aktuální stav (v19.3, 2026-03-04)
 
-### Hlavní problém
-V Normal režimu baterie občas přestane vybíjet (~každých 5 minut). Příčiny identifikovány a opraveny.
+### Nasazené fixy
+Všechny fixy jsou nasazeny a ověřeny.
 
-### Co bylo opraveno (v kódu, čeká na deploy)
+#### v19.3 ŠETŘIT battery discharge fix (2026-03-04)
+- **Problém**: Baterie vybíjela ~130W v ŠETŘIT módu při solar=0 (inverter DC bus standby loss)
+- **Fix**: `MaxDischargePower = 0` když solar ≤ 10W + `PSP = 150W` (grid bias). Victron transfer relay zajišťuje grid passthrough.
+- **Výsledek**: Baterie 0W (dříve -118W)
 
-#### Fix 1: fve-modes.json — paralelní Victron service cally
-- **Problém**: 5 service callů řetězově (A→B→C→D→E). Pokud jeden selže, zbytek se neprovede.
-- **Fix**: Všech 5 módů → Logic funkce posílá na všechny service cally paralelně.
-- **Zákaz přetoků**: doplněny 3 chybějící cally (Schedule SOC=0, Schedule Day=-7, MaxDischargePower=0).
+#### v19.3 Per-hour solar forecast (2026-03-04)
+- **Problém**: `forecastPerHour` byla jen ve fallback path, historická data (path 1) běžela první
+- **Fix**: `forecastPerHour[hour]` jako PATH 0 (nejvyšší priorita) v `getSolarGainForHour`
+- **Výsledek**: h7→h10 SOC realistické (+11% vs starých +29%)
 
-#### Fix 2: fve-orchestrator.json — override Normal→Šetřit
-- **Problém**: `Kontrola podmínek` (běží každých 15s) overridovala Normal→Šetřit při `cerpadloTopi || autoNabijeni`.
-  - Šetřit nastavuje `max_discharge_power=0` + `scheduled_soc=currentSoc` → baterie se nabíjí, spotřeba ze sítě.
-  - Feedback loop: override zapisoval "setrit" zpět do `fve_current_mode`, takže i po skončení podmínky zůstalo "setrit" (až 60s).
-- **Fix**: `planMode` se čte z `plan.currentMode` (immutable, nastavuje plánovač). Override odstraněn.
-
-#### Fix 3: fve-orchestrator.json — SOC oscilace v plánovači (~5 min přerušení)
-- **Problém 1**: PRIORITA 3 (`simulatedSoc <= minSoc + 3` → ŠETŘIT) způsobovala oscilaci:
-  - Normal → baterie vybíjí → SOC klesne pod práh → Šetřit (max_discharge=0)
-  - Solar trochu nabije → SOC stoupne → Normal → opakuj (~5 min cyklus)
-- **Problém 2**: Solar offsets se vytvořily jen když `remainingSolarKwh > 0`.
-  Odpoledne s 0 zbývajícím forecastem → hodina NENÍ solární → default ŠETŘIT.
-- **Fix KROK 6**: Solar offsets vždy pro hodiny v solárním okně (9-17), bez ohledu na forecast.
-- **Fix PRIORITA 3**: Během solárních hodin ochrana baterie jen při absolutním minSoc (ne minSoc+3).
-
-### Stav nasazení
-**Fixy čekají na deploy.** Deploy příkaz: viz sekce Deploy pravidla.
+#### v19.3 NIBE heating fix (2026-03-04)
+- **Problém**: NIBE nenatápělo nádrž v nejlevnějších hodinách (`isDraha` a `cheaperAhead` blokovali)
+- **Fix**: `isDraha` respektuje `planCurrentMode === "setrit"`. `cheaperAhead`/`bigSolarTomorrow` skippovány když plan je `setrit`.
 
 ### Deploy pravidla
 - **NIKDY nerestartovat HA** (`deploy.sh` BEZ `--with-ha`)
 - Restartuje se pouze Node-RED
-- Cesta k repozitáři na HA: nutno detekovat (`/config/HA` nebo `/homeassistant/HA` nebo `/tmp/HA`)
+- Deploy skript v `/tmp/HA`
 
 ---
 
@@ -43,7 +32,7 @@ V Normal režimu baterie občas přestane vybíjet (~každých 5 minut). Příč
 | Soubor | Účel |
 |---|---|
 | `fve-orchestrator.json` | Plánovač (1min) + Exekutor (15s) |
-| `fve-modes.json` | 5 módů: Normal, Šetřit, Nabíjet, Prodávat, Zákaz přetoků |
+| `fve-modes.json` | 6 módů: Normal, Šetřit, Nabíjet, Prodávat, Zákaz přetoků, Solární nabíjení |
 | `fve-config.json` | Globální konfigurace (prahy, kapacity, SOC limity) |
 | `init-set-victron.json` | VRM API čtení + statistiky (nenastavuje Victron řízení) |
 | `fve-heating.json` | Řízení topení/chlazení TČ |
@@ -64,20 +53,23 @@ FVE Modes → Link In → Logic funkce → 5× paralelní service cally:
    - number.max_discharge_power
 ```
 
-### Victron nastavení podle módů
-| Parametr | Normal | Šetřit | Nabíjet | Prodávat | Zákaz přetoků |
-|---|---|---|---|---|---|
-| power_set_point | 0 | 0 | dynamic | dynamic | 0 |
-| scheduled_soc | 0 | currentSoc | targetSoc | 0 | 0 |
-| schedule_charge_duration | 0 | 86399 | 86399 | 0 | 0 |
-| schedule_charge_day | -7 | 7 | 7 | -7 | -7 |
-| max_discharge_power | -1 | 0 | 0 | -1 | 0 |
+### Victron nastavení podle módů (v19.3)
+| Parametr | Normal | Šetřit | Nabíjet | Prodávat | Zákaz přetoků | Solární |
+|---|---|---|---|---|---|---|
+| power_set_point | 0 | gridBias (150W) | dynamic | dynamic | 100 | 0 |
+| min_soc | minSoc | minSoc | minSoc | minSoc | minSoc | minSoc |
+| schedule_soc | 0 | 0 | targetSoc | 0 | 0 | 0 |
+| schedule_charge_duration | 0 | 0 | 86399 | 0 | 0 | 0 |
+| schedule_charge_day | -7 | -7 | 7 | -7 | -7 | -7 |
+| max_discharge_power | blockDisch? solarPT : -1 | solar>10?max(50,s):0 | 0 | -1 | -1 | blockDisch? solarPT : -1 |
+| max_charge_power | blockDisch? 0 : -1 | patBlock? 0 : -1 | -1 | 0 | -1 | patBlock? 0 : -1 |
+| feedin_on | true | true | true | true | false | true |
 
 ### Normal režim: co SPRÁVNĚ dělá PSP=0
 - Solar → spotřeba domácnosti (priorita)
 - Solar přebytek → nabíjení baterie (NORMÁLNÍ, ne bug)
 - Solar < spotřeba → baterie vybíjí (pokrývá deficit)
-- **BUG byl**: override přepnul na Šetřit → baterie se nabíjela na currentSoc, vybíjení zakázáno
+- blockDischarge (NIBE/auto/sauna) → `max_discharge_power = solarPassthrough` (0 při solar≤10W)
 
 ---
 
@@ -92,12 +84,19 @@ FVE Modes → Link In → Logic funkce → 5× paralelní service cally:
 - Fix boiler.json: config → config_fve typo
 - Deploy troubleshooting (divergent branches, missing YAML files)
 
-### Session 6: 2026-02-14 (aktuální)
+### Session 6: 2026-02-14
 - Fix 1: paralelní Victron service cally (fve-modes.json)
 - Fix 2: override Normal→Šetřit odstraněn (fve-orchestrator.json)
-- Fix 3: SOC oscilace v plánovači — solar offsets vždy + PRIORITA 3 relaxace (fve-orchestrator.json)
-- Fix: deploy_from_scratch.sh bez --with-ha
-- TODO: nasadit fixy na HA
+- Fix 3: SOC oscilace v plánovači
+
+### Session 7-9: 2026-02-24 – 2026-03-03
+- Wallbox amperáže damping, boiler guard, NIBE v2.3, cenová arbitráž v19.0, feed-in control
+
+### Session 10: 2026-03-04 (aktuální)
+- ŠETŘIT MaxDischargePower=0 fix (eliminuje 130W DC bus standby)
+- Per-hour solar forecast (forecastPerHour jako PATH 0)
+- NIBE heating fix (isDraha respektuje plan setrit)
+- Konzistence blokace vybíjení přes všechny módy
 
 ---
 
@@ -105,11 +104,12 @@ FVE Modes → Link In → Logic funkce → 5× paralelní service cally:
 - Victron řídící entity (`number.power_set_point` atd.) se nastavují **výhradně** v `fve-modes.json`
 - `init-set-victron.json` (1s repeat) zapisuje jen do `input_number.*` (statistiky), ne do Victron řízení
 - Žádný jiný flow nemění Victron ESS nastavení
-- Normal mode service cally mají **hardcoded** hodnoty (ne z msg)
-- Šetřit/Nabíjet čtou dynamické hodnoty z `msg.victron` (template `{{victron.*}}`)
+- Všechny módy používají sdílenou grupu "Victron Actions" s fan-out + Mustache templates
 - Výchozí mód plánovače je ŠETŘIT (PRIORITA 7), NORMAL jen pro solar/expensive/peak hodiny
+- **MaxDischargePower=0 je bezpečné při solar≤10W** — Victron transfer relay zajišťuje grid passthrough
+- **PSP > 0** (grid bias) v ŠETŘIT kompenzuje inverter standby (~130W DC bus loss)
 
-## Otevřené otázky
-1. Je PSP=0 správné chování pro Normal režim? → ANO, self-consumption: solar→domácnost, přebytek→baterie
-2. Jak se chová Victron s scheduled_soc=0 + schedule_charge_duration=0? → Scheduling vypnutý
-3. Stačí opravy v Node-RED, nebo je potřeba ověřit i nastavení na Victron GX?
+## Vyřešené problémy
+1. PSP=0 správné pro Normal režim? → ANO, self-consumption
+2. scheduled_soc=0 + duration=0? → Scheduling vypnutý
+3. MaxDischargePower=0 bezpečné? → ANO při solar≤10W (ověřeno 2026-03-04)

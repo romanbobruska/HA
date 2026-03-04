@@ -93,11 +93,13 @@ Jednorázová akce:
 
 ### 5.3 Zimní režim — NIBE (47371)
 
-**Blokace v drahých hodinách:**
-- `levelBuy >= prah_draha_energie` → BLOKOVAT (47371=0)
-  - Výjimka: nouzová teplota (indoor < `topeni_nouzova_teplota`) → POVOLIT i v drahých
-- `levelBuy < prah_draha_energie` → POVOLIT (47371=1)
-  - V nejlevnějších hodinách vždy povolit — lepší než riskovat topení v drahých
+**Blokace v drahých hodinách (v2.3 + v19.3):**
+- `isDraha` = `lvl >= prah_draha_energie` AND `planCurrentMode !== "setrit"` (v19.3: FVE plan setřit = levná hodina → NIBE může topit)
+- `isDraha` → NIBE OFF (jedinou výjimkou je solární přebytek ≥ 8kW = free energy)
+- **ŽÁDNÁ nouzová výjimka** — odstraňeno v v2.3 (dostatek levných hodin na natopení nádrže)
+- `!isDraha` → POVOLIT (47371=1)
+  - V nejlevnějších hodinách vždy povolit — proaktivně topit nádrž
+- `cheaperAhead`/`bigSolarTomorrow` se přeskočí když FVE plan je `setrit` (v19.3)
 
 **Vzájemná exkluzivita:**
 - Pokud patrony aktivní → NIBE MUSÍ být OFF (47371=0)

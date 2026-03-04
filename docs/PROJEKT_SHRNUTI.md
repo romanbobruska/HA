@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-03 (v5: NIBE v2.3 — zákaz v drahých hodinách + proaktivní topení nádrže)
+> Poslední aktualizace: 2026-03-04 (v19.3: ŠETŘIT MaxDischargePower=0 fix, per-hour solar forecast, NIBE heating fix)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -13,7 +13,8 @@
 > - **Design pattern pro NR flows:** každý node MUSÍ být v group (`g` property). Nové nody vždy přidat do existující nebo nové group. Vzor layoutu: `fve-config.json`
 > - **Deploy = stop + start** (ne restart) — NR načte flows čistě bez banneru "modified externally"
 > - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
-> - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes dynamický `max_discharge_power = aktuální solar` (viz sekce 9), NE přes změnu min_soc. **NIKDY nepoužívat `max_discharge_power: 0`** — blokuje celý DC→AC tok invertoru.
+> - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes dynamický `max_discharge_power` (viz sekce 9), NE přes změnu min_soc.
+> - **KRITICKÉ: `max_discharge_power = 0` je POVOLENO a SPRÁVNÉ když solar ≤ 10W** (noc/zataženo). Victron transfer relay zajistí grid passthrough. Při solar > 10W použít `Math.max(50, solar)` pro DC bus passthrough.
 > - **KRITICKÉ: Flows které vytvořil uživatel** (`nabijeni-auta-sit.json`, `nabijeni-auta-slunce.json`, `manager-nabijeni-auta.json` — původní spaghetti logika) **NESMÍM měnit bez explicitního souhlasu uživatele.** Před jakoukoliv změnou logiky v těchto flows se ZEPTAT.
 
 ---
@@ -127,7 +128,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů v19.0 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). |
-| `fve-modes.json` | Implementace 6 módů (v6, 2026-03-03). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power = Math.max(50, currentSolar)`. NABÍJET manual = targetSoc=100. Fan-out bez diagnostického warn (odstraněn 2026-03-03). |
+| `fve-modes.json` | Implementace 6 módů (v19.3, 2026-03-04). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod` (oprava 2026-03-03). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
@@ -246,9 +247,11 @@ night_reserve_kwh: 10         prodej_z_baterie_enabled: true
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení** (oprava v3, 2026-03-03): při aktivním NIBE topení, nabíjení auta ze sítě nebo sauně → `max_discharge_power = Math.max(50, currentSolar)` (dynamicky = aktuální solární výkon). Solar prochází na AC zátěže, baterie se nevybíjí. **NIKDY nepoužívat `max_discharge_power: 0`** (blokuje celý DC→AC tok). Solární nabíjení auta NEBLOKUJE.
+**Blokace vybíjení** (oprava v19.3, 2026-03-04): při aktivním NIBE topení, nabíjení auta ze sítě nebo sauně → `max_discharge_power` = dynamicky dle solaru. Solar prochází na AC zátěže, baterie se nevybíjí. Solární nabíjení auta NEBLOKUJE.
+- **solar > 10W** → `max_discharge_power = Math.max(50, solar)` (DC bus passthrough pro solar)
+- **solar ≤ 10W** → `max_discharge_power = 0` (Victron transfer relay zajistí grid passthrough, eliminuje ~130W DC bus standby loss)
 
-**ŠETŘIT mód** (oprava v3, 2026-03-03): `max_discharge_power = Math.max(50, currentSolar)` → solar prochází na AC, baterie se nevybíjí. `min_soc` se NEMĚNÍ.
+**ŠETŘIT mód** (oprava v19.3, 2026-03-04): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. `power_set_point = config.setrit_grid_bias_w` (default 150W) — grid bias kompenzuje inverter standby. `min_soc` se NEMĚNÍ. Ověřeno: baterie 0W v ŠETŘIT (dříve -118W).
 
 **Feed-in control** (oprava 2026-02-26):
 - Zákaz přetoků: `switch.overvoltage_feed_in = OFF` + `number.max_feed_in_power = 0` + `power_set_point = 100W` + **`PreventFeedback = 1` přes MQTT** (`victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback`)
@@ -401,15 +404,16 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 ## 9. Aktuální stav integrací
 
-**Blokace vybíjení baterie** (oprava v3 — dynamická, 2026-03-03):
-- **PROBLÉM**: Victron DC bus — solar a baterie sdílí DC bus. Nízký `MaxDischargePower` (0 nebo 50) škrtí celý DC→AC tok invertoru, solar nemůže projít na AC zátěže.
-- **ŘEŠENÍ v3**: `MaxDischargePower = aktuální solární výkon` (dynamicky). Invertor může převést celou solární produkci na AC bez vybíjení baterie (solar pokrývá DC→AC tok). Min 50W pro noční provoz.
-- **NIKDY nepoužívat** `MaxDischargePower=0` — blokuje celý invertor!
+**Blokace vybíjení baterie** (oprava v19.3 — dynamická, 2026-03-04):
+- **PROBLÉM**: Victron DC bus — solar a baterie sdílí DC bus. Při solar>0 nízký `MaxDischargePower` škrtí DC→AC tok. Při solar=0 min 50W způsoboval ~130W DC bus standby loss.
+- **ŘEŠENÍ v19.3**: Dvoustupňový MaxDischargePower dle aktuálního solaru:
+  - **solar > 10W** → `MaxDischargePower = Math.max(50, solar)` — solar prochází DC→AC
+  - **solar ≤ 10W** → `MaxDischargePower = 0` — Victron transfer relay zajistí grid passthrough, baterie izolována
 - **NIKDY nepoužívat** `min_soc` pro blokaci vybíjení — uživatel kontroluje `number.min_soc`
-- **ŠETŘIT Logic**: `max_discharge_power = Math.max(50, currentSolar)` (čte `sensor.vyroba_fve`)
-- **ŠETŘIT v19.3**: `power_set_point = config.setrit_grid_bias_w` (default 150W) — kompenzuje ~130W standby odběr invertoru z DC busu. Bez toho baterie vybíjí ~100-150W i při solar=0.
-- **NORMAL Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
-- **SOLÁRNÍ NABÍJENÍ Logic**: `blockDischarge ? Math.max(50, currentPvPower) : -1`
+- **ŠETŘIT Logic**: `max_discharge_power = solar>10 ? Math.max(50, solar) : 0` + `PSP = config.setrit_grid_bias_w` (150W)
+- **NORMAL Logic** (blockDischarge): `solarPassthrough = solar>10 ? Math.max(50, solar) : 0`
+- **SOLÁRNÍ NABÍJENÍ Logic** (blockDischarge): stejný pattern
+- **Ověřeno**: baterie 0.0W v ŠETŘIT při solar=0 (dříve -118W)
 
 **Init konfigurace** (oprava 2026-03-03):
 - `Nastav konfiguraci` v `fve-config.json` čte `manual_mod` z `input_select.fve_manual_mod` při startu NR
@@ -461,4 +465,5 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 - **Výkon**: 17 kWp, **Lokace**: Horoušany (50.10°N, 14.74°E)
 - **Azimut**: 190° (mírně JZ), **Sklon**: 45°
 - **Solární křivka** (v18.12): 5:00–18:00, maximum v 12:00 (13%), silnější odpoledne díky JZ orientaci
-- **Sanity check výroby** (monthMaxSolarKwh): Leden 8, Únor 15, Březen 30, Červen 75 kWh/den
+- **Per-hour solar forecast** (v19.3): `forecastPerHour` z `sensor.energy_production_tomorrow_3` (`wh_period`) má NEJVYŠŠÍ prioritu v `getSolarGainForHour` — před historickými daty i statickou křivkou
+- **Sanity check výroby** (monthMaxSolarKwh): Leden 15, Únor 35, Březen 60, Červen 120 kWh/den
