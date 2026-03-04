@@ -127,14 +127,14 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů v19.4 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac` (zbývající část hodiny) — zabraňuje předčasnému ukončení prodeje uprostřed hodiny. |
+| `fve-orchestrator.json` | Plánovač módů v19.5 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO); OPEN_METEO: `forecastPerHour` z `wh_period` today+tomorrow, override aktuální hodiny z `energy_current_hour_3`. |
 | `fve-modes.json` | Implementace 6 módů (v19.4, 2026-03-04). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. **PRODÁVAT: `PSP = -maxFeedIn`** (aktivní prodej z baterie do sítě, ne jen solar excess). |
-| `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod` (oprava 2026-03-03). |
+| `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod`. **v19.5**: `solar_forecast_source` config (VICTRON/OPEN_METEO); listener + handler pro Open Meteo entity (`energy_production_today/tomorrow_3`, `energy_production_today_remaining_3`, `energy_current_hour_3`). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6 — prioritní logika níže; **takeover** při car already charging + solar > 4kW |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6 — prioritní logika níže; **takeover** při car already charging + solar > 4kW; **v19.5**: forecast entity dle `solar_forecast_source` |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; anti-cycling 6A floor jen při malém deficitu (>-1kW); **NIBE mutex** → 0A STOP když `cerpadlo_topi` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
@@ -200,8 +200,8 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 - `nabijeni_auta_soc_charge_w: 1000` — rezerva solaru pro nabíjení baterie při SOC<95% (W)
 
 **Odkud čte data**:
-- `vyrobaDnes` = `getFloat("input_number.predpoved_solarni_vyroby_dnes")` → přes HA websocket (vždy aktuální)
-- `vyrobaZitra` = `getFloat("input_number.predpoved_solarni_vyroby_zitra")` → přes HA websocket
+- `vyrobaDnes` = dle `solar_forecast_source`: VICTRON → `input_number.predpoved_solarni_vyroby_dnes`, OPEN_METEO → `sensor.energy_production_today_3`
+- `vyrobaZitra` = dle `solar_forecast_source`: VICTRON → `input_number.predpoved_solarni_vyroby_zitra`, OPEN_METEO → `sensor.energy_production_tomorrow_3`
 - `letniRezim` = `getBool("input_boolean.letni_rezim")` → přes HA websocket
 
 ---
