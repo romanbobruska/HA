@@ -128,7 +128,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | Soubor | Co dělá |
 |--------|---------|
 | `fve-orchestrator.json` | Plánovač módů v19.0 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). |
-| `fve-modes.json` | Implementace 6 módů (v19.3, 2026-03-04). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. |
+| `fve-modes.json` | Implementace 6 módů (v19.4, 2026-03-04). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. **PRODÁVAT: `PSP = -maxFeedIn`** (aktivní prodej z baterie do sítě, ne jen solar excess). |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod` (oprava 2026-03-03). |
 | `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
