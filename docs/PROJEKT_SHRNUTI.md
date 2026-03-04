@@ -247,9 +247,10 @@ night_reserve_kwh: 10         prodej_z_baterie_enabled: true
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 
-**Blokace vybíjení** (oprava v19.3, 2026-03-04): při aktivním NIBE topení, nabíjení auta ze sítě nebo sauně → `max_discharge_power` = dynamicky dle solaru. Solar prochází na AC zátěže, baterie se nevybíjí. Solární nabíjení auta NEBLOKUJE.
-- **solar > 10W** → `max_discharge_power = Math.max(50, solar)` (DC bus passthrough pro solar)
-- **solar ≤ 10W** → `max_discharge_power = 0` (Victron transfer relay zajistí grid passthrough, eliminuje ~130W DC bus standby loss)
+**Blokace vybíjení** (oprava v19.4, 2026-03-04):
+- **blockDischargeSoft** (NIBE topí, nabíjení auta ze sítě, sauna): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`
+- **blockDischargeHard** (v19.4: auto nabíjí + SOC < `nabijeni_auta_min_soc` [95%]): `max_discharge_power = 0` — baterie se NEVYBÍJÍ dokud SOC nedosáhne 95%. Solar → baterie (MPPT), auto → grid. Čte `sensor.charger_state_garage` přímo (přežije NR restart).
+- **Prodej deferral** (v19.4): PRODÁVAT se odkládá pokud >20% lepší prodejní cena existuje do 3h (neplatí pro předpočítané arbitrageSellOffsets)
 
 **ŠETŘIT mód** (oprava v19.3, 2026-03-04): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. `power_set_point = config.setrit_grid_bias_w` (default 150W) — grid bias kompenzuje inverter standby. `min_soc` se NEMĚNÍ. Ověřeno: baterie 0W v ŠETŘIT (dříve -118W).
 
