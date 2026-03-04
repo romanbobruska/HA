@@ -136,7 +136,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
 | `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6 — prioritní logika níže; **takeover** při car already charging + solar > 4kW |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
-| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; min 6A při solar>2kW (anti-cycling) |
+| `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; anti-cycling 6A floor jen při malém deficitu (>-1kW); **NIBE mutex** → 0A STOP když `cerpadlo_topi` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
