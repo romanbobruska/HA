@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-05 (v19.9: ZÁKAZ PŘETOKŮ blokace vybíjení při topení NIBE)
+> Poslední aktualizace: 2026-03-05 (v2.4 heating: bigSolarTomorrow/cheaperAhead neblokují NIBE v solárních hodinách)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -321,8 +321,9 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
    - `prebytek >= SOLAR_OVERRIDE_W (8kW)` → NIBE ON/pokračuje (free energy)
    - **Jinak → NIBE OFF / NESPOUŠTĚT** (žádná nouzová výjimka!)
 3. **nibeWanted && !isDraha** (levná/střední hodina + potřeba topit nebo nádrž pod MAX):
+   - **v2.4**: `bigSolarTomorrow` a `cheaperAhead` odklady se aplikují **POUZE mimo solární hodiny**. V solárních hodinách NIBE topí vždy (solární energie = zdarma).
    - `canDeferHeat` (v19.4): pokud `indoorTemp ≥ safeTemp` (effTarget - bezpečný pokles), NIBE odloží topení na levnější hodinu i při malém deficitu teploty.
-   - `cheaperAhead` (v19.4): NIBE topí jen pokud je levnější hodina do 3h. `planCurrentMode === "setrit"` respektuje `cheaperAhead`/`bigSolarTomorrow` jen když `lvl ≤ PRAH_LEVNA`.
+   - `cheaperAhead` (v19.4): mimo solar hodiny — NIBE topí jen pokud je levnější hodina do 3h. `planCurrentMode === "setrit"` respektuje jen když `lvl ≤ PRAH_LEVNA`.
    - `prebytek >= SOLAR_OVERRIDE_W` → NIBE ON, `nibeBlockDischarge = false`
    - jinak → NIBE ON, `nibeBlockDischarge = (batSoc <= 90)`
 4. **Jinak** (dům nepotřebuje + nádrž OK) → NIBE OFF
