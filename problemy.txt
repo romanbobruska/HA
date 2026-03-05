@@ -1,21 +1,13 @@
-Záporná cena + balancing potřebný + solární hodina → mód Balancování (ne Zákaz přetoků)
-bal_logic_func nastaví prevent_feedback=1 (ochrana proti exportu do sítě)
-Baterie se nabíjí ze solaru na 100%
-Když SOC dosáhne 95%+ a je záporná cena → balancing_solar_dump=true
-Heating flow povolí patrony → absorbují přebytek solaru
-Victron MPPT nekurtailuje protože patrony vytváří load
-Solární výroba běží na 100%, baterie se balancuje, nic neteče do sítě
+chtel bych videt v planu, kdy aktualne pouzijes mod balancinu - 
 
-Ale patrony jsou az posledni v prioritach - nejdrive musis nabit auto. Neprecetl jsi moje zadani dukladne. Pro priste bud peclivejsi.
+07:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	21	5.83 Kč	3.71 Kč
+08:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	17	4.94 Kč	2.97 Kč
+09:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	12	4.44 Kč	1.92 Kč
+10:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	5	2.59 Kč	1.03 Kč
+11:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	2	1.63 Kč	0.23 Kč
 
-    // Priorita spotřebičů (nižší = vyšší priorita)
-    priority: {
-        tepelne_cerpadlo: 1,
-        bojler: 2,
-        auto_nabijeni: 4,       
-        baterie_nabijeni: 3,
-        ostatni: 5
-    }
+Co kdyz zitra svitit nebude? Co kdyz bude velka spotreba - zobraz balancing a v te hodine, kdy nastanou podminky pro ten mod. Drive nastavuj plan
+jako obvykle - chci videt, ze jsi prave presel v danou hodinu a treba i v dalsi hodinu do modu balancingu, ne, ze uvidim v 
+planu stale balancing.
 
-    Patrony v congigu ani zminene nejsou, ale vidis ty priority? Auto ma vyssi prioritu nez patrony, jelikoz spadaji do ostatni. Nnei tomu tak?
-    Orientuj se dle priorit v configu fve.
+Chapeme se? Kdyztak se zeptej podle pravidel
