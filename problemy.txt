@@ -1,13 +1,21 @@
-prepsal jsi muj config - nestahl jsi ho z HA. PROC??? MAS PRAVIDLO, ZE SI PRED TIM, NEZ ZACNES NECO DELAT, STAHNES AKTUALNI FLOWS,
-ABYS MI NEPREPISOVAL ZMENY!!! PROC TO NEDELAS? ZAPAMATUJ SI TOTO PRAVIDLO JEDNOU PRO VZDY DO MD FILU!!!
+Záporná cena + balancing potřebný + solární hodina → mód Balancování (ne Zákaz přetoků)
+bal_logic_func nastaví prevent_feedback=1 (ochrana proti exportu do sítě)
+Baterie se nabíjí ze solaru na 100%
+Když SOC dosáhne 95%+ a je záporná cena → balancing_solar_dump=true
+Heating flow povolí patrony → absorbují přebytek solaru
+Victron MPPT nekurtailuje protože patrony vytváří load
+Solární výroba běží na 100%, baterie se balancuje, nic neteče do sítě
 
-- zkontroluj a uprav pravidlo - pokud bude zakaz pretoku a budes chit balancovat baterii,
-muzes treba nabijet auto, aby solarni vyroba fungovala na 100 procent a nebyla omezovana zakazem pretoku. Pokud nebude mit auto 
-hlad, tak treba zapnes faze na patrone tak, aby jsme maximalne vyuzili solarni vyrobu.
+Ale patrony jsou az posledni v prioritach - nejdrive musis nabit auto. Neprecetl jsi moje zadani dukladne. Pro priste bud peclivejsi.
 
-DULEZITE JE, ABY BALANCING FUNGOVAL SPRAVNE - TZN. ABY BATERIE PORAD MELA ENERGII NA NABIJENI. ZAROVEN ALE NECHCI, ABY JSME OMEZOVALI SOLARNI VYROBU.
+    // Priorita spotřebičů (nižší = vyšší priorita)
+    priority: {
+        tepelne_cerpadlo: 1,
+        bojler: 2,
+        auto_nabijeni: 4,       
+        baterie_nabijeni: 3,
+        ostatni: 5
+    }
 
-PROTOZE, KDYZ JE BATERIE NA 100 PROCENTECH A JE ZAKAZ PRETOKU, TAK SE OMEZI SOLARNI VYROBA TAK, ABY PREBYTEK NETEKL DO SITE, JELIKOZ BYCH ZA TO ZAPLATIL,
-A TO NECHCI.
-
-Prozkoumej znovu dokumentaci k victronu a pripadne nasad fix. BUD PECLIVY!!!
+    Patrony v congigu ani zminene nejsou, ale vidis ty priority? Auto ma vyssi prioritu nez patrony, jelikoz spadaji do ostatni. Nnei tomu tak?
+    Orientuj se dle priorit v configu fve.
