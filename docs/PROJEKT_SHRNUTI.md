@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-05 (v19.9 orchestrator: low-gain solar hours v discharge poolu; v2.4 heating: solar bypass)
+> Poslední aktualizace: 2026-03-05 (v19.10 orchestrator: Pylontech balancing; v2.5 heating: balancing pump/patrony block)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -12,6 +12,7 @@
 > - Nodes/skupiny v Node-RED se nesmí překrývat v canvasu — groups řadit vertikálně, mezera ~18px, x=14
 > - **Design pattern pro NR flows:** každý node MUSÍ být v group (`g` property). Nové nody vždy přidat do existující nebo nové group. Vzor layoutu: `fve-config.json`
 > - **Deploy = stop + start** (ne restart) — NR načte flows čistě bez banneru "modified externally"
+> - **Po sobě VŽDY uklidit dočasné soubory** (`_*.py`, `_*.js`, `fix_*.py` apod.) — nezasírat projekt nepotřebnými soubory
 > - **Před každým deploym** `deploy_sync_server.py` automaticky zachytí ruční změny z NR UI do git verzí flows
 > - **KRITICKÉ: `number.min_soc` je VÝHRADNĚ pod kontrolou uživatele.** Žádný mód, žádný flow nesmí přepisovat tuto hodnotu. Blokace vybíjení baterie se řeší přes dynamický `max_discharge_power` (viz sekce 9), NE přes změnu min_soc.
 > - **KRITICKÉ: `max_discharge_power = 0` je POVOLENO a SPRÁVNÉ když solar ≤ 10W** (noc/zataženo). Victron transfer relay zajistí grid passthrough. Při solar > 10W použít `Math.max(50, solar)` pro DC bus passthrough.
@@ -127,10 +128,10 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů v19.9 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO). **v19.7**: KROK 7 řadí discharge kandidáty podle absolutní nákupní ceny (ne per-day levelBuy) — oprava midnight boundary. **v19.8**: Solární+drahá hodina s negativním solárním ziskem a SOC blízko minSoc → ŠETŘIT (ochrana baterie). **v19.9**: Solární hodiny s negativním solárním ziskem (solar < spotřeba) vstupují do discharge candidate poolu v KROK 7 — baterie se vybíjí přednostně v dražších hodinách, ne v levnějších ne-solárních. |
+| `fve-orchestrator.json` | Plánovač módů v19.10 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO). **v19.7**: KROK 7 řadí discharge kandidáty podle absolutní nákupní ceny (ne per-day levelBuy) — oprava midnight boundary. **v19.8**: Solární+drahá hodina s negativním solárním ziskem a SOC blízko minSoc → ŠETŘIT (ochrana baterie). **v19.9**: Solární hodiny s negativním solárním ziskem (solar < spotřeba) vstupují do discharge candidate poolu v KROK 7 — baterie se vybíjí přednostně v dražších hodinách, ne v levnějších ne-solárních. **v19.10**: Pylontech battery balancing — PRIORITA 0.5 v `calculateModeForHour`: když `balancing_active`, solární hodiny → NABÍJET, levné → NABÍJET, ostatní → ŠETŘIT. `targetSocFromGrid = 100` při balancování. |
 | `fve-modes.json` | Implementace 6 módů (v19.9, 2026-03-05). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. **PRODÁVAT: `PSP = -maxFeedIn`** (aktivní prodej z baterie do sítě, ne jen solar excess). **v19.9**: ZÁKAZ PŘETOKŮ nyní blokuje vybíjení baterie při `cerpadloTopi` nebo `saunaAktivni` — dříve byl `max_discharge_power=-1` hardcoded a NIBE vybíjela baterii. |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod`. **v19.5**: `solar_forecast_source` config (VICTRON/OPEN_METEO); listener + handler pro Open Meteo entity (`energy_production_today/tomorrow_3`, `energy_production_today_remaining_3`, `energy_current_hour_3`). |
-| `fve-heating.json` | Řízení topení: NIBE + oběhové čerpadlo + patrony + chlazení |
+| `fve-heating.json` | Řízení topení v2.5: NIBE + oběhové čerpadlo + patrony + chlazení. **v2.4**: `bigSolarTomorrow`/`cheaperAhead` neblokují NIBE v solárních hodinách. **v2.5**: Při `balancing_active` → patrony blokovány, oběhové čerpadlo off (pokud `indoorTemp ≥ targetTemp - 0.2`). NIBE má přednost před balancováním. |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
@@ -138,6 +139,7 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; anti-cycling 6A floor jen při malém deficitu (>-1kW); **NIBE mutex** → 0A STOP když `cerpadlo_topi` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
+| `battery-balancing.json` | Pylontech battery balancing 1×/30 dní. Globály: `balancing_needed`, `balancing_active`, `balancing_block_pump`. Detekce vybalancování: SOC=100% + |I|<0.5A + cell diff<0.02V po 20 min. Aktivace: solární hodina (>1kW) = priorita, grid fallback po 31 dnech. NE při zákazu přetoků. Priority: NIBE > balancing > patrony/auto/bazén. HA entity: `input_datetime.last_pylontech_balanced`. MQTT sensory: `battery/512/Dc/0/Current`, `battery/512/System/MaxCellVoltage`, `battery/512/System/MinCellVoltage`, `battery/512/Soc`. |
 | `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
 | `ostatni.json` | Drobné automatizace |
 
