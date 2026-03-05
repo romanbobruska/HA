@@ -64,6 +64,10 @@ input_boolean:
     name: "Blokace vybíjení baterie"
     icon: mdi:battery-lock
 
+  pylontech_balancing_ok:
+    name: "Pylontech balancování OK"
+    icon: mdi:battery-check
+
 # -----------------------------------------------------------------------------
 # INPUT NUMBERS - Nastavitelné parametry
 # -----------------------------------------------------------------------------
@@ -79,14 +83,6 @@ input_datetime:
     has_date: true
     has_time: true
     icon: mdi:battery-sync
-
-# -----------------------------------------------------------------------------
-# INPUT BOOLEAN - Přepínače
-# -----------------------------------------------------------------------------
-input_boolean:
-  pylontech_balancing_ok:
-    name: "Pylontech balancování OK"
-    icon: mdi:battery-check
 
 # -----------------------------------------------------------------------------
 # INPUT SELECT - Výběrové možnosti
