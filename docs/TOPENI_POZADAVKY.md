@@ -27,7 +27,7 @@ Kompletní řízení teploty v domě přes Node-RED. Systém má plnou odpovědn
 | `sensor.teplota_smesovac_teplota` | Teplota ve směšovací nádrži |
 | `sensor.hp2551ae_pro_v2_1_0_outdoor_temperature` | Venkovní teplota |
 | `sensor.nibe_degree_minutes` | Stupně minuty NIBE (rozsah +100 až -30) |
-| `switch.horousany_termostat_prizemi_kote` | Oběhové čerpadlo domu |
+| `switch.teplota_smesovac` | Oběhové čerpadlo domu |
 | `switch.patrona_faze_1` | Patrona fáze 1 (3 kW) |
 | `switch.patrona_faze_3_2` | Patrona fáze 2 (3 kW) |
 | `switch.patrona_faze_3` | Patrona fáze 3 (3 kW) |
@@ -50,7 +50,7 @@ Kompletní řízení teploty v domě přes Node-RED. Systém má plnou odpovědn
 | Aktuátor | Ovládání | Popis |
 |---|---|---|
 | NIBE topení | Modbus reg 47371 (0/1) | Povolení/zákaz hřát nádrž |
-| Oběhové čerpadlo | `switch.horousany_termostat_prizemi_kote` | ON/OFF |
+| Oběhové čerpadlo | `switch.teplota_smesovac` | ON/OFF |
 | Patrona fáze 1 | `switch.patrona_faze_1` | ON/OFF |
 | Patrona fáze 2 | `switch.patrona_faze_3_2` | ON/OFF |
 | Patrona fáze 3 | `switch.patrona_faze_3` | ON/OFF |

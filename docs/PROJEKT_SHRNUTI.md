@@ -335,7 +335,7 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 - COOLDOWN: min. 10 minut mezi přepnutími
 - OCHRANA: nevypnout pokud kompresor běží nebo čerpadlo není v Klidovém stavu
 
-**Oběhové čerpadlo** (`switch.horousany_termostat_prizemi_kote`):
+**Oběhové čerpadlo** (`switch.teplota_smesovac`):
 - ON: `tankTemp >= MIN_TANK (32°C)` — **bez horního limitu** (horní limit platí jen pro patrony)
 - Noční omezení (22:00–6:00): spustí jen pokud `indoorTemp < targetTemp - 0.5°C`
 - Nezávislé na NIBE, čerpá teplo z nádrže kdykoli je k dispozici
