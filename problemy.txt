@@ -1,4 +1,17 @@
-- nevidim, ze bych mohl zadat manualne mod balancovani baterie - to chci, aby to bylo v syncu s ostatnimi mody
-- zaroven nevidim nikde v configu fve parametr, pres ktery si nastavim pocet hodin, po kterou max bude bezet mod balancingu na 100 procentech
-odstran tu HA entitu a cti to jen z konfigu fve  -pokud bych chtel novou entitu v ha, tak ti to reknu explicitne - netvor si 
-ha entity, jak uznas za vhodne!!!
+- proc je v configu fve tohle:
+    
+    // Módy
+    mody: {
+        NORMAL: "normal",
+        SETRIT: "setrit",
+        NABIJET_ZE_SITE: "nabijet_ze_site",
+        PRODAVAT: "prodavat",
+        PRODAVAT_MISTO_NABIJENI: "prodavat_misto_nabijeni",
+        ZAKAZ_PRETOKU: "zakaz_pretoku"
+    },
+
+    nemel by tam byt take balancing? Pokud je tam tohle zbytecne, proc to tam v tom configu je?
+
+    Zkontroluj, ze mod balancing je v suncu s ostatnimi mody - zaroven opet zkontroluj, ze mod balancing splnuje moje pozadavky, ktere 
+    jsem ti zadal drive v MD filu.
+
