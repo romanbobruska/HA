@@ -1,1 +1,7 @@
-Rekni mi, proc ted skoncilo prodavani - doprdele - vzdyt se melo prodavat celou hodinu ne? dej mi vysvetleni, pripadne oprav - V CESTINE!!!
+po deploy v NR mi pise NR chyby - {"__enc__":true,"type":"error","data":{"name":"Error","message":"Invalid server config","stack":"Error: Invalid server config\n    at N (/opt/node_modules/node-red-contrib-home-assistant-websocket/dist/helpers/node.js:1:763)\n    at new v (/opt/node_modules/node-red-contrib-home-assistant-websocket/dist/nodes/current-state/index.js:1:1318)\n    at Object.createNode (/opt/node_modules/@node-red/runtime/lib/flows/util.js:211:27)\n    at Flow.start (/opt/node_modules/@node-red/runtime/lib/flows/Flow.js:261:54)\n    at start (/opt/node_modules/@node-red/runtime/lib/flows/index.js:403:17)"}}
+
+- zaroven, chci, aby jsi zrusil flow battery balancing a dal to jako novy mod do fve modes.
+
+Zaroven chci, abys vzdy, pokud bude tento mod mi vypsal tento mod do planu - jako mame mody normalni, setrit atd., tak tam bude balancing. BUD PECLIVY A ZANALYZUJ A NASAD TO SPRAVNE!!!
+
+ - OVER, ZE PLATI VSECHNY ME POZADAVKY, KTERE JSOU V MD FILECH - JAKO NAPR. ZE NESMIS VYPNOUT NIBE, KDYZ PRACUJE
