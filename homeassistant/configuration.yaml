@@ -81,6 +81,14 @@ input_datetime:
     icon: mdi:battery-sync
 
 # -----------------------------------------------------------------------------
+# INPUT BOOLEAN - Přepínače
+# -----------------------------------------------------------------------------
+input_boolean:
+  pylontech_balancing_ok:
+    name: "Pylontech balancování OK"
+    icon: mdi:battery-check
+
+# -----------------------------------------------------------------------------
 # INPUT SELECT - Výběrové možnosti
 # -----------------------------------------------------------------------------
 input_select:
