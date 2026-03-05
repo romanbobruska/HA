@@ -61,6 +61,16 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 - `deploy_sync_server.py` = **samostatný nástroj**, nespouští se automaticky při deployi
 - Deploy nikdy nespouští sync automaticky — jinak by přepsal git serverovou (potenciálně starou) verzí
 
+### ⚠️ NEJDŮLEŽITĚJŠÍ PRAVIDLO — VŽDY STÁHNOUT FLOWS ZE SERVERU PŘED ÚPRAVOU
+- **PŘED jakoukoli úpravou** Node-RED flow souborů (`fve-config.json`, `fve-modes.json`, `fve-orchestrator.json`, `fve-heating.json`, atd.) **VŽDY nejdřív stáhnout aktuální verzi ze serveru**:
+  ```bash
+  ssh -i "$env:USERPROFILE\.ssh\id_ha" -o ConnectTimeout=10 roman@192.168.0.30 \
+    "cat /addon_configs/a0d7b954_nodered/flows.json" > _server_flows.json
+  ```
+- Pak extrahovat nody příslušného tabu a aplikovat cílené změny **na vrch serverové verze**
+- **NIKDY** nemodifikovat lokální flow soubory bez předchozího syncu — uživatel dělá ruční změny na serveru, které by byly přepsány
+- Porušení tohoto pravidla = ztráta uživatelových ručních úprav
+
 ### Kritická pravidla pro sync server→git
 - **Sync matchuje vždy podle ID nodu** — nikdy nepřepisovat `rules`/`func`/`wires` z jednoho nodu na jiný
 - **`rules`, `func`, `wires`, `links`** smí být synced jen pokud patří ke správnému ID

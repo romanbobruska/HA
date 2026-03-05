@@ -1,17 +1,13 @@
-- proc je v configu fve tohle:
-    
-    // Módy
-    mody: {
-        NORMAL: "normal",
-        SETRIT: "setrit",
-        NABIJET_ZE_SITE: "nabijet_ze_site",
-        PRODAVAT: "prodavat",
-        PRODAVAT_MISTO_NABIJENI: "prodavat_misto_nabijeni",
-        ZAKAZ_PRETOKU: "zakaz_pretoku"
-    },
+prepsal jsi muj config - nestahl jsi ho z HA. PROC??? MAS PRAVIDLO, ZE SI PRED TIM, NEZ ZACNES NECO DELAT, STAHNES AKTUALNI FLOWS,
+ABYS MI NEPREPISOVAL ZMENY!!! PROC TO NEDELAS? ZAPAMATUJ SI TOTO PRAVIDLO JEDNOU PRO VZDY DO MD FILU!!!
 
-    nemel by tam byt take balancing? Pokud je tam tohle zbytecne, proc to tam v tom configu je?
+- zkontroluj a uprav pravidlo - pokud bude zakaz pretoku a budes chit balancovat baterii,
+muzes treba nabijet auto, aby solarni vyroba fungovala na 100 procent a nebyla omezovana zakazem pretoku. Pokud nebude mit auto 
+hlad, tak treba zapnes faze na patrone tak, aby jsme maximalne vyuzili solarni vyrobu.
 
-    Zkontroluj, ze mod balancing je v suncu s ostatnimi mody - zaroven opet zkontroluj, ze mod balancing splnuje moje pozadavky, ktere 
-    jsem ti zadal drive v MD filu.
+DULEZITE JE, ABY BALANCING FUNGOVAL SPRAVNE - TZN. ABY BATERIE PORAD MELA ENERGII NA NABIJENI. ZAROVEN ALE NECHCI, ABY JSME OMEZOVALI SOLARNI VYROBU.
 
+PROTOZE, KDYZ JE BATERIE NA 100 PROCENTECH A JE ZAKAZ PRETOKU, TAK SE OMEZI SOLARNI VYROBA TAK, ABY PREBYTEK NETEKL DO SITE, JELIKOZ BYCH ZA TO ZAPLATIL,
+A TO NECHCI.
+
+Prozkoumej znovu dokumentaci k victronu a pripadne nasad fix. BUD PECLIVY!!!
