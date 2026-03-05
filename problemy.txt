@@ -1,1 +1,14 @@
-no nefunguje to - podivej se na plan - zkontroloval jsi ho??? ty chces ted balancovat??? Pouzil jsi vsechny kontroly po deploy, jak bylo pozadovano?
+podivej se na plan:
+
+07:00 +1	⚫ balancovani	Balancování (☀solár, 33d), cíl 100%	21	5.83 Kč	3.70 Kč
+08:00 +1	⚫ balancovani	Balancování (☀solár, 33d), cíl 100%	17	4.94 Kč	2.97 Kč
+09:00 +1	⚫ balancovani	Balancování (☀solár, 33d), cíl 100%	12	4.44 Kč	1.92 Kč
+
+1/ zmen balancovani za Balancování - česky prosím
+2/ Jsi si jist, že v režimu balancovani se nebude brat ze site ted, kdyz je solarni predpoved dobra? Ano, v zime - kdyz solarni vyroba bude 
+slaba, chapu, ze budes muset dobit baterii ze site - ale ujisti se, ze se nenastavi mod setrit nebo jiny mod, ktery blokuje vybijeni baterie a bude zbytecne
+brat ze site - pozadavek byl, ze chci balancovat za co nevyhodnejsich podminek!!!
+
+- upravil jsem modes flow, doufam, ze mi ho neprepises - zapamatuj si design pattern a rid rid se podle neho
+- ujisti se, ze pokud bude v dome zima, tak se natopi pres NIBE, jak bylo pozadovano.
+- Zaroven mam pozadavek - pokud bude balancing na 100 procentech trvat vice nez hodinu, tak ho vypnes nasilne - hodina staci
