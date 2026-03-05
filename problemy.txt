@@ -1,13 +1,5 @@
-chtel bych videt v planu, kdy aktualne pouzijes mod balancinu - 
+opravdu si myslis, ze nastane toto?
 
-07:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	21	5.83 Kč	3.71 Kč
-08:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	17	4.94 Kč	2.97 Kč
-09:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	12	4.44 Kč	1.92 Kč
-10:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	5	2.59 Kč	1.03 Kč
-11:00	⚫ Balancování	☀ solár, 33 dní, cíl 100%	2	1.63 Kč	0.23 Kč
+11:00	🟢 Normální	Solární hodina, SOC 64% → ~88%	2	1.63 Kč	0.23 Kč
 
-Co kdyz zitra svitit nebude? Co kdyz bude velka spotreba - zobraz balancing a v te hodine, kdy nastanou podminky pro ten mod. Drive nastavuj plan
-jako obvykle - chci videt, ze jsi prave presel v danou hodinu a treba i v dalsi hodinu do modu balancingu, ne, ze uvidim v 
-planu stale balancing.
-
-Chapeme se? Kdyztak se zeptej podle pravidel
+vzdyt se bude topit - cerpadlo asi ceka na solarni hodiny, coz je spravne v aktualni situaci a zaroven si zkontroluj solarni krivku v horousanech, praha vychod, psc 25082.
