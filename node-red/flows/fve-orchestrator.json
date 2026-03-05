@@ -303,7 +303,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Rozhodnutí o akci",
-        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    default: msg.modeIndex = 0;\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"balancovani\");\nif (mode !== \"balancovani\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
+        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    default: msg.modeIndex = 0;\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"Balancování\");\nif (mode !== \"Balancování\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,

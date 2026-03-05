@@ -44,16 +44,6 @@ fve_max_spotreba_sit:
   icon: mdi:transmission-tower-import
   mode: box
 
-balancing_force_stop_hours:
-  name: "Balancování - max doba na 100%"
-  min: 0.5
-  max: 24
-  step: 0.5
-  unit_of_measurement: "h"
-  icon: mdi:battery-clock
-  mode: box
-  initial: 2
-
 fve_jistic:
   name: "Jistič"
   min: 16

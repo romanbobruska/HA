@@ -113,6 +113,7 @@ input_select:
       - "🔵 Nabíjet ze sítě"
       - "🔴 Prodávat do sítě"
       - "🟣 Zákaz přetoků"
+      - "⚡ Balancování baterie"
     icon: mdi:cog
 
   fve_plan_mode:
