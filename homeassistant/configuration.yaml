@@ -71,6 +71,16 @@ input_boolean:
 input_number: !include input_numbers.yaml
 
 # -----------------------------------------------------------------------------
+# INPUT DATETIME - Časové značky
+# -----------------------------------------------------------------------------
+input_datetime:
+  last_pylontech_balanced:
+    name: "Poslední balancování Pylontech"
+    has_date: true
+    has_time: true
+    icon: mdi:battery-sync
+
+# -----------------------------------------------------------------------------
 # INPUT SELECT - Výběrové možnosti
 # -----------------------------------------------------------------------------
 input_select:

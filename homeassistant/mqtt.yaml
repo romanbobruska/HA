@@ -530,3 +530,39 @@ sensor:
     state_topic: "victron/N/c0619ab69c71/vebus/276/Alarms/GridLost"
     value_template: "{{ value_json.value | int }}"
     icon: mdi:transmission-tower-off
+
+  # Battery balancing - DC proud baterie (systémová úroveň)
+  - name: "Battery DC Current"
+    unique_id: "victron_battery_dc_current"
+    state_topic: "victron/N/c0619ab69c71/battery/512/Dc/0/Current"
+    value_template: "{{ (value_json.value | default(0)) | float(0) | round(2) }}"
+    unit_of_measurement: "A"
+    device_class: current
+    icon: mdi:current-dc
+
+  # Battery balancing - maximální napětí článku
+  - name: "Battery Max Cell Voltage"
+    unique_id: "victron_battery_max_cell_voltage"
+    state_topic: "victron/N/c0619ab69c71/battery/512/System/MaxCellVoltage"
+    value_template: "{{ (value_json.value | default(0)) | float(0) | round(3) }}"
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:flash-triangle
+
+  # Battery balancing - minimální napětí článku
+  - name: "Battery Min Cell Voltage"
+    unique_id: "victron_battery_min_cell_voltage"
+    state_topic: "victron/N/c0619ab69c71/battery/512/System/MinCellVoltage"
+    value_template: "{{ (value_json.value | default(0)) | float(0) | round(3) }}"
+    unit_of_measurement: "V"
+    device_class: voltage
+    icon: mdi:flash-triangle-outline
+
+  # Battery balancing - SOC z battery-level (přesnější pro detekci 100%)
+  - name: "Battery SOC Precise"
+    unique_id: "victron_battery_soc_precise"
+    state_topic: "victron/N/c0619ab69c71/battery/512/Soc"
+    value_template: "{{ (value_json.value | default(0)) | float(0) | round(1) }}"
+    unit_of_measurement: "%"
+    device_class: battery
+    icon: mdi:battery
