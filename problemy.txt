@@ -1,5 +1,1 @@
-proc se plan prepnul na balancovani v teto hodine, kdyz neni natopeny dum a pristi hodinu je zakaz pretoku? To nemuze tak byt, protoze balancovani
-bude trvat podle configu max 2 hodiny a timto by balancing trval i v rezimu zakazu pretoku.
-
-Zaroven zkontroluj, ze pocitas pri simulaci nabiti baterie s aktualni minutou v hodine - zda se mi, ze porad pricitas v simulaci procenta SOC a neberes
-v uvahu aktualni cast hodiny.
+PROC SE VYPNULO NIBE, KDYZ JE SOLARNI VYROBA A NENI NATOPENY DUM!!! TY DEBILE!!!! NEDELEJ TAKOVE CHYBY!!!!
