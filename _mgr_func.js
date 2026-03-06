@@ -39,20 +39,26 @@ var MIN_SOC      = config.nabijeni_auta_min_soc      || 95;
 var MIN_SOLAR_W  = config.nabijeni_auta_solar_w      || 4000;
 var MIN_SOC_SLUNCE = config.nabijeni_auta_min_soc_slunce || 85;
 
+// v22: Clear balancing_solar_car on all non-balancing-solar exits
+// Set BEFORE routing to SLUNCE during balancing — correction loop reads this
+
 // 1. Auto nemá hlad → stop (grid+solar OFF)
 if (!autoHlad) {
+    global.set("balancing_solar_car", false);
     node.status({fill:"grey", shape:"ring", text:"Nemá hlad → stop"});
     return [[msg], null, null];
 }
 
 // 1b. v2.5: Charger hlásí "charged" → stop okamžitě (bez čekání na auto_ma_hlad delay)
 if (chargerCharged) {
+    global.set("balancing_solar_car", false);
     node.status({fill:"grey", shape:"ring", text:"Charger state=" + chargerState + " (nabito) → stop"});
     return [[msg], null, null];
 }
 
 // 2. Automatizace vypnuta → stop
 if (!automatizace) {
+    global.set("balancing_solar_car", false);
     node.status({fill:"grey", shape:"ring", text:"Automatizace OFF → stop"});
     return [[msg], null, null];
 }
@@ -61,6 +67,7 @@ if (!automatizace) {
 var ultraLevna = global.get("ultra_levna_energie") || false;
 var cerpadloTopi = global.get("cerpadlo_topi") || false;
 if (cerpadloTopi && !ultraLevna) {
+    global.set("balancing_solar_car", false);
     node.status({fill:"red", shape:"ring", text:"⚠️MUTEX: NIBE topí → auto STOP"});
     return [[msg], null, null];
 }
@@ -72,24 +79,31 @@ var balancingActive = fvePlanAttrs.current_mode === "Balancování" || global.ge
 if (balancingActive) {
     if (batSoc < 99) {
         // SOC nízký — baterie potřebuje veškerý solár na balancing
+        global.set("balancing_solar_car", false);
         node.status({fill:"yellow", shape:"ring", text:"⚡ Balancování (SOC:" + batSoc + "%) → auto STOP"});
         return [[msg], null, null];
     }
     // SOC ≥ 99% — přebytek využij na auto, ale baterie se NESMÍ vybíjet
     if (solarCyklusBezi) {
         // Solární cyklus už běží → nechat (korekční smyčka řídí ampéráž s reserve)
+        global.set("balancing_solar_car", true);
         node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+cyklus | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W"});
         return [null, [msg], null];
     }
     if (rozdiVyroby > MIN_SOLAR_W) {
         // Dostatek přebytku → spusť solární nabíjení auta
+        global.set("balancing_solar_car", true);
         node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+start | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W → slunce"});
         return [null, [msg], null];
     }
     // Žádný přebytek → STOP (při balancingu nenabíjet ze sítě)
+    global.set("balancing_solar_car", false);
     node.status({fill:"yellow", shape:"ring", text:"⚡ Bal+SOC≥99 žádný přebytek (" + Math.round(rozdiVyroby) + "W) → STOP"});
     return [[msg], null, null];
 }
+
+// Non-balancing paths: clear flag
+global.set("balancing_solar_car", false);
 
 // 3c. SOC pod prahem pro solární nabíjení → stop solární cyklus
 if (batSoc < MIN_SOC_SLUNCE) {
