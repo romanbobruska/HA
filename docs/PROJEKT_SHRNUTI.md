@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-06 (v22: multi-hour balancing, switch routing fix, balancing priority over car/NIBE, start time tracking)
+> Poslední aktualizace: 2026-03-06 (v24: night SOC optimization, balancing boolean fix, persistent balancing log)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -249,6 +249,9 @@ topeni_min_soc_patron: 95     topeni_max_teplota_patron: 50
 topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 min_arbitrage_profit_czk: 2   min_sell_profit_czk: 2
 night_reserve_kwh: 10         prodej_z_baterie_enabled: true
+night_target_soc_margin: 5    // margin nad minSOC pro noční cíl (%)
+balancing_interval_days: 30   balancing_force_stop_hours: 2
+balancing_min_solar_kwh: 3    balancing_grid_reserve_w: 1000
 ```
 
 ---
@@ -263,7 +266,7 @@ night_reserve_kwh: 10         prodej_z_baterie_enabled: true
 | **Prodávat** | Cenová arbitráž: prodejní zisk ≥ 2 CZK/kWh po amortizaci+ztrátách, SOC > minSoc + noční rezerva | Prodej do sítě |
 | **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
-| **Balancování** | 1×/30 dní, solární hodiny (priorita), grid jen bez solaru | Nabíjí na 100%, force-stop (fve_config, default 2h), NIBE neblokovaná |
+| **Balancování** | 1×/30 dní, solární hodiny (priorita), grid jen bez solaru | Nabíjí na 100%, detekce: SOC≥100% + |I|<0.5A + ΔV<0.02V po 20min. Force-stop po `balancing_force_stop_hours` (2h). Po dokončení: auto-update `input_datetime.last_pylontech_balanced` + `input_boolean.pylontech_balancing_ok` (✅=OK, ❌=force-stop). **v24**: `bal_svc_set_boolean` uses `action` format. Persistent log: `bal_current`, `bal_cell_diff`, `bal_soc_precise`, `bal_status`. NIBE neblokovaná. |
 
 **Blokace vybíjení** (oprava v19.4, 2026-03-04):
 - **blockDischargeSoft** (NIBE topí, nabíjení auta ze sítě, sauna): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`
@@ -414,8 +417,9 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 ## 8. FVE Logging (`/homeassistant/fve_log.jsonl`)
 
-- Každý cyklus módů (Normal/Šetřit/Nabíjet/Prodávat/Solární/Zákaz) zapisuje JSON řádek
+- Každý cyklus módů (Normal/Šetřit/Nabíjet/Prodávat/Solární/Zákaz/Balancování) zapisuje JSON řádek
 - Pole: `ts, mode, soc, prebytek_w, block_discharge, block_min_soc, nibe, topeni_mod, consumers`
+- **v24**: Balancování přidává: `bal_current` (A), `bal_cell_diff` (V), `bal_soc_precise` (%), `bal_status` (detekční stav)
 - Rotace 1× denně ve 04:00 — zachovají se záznamy max 3 dny dozadu (max 10000 řádků)
 - Soubor: `/homeassistant/fve_log.jsonl`
 - Čtení: `tail -20 /homeassistant/fve_log.jsonl | python3 -c "import sys,json; [print(json.dumps(json.loads(l))) for l in sys.stdin]"`
