@@ -90,10 +90,13 @@ if (balancingActive) {
         node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+cyklus | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W"});
         return [null, [msg], null];
     }
-    if (rozdiVyroby > MIN_SOLAR_W) {
-        // Dostatek přebytku → spusť solární nabíjení auta
+    // v22: Při balancingu potřebujeme dost přebytku pro min 6A + reserve na grid export
+    var BAL_RESERVE_W = config.balancing_grid_reserve_w || 1000;
+    var BAL_MIN_SURPLUS = 6 * 3 * 230 + BAL_RESERVE_W;  // 4140 + 1000 = 5140W
+    if (rozdiVyroby > BAL_MIN_SURPLUS) {
+        // Dostatek přebytku pro 6A + reserve → spusť solární nabíjení auta
         global.set("balancing_solar_car", true);
-        node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+start | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W → slunce"});
+        node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+start | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W (min:" + BAL_MIN_SURPLUS + "W) → slunce"});
         return [null, [msg], null];
     }
     // Žádný přebytek → STOP (při balancingu nenabíjet ze sítě)
