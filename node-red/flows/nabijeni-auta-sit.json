@@ -731,7 +731,8 @@
         "z": "a86ad952ad7756aa",
         "name": "IN nabíjení ze sítě",
         "links": [
-            "f95d3971ad3d46f7"
+            "f95d3971ad3d46f7",
+            "link_out_sit"
         ],
         "x": 55,
         "y": 40,
