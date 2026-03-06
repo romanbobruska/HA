@@ -65,7 +65,15 @@ if (cerpadloTopi && !ultraLevna) {
     return [[msg], null, null];
 }
 
-// 3b. SOC pod prahem pro solární nabíjení → stop solární cyklus
+// 3b. v22: Balancování má přednost před nabíjením auta
+// Pokud baterie není na 100%, zastavit auto aby se baterie nabila pro balancování
+var balancingActive = global.get("balancing_active") || false;
+if (balancingActive && batSoc < 100) {
+    node.status({fill:"yellow", shape:"ring", text:"⚡ Balancování (SOC:" + batSoc + "%) → auto STOP"});
+    return [[msg], null, null];
+}
+
+// 3c. SOC pod prahem pro solární nabíjení → stop solární cyklus
 if (batSoc < MIN_SOC_SLUNCE) {
     node.status({fill:"orange", shape:"ring", text:"SOC " + batSoc + "% < " + MIN_SOC_SLUNCE + "% → stop"});
     return [[msg], null, null];

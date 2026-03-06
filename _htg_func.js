@@ -351,6 +351,11 @@ if (!automatizace) {
         } else if (nibeBlockedByPatrony) {
             if (nibeOn && canOffNibe) actions.push("nibe_off");
 
+        // === v22: BALANCOVÁNÍ → NIBE OFF pokud dům nepotřebuje topit ===
+        // Priorita: topení domu > balancování > proaktivní ohřev nádrže
+        } else if (balancingActive && !needsHeat) {
+            if (nibeOn && canOffNibe) actions.push("nibe_off");
+
         // === DRAHÁ HODINA → NIBE OFF (jediná výjimka: velký solár) ===
         } else if (isDraha) {
             if (prebytek >= SOLAR_OVERRIDE_W) {
