@@ -67,7 +67,9 @@ var coolEnabled = getBool("input_boolean.chlazeni");
 var autoHlad = getBool("input_boolean.auto_ma_hlad");
 var autoNabiji = global.get("auto_nabijeni_aktivni") || false;  // wallbox fyzicky nabiji
 var ultraLevna = global.get("ultra_levna_energie") || false;  // ultra-levny rezim (cena < 1 Kc + solar hodiny)
-var balancingActive = global.get("balancing_active") || false;
+// v22: Čteme z HA entity (přežije restart NR) i z globalu
+var _fvePlanAttrs = (global.get("homeassistant.homeAssistant.states['sensor.fve_plan']") || {}).attributes || {};
+var balancingActive = _fvePlanAttrs.current_mode === "Balancování" || global.get("balancing_active") || false;
 var balancingSolarDump = global.get("balancing_solar_dump") || false;  // Pylontech balancing mode
 var balancingBlockPump = global.get("balancing_block_pump") || false;  // block pump during balancing
 

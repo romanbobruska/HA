@@ -66,8 +66,9 @@ if (cerpadloTopi && !ultraLevna) {
 }
 
 // 3b. v22: Balancování má přednost před nabíjením auta
-// Pokud baterie není na 100%, zastavit auto aby se baterie nabila pro balancování
-var balancingActive = global.get("balancing_active") || false;
+// Čteme z HA entity (přežije restart NR) i z globalu (nastaví orchestrátor)
+var fvePlanAttrs = (global.get("homeassistant.homeAssistant.states['sensor.fve_plan']") || {}).attributes || {};
+var balancingActive = fvePlanAttrs.current_mode === "Balancování" || global.get("balancing_active") || false;
 if (balancingActive && batSoc < 100) {
     node.status({fill:"yellow", shape:"ring", text:"⚡ Balancování (SOC:" + batSoc + "%) → auto STOP"});
     return [[msg], null, null];
