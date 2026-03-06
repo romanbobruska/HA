@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-05 (v19.11 orchestrator: Balancování mód; fve-modes 7 módů; konfiguratelný force-stop; OK/NOK indikátor)
+> Poslední aktualizace: 2026-03-06 (v22: multi-hour balancing, switch routing fix, balancing priority over car/NIBE, start time tracking)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -139,14 +139,14 @@ Group "Log"                     x=494 y=159  w=662  h=182  (vpravo vedle módů,
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů v19.11 na 12h (spotové ceny + solar forecast + SOC simulace + **cenová arbitráž** + **PRODÁVAT mód**). Rozšířený cenový pohled na 36h (dnes+zítra). **PRODÁVAT socAfterSell** používá `frac`. **Sbírka dat** čte solární forecast dle `solar_forecast_source` (VICTRON/OPEN_METEO). **v19.7**: KROK 7 řadí discharge kandidáty podle absolutní nákupní ceny (ne per-day levelBuy) — oprava midnight boundary. **v19.8**: Solární+drahá hodina s negativním solárním ziskem a SOC blízko minSoc → ŠETŘIT (ochrana baterie). **v19.9**: Solární hodiny s negativním solárním ziskem (solar < spotřeba) vstupují do discharge candidate poolu v KROK 7 — baterie se vybíjí přednostně v dražších hodinách, ne v levnějších ne-solárních. **v19.11**: Pylontech battery balancing — PRIORITA 0.5 v `calculateModeForHour`: čte `input_datetime.last_pylontech_balanced` z HA, pokud ≥30 dní → mód `Balancování` (CZ klíč). **Solar-first**: solární hodiny = nabíjí; levné hodiny = grid nabíjení JEN pokud žádné solární hodiny není k dispozici. Drahé hodiny: fall-through do normální priority chain. |
+| `fve-orchestrator.json` | Plánovač módů v22 na 12h. **v22**: Multi-hour balancing — `balancingHoursUsed < balancingForceStopHours` (default 2h). Plán zobrazuje Balancování přes více po sobě jdoucích solárních hodin dokud SOC nedosáhne 100% nebo nedojdou max hodiny. **Switch routing fix**: outputs 6→7, wire output 6 → `lo_orch_balancovani` (dřív Balancování messages silentně zahozeny). **Rozhodnutí o akci**: trackuje `balancing_started_at` global, po překročení max doby přepne na NORMAL. PRIORITA 0.5: `_balCanAssign` = balancingNeeded && hoursUsed < max && elapsed < max. **Solar-first**: solární hodiny = nabíjí; levné hodiny = grid nabíjení JEN pokud žádné solární hodiny není k dispozici. |
 | `fve-modes.json` | Implementace 7 módů (v19.11, 2026-03-05). Sdílená grupa "Victron Actions" s fan-out + service cally. **`number.min_soc` se NEPŘEPISUJE** — `shared_min_soc` odpojen. Blokace vybíjení = **dynamický** `max_discharge_power`: solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. ŠETŘIT: `PSP = config.setrit_grid_bias_w` (150W). NABÍJET manual = targetSoc=100. **PRODÁVAT: `PSP = -maxFeedIn`** (aktivní prodej z baterie do sítě, ne jen solar excess). **v19.9**: ZÁKAZ PŘETOKŮ nyní blokuje vybíjení baterie při `cerpadloTopi` nebo `saunaAktivni`. **v19.11**: Nový mód BALANCOVÁNÍ (klíč `Balancování`) — nabíjí na 100%, detekuje vybalancování (SOC=100% + |I|<0.5A + cell ΔV<0.02V po 20min). **Force-stop**: konfiguratelný přes `fve_config.balancing_force_stop_hours` (default 2h). Po dokončení: aktualizuje `input_datetime.last_pylontech_balanced` + nastaví `input_boolean.pylontech_balancing_ok` (ON=úspěch, OFF=force-stop). NIBE má přednost — není blokovaná balancováním. |
 | `fve-config.json` | Konfigurace + čtení HA stavů do globálů. Init čte `manual_mod` z `input_select.fve_manual_mod`. **v19.5**: `solar_forecast_source` config (VICTRON/OPEN_METEO); listener + handler pro Open Meteo entity (`energy_production_today/tomorrow_3`, `energy_production_today_remaining_3`, `energy_current_hour_3`). |
-| `fve-heating.json` | Řízení topení v2.5: NIBE + oběhové čerpadlo + patrony + chlazení. **v2.4**: `bigSolarTomorrow`/`cheaperAhead` neblokují NIBE v solárních hodinách. **v2.5**: Při `balancing_active` → patrony blokovány, oběhové čerpadlo off (pokud `indoorTemp ≥ targetTemp - 0.2`). NIBE má přednost před balancováním. |
+| `fve-heating.json` | Řízení topení v2.5+v22: NIBE + oběhové čerpadlo + patrony + chlazení. **v22**: `balancingActive` čten z HA entity `sensor.fve_plan` (přežije restart NR) + globálu. Při balancování + dům nepotřebuje topit → **NIBE OFF** (proaktivní ohřev nádrže ustoupí balancování). Pokud `needsHeat=true` → NIBE zůstává ON (topení domu > balancování). Patrony blokovány při `balancingActive`. Priorita: **topení domu > balancování > proaktivní ohřev nádrže > patrony/auto/bazén**. |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál `fve_prices_forecast` |
-| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6 — prioritní logika níže; **takeover** při car already charging + solar > 4kW; **v19.5**: forecast entity dle `solar_forecast_source` |
+| `manager-nabijeni-auta.json` | Rozhodnutí grid vs. solar nabíjení auta v2.6+v22. **v22**: Balancování má přednost před nabíjením auta — pokud `balancingActive && batSoc < 100` → auto STOP (output 1). `balancingActive` čten z HA entity `sensor.fve_plan` (přežije restart NR) + globálu. Funkce: `Rozhodovací logika v2.6`. |
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (headroom výpočet); cenové prahy z `fve_config` (`nabijeni_auta_cena_prah_vyssi/nizsi`) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru; SOC práh z `fve_config`; damping ±2A/cyklus, delay 20s; **korekční křivka**: SOC<95% → reserva 1kW pro baterii (CHARGE), SOC≥95% → drain 1kW z baterie; anti-cycling 6A floor jen při malém deficitu (>-1kW); **NIBE mutex** → 0A STOP když `cerpadlo_topi` |
 | `boiler.json` | Automatizace bojleru (Meross termostat) — solar forecast zítra, NIBE guard, Meross unavailable guard |
@@ -177,7 +177,7 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 
 **Config** (flow proměnné): `TEPLOTA_MAX=69, VYSOKA=60, STREDNI=58, MIN=20, POVINNY_SOLAR=40, FORECAST_THRESHOLD=35000Wh, PRICE_LEVEL_LEVNY=6, CENA_KWH_LEVNA=2.6`
 
-### Manager nabíjení auta v2.4 — prioritní logika (oprava 2026-02-27)
+### Manager nabíjení auta v2.6+v22 — prioritní logika
 
 **Implementace**: 1 `function` node (`main_logic_func`), 3 výstupy: [stop, slunce, síť].
 **DŮLEŽITÉ**: čte `vyrobaDnes`/`vyrobaZitra` **přímo z `homeassistant.homeAssistant.states`** (HA websocket store) — NE z `fve_config`, protože `fve_config.forecast_vyroba_dnes` je po restartu NR = 0.
@@ -189,9 +189,13 @@ Rozhodovací pořadí (první splněná podmínka vyhraje):
 Rozhodovací pořadí (první splněná podmínka vyhraje):
 
 1. Auto nemá hlad → **STOP** (wallbox OFF)
+1b. Charger state=3/4 (nabito) → **STOP**
 2. Automatizace OFF → **STOP** (wallbox OFF)
 3. NIBE topí (mutex) → **STOP** (wallbox OFF)
-4. `solarni_rezim ON` + **přebytek** → **SLUNCE**; bez přebytku → **STOP**
+3b. **Balancování aktivní** + SOC < 100% → **STOP** (baterie se musí nabít)
+3c. SOC < 85% → **STOP**
+4. Solární cyklus už běží → **SLUNCE** (nechat běžet)
+5. `solarni_rezim ON` + **přebytek** → **SLUNCE**; bez přebytku → **STOP**
 5. `letni_rezim ON` + **přebytek** → **SLUNCE**; bez přebytku → falls through
 6. `vyrobaDnes > 40 kWh` + **přebytek** → **SLUNCE**
 7. `batSoc > 95%` + **přebytek** → **SLUNCE**
