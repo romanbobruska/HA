@@ -833,13 +833,25 @@ function calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {
     }
 
     // PRIORITA 0.5: Balancování baterie (1x/30 dní)
-    // v22: Přes více hodin — dokud SOC nedosáhne 100% a nepřekročíme max dobu
+    // v23: Přes více hodin — pouze v hodinách s dostatečným solárním výkonem
+    var BAL_MIN_SOLAR_KWH = config.balancing_min_solar_kwh || 2;
     if (_balCanAssign) {
         if (solarOffsets[offset]) {
-            balancingHoursUsed++;
-            var balReason = "☀ solár, " + Math.round(daysSinceBal) + " dní, SOC " + Math.round(simulatedSoc) + "% → cíl 100%";
-            if (priceSell <= 0) balReason += " (zákaz přetoků)";
-            return { mode: MODY.BALANCOVANI, reason: balReason };
+            // v23: Check per-hour solar forecast — skip hours with too little solar
+            var balHour = (currentHour + offset) % 24;
+            var balSolarKwh = (forecastPerHour[balHour] !== undefined) ? forecastPerHour[balHour] : 0;
+            if (balSolarKwh <= 0) {
+                // Fallback to curve estimate
+                var balCurveShare = getSolarCurveShare(balHour);
+                balSolarKwh = (forecastZitra > 0 ? forecastZitra : remainingSolarKwh) * balCurveShare;
+            }
+            if (balSolarKwh >= BAL_MIN_SOLAR_KWH) {
+                balancingHoursUsed++;
+                var balReason = "☀ solár " + balSolarKwh.toFixed(1) + "kWh, " + Math.round(daysSinceBal) + " dní, SOC " + Math.round(simulatedSoc) + "% → cíl 100%";
+                if (priceSell <= 0) balReason += " (zákaz přetoků)";
+                return { mode: MODY.BALANCOVANI, reason: balReason };
+            }
+            // Solar hour but too little yield — fall through to normal decisions
         } else if (priceSell <= 0) {
             // Nesolar + záporná cena: ZAKAZ_PRETOKU (grid nabíjení nemá smysl)
             return { mode: MODY.ZAKAZ_PRETOKU, reason: "Záporná cena, čekám na solár pro balancing" };
