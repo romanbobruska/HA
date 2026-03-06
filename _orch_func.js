@@ -1015,6 +1015,14 @@ function calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {
         };
     }
 
+    // PRIORITA 5c: v24 - Hodiny oříznuté KROK 7c → ŠETŘIT (chrání SOC target)
+    if (arbSaveOffsets[offset]) {
+        return {
+            mode: MODY.SETRIT,
+            reason: "Šetřím pro dražší hodiny (Lv" + levelBuy + ", SOC " + Math.round(simulatedSoc) + "%, cíl " + targetEndSoc + "%)"
+        };
+    }
+
     // PRIORITA 6: ŠETŘIT (výchozí mód) - pouze levné hodiny (levelBuy < PRAH_DRAHA)
     return {
         mode: MODY.SETRIT,
