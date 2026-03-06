@@ -15,12 +15,13 @@ REPO_URL="https://github.com/romanbobruska/HA.git"
 BRANCH="main"
 HA_CONFIG="/config"
 NODERED_DIR="/addon_configs/a0d7b954_nodered"
-RESTART_HA=false
+RESTART_HA=true
 FORCE=false
 
 for arg in "$@"; do
     case $arg in
-        --with-ha) RESTART_HA=true ;;
+        --with-ha) RESTART_HA=true ;;  # default, zpětná kompatibilita
+        --no-ha) RESTART_HA=false ;;
         --branch=*) BRANCH="${arg#*=}" ;;
         --force) FORCE=true ;;
     esac
@@ -31,7 +32,7 @@ echo "  Branch: $BRANCH"
 if $RESTART_HA; then
     echo "  (s restartem Home Assistant)"
 else
-    echo "  (pouze Node-RED)"
+    echo "  (pouze Node-RED, BEZ restartu HA)"
 fi
 echo "=========================================="
 
@@ -168,7 +169,7 @@ if $RESTART_HA; then
         echo "   ⚠️  HA restart přes API selhal (HTTP $HA_RESTART) — restartujte ručně: Nastavení → Systém → Restartovat"
     fi
 else
-    echo "   ℹ️  Home Assistant NEBYL restartován (použijte --with-ha pro restart HA)"
+    echo "   ℹ️  Home Assistant NEBYL restartován (--no-ha flag)"
 fi
 
 # --- 7. Úklid repozitáře ---

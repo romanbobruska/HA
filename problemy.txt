@@ -1,5 +1,3 @@
-opravdu si myslis, ze nastane toto?
-
-11:00	🟢 Normální	Solární hodina, SOC 64% → ~88%	2	1.63 Kč	0.23 Kč
-
-vzdyt se bude topit - cerpadlo asi ceka na solarni hodiny, coz je spravne v aktualni situaci a zaroven si zkontroluj solarni krivku v horousanech, praha vychod, psc 25082.
+hlasi mi HA, ze mame pouzito 10 procent diskoveho uloziste. Vcera to bylo 6 procent. Nekde se neco muselo stat v ramci nasich zmen, co zpusobuje
+zasirani diksu v HA. Nevadi mi to, ale zkotroluj, ze neukladas do HA zbytecnosti. Zaroven vymaz z HA nepotrebne fily,
+abychom mohli fungovat - toto si uloz jako dalsi pravidlo po deploy.
