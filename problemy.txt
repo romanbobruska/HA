@@ -1,59 +1,13 @@
-ZAMER SE NA BALANCING.
+- NEUKLIZIS PO SOBE - NAPRAV TO, JSOU TU ZBYTECNE FILY V PROJEKTU - ZAPAMATUJ SI DOPRDELE TEN POZAVAVEK PO DEPLOYI
+- Ted vidim, ze nam posledni balancing nedopadl podle ocekavani - tzn. aby baterie byla 20 minut bez nabijeni a vybijeni - tzn. aby bylo 
+nabijeni a vybijeni baterie po min 20 minut na  0. OK, V tomto pripade se spusti balancing za dalsi mesic - 30 dni, doufam, ze ten parametr jo v fve configu.
 
-DNES JSME BALANCOVALI. MAM S TIM NEKOLIK PROBLEMU. podivej se do D:\Programy\Programování\Node Red\HA\user images\plan.png.:
+Ale pockej - zatimco pisu tohle zadani, tys mi zmenil ikonku z NOK na OK. JSI SI JIST, ZE JSME DOPADLI DOBRE??? ZE BATERIE SE PO DOBU 20 MINUT 
+NENEABIJELA ANI NEVYBIJELA??? MAS DOSTATECNE LOGY A JA NEVIM CO K TOMU, ABYS TO ZJISTIL, JAK DOPADL BALANCING?????
 
-1/ V PLANU V DASHBOARDU V HA NEVIDIM IKONKU, JAK JSME DOPADLI, JAK BYLO POZADOVANO. 
-2/ NEVIDIM AKTUALIZOVANY LAST UPDATE POSLEDNIHO BALANCINGU - STALE JE TAM ⚡ Poslední balancing: 01.02. 00:00, I KDYZ JSME DNES BALANCOVALI
-3/ V H7 PLANUJES OPET BALANCING - 
-    A/ TOHLE NENI DOBRE, PROTOZE MAS POZADAVEK, ABY SE ZOBRAZIL BALANCING V HODINE, KDY TO JE REALNE. V HODINE H7 NEBUDEME BALANCOVAT, JELIKOZ SOLARNI
-    VYROBA NAM NEDA DOST VYKONU
-    B/ NESOUVISI TEN PLAN BALANCNGU NA H7 S TIM, ZES NEAKTUALIZOVAL POSLEDNI LAST BALANCING?
+Ted se mi plan libi, nerozbij ho.
 
-    PRECTI SI MD FILY A OPRAV TO TAK, ABY TO FUNGOVALO SPRÁVNĚ. JESTLI TI TO POMUZE, TADY MAS YAML MEHO PLANU V HA:
+- znovu over, ze mi budes davat posledni datum balancingu do dashboardu vcetne ikony, jak dopadl. PLATI TED NOVE TEN POZADAVEK - PO 20 MINUT NESMI NASTAT 
+VYBIJENI ANI NABIJENI BATERIE.
 
-    type: markdown
-content: >
-  {% set plan = state_attr('sensor.fve_plan_data', 'plan') %} {% set last_update
-  = state_attr('sensor.fve_plan_data', 'last_update') %} {% set current_mode =
-  state_attr('sensor.fve_plan_data', 'current_mode') %} {% set blokace =
-  state_attr('sensor.fve_plan_data', 'blokace_text') %} {% set last_bal =
-  states('input_datetime.last_pylontech_balanced') %}
-
-  {# Načtení stavu sítě #} {% set grid_status =
-  states('sensor.stav_rozvodne_site_grid_status') %}
-
-  {% set mode_icons = {
-    'normal': '🟢', 'setrit': '🟡', 'nabijet_ze_site': '🔵',
-    'prodavat': '🔴', 'prodavat_misto_nabijeni': '⚪', 'zakaz_pretoku': '🟣'
-  } %}
-
-  {% set mode_names = {
-    'normal': 'Normální', 'setrit': 'Šetřit', 'nabijet_ze_site': 'Nabíjet',
-    'prodavat': 'Prodávat', 'prodavat_misto_nabijeni': 'Prodej přebytku', 'zakaz_pretoku': 'Zákaz přetoků'
-  } %}
-
-  <b>Aktuální mód:</b> {{ mode_icons[current_mode] | default('⚫') }} {{
-  mode_names[current_mode] | default(current_mode) }} |  <b>Blokace:</b> {{
-  blokace | default('NE') }} |  <b>⚡ Poslední balancing:</b> {{
-  as_timestamp(last_bal) | timestamp_custom('%d.%m. %H:%M') if last_bal !=
-  'unknown' else 'N/A' }}
-
-  <b>Aktualizováno:</b> {% if last_update %}{{ as_timestamp(last_update) |
-  timestamp_custom('%d.%m.%Y %H:%M:%S') }}{% else %}N/A{% endif %} | 
-  <b>Síť:</b>  {%- if grid_status == 'Připojeno (OK)' -%} 🟢 OK {%- elif
-  grid_status == 'Varování (Warning)' -%} 🟡 VAROVÁNÍ {%- elif grid_status ==
-  'Výpadek (Grid Lost)' -%} 🔴 VÝPADEK {%- else -%} ⚪ NEZNÁMO ({{ grid_status
-  }}) {%- endif -%}
-
-  {% if plan and plan | length > 0 %} <table>
-  <tr><th>Hodina</th><th>Mód</th><th>Důvod</th><th>Level</th><th>Cena
-  nákup</th><th>Cena prodej</th></tr> {% for item in plan %} <tr> <td>{{ '%02d'
-  | format(item.hour) }}:00{% if item.isNextDay %} +1{% endif %}</td> <td>{{
-  mode_icons[item.mode] | default('⚫') }} {{ mode_names[item.mode] |
-  default(item.mode) }}</td> <td>{{ item.reason }}</td> <td>{{ item.priceLevel
-  }}</td> <td>{{ '%.2f' | format(item.priceBuy) }} Kč</td> <td>{{ '%.2f' |
-  format(item.priceSell) }} Kč</td> </tr> {% endfor %} </table> {% else %} Plán
-  není k dispozici {% endif %}
-grid_options:
-  rows: 8
-  columns: 33
+CHAPES ZADANI??? PRIPADNE SE ZEPTEJ V JEENDOM PROMTPU.

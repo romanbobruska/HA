@@ -823,7 +823,8 @@ function calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {
         lastBalMs_pre = new Date(lastBalStr_pre).getTime();
     }
     var daysSinceBal = lastBalMs_pre > 0 ? (Date.now() - lastBalMs_pre) / (1000 * 60 * 60 * 24) : 999;
-    var balancingNeeded = daysSinceBal >= 30;
+    var balancingIntervalDays = config.balancing_interval_days || 30;
+    var balancingNeeded = daysSinceBal >= balancingIntervalDays;
 
     // PRIORITA 0: Záporná prodejní cena
     // Pokud balancing potřebný + solární hodina → BALANCOVANI (ne zákaz přetoků)
