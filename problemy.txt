@@ -1,5 +1,1 @@
-podivej se na plan. Mas ted balancovani, ale baterie neni nabita
--zaroven ti nejak nevysla simulace solarni vyroby - jak jsem ti rikal, bylo to nerealne - opravdu myslis, ze se baterie v tuto hodinu dobije na 100 procent?
-
-Uprav simulaci solarni vyroby z ohledem na spotrebu, at je to realne. Zaroven chci videt mod balancovani az teprve v hodine, kdy to opravdu realne 
-bude mozne.
+uprava pravidla pro balancovani - nikdy ho neplanuj v hodine, kdy je zakaz pretoku - nechceme, aby se omezovala solarni vyroba
