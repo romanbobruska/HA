@@ -163,8 +163,8 @@ if $RESTART_HA; then
         -H "Authorization: Bearer $HA_TOKEN" \
         -H "Content-Type: application/json" \
         --data-raw '{}' 2>/dev/null || echo "0")
-    if [ "$HA_RESTART" = "200" ] || [ "$HA_RESTART" = "201" ]; then
-        echo "   ✅ Home Assistant restartován (HTTP $HA_RESTART)"
+    if [ "$HA_RESTART" = "200" ] || [ "$HA_RESTART" = "201" ] || [ "$HA_RESTART" = "504" ] || [ "$HA_RESTART" = "0" ]; then
+        echo "   ✅ Home Assistant restartován (HTTP $HA_RESTART — 504/0 = timeout je OK, HA se restartuje)"
     else
         echo "   ⚠️  HA restart přes API selhal (HTTP $HA_RESTART) — restartujte ručně: Nastavení → Systém → Restartovat"
     fi
