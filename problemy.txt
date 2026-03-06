@@ -1,3 +1,3 @@
-hlasi mi HA, ze mame pouzito 10 procent diskoveho uloziste. Vcera to bylo 6 procent. Nekde se neco muselo stat v ramci nasich zmen, co zpusobuje
-zasirani diksu v HA. Nevadi mi to, ale zkotroluj, ze neukladas do HA zbytecnosti. Zaroven vymaz z HA nepotrebne fily,
-abychom mohli fungovat - toto si uloz jako dalsi pravidlo po deploy.
+NE - nechci, abys vzdy restartoval HA. jen pokud je to nutne. Ctime muj pozadavek. Pokud to , co jsem ti rekl v poslednim promtu je problem s restartem HA, 
+tak jsem s tim OK.
+Potom to bylo na vysvetleni, ne na zmenu pozadavku!!!

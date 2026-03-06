@@ -15,12 +15,12 @@ REPO_URL="https://github.com/romanbobruska/HA.git"
 BRANCH="main"
 HA_CONFIG="/config"
 NODERED_DIR="/addon_configs/a0d7b954_nodered"
-RESTART_HA=true
+RESTART_HA=false
 FORCE=false
 
 for arg in "$@"; do
     case $arg in
-        --with-ha) RESTART_HA=true ;;  # default, zpětná kompatibilita
+        --with-ha) RESTART_HA=true ;;
         --no-ha) RESTART_HA=false ;;
         --branch=*) BRANCH="${arg#*=}" ;;
         --force) FORCE=true ;;
@@ -32,7 +32,7 @@ echo "  Branch: $BRANCH"
 if $RESTART_HA; then
     echo "  (s restartem Home Assistant)"
 else
-    echo "  (pouze Node-RED, BEZ restartu HA)"
+    echo "  (pouze Node-RED)"
 fi
 echo "=========================================="
 
