@@ -826,17 +826,18 @@ function calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {
     var balancingNeeded = daysSinceBal >= 30;
 
     // PRIORITA 0: Záporná prodejní cena
-    // Pokud balancing potřebný → NE zákaz přetoků, ale BALANCOVANI (solární hodiny)
-    if (priceSell <= 0 && !(balancingNeeded && offset === 0)) {
+    // Pokud balancing potřebný + solární hodina → BALANCOVANI (ne zákaz přetoků)
+    var _balCanAssign = balancingNeeded && balancingHoursUsed < balancingForceStopHours && (offset === 0 ? _balElapsedHours < balancingForceStopHours : true);
+    if (priceSell <= 0 && !(_balCanAssign && solarOffsets[offset])) {
         return { mode: MODY.ZAKAZ_PRETOKU, reason: "Záporná prodejní cena" };
     }
 
     // PRIORITA 0.5: Balancování baterie (1x/30 dní)
-    // Pouze aktuální hodina (offset 0) — budoucí hodiny plánují normálně
-    // Při záporné ceně + solární hodina: BALANCOVANI s ochranou proti přetokům
-    if (balancingNeeded && offset === 0) {
+    // v22: Přes více hodin — dokud SOC nedosáhne 100% a nepřekročíme max dobu
+    if (_balCanAssign) {
         if (solarOffsets[offset]) {
-            var balReason = "☀ solár, " + Math.round(daysSinceBal) + " dní, cíl 100%";
+            balancingHoursUsed++;
+            var balReason = "☀ solár, " + Math.round(daysSinceBal) + " dní, SOC " + Math.round(simulatedSoc) + "% → cíl 100%";
             if (priceSell <= 0) balReason += " (zákaz přetoků)";
             return { mode: MODY.BALANCOVANI, reason: balReason };
         } else if (priceSell <= 0) {
@@ -846,10 +847,11 @@ function calculateModeForHour(offset, priceData, simulatedSoc, hFraction) {
             // Levná hodina + kladná cena: grid nabíjení jen bez solaru
             var hasSolarAhead = false;
             for (var soff in solarOffsets) {
-                if (parseInt(soff) >= offset) { hasSolarAhead = true; break; }
+                if (parseInt(soff) > offset) { hasSolarAhead = true; break; }
             }
             if (!hasSolarAhead) {
-                return { mode: MODY.BALANCOVANI, reason: "levná Lv" + levelBuy + ", žádný solár, cíl 100%" };
+                balancingHoursUsed++;
+                return { mode: MODY.BALANCOVANI, reason: "levná Lv" + levelBuy + ", žádný solár, SOC " + Math.round(simulatedSoc) + "% → cíl 100%" };
             }
         }
         // Drahé/střední hodiny: normální provoz (fall-through)
@@ -1047,6 +1049,14 @@ var modeNamesCZ = {
     zakaz_pretoku: "Zákaz přetoků",
     "Balancování": "Balancování baterie"
 };
+
+// v22: Multi-hour balancing
+var balancingForceStopHours = config.balancing_force_stop_hours || 2;
+var balancingHoursUsed = 0;
+// Check how many hours already elapsed (if balancing is running)
+var _balStartedAt = global.get("balancing_started_at") || 0;
+var _balElapsedHours = _balStartedAt > 0 ? (Date.now() - _balStartedAt) / (1000 * 3600) : 0;
+var balancingHoursRemaining = Math.max(0, balancingForceStopHours - _balElapsedHours);
 
 var plan = [];
 var simulatedSoc = currentSoc;
