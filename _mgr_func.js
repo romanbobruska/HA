@@ -65,12 +65,29 @@ if (cerpadloTopi && !ultraLevna) {
     return [[msg], null, null];
 }
 
-// 3b. v22: Balancování má přednost před nabíjením auta
+// 3b. v22: Balancování — řízené nabíjení auta
 // Čteme z HA entity (přežije restart NR) i z globalu (nastaví orchestrátor)
 var fvePlanAttrs = (global.get("homeassistant.homeAssistant.states['sensor.fve_plan']") || {}).attributes || {};
 var balancingActive = fvePlanAttrs.current_mode === "Balancování" || global.get("balancing_active") || false;
-if (balancingActive && batSoc < 100) {
-    node.status({fill:"yellow", shape:"ring", text:"⚡ Balancování (SOC:" + batSoc + "%) → auto STOP"});
+if (balancingActive) {
+    if (batSoc < 99) {
+        // SOC nízký — baterie potřebuje veškerý solár na balancing
+        node.status({fill:"yellow", shape:"ring", text:"⚡ Balancování (SOC:" + batSoc + "%) → auto STOP"});
+        return [[msg], null, null];
+    }
+    // SOC ≥ 99% — přebytek využij na auto, ale baterie se NESMÍ vybíjet
+    if (solarCyklusBezi) {
+        // Solární cyklus už běží → nechat (korekční smyčka řídí ampéráž s reserve)
+        node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+cyklus | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W"});
+        return [null, [msg], null];
+    }
+    if (rozdiVyroby > MIN_SOLAR_W) {
+        // Dostatek přebytku → spusť solární nabíjení auta
+        node.status({fill:"green", shape:"dot", text:"⚡☀ Bal+start | SOC:" + batSoc + "% přebytek:" + Math.round(rozdiVyroby) + "W → slunce"});
+        return [null, [msg], null];
+    }
+    // Žádný přebytek → STOP (při balancingu nenabíjet ze sítě)
+    node.status({fill:"yellow", shape:"ring", text:"⚡ Bal+SOC≥99 žádný přebytek (" + Math.round(rozdiVyroby) + "W) → STOP"});
     return [[msg], null, null];
 }
 
