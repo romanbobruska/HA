@@ -1,17 +1,6 @@
-podivej se na plan - je v syncu s nasimi pozadavky? v h6 mas 
+zkontroluj config fve a rekni mi, po jakou dobu se ted musi balancovat baterie. nech mi to zobrazene prehledne po 30 sekund, potom pokracuj. chtel bych videt,
+ze vidis na config spravne a pouzivas ho.
+- zaroven zkontroluj, ze budes vzdy po balancovani aktualizovat vse, co je nutne, abych videl v dashboardu aktualni stav.
+- zkontroluj, ze pri balancingu mas vsechny logy a autalni stav v HA zapamatovane, abys mohl spravne vyhodnotit, zda balancing dopadl OK nebo NOK.
 
-06:00 +1	🟢 Normální	drahá (Lv21≥eff12), vybíjení SOC 22% → ~20%	21	5.73 Kč	2.99 Kč
-
-pritom mas v h5 tomto
-05:00 +1	🟢 Normální	drahá (Lv13≥eff12), vybíjení SOC 27% → ~22%	13	4.79 Kč	2.84 Kč
-
-zanalyzuj reseni a nad fix - podle me by bylo lepsi setrit v v h5 za cenu 4.79 Kč, nez dostat baterii na kritickou minSOC v h6.
-5.73 Kč	
-
-Pozadavek byl, aby sees dostal v nocnich hodinach na cca 25 procent SOC baterie, samozrejme setreni se pouzije v tech nejlevnejsich hodinach, co to jde.
-
-OBECNE A ZNOVU - CELY TENTO PROJEKT JE O TOM, ABYCHOM UTRATILI ZA ENERGII CO NEJMENE PENEZ, PROTOZE MAME FVE A ZAROVEN CHCEME MAXIMALNE 
-VYUZIT SOLARNI VYROBU.
-
-
-JE TI TO JASNE UZ KONECNE?
+Zkontroluj pozadavky v md filu, zda jsme synchronizovani.
