@@ -700,72 +700,75 @@ for (var arbi = 0; arbi < cheapInPlan.length && totalArbChargeKwh < maxArbCharge
 // Update targetSocFromGrid pro SOC simulaci (arbitráž + deficit)
 // targetSocFromGrid update moved after KROK 7c
 
-// === KROK 7c: OPTIMALIZACE — target end SOC 25% ===
+// === KROK 7c: OPTIMALIZACE — target end SOC ===
+// v24: Běží VŽDY (nejen s arbitráží) — zabraňuje vybití na minSOC v drahých hodinách
 // 1) Sloučí discharge z KROK 7 + P5b hodiny (levelBuy >= PRAH_DRAHA)
 // 2) Ořízne nejlevnější discharge hodiny pokud by SOC kleslo pod target
-// 3) Ořízne arb nabíjení na minimum potřebné
+// 3) Pokud arbitráž: ořízne arb nabíjení na minimum potřebné
 // 4) Oříznuté hodiny jdou do arbSaveOffsets → P5b je nepřepíše
 var arbSaveOffsets = {};
-if (Object.keys(arbitrageChargeOffsets).length > 0) {
-    var targetEndSoc = minSoc + 5;
+var nightTargetMarginPct = config.night_target_soc_margin || 5;
+var targetEndSoc = minSoc + nightTargetMarginPct;
 
-    // Odstraň arb charge offsety z discharge (nemohou být obojí)
-    for (var ari in arbitrageChargeOffsets) {
-        delete dischargeOffsets[ari];
+// Odstraň arb charge offsety z discharge (nemohou být obojí)
+for (var ari in arbitrageChargeOffsets) {
+    delete dischargeOffsets[ari];
+}
+
+// Přidej P5b hodiny (levelBuy >= PRAH_DRAHA) které nejsou v discharge ani arb
+for (var p5i = 0; p5i < hourPrices.length; p5i++) {
+    var p5h = hourPrices[p5i];
+    if (p5h.levelBuy >= PRAH_DRAHA && !dischargeOffsets[p5h.offset] &&
+        !solarOffsets[p5h.offset] && !chargingOffsets[p5h.offset] &&
+        !arbitrageChargeOffsets[p5h.offset]) {
+        dischargeOffsets[p5h.offset] = true;
     }
+}
 
-    // Přidej P5b hodiny (levelBuy >= PRAH_DRAHA) které nejsou v discharge ani arb
-    for (var p5i = 0; p5i < hourPrices.length; p5i++) {
-        var p5h = hourPrices[p5i];
-        if (p5h.levelBuy >= PRAH_DRAHA && !dischargeOffsets[p5h.offset] &&
-            !solarOffsets[p5h.offset] && !chargingOffsets[p5h.offset] &&
-            !arbitrageChargeOffsets[p5h.offset]) {
-            dischargeOffsets[p5h.offset] = true;
-        }
+// Seřaď všechny discharge hodiny od nejlevnější (pro trimming)
+var dischKeys = Object.keys(dischargeOffsets).map(Number);
+dischKeys.sort(function(a, b) {
+    var prA = 0, prB = 0;
+    for (var pp = 0; pp < hourPrices.length; pp++) {
+        if (hourPrices[pp].offset === a) prA = hourPrices[pp].buy;
+        if (hourPrices[pp].offset === b) prB = hourPrices[pp].buy;
     }
+    return prA - prB;
+});
 
-    // Seřaď všechny discharge hodiny od nejlevnější (pro trimming)
-    var dischKeys = Object.keys(dischargeOffsets).map(Number);
-    dischKeys.sort(function(a, b) {
-        var prA = 0, prB = 0;
-        for (var pp = 0; pp < hourPrices.length; pp++) {
-            if (hourPrices[pp].offset === a) prA = hourPrices[pp].buy;
-            if (hourPrices[pp].offset === b) prB = hourPrices[pp].buy;
-        }
-        return prA - prB;
-    });
+// Ořízni nejlevnější discharge hodiny pokud by SOC kleslo pod target
+var totalDischSoc = dischKeys.length * socDropNormal;
+var projEndSoc = currentSoc - totalDischSoc;
+while (projEndSoc < targetEndSoc && dischKeys.length > 0) {
+    var trimOff = dischKeys.shift();
+    delete dischargeOffsets[trimOff];
+    arbSaveOffsets[trimOff] = true;
+    totalDischSoc -= socDropNormal;
+    projEndSoc = currentSoc - totalDischSoc;
+}
 
-    // Ořízni nejlevnější discharge hodiny pokud by SOC kleslo pod target
-    var totalDischSoc = dischKeys.length * socDropNormal;
-    var projEndSoc = currentSoc - totalDischSoc;
-    while (projEndSoc < targetEndSoc && dischKeys.length > 0) {
-        var trimOff = dischKeys.shift();
-        delete dischargeOffsets[trimOff];
-        arbSaveOffsets[trimOff] = true;
-        totalDischSoc -= socDropNormal;
+// Doplň discharge hodiny pokud je SOC stále nad target (nejdražší první)
+// Kandidáti: ne-solar, ne-charge, ne-arb, ne-discharge, ne v arbSaveOffsets
+var fillCand = [];
+for (var fci = 0; fci < hourPrices.length; fci++) {
+    var fch = hourPrices[fci];
+    if (!dischargeOffsets[fch.offset] && !solarOffsets[fch.offset] &&
+        !chargingOffsets[fch.offset] && !arbitrageChargeOffsets[fch.offset] &&
+        !arbSaveOffsets[fch.offset]) {
+        fillCand.push(fch);
+    }
+}
+fillCand.sort(function(a, b) { return b.buy - a.buy; });
+for (var ffi = 0; ffi < fillCand.length; ffi++) {
+    if (projEndSoc - socDropNormal >= targetEndSoc) {
+        dischargeOffsets[fillCand[ffi].offset] = true;
+        totalDischSoc += socDropNormal;
         projEndSoc = currentSoc - totalDischSoc;
     }
+}
 
-    // Doplň discharge hodiny pokud je SOC stále nad target (nejdražší první)
-    // Kandidáti: ne-solar, ne-charge, ne-arb, ne-discharge, ne v arbSaveOffsets
-    var fillCand = [];
-    for (var fci = 0; fci < hourPrices.length; fci++) {
-        var fch = hourPrices[fci];
-        if (!dischargeOffsets[fch.offset] && !solarOffsets[fch.offset] &&
-            !chargingOffsets[fch.offset] && !arbitrageChargeOffsets[fch.offset] &&
-            !arbSaveOffsets[fch.offset]) {
-            fillCand.push(fch);
-        }
-    }
-    fillCand.sort(function(a, b) { return b.buy - a.buy; });
-    for (var ffi = 0; ffi < fillCand.length; ffi++) {
-        if (projEndSoc - socDropNormal >= targetEndSoc) {
-            dischargeOffsets[fillCand[ffi].offset] = true;
-            totalDischSoc += socDropNormal;
-            projEndSoc = currentSoc - totalDischSoc;
-        }
-    }
-
+// Arb-specific: ořízni arb charge hodiny na minimum potřebné
+if (Object.keys(arbitrageChargeOffsets).length > 0) {
     // Potřebný SOC po nabití = target + drain
     var neededChargeKwh = Math.max(0, (targetEndSoc + totalDischSoc - currentSoc) / 100 * kapacitaBaterie / chargeEfficiency);
 

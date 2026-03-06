@@ -1,13 +1,17 @@
-- NEUKLIZIS PO SOBE - NAPRAV TO, JSOU TU ZBYTECNE FILY V PROJEKTU - ZAPAMATUJ SI DOPRDELE TEN POZAVAVEK PO DEPLOYI
-- Ted vidim, ze nam posledni balancing nedopadl podle ocekavani - tzn. aby baterie byla 20 minut bez nabijeni a vybijeni - tzn. aby bylo 
-nabijeni a vybijeni baterie po min 20 minut na  0. OK, V tomto pripade se spusti balancing za dalsi mesic - 30 dni, doufam, ze ten parametr jo v fve configu.
+podivej se na plan - je v syncu s nasimi pozadavky? v h6 mas 
 
-Ale pockej - zatimco pisu tohle zadani, tys mi zmenil ikonku z NOK na OK. JSI SI JIST, ZE JSME DOPADLI DOBRE??? ZE BATERIE SE PO DOBU 20 MINUT 
-NENEABIJELA ANI NEVYBIJELA??? MAS DOSTATECNE LOGY A JA NEVIM CO K TOMU, ABYS TO ZJISTIL, JAK DOPADL BALANCING?????
+06:00 +1	🟢 Normální	drahá (Lv21≥eff12), vybíjení SOC 22% → ~20%	21	5.73 Kč	2.99 Kč
 
-Ted se mi plan libi, nerozbij ho.
+pritom mas v h5 tomto
+05:00 +1	🟢 Normální	drahá (Lv13≥eff12), vybíjení SOC 27% → ~22%	13	4.79 Kč	2.84 Kč
 
-- znovu over, ze mi budes davat posledni datum balancingu do dashboardu vcetne ikony, jak dopadl. PLATI TED NOVE TEN POZADAVEK - PO 20 MINUT NESMI NASTAT 
-VYBIJENI ANI NABIJENI BATERIE.
+zanalyzuj reseni a nad fix - podle me by bylo lepsi setrit v v h5 za cenu 4.79 Kč, nez dostat baterii na kritickou minSOC v h6.
+5.73 Kč	
 
-CHAPES ZADANI??? PRIPADNE SE ZEPTEJ V JEENDOM PROMTPU.
+Pozadavek byl, aby sees dostal v nocnich hodinach na cca 25 procent SOC baterie, samozrejme setreni se pouzije v tech nejlevnejsich hodinach, co to jde.
+
+OBECNE A ZNOVU - CELY TENTO PROJEKT JE O TOM, ABYCHOM UTRATILI ZA ENERGII CO NEJMENE PENEZ, PROTOZE MAME FVE A ZAROVEN CHCEME MAXIMALNE 
+VYUZIT SOLARNI VYROBU.
+
+
+JE TI TO JASNE UZ KONECNE?
