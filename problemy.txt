@@ -1,3 +1,5 @@
-NE - nechci, abys vzdy restartoval HA. jen pokud je to nutne. Ctime muj pozadavek. Pokud to , co jsem ti rekl v poslednim promtu je problem s restartem HA, 
-tak jsem s tim OK.
-Potom to bylo na vysvetleni, ne na zmenu pozadavku!!!
+podivej se na plan. Mas ted balancovani, ale baterie neni nabita
+-zaroven ti nejak nevysla simulace solarni vyroby - jak jsem ti rikal, bylo to nerealne - opravdu myslis, ze se baterie v tuto hodinu dobije na 100 procent?
+
+Uprav simulaci solarni vyroby z ohledem na spotrebu, at je to realne. Zaroven chci videt mod balancovani az teprve v hodine, kdy to opravdu realne 
+bude mozne.
