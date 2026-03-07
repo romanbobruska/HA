@@ -115,7 +115,10 @@ for (var _pi = 0; _pi < _planArr.length; _pi++) {
 }
 var PRAH_UL = config.prah_ultra_levna_nakup || 1.0;
 var ultraLevna = _isSolar && _buyP < PRAH_UL && _sellP <= 0;
-var ultraSocPrah = ultraLevna ? (config.min_soc || 20) : MIN_SOC_PAT;
+// v24: cannotExportSolar = záporná cena + solar → MUSÍME dumpovat (buy price irelevantní)
+var cannotExportSolar = _isSolar && _sellP <= 0;
+var dumpRelax = ultraLevna || cannotExportSolar;
+var ultraSocPrah = dumpRelax ? (config.min_soc || 20) : MIN_SOC_PAT;
 
 // SOC pod prahem → vypnout VŠECHNY fáze
 if (batSoc < ultraSocPrah) {

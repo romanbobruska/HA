@@ -124,6 +124,9 @@ if (_ultraBuyPrice >= 99 && prices.length > 0) {
     }
 }
 ultraLevna = isSolarHour && _ultraBuyPrice < PRAH_ULTRA_LEVNA_HTG && _ultraSellPrice <= 0;
+// v24: cannotExportSolar = záporná prodejní cena + solární hodina → MUSÍME dumpovat přebytky
+// Patrony relaxace se řídí tímto (ne ultraLevna), protože buy price je irelevantní pro dump
+var cannotExportSolar = isSolarHour && _ultraSellPrice <= 0;
 var entityZbyvajici = (solarSource === "OPEN_METEO") ? "sensor.energy_production_today_remaining_3" : "input_number.zbyvajici_solarni_vyroba_dnes";
 var zbyvajiciSolar = getFloat(entityZbyvajici, 0) * 1000; // Wh
 var kapacitaBat = (config.kapacita_baterie_kwh || 28) * 1000; // Wh
@@ -281,17 +284,18 @@ if (!automatizace) {
         var needsHeat = indoorTemp < effTarget;
 
         // Podmínky pro spuštění patrony (solární přebytek)
-        // Ultra levná: relaxace - nižší SOC práh, patrony mohou brát ze sítě, auto neblokuje
-        var ultraSocPrah = ultraLevna ? (config.min_soc || 20) : MIN_SOC_PAT;
+        // v24: cannotExportSolar relaxuje SOC práh a autoHlad — při záporné ceně prodeje MUSÍME dumpovat
+        var dumpRelax = ultraLevna || cannotExportSolar;
+        var ultraSocPrah = dumpRelax ? (config.min_soc || 20) : MIN_SOC_PAT;
         // v19.10: Balancing = patrony blokovány (priority: balancing > patrony)
-        var patronyMohou = (!balancingActive || balancingSolarDump) && batSoc >= ultraSocPrah && (ultraLevna || balancingSolarDump || (!autoHlad && !autoNabiji)) && tankTemp < MAX_TANK_PAT && (!gridLost || solarPower > 0);
+        var patronyMohou = (!balancingActive || balancingSolarDump) && batSoc >= ultraSocPrah && (dumpRelax || balancingSolarDump || (!autoHlad && !autoNabiji)) && tankTemp < MAX_TANK_PAT && (!gridLost || solarPower > 0);
         var patronyActive = false;
         // Hlavní loop zapíná patrony POUZE pokud actPat === 0 (první zapnutí nebo restart).
         // Jakmile patrony jednou běží, 5s smyčka (pat_korekce_func) přebírá řízení počtu fází.
         if (patronyMohou && actPat === 0) {
             // Patrony neběží — konzervativní start: vždy jen 1 fáze, korekce (5s) přidá další
-            // Ultra levná: patrony mohou startovat i bez solárního přebytku (grid je levný)
-            if (ultraLevna || availPat >= MIN_PRETOK) {
+            // v24: dumpRelax (záporná cena) nebo dostatek přebytku → start patrony
+            if (dumpRelax || availPat >= MIN_PRETOK) {
                 patTarget = 1; patronyActive = true;
                 // Nastav cooldown pro korekci — čekat než se systém stabilizuje po startu
                 flow.set("pat_change_cooldown", 6); // 6×5s = 30s
@@ -314,7 +318,7 @@ if (!automatizace) {
         var patronySocReady = batSoc >= (MIN_SOC_PAT - 15);
         var battNeedWh = Math.max(0, (MIN_SOC_PAT - batSoc) / 100 * kapacitaBat);
         var consumeEstWh = solarHoursLeft * 1500; // ~1.5kWh/h průměrná spotřeba domu
-        var patronyRealisticke = ultraLevna || (patronySocReady && zbyvajiciSolar > (battNeedWh + consumeEstWh) * 1.5);
+        var patronyRealisticke = dumpRelax || (patronySocReady && zbyvajiciSolar > (battNeedWh + consumeEstWh) * 1.5);
         if (isSolarHour && tempGap <= PATRON_TEMP_MARGIN && needsHeat && patronyRealisticke) {
             // Solární hodiny + teplota blízko cíle + reálná šance na SOC ≥ 95% → mod Patrony
             topeniModAktivni = "Patrony";
