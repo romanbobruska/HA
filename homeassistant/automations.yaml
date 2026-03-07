@@ -119,16 +119,6 @@
           entity_id: sensor.stav_wallboxu_venek
           above: 3
           below: 5
-        - alias: Wallbox garáž je Waiting for start nebo Low SOC
-          condition: numeric_state
-          entity_id: sensor.charger_state_garage
-          above: 5
-          below: 8
-        - alias: Wallbox zahrada je Waiting for start nebo Low SOC
-          condition: numeric_state
-          entity_id: sensor.stav_wallboxu_venek
-          above: 5
-          below: 8
   actions:
     - action: input_boolean.turn_on
       metadata: {}
@@ -166,16 +156,6 @@
           entity_id: sensor.stav_wallboxu_venek
           above: 3
           below: 5
-        - alias: Wallbox garáž je Waiting for start nebo Low SOC
-          condition: numeric_state
-          entity_id: sensor.charger_state_garage
-          above: 5
-          below: 8
-        - alias: Wallbox zahrada je Waiting for start nebo Low SOC
-          condition: numeric_state
-          entity_id: sensor.stav_wallboxu_venek
-          above: 5
-          below: 8
   actions:
     - action: input_boolean.turn_off
       metadata: {}
