@@ -312,10 +312,18 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 | Mód | Podmínka | Blokace |
 |-----|----------|--------|
 | **NIBE** | `tempGap > 0.2°C` (teplota domu je víc než 0.2°C pod cílem) | Patrony zakázány |
-| **Patrony** | `tempGap ≤ 0.3°C` + reálná šance na SOC ≥ 95% + solární přebytek ≥ 3kW | NIBE zakázáno |
-| **Vypnuto** | teplota OK + žádný přebytek | obojí vypnuto |
+| **Patrony** | `tempGap ≤ 0.3°C` + reálná šance na SOC ≥ 95% + solární přebytek ≥ 3kW. **v24**: Také když `cannotExportSolar` (sellP≤0) + `!needsHeat` + `patronyMohou` — čeká na přebytek. | NIBE zakázáno |
+| **Vypnuto** | teplota OK + žádný přebytek / autoHlad blokuje patrony | **v24**: NIBE i patrony zakázány (dříve NIBE proaktivně topilo nádrž) |
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
+
+**v24 Patrony opravy** (2026-03-07):
+- `autoHlad` (auto má hlad) VŽDY blokuje patrony — ani `dumpRelax` neobchází
+- `dumpRelax = ultraLevna || cannotExportSolar` relaxuje POUZE SOC práh (90→20%)
+- `cannotExportSolar = isSolarHour && sellPrice ≤ 0` — záporná prodejní cena + solár
+- START patrony VŽDY vyžaduje reálný přebytek `availPat >= MIN_PRETOK` (3kW)
+- Ceny se čtou z `sensor.fve_plan` HA entity (přežije NR restart), fallback na prices global
+- MUTEX deadlock opraven: `nibe_off` ve stejném batchi dovolí patrony startovat
 
 **MOD_PATRONY reálnost** (oprava v2, 2026-03-03): MOD_PATRONY se aktivuje JEN pokud je reálná šance, že patrony poběží:
 - `patronySocReady = batSoc >= MIN_SOC_PAT - 15` — baterie musí být blízko cíle (≥80% při práhu 95%)
@@ -336,6 +344,7 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 **NIBE** (`switch.nibe_topeni`, reg 47371) — rozhodovací strom (v2.3, 2026-03-03):
 
 `nibeWanted = needsHeat || (!isDraha && tankTemp < MAX_TANK)` — v levných hodinách proaktivně topí nádrž i když dům je OK.
+**v24**: `nibeBlockedByMod` nyní blokuje NIBE i při `topeniMod=Vypnuto` (dříve jen při Patrony). Proaktivní ohřev nádrže probíhá jen když `topeniMod=NIBE`.
 
 1. **Bezpečnostní kontroly** (vždy první): Grid Lost, Krb, Nádrž > MAX_TANK, Patrony blokují → NIBE OFF
 2. **isDraha** (drahá hodina — `lvl >= prah_draha_energie`):
