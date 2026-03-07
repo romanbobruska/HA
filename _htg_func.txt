@@ -100,15 +100,27 @@ var solarStart = (plan && plan.solarStartHour) || 9;
 var solarEnd = (plan && plan.solarEndHour) || 17;
 var isSolarHour = (hour >= solarStart && hour < solarEnd);
 var solarHoursLeft = isSolarHour ? (solarEnd - hour) : 0;
-// v24: Výpočet ultraLevna přímo z cen — nezávislý na globálu z mode flow
+// v24: Výpočet ultraLevna — primárně z HA entity (přežije NR restart), fallback na prices global
 var PRAH_ULTRA_LEVNA_HTG = config.prah_ultra_levna_nakup || 1.0;
 var _ultraBuyPrice = 99;
 var _ultraSellPrice = 99;
-for (var _ui = 0; _ui < prices.length; _ui++) {
-    if (prices[_ui].hour === hour && (prices[_ui].minute === 0 || prices[_ui].minute === undefined)) {
-        _ultraBuyPrice = parseFloat(prices[_ui].priceCZKhourBuy) || 99;
-        _ultraSellPrice = parseFloat(prices[_ui].priceCZKhourProd) || 99;
+// 1) Zkus plan entity z HA (přežije restart NR)
+var _planArr = _fvePlanAttrs.plan || [];
+for (var _pi = 0; _pi < _planArr.length; _pi++) {
+    if (_planArr[_pi].hour === hour && _planArr[_pi].offset !== undefined) {
+        _ultraBuyPrice = parseFloat(_planArr[_pi].priceBuy) || 99;
+        _ultraSellPrice = parseFloat(_planArr[_pi].priceSell) || 99;
         break;
+    }
+}
+// 2) Fallback na prices global (pokud plan entity nemá data)
+if (_ultraBuyPrice >= 99 && prices.length > 0) {
+    for (var _ui = 0; _ui < prices.length; _ui++) {
+        if (prices[_ui].hour === hour && (prices[_ui].minute === 0 || prices[_ui].minute === undefined)) {
+            _ultraBuyPrice = parseFloat(prices[_ui].priceCZKhourBuy) || 99;
+            _ultraSellPrice = parseFloat(prices[_ui].priceCZKhourProd) || 99;
+            break;
+        }
     }
 }
 ultraLevna = isSolarHour && _ultraBuyPrice < PRAH_ULTRA_LEVNA_HTG && _ultraSellPrice <= 0;
