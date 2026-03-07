@@ -1,6 +1,1 @@
-zkontroluj config fve a rekni mi, po jakou dobu se ted musi balancovat baterie. nech mi to zobrazene prehledne po 30 sekund, potom pokracuj. chtel bych videt,
-ze vidis na config spravne a pouzivas ho.
-- zaroven zkontroluj, ze budes vzdy po balancovani aktualizovat vse, co je nutne, abych videl v dashboardu aktualni stav.
-- zkontroluj, ze pri balancingu mas vsechny logy a autalni stav v HA zapamatovane, abys mohl spravne vyhodnotit, zda balancing dopadl OK nebo NOK.
-
-Zkontroluj pozadavky v md filu, zda jsme synchronizovani.
+JE NATOPENY DUM. SOLARNI VYROBA VYSOKA. ZAKAZ PRETOKU. PROC JE ZAPNUTE NIBE, KDYZ JE TED VELKA PRAVDEPODOBNOST, ZE POUZIJEME PATRONY NA PRETOKY?
