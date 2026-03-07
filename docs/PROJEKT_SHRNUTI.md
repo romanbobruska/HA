@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-06 (v24: night SOC optimization, balancing boolean fix, persistent balancing log)
+> Poslední aktualizace: 2026-03-07 (v24: night SOC optimization, balancing fix, patrony dump fix, MUTEX deadlock fix)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -250,6 +250,7 @@ topeni_patron_faze_w: 3000    topeni_min_pretok_patron_w: 3000
 min_arbitrage_profit_czk: 2   min_sell_profit_czk: 2
 night_reserve_kwh: 10         prodej_z_baterie_enabled: true
 night_target_soc_margin: 5    // margin nad minSOC pro noční cíl (%)
+prah_ultra_levna_nakup: 1.0   // buy price < této hodnoty = ultra levná (Kč/kWh)
 balancing_interval_days: 30   balancing_force_stop_hours: 2
 balancing_min_solar_kwh: 3    balancing_grid_reserve_w: 1000
 ```
@@ -264,7 +265,7 @@ balancing_min_solar_kwh: 3    balancing_grid_reserve_w: 1000
 | **Šetřit** | Výchozí, levné hodiny | Nečerpá |
 | **Nabíjet ze sítě** | Nejlevnější hodiny | Nabíjí ze sítě |
 | **Prodávat** | Cenová arbitráž: prodejní zisk ≥ 2 CZK/kWh po amortizaci+ztrátách, SOC > minSoc + noční rezerva | Prodej do sítě |
-| **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF |
+| **Zákaz přetoků** | Záporné prodejní ceny | Normální ESS, feed-in OFF. **v24**: `cannotExportSolar` (sellP≤0 + solární hodina) relaxuje patrony — SOC práh klesne na `min_soc` (20%), `auto_ma_hlad` neblokuje. Patrony dumpují solární přebytky do nádrže. |
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 | **Balancování** | 1×/30 dní, solární hodiny (priorita), grid jen bez solaru | Nabíjí na 100%, detekce: SOC≥100% + |I|<0.5A + ΔV<0.02V po 20min. Force-stop po `balancing_force_stop_hours` (2h). Po dokončení: auto-update `input_datetime.last_pylontech_balanced` + `input_boolean.pylontech_balancing_ok` (✅=OK, ❌=force-stop). **v24**: `bal_svc_set_boolean` uses `action` format. Persistent log: `bal_current`, `bal_cell_diff`, `bal_soc_precise`, `bal_status`. NIBE neblokovaná. |
 
