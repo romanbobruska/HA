@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-07 (v24: night SOC optimization, balancing fix, patrony dump fix, MUTEX deadlock fix)
+> Poslední aktualizace: 2026-03-07 (v24.1: charger state fix, autoHladForPatrony, automation fix, manager wasCharging)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -317,8 +317,9 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
-**v24 Patrony opravy** (2026-03-07):
-- `autoHlad` (auto má hlad) VŽDY blokuje patrony — ani `dumpRelax` neobchází
+**v24.1 Patrony opravy** (2026-03-07):
+- **`autoHladForPatrony`**: patrony blokovány JEN při AKTIVNÍM nabíjení auta (`autoNabiji=true` NEBO `chargerState=="2"`). Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony NEBLOKUJE — řeší problém kdy wallbox hlásil state 6 (Wait for start) místo 3 (Charged) a `auto_ma_hlad` zůstával ON.
+- **HA automatizace opravena**: `automations.yaml` — "Auto má hlad" a "Auto nemá hlad" již NEOBSAHUJÍ state 6 (Wait for start) a 7 (Low SOC) v podmínkách. Tyto stavy neznamenají, že auto potřebuje nabíjet. Hlad se nastavuje JEN při state 2 (Charging) nebo 4 (Wait for sun).
 - `dumpRelax = ultraLevna || cannotExportSolar` relaxuje POUZE SOC práh (90→20%)
 - `cannotExportSolar = isSolarHour && sellPrice ≤ 0` — záporná prodejní cena + solár
 - START patrony VŽDY vyžaduje reálný přebytek `availPat >= MIN_PRETOK` (3kW)
@@ -374,9 +375,9 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **Patrony** (3 fáze × 3 kW, `switch.patrona_faze_1/3_2/3`):
 - **Priorita nejnižší** — zapnou se pouze pokud už není kam dát solární energii
-- Podmínky (`patronyMohou`): SOC ≥ 95% + auto nenabíjí + `auto_ma_hlad=OFF` + nádrž < 50°C + solární přebytek
-  - `auto_nabijeni_aktivni` (global) = wallbox fyzicky nabíjí (`Charging`) — blokuje patrony i při solárním nabíjení auta
-  - `auto_ma_hlad` = ránní rychlé síťové nabíjení auta
+- Podmínky (`patronyMohou`): SOC ≥ 95% + `!autoHladForPatrony` + `!autoNabiji` + nádrž < 50°C + solární přebytek
+  - `autoHladForPatrony = autoHlad && (autoNabiji || chargerState==="2")` — blokuje patrony JEN při aktivním nabíjení
+  - Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony neblokuje (fix pro stale state 6)
 - **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka (5s) přidá další
 - **Hlavní loop vs korekce**: hlavní loop jen startuje (actPat=0→1) nebo stopuje patrony. Jakmile patrony běží, počet fází řídí korekční smyčka (5s).
 - **MOD_PATRONY** se aktivuje pokud:
@@ -384,16 +385,14 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
   - nebo `!needsHeat` AND patrony fyzicky běží — teplota dosažena, patrony dál ohřívají nádrž
 - MOD_PATRONY = NIBE blokováno. Patrony fyzicky čekají na SOC ≥ 95%.
 - `PATRON_TEMP_MARGIN = 0.3°C` — max rozdíl indoor vs target pro přepnutí na patrony v solárních hodinách
-- **Korekce fází** (`pat_korekce_func`, 5s cyklus) — **reaktivní logika** (bez predikce availPat):
-  - **Snížení**: `battMinus > DISCHARGE_LIMIT` musí trvat **3 po sobě jdoucí cykly** (15s) → sníží o 1 fázi
-  - **Zvýšení**: `battMinus === 0` musí trvat **6 po sobě jdoucích cyklů** (30s stability) → přidá 1 fázi
+- **Korekce fází** (`pat_korekce_func`, 5s cyklus) — **closed-loop battery feedback** (v24.1):
+  - **SOC 90–95% (CHARGE-FB)**: cíl = baterie se nabíjí ~1kW (`topeni_patron_drain_w`, default 1000W). `battError = battCharging - TARGET`. Pokud error > DEAD_BAND (500W) → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
+  - **SOC ≥ 95% (DRAIN-FB)**: cíl = baterie se VYBÍJÍ ~1kW. `battError = battCharging - (-DRAIN_W)`. Pokud error > DEAD_BAND → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
+  - **max_charge_power**: SOC ≥ 95% → 0 (blok nabíjení), jinak -1 (unlimited)
   - **Minimum 1 fáze**: korekce nikdy nesníží pod 1 fázi. Pod 1 fázi může vypnout jen hlavní loop (patronyMohou = false).
   - **Cooldown**: po každé změně fáze 30s pauza (6 cyklů × 5s) — zamezuje oscilaci
   - **Startup cooldown**: hlavní loop při zapnutí patrony (actPat=0→1) nastaví cooldown 30s pro korekci
-  - `DISCHARGE_LIMIT = 200W` (config: `topeni_patron_discharge_limit_w`)
-  - `DISCHARGE_HYST = 3` (config: `topeni_patron_discharge_hyst`)
-  - `STABLE_CYCLES = 6` (config: `topeni_patron_stable_cycles`)
-  - `CHANGE_COOLDOWN = 6` (config: `topeni_patron_change_cooldown`)
+  - Config: `topeni_patron_drain_w` (1000), `topeni_patron_dead_band_w` (500), `topeni_patron_change_cooldown` (6)
   - Korekce kontroluje SOC ≥ 95% (resp. ultraSocPrah) — pod prahem vypne všechny fáze
   - Platí pro automatický i manuální mód
 
@@ -478,8 +477,18 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 
 **Wallbox ampérace** (oprava 2026-02-26, commit 7c641cf+e34050c):
 - `select.wallboxu_garaz_amperace` vrací string "16A" — parsovat přes `parseInt(rawCharger.replace(/[^0-9]/g, ''), 10)`
-- Damping: max ±2A změna za cyklus, delay 20s mezi cykly
-- Bez opravy: ampérace oscilovala 6→16→6 každou 1-2s
+- **v24.1**: Closed-loop feedback na `sensor.nabijeni_baterii` — cíl ~1kW nabíjení baterie (`nabijeni_auta_target_batt_w`), dead band ±500W (`nabijeni_auta_dead_band_w`), ±1A kroky
+- Damping: max ±1A změna za cyklus (closed-loop), delay 20s mezi cykly
+
+**Victron EV Charger stavy** (MQTT `evcharger/41/Status`):
+- 0=Disconnected, 1=Connected, 2=Charging, 3=Charged, 4=WaitSun, 5=WaitRFID, **6=WaitStart**, 7=LowSOC, 8–14=Errors
+- **State 6 (WaitStart)**: wallbox čeká na StartStop=1. Nastane i když auto JE nabité a solární loop vypnul StartStop — NEZNAMNÁ že auto potřebuje nabíjet!
+- **Manager v24.1**: trackuje `charger_was_charging` global — pokud charger byl v state 2 a přešel na 6/1 + loop neběží → detekuje jako "charged"
+
+**HA automatizace `auto_ma_hlad`** (`automations.yaml`):
+- "Auto má hlad" (ON): state 2 (Charging) nebo 4 (WaitSun) na jakémkoli wallboxu
+- "Auto nemá hlad" (OFF): žádný wallbox není v state 2/4
+- **v24.1 FIX**: Odebrány state 6 (WaitStart) a 7 (LowSOC) z podmínek — tyto stavy způsobovaly stale `auto_ma_hlad=ON` když auto bylo nabité
 
 ---
 
