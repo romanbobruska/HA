@@ -66,7 +66,8 @@ var fireplace = getBool("input_boolean.topi_se_v_krbu");
 var coolEnabled = getBool("input_boolean.chlazeni");
 var autoHlad = getBool("input_boolean.auto_ma_hlad");
 var autoNabiji = global.get("auto_nabijeni_aktivni") || false;  // wallbox fyzicky nabiji
-var ultraLevna = global.get("ultra_levna_energie") || false;  // ultra-levny rezim (cena < 1 Kc + solar hodiny)
+// v24: ultraLevna se počítá níže (po isSolarHour)
+var ultraLevna = false;
 // v22: Čteme z HA entity (přežije restart NR) i z globalu
 var _fvePlanAttrs = (global.get("homeassistant.homeAssistant.states['sensor.fve_plan']") || {}).attributes || {};
 var balancingActive = _fvePlanAttrs.current_mode === "Balancování" || global.get("balancing_active") || false;
@@ -99,6 +100,18 @@ var solarStart = (plan && plan.solarStartHour) || 9;
 var solarEnd = (plan && plan.solarEndHour) || 17;
 var isSolarHour = (hour >= solarStart && hour < solarEnd);
 var solarHoursLeft = isSolarHour ? (solarEnd - hour) : 0;
+// v24: Výpočet ultraLevna přímo z cen — nezávislý na globálu z mode flow
+var PRAH_ULTRA_LEVNA_HTG = config.prah_ultra_levna_nakup || 1.0;
+var _ultraBuyPrice = 99;
+var _ultraSellPrice = 99;
+for (var _ui = 0; _ui < prices.length; _ui++) {
+    if (prices[_ui].hour === hour && (prices[_ui].minute === 0 || prices[_ui].minute === undefined)) {
+        _ultraBuyPrice = parseFloat(prices[_ui].priceCZKhourBuy) || 99;
+        _ultraSellPrice = parseFloat(prices[_ui].priceCZKhourProd) || 99;
+        break;
+    }
+}
+ultraLevna = isSolarHour && _ultraBuyPrice < PRAH_ULTRA_LEVNA_HTG && _ultraSellPrice <= 0;
 var entityZbyvajici = (solarSource === "OPEN_METEO") ? "sensor.energy_production_today_remaining_3" : "input_number.zbyvajici_solarni_vyroba_dnes";
 var zbyvajiciSolar = getFloat(entityZbyvajici, 0) * 1000; // Wh
 var kapacitaBat = (config.kapacita_baterie_kwh || 28) * 1000; // Wh
@@ -308,7 +321,7 @@ if (!automatizace) {
         flow.set("topeni_mod_active", topeniModAktivni);
 
         // v24 DEBUG: Diagnostika patrony vs NIBE
-        node.warn("HTG_DEBUG: ultraLevna=" + ultraLevna + " patronyMohou=" + patronyMohou + " patronyActive=" + patronyActive + " needsHeat=" + needsHeat + " topeniMod=" + topeniModAktivni + " batSoc=" + batSoc + " ultraSocPrah=" + ultraSocPrah + " autoHlad=" + autoHlad + " tankTemp=" + tankTemp + " patTarget=" + patTarget);
+        node.warn("HTG_DEBUG: ultraLevna=" + ultraLevna + " buyP=" + _ultraBuyPrice + " sellP=" + _ultraSellPrice + " patronyMohou=" + patronyMohou + " patronyActive=" + patronyActive + " needsHeat=" + needsHeat + " topeniMod=" + topeniModAktivni + " batSoc=" + batSoc + " ultraSocPrah=" + ultraSocPrah + " autoHlad=" + autoHlad + " patTarget=" + patTarget + " actions=" + actions.join(","));
 
         // Blokace dle modu
         var nibeBlockedByMod     = (topeniModAktivni === "Patrony");
