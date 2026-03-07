@@ -307,6 +307,9 @@ if (!automatizace) {
         }
         flow.set("topeni_mod_active", topeniModAktivni);
 
+        // v24 DEBUG: Diagnostika patrony vs NIBE
+        node.warn("HTG_DEBUG: ultraLevna=" + ultraLevna + " patronyMohou=" + patronyMohou + " patronyActive=" + patronyActive + " needsHeat=" + needsHeat + " topeniMod=" + topeniModAktivni + " batSoc=" + batSoc + " ultraSocPrah=" + ultraSocPrah + " autoHlad=" + autoHlad + " tankTemp=" + tankTemp + " patTarget=" + patTarget);
+
         // Blokace dle modu
         var nibeBlockedByMod     = (topeniModAktivni === "Patrony");
         var patronyBlockedByMod  = (topeniModAktivni === "NIBE");
