@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-07 (v24.1: charger state fix, autoHladForPatrony, automation fix, manager wasCharging)
+> Poslední aktualizace: 2026-03-08 (v24.2: CRITICAL FIX — patrony SOC práh VŽDY 90%, dumpRelax nerelaxuje SOC)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -317,12 +317,13 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
-**v24.1 Patrony opravy** (2026-03-07):
-- **`autoHladForPatrony`**: patrony blokovány JEN při AKTIVNÍM nabíjení auta (`autoNabiji=true` NEBO `chargerState=="2"`). Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony NEBLOKUJE — řeší problém kdy wallbox hlásil state 6 (Wait for start) místo 3 (Charged) a `auto_ma_hlad` zůstával ON.
-- **HA automatizace opravena**: `automations.yaml` — "Auto má hlad" a "Auto nemá hlad" již NEOBSAHUJÍ state 6 (Wait for start) a 7 (Low SOC) v podmínkách. Tyto stavy neznamenají, že auto potřebuje nabíjet. Hlad se nastavuje JEN při state 2 (Charging) nebo 4 (Wait for sun).
-- `dumpRelax = ultraLevna || cannotExportSolar` relaxuje POUZE SOC práh (90→20%)
-- `cannotExportSolar = isSolarHour && sellPrice ≤ 0` — záporná prodejní cena + solár
-- START patrony VŽDY vyžaduje reálný přebytek `availPat >= MIN_PRETOK` (3kW)
+**v24.2 Patrony opravy** (2026-03-08):
+- **KRITICKÁ OPRAVA v24.2**: `dumpRelax` již NERELAXUJE SOC práh pro patrony! Dříve `cannotExportSolar` (záporná prodejní cena) snížil SOC práh z 90% na 20%, což spuštělo patrony při SOC 51%! SOC práh pro patrony je nyní VŽDY `MIN_SOC_PAT` (90%) — baterie má ABSOLUTNÍ prioritu.
+- **`autoHladForPatrony`** (v24.1): patrony blokovány JEN při AKTIVNÍM nabíjení auta (`autoNabiji=true` NEBO `chargerState=="2"`). Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony NEBLOKUJE.
+- **HA automatizace opravena** (v24.1): `automations.yaml` — "Auto má hlad" a "Auto nemá hlad" již NEOBSAHUJÍ state 6/7 v podmínkách.
+- **pat_korekce min 1 fáze** (v24.2): CHARGE-FB↓ a DRAIN-FB↓ používají `actPat > 1` (ne `> 0`) — korekce nikdy nesníží pod 1 fázi, pouze hlavní loop může jít na 0.
+- `dumpRelax = ultraLevna || cannotExportSolar` se používá JEN pro `patronyRealisticke` (volba MODu), NE pro SOC práh
+- START patrony VŽDY vyžaduje: SOC ≥ 90% + reálný přebytek `availPat >= MIN_PRETOK` (3kW)
 - Ceny se čtou z `sensor.fve_plan` HA entity (přežije NR restart), fallback na prices global
 - MUTEX deadlock opraven: `nibe_off` ve stejném batchi dovolí patrony startovat
 
