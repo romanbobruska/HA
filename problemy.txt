@@ -1,9 +1,4 @@
 TY DEBILE!!!!!!!!
 
-proc se nenabiji auto, kdyz je waiting for start? logika manageru rika, ze auto nema hlad, ale ono ma!!!
-
--zaroven nefunguje vypnuti automatizace topeni - pokud je vypnuta automatizace topeni domu, stejne spoustis patrony - TO NE!!! MAS PO VYPNUTI AUTOMATIZACE 
-VSE VYPNOUT A PAK UZ NA NIC NESAHAT, NIC NEAUJTOMATIZOVAT, DOKUK SE AUTOmatizace zase nezapne!!!!
-
-- zaroven pridej pozadavek do topeni - patromny se nesmi nikdy zapnout - ani jedna faze patrony - pokud bude solarni vyroba mensi nez 5 kWH a zaroven
-nebude v planu mod zakaz pretoku a zaroven baterie bude mit SOC mene nez 95 procent!!! ostatni pozadavky plati!!!
+proc se nenabiji auto, je spustena patrona, ale auto ma hlad???? TO UZ JSME SPOLU XKRAT RESILI - PATRONY JSOU AZ NA POSLEDNIM MISTE!!! PROC JSI SI 
+NEZKONTROLOVAL STAV V HA DLE POZADAVKU V MD FILU PO DEPLOYI?????
