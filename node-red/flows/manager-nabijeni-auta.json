@@ -1,419 +1,419 @@
 [
-    {
-        "id": "7ceb7c5337692ae5",
-        "type": "tab",
-        "label": "Manager nabíjení auta",
-        "disabled": false,
-        "info": "",
-        "env": []
+  {
+    "id": "7ceb7c5337692ae5",
+    "type": "tab",
+    "label": "Manager nabíjení auta",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "40686c99d0404f36",
+    "type": "inject",
+    "z": "7ceb7c5337692ae5",
+    "name": "5 minut",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "300",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 10,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 80,
+    "wires": [
+      [
+        "main_logic_func"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "8f1a7b3a93bc777c",
+    "type": "server-state-changed",
+    "z": "7ceb7c5337692ae5",
+    "name": "Stav wallboxu",
+    "server": "c7421fe2.cb11c",
+    "version": 6,
+    "outputs": 1,
+    "exposeAsEntityConfig": "",
+    "entities": {
+      "entity": [
+        "sensor.charger_state_garage",
+        "sensor.stav_wallboxu_venek"
+      ],
+      "substring": [],
+      "regex": []
     },
-    {
-        "id": "40686c99d0404f36",
-        "type": "inject",
-        "z": "7ceb7c5337692ae5",
-        "name": "5 minut",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "300",
-        "crontab": "",
-        "once": true,
-        "onceDelay": 10,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 80,
-        "wires": [
-            [
-                "main_logic_func"
-            ]
-        ],
-        "g": "mgr_grp_logic"
+    "outputInitially": false,
+    "stateType": "str",
+    "ifState": "",
+    "ifStateType": "str",
+    "ifStateOperator": "is",
+    "outputOnlyOnStateChange": true,
+    "for": "0",
+    "forType": "num",
+    "forUnits": "minutes",
+    "ignorePrevStateNull": false,
+    "ignorePrevStateUnknown": false,
+    "ignorePrevStateUnavailable": false,
+    "ignoreCurrentStateUnknown": false,
+    "ignoreCurrentStateUnavailable": false,
+    "outputProperties": [
+      {
+        "property": "payload",
+        "propertyType": "msg",
+        "value": "string",
+        "valueType": "entityState"
+      },
+      {
+        "property": "data",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "eventData"
+      },
+      {
+        "property": "topic",
+        "propertyType": "msg",
+        "value": "",
+        "valueType": "triggerId"
+      }
+    ],
+    "x": 330,
+    "y": 80,
+    "wires": [
+      [
+        "main_logic_func"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "main_logic_func",
+    "type": "function",
+    "z": "7ceb7c5337692ae5",
+    "name": "Rozhodovací logika v2.6",
+    "func": "// Manager nabíjení auta v24.1\n// v2.4: Pokud solární cyklus už běží, NEZASTAVOVAT kvůli poklesu přebytku.\n// v24.1: Detekce \"charged\" i přes state 6 (Wait for start) — wallbox přeskočí state 3\n//   když solar loop vypne StartStop dřív než manager zachytí \"3\".\n//   Trackujeme wasCharging global pro spolehlivou detekci.\n// Výstupy: [1] stop → grid+solar OFF, [2] nabíjení ze slunce, [3] nabíjení ze sítě\nfunction getState(id) {\n    var e = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {};\n    return e.state;\n}\nfunction getBool(id) { return getState(id) === \"on\"; }\nfunction getFloat(id, def) {\n    var v = parseFloat(getState(id));\n    return isNaN(v) ? (def || 0) : v;\n}\n\nvar config = global.get(\"fve_config\") || {};\n\nvar autoHlad     = getBool(\"input_boolean.auto_ma_hlad\");\nvar automatizace = getBool(\"input_boolean.automatizovat_nabijeni_auta\");\nvar solarniRezim = getBool(\"input_boolean.solarni_rezim_nabijeni_auta\");\nvar letniRezim   = getBool(\"input_boolean.letni_rezim\");\nvar solarCyklusBezi = getBool(\"input_boolean.nastavuj_amperaci_chargeru_solar\");\n\n// v24.1: Charger state tracking — Victron EVC_STATUS:\n// 0=Disconnected, 1=Connected, 2=Charging, 3=Charged, 4=WaitSun, 5=WaitRFID, 6=WaitStart\nvar chargerState = getState(\"sensor.charger_state_garage\") || \"0\";\n// Track \"was charging\" pro detekci charged i přes state 6\nvar wasCharging = global.get(\"charger_was_charging\") || false;\nif (chargerState === \"2\") {\n    global.set(\"charger_was_charging\", true);\n    wasCharging = true;\n}\n// v24.1: Charged = state 3/4 NEBO (state 6/1 po předchozím nabíjení + loop neběží)\nvar chargerCharged = (chargerState === \"3\" || chargerState === \"4\");\nif (!chargerCharged && wasCharging && !solarCyklusBezi && (chargerState === \"6\" || chargerState === \"1\")) {\n    chargerCharged = true;\n}\n\n// v19.5: Solar forecast source z configu (VICTRON / OPEN_METEO)\nvar solarSource = (config.solar_forecast_source || \"VICTRON\").toUpperCase();\nvar entityDnes = (solarSource === \"OPEN_METEO\") ? \"sensor.energy_production_today_3\" : \"input_number.predpoved_solarni_vyroby_dnes\";\nvar entityZitra = (solarSource === \"OPEN_METEO\") ? \"sensor.energy_production_tomorrow_3\" : \"input_number.predpoved_solarni_vyroby_zitra\";\nvar vyrobaDnes   = getFloat(entityDnes, 0);\nvar vyrobaZitra  = getFloat(entityZitra, 0);\nvar batSoc       = getFloat(\"sensor.battery_percent\", 0);\nvar rozdiVyroby  = getFloat(\"sensor.rozdil_vyroby_a_spotreby\", 0);\n\nvar FORECAST_KWH = config.nabijeni_auta_forecast_kwh || 40;\nvar MIN_SOC      = config.nabijeni_auta_min_soc      || 95;\nvar MIN_SOLAR_W  = config.nabijeni_auta_solar_w      || 4000;\nvar MIN_SOC_SLUNCE = config.nabijeni_auta_min_soc_slunce || 85;\n\n// v22: Clear balancing_solar_car on all non-balancing-solar exits\n// Set BEFORE routing to SLUNCE during balancing — correction loop reads this\n\n// 1. Auto nemá hlad → stop (grid+solar OFF)\nif (!autoHlad) {\n    global.set(\"balancing_solar_car\", false);\n    global.set(\"charger_was_charging\", false);  // v24.1: reset pro další session\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Nemá hlad → stop\"});\n    return [[msg], null, null];\n}\n\n// 1b. v24.1: Charger hlásí \"charged\" → stop okamžitě + reset wasCharging\nif (chargerCharged) {\n    global.set(\"balancing_solar_car\", false);\n    global.set(\"charger_was_charging\", false);  // v24.1: reset — nabíjení dokončeno\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Charger state=\" + chargerState + \" wasChg=\" + wasCharging + \" (nabito) → stop\"});\n    return [[msg], null, null];\n}\n\n// 2. Automatizace vypnuta → stop\nif (!automatizace) {\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace OFF → stop\"});\n    return [[msg], null, null];\n}\n\n// 3. MUTEX: NIBE topí → auto NESMÍ nabíjet (nikdy současně!)\nvar ultraLevna = global.get(\"ultra_levna_energie\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nif (cerpadloTopi && !ultraLevna) {\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"red\", shape:\"ring\", text:\"⚠️MUTEX: NIBE topí → auto STOP\"});\n    return [[msg], null, null];\n}\n\n// 3b. v24.1: Balancování — řízené nabíjení auta\n// v24.1: POUZE HA plan entity (global \"balancing_active\" je stale po NR restartu!)\nvar fvePlanAttrs = (global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\") || {}).attributes || {};\nvar balancingActive = fvePlanAttrs.current_mode === \"Balancování\";\n// Vyčisti stale global pokud plan nehlásí balancování\nif (!balancingActive && global.get(\"balancing_active\")) {\n    global.set(\"balancing_active\", false);\n}\nif (balancingActive) {\n    if (batSoc < 99) {\n        // SOC nízký — baterie potřebuje veškerý solár na balancing\n        global.set(\"balancing_solar_car\", false);\n        node.status({fill:\"yellow\", shape:\"ring\", text:\"⚡ Balancování (SOC:\" + batSoc + \"%) → auto STOP\"});\n        return [[msg], null, null];\n    }\n    // SOC ≥ 99% — přebytek využij na auto, ale baterie se NESMÍ vybíjet\n    if (solarCyklusBezi) {\n        // Solární cyklus už běží → nechat (korekční smyčka řídí ampéráž s reserve)\n        global.set(\"balancing_solar_car\", true);\n        node.status({fill:\"green\", shape:\"dot\", text:\"⚡☀ Bal+cyklus | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W\"});\n        return [null, [msg], null];\n    }\n    // v22: Při balancingu potřebujeme dost přebytku pro min 6A + reserve na grid export\n    var BAL_RESERVE_W = config.balancing_grid_reserve_w || 1000;\n    var BAL_MIN_SURPLUS = 6 * 3 * 230 + BAL_RESERVE_W;  // 4140 + 1000 = 5140W\n    if (rozdiVyroby > BAL_MIN_SURPLUS) {\n        // Dostatek přebytku pro 6A + reserve → spusť solární nabíjení auta\n        global.set(\"balancing_solar_car\", true);\n        node.status({fill:\"green\", shape:\"dot\", text:\"⚡☀ Bal+start | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W (min:\" + BAL_MIN_SURPLUS + \"W) → slunce\"});\n        return [null, [msg], null];\n    }\n    // Žádný přebytek → STOP (při balancingu nenabíjet ze sítě)\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"⚡ Bal+SOC≥99 žádný přebytek (\" + Math.round(rozdiVyroby) + \"W) → STOP\"});\n    return [[msg], null, null];\n}\n\n// Non-balancing paths: clear flag\nglobal.set(\"balancing_solar_car\", false);\n\n// 3c. SOC pod prahem pro solární nabíjení → stop solární cyklus\nif (batSoc < MIN_SOC_SLUNCE) {\n    node.status({fill:\"orange\", shape:\"ring\", text:\"SOC \" + batSoc + \"% < \" + MIN_SOC_SLUNCE + \"% → stop\"});\n    return [[msg], null, null];\n}\n\n// === v2.4: Pokud solární cyklus UŽ BĚŽÍ, nechat ho běžet ===\n// Cyklus si sám řídí ampéráž a zastaví se když target < 6A\n// Manager ho nezastavuje kvůli poklesu přebytku\nif (solarCyklusBezi) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"☀️ Cyklus běží | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W charger:\" + chargerState});\n    return [null, [msg], null];\n}\n\n// v19.4: Car already charging + solar production → take over with solar cycle\n// Surplus is negative because car consumes, but solar IS available\nvar currentSolarW = getFloat(\"sensor.vyroba_fve\", 0);\nvar chargerIsCharging = (chargerState === \"2\");\nif (chargerIsCharging && currentSolarW > MIN_SOLAR_W && !solarCyklusBezi) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"☀️ Takeover | solar:\" + Math.round(currentSolarW) + \"W charger active → slunce\"});\n    return [null, [msg], null];\n}\n\n// === v19.12: Balancing solar dump → start solar cycle even without surplus ===\n// During balancing + negative sell price, MPPT is curtailed → surplus=0 even though solar IS producing.\n// Use raw solar production (sensor.vyroba_fve) instead of surplus to decide.\nvar balancingSolarDump = global.get(\"balancing_solar_dump\") || false;\nif (balancingSolarDump && currentSolarW > MIN_SOLAR_W) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"⚡ Solar dump | solar:\" + Math.round(currentSolarW) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// === Nový start solárního nabíjení ===\n// v24.4: Použít fve_dostupny_prebytek místo rozdiVyroby — rozdiVyroby je záporné\n// když baterie nabíjí (absorbuje solár), ale auto má mít PRIORITU nad baterií.\n// fve_dostupny_prebytek = solár - spotřeba domu (nepočítá nabíjení baterie).\nvar availSurplus = getFloat(\"sensor.fve_dostupny_prebytek\", 0);\nvar maPrebytek = availSurplus > MIN_SOLAR_W;\n\n// 4. Solární režim ON → slunce (jen pokud je přebytek)\nif (solarniRezim && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Solar ON | přebytek=\" + Math.round(availSurplus) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 5. Letní režim + přebytek → slunce\nif (letniRezim && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Letní + přebytek=\" + Math.round(availSurplus) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 6. Výroba dnes > FORECAST + přebytek → slunce\nif (vyrobaDnes > FORECAST_KWH && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Dnes \" + Math.round(vyrobaDnes) + \"kWh + přebytek → slunce\"});\n    return [null, [msg], null];\n}\n\n// 7. Baterie > MIN_SOC + přebytek → slunce\nif (batSoc > MIN_SOC && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Bat \" + batSoc + \"% + přebytek=\" + Math.round(availSurplus) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 8. Zítra dobrý forecast + přebytek → slunce\nif (vyrobaZitra > FORECAST_KWH && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Zítra \" + Math.round(vyrobaZitra) + \"kWh + přebytek → slunce\"});\n    return [null, [msg], null];\n}\n\n// 9. Žádný přebytek nebo forecast nesplněn\nif (vyrobaZitra > FORECAST_KWH || vyrobaDnes > FORECAST_KWH) {\n    node.status({fill:\"orange\", shape:\"ring\", text:\"Čeká na přebytek | dnes:\" + Math.round(vyrobaDnes) + \" zítra:\" + Math.round(vyrobaZitra) + \" přebytek=\" + Math.round(availSurplus) + \"W\"});\n    return [[msg], null, null];\n}\n\n// 10. Forecast špatný, přebytek není → nabíjení ze sítě\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Síť | dnes:\" + Math.round(vyrobaDnes) + \" zítra:\" + Math.round(vyrobaZitra) + \" bat:\" + batSoc + \"%\"});\nreturn [null, null, [msg]];",
+    "outputs": 3,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 200,
+    "wires": [
+      [
+        "svc_solar_off_stop"
+      ],
+      [
+        "svc_solar_off_slunce"
+      ],
+      [
+        "svc_solar_off_sit"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_grid_off",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Grid OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_grid"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 740,
+    "y": 140,
+    "wires": [
+      [
+        "wallbox_stop_svc_main"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_solar_off_stop",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Solar OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_solar"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 550,
+    "y": 140,
+    "wires": [
+      [
+        "svc_grid_off"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_solar_off_slunce",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Solar OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_solar"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 550,
+    "y": 200,
+    "wires": [
+      [
+        "svc_grid_off_slunce"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_grid_off_slunce",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Grid OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_grid"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 740,
+    "y": 200,
+    "wires": [
+      [
+        "link_out_slunce"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "link_out_slunce",
+    "type": "link out",
+    "z": "7ceb7c5337692ae5",
+    "name": "Spusť nabíjení ze slunce",
+    "mode": "link",
+    "links": [
+      "bd970168cfe6cecf"
+    ],
+    "x": 865,
+    "y": 200,
+    "wires": [],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_solar_off_sit",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Solar OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_solar"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 550,
+    "y": 260,
+    "wires": [
+      [
+        "svc_grid_off_sit"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "svc_grid_off_sit",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "name": "Grid OFF",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "input_boolean.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "input_boolean.nastavuj_amperaci_chargeru_grid"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "input_boolean",
+    "service": "turn_off",
+    "x": 740,
+    "y": 260,
+    "wires": [
+      [
+        "link_out_sit"
+      ]
+    ],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "link_out_sit",
+    "type": "link out",
+    "z": "7ceb7c5337692ae5",
+    "name": "Spusť nabíjení ze sítě",
+    "mode": "link",
+    "links": [
+      "4c0ccbe3229bb4f8"
+    ],
+    "x": 865,
+    "y": 260,
+    "wires": [],
+    "g": "mgr_grp_logic"
+  },
+  {
+    "id": "mgr_grp_logic",
+    "type": "group",
+    "z": "7ceb7c5337692ae5",
+    "name": "Rozhodovací logika",
+    "style": {
+      "fill": "#d3e8f3",
+      "label": true
     },
-    {
-        "id": "8f1a7b3a93bc777c",
-        "type": "server-state-changed",
-        "z": "7ceb7c5337692ae5",
-        "name": "Stav wallboxu",
-        "server": "c7421fe2.cb11c",
-        "version": 6,
-        "outputs": 1,
-        "exposeAsEntityConfig": "",
-        "entities": {
-            "entity": [
-                "sensor.charger_state_garage",
-                "sensor.stav_wallboxu_venek"
-            ],
-            "substring": [],
-            "regex": []
-        },
-        "outputInitially": false,
-        "stateType": "str",
-        "ifState": "",
-        "ifStateType": "str",
-        "ifStateOperator": "is",
-        "outputOnlyOnStateChange": true,
-        "for": "0",
-        "forType": "num",
-        "forUnits": "minutes",
-        "ignorePrevStateNull": false,
-        "ignorePrevStateUnknown": false,
-        "ignorePrevStateUnavailable": false,
-        "ignoreCurrentStateUnknown": false,
-        "ignoreCurrentStateUnavailable": false,
-        "outputProperties": [
-            {
-                "property": "payload",
-                "propertyType": "msg",
-                "value": "string",
-                "valueType": "entityState"
-            },
-            {
-                "property": "data",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "eventData"
-            },
-            {
-                "property": "topic",
-                "propertyType": "msg",
-                "value": "",
-                "valueType": "triggerId"
-            }
-        ],
-        "x": 330,
-        "y": 80,
-        "wires": [
-            [
-                "main_logic_func"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "main_logic_func",
-        "type": "function",
-        "z": "7ceb7c5337692ae5",
-        "name": "Rozhodovací logika v2.6",
-        "func": "// Manager nabíjení auta v24.1\n// v2.4: Pokud solární cyklus už běží, NEZASTAVOVAT kvůli poklesu přebytku.\n// v24.1: Detekce \"charged\" i přes state 6 (Wait for start) — wallbox přeskočí state 3\n//   když solar loop vypne StartStop dřív než manager zachytí \"3\".\n//   Trackujeme wasCharging global pro spolehlivou detekci.\n// Výstupy: [1] stop → grid+solar OFF, [2] nabíjení ze slunce, [3] nabíjení ze sítě\nfunction getState(id) {\n    var e = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {};\n    return e.state;\n}\nfunction getBool(id) { return getState(id) === \"on\"; }\nfunction getFloat(id, def) {\n    var v = parseFloat(getState(id));\n    return isNaN(v) ? (def || 0) : v;\n}\n\nvar config = global.get(\"fve_config\") || {};\n\nvar autoHlad     = getBool(\"input_boolean.auto_ma_hlad\");\nvar automatizace = getBool(\"input_boolean.automatizovat_nabijeni_auta\");\nvar solarniRezim = getBool(\"input_boolean.solarni_rezim_nabijeni_auta\");\nvar letniRezim   = getBool(\"input_boolean.letni_rezim\");\nvar solarCyklusBezi = getBool(\"input_boolean.nastavuj_amperaci_chargeru_solar\");\n\n// v24.1: Charger state tracking — Victron EVC_STATUS:\n// 0=Disconnected, 1=Connected, 2=Charging, 3=Charged, 4=WaitSun, 5=WaitRFID, 6=WaitStart\nvar chargerState = getState(\"sensor.charger_state_garage\") || \"0\";\n// Track \"was charging\" pro detekci charged i přes state 6\nvar wasCharging = global.get(\"charger_was_charging\") || false;\nif (chargerState === \"2\") {\n    global.set(\"charger_was_charging\", true);\n    wasCharging = true;\n}\n// v24.1: Charged = state 3/4 NEBO (state 6/1 po předchozím nabíjení + loop neběží)\nvar chargerCharged = (chargerState === \"3\" || chargerState === \"4\");\nif (!chargerCharged && wasCharging && !solarCyklusBezi && (chargerState === \"6\" || chargerState === \"1\")) {\n    chargerCharged = true;\n}\n\n// v19.5: Solar forecast source z configu (VICTRON / OPEN_METEO)\nvar solarSource = (config.solar_forecast_source || \"VICTRON\").toUpperCase();\nvar entityDnes = (solarSource === \"OPEN_METEO\") ? \"sensor.energy_production_today_3\" : \"input_number.predpoved_solarni_vyroby_dnes\";\nvar entityZitra = (solarSource === \"OPEN_METEO\") ? \"sensor.energy_production_tomorrow_3\" : \"input_number.predpoved_solarni_vyroby_zitra\";\nvar vyrobaDnes   = getFloat(entityDnes, 0);\nvar vyrobaZitra  = getFloat(entityZitra, 0);\nvar batSoc       = getFloat(\"sensor.battery_percent\", 0);\nvar rozdiVyroby  = getFloat(\"sensor.rozdil_vyroby_a_spotreby\", 0);\n\nvar FORECAST_KWH = config.nabijeni_auta_forecast_kwh || 40;\nvar MIN_SOC      = config.nabijeni_auta_min_soc      || 95;\nvar MIN_SOLAR_W  = config.nabijeni_auta_solar_w      || 4000;\nvar MIN_SOC_SLUNCE = config.nabijeni_auta_min_soc_slunce || 85;\n\n// v22: Clear balancing_solar_car on all non-balancing-solar exits\n// Set BEFORE routing to SLUNCE during balancing — correction loop reads this\n\n// 1. Auto nemá hlad → stop (grid+solar OFF)\nif (!autoHlad) {\n    global.set(\"balancing_solar_car\", false);\n    global.set(\"charger_was_charging\", false);  // v24.1: reset pro další session\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Nemá hlad → stop\"});\n    return [[msg], null, null];\n}\n\n// 1b. v24.1: Charger hlásí \"charged\" → stop okamžitě + reset wasCharging\nif (chargerCharged) {\n    global.set(\"balancing_solar_car\", false);\n    global.set(\"charger_was_charging\", false);  // v24.1: reset — nabíjení dokončeno\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Charger state=\" + chargerState + \" wasChg=\" + wasCharging + \" (nabito) → stop\"});\n    return [[msg], null, null];\n}\n\n// 2. Automatizace vypnuta → stop\nif (!automatizace) {\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"grey\", shape:\"ring\", text:\"Automatizace OFF → stop\"});\n    return [[msg], null, null];\n}\n\n// 3. MUTEX: NIBE topí → auto NESMÍ nabíjet (nikdy současně!)\nvar ultraLevna = global.get(\"ultra_levna_energie\") || false;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") || false;\nif (cerpadloTopi && !ultraLevna) {\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"red\", shape:\"ring\", text:\"⚠️MUTEX: NIBE topí → auto STOP\"});\n    return [[msg], null, null];\n}\n\n// 3b. v24.1: Balancování — řízené nabíjení auta\n// v24.1: POUZE HA plan entity (global \"balancing_active\" je stale po NR restartu!)\nvar fvePlanAttrs = (global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\") || {}).attributes || {};\nvar balancingActive = fvePlanAttrs.current_mode === \"Balancování\";\n// Vyčisti stale global pokud plan nehlásí balancování\nif (!balancingActive && global.get(\"balancing_active\")) {\n    global.set(\"balancing_active\", false);\n}\nif (balancingActive) {\n    if (batSoc < 99) {\n        // SOC nízký — baterie potřebuje veškerý solár na balancing\n        global.set(\"balancing_solar_car\", false);\n        node.status({fill:\"yellow\", shape:\"ring\", text:\"⚡ Balancování (SOC:\" + batSoc + \"%) → auto STOP\"});\n        return [[msg], null, null];\n    }\n    // SOC ≥ 99% — přebytek využij na auto, ale baterie se NESMÍ vybíjet\n    if (solarCyklusBezi) {\n        // Solární cyklus už běží → nechat (korekční smyčka řídí ampéráž s reserve)\n        global.set(\"balancing_solar_car\", true);\n        node.status({fill:\"green\", shape:\"dot\", text:\"⚡☀ Bal+cyklus | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W\"});\n        return [null, [msg], null];\n    }\n    // v22: Při balancingu potřebujeme dost přebytku pro min 6A + reserve na grid export\n    var BAL_RESERVE_W = config.balancing_grid_reserve_w || 1000;\n    var BAL_MIN_SURPLUS = 6 * 3 * 230 + BAL_RESERVE_W;  // 4140 + 1000 = 5140W\n    if (rozdiVyroby > BAL_MIN_SURPLUS) {\n        // Dostatek přebytku pro 6A + reserve → spusť solární nabíjení auta\n        global.set(\"balancing_solar_car\", true);\n        node.status({fill:\"green\", shape:\"dot\", text:\"⚡☀ Bal+start | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W (min:\" + BAL_MIN_SURPLUS + \"W) → slunce\"});\n        return [null, [msg], null];\n    }\n    // Žádný přebytek → STOP (při balancingu nenabíjet ze sítě)\n    global.set(\"balancing_solar_car\", false);\n    node.status({fill:\"yellow\", shape:\"ring\", text:\"⚡ Bal+SOC≥99 žádný přebytek (\" + Math.round(rozdiVyroby) + \"W) → STOP\"});\n    return [[msg], null, null];\n}\n\n// Non-balancing paths: clear flag\nglobal.set(\"balancing_solar_car\", false);\n\n// 3c. SOC pod prahem pro solární nabíjení → stop solární cyklus\nif (batSoc < MIN_SOC_SLUNCE) {\n    node.status({fill:\"orange\", shape:\"ring\", text:\"SOC \" + batSoc + \"% < \" + MIN_SOC_SLUNCE + \"% → stop\"});\n    return [[msg], null, null];\n}\n\n// === v2.4: Pokud solární cyklus UŽ BĚŽÍ, nechat ho běžet ===\n// Cyklus si sám řídí ampéráž a zastaví se když target < 6A\n// Manager ho nezastavuje kvůli poklesu přebytku\nif (solarCyklusBezi) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"☀️ Cyklus běží | SOC:\" + batSoc + \"% přebytek:\" + Math.round(rozdiVyroby) + \"W charger:\" + chargerState});\n    return [null, [msg], null];\n}\n\n// v19.4: Car already charging + solar production → take over with solar cycle\n// Surplus is negative because car consumes, but solar IS available\nvar currentSolarW = getFloat(\"sensor.vyroba_fve\", 0);\nvar chargerIsCharging = (chargerState === \"2\");\nif (chargerIsCharging && currentSolarW > MIN_SOLAR_W && !solarCyklusBezi) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"☀️ Takeover | solar:\" + Math.round(currentSolarW) + \"W charger active → slunce\"});\n    return [null, [msg], null];\n}\n\n// === v19.12: Balancing solar dump → start solar cycle even without surplus ===\n// During balancing + negative sell price, MPPT is curtailed → surplus=0 even though solar IS producing.\n// Use raw solar production (sensor.vyroba_fve) instead of surplus to decide.\nvar balancingSolarDump = global.get(\"balancing_solar_dump\") || false;\nif (balancingSolarDump && currentSolarW > MIN_SOLAR_W) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"⚡ Solar dump | solar:\" + Math.round(currentSolarW) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// === Nový start solárního nabíjení ===\nvar maPrebytek = rozdiVyroby > MIN_SOLAR_W;\n\n// 4. Solární režim ON → slunce (jen pokud je přebytek)\nif (solarniRezim && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Solar ON | přebytek=\" + Math.round(rozdiVyroby) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 5. Letní režim + přebytek → slunce\nif (letniRezim && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Letní + přebytek=\" + Math.round(rozdiVyroby) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 6. Výroba dnes > FORECAST + přebytek → slunce\nif (vyrobaDnes > FORECAST_KWH && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Dnes \" + Math.round(vyrobaDnes) + \"kWh + přebytek → slunce\"});\n    return [null, [msg], null];\n}\n\n// 7. Baterie > MIN_SOC + přebytek → slunce\nif (batSoc > MIN_SOC && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Bat \" + batSoc + \"% + přebytek=\" + Math.round(rozdiVyroby) + \"W → slunce\"});\n    return [null, [msg], null];\n}\n\n// 8. Zítra dobrý forecast + přebytek → slunce\nif (vyrobaZitra > FORECAST_KWH && maPrebytek) {\n    node.status({fill:\"green\", shape:\"dot\", text:\"Zítra \" + Math.round(vyrobaZitra) + \"kWh + přebytek → slunce\"});\n    return [null, [msg], null];\n}\n\n// 9. Žádný přebytek nebo forecast nesplněn\nif (vyrobaZitra > FORECAST_KWH || vyrobaDnes > FORECAST_KWH) {\n    node.status({fill:\"orange\", shape:\"ring\", text:\"Čeká na přebytek | dnes:\" + Math.round(vyrobaDnes) + \" zítra:\" + Math.round(vyrobaZitra) + \" přebytek=\" + Math.round(rozdiVyroby) + \"W\"});\n    return [[msg], null, null];\n}\n\n// 10. Forecast špatný, přebytek není → nabíjení ze sítě\nnode.status({fill:\"blue\", shape:\"dot\", text:\"Síť | dnes:\" + Math.round(vyrobaDnes) + \" zítra:\" + Math.round(vyrobaZitra) + \" bat:\" + batSoc + \"%\"});\nreturn [null, null, [msg]];",
-        "outputs": 3,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 310,
-        "y": 200,
-        "wires": [
-            [
-                "svc_solar_off_stop"
-            ],
-            [
-                "svc_solar_off_slunce"
-            ],
-            [
-                "svc_solar_off_sit"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_grid_off",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Grid OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 740,
-        "y": 140,
-        "wires": [
-            [
-                "wallbox_stop_svc_main"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_solar_off_stop",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 550,
-        "y": 140,
-        "wires": [
-            [
-                "svc_grid_off"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_solar_off_slunce",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 550,
-        "y": 200,
-        "wires": [
-            [
-                "svc_grid_off_slunce"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_grid_off_slunce",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Grid OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 740,
-        "y": 200,
-        "wires": [
-            [
-                "link_out_slunce"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "link_out_slunce",
-        "type": "link out",
-        "z": "7ceb7c5337692ae5",
-        "name": "Spusť nabíjení ze slunce",
-        "mode": "link",
-        "links": [
-            "bd970168cfe6cecf"
-        ],
-        "x": 865,
-        "y": 200,
-        "wires": [],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_solar_off_sit",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Solar OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_solar"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 550,
-        "y": 260,
-        "wires": [
-            [
-                "svc_grid_off_sit"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "svc_grid_off_sit",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "name": "Grid OFF",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "input_boolean.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "input_boolean.nastavuj_amperaci_chargeru_grid"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "input_boolean",
-        "service": "turn_off",
-        "x": 740,
-        "y": 260,
-        "wires": [
-            [
-                "link_out_sit"
-            ]
-        ],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "link_out_sit",
-        "type": "link out",
-        "z": "7ceb7c5337692ae5",
-        "name": "Spusť nabíjení ze sítě",
-        "mode": "link",
-        "links": [
-            "4c0ccbe3229bb4f8"
-        ],
-        "x": 865,
-        "y": 260,
-        "wires": [],
-        "g": "mgr_grp_logic"
-    },
-    {
-        "id": "mgr_grp_logic",
-        "type": "group",
-        "z": "7ceb7c5337692ae5",
-        "name": "Rozhodovací logika",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "40686c99d0404f36",
-            "8f1a7b3a93bc777c",
-            "main_logic_func",
-            "svc_grid_off",
-            "svc_solar_off_stop",
-            "svc_solar_off_slunce",
-            "svc_grid_off_slunce",
-            "link_out_slunce",
-            "svc_solar_off_sit",
-            "svc_grid_off_sit",
-            "link_out_sit",
-            "wallbox_stop_svc_main"
-        ],
-        "x": 14,
-        "y": 39,
-        "w": 892,
-        "h": 262
-    },
-    {
-        "id": "wallbox_stop_svc_main",
-        "type": "api-call-service",
-        "z": "7ceb7c5337692ae5",
-        "g": "mgr_grp_logic",
-        "name": "Wallbox STOP",
-        "server": "c7421fe2.cb11c",
-        "version": 7,
-        "debugenabled": false,
-        "action": "switch.turn_off",
-        "floorId": [],
-        "areaId": [],
-        "deviceId": [],
-        "entityId": [
-            "switch.wallbox_garaz_start_stop"
-        ],
-        "labelId": [],
-        "data": "",
-        "dataType": "jsonata",
-        "mergeContext": "",
-        "mustacheAltTags": false,
-        "outputProperties": [],
-        "queue": "none",
-        "blockInputOverrides": true,
-        "domain": "switch",
-        "service": "turn_off",
-        "x": 740,
-        "y": 80,
-        "wires": [
-            []
-        ]
-    }
+    "nodes": [
+      "40686c99d0404f36",
+      "8f1a7b3a93bc777c",
+      "main_logic_func",
+      "svc_grid_off",
+      "svc_solar_off_stop",
+      "svc_solar_off_slunce",
+      "svc_grid_off_slunce",
+      "link_out_slunce",
+      "svc_solar_off_sit",
+      "svc_grid_off_sit",
+      "link_out_sit",
+      "wallbox_stop_svc_main"
+    ],
+    "x": 14,
+    "y": 39,
+    "w": 892,
+    "h": 262
+  },
+  {
+    "id": "wallbox_stop_svc_main",
+    "type": "api-call-service",
+    "z": "7ceb7c5337692ae5",
+    "g": "mgr_grp_logic",
+    "name": "Wallbox STOP",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "switch.turn_off",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "switch.wallbox_garaz_start_stop"
+    ],
+    "labelId": [],
+    "data": "",
+    "dataType": "jsonata",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "switch",
+    "service": "turn_off",
+    "x": 740,
+    "y": 80,
+    "wires": [
+      []
+    ]
+  }
 ]
