@@ -29,12 +29,13 @@
             "98dc3d2a8b804b92",
             "b2f8f7968bd30604",
             "795e263cb06160dd",
-            "04485a466ad52c1e"
+            "04485a466ad52c1e",
+            "solar_corr_inject_20s"
         ],
         "x": 34,
         "y": 399,
         "w": 1072,
-        "h": 382
+        "h": 422
     },
     {
         "id": "459839492fb6e054",
@@ -389,7 +390,7 @@
             "substring": [],
             "regex": []
         },
-        "outputInitially": false,
+        "outputInitially": true,
         "stateType": "str",
         "ifState": "on",
         "ifStateType": "str",
@@ -842,5 +843,25 @@
             "node-red-contrib-time-range-switch": "1.2.0",
             "node-red-contrib-moment": "5.0.0"
         }
+    },
+    {
+        "id": "solar_corr_inject_20s",
+        "type": "inject",
+        "z": "49921d17efb0cefe",
+        "g": "68ded079ca35f344",
+        "name": "CL heartbeat 20s",
+        "props": [],
+        "repeat": "20",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "30",
+        "topic": "",
+        "x": 160,
+        "y": 760,
+        "wires": [
+            [
+                "f4f87ba21653eda5"
+            ]
+        ]
     }
 ]

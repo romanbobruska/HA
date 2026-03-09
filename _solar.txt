@@ -1,0 +1,136 @@
+let spotreba_sit = msg.payload_spotreba
+let battpct = msg.payload_battpct
+// v22: Read amperage directly from HA global state (node chain converts '14A' to NaN)
+var ampState = global.get("homeassistant.homeAssistant.states['select.wallboxu_garaz_amperace']") || {};
+let rawCharger = String(ampState.state || '0');
+let chargeramp_a = parseInt(rawCharger.replace(/[^0-9]/g, ''), 10) || 0;
+let chargeramp_w = chargeramp_a * 3 * 230;
+const config = global.get("fve_config") || {};
+let batt_minus = msg.payload_batt_minus || 0;
+let rozdil_vyroby_spotreby = msg.payload;
+
+// v22: SOC >= 99% → conservative mode (BAL-RES + slow ramp)
+// Immune to NR restart timing — SOC is always available from HA
+var highSocMode = (battpct >= 99);
+var BALANCING_GRID_RESERVE_W = config.balancing_grid_reserve_w || 1000;
+
+// === PARAMETRY Z CONFIGU ===
+let MIN_SOC_SLUNCE = config.nabijeni_auta_min_soc_slunce || 85;
+let SOC_DRAIN_THRESHOLD = config.nabijeni_auta_soc_drain_prah || 95;
+let SOC_DRAIN_W = config.nabijeni_auta_soc_drain_w || 1000;
+
+// === OCHRANA 1: SOC pod prahem → STOP nabíjení ===
+if (battpct < MIN_SOC_SLUNCE) {
+    node.status({fill:'red', shape:'ring', text:'SOC ' + battpct + '% < ' + MIN_SOC_SLUNCE + '% → 0A STOP'});
+    msg.payload = 0;
+    return msg;
+}
+
+// === v24.1: Battery feedback — signed power ===
+var battState = global.get("homeassistant.homeAssistant.states['sensor.nabijeni_baterii']") || {};
+var battW = parseFloat(battState.state) || 0; // kladné=nabíjí, záporné=vybíjí
+
+// === CLOSED-LOOP: charger already running → ±1A based on battery feedback ===
+// v24.1: This is the PRIMARY control when charger is running.
+// Open-loop is ONLY used for startup (chargeramp_a < 6).
+if (chargeramp_a >= 6 && !highSocMode) {
+    var targetAmper = chargeramp_a; // default: keep current
+    var socZone = '';
+
+    if (battpct >= SOC_DRAIN_THRESHOLD) {
+        // SOC >= 95%: battery can drain — target battery ~0W
+        // Increase charger if battery charging too much, decrease if draining too much
+        socZone = 'DRAIN-FB';
+        if (battW > 1500) {
+            targetAmper = chargeramp_a + 1;
+        } else if (battW < -SOC_DRAIN_W) {
+            targetAmper = chargeramp_a - 1;
+        }
+    } else {
+        // SOC 85-95%: battery MUST charge at ~TARGET_BATT_W
+        var TARGET_BATT_W = config.nabijeni_auta_target_batt_w || 1000;
+        var DEAD_BAND_W = config.nabijeni_auta_dead_band_w || 500;
+        socZone = 'CHARGE-FB tgt=' + TARGET_BATT_W + '±' + DEAD_BAND_W;
+
+        if (battW > TARGET_BATT_W + DEAD_BAND_W) {
+            // Battery charging too much → give 1A more to charger
+            targetAmper = chargeramp_a + 1;
+        } else if (battW < TARGET_BATT_W - DEAD_BAND_W) {
+            // Battery not charging enough or discharging → take 1A from charger
+            targetAmper = chargeramp_a - 1;
+        }
+        // else: within dead band → keep current (targetAmper = chargeramp_a)
+    }
+
+    // Floor/ceiling
+    if (targetAmper < 6) targetAmper = 6;
+    if (targetAmper > 16) targetAmper = 16;
+
+    node.warn('SOLAR_AMP CL now=' + chargeramp_a + ' batt=' + Math.round(battW) + ' final=' + targetAmper + ' soc=' + battpct + ' ' + socZone);
+    node.status({fill: 'green', shape: 'dot',
+        text: targetAmper + 'A (CL batt:' + Math.round(battW) + 'W now:' + chargeramp_a + 'A SOC:' + battpct + '% ' + socZone + ')'});
+    msg.payload = targetAmper;
+    return msg;
+}
+
+// === OPEN-LOOP: charger NOT running or highSocMode — calculate initial target ===
+let availableW = rozdil_vyroby_spotreby + chargeramp_w;
+let socZone = '';
+
+if (highSocMode) {
+    availableW -= BALANCING_GRID_RESERVE_W;
+    socZone = 'BAL-RES-' + BALANCING_GRID_RESERVE_W + 'W';
+} else {
+    let SOC_CHARGE_W = config.nabijeni_auta_soc_charge_w || 1000;
+    if (battpct >= MIN_SOC_SLUNCE && battpct < SOC_DRAIN_THRESHOLD) {
+        availableW -= SOC_CHARGE_W;
+        socZone = 'CHARGE-' + SOC_CHARGE_W + 'W';
+        if (batt_minus > 50) {
+            availableW -= batt_minus;
+            socZone += ' batt-=' + Math.round(batt_minus) + 'W';
+        }
+    } else if (battpct >= SOC_DRAIN_THRESHOLD) {
+        availableW += SOC_DRAIN_W;
+        socZone = 'DRAIN+' + SOC_DRAIN_W + 'W';
+    }
+}
+
+let targetAmper = Math.floor(availableW / 230 / 3);
+
+// Omezeni rozsahu 0 nebo 6-16A
+if (targetAmper > 16) targetAmper = 16;
+
+// highSocMode damping (unchanged from v22)
+if (highSocMode) {
+    if (rozdil_vyroby_spotreby < 0) {
+        if (chargeramp_a <= 6) {
+            targetAmper = 0;
+        } else {
+            targetAmper = chargeramp_a - 2;
+            if (targetAmper < 6) targetAmper = 6;
+        }
+    } else {
+        if (chargeramp_a < 6) {
+            targetAmper = 6;
+        } else {
+            if (targetAmper > chargeramp_a + 1) targetAmper = chargeramp_a + 1;
+            if (targetAmper < chargeramp_a - 2) targetAmper = chargeramp_a - 2;
+            if (targetAmper < 6) targetAmper = 6;
+        }
+    }
+    if (targetAmper > 16) targetAmper = 16;
+} else {
+    // Startup: floor at 6A if small deficit, 0 if large
+    if (targetAmper < 6 && availableW > -1000) {
+        targetAmper = 6;
+    } else if (targetAmper < 6) {
+        targetAmper = 0;
+    }
+}
+
+node.warn('SOLAR_AMP OL now=' + chargeramp_a + ' batt=' + Math.round(battW) + ' avail=' + Math.round(availableW) + ' final=' + targetAmper + ' soc=' + battpct + ' ' + socZone);
+node.status({fill: targetAmper > 0 ? 'green' : 'red', shape: 'dot',
+    text: targetAmper + 'A (OL avail:' + Math.round(availableW) + 'W now:' + chargeramp_a + 'A SOC:' + battpct + '% batt:' + Math.round(battW) + 'W ' + socZone + ')'});
+
+msg.payload = targetAmper;
+return msg;
