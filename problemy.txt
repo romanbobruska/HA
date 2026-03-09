@@ -1,9 +1,9 @@
 TY DEBILE!!!!!!!!
 
-TY KRETENE!!!! PRECTI SI POSLEDNI USPESNE DEPLOY - MAS V MD FILU ZAPSANO, JKAY JE SPRAVNY DEPLOYMENT A TY TO ZASE KURVA ZAPOMENES!!!!
+proc se nenabiji auto, kdyz je waiting for start? logika manageru rika, ze auto nema hlad, ale ono ma!!!
 
-ZMRDE!!!!!!!!!!!!! PRECTI SI MD FILE!!!!!!!!!!!
+-zaroven nefunguje vypnuti automatizace topeni - pokud je vypnuta automatizace topeni domu, stejne spoustis patrony - TO NE!!! MAS PO VYPNUTI AUTOMATIZACE 
+VSE VYPNOUT A PAK UZ NA NIC NESAHAT, NIC NEAUJTOMATIZOVAT, DOKUK SE AUTOmatizace zase nezapne!!!!
 
-PROC JE SPUSTENA PATRONA, KDYZ JASNY POZAdAVEK BYL, ZE SE NESMI SPOUSTET, POKUD JE SOC BATERIE MENSI NEZ 90 PROCENT?????
-
-KRETENE!!!!!!!!!!!!!!!!!!
+- zaroven pridej pozadavek do topeni - patromny se nesmi nikdy zapnout - ani jedna faze patrony - pokud bude solarni vyroba mensi nez 5 kWH a zaroven
+nebude v planu mod zakaz pretoku a zaroven baterie bude mit SOC mene nez 95 procent!!! ostatni pozadavky plati!!!
