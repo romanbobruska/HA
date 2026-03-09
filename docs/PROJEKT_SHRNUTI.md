@@ -385,9 +385,8 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **Patrony** (3 fáze × 3 kW, `switch.patrona_faze_1/3_2/3`):
 - **Priorita nejnižší** — zapnou se pouze pokud už není kam dát solární energii
-- Podmínky (`patronyMohou`): SOC ≥ 95% + `!autoHladForPatrony` + `!autoNabiji` + nádrž < 50°C + solární přebytek
-  - `autoHladForPatrony = autoHlad && (autoNabiji || chargerState==="2")` — blokuje patrony JEN při aktivním nabíjení
-  - Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony neblokuje (fix pro stale state 6)
+- Podmínky (`patronyMohou`): SOC ≥ 90% + `!autoHlad` + `!autoNabiji` + nádrž < MAX_TANK_PAT + solární přebytek + `patronySolarOk`
+  - **v24.4**: `autoHlad` (auto_ma_hlad=ON) VŽDY blokuje patrony — auto má ABSOLUTNÍ prioritu. Žádný override, žádná výjimka.
 - **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka (5s) přidá další
 - **Hlavní loop vs korekce**: hlavní loop jen startuje (actPat=0→1) nebo stopuje patrony. Jakmile patrony běží, počet fází řídí korekční smyčka (5s).
 - **MOD_PATRONY** se aktivuje pokud:
