@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-08 (v24.2: CRITICAL FIX — patrony SOC práh VŽDY 90%, dumpRelax nerelaxuje SOC)
+> Poslední aktualizace: 2026-03-09 (v24.3: auto_ma_hlad state 6 fix, automatizace OFF fix, patrony solar guard)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -317,15 +317,21 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
-**v24.2 Patrony opravy** (2026-03-08):
-- **KRITICKÁ OPRAVA v24.2**: `dumpRelax` již NERELAXUJE SOC práh pro patrony! Dříve `cannotExportSolar` (záporná prodejní cena) snížil SOC práh z 90% na 20%, což spuštělo patrony při SOC 51%! SOC práh pro patrony je nyní VŽDY `MIN_SOC_PAT` (90%) — baterie má ABSOLUTNÍ prioritu.
-- **`autoHladForPatrony`** (v24.1): patrony blokovány JEN při AKTIVNÍM nabíjení auta (`autoNabiji=true` NEBO `chargerState=="2"`). Samotný `auto_ma_hlad=ON` bez aktivního nabíjení patrony NEBLOKUJE.
-- **HA automatizace opravena** (v24.1): `automations.yaml` — "Auto má hlad" a "Auto nemá hlad" již NEOBSAHUJÍ state 6/7 v podmínkách.
-- **pat_korekce min 1 fáze** (v24.2): CHARGE-FB↓ a DRAIN-FB↓ používají `actPat > 1` (ne `> 0`) — korekce nikdy nesníží pod 1 fázi, pouze hlavní loop může jít na 0.
+**v24.3 Patrony opravy** (2026-03-09):
+- **v24.3: `auto_ma_hlad` state 6 fix**: State 6 (WaitStart) ZNOVU přidán do "Auto má hlad" / "Auto nemá hlad" automatizací. State 6 = auto je připojené a čeká na start = má hlad. `autoHladForPatrony` zajišťuje, že patrony nejsou blokovány (blokuje JEN při aktivním nabíjení).
+- **v24.3: Automatizace OFF = STOP VŠE**: Když `input_boolean.automatizovat_topeni=OFF`, flow 1× bezpečnostně vypne patrony a pak ABSOLUTNĚ na nic nesahá (NIBE, oběhové, patrony). Uživatel ovládá vše ručně. Žádné manuální módy („Patrony“, „NIBE“ apod.) se nečtou.
+- **v24.3: Patrony solar guard** (`patronySolarOk`): Patrony ZAKÁZÁNY pokud VŠECHNY tyto podmínky platí současně:
+  - `solarPower < topeni_patron_min_solar_w` (default 5000W)
+  - FVE mód != `zakaz_pretoku`
+  - `batSoc < 95%`
+  - Kontrola v `htg_main_func` (patronyMohou) i v `pat_korekce_func` (vypne běžící patrony)
+- **v24.2: SOC práh VŽDY 90%**: `dumpRelax` již NERELAXUJE SOC práh. Baterie má ABSOLUTNÍ prioritu.
+- **pat_korekce min 1 fáze** (v24.2): CHARGE-FB↓ a DRAIN-FB↓ používají `actPat > 1` — korekce nikdy nesníží pod 1 fázi.
 - `dumpRelax = ultraLevna || cannotExportSolar` se používá JEN pro `patronyRealisticke` (volba MODu), NE pro SOC práh
-- START patrony VŽDY vyžaduje: SOC ≥ 90% + reálný přebytek `availPat >= MIN_PRETOK` (3kW)
+- START patrony VŽDY vyžaduje: SOC ≥ 90% + solár ≥ 5kW (nebo zakaz_pretoku/SOC≥95%) + přebytek ≥ 3kW
 - Ceny se čtou z `sensor.fve_plan` HA entity (přežije NR restart), fallback na prices global
 - MUTEX deadlock opraven: `nibe_off` ve stejném batchi dovolí patrony startovat
+- Config: `topeni_patron_min_solar_w: 5000` (W, default)
 
 **MOD_PATRONY reálnost** (oprava v2, 2026-03-03): MOD_PATRONY se aktivuje JEN pokud je reálná šance, že patrony poběží:
 - `patronySocReady = batSoc >= MIN_SOC_PAT - 15` — baterie musí být blízko cíle (≥80% při práhu 95%)
@@ -417,11 +423,13 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 **Cílová teplota**: `input_number.nastavena_teplota_v_dome`
 Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhové čerpadlo.
 
-**Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) = manuální mód (oprava 2026-03-02):
-- Flow **NEZASAHUJE do NIBE** — uživatel ovládá NIBE přímo v HA UI
-- Flow pouze 1× bezpečnostně zastaví patrony (prevence nekontrolovaného ohřevu)
-- `input_select.topeni_mod` se při vypnuté automatizaci **NEČTE** — flow nic neřídí
-- **OPRAVA**: dříve chybně vypínalo NIBE ve všech manuálních módech (NIBE, Patrony, Obehove větví všechny volaly `nibe_off`)
+**Automatizace OFF** (`input_boolean.automatizovat_topeni` → OFF) — v24.3 kompletní přepis:
+- Flow 1× bezpečnostně zastaví patrony, pak **ABSOLUTNĚ na nic nesahá**
+- **NIBE**: nezasahuje — uživatel ovládá přímo v HA UI
+- **Oběhové čerpadlo**: nezasahuje
+- **Patrony**: nezasahuje (po úvodním STOP)
+- `input_select.topeni_mod` se **NEČTE** — flow nic neřídí, žádné manuální módy
+- `pat_korekce_func` má vlastní kontrolu: při `automatizovat_topeni=OFF` 1× zastaví a pak nic nedělá
 
 ---
 
@@ -487,9 +495,9 @@ Noční snížení (`0.5°C`) platí **vždy v noci** (22:00–6:00) pro oběhov
 - **Manager v24.1**: trackuje `charger_was_charging` global — pokud charger byl v state 2 a přešel na 6/1 + loop neběží → detekuje jako "charged"
 
 **HA automatizace `auto_ma_hlad`** (`automations.yaml`):
-- "Auto má hlad" (ON): state 2 (Charging) nebo 4 (WaitSun) na jakémkoli wallboxu
-- "Auto nemá hlad" (OFF): žádný wallbox není v state 2/4
-- **v24.1 FIX**: Odebrány state 6 (WaitStart) a 7 (LowSOC) z podmínek — tyto stavy způsobovaly stale `auto_ma_hlad=ON` když auto bylo nabité
+- "Auto má hlad" (ON): state 2 (Charging), 4 (WaitSun) nebo **6 (WaitStart)** na jakémkoli wallboxu
+- "Auto nemá hlad" (OFF): žádný wallbox není v state 2/4/6
+- **v24.3 FIX**: State 6 (WaitStart) ZNOVU přidán — auto v state 6 = připojené a čeká na nabíjení. `autoHladForPatrony` v htg_main_func zajišťuje, že samotný `auto_ma_hlad=ON` neblokuje patrony (blokuje JEN při aktivním nabíjení).
 
 ---
 
