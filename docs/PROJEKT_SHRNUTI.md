@@ -388,7 +388,7 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 - Podmínky (`patronyMohou`): SOC ≥ 90% + `!autoHlad` + `!autoNabiji` + nádrž < MAX_TANK_PAT + solární přebytek + `patronySolarOk`
   - **v24.4**: `autoHlad` (auto_ma_hlad=ON) VŽDY blokuje patrony — auto má ABSOLUTNÍ prioritu. Žádný override, žádná výjimka.
 - **Konzervativní start**: hlavní loop (60s) vždy zapne jen **1 fázi**, korekční smyčka (5s) přidá další
-- **Hlavní loop vs korekce**: hlavní loop jen startuje (actPat=0→1) nebo stopuje patrony. Jakmile patrony běží, počet fází řídí korekční smyčka (5s).
+- **Hlavní loop vs korekce**: hlavní loop startuje (actPat=0→1) nebo stopuje patrony. Jakmile patrony běží, počet fází řídí korekční smyčka (5s). **v24.6**: hlavní loop také kontroluje `availPat >= MIN_PRETOK` i když patrony běží — pokud přebytek nestačí, zastaví je.
 - **MOD_PATRONY** se aktivuje pokud:
   - `isSolarHour` AND `tempGap ≤ PATRON_TEMP_MARGIN (0.3°C)` AND `needsHeat` — solární hodiny, dům blízko cíle
   - nebo `!needsHeat` AND patrony fyzicky běží — teplota dosažena, patrony dál ohřívají nádrž
@@ -399,7 +399,7 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
   - **SOC 90–95% (CHARGE-FB)**: cíl = baterie se nabíjí ~1kW (`topeni_patron_drain_w`, default 1000W). `battError = battCharging - TARGET`. Pokud error > DEAD_BAND (500W) → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
   - **SOC ≥ 95% (DRAIN-FB)**: cíl = baterie se VYBÍJÍ ~1kW. `battError = battCharging - (-DRAIN_W)`. Pokud error > DEAD_BAND → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
   - **max_charge_power**: SOC ≥ 95% → 0 (blok nabíjení), jinak -1 (unlimited)
-  - **Minimum 1 fáze**: korekce nikdy nesníží pod 1 fázi. Pod 1 fázi může vypnout jen hlavní loop (patronyMohou = false). **Výjimka**: grid draw safety může snížit na 0 fází!
+  - **v24.6: Žádné minimum fází**: korekce MŮŽE snížit na 0 fází v CHARGE-FB i DRAIN-FB (oprava deadlocku). Dříve `actPat > 1` bránilo zastavení poslední fáze → baterie se vybíjela pro patronu bez dostatečného soláru.
   - **Cooldown**: po každé změně fáze 30s pauza (6 cyklů × 5s) — zamezuje oscilaci. **Výjimka**: grid draw override ignoruje cooldown.
   - **Startup cooldown**: hlavní loop při zapnutí patrony (actPat=0→1) nastaví cooldown 30s pro korekci
   - Config: `topeni_patron_drain_w` (1000), `topeni_patron_dead_band_w` (500), `topeni_patron_change_cooldown` (6), `topeni_patron_max_grid_draw_w` (200)
