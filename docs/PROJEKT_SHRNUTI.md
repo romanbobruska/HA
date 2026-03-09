@@ -396,13 +396,14 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 - MOD_PATRONY = NIBE blokováno. Patrony fyzicky čekají na SOC ≥ 95%.
 - `PATRON_TEMP_MARGIN = 0.3°C` — max rozdíl indoor vs target pro přepnutí na patrony v solárních hodinách
 - **Korekce fází** (`pat_korekce_func`, 5s cyklus) — **closed-loop battery feedback** (v24.1):
+  - **v24.5: GRID DRAW SAFETY** (NEJVYŠŠÍ PRIORITA v korekci): Čte `sensor.spotreba_ze_site`. Pokud grid > `topeni_patron_max_grid_draw_w` (default 200W) a patrony běží → **okamžitě ubrat fáze** (override cooldown!). Patrony NESMÍ způsobovat odběr ze sítě. Počet fází k odebrání = `ceil(gridExcess / 3000)`. Reaguje i během cooldownu.
   - **SOC 90–95% (CHARGE-FB)**: cíl = baterie se nabíjí ~1kW (`topeni_patron_drain_w`, default 1000W). `battError = battCharging - TARGET`. Pokud error > DEAD_BAND (500W) → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
   - **SOC ≥ 95% (DRAIN-FB)**: cíl = baterie se VYBÍJÍ ~1kW. `battError = battCharging - (-DRAIN_W)`. Pokud error > DEAD_BAND → přidá fázi. Pokud error < -DEAD_BAND → odeber fázi.
   - **max_charge_power**: SOC ≥ 95% → 0 (blok nabíjení), jinak -1 (unlimited)
-  - **Minimum 1 fáze**: korekce nikdy nesníží pod 1 fázi. Pod 1 fázi může vypnout jen hlavní loop (patronyMohou = false).
-  - **Cooldown**: po každé změně fáze 30s pauza (6 cyklů × 5s) — zamezuje oscilaci
+  - **Minimum 1 fáze**: korekce nikdy nesníží pod 1 fázi. Pod 1 fázi může vypnout jen hlavní loop (patronyMohou = false). **Výjimka**: grid draw safety může snížit na 0 fází!
+  - **Cooldown**: po každé změně fáze 30s pauza (6 cyklů × 5s) — zamezuje oscilaci. **Výjimka**: grid draw override ignoruje cooldown.
   - **Startup cooldown**: hlavní loop při zapnutí patrony (actPat=0→1) nastaví cooldown 30s pro korekci
-  - Config: `topeni_patron_drain_w` (1000), `topeni_patron_dead_band_w` (500), `topeni_patron_change_cooldown` (6)
+  - Config: `topeni_patron_drain_w` (1000), `topeni_patron_dead_band_w` (500), `topeni_patron_change_cooldown` (6), `topeni_patron_max_grid_draw_w` (200)
   - Korekce kontroluje SOC ≥ 95% (resp. ultraSocPrah) — pod prahem vypne všechny fáze
   - Platí pro automatický i manuální mód
 
