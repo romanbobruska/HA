@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-09 (v24.3: auto_ma_hlad state 6 fix, automatizace OFF fix, patrony solar guard)
+> Poslední aktualizace: 2026-03-09 (v24.4: autoHlad ALWAYS blocks patrony, manager surplus fix fve_dostupny_prebytek)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -317,8 +317,10 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
-**v24.3 Patrony opravy** (2026-03-09):
-- **v24.3: `auto_ma_hlad` state 6 fix**: State 6 (WaitStart) ZNOVU přidán do "Auto má hlad" / "Auto nemá hlad" automatizací. State 6 = auto je připojené a čeká na start = má hlad. `autoHladForPatrony` zajišťuje, že patrony nejsou blokovány (blokuje JEN při aktivním nabíjení).
+**v24.4 Patrony + nabíjení opravy** (2026-03-09):
+- **v24.4: `autoHlad` VŽDY blokuje patrony**: Pokud `auto_ma_hlad=ON`, patrony NESMÍ běžet. Žádný override, žádná výjimka. Auto má ABSOLUTNÍ prioritu. (`autoHladForPatrony` odstraněno — způsobovalo bypass.)
+- **v24.4: Manager surplus fix**: `maPrebytek` používá `sensor.fve_dostupny_prebytek` místo `rozdiVyroby`. `rozdiVyroby` je záporné když baterie nabíjí (absorbují solár), i když je dostatek soláru pro auto. `fve_dostupny_prebytek` = solár - spotřeba domu (nepočítá nabíjení baterie).
+- **v24.3: `auto_ma_hlad` state 6 fix**: State 6 (WaitStart) ZNOVU přidán do "Auto má hlad" / "Auto nemá hlad" automatizací. State 6 = auto je připojené a čeká na start = má hlad.
 - **v24.3: Automatizace OFF = STOP VŠE**: Když `input_boolean.automatizovat_topeni=OFF`, flow 1× bezpečnostně vypne patrony a pak ABSOLUTNĚ na nic nesahá (NIBE, oběhové, patrony). Uživatel ovládá vše ručně. Žádné manuální módy („Patrony“, „NIBE“ apod.) se nečtou.
 - **v24.3: Patrony solar guard** (`patronySolarOk`): Patrony ZAKÁZÁNY pokud VŠECHNY tyto podmínky platí současně:
   - `solarPower < topeni_patron_min_solar_w` (default 5000W)
