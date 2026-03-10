@@ -1,50 +1,12 @@
-Otázky k zákonům vs. aktuální implementace
-1. SOC práh pro patrony — KONFLIKT v zákonech
-PATRONY MAJI JASNE PRAVIDLO - NESMI SE SPOUSTET, POKUD BUDE POTREBA NEJAKE SPOTREBY - NAVIC - V NOCI ASI ZADNA SOLARNI VYROPBA NEBUDE...
-PATRONY SE SPOUSTEJI PRI PREBYTECNE SOLARNI VYROBE, KDE NEVIME, KAM TU ELEKTRIKU DAT!!!! VIZ ZAKONY!!!
+proc doprdele ta simulace planu nenavazuje?
 
-2. Blokování vybíjení baterie
-PLATÍ ZÁKON. NAVÍC SE NEKOUKEJ
+23:00	🟡 Šetřit	Šetřím pro dražší hodiny (Lv6, SOC 37%, cíl 25%)	6	3.95 Kč	2.15 Kč
+00:00 +1	🟡 Šetřit	Šetřím pro dražší hodiny (Lv12, SOC 37%, cíl 25%)	12	3.57 Kč	1.84 Kč
+01:00 +1	🟡 Šetřit	Šetřím (Lv10<12), SOC 37%	10	3.34 Kč	1.65 Kč
 
-3. topeni_patron_change_cooldown v zákonech vs. implementace
-Zákon 11.3 říká: topeni_patron_change_cooldown: 6 (počet 5s cyklů mezi změnami fáze)
+Opravdu nastane nabijeni v h1? PROC NEMAM V V ZAKONECH PRAVIDLA PRO FVE PLAN? PROC TO LOGICKY NENAVAZUJE??? To se bude nabijet ze site pri dobre predpovedi 
+solarni vyroby??? 
 
-Zákon 8.6 říká: "tady neplatí cooldown, patrony fungují okamžitě"
+Zachovej maximnalni jednoduchost flows a funkci. Zamysli se nad tim, neni to slozite.
 
-Otázka: V rekonciliaci jsem nastavil cooldown=0 dle zákona 8.6. Ale zákon 11.3 stále říká 6. Který platí?
-
-platí zákon
-
-4. Mód "Solární nabíjení" — kde je implementován?
-Zákon 4.1 uvádí mód "Solární nabíjení" — "Levné solární hodiny". Ale v orchestrátoru tento mód nikdy není přiřazen (calculateModeForHour ho nevrací). V solárních hodinách orchestrátor vrací buď Normal nebo Šetřit.
-
-Otázka: Má být mód "Solární nabíjení" (solar_charging) samostatně aktivován orchestrátorem? Aktuálně se nikdy nepoužívá v plánu.
-
-NE, máme pro tuto moznost jen mod normal
-
-5. NIBE cooldown 3 minuty vs. 10 minut
-Zákon 8.3 říká: "COOLDOWN: min. 3 minut mezi přepnutími"
-
-Ale zákon 11.3 nemá explicitní parametr nibe_cooldown_min — v konfigu je nibe_cooldown_min: 3.
-
-Otázka: 3 minuty je správně? (Implementováno tak.)
-
-Spravne je 1 minuta pro cooldown pro NIBE - MODBUS KOMPONENTY MAJI ZPOZDENI... Jine NE
-
-6. Plánovač — prah_draha_energie
-Zákon 11.1 říká: prah_draha_energie: 12 (level)
-
-Kód orchestrátoru: var PRAH_DRAHA = config.prah_draha_energie || 12; ← souhlasí.
-
-Zákon 8.3 bod 2: "Drahá hodina (lvl ≥ 12)" ← souhlasí.
-
-Otázka: Žádná, toto sedí.
-
-7. PRODÁVAT mód — min_soc floor
-Zákon 4.5 říká: "Nastavíš si v módu prodávat SOC baterie, na kterou chceš baterii vybít. Pod tu nepůjdeš."
-
-Aktuální kód PRODÁVAT Logic: effectiveMinSoc = Math.max(minSoc, currentSoc - 1) — vybíjí jen o 1% a pak přepíná. To neodpovídá zákonu — zákon říká, že se má nastavit cílové SOC dopředu (min. hodinu předem).
-
-Otázka: Je aktuální implementace PRODÁVAT módu správná? Zákon vyžaduje předem nastavené cílové SOC, kód to nedělá.
-
-Ne, není správná, implementuj správnou logiku dle zákonů
+UPRAV ZAKONY JEN PRO PLAN TAK, ABY NAVAZOVALY JEDTNOTLIVE MODY TAK, ABY TO BYLO REALISTICKE - JEN PRIDEJ VFE PLAN SEKCI!!! NIC DALSIHO NEMEN!!!
