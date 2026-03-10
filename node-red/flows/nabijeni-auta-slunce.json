@@ -298,7 +298,7 @@
             "select.wallbox_venek_amperace"
         ],
         "labelId": [],
-        "data": "{\"option\":msg.payload & 'A'}",
+        "data": "{\"option\":$string(payload) & \"A\"}",
         "dataType": "jsonata",
         "mergeContext": "",
         "mustacheAltTags": false,
