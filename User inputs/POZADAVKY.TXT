@@ -178,6 +178,8 @@ jistá, NEZASADÍ a vysvětlí proč.
     - POKUD JE ZAPNUTA SAUNA (HA KOMPONENTA)
 
 4.9 FVE PLÁN — PRAVIDLA PRO 12h PLÁN (fve-orchestrator.json)
+    - OBECNE PRAVIDLO, KTERE JE PODSTATOU CELEHO PROJEKTU I A ZVLASTE TETO SEKCE - NAKUPUJEME ZA CO NEJMENSI PENIZE, PRODAVAME ZA CO NEJVETSI PENIZE!!!
+        TZN. NEBUDEME SETRIT V LEVNEJSICH HODINACH, KDYZ PAK POZDEJI NAKOUPIME ENERGII ZA DRAZ - CO NEJLEVNEJSI PRISTUP TADY PLATI!!!
     Orchestrátor generuje plán na 12 hodin dopředu. Plán přiřazuje každé hodině
     jeden mód (Normal, Šetřit, Nabíjet ze sítě, Prodávat, Zákaz přetoků, Balancování).
     Plán MUSÍ být logicky konzistentní — módy musí na sebe navazovat realisticky.
