@@ -1,8 +1,10 @@
 Ne, porad mi to haze chybu pri deploy:
-{"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Identifier 'socZone' has already been declared (body:line 84)","stack":"Function node:788e188fae8d1fca [Vypočítej max amperaci v2]:85\nlet socZone = '';\n    ^\n\nSyntaxError: Identifier 'socZone' has already been declared\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}}
+{"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Identifier 'targetAmper' has already been declared (body:line 104)","stack":"Function node:788e188fae8d1fca [Vypočítej max amperaci v2]:105\nlet targetAmper = Math.floor(availableW / 230 / 3);\n    ^\n\nSyntaxError: Identifier 'targetAmper' has already been declared\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}}
 pravidlo 2.4 v zakonech (D:\Programy\Programování\Node Red\HA\User inputs\POZADAVKY.TXT) nebylo splneno. 
 
-Precti si, jak je pozadovano, zakony deploymentu
+proc comnmitujes do main? pozadavek byl abys vse ted ukladal do branche refactoring!!!
 
-Dodelej tasky, ktere zbyvaji, at je to kompletni
+Precti si, jak je pozadovano, podle zakonu deploymentu
+
+Dodelej tasky, ktere zbyvaji, at je to kompletni a funkci!!!!
 
