@@ -1,5 +1,9 @@
 # Automatizace topení domu — Požadavky a architektura
 
+> **⚠️ ZASTARALÝ SOUBOR** — Požadavky a zákony jsou výhradně v `User inputs/POZADAVKY.TXT`.
+> Tento soubor je zachován pouze jako referenční přehled HA entit a komponent.
+> Při jakémkoli konfliktu platí VÝHRADNĚ `POZADAVKY.TXT`.
+
 ## 1. Přehled systému
 
 Kompletní řízení teploty v domě přes Node-RED. Systém má plnou odpovědnost za teplotu v domě a za odběr elektřiny tepelným čerpadlem.

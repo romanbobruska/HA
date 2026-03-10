@@ -1,5 +1,8 @@
 # Kontext konverzace — FVE řízení
 
+> **⚠️ ZASTARALÝ SOUBOR** — Historický log sessions. Aktuální stav systému je v `docs/PROJEKT_SHRNUTI.md`.
+> Požadavky a zákony jsou výhradně v `User inputs/POZADAVKY.TXT`.
+
 ## Aktuální stav (v19.3, 2026-03-04)
 
 ### Nasazené fixy
