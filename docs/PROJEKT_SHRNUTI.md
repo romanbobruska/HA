@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-10 (v25.9: Šetřit SOC konstantní dle zákona 4.9.1, KROK 7c bez passive drain, 2× deploy OK)
+> Poslední aktualizace: 2026-03-11 (v25.1 REFACTORING: Všechny funkce ≤100L, hardcoded hodnoty nahrazeny config parametry, velké funkce rozděleny)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -56,10 +56,10 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů na 12h (cenová arbitráž, solar-first, balancing) |
+| `fve-orchestrator.json` | Plánovač módů na 12h — 5 funkcí: Příprava→Cena→Arbitráž→Plán→Výstup (v25.1 split z 1239L) |
 | `fve-modes.json` | Implementace 7 FVE módů (Normal, Šetřit, Nabíjet, Prodávat, Zákaz, Solární, Balancování) |
-| `fve-config.json` | Centrální konfigurace + čtení HA stavů do globálů |
-| `fve-heating.json` | Řízení topení (NIBE, oběhové čerpadlo, patrony, chlazení) |
+| `fve-config.json` | Centrální konfigurace (47L) + čtení HA stavů do globálů (30L) |
+| `fve-heating.json` | Řízení topení — 3 funkce: Čtení stavu→Rozhodování→Pojistky+výstup (v25.1 split z 541L) |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
 | `vypocitej-ceny.json` | Spotové ceny z API → SQLite → globál |
@@ -115,7 +115,33 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 ---
 
-## 7. Solární instalace
+## 7. v25.1 REFACTORING (branch: REFACTORING, 2026-03-11)
+
+Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny config parametry.
+
+| Funkce | Před | Po | Změna |
+|--------|------|-----|-------|
+| Výpočet plánu na 12h | 1239L | 5 funkcí (49+45+33+58+25L) | Split do řetězce msg passing |
+| Řízení topení v2.0 | 541L | 3 funkce (61+70+35L) | Split: čtení→rozhodování→pojistky |
+| Patrony korekce | 212L | 53L | Komprese, zachována logika |
+| BALANCOVÁNÍ Logic | 229L | 51L | Komprese, zachována logika |
+| Kontrola podmínek | 131L | 46L | Komprese |
+| 🧠 Bojler logika | 214L | 47L | Komprese |
+| Manager nabíjení auta | 176L | 42L | Komprese |
+| Nastav konfiguraci | 168L | 47L | Komprese, removed comments |
+| Vypočítej amperaci | 142L | 33L | Komprese |
+| Sbírka dat | 124L | 35L | Komprese |
+| Filtrace bazénu | 121L | 30L | Komprese |
+| Zpracuj HA stavy | 103L | 30L | Komprese |
+
+**R3**: Hardcoded `7600` → `config.max_feed_in_w || 7600` v 6 funkcích (fve-modes)
+**R4**: Hardcoded `95` SOC → `config.topeni_patron_drain_soc_prah || 95` v 5 funkcích
+
+**Pozn.**: Komprimované funkce v chráněných flows (manager-nabijeni-auta, nabijeni-auta-slunce) — logika nezměněna, jen formátování.
+
+---
+
+## 8. Solární instalace
 
 - **Výkon**: 17 kWp, **Lokace**: Horoušany (50.10°N, 14.74°E)
 - **Azimut**: 190° (JZ), **Sklon**: 45°
