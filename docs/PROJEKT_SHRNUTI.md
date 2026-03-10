@@ -317,6 +317,13 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
 
+**v24.7 NIBE solar hour deferral** (2026-03-10):
+- **BUG**: `cheaperAhead` deferral byl přeskočen v solárních hodinách (`!isSolarHour`). Předpoklad: solar pokryje NIBE. Ale při 3kW solar a 10kW NIBE spotřeby → 10kW ze sítě!
+- **FIX**: `!isSolarHour` nahrazeno `!solarCoversNibe` kde `solarCoversNibe = isSolarHour && prebytek >= SOLAR_OVERRIDE_W (8kW)`.
+- Efekt: v solárních hodinách s nízkým solárem se NIBE odloží na levnější hodiny (cheaperAhead, bigSolarTomorrow).
+- Pokud solar >= 8kW → NIBE běží na soláru (bez deferral). Pokud solar < 8kW → cheaperAhead/bigSolarTomorrow deferral platí.
+- Config: `topeni_solar_override_w: 8000` (W, default)
+
 **v24.4 Patrony + nabíjení opravy** (2026-03-09):
 - **v24.4: `autoHlad` VŽDY blokuje patrony**: Pokud `auto_ma_hlad=ON`, patrony NESMÍ běžet. Žádný override, žádná výjimka. Auto má ABSOLUTNÍ prioritu. (`autoHladForPatrony` odstraněno — způsobovalo bypass.)
 - **v24.4: Manager surplus fix**: `maPrebytek` používá `sensor.fve_dostupny_prebytek` místo `rozdiVyroby`. `rozdiVyroby` je záporné když baterie nabíjí (absorbují solár), i když je dostatek soláru pro auto. `fve_dostupny_prebytek` = solár - spotřeba domu (nepočítá nabíjení baterie).
@@ -329,7 +336,7 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
   - `batSoc < 95%`
   - Kontrola v `htg_main_func` (patronyMohou) i v `pat_korekce_func` (vypne běžící patrony)
 - **v24.2: SOC práh VŽDY 90%**: `dumpRelax` již NERELAXUJE SOC práh. Baterie má ABSOLUTNÍ prioritu.
-- **pat_korekce min 1 fáze** (v24.2): CHARGE-FB↓ a DRAIN-FB↓ používají `actPat > 1` — korekce nikdy nesníží pod 1 fázi.
+- **pat_korekce min 1 fáze** (v24.2→v24.6 OPRAVENO): Dříve `actPat > 1` bránilo snížení pod 1 fázi. v24.6 změněno na `actPat > 0` — korekce MŮŽE snížit na 0 fází (oprava deadlocku).
 - `dumpRelax = ultraLevna || cannotExportSolar` se používá JEN pro `patronyRealisticke` (volba MODu), NE pro SOC práh
 - START patrony VŽDY vyžaduje: SOC ≥ 90% + solár ≥ 5kW (nebo zakaz_pretoku/SOC≥95%) + přebytek ≥ 3kW
 - Ceny se čtou z `sensor.fve_plan` HA entity (přežije NR restart), fallback na prices global
