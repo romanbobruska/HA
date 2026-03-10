@@ -25,13 +25,15 @@ jistá, NEZASADÍ a vysvětlí proč.
     - number.min_soc je VÝHRADNĚ pod kontrolou uživatele — žádný flow nesmí tuto entitu měnit
     - NIKDY hardcodovat hodnoty které jsou v fve_config nebo HA entitách
     - NIBE nesmí být vypnuto (47371=0) pokud kompresor právě běží
-    - Při topení domu oběhovým čerpadlem NESMÍ baterie odebírat ze sítě (grid draw = 0)
+    - Chceme maximalne vyuzit solarni vyrobu - omezovat jen v kritickych pripadech (vetsinou to budou chyby) - pokud bude vse v tomto
+        projektu nastaveno spravne, SOLARNI VYROBA SE NESMI OMEZIT - DESIRE STATE!!!
 
 1.3 OBECNÉ POŽADAVKY NA KÓD
     - Všechny parametry čerpat z fve_config (global) nebo HA entit
     - Žádné magické konstanty v kódu — vše pojmenováno a konfigurovatelné
     - Každý cyklus musí logovat do fve_log.jsonl (ts, mode, soc, spotřeba, aktuátory)
     - Žádný odběr ze sítě kvůli automatizaci — pokud automatizace způsobuje grid draw, je to bug
+    - Pokud si AI nebude jistý v požadavku - bude tam konflikt s aktuálně nastavenými pravidly, uživatele se nejdříve zeptá, jak to myslel a dá mu na výběr
 
 1.4 SOLÁRNÍ FVE INSTALACE
     - Výkon: 17 kWp, Horoušany (50.10°N, 14.74°E)
@@ -49,7 +51,7 @@ jistá, NEZASADÍ a vysvětlí proč.
       "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git \
        && cd /tmp/HA && bash deploy.sh 2>&1"
 
-2.2 WORKFLOW: Ruční změna v Node-RED UI
+2.2 WORKFLOW: Ruční změna v Node-RED UI - Pozor, jen pokud se nepovede bod 2.1!
     1. Uživatel provede změnu v NR UI → klikne Deploy v NR
     2. Uživatel řekne AI "hotovo"
     3. AI stáhne server flows přes SSH, porovná s gitem, commitne změny
@@ -63,11 +65,15 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 2.4 PO DEPLOYMENTU (VŽDY)
     - Ověřit HTTP 200 z Node-RED (deploy.sh to dělá automaticky)
+    - Zkontrolujes logy v NR - casto se stava, ze pokud zmeni NR flow, vyhodi mi to chybu, napr 
+        ({"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Identifier 'socZone' has already been declared (body:line 85)","stack":"Function node:788e188fae8d1fca [Vypočítej max amperaci v2]:86\nlet socZone = '';\n    ^\n\nSyntaxError: Identifier 'socZone' has already been declared\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}})
     - Zkontrolovat aktuální stavy v HA (baterie, grid draw, wallbox)
     - Ověřit že navrhované řešení splňuje zákony z tohoto souboru
     - Aktualizovat docs/PROJEKT_SHRNUTI.md (living document)
     - Smazat dočasné soubory (_*.py, fix_*.py, _*.js, _*.txt apod.)
     - Přes SSH zkontrolovat /tmp/ — smazat dočasné skripty
+    - Nikdy nenechavat spustene debug nody, pokud uz je nepotrebujeme, tzn. neprovadime debug - to zabira pamet HA
+
 
 2.5 GIT PRAVIDLA
     - Commit message: "v24.XX: stručný popis co a proč"
@@ -121,96 +127,93 @@ jistá, NEZASADÍ a vysvětlí proč.
     └──────────────────┴──────────────────────────────────────────┘
 
 4.2 NORMAL MÓD
-    - PSP (power_set_point) = 0 W
-    - Baterie se vybíjí dle potřeby domácnosti
-    - blockDischargeSoft: když NIBE topí / nabíjení auta ze sítě / sauna
-      → max_discharge_power = solar>10W ? Math.max(50,solar) : 0
-    - blockDischargeHard: ODSTRANĚNO v v24.10 (auto bere ze sítě, ne z Victronu)
+    - Baterie nikdy nesmí mít blokaci vybíjení baterie - baterie se vybíjí vzhledem ke spotřebě, zbytek se bere ze sítě.
+        - Výjimkou je pravidlo u blokace baterie u NIBE - tam se baterie může vybíjet, ale používá se případně výroba ze soláru
 
 4.3 ŠETŘIT MÓD
-    - max_discharge_power = solar>10W ? Math.max(50,solar) : 0
+    - baterie se nesmí vybíjet
     - PSP = config.setrit_grid_bias_w (150W) — kompenzuje inverter standby
-    - min_soc SE NEMĚNÍ
 
 4.4 NABÍJET ZE SÍTĚ
     - Scheduled charging přes Victron ESS
-    - Aktivuje se jen pokud zisk z arbitráže ≥ min_arbitrage_profit_czk (2 Kč/kWh)
+    - Aktivuje se jen pokud zisk z arbitráže ≥ min_arbitrage_profit_czk - vyčteš z konfigu
     - Solar coverage check: pokud solar baterii naplní sám, nechargrovat z gridu
 
 4.5 PRODÁVAT
     - PSP = -maxFeedIn (aktivní prodej z baterie do sítě)
-    - Podmínka: prodejní cena × efficieny - costBasis ≥ 2 Kč/kWh AND SOC > minSoc+noční rezerva
+    - Podmínka: prodejní cena × efficieny - costBasis ≥ <parametr z konfigu> AND SOC > minSoc+noční rezerva
     - Prodej deferral: odložit pokud >20% lepší cena do 3h (neplatí pro předpočítané offsety)
+    - Nastavis si v modu prodavat SOC baterie, na kterou chces baterii vybit. Pod tu nepujdes. Jde o to, aby fungoval plan
+        i v dalsich modech a nevybil jsi si baterii na SOC, ktere pak bude brat ze site v drazsich hodinach. Ne, ze budes 
+        plan prepinat v aktualnim modu z prodavat na normal - to je spatne. Musis vedet min. hodinu predem, na jakou SOC 
+        chces baterii vybit.
+
 
 4.6 ZÁKAZ PŘETOKŮ
-    - overvoltage_feed_in = OFF, max_feed_in_power = 0, PSP = 100W, PreventFeedback = 1
-    - MQTT: victron/W/c0619ab69c71/settings/0/Settings/CGwacs/PreventFeedback
-    - cannotExportSolar (sellP≤0 + solární hodina): relaxuje patrony — SOC práh klesne na min_soc (20%)
+    - Nesmi se exportovat do site, idealne ani 100 Wh. Zaroven se nesmi ze site brat (povoleno cca 150W)!
+    - Musi byt zachovano pravidlo, ze chceme maximalne vyuzit solarni vyrobu
+    - U zakazu pretoku pamatuj na to, ze pokud bude BATERIE NA VYSOKEM SOC (SOC≥95%), tak se bude OMEZOVAT VYROBA SOLARU 
+        - TO JE nekolikrat ZMINENO v tomto SOUBORU v jinem kontextu
 
 4.7 BALANCOVÁNÍ
     - Frekvence: 1× za 30 dní (config: balancing_interval_days = 30)
-    - Detekce: SOC≥100% + |I|<0.5A + cell ΔV<0.02V po 20 min → balanced=true
-    - Force-stop: po balancing_force_stop_hours (2h) na SOC=100%
+    - Tento mod se nikdy nesmi spustit ve FVE modu ZAKAZ PRETOKU!
+    - Naplanuje se tento mod, tak, aby to bylo realisticke - napr. 
+        - ne rano, kdy je mala solarni vyroba
+        - ne, pokud jsou drahe hodiny pro prah_ultra_levna_nakup
+        - ne, pokud mame velkou spotrebu_ze_site nebo napr. neni nabite auto nebo baterie ma nizky SOC
+        - a tak dale
+    - Detekce: SOC≥100% + (NABIJENI BATERIE + VYBIJENI BATERIE = 0) po 20 min → balanced=true
+    - Force-stop: po balancing_force_stop_hours (konfig parametr) na SOC=100%
     - Po dokončení: auto-update input_datetime.last_pylontech_balanced + input_boolean.pylontech_balancing_ok
     - NIBE není blokována při balancování (topení domu má přednost)
     - Priorita: Solar hodiny → grid jen bez solaru
+    - Pokud se nepodari balancing - skonci NOK, zkusime za dalsich config: balancing_interval_days
 
-4.8 BLOKACE VYBÍJENÍ BATERIE (aktuální stav)
-    - solar > 10W → max_discharge_power = Math.max(50, solar)
-    - solar ≤ 10W → max_discharge_power = 0 (Victron transfer relay zajistí grid passthrough)
-    - NIKDY neblokovat vybíjení přes number.min_soc — jen přes max_discharge_power
-    - blockDischargeHard byl odstraněn v v24.10 — korekční smyčka auta řídí baterii
+4.8 BLOKACE VYBÍJENÍ BATERIE 
+    - POUZIJE SE POUZE A JEDINE V TECHTO PRIPADECH:
+    - POKUD BEZI NIBE 
+    - POKUD JE ZAPNUTA SAUNA (HA KOMPONENTA)
 
 ================================================================================
 5. FLOW: NABÍJENÍ AUTA ZE SLUNCE (nabijeni-auta-slunce.json)
 ================================================================================
 
-5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ KOREKČNÍ SMYČKY
-    - input_boolean.nastavuj_amperaci_chargeru_solar = ON
-    - SOC baterie ≥ nabijeni_auta_min_soc_slunce (85%) → jinak STOP (0A)
-    - Korekce každých 20s (inject heartbeat + server-state-changed trigger)
+5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ NABÍJENÍ AUTA ZE SLUNCE
 
-5.2 SOC BATERIE < nabijeni_auta_soc_drain_prah (95%) — CHARGE MÓD
-    - Cíl: baterie se NABÍJÍ ~1 kW (nabijeni_auta_soc_charge_w = 1000W)
-    - Dead band: ±500W (nabijeni_auta_dead_band_w)
-    - Pokud baterie nabíjí < 500W → snížit amperaci o 1A
-    - Pokud baterie nabíjí > 1500W → zvýšit amperaci o 1A
-    - Pokud 500W–1500W → beze změny (dead band)
-    - Max změna: ±1A za cyklus
+    - SOC BATERIE je vetsi nez 85%
+    - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!!
+    - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
+    - Korekcni smycka reguluje dynamicky amperaci na chargeru podle:
+        - aktualni spotreby domu
+        - solarni vyroby
+        - aktualniho SOC baterie
+        - Odberu ze site
+        - Spravny stav je takovy, ze se auto nabiji ze solaru tak, aby mezi SOC fve baterie 85 - 95% se 
+        nabijela baterie cca 1kWh, nad 95% se vybijela cca 1kWH. Toto zarizuje korekcni smycka, ktera nastavuje
+        amperaci na chargeru - meni se nebo zustava nahodnote A na chargeru dle podminek kazdych 20s (zajisteno input nodem).
+        - Pokud korekcni smycka vyhodnoti, ze jsou podminky takove, ze se auto nemuze nabijet ani min. 6A, vypne korekcni smycka charger a 
+        ceka se, co udela manager nabijeni auta!!!
+        - cyklus upravuje amperaci tak, aby nabijeni auta bylo optimalni a odpovidalo aktualnim podminkam v dome.
+        - algoritmus vypoctu amperace musi byt spravny, aby nedochazelo k chaoticke oscilaci - 6A, za dalsich 20s 16A atp.
+        - tato korekcni smycka by mela automaticky zastavit charger, pokud se zvedne spotreba domu - napr. zacne topit
+            NIBE - jelikoz to bude mit v rozdilu spotreby a vyroby. Nepotrebujeme zadny MUTEX
 
-5.3 SOC BATERIE ≥ nabijeni_auta_soc_drain_prah (95%) — DRAIN MÓD
-    - Cíl: baterie se VYBÍJÍ ~1 kW (nabijeni_auta_soc_drain_w = 1000W)
-    - Stejný dead band a ±1A logika, ale opačný cíl
-    - Max SOC 99%: konzervativní mód — zvyšovat jen při exportu, snižovat agresivněji
-
-5.4 OCHRANA PROTI ODBĚRU ZE SÍTĚ
-    - Wallbox je grid-connected (mimo Victron ESS) — bere ze sítě, ne přímo z baterie
-    - Pokud solar klesne, baterie MUSÍ moci vybíjet pro domácnost (blockDischargeHard odstraněn)
-    - Korekční smyčka snižuje amperaci tak, aby baterie nenabíjela pod dead band
-
-5.5 WALLBOX AMPERACE
-    - Rozsah: 6A–16A (select.wallboxu_garaz_amperace)
-    - Entita vrací string "10A" → parsovat: parseInt(str.replace(/[^0-9]/g,''),10)
-    - Service call JSONata: {"option": $string(payload) & "A"}  ← SPRÁVNĚ
-    - Nesprávně: msg.payload & 'A'  ← msg není v JSONata kontextu!
-
-5.6 MUTEX S NIBE
-    - Pokud NIBE topí (cerpadlo_topi = true) → wallbox STOP (0A)
 
 ================================================================================
 6. FLOW: NABÍJENÍ AUTA ZE SÍTĚ (nabijeni-auta-sit.json)
 ================================================================================
 
 6.1 PODMÍNKY PRO NABÍJENÍ ZE SÍTĚ
-    - Cena elektřiny ≤ nabijeni_auta_cena_prah_vyssi (4.3 Kč/kWh) pro vyšší práh
-    - Cena elektřiny ≤ nabijeni_auta_cena_prah_nizsi (3.0 Kč/kWh) pro nižší práh
-    - input_boolean.nastavuj_amperaci_chargeru_grid = ON
+    - Plati jen, kdyz neni solarni nabijeni auta nebo letni rezim
+    - Nabijime za co nejnizsi cenu ze site - pokud je zadano v HA komponente input_select.nabijet_auto_hodin_v_bloku
+        napr. hodnota 1, nabijime v levelu 1 (nejlevnejsi hodina)
+    - pokud je superlevna cena - v konfigu - napr. 1.5KC, nabiji se, i kdyz to neni nejlevnejsi hodina (level 1)
 
 6.2 OCHRANA PŘETÍŽENÍ SÍTĚ
-    - Celková spotřeba + příkon wallboxu ≤ nabijeni_auta_pretizeni_w (18000W)
-
-6.3 SERVICE CALL (stejná oprava jako solar)
-    - JSONata: {"option": $string(payload) & "A"}  ← SPRÁVNĚ
+    - Plati, ze nesmime vzit ze site vice nez je definovan max odber ze site - to je cele.
+        - pokud se bude zrat hodne, pak plati priority  - kazde flow ma ochranu na pretizeni ze site. Pokud nastane 
+        konflikt, plati priority - bere ten, co ma prednost
 
 ================================================================================
 7. FLOW: MANAGER NABÍJENÍ AUTA (manager-nabijeni-auta.json)
@@ -218,18 +221,16 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 7.1 PRIORITNÍ ROZHODOVÁNÍ (první splněná podmínka vyhraje)
     1. Auto nemá hlad (auto_ma_hlad=OFF) → STOP
-    2. Charger state 3/4 (nabito) → STOP
-    3. Automatizace OFF → STOP
-    4. NIBE topí (mutex) → STOP
+    2. Automatizace OFF → STOP
     5. Balancování aktivní + SOC < 100% → STOP (baterie se musí nabít)
     6. SOC < 85% → STOP
-    7. Solární cyklus už běží → SLUNCE (nechat běžet)
-    8. solarni_rezim ON + přebytek → SLUNCE; bez přebytku → STOP
+    7. Solární cyklus už běží → nechat bezet, plati korekcni smycka solaru
+    8. Pokud jsou podminky splneny a nabijeni je zastavene, spusti dane flow znovu
     9. letni_rezim ON + přebytek → SLUNCE; bez přebytku → falls through
     10. vyrobaDnes > 40 kWh + přebytek → SLUNCE
-    11. batSoc > 95% + přebytek → SLUNCE
     12. vyrobaZitra > 40 kWh + přebytek → SLUNCE
     13. Forecast špatný → SÍŤ (pokud cena OK)
+    14. Zimni rezim + solar off - plati podminky pro nabijeni ze site, viz bod 10, 12
 
 7.2 KLÍČOVÉ OCHRANNÉ PODMÍNKY
     - VŠECHNY cesty na SLUNCE vyžadují reálný přebytek > nabijeni_auta_solar_w (4000W)
@@ -237,8 +238,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Stop path fyzicky zastavuje wallbox (switch.wallbox_garaz_start_stop = OFF)
 
 7.3 AUTO MÁ HLAD — DEFINICE
-    - input_boolean.auto_ma_hlad = ON při: state 2 (Charging), 4 (WaitSun), 6 (WaitStart)
-    - State 6 (WaitStart) = auto připojeno, čeká na start = MÁ HLAD
+    - input_boolean.auto_ma_hlad = ON nebo OFF. Pokud ON, auto se chce nab9jet, pokud OFF, auto uz je nabito. nic více, nic méně.
 
 ================================================================================
 8. FLOW: TOPENÍ DOMU (fve-heating.json)
@@ -262,34 +262,39 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 8.3 NIBE (switch.nibe_topeni, reg 47371)
     Rozhodování (první splněná podmínka):
-    1. Grid Lost / Krb / Nádrž > MAX_TANK / Patrony aktivní → NIBE OFF
+    1. Pokud bude dostatek odhadovane solarni energie, staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
+        od definovane teploty v dome - vse je v konfigu, nic nehardcodovat
+    2. Grid Lost / Krb / Nádrž > MAX_TANK / Patrony aktivní → NIBE OFF
     2. Drahá hodina (lvl ≥ 12) a solar < 8kW → NIBE OFF (žádná výjimka)
-    3. Drahá hodina a solar ≥ 8kW (free energy) → NIBE ON
+    3. Drahá hodina a solar ≥ 8kW (free energy) → NIBE ON + BLOKACE BATERIE OFF
     4. Levná/střední hodina + potřeba topit:
        - Solar ≥ 8kW (topeni_solar_override_w) → NIBE ON bez odkladu
        - Solar < 8kW → cheaperAhead/bigSolarTomorrow odklady platí
        - canDeferHeat: pokud indoorTemp ≥ safeTemp, lze odložit na levnější hodinu
-    5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže)
+    5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže) - jen, pokud neni vyhodnejsi topit pres patrony a bod 1 plati
     6. Jinak → NIBE OFF
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
-    COOLDOWN: min. 10 minut mezi přepnutími
+    COOLDOWN: min. 3 minut mezi přepnutími
 
 8.4 OBĚHOVÉ ČERPADLO (switch.teplota_smesovac)
-    - ON pokud: teplota domu < cíl A nádrž ≥ 32°C
-    - OFF pokud: nádrž < 32°C NEBO krb aktivní (nesahat!)
+    - ON pokud: teplota domu < cíl A nádrž ≥ nastavena teplota v nadrzi 
+    - OFF pokud: nádrž < config teplota v nadrzi NEBO krb aktivní (nesahat!)
     - Noční omezení (22-6h): jen pokud indoorTemp < targetTemp - 0.5°C
     - Horní limit nádrže pro oběhové čerpadlo: NENÍ (50°C jen pro patrony)
     - Nezávislé na NIBE
 
 8.5 PATRONY (switch.patrona_faze_1/3_2/3, 3× 3kW)
     Podmínky start (patronyMohou) — VŠECHNY musí být splněny:
-    - SOC baterie ≥ topeni_min_soc_patron (95%)  ← HARD LIMIT
+    - Uz nikam nemame dat solarni energii - ani do auta, ani do pripadne virivky, nikam - mam prebytek, ktery nikam nevyuzijeme, a zaroven uspokojime 
+        spotrebu domu. Pak se spusti mod patrony.
+    - Mod se spusti, jak je definovano vyse, pokud teplota v dome bude 0.2 stupne pod stanovenou teplotou v dome a zaroven budeme
+        mit dostatek ocekavanych solarnich prebytku - tehdy NIBE OFF.
+    - SOC baterie ≥ 85 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
-    - autoNabiji = OFF  ← auto nabíjení ze sítě ani ze slunce nesmí běžet
-    - Teplota nádrže < topeni_max_teplota_patron (60°C)
-    - Solární přebytek ≥ topeni_min_pretok_patron_w (3000W)
-    - patronySolarOk: solar ≥ 5kW NEBO fve_mod=zakaz_pretoku NEBO SOC≥95%
+    - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
+        - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
+    - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
 
     Stupňování fází:
@@ -300,29 +305,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 
     Start: hlavní loop vždy spustí jen 1 fázi → korekce přidá další
 
-8.6 KOREKCE PATRONY (pat_korekce_func, každých 5s)
-    Priorita 1 — GRID DRAW SAFETY (override vše včetně cooldown):
-    - Pokud spotreba_ze_site > topeni_patron_max_grid_draw_w (200W) → ubrat fáze
-    - Počet fází k odebrání = ceil(gridExcess / 3000)
-    - Může snížit až na 0 fází
+8.6 KOREKCE PATRONY (pat_korekce_func, každých 20s) - tady neplatí cooldown, patrony fungují okamžitě
+   - Tady to funguje stejne jako u nabíjení auta ze solaru -  s tím rozdílem, že patrony mají nejmenší prioritu
+    a spouští se až po 90% SOC baterie. Precti si ta pravidla, plati stejna - obecne - pokud mame prebytek solaru na 
+    patrony, pak spustme 1, 2 nebo 3 faze - pokud ne, tak nic.
 
-    Priorita 2 — Battery Feedback:
-    - SOC 90–95% (CHARGE-FB): cíl = baterie nabíjí ~1kW
-      → error > 500W → přidat fázi; error < -500W → ubrat fázi
-    - SOC ≥ 95% (DRAIN-FB): cíl = baterie vybíjí ~1kW
-      → stejná logika, opačný cíl
-
-    Cooldown: 30s po každé změně fáze (6 cyklů × 5s) — zabraňuje oscilaci
-    Výjimka: grid draw safety ignoruje cooldown
-
-8.7 CÍLOVÁ TEPLOTA A NOČNÍ SNÍŽENÍ
-    - Cílová teplota: input_number.nastavena_teplota_v_dome (aktuálně 23.3°C)
-    - Noční snížení: 0.5°C platí VŽDY v noci (22-6h), ne jen v drahých hodinách
-
-8.8 LETNÍ REŽIM (input_boolean.letni_rezim = ON)
-    - Topení: NIBE a oběhové čerpadlo jsou OFF
-    - Chlazení: řízeno cílovou teplotou
-    - Patrony: OFF (pokud není implementována overflow logika)
 
 ================================================================================
 9. FLOW: BOJLER (boiler.json)
