@@ -173,9 +173,51 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Pokud se nepodari balancing - skonci NOK, zkusime za dalsich config: balancing_interval_days
 
 4.8 BLOKACE VYBÍJENÍ BATERIE 
-    - POUZIJE SE POUZE A JEDINE V TECHTO PRIPADECH:
+    - POUZIJE SE POUZE A JEDINE V TECHTO PŘÍPADECH:
     - POKUD BEZI NIBE 
     - POKUD JE ZAPNUTA SAUNA (HA KOMPONENTA)
+
+4.9 FVE PLÁN — PRAVIDLA PRO 12h PLÁN (fve-orchestrator.json)
+    Orchestrátor generuje plán na 12 hodin dopředu. Plán přiřazuje každé hodině
+    jeden mód (Normal, Šetřit, Nabíjet ze sítě, Prodávat, Zákaz přetoků, Balancování).
+    Plán MUSÍ být logicky konzistentní — módy musí na sebe navazovat realisticky.
+
+    4.9.1 SIMULACE SOC MUSÍ BÝT REALISTICKÁ
+        - V KAŽDÉM módu se SOC mění — nikdy nestojí na místě celé hodiny:
+            - Šetřit: SOC klesá o config.soc_drop_setrit_pct za hodinu (standby spotřeba domu)
+            - Normal: SOC klesá o config.soc_drop_normal_pct za hodinu (aktivní vybíjení)
+            - Nabíjet ze sítě: SOC roste dle config.charge_rate_kwh
+            - Prodávat: SOC klesá dle max_feed_in a kapacity baterie
+            - Solární hodiny: SOC roste dle predikce solárního zisku
+        - Pokud simulace ukazuje stejné SOC přes více hodin → je to BUG
+
+    4.9.2 ROZHODOVÁNÍ O MÓDECH — LOGICKÁ NÁVAZNOST
+        Pro každou hodinu platí (v pořadí priority):
+
+        1. Zákaz přetoků: prodejní cena ≤ 0 → feed-in OFF, PSP kladné
+        2. Balancování: pokud je naplánováno (viz 4.7)
+        3. Nabíjet ze sítě: POUZE pokud VŠECHNY podmínky splněny:
+            a) Cena je pod prah_levna_energie (level ≤ config.prah_levna_energie)
+            b) Solární předpověď NESTAČÍ pokrýt denní spotřebu
+               (forecast_dnes + forecast_zitra < potřeba → nabíjej, jinak NE)
+            c) SOC po solární výrobě by byl stále pod min_soc + noční_rezerva
+            d) Arbitráž se vyplatí: (budoucí prodejní cena - nákupní cena) × účinnost ≥ min_arbitrage_profit
+            → Pokud zítra svítí dostatečně → NENABÍJET ze sítě!
+        4. Prodávat: viz pravidla 4.5
+        5. Normal (vybíjení): cena ≥ prah_draha_energie AND SOC > min_soc + rezerva
+        6. Šetřit: default — baterie se nevybíjí, solar jde do baterie/sítě
+
+    4.9.3 KONZISTENCE PLÁNU
+        - Plán musí zajistit, že SOC na konci horizontu ≥ min_soc
+        - Pokud se vybíjí v drahých hodinách, musí zbýt dost na zbytek noci
+        - Nabíjení ze sítě v levných hodinách má smysl JEN pokud:
+            a) Solar zítra nestačí NEBO
+            b) Existuje dost drahých hodin na profitable arbitráž
+        - Nelogické sekvence (příklady chyb):
+            × Šetřit → Nabíjet ze sítě → Šetřit (proč nabíjet, když šetříme?)
+            × Nabíjet ze sítě při dobré solární předpovědi (solar to udělá zadarmo)
+            × SOC 37% neměnné přes 3+ hodiny Šetřit (nerealistické)
+            × Vybíjet v levné hodině a šetřit v drahé (obrácená logika)
 
 ================================================================================
 5. FLOW: NABÍJENÍ AUTA ZE SLUNCE (nabijeni-auta-slunce.json)
