@@ -7,6 +7,7 @@
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
 >
 > **Pravidla pro AI:**
+> - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
 > - Před každou prací PŘEČÍST `User inputs/POZADAVKY.TXT` (ZÁKONY)
 > - Před deploymentem ověřit soulad se VŠEMI zákony
 > - Po deploymentu ověřit HA stavy, logy, grid draw
