@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci (ne přidávat na konec).
-> Poslední aktualizace: 2026-03-09 (v24.4: autoHlad ALWAYS blocks patrony, manager surplus fix fve_dostupny_prebytek)
+> Poslední aktualizace: 2026-03-10 (v24.10: oprava korekční smyčky auta — 3 bugy, odstranění blockDischargeHard)
 >
 > **Provozní pravidla pro AI:**
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
@@ -269,9 +269,9 @@ balancing_min_solar_kwh: 3    balancing_grid_reserve_w: 1000
 | **Solární nabíjení** | Levné solární hodiny | Může nabíjet ze solaru, nevybíjí |
 | **Balancování** | 1×/30 dní, solární hodiny (priorita), grid jen bez solaru | Nabíjí na 100%, detekce: SOC≥100% + |I|<0.5A + ΔV<0.02V po 20min. Force-stop po `balancing_force_stop_hours` (2h). Po dokončení: auto-update `input_datetime.last_pylontech_balanced` + `input_boolean.pylontech_balancing_ok` (✅=OK, ❌=force-stop). **v24**: `bal_svc_set_boolean` uses `action` format. Persistent log: `bal_current`, `bal_cell_diff`, `bal_soc_precise`, `bal_status`. NIBE neblokovaná. |
 
-**Blokace vybíjení** (oprava v19.4, 2026-03-04):
+**Blokace vybíjení** (aktuální stav po v24.10):
 - **blockDischargeSoft** (NIBE topí, nabíjení auta ze sítě, sauna): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`
-- **blockDischargeHard** (v19.4: auto nabíjí + SOC < `nabijeni_auta_min_soc` [95%]): `max_discharge_power = 0` — baterie se NEVYBÍJÍ dokud SOC nedosáhne 95%. Solar → baterie (MPPT), auto → grid. Čte `sensor.charger_state_garage` přímo (přežije NR restart).
+- ~~**blockDischargeHard**~~ **(v24.10 ODSTRANĚNO)**: Původně blokoval vybíjení když auto nabíjí + SOC < 95%. PROBLÉM: auto bere ze sítě (ne z Victronu) → blockDischargeHard zabraňoval baterii napájet domácnost → odběr ze sítě! Korekční smyčka v `nabijeni-auta-slunce.json` zajišťuje správnou úroveň baterie — hard block je zbytečný. Čte `sensor.charger_state_garage` přímo (zachováno pro `blockDischargeSoft` logiku).
 - **Prodej deferral** (v19.4): PRODÁVAT se odkládá pokud >20% lepší prodejní cena existuje do 3h (neplatí pro předpočítané arbitrageSellOffsets)
 
 **ŠETŘIT mód** (oprava v19.3, 2026-03-04): `max_discharge_power` = solar>10W → `Math.max(50, solar)`, solar≤10W → `0`. `power_set_point = config.setrit_grid_bias_w` (default 150W) — grid bias kompenzuje inverter standby. `min_soc` se NEMĚNÍ. Ověřeno: baterie 0W v ŠETŘIT (dříve -118W).
@@ -316,6 +316,24 @@ Příklad: 23:00 (3.99 CZK, effCost=6.43) → 18:00 zítra (9.20 CZK) = profit *
 | **Vypnuto** | teplota OK + žádný přebytek / autoHlad blokuje patrony | **v24**: NIBE i patrony zakázány (dříve NIBE proaktivně topilo nádrž) |
 
 **PRIORITA**: Patrony = **POSLEDNÍ** v prioritě. Berou přebytky co nemám kam dát (auto, NIBE, baterie uspokojeny). Patrony běží jen pokud teplota domu je max 0.3°C pod cílem (`PATRON_TEMP_MARGIN`). Větší rozdíl → NIBE.
+
+**v24.10 Korekční smyčka auta — 3 bugy opraveny** (2026-03-10):
+
+- **BUG 1: Switch `vt:str` (string porovnání)** v `nabijeni-auta-slunce.json` node `82f8a5c6cfa6c254` ("Amperace < 6?"):
+  - `"10" < "6"` = TRUE (lexikograficky `"1" < "6"`) → při `targetAmper=10` (dead band, beze změny) se smyčka přepnula na výstup 1 → `Nastavuj amperaci OFF` → bool vypnut → smyčka se zastavila → wallbox stál na 10A natrvalo
+  - FIX: `vt:"str"` → `vt:"num"` (numerické porovnání: `10 < 6 = FALSE → else → service call`)
+
+- **BUG 2: JSONata `msg.payload` neplatné v NR api-call-service** v service call "Nastav amperaci na chargeru" (`44281067ced2dc56`) a grid charging (`1f5e371852712ac6`):
+  - V NR JSONata kontextu je `$` = root (zpráva), ne `msg`. Výraz `msg.payload & 'A'` = `undefined & 'A'` = `"A"` (neplatná option) → HA call selhal tiše → wallbox se nikdy nenastavil
+  - FIX: `msg.payload & 'A'` → `$string(payload) & "A"` (správný přístup v NR JSONata)
+  - Opraveno v obou flows: `nabijeni-auta-slunce.json` i `nabijeni-auta-sit.json`
+
+- **BUG 3: `blockDischargeHard` blokoval baterii pro domácnost** (`fve-modes.json` NORMAL Logic):
+  - Při auto nabíjení + SOC < 95%: `max_discharge_power = solarPassthrough = 0` (při nízkém solaru) → baterie se nemohla vybíjet → domácnost odebírala ze sítě!
+  - KOŘEN: auto nabíjí ze sítě (grid-connected, mimo Victron ESS) → blockDischargeHard nemohl zabránit vybíjení PRO AUTO, ale zabránil vybíjení pro DOMEÁCNOST
+  - FIX: `blockDischargeHard = false` (odstraněno). Korekční smyčka v `nabijeni-auta-slunce.json` zajišťuje správnou úroveň baterie při solárním nabíjení auta
+
+- **REVERT v24.9** (`fve-heating.json`): `autoHlad` vráceno jako ABSOLUTNÍ blokace patrony. v24.9 přidal `patronyCarOk` který mohl spustit patrony při nabíjení auta — ŠPATNĚ. Pravidlo: auto_ma_hlad=ON → patrony NIKDY.
 
 **v24.7 NIBE solar hour deferral** (2026-03-10):
 - **BUG**: `cheaperAhead` deferral byl přeskočen v solárních hodinách (`!isSolarHour`). Předpoklad: solar pokryje NIBE. Ale při 3kW solar a 10kW NIBE spotřeby → 10kW ze sítě!
