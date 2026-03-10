@@ -1,15 +1,5 @@
-Udelej si diff mezi tim, co jsi mi vygeneroval za D:\Programy\Programování\Node Red\HA\User inputs\POZADAVKY.TXT a jak jsem je zmenil.
+Znovu si zkotroluj, ze je vse v souladu se zakony, pripadne se zeptej na nesrovnalosti - to bylo super.
+Zaroven si zkontroluj, ze jsi vsechny slozite funkce v NR zjednodusil na maximalni moznou uroven a 
+ze bude vse fungovat po deployi, jak je v zakonech.
 
-Dost jsem to zjednodusil - to jsou zakony.
-
-Projdi cely projekt, zda odpovida pozadavkum, zda tam nejsou zadne bugy, vyhod zbytecny kod atd.
-
-- POUZIJ BRANCH REKONCILIACE  V GITU, at se kdyztak muzeme vratit. TAM SE TATO VETEV ULOZI V GITU. ZJEDNODUS CELY PROJEKT A NASAD UPRAVY, PRIPADNE SE ZEPTEJ NA NESROVNALOSTI V 
-JEDNOM PROMPTU.
-
-POKUD TO POCHOPIS A NASADIME OK, ODSTRAN Z MD FILU VSECHNY POZADAVKY, KTERE TAM MAS ULOZENE ODE ME, ABY FUNGOVAL JEN ZAKON.
-
-Rozumime si?
-
-Bud peclivy a zjednodus cely projekt. Myslim, ze to zadani je v celku logicke a jednoduche, jen ty ho mas slozite - a proto delas chyby.
-
+Udelej vse, co je v zakonech.

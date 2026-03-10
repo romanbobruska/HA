@@ -342,7 +342,7 @@
         "z": "fve_history_tab",
         "g": "fve_history_export_group",
         "name": "Export Data",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,

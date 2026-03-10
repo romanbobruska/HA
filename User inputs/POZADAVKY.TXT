@@ -290,7 +290,7 @@ jistá, NEZASADÍ a vysvětlí proč.
         spotrebu domu. Pak se spusti mod patrony.
     - Mod se spusti, jak je definovano vyse, pokud teplota v dome bude 0.2 stupne pod stanovenou teplotou v dome a zaroven budeme
         mit dostatek ocekavanych solarnich prebytku - tehdy NIBE OFF.
-    - SOC baterie ≥ 85 procent
+    - SOC baterie ≥ 90 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
     - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
         - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
