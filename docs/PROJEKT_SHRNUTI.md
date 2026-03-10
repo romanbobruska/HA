@@ -4,6 +4,10 @@
 > Poslední aktualizace: 2026-03-10 (v24.10: oprava korekční smyčky auta — 3 bugy, odstranění blockDischargeHard)
 >
 > **Provozní pravidla pro AI:**
+> - **KRITICKÉ: Před analýzou každého fixu nebo nového požadavku PŘEČÍST `User inputs/POZADAVKY.TXT`** — tyto jsou ZÁKONY, nikdy je neporušit
+> - **KRITICKÉ: Před každým deploymentem ověřit, že řešení splňuje VŠECHNY zákony z `POZADAVKY.TXT`.** Pokud ne → zamyslet se znovu. Nasadit POUZE verzi splňující zákony + zadání. Pokud to není možné, vysvětlit proč a nenasazovat.
+> - **KRITICKÉ: Po deploymentu ověřit, že nasazení je v souladu se zákony z `POZADAVKY.TXT`** (HA stavy, grid draw, baterie)
+> - **KRITICKÉ: `User inputs/POZADAVKY.TXT` NESMÍ AI NIKDY MĚNIT** — edituje výhradně uživatel
 > - Aktualizovat tento soubor po každém **úspěšném** nasazení (deploy)
 > - Uživatel nevyžaduje potvrzení každého kroku — vše provádět bez čekání na Accept v IDE
 > - Pokud je otázka nutná, položit max. 1× po kompletní analýze — ideálně více otázek v jednom promptu

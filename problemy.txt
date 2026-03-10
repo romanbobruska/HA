@@ -1,3 +1,46 @@
-NE NE NE!!! ZERU ZE SITE - TO JE TEN PROBLEM!!!! DEBILEEE!!!! PROC JE BLOKOVANA BATERIE NA VYBIJENI!!!!!!!!! DEBILEEEEEEEEE!!!
+Uz na tvoje chyby nemam nervy. Udelame to jinak. MENIME PRISTUP KOMUNIKACE.
 
-OPRAV TO!!!!!!!!!!!!
+Uprav mi soubor D:\Programy\Programování\Node Red\HA\User inputs\POZADAVKY.TXT:
+
+Vypis mi z pozadavku v MD filech, ktere mas ulozene, vsechny moje mozadavky na cely projekt. chci to mit strukturovane, srozumitelne pro cloveka, ale 
+zaroven pochopitelne pro tebe. Predstavuji si, ze tam bude struktura neco jako 
+
+- obecne pozadavky
+- flow topení domu
+    - mode patrony
+    - mode NIBE
+    ....
+- flow nabíjení auta ze slunce
+    - case SOC baterie < 95%
+    - case SOC baterie >= 96%
+- flow fve modes
+    - mode nabíjet baterii
+    - mode šetřit baterii
+    - mode normal
+    ...
+- deployment
+...
+- after deployment...
+atd....
+
+Tuto strukturu ber to jako příklad - chci mít přehled o všech možnostech a případných variantách, které jsem ti zadal v minulosti jako vstupní data. A chci je do budoucna měnit - 
+jelikož to budou pro tebe ZÁKONY, které NIKDY ZA ŽÁDNÝCH OKOLNOSTÍ NEPORUŠÍŠ! A zároveň, tento soubor mi nebudeš NIKDY MĚNIT!!! TEN BUDU MĚNIT JÁ A POUZE JÁ!!!
+
+Pouzij i MCP tool, abys precetl, jak jsme na tom aktualne, aby v tom soubory byl aktualni stav, pokud si nebudes jisty, jak jsem to myslel - 
+tzn. kombinace MD souboru a aktualniho stavu - v pripade konfiktu moje pozadavky v MD SOUBORECH MAJI PREDNOST!
+
+Ty si uz budes drzet pouze MD fily jako popis projektu, deployment, after deployment atd... tzn. MD soubory, ktere budes potrebovat pro vse 
+ostatni, abys pochopil kontext, KROME MYCH POZADAVKU!
+Ja potom tento soubor zedituji, aby odpovidal mym predstavam, jak projekt ma fungovat. Ty vzdy pri zadani fixu problemu nebo noveho pozadavku si 
+nejdrive prectes zadani, pak budes analyzovat problem - VZDY. PRED DEPLOYMENTEM SI OVERIS VZDY, ZE TVE NASAZOVANE RESENI PLNI
+ME POZADAVKY/ZÁKONY. POKUD NE, ZAMYSLIS SE NAD TIM ZNOVU. NASAZOVAT BUDES POUZE VERZI, KTERA PLNI ME POZADAVKY A ZÁROVEN ZADANI V PROMTPU. POKUD TOHO 
+NEBUDES SCHOPEN, TAK MI VYSVETLIS PROC A NEBUDES NASAZOVAT, JELIKOZ NEBUDES MIT JISTOTU TOHO, ZE NEPORUSIS ZAKONY - PRIPADNE MI DAS VOLBY.
+Po deploymentu VZDY OVERIS, ZE TVE NASAZENI JSOU V SOULADU SE ZÁKONY, KTERE JSEM TI POSKYTL!
+
+NIKDY NEBUDES DELAT ZMENY V TOMTO FILU, POKUD TE O TO EXPLIXITNE NEPOZADAM, JAK NAPR. TED!!!
+
+Nova pravidla z tohoto promptu si zapamatuj do MD files, MENIME ZPUSOB KOMUNIKACE, NECHCI, ABYS JE PORUSIL!!!
+
+ROZUMIS MI??? PRIPADNE SE ZEPTEJ - TED SE JEDNA JEN O TO, ABYCH MEL KOMPLETNI A SROZUMITELNY VYPIS POZADAVKU / ZAKONU, ktery budu editovat jako vstup pro tebe.
+
+
