@@ -34,6 +34,10 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Každý cyklus musí logovat do fve_log.jsonl (ts, mode, soc, spotřeba, aktuátory)
     - Žádný odběr ze sítě kvůli automatizaci — pokud automatizace způsobuje grid draw, je to bug
     - Pokud si AI nebude jistý v požadavku - bude tam konflikt s aktuálně nastavenými pravidly, uživatele se nejdříve zeptá, jak to myslel a dá mu na výběr
+    - Chci maximalni jednoduchost, abych se na to mohl koukat a upravovat to, ne slozite kody ve funkcich v NR, ktere bych musel studovat. Funkce jsou povoleny,
+        ale jednodussi, tak maximalne rekneme 100 radku - vice ne. Pokud potrebujes, pridej si dalsi funkci a spravne ji napoj v NR, hlavne, ze bude
+        NR upravitelne a jednoduse pochopitelne i clovekem, ktery ma s programovanim cca 5 let zkusenosti
+    - Dodrzuj design patterny, ktere jsou v NR. Muzes pridat vylepseni, ale hlavne flows nerozbij
 
 1.4 SOLÁRNÍ FVE INSTALACE
     - Výkon: 17 kWp, Horoušany (50.10°N, 14.74°E)

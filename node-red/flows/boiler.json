@@ -75,8 +75,8 @@
             "8d401c2a5bd5d0ef",
             "3472b1985ec023f5"
         ],
-        "x": 234,
-        "y": 558,
+        "x": 214,
+        "y": 539,
         "w": 612,
         "h": 150
     },
@@ -705,15 +705,15 @@
         "z": "0a2df88897520187",
         "g": "09797f9996ff875a",
         "name": "🧠 Rozhodovací logika",
-        "func": "// ========== NAČTENÍ KONFIGURACE Z FLOW PROMĚNNÝCH ==========\nconst TEPLOTA_MAX = flow.get(\"TEPLOTA_MAX\") || 69;\nconst TEPLOTA_VYSOKA = flow.get(\"TEPLOTA_VYSOKA\") || 60;\nconst TEPLOTA_STREDNI = flow.get(\"TEPLOTA_STREDNI\") || 55;\nconst TEPLOTA_MIN = flow.get(\"TEPLOTA_MIN\") || 20;\nconst TEPLOTA_POVINNY_SOLAR = flow.get(\"TEPLOTA_POVINNY_SOLAR\") || 40;\nconst HYSTEREZE = flow.get(\"HYSTEREZE\") || 500;\nconst SPOTREBA_BOJLER = flow.get(\"SPOTREBA_BOJLER\") || 2500;\nconst PRICE_LEVEL_LEVNY = flow.get(\"PRICE_LEVEL_LEVNY\") || 3;\nconst CENA_KWH_LEVNA = flow.get(\"CENA_KWH_LEVNA\") || 2.6;\nconst FORECAST_THRESHOLD = flow.get(\"FORECAST_THRESHOLD\") || 35000;\n\n// ========== NAČTENÍ GLOBÁLNÍCH PROMĚNNÝCH ==========\nconst max_spotreba_sit = global.get(\"max_spotreba_sit\") || 24000;\nconst forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") || 0;\nconst forecast_vyroba_zitra = global.get(\"forecast_vyroba_zitra\") || 0;\nconst cerpadlo_topi = global.get(\"cerpadlo_topi\") === true;\n\n// v18.9: Aktuální nastavená teplota termostatu (Meross) - guard proti zbytečným zápisům\nconst climateEntity = global.get(\"homeassistant.homeAssistant.states['climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53']\") || {};\nconst aktualni_nastavena_teplota = parseFloat((climateEntity.attributes || {}).temperature) || 0;\n\n// ========== NAČTENÍ VSTUPNÍCH HODNOT Z MSG ==========\nconst jsme_doma = msg.jsme_doma === \"on\";\nconst rychle_voda = msg.rychle_voda === \"on\";\nconst teplota_bojleru = msg.teplota_bojleru || 0;\nconst spotreba_bojleru_aktualni = msg.spotreba_bojleru || 0;\nconst battery = msg.battery_percent || 0;\nconst rozdil_vyroby = msg.rozdil_vyroby || 0;\nconst letni_rezim = msg.letni_rezim === \"on\";\nconst auto_hlad = msg.auto_hlad === \"on\";\nconst auto_automatizace = msg.auto_automatizace === \"on\";\nconst price_level = msg.price_level || 24;\nconst cena_kwh = msg.cena_kwh || 10;\nconst celkova_spotreba = msg.celkova_spotreba || 0;\nconst spotreba_ze_site = msg.spotreba_ze_site || 0;\n\n// ========== ČASOVÁ KONTROLA ==========\nconst now = new Date();\nconst hodina = now.getHours();\nconst minuty = now.getMinutes();\nconst cas_minuty = hodina * 60 + minuty;\nconst je_povinny_cas = cas_minuty >= 17 * 60 && cas_minuty <= 19 * 60 + 30;\n\n// ========== DETEKCE STAVU BOJLERU ==========\nconst bojler_ohriva = spotreba_bojleru_aktualni > 100;\n\n// ========== KONTROLA LIMITU ODBĚRU ZE SÍTĚ ==========\n// === OCHRANA PROTI PŘETÍŽENÍ SÍTĚ ===\n// Používáme celkovou spotřebu (AC zátěže bez baterie) místo odběru ze sítě\nconst config_fve = global.get(\"fve_config\") || {};\nconst MAX_GRID = config_fve.max_spotreba_sit_w || 22000;\nconst SAFETY_MARGIN = config_fve.safety_margin_w || 2000;\nconst SAFE_LIMIT = MAX_GRID - SAFETY_MARGIN;\nconst volna_kapacita_site = SAFE_LIMIT - celkova_spotreba;\nconst muzeme_zapnout_bojler = bojler_ohriva || (volna_kapacita_site >= SPOTREBA_BOJLER);\n\n// ========== PRAHY S HYSTEREZÍ ==========\nconst PRAH_ZAPNUTI_MAX = 4000 + SPOTREBA_BOJLER + HYSTEREZE;\nconst PRAH_VYPNUTI_MAX = 4000;\nconst PRAH_ZAPNUTI_VYSOKA = SPOTREBA_BOJLER + HYSTEREZE;\nconst PRAH_VYPNUTI_VYSOKA = -HYSTEREZE;\n\n// ========== POMOCNÉ FUNKCE ==========\nconst je_levna_elektrina = (price_level <= PRICE_LEVEL_LEVNY) || (cena_kwh <= CENA_KWH_LEVNA);\nconst slunecny_den = forecast_vyroba_dnes > FORECAST_THRESHOLD;\nconst slunecny_den_zitra = forecast_vyroba_zitra > FORECAST_THRESHOLD;\n\nlet cilova_teplota = TEPLOTA_MIN;\nlet duvod = \"\";\n\n// ========== ROZHODOVACÍ LOGIKA ==========\n\n// 1. Nejsme doma - vždy vypnout\nif (!jsme_doma) {\n    cilova_teplota = TEPLOTA_MIN;\n    duvod = \"Nejsme doma\";\n}\n// 2. Rychle teplá voda - override vše\nelse if (rychle_voda) {\n    cilova_teplota = TEPLOTA_MAX;\n    duvod = \"Rychle teplá voda (override)\";\n}\n// 3. Povinný čas 17:00-19:30 a voda je studená\nelse if (je_povinny_cas && teplota_bojleru < 58) {\n    if (!muzeme_zapnout_bojler) {\n        cilova_teplota = TEPLOTA_MIN;\n        duvod = \"Povinný čas, ale limit sítě\";\n    } else if (slunecny_den_zitra && teplota_bojleru >= TEPLOTA_POVINNY_SOLAR) {\n        // Zítra velký solár a bojler už má 40°C → čekej na solár\n        cilova_teplota = TEPLOTA_POVINNY_SOLAR;\n        duvod = \"Povinný čas, zítra solár \" + Math.round(forecast_vyroba_zitra/1000) + \"kWh → jen \" + TEPLOTA_POVINNY_SOLAR + \"°C\";\n    } else if (slunecny_den_zitra && teplota_bojleru < TEPLOTA_POVINNY_SOLAR) {\n        // Zítra velký solár, ale bojler je pod 40°C → natop alespoň na 40°C\n        cilova_teplota = TEPLOTA_POVINNY_SOLAR;\n        duvod = \"Povinný ohřev na \" + TEPLOTA_POVINNY_SOLAR + \"°C (zítra solár \" + Math.round(forecast_vyroba_zitra/1000) + \"kWh)\";\n    } else {\n        // Zítra malý solár → normální ohřev\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Povinný ohřev 17:00-19:30\";\n    }\n}\n// 4. Baterie plné (>96%) - využijeme solární přebytek\nelse if (cerpadlo_topi && rozdil_vyroby < PRAH_ZAPNUTI_VYSOKA) {\n    // NIBE běží a přebytek nestačí na oba → bojler čeká\n    cilova_teplota = TEPLOTA_MIN;\n    duvod = \"NIBE topí, přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW nestačí\";\n}\nelse if (battery > 96) {\n    const prah_max = bojler_ohriva ? PRAH_VYPNUTI_MAX : PRAH_ZAPNUTI_MAX;\n    const prah_vysoka = bojler_ohriva ? PRAH_VYPNUTI_VYSOKA : PRAH_ZAPNUTI_VYSOKA;\n    \n    if (rozdil_vyroby > prah_max) {\n        if (auto_hlad && auto_automatizace) {\n            cilova_teplota = TEPLOTA_VYSOKA;\n            duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW, ale auto nabíjí\";\n        } else {\n            cilova_teplota = TEPLOTA_MAX;\n            duvod = \"Baterie plné + přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW\";\n        }\n    } else if (rozdil_vyroby > prah_vysoka) {\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW pokryje ohřev\";\n    } else if (bojler_ohriva && rozdil_vyroby > -SPOTREBA_BOJLER) {\n        cilova_teplota = flow.get(\"posledni_cilova_teplota\") || TEPLOTA_MIN;\n        duvod = \"Hystereze - udržuji \" + cilova_teplota + \"°C\";\n    } else {\n        if (!letni_rezim && je_levna_elektrina && muzeme_zapnout_bojler) {\n            cilova_teplota = TEPLOTA_STREDNI;\n            duvod = \"Levná elektřina (L\" + price_level + \", \" + cena_kwh + \" Kč)\";\n        } else if (letni_rezim) {\n            cilova_teplota = TEPLOTA_MIN;\n            duvod = \"Letní režim - čekám na slunce\";\n        } else {\n            cilova_teplota = TEPLOTA_MIN;\n            duvod = \"Málo přebytku a drahá elektřina\";\n        }\n    }\n}\n// 5. Baterie nejsou plné\nelse {\n    const prah = bojler_ohriva ? PRAH_VYPNUTI_VYSOKA : PRAH_ZAPNUTI_VYSOKA;\n    const prah_max5 = bojler_ohriva ? PRAH_VYPNUTI_MAX : PRAH_ZAPNUTI_MAX;\n    \n    if (rozdil_vyroby > prah_max5) {\n        cilova_teplota = TEPLOTA_MAX;\n        duvod = \"Velký přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW → \" + TEPLOTA_MAX + \"°C (bat \" + battery + \"%)\";\n    } else if (rozdil_vyroby > prah) {\n        cilova_teplota = TEPLOTA_VYSOKA;\n        duvod = \"Přebytek \" + Math.round(rozdil_vyroby/1000) + \"kW (bat \" + battery + \"%)\";\n    } else if (bojler_ohriva && rozdil_vyroby > -SPOTREBA_BOJLER) {\n        cilova_teplota = flow.get(\"posledni_cilova_teplota\") || TEPLOTA_MIN;\n        duvod = \"Hystereze - udržuji \" + cilova_teplota + \"°C\";\n    } else if (letni_rezim && slunecny_den) {\n        cilova_teplota = TEPLOTA_MIN;\n        duvod = \"Letní režim + forecast \" + Math.round(forecast_vyroba_dnes/1000) + \"kWh\";\n    } else if (!letni_rezim && je_levna_elektrina && muzeme_zapnout_bojler) {\n        cilova_teplota = TEPLOTA_STREDNI;\n        duvod = \"Levná elektřina (L\" + price_level + \", \" + cena_kwh + \" Kč)\";\n    } else {\n        cilova_teplota = TEPLOTA_MIN;\n        if (letni_rezim) {\n            duvod = \"Letní režim - pouze solar\";\n        } else if (!muzeme_zapnout_bojler) {\n            duvod = \"Limit sítě\";\n        } else {\n            duvod = \"Drahá elektřina\";\n        }\n    }\n}\n\n// ========== ULOŽENÍ STAVU ==========\nflow.set(\"posledni_cilova_teplota\", cilova_teplota);\n\n// GUARD 1: Meross unavailable → nezašílat nic (zabrání chybám)\nconst climateState = (climateEntity || {}).state || \"unavailable\";\nif (climateState === \"unavailable\") {\n    node.status({fill: \"red\", shape: \"ring\", text: \"Meross UNAVAILABLE - přeskákuji\"});\n    return null;\n}\n\n// GUARD 2: neposílat změnu do Merossu pokud se teplota nezměnila\nif (cilova_teplota === aktualni_nastavena_teplota) {\n    node.status({fill: \"blue\", shape: \"dot\", text: cilova_teplota + \"/\" + aktualni_nastavena_teplota + \"°C - BEZ ZMĚNY - \" + duvod});\n    return null;\n}\n\n// ========== VÝSTUP ==========\nmsg.payload = {\n    teplota: cilova_teplota,\n    duvod: duvod,\n    config: {\n        TEPLOTA_MAX, TEPLOTA_VYSOKA, TEPLOTA_STREDNI, TEPLOTA_MIN,\n        HYSTEREZE, SPOTREBA_BOJLER, PRICE_LEVEL_LEVNY, CENA_KWH_LEVNA,\n        FORECAST_THRESHOLD\n    },\n    debug: {\n        jsme_doma, rychle_voda, teplota_bojleru, spotreba_bojleru_aktualni,\n        bojler_ohriva, battery, rozdil_vyroby, letni_rezim, slunecny_den,\n        forecast_vyroba_dnes, forecast_vyroba_zitra, slunecny_den_zitra,\n        cerpadlo_topi, auto_hlad, auto_automatizace, price_level,\n        cena_kwh, je_levna_elektrina, celkova_spotreba, spotreba_ze_site,\n        max_spotreba_sit, MAX_GRID, SAFE_LIMIT, celkova_spotreba, volna_kapacita_site, muzeme_zapnout_bojler,\n        je_povinny_cas, cas: hodina + \":\" + (minuty < 10 ? \"0\" : \"\") + minuty\n    }\n};\n\n// ========== STATUS ==========\nlet barva = \"grey\";\nif (cilova_teplota >= TEPLOTA_VYSOKA) barva = \"green\";\nelse if (cilova_teplota >= TEPLOTA_STREDNI) barva = \"yellow\";\nnode.status({fill: barva, shape: bojler_ohriva ? \"ring\" : \"dot\", text: cilova_teplota + \"°C - \" + duvod});\n\nreturn msg;",
+        "func": "// 🧠 Rozhodovací logika bojleru — cílová teplota dle přebytku, ceny, forecastu\nvar TM=flow.get(\"TEPLOTA_MAX\")||69,TV=flow.get(\"TEPLOTA_VYSOKA\")||60,TS=flow.get(\"TEPLOTA_STREDNI\")||55;\nvar TMI=flow.get(\"TEPLOTA_MIN\")||20,TPS=flow.get(\"TEPLOTA_POVINNY_SOLAR\")||40;\nvar HY=flow.get(\"HYSTEREZE\")||500,SB=flow.get(\"SPOTREBA_BOJLER\")||2500;\nvar PLV=flow.get(\"PRICE_LEVEL_LEVNY\")||3,CKL=flow.get(\"CENA_KWH_LEVNA\")||2.6;\nvar FT=flow.get(\"FORECAST_THRESHOLD\")||35000;\nvar mxS=global.get(\"max_spotreba_sit\")||24000,fD=global.get(\"forecast_vyroba_dnes\")||0,fZ=global.get(\"forecast_vyroba_zitra\")||0;\nvar cerp=global.get(\"cerpadlo_topi\")===true;\nvar clE=global.get(\"homeassistant.homeAssistant.states['climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53']\")||{};\nvar aktT=parseFloat((clE.attributes||{}).temperature)||0;\nvar cfg=global.get(\"fve_config\")||{},MG=cfg.max_spotreba_sit_w||22000,SM=cfg.safety_margin_w||2000,SL=MG-SM;\nvar dom=msg.jsme_doma===\"on\",rv=msg.rychle_voda===\"on\",tB=msg.teplota_bojleru||0;\nvar sBA=msg.spotreba_bojleru||0,bat=msg.battery_percent||0,rV=msg.rozdil_vyroby||0;\nvar let2=msg.letni_rezim===\"on\",aH=msg.auto_hlad===\"on\",aA=msg.auto_automatizace===\"on\";\nvar pL=msg.price_level||24,cK=msg.cena_kwh||10,cS=msg.celkova_spotreba||0,sSit=msg.spotreba_ze_site||0;\nvar hr=new Date().getHours(),mn=new Date().getMinutes(),cm=hr*60+mn;\nvar jPC=cm>=17*60&&cm<=19*60+30,bO=sBA>100,vK=SL-cS,mZ=bO||(vK>=SB);\nvar PZM=4000+SB+HY,PVM=4000,PZV=SB+HY,PVV=-HY;\nvar jLE=(pL<=PLV)||(cK<=CKL),sD=fD>FT,sDZ=fZ>FT;\nvar cT=TMI,dv=\"\";\nif(!dom){cT=TMI;dv=\"Není doma\";}\nelse if(rv){cT=TM;dv=\"Rychle voda\";}\nelse if(jPC&&tB<58){if(!mZ){cT=TMI;dv=\"Pov.čas limit sítě\";}\nelse if(sDZ&&tB>=TPS){cT=TPS;dv=\"Pov.čas zítra sol→\"+TPS+\"°C\";}\nelse if(sDZ){cT=TPS;dv=\"Pov.ohřev na \"+TPS+\"°C\";}\nelse{cT=TV;dv=\"Pov.ohřev 17-19:30\";}}\nelse if(cerp&&rV<PZV){cT=TMI;dv=\"NIBE přeb:\"+Math.round(rV/1000)+\"kW\";}\nelse if(bat>96){var pM=bO?PVM:PZM,pV=bO?PVV:PZV;\nif(rV>pM){cT=aH&&aA?TV:TM;dv=(aH?\"Přeb+auto\":\"Bat plné+přeb \")+(Math.round(rV/1000))+\"kW\";}\nelse if(rV>pV){cT=TV;dv=\"Přeb \"+Math.round(rV/1000)+\"kW\";}\nelse if(bO&&rV>-SB){cT=flow.get(\"posledni_cilova_teplota\")||TMI;dv=\"Hystereze \"+cT+\"°C\";}\nelse{if(!let2&&jLE&&mZ){cT=TS;dv=\"Levná L\"+pL;}else{cT=TMI;dv=let2?\"Léto čeká\":\"Drahá/málo\";}}}\nelse{var p5=bO?PVV:PZV,pM5=bO?PVM:PZM;\nif(rV>pM5){cT=TM;dv=\"Velký přeb \"+Math.round(rV/1000)+\"kW bat:\"+bat+\"%\";}\nelse if(rV>p5){cT=TV;dv=\"Přeb \"+Math.round(rV/1000)+\"kW bat:\"+bat+\"%\";}\nelse if(bO&&rV>-SB){cT=flow.get(\"posledni_cilova_teplota\")||TMI;dv=\"Hystereze \"+cT+\"°C\";}\nelse if(let2&&sD){cT=TMI;dv=\"Léto fc:\"+Math.round(fD/1000)+\"kWh\";}\nelse if(!let2&&jLE&&mZ){cT=TS;dv=\"Levná L\"+pL+\" \"+cK+\"Kč\";}\nelse{cT=TMI;dv=let2?\"Léto solar\":!mZ?\"Limit sítě\":\"Drahá\";}}\nflow.set(\"posledni_cilova_teplota\",cT);\nvar clSt=(clE||{}).state||\"unavailable\";\nif(clSt===\"unavailable\"){node.status({fill:\"red\",shape:\"ring\",text:\"Meross UNAVAIL\"});return null;}\nif(cT===aktT){node.status({fill:\"blue\",shape:\"dot\",text:cT+\"/\"+aktT+\"°C BEZ ZMĚNY \"+dv});return null;}\nmsg.payload={teplota:cT,duvod:dv,debug:{dom:dom,rv:rv,tB:tB,bat:bat,rV:rV,let2:let2,pL:pL,cK:cK,jLE:jLE,cS:cS,mZ:mZ}};\nvar b=\"grey\";if(cT>=TV)b=\"green\";else if(cT>=TS)b=\"yellow\";\nnode.status({fill:b,shape:bO?\"ring\":\"dot\",text:cT+\"°C \"+dv});\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 626,
+        "x": 350,
+        "y": 620,
         "wires": [
             [
                 "8d401c2a5bd5d0ef",
@@ -747,8 +747,8 @@
         "blockInputOverrides": false,
         "domain": "climate",
         "service": "set_temperature",
-        "x": 710,
-        "y": 659,
+        "x": 690,
+        "y": 640,
         "wires": [
             []
         ]
@@ -767,8 +767,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 599,
+        "x": 670,
+        "y": 580,
         "wires": []
     },
     {
@@ -796,27 +796,5 @@
                 "d8271d02d0bbbfd8"
             ]
         ]
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "b6ac39c28a43ec7d",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
     }
 ]

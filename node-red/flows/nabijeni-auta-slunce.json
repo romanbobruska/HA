@@ -32,10 +32,10 @@
             "04485a466ad52c1e",
             "solar_corr_inject_20s"
         ],
-        "x": 34,
-        "y": 399,
-        "w": 1072,
-        "h": 422
+        "x": 24,
+        "y": 459,
+        "w": 1084,
+        "h": 382
     },
     {
         "id": "459839492fb6e054",
@@ -62,8 +62,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 1000,
-        "y": 360,
+        "x": 940,
+        "y": 400,
         "wires": [
             []
         ]
@@ -80,8 +80,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
-        "y": 220,
+        "x": 280,
+        "y": 260,
         "wires": [
             [
                 "b007af166f6ef45c"
@@ -116,8 +116,8 @@
         "blockInputOverrides": true,
         "domain": "automation",
         "service": "trigger",
-        "x": 950,
-        "y": 168,
+        "x": 890,
+        "y": 208,
         "wires": [
             []
         ]
@@ -158,8 +158,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 340,
-        "y": 60,
+        "x": 280,
+        "y": 100,
         "wires": [
             [
                 "d83891ae820948bf"
@@ -180,8 +180,8 @@
         "endTime": "11:01",
         "startOffset": "0",
         "endOffset": "0",
-        "x": 800,
-        "y": 60,
+        "x": 740,
+        "y": 100,
         "wires": [
             [
                 "c1b904a337bbf0a5"
@@ -206,8 +206,8 @@
         "output": "payload",
         "outputType": "msg",
         "outTz": "Europe/Prague",
-        "x": 580,
-        "y": 40,
+        "x": 520,
+        "y": 80,
         "wires": [
             [
                 "e7b12c271da1e268"
@@ -220,15 +220,15 @@
         "z": "49921d17efb0cefe",
         "g": "68ded079ca35f344",
         "name": "Vypočítej max amperaci v2",
-        "func": "let spotreba_sit = msg.payload_spotreba\nlet battpct = msg.payload_battpct\n// v22: Read amperage directly from HA global state (node chain converts '14A' to NaN)\nvar ampState = global.get(\"homeassistant.homeAssistant.states['select.wallboxu_garaz_amperace']\") || {};\nlet rawCharger = String(ampState.state || '0');\nlet chargeramp_a = parseInt(rawCharger.replace(/[^0-9]/g, ''), 10) || 0;\nlet chargeramp_w = chargeramp_a * 3 * 230;\nconst config = global.get(\"fve_config\") || {};\nlet batt_minus = msg.payload_batt_minus || 0;\nlet rozdil_vyroby_spotreby = msg.payload;\n\n// v22: SOC >= 99% → conservative mode (BAL-RES + slow ramp)\n// Immune to NR restart timing — SOC is always available from HA\nvar highSocMode = (battpct >= 99);\nvar BALANCING_GRID_RESERVE_W = config.balancing_grid_reserve_w || 1000;\n\n// === PARAMETRY Z CONFIGU ===\nlet MIN_SOC_SLUNCE = config.nabijeni_auta_min_soc_slunce || 85;\nlet SOC_DRAIN_THRESHOLD = config.nabijeni_auta_soc_drain_prah || 95;\nlet SOC_DRAIN_W = config.nabijeni_auta_soc_drain_w || 1000;\n\n// === OCHRANA 1: SOC pod prahem → STOP nabíjení ===\nif (battpct < MIN_SOC_SLUNCE) {\n    node.status({fill:'red', shape:'ring', text:'SOC ' + battpct + '% < ' + MIN_SOC_SLUNCE + '% → 0A STOP'});\n    msg.payload = 0;\n    return msg;\n}\n\n// === v24.1: Battery feedback — signed power ===\nvar battState = global.get(\"homeassistant.homeAssistant.states['sensor.nabijeni_baterii']\") || {};\nvar battW = parseFloat(battState.state) || 0; // kladné=nabíjí, záporné=vybíjí\n// v24.8: Read prebytek for SOC>=99% feedback (battery full → battW≈0 → need surplus signal)\nvar prebytekState = global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\") || {};\nvar prebytek = parseFloat(prebytekState.state) || 0;\n\n// === CLOSED-LOOP: charger already running → ±1A based on battery feedback ===\n// v24.1: This is the PRIMARY control when charger is running.\n// Open-loop is ONLY used for startup (chargeramp_a < 6).\nif (chargeramp_a >= 6) { // v24.8: removed !highSocMode — CL handles all SOC levels\n    var targetAmper = chargeramp_a; // default: keep current\n    var socZone = '';\n\n    if (battpct >= SOC_DRAIN_THRESHOLD) {\n        // SOC >= 95%: battery can drain — target battery ~0W\n        // Increase charger if battery charging too much, decrease if draining too much\n        socZone = 'DRAIN-FB';\n        // v24.8: At SOC>=99% battery is full — surplus goes to grid, not battery.\n        // Use prebytek (solar-house) minus charger power as ramp-up signal.\n        var surplusForCharger = prebytek - chargeramp_w;\n        var rampUp = (battW > 1500) || (highSocMode && surplusForCharger > 500);\n        if (battW < -SOC_DRAIN_W) {\n            targetAmper = chargeramp_a - 1;\n        } else if (rampUp) {\n            targetAmper = chargeramp_a + 1;\n        }\n    } else {\n        // SOC 85-95%: battery MUST charge at ~TARGET_BATT_W\n        var TARGET_BATT_W = config.nabijeni_auta_target_batt_w || 1000;\n        var DEAD_BAND_W = config.nabijeni_auta_dead_band_w || 500;\n        socZone = 'CHARGE-FB tgt=' + TARGET_BATT_W + '±' + DEAD_BAND_W;\n\n        if (battW > TARGET_BATT_W + DEAD_BAND_W) {\n            // Battery charging too much → give 1A more to charger\n            targetAmper = chargeramp_a + 1;\n        } else if (battW < TARGET_BATT_W - DEAD_BAND_W) {\n            // Battery not charging enough or discharging → take 1A from charger\n            targetAmper = chargeramp_a - 1;\n        }\n        // else: within dead band → keep current (targetAmper = chargeramp_a)\n    }\n\n    // Floor/ceiling\n    if (targetAmper < 6) targetAmper = 6;\n    if (targetAmper > 16) targetAmper = 16;\n\n    node.status({fill: 'green', shape: 'dot',\n        text: targetAmper + 'A (CL batt:' + Math.round(battW) + 'W now:' + chargeramp_a + 'A SOC:' + battpct + '% ' + socZone + ')'});\n    msg.payload = targetAmper;\n    return msg;\n}\n\n// === OPEN-LOOP: charger NOT running or highSocMode — calculate initial target ===\nlet availableW = rozdil_vyroby_spotreby + chargeramp_w;\nsocZone = '';\n\nif (highSocMode) {\n    availableW -= BALANCING_GRID_RESERVE_W;\n    socZone = 'BAL-RES-' + BALANCING_GRID_RESERVE_W + 'W';\n} else {\n    let SOC_CHARGE_W = config.nabijeni_auta_soc_charge_w || 1000;\n    if (battpct >= MIN_SOC_SLUNCE && battpct < SOC_DRAIN_THRESHOLD) {\n        availableW -= SOC_CHARGE_W;\n        socZone = 'CHARGE-' + SOC_CHARGE_W + 'W';\n        if (batt_minus > 50) {\n            availableW -= batt_minus;\n            socZone += ' batt-=' + Math.round(batt_minus) + 'W';\n        }\n    } else if (battpct >= SOC_DRAIN_THRESHOLD) {\n        availableW += SOC_DRAIN_W;\n        socZone = 'DRAIN+' + SOC_DRAIN_W + 'W';\n    }\n}\n\ntargetAmper = Math.floor(availableW / 230 / 3);\n\n// Omezeni rozsahu 0 nebo 6-16A\nif (targetAmper > 16) targetAmper = 16;\n\n// highSocMode damping (unchanged from v22)\nif (highSocMode) {\n    if (rozdil_vyroby_spotreby < 0) {\n        if (chargeramp_a <= 6) {\n            targetAmper = 0;\n        } else {\n            targetAmper = chargeramp_a - 2;\n            if (targetAmper < 6) targetAmper = 6;\n        }\n    } else {\n        if (chargeramp_a < 6) {\n            targetAmper = 6;\n        } else {\n            if (targetAmper > chargeramp_a + 1) targetAmper = chargeramp_a + 1;\n            if (targetAmper < chargeramp_a - 2) targetAmper = chargeramp_a - 2;\n            if (targetAmper < 6) targetAmper = 6;\n        }\n    }\n    if (targetAmper > 16) targetAmper = 16;\n} else {\n    // Startup: floor at 6A if small deficit, 0 if large\n    if (targetAmper < 6 && availableW > -1000) {\n        targetAmper = 6;\n    } else if (targetAmper < 6) {\n        targetAmper = 0;\n    }\n}\n\nnode.status({fill: targetAmper > 0 ? 'green' : 'red', shape: 'dot',\n    text: targetAmper + 'A (OL avail:' + Math.round(availableW) + 'W now:' + chargeramp_a + 'A SOC:' + battpct + '% batt:' + Math.round(battW) + 'W ' + socZone + ')'});\n\nmsg.payload = targetAmper;\nreturn msg;\n",
+        "func": "// Vypočítej max amperaci v2 — closed-loop solar car charging\nvar spotrSit=msg.payload_spotreba,soc=msg.payload_battpct;\nvar aS=global.get(\"homeassistant.homeAssistant.states['select.wallboxu_garaz_amperace']\")||{};\nvar rawA=String(aS.state||'0'),curA=parseInt(rawA.replace(/[^0-9]/g,''),10)||0,curW=curA*3*230;\nvar cfg=global.get(\"fve_config\")||{},bMinus=msg.payload_batt_minus||0,rozW=msg.payload;\nvar hi=soc>=99,BR=cfg.balancing_grid_reserve_w||1000;\nvar MSS=cfg.nabijeni_auta_min_soc_slunce||85,SDT=cfg.nabijeni_auta_soc_drain_prah||95,SDW=cfg.nabijeni_auta_soc_drain_w||1000;\nif(soc<MSS){node.status({fill:'red',shape:'ring',text:'SOC '+soc+'%<'+MSS+'%→0A'});msg.payload=0;return msg;}\nvar bS=global.get(\"homeassistant.homeAssistant.states['sensor.nabijeni_baterii']\")||{};\nvar bW=parseFloat(bS.state)||0;\nvar pS=global.get(\"homeassistant.homeAssistant.states['sensor.fve_dostupny_prebytek']\")||{};\nvar preb=parseFloat(pS.state)||0;\n// CLOSED-LOOP (charger running)\nif(curA>=6){var tA=curA,zone='';\nif(soc>=SDT){zone='DRAIN-FB';var sf=preb-curW,up=(bW>1500)||(hi&&sf>500);\nif(bW<-SDW)tA=curA-1;else if(up)tA=curA+1;}\nelse{var TBW=cfg.nabijeni_auta_target_batt_w||1000,DB=cfg.nabijeni_auta_dead_band_w||500;zone='CH-FB t='+TBW+'±'+DB;\nif(bW>TBW+DB)tA=curA+1;else if(bW<TBW-DB)tA=curA-1;}\nif(tA<6)tA=6;if(tA>16)tA=16;\nnode.status({fill:'green',shape:'dot',text:tA+'A(CL b:'+Math.round(bW)+'W n:'+curA+'A SOC:'+soc+'% '+zone+')'});\nmsg.payload=tA;return msg;}\n// OPEN-LOOP (startup)\nvar avW=rozW+curW,zone2='';\nif(hi){avW-=BR;zone2='BAL-RES';}\nelse{var SCW=cfg.nabijeni_auta_soc_charge_w||1000;\nif(soc>=MSS&&soc<SDT){avW-=SCW;zone2='CH-'+SCW;if(bMinus>50){avW-=bMinus;zone2+=' b-='+Math.round(bMinus);}}\nelse if(soc>=SDT){avW+=SDW;zone2='DR+'+SDW;}}\nvar tA2=Math.floor(avW/230/3);if(tA2>16)tA2=16;\nif(hi){if(rozW<0){tA2=curA<=6?0:Math.max(6,curA-2);}\nelse{if(curA<6)tA2=6;else{if(tA2>curA+1)tA2=curA+1;if(tA2<curA-2)tA2=curA-2;if(tA2<6)tA2=6;}if(tA2>16)tA2=16;}}\nelse{if(tA2<6&&avW>-1000)tA2=6;else if(tA2<6)tA2=0;}\nnode.status({fill:tA2>0?'green':'red',shape:'dot',text:tA2+'A(OL av:'+Math.round(avW)+'W n:'+curA+'A SOC:'+soc+'% b:'+Math.round(bW)+'W '+zone2+')'});\nmsg.payload=tA2;return msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 970,
-        "y": 600,
+        "x": 962,
+        "y": 660,
         "wires": [
             [
                 "82f8a5c6cfa6c254"
@@ -272,8 +272,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 730,
-        "y": 600,
+        "x": 722,
+        "y": 660,
         "wires": [
             [
                 "788e188fae8d1fca"
@@ -307,8 +307,8 @@
         "blockInputOverrides": true,
         "domain": "select",
         "service": "select_option",
-        "x": 950,
-        "y": 740,
+        "x": 942,
+        "y": 800,
         "wires": [
             [
                 "0ef0c77eb8bb4570"
@@ -333,8 +333,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 120,
-        "y": 740,
+        "x": 112,
+        "y": 800,
         "wires": [
             [
                 "f4f87ba21653eda5"
@@ -362,8 +362,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1000,
-        "y": 669,
+        "x": 992,
+        "y": 729,
         "wires": [
             [
                 "5ae66c11fe946b89"
@@ -424,8 +424,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
-        "y": 440,
+        "x": 142,
+        "y": 500,
         "wires": [
             [
                 "04485a466ad52c1e"
@@ -470,8 +470,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 160,
-        "y": 669,
+        "x": 152,
+        "y": 729,
         "wires": [
             [
                 "04485a466ad52c1e"
@@ -502,8 +502,8 @@
         "blockInputOverrides": true,
         "domain": "select",
         "service": "select_option",
-        "x": 980,
-        "y": 120,
+        "x": 920,
+        "y": 160,
         "wires": [
             [
                 "7e1e1d4a89bf0bc1"
@@ -535,8 +535,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 970,
-        "y": 280,
+        "x": 910,
+        "y": 320,
         "wires": [
             [
                 "459839492fb6e054"
@@ -568,8 +568,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_on",
-        "x": 980,
-        "y": 220,
+        "x": 920,
+        "y": 260,
         "wires": [
             [
                 "7e1e1d4a89bf0bc1"
@@ -613,8 +613,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 520,
-        "y": 600,
+        "x": 512,
+        "y": 660,
         "wires": [
             [
                 "41a9b59ceb3ddd02"
@@ -627,11 +627,10 @@
         "z": "49921d17efb0cefe",
         "name": "IN nabíjení ze slunce",
         "links": [
-            "a8fa70c2e6e05ec5",
             "link_out_slunce"
         ],
-        "x": 45,
-        "y": 20,
+        "x": 65,
+        "y": 60,
         "wires": [
             [
                 "3ae97b682b8fceee"
@@ -674,8 +673,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 340,
-        "y": 140,
+        "x": 280,
+        "y": 180,
         "wires": [
             [
                 "b007af166f6ef45c"
@@ -722,8 +721,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 480,
-        "y": 520,
+        "x": 472,
+        "y": 580,
         "wires": [
             [
                 "98dc3d2a8b804b92"
@@ -767,8 +766,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 320,
-        "y": 520,
+        "x": 312,
+        "y": 580,
         "wires": [
             [
                 "b2f8f7968bd30604"
@@ -812,37 +811,13 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 140,
-        "y": 520,
+        "x": 132,
+        "y": 580,
         "wires": [
             [
                 "795e263cb06160dd"
             ]
         ]
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "c10a96016983ea1f",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-contrib-time-range-switch": "1.2.0",
-            "node-red-contrib-moment": "5.0.0"
-        }
     },
     {
         "id": "solar_corr_inject_20s",
