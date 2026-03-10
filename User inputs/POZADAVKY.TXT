@@ -67,6 +67,8 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Ověřit HTTP 200 z Node-RED (deploy.sh to dělá automaticky)
     - Zkontrolujes logy v NR - casto se stava, ze pokud zmeni NR flow, vyhodi mi to chybu, napr 
         ({"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Identifier 'socZone' has already been declared (body:line 85)","stack":"Function node:788e188fae8d1fca [Vypočítej max amperaci v2]:86\nlet socZone = '';\n    ^\n\nSyntaxError: Identifier 'socZone' has already been declared\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}})
+        Musis zkontrolovat, ze pri opakovanem doploymentu v NR nenastane chyba. Staci, jen posunout nejaky node, zkusit deploy v NR a pokud OK, tak ho
+        vratit zpatky - nebo das das nejakou poznamku do funkce v NR a provedes deploy... a pak to vratis zpet, pokud OK bez chyb...
     - Zkontrolovat aktuální stavy v HA (baterie, grid draw, wallbox)
     - Ověřit že navrhované řešení splňuje zákony z tohoto souboru
     - Aktualizovat docs/PROJEKT_SHRNUTI.md (living document)
