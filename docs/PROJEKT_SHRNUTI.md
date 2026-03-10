@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-10 (v25.4: Fix all var redeclarations in Vypocitej max amperaci v2, 2× deploy test OK)
+> Poslední aktualizace: 2026-03-10 (v25.6: Fix simulace SOC v Šetřit, PRODÁVAT cílové SOC z plánu, NIBE cooldown 1min, zákon 4.9 FVE PLÁN, 2× deploy OK)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
