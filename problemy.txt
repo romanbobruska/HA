@@ -1,5 +1,5 @@
-Znovu si zkotroluj, ze je vse v souladu se zakony, pripadne se zeptej na nesrovnalosti - to bylo super.
-Zaroven si zkontroluj, ze jsi vsechny slozite funkce v NR zjednodusil na maximalni moznou uroven a 
-ze bude vse fungovat po deployi, jak je v zakonech.
+dokonci, co jsi chtel udelat - zaroven
+neni vse OK - nesplnil jsi kontrolu logu v NR, jak je v zakonech!!!!
 
-Udelej vse, co je v zakonech.
+{"__enc__":true,"type":"error","data":{"name":"SyntaxError","message":"Identifier 'socZone' has already been declared (body:line 85)","stack":"Function node:788e188fae8d1fca [Vypočítej max amperaci v2]:86\nlet socZone = '';\n    ^\n\nSyntaxError: Identifier 'socZone' has already been declared\n    at new Script (node:vm:117:7)\n    at /opt/node_modules/@node-red/nodes/core/function/10-function.js:383:31"}}
+
