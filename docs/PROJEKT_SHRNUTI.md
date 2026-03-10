@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-10 (v25.7: Drahé hodiny VŽDY Normal — KROK 7c ochrana + P5b bez arbSaveOffsets, 2× deploy OK)
+> Poslední aktualizace: 2026-03-10 (v25.8: Fix KROK 7c trim skip, drahé hodiny chráněny, SOC simulace realistická, 2× deploy OK)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
