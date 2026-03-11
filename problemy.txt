@@ -1,1 +1,14 @@
-donci svoje ulohy a zkontroluj, ze vse v HA funguje spravne. Dle zakonu. Ze jsi dodrzel i design patterns.
+Podivej se na plan. nesplnuje zakon o realne simulaci a navazovani. hlavne toto:
+
+06:00	🟢 Normální	drahá Lv23, SOC 26→~21%	23	5.94 Kč	3.15 Kč
+07:00	🟢 Normální	Sol+drahá Lv12	12	3.47 Kč	1.75 Kč
+
+1/ nechci videt v planu jako duvod zkratky, napr. 	Sol+drahá Lv12. porad chvi videt SOC baterie a jasny duvod, proc to tak nastalo
+2/ opravdu si myslis, ze tato simulace vyjde vzhledem k solarni krivce u nas v Horousanech?
+
+Explicitne zadam, abys upravil zakony - pouze tuto sekci - pro simulaci planu. Musi to byt realne a musim videt, 
+kde je baterie na jakem SOC v duvodu. zadne zkratky.
+
+	Sol+drahá Lv12 by melo byt solární + drahá atp.
+
+Oprav simulaci a zapis pouze jasny vystup do zakonu v dane sekci 

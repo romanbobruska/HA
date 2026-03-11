@@ -13,6 +13,9 @@ jistá, NEZASADÍ a vysvětlí proč.
 1. OBECNÉ POŽADAVKY A ABSOLUTNÍ PRAVIDLA
 ================================================================================
 
+1.0 MAIN GOAL CELEHO PROJEKTU - NEBRAT ZE SITE VICE, NEZ JE POTREBA - GOAL JE CO NEJMENE UTRATIT ZA ELEKTRINU
+    V NAKUPU, PRIPADNE JESTE VYDELAT NA PRODEJI. MAXIMALNE VYUZIT SOLAR A SPOTOVE CENY!!!
+
 1.1 PRIORITNÍ POŘADÍ SPOTŘEBIČŮ (od nejvyšší priority)
     1. Topení domu (NIBE) — pokud dům potřebuje teplo
     2. Nabíjení baterie FVE — baterie má přednost před autem i patrony
@@ -27,7 +30,8 @@ jistá, NEZASADÍ a vysvětlí proč.
     - NIBE nesmí být vypnuto (47371=0) pokud kompresor právě běží
     - Chceme maximalne vyuzit solarni vyrobu - omezovat jen v kritickych pripadech (vetsinou to budou chyby) - pokud bude vse v tomto
         projektu nastaveno spravne, SOLARNI VYROBA SE NESMI OMEZIT - DESIRE STATE!!!
-
+    - POKUD BUDE ZAPORNA NAKUPNI CENA, POUZIJ VSE DO MAXIMA SPOTREBY SE SITE PODLE PRIORIT!!! Oni nam v tomto pripade jeste zaplati za odber!!!
+            zapni vse, co se da zapnout, abycom brali co nejvice 
 1.3 OBECNÉ POŽADAVKY NA KÓD
     - Všechny parametry čerpat z fve_config (global) nebo HA entit
     - Žádné magické konstanty v kódu — vše pojmenováno a konfigurovatelné
@@ -160,6 +164,13 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Musi byt zachovano pravidlo, ze chceme maximalne vyuzit solarni vyrobu
     - U zakazu pretoku pamatuj na to, ze pokud bude BATERIE NA VYSOKEM SOC (SOC≥95%), tak se bude OMEZOVAT VYROBA SOLARU 
         - TO JE nekolikrat ZMINENO v tomto SOUBORU v jinem kontextu
+    - NESMIME OMEZOVAT SOLARNI VYROBU - TOMU PRIZPUSOB VSECHNO, CO S TIM JE SPOJENE - OBECNE - CHCEME MAXIMALNE VYUZIT SOLARNI 
+            VYROBU, NE JI OMEZOVAT - POKUD MAS KAM DAT TU PREBYTECNOU ENERGII - TZN POKUD JE BATERIE NAD 95 PROCENTAMA - TAK JI 
+            DEJ VSUDE, KDE JE TO POTREBA PODLE PRIORIT, ABYCHOM MAXIMALNE VYUZILI SOLARNI ZISK. CTI PRAVIDLA V TOMTO SOUBORU
+    - Lepsi je brat z baterie, nez omezovat solarni vykon.
+    - Lepsi je vyuzit solarni vyrobu a vybijet baterii na spotebice, ktere to potrebuji, nez omezovat solarni vykon. 
+    - v nejhorsim pripadne se omezi solarni vyroba - ale to necheme obecne
+
 
 4.7 BALANCOVÁNÍ
     - Frekvence: 1× za 30 dní (config: balancing_interval_days = 30)
@@ -226,6 +237,27 @@ jistá, NEZASADÍ a vysvětlí proč.
             × Nabíjet ze sítě při dobré solární předpovědi (solar to udělá zadarmo)
             × SOC 37% neměnné přes 3+ hodiny Šetřit (nerealistické)
             × Vybíjet v levné hodině a šetřit v drahé (obrácená logika)
+    4.9.4 FORMÁT SLOUPCE „DŮVOD" V PLÁNU
+        Každý řádek plánu MUSÍ v důvodu obsahovat:
+        a) Srozumitelný český popis situace (žádné zkratky typu „Sol", „Lv", „Arb")
+        b) Aktuální SOC baterie a očekávanou změnu: „SOC XX→~YY%"
+        c) Pokud je cenová úroveň relevantní: „úroveň X" (ne „LvX")
+
+        Správné příklady:
+            „Drahá hodina (úroveň 23), SOC 26→~21%"
+            „Solární hodina, SOC 21→~28%"
+            „Solární + drahá hodina (úroveň 12), SOC 21→~21%"
+            „Šetřím baterii (úroveň 8), SOC 31%"
+            „Nabíjení ze sítě na 60%, SOC 25→~43%"
+            „Záporná prodejní cena, SOC 37%"
+            „Prodej do sítě (zisk 2.3 Kč/kWh), SOC 55→~38%"
+
+        Chybné příklady (ZAKÁZÁNO):
+            × „Sol, SOC 29→~34%" — zkratka „Sol"
+            × „Sol+drahá Lv12" — zkratky + chybí SOC
+            × „drahá Lv23, vybíjení" — zkratka + chybí SOC
+            × „Arbitráž→h14" — nesrozumitelné
+            × „Šetřím Lv8, SOC 44%" — zkratka „Lv"
 
 ================================================================================
 5. FLOW: NABÍJENÍ AUTA ZE SLUNCE (nabijeni-auta-slunce.json)
@@ -325,6 +357,9 @@ jistá, NEZASADÍ a vysvětlí proč.
        - canDeferHeat: pokud indoorTemp ≥ safeTemp, lze odložit na levnější hodinu
     5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže) - jen, pokud neni vyhodnejsi topit pres patrony a bod 1 plati
     6. Jinak → NIBE OFF
+    7. DULEZITE JE, ZE DUM BUDE NATOPENY ZA CO NEJLEPSI CENU TAK, ABY TEPLOTA V DOME BYLA PODLE PRAVIDEL HYSTEREZE - TY JSOU DEFINOVANY V TOMTO SOUBORU. PLATI 
+        I PRO TOPENI I PRO CHLAZENI DOMU - POKUD JE CHAZENI ZAPNUTO, OPET PLATI TEPLOTA V DOME, KTERA JE NASTAVENA. TEPLOTA V DOME JE URCUJICI.
+    
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
     COOLDOWN: min. 3 minut mezi přepnutími
