@@ -207,7 +207,10 @@ jistá, NEZASADÍ a vysvětlí proč.
             - Normal: SOC klesá o config.soc_drop_normal_pct za hodinu (aktivní vybíjení)
             - Nabíjet ze sítě: SOC roste dle config.charge_rate_kwh
             - Prodávat: SOC klesá dle max_feed_in a kapacity baterie
-            - Solární hodiny: SOC roste dle predikce solárního zisku
+            - Solární hodiny: SOC roste dle predikce solárního zisku (Open Meteo per-hour forecast)
+              Odhad spotřeby NIBE v simulaci: přičíst POUZE pokud solární forecast pro danou hodinu
+              překročí topeni_solar_override_w/1000 (8 kWh). Pod tímto prahem NIBE v simulaci neuvažovat.
+              Pokud NIBE ovlivňuje výpočet, uvést v důvodu „(NIBE topí)".
         - Pokud simulace ukazuje stejné SOC přes více hodin → je to BUG
 
     4.9.2 ROZHODOVÁNÍ O MÓDECH — LOGICKÁ NÁVAZNOST

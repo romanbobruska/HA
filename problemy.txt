@@ -1,14 +1,8 @@
-Podivej se na plan. nesplnuje zakon o realne simulaci a navazovani. hlavne toto:
+opravdu si myslis, ze nastane toto?
 
-06:00	🟢 Normální	drahá Lv23, SOC 26→~21%	23	5.94 Kč	3.15 Kč
-07:00	🟢 Normální	Sol+drahá Lv12	12	3.47 Kč	1.75 Kč
+08:00	🟢 Normální	Solární hodina, SOC 22→~28%	6	3.07 Kč	1.42 Kč
+09:00	🟢 Normální	Solární hodina, SOC 28→~32%	11	3.34 Kč	1.01 Kč
 
-1/ nechci videt v planu jako duvod zkratky, napr. 	Sol+drahá Lv12. porad chvi videt SOC baterie a jasny duvod, proc to tak nastalo
-2/ opravdu si myslis, ze tato simulace vyjde vzhledem k solarni krivce u nas v Horousanech?
+v h8 da solarni vyroba u nas v horousanech vice nez v h9?
 
-Explicitne zadam, abys upravil zakony - pouze tuto sekci - pro simulaci planu. Musi to byt realne a musim videt, 
-kde je baterie na jakem SOC v duvodu. zadne zkratky.
-
-	Sol+drahá Lv12 by melo byt solární + drahá atp.
-
-Oprav simulaci a zapis pouze jasny vystup do zakonu v dane sekci 
+Zamysli se nad tim, jestli to ma smysl. pripadne nasad fix a updatuj zakony jen v sekci planu - explicitni pozadavek
