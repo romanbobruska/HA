@@ -273,6 +273,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ NABÍJENÍ AUTA ZE SLUNCE
 
     - SOC BATERIE je vetsi nez 85%
+    - KROKY V KOREKCNI SMYCCE +- 1A PO 20 SEKUNDACH
     - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!!
     - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
     - Korekcni smycka reguluje dynamicky amperaci na chargeru podle:
