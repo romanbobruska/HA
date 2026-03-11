@@ -1,8 +1,4 @@
-opravdu si myslis, ze nastane toto?
+rozbil jsi mi flow init set victron - vrat mi posledni funkcni verzi z gitu - jeste vcera to fungovalo - flow pise, ze neni nakonfigurovan API token na
+victron api. 
 
-08:00	🟢 Normální	Solární hodina, SOC 22→~28%	6	3.07 Kč	1.42 Kč
-09:00	🟢 Normální	Solární hodina, SOC 28→~32%	11	3.34 Kč	1.01 Kč
-
-v h8 da solarni vyroba u nas v horousanech vice nez v h9?
-
-Zamysli se nad tim, jestli to ma smysl. pripadne nasad fix a updatuj zakony jen v sekci planu - explicitni pozadavek
+zjisti pricinu, proc jsi to rozbil a oprav to a uz mi nic nerozbijej!!!
