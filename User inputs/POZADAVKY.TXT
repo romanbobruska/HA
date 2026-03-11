@@ -32,6 +32,7 @@ jistá, NEZASADÍ a vysvětlí proč.
         projektu nastaveno spravne, SOLARNI VYROBA SE NESMI OMEZIT - DESIRE STATE!!!
     - POKUD BUDE ZAPORNA NAKUPNI CENA, POUZIJ VSE DO MAXIMA SPOTREBY SE SITE PODLE PRIORIT!!! Oni nam v tomto pripade jeste zaplati za odber!!!
             zapni vse, co se da zapnout, abycom brali co nejvice 
+    - NIKDY NEMEN NR FLOW INIT SET VICTRON! 
 1.3 OBECNÉ POŽADAVKY NA KÓD
     - Všechny parametry čerpat z fve_config (global) nebo HA entit
     - Žádné magické konstanty v kódu — vše pojmenováno a konfigurovatelné
@@ -48,6 +49,9 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Azimut: 190° (mírně JZ), Sklon: 45°
     - Baterie: Pylontech, kapacita 28 kWh, min_soc = 20% (uživatel nastavuje v HA)
     - VICTRON ESS — grid-tied, wallbox je připojen na GRID (mimo Victron ESS)
+
+1.5 DODATEČNÉ POŽADAVKY
+    - NEPOUŽÍVEJ POWERSHELL VE SVÝCH SKRIPTECH, POUŽÍVEJ CO NEJVÍCE PYTHON, JE NAINSTALOVÁN
 
 ================================================================================
 2. DEPLOYMENT A WORKFLOW

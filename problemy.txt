@@ -1,4 +1,2 @@
-rozbil jsi mi flow init set victron - vrat mi posledni funkcni verzi z gitu - jeste vcera to fungovalo - flow pise, ze neni nakonfigurovan API token na
-victron api. 
-
-zjisti pricinu, proc jsi to rozbil a oprav to a uz mi nic nerozbijej!!!
+SLEDUJ PO DOBU 1 MINUTY KAZDYCH 5 SEKUND, JAK SE CHOVA NASTAVENI AMPERACE V SOLARNIM NABIJENI AUTA V KOREKCNI SMYCCE. POROVNEJ SE ZAKONY. 
+REKNI MI, ZDA JE TO SPRAVNE, POKUD NE, OPRAV TO.
