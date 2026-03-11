@@ -167,6 +167,12 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Fix**: `outputs: 6`, wires pro p1_on→`htg_svc_p1_on`, p2_on→`htg_svc_p2_on`, p3_on→`htg_svc_p3_on`
 - **Ověřeno**: 3 fáze stabilně běží, batt -528W, grid 82W
 
+### v25.9: Patrony — sell price check (zákon 8.5)
+- **Nový zákon**: Pokud prodejní cena > 2 CZK → patrony se nepoužijí (lepší prodat)
+- **Config**: `topeni_patron_max_sell_price: 2` (CZK, konfigurovatelné)
+- **Implementace**: check v `rf_htg_decide2` (`patSellOk`) + `pat_korekce_func` (SELL price guard)
+- **Logika**: `sellPrice <= threshold || sellPrice >= 99` (99 = cena nedostupná → povoleno)
+
 ### Entity názvy patron fází
 | Fáze | Entity ID |
 |------|-----------|
