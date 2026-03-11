@@ -346,11 +346,13 @@ jistá, NEZASADÍ a vysvětlí proč.
     └──────────┴────────────────────────────────────────────────────┘
 
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
+    - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
     - NIBE a patrony NIKDY současně (viz 1.2)
     - auto_ma_hlad=ON → patrony NESMÍ běžet. ABSOLUTNÍ pravidlo. Žádná výjimka.
     - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
     - Automatizace OFF → 1× bezpečnostně zastavit patrony, pak ABSOLUTNĚ na nic nesahat
+
 
 8.3 NIBE (switch.nibe_topeni, reg 47371)
     Rozhodování (první splněná podmínka):
@@ -391,6 +393,7 @@ jistá, NEZASADÍ a vysvětlí proč.
         - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
+    - Pokud bude prodejni cena vetsi nez 2 koruny (konfigurovatelny parametr), tak se patrony nepouziji
 
     Stupňování fází:
     - < 3kW přebytek → 0 fází (OFF)

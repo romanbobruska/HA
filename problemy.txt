@@ -1,5 +1,3 @@
-NASTUDUJ SI CELE ZAKONY - MUSIS PRED KAZDYM PROMPTEM TOTO UDELAT, ABYS BYL V KONTEXTU.
+nastuduj si zakony - jakozto pokazde pri kazdem promtu - zapamatuj si toto pravidlo.
 
-ZAMER SE NA KOREKCNI SMYCKU PATRON A REKNI MI, ZDA JE TO OK. NEMELY BY TED BYT ZAPLE 2 FAZE?
-
-NECHCI TI NAPOVIDAT, POROVNEJ SE ZAKONY A PRIPADNE OPRAV...
+Zamer se na patrony - neco jsem tam pridal - zkontroluj to a nasad fix.
