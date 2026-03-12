@@ -352,12 +352,15 @@ jistá, NEZASADÍ a vysvětlí proč.
     - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
     - Automatizace OFF → 1× bezpečnostně zastavit patrony, pak ABSOLUTNĚ na nic nesahat
+    - Při topení v zimním režimu platí pravidlo, že dum musi byt natopen na pozadovanou teplotu (stejnou nebo vyssi, zadna hystereze) 
+        nejdele v posledni hodine solarni vyroby
+    
 
 
 8.3 NIBE (switch.nibe_topeni, reg 47371)
     Rozhodování (první splněná podmínka):
-    1. Pokud bude dostatek odhadovane solarni energie, staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
-        od definovane teploty v dome - vse je v konfigu, nic nehardcodovat
+    1. Pokud bude dostatek zbývající odhadovane solarni energie (30kWH), staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
+        od definovane teploty v dome a pote se bude cekat na solarni vyrobu na dotopeni - vse je v konfigu, nic nehardcodovat
     2. Grid Lost / Krb / Nádrž > MAX_TANK / Patrony aktivní → NIBE OFF
     2. Drahá hodina (lvl ≥ 12) a solar < 8kW → NIBE OFF (žádná výjimka)
     3. Drahá hodina a solar ≥ 8kW (free energy) → NIBE ON + BLOKACE BATERIE OFF
