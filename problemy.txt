@@ -1,1 +1,3 @@
-zkontroluj zakony a rekni mi, co se zmenilo od poelsniho promtpu - to je test. Zaroven zkontroluj, zda je vse OK v nasem projektu dle zakonu.
+zamer se na arbitraz a rekni mi, zda je vse podle zakonu - me to nepripada.
+
+pokud je to ok, rekni mi, kde je chyba v zakonech - jinak nasad fix

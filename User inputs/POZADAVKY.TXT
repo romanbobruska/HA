@@ -512,7 +512,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 11.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
         - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
-         odberu a take solarni vyrobe. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
+         odberu a take ocekavane solarni vyrobe a pozdejsich cen za nakup. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
          pri nabijeni a vybijeni baterie
     min_arbitrage_profit_czk: 3 (min zisk pro nabíjení z gridu, Kč/kWh)
     min_sell_profit_czk: 3 (min zisk pro prodej do sítě, Kč/kWh)
