@@ -1,9 +1,5 @@
-podivej se na plan, zda dodrzuje zakony - konkretne
+- zkontroluj, ze pokud bude blokace baterie NEBO NECO JINEHO - JE TO DAHSBOARD - uvidim v dashboardu presny nazev duvodu blokace - zobrazuje se mi Blokace:top místo blokace Topení.
+zapamatu si, ze nemuzes menit zavedene funkcionality, ktere funguji - zvlaste v dashboardu. Kdyztak se me na to zeptas, ale nezmenis to sam o sobe.
 
-07:00 +1	🟡 Šetřit	Ochrana minimální SOC, SOC 20% ≤ 20%	16	4.68 Kč	2.75 Kč
-
-versus
-
-05:00 +1	🟢 Normální	Drahá hodina (úroveň 13), SOC 30→~25%	13	3.73 Kč	1.97 Kč
-
-Vysvetli mi, proc je plan takovy, jaky je na zaklade planu. Pokud tam neni chyba, dej mi presny result, proc to tak je. jinak nasad fix - zakon je zakon
+- Celkove se mi to zatim libi, sluc projekt do gitu do main vetve, kdyztak se vratime. ALE PREDTIM ZKOTROLUJ, ZE NEMAME NEKDE ZASADNI BUGY,
+ktere udelaji projekt nefunkci!!! Zkontroluj prosim, ze je vse dle ZAKONU!!! KDYZTAK SE ZEPTEJ...
