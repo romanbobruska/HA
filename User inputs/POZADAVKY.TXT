@@ -510,8 +510,12 @@ jistá, NEZASADÍ a vysvětlí proč.
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
 
 11.4 ARBITRÁŽ A CENY
-    min_arbitrage_profit_czk: 2 (min zisk pro nabíjení z gridu, Kč/kWh)
-    min_sell_profit_czk: 2 (min zisk pro prodej do sítě, Kč/kWh)
+    - Základní pravidla arbitráže
+        - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
+         odberu a take solarni vyrobe. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
+         pri nabijeni a vybijeni baterie
+    min_arbitrage_profit_czk: 3 (min zisk pro nabíjení z gridu, Kč/kWh)
+    min_sell_profit_czk: 3 (min zisk pro prodej do sítě, Kč/kWh)
     prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh)
     night_reserve_kwh: 10 (noční rezerva — pod tuto hodnotu neprodávat)
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
