@@ -1,3 +1,9 @@
-zamer se na arbitraz a rekni mi, zda je vse podle zakonu - me to nepripada.
+podivej se na plan, zda dodrzuje zakony - konkretne
 
-pokud je to ok, rekni mi, kde je chyba v zakonech - jinak nasad fix
+07:00 +1	🟡 Šetřit	Ochrana minimální SOC, SOC 20% ≤ 20%	16	4.68 Kč	2.75 Kč
+
+versus
+
+05:00 +1	🟢 Normální	Drahá hodina (úroveň 13), SOC 30→~25%	13	3.73 Kč	1.97 Kč
+
+Vysvetli mi, proc je plan takovy, jaky je na zaklade planu. Pokud tam neni chyba, dej mi presny result, proc to tak je. jinak nasad fix - zakon je zakon
