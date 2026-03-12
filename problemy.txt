@@ -1,1 +1,1 @@
-pridal jsem pravidlo do zakonu o topeni
+pridal jsem pravidlo do zakonu o topeni - implementuj ho
