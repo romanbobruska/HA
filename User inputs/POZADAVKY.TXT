@@ -353,7 +353,8 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
     - Automatizace OFF → 1× bezpečnostně zastavit patrony, pak ABSOLUTNĚ na nic nesahat
     - Při topení v zimním režimu platí pravidlo, že dum musi byt natopen na pozadovanou teplotu (stejnou nebo vyssi, zadna hystereze) 
-        nejpozdeji v posledni hodine solarni vyroby
+        nejpozdeji v posledni hodine solarni vyroby. Pokud ze zbyvajici solarni energie > 20kWH a do posledni solarni hodiny budou zbyvat
+        mene nez 3 hodiny, NIBE se spusti podle pravidel nejnizsich nakupnich cen.
     
 
 
