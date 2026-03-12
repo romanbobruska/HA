@@ -1,1 +1,4 @@
-pridal jsem pravidlo do zakonu o topeni - implementuj ho
+Podle zakonu by ted melo byt zapnute NIBE - je ted posledni levna hodina az do posledni solarni hodiny. Teplota v dome je pod nastavenou teplotou, nadrz je 
+chladna. Rekni mi, proc je NIBE OFF - pokud je to podle zakona, rekkni mi, kde je konflikt. POkud to mas spatne ty, tak to oprav a hlavne zkontroluj!!!
+
+ted jsi to neudelal...
