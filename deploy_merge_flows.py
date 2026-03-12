@@ -75,7 +75,7 @@ for nid, srv_node in server_by_id.items():
     if nid not in seen_ids:
         # Zachovat pouze config/server/credentials nody, ne flow nody
         ntype = srv_node.get('type', '')
-        if ntype in ('server', 'sqlitedb', 'global-config', 'credentials') or \
+        if ntype in ('server', 'sqlitedb', 'global-config', 'credentials', 'config-vrm-api') or \
            nid.startswith('c7421fe') or '.' in nid:  # starší ID formát s tečkou = config
             all_nodes.append(srv_node)
             seen_ids.add(nid)

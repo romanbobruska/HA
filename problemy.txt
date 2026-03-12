@@ -1,14 +1,5 @@
-setrit mode funguje dle zakonu. ale vadi, mi, ze nenavazuje plan:
+- zkontroluj, ze pokud bude blokace baterie NEBO NECO JINEHO - JE TO DAHSBOARD - uvidim v dashboardu presny nazev duvodu blokace - zobrazuje se mi Blokace:top místo blokace Topení.
+zapamatu si, ze nemuzes menit zavedene funkcionality, ktere funguji - zvlaste v dashboardu. Kdyztak se me na to zeptas, ale nezmenis to sam o sobe.
 
-odina	Mód	Důvod	Level	Cena nákup	Cena prodej
-23:00	🟡 Šetřit	Šetřím pro dražší hodiny (Lv6, SOC 36%, cíl 25%)	6	3.95 Kč	2.15 Kč
-00:00 +1	🟢 Normální	drahá (Lv12≥eff6), vybíjení SOC 36% → ~31%	12	3.57 Kč	1.84 Kč
-01:00 +1	🟡 Šetřit	Šetřím (Lv10<12), SOC 31%	10	3.34 Kč	1.65 Kč
-02:00 +1	🟡 Šetřit	Šetřím (Lv7<12), SOC 30%	7	3.21 Kč	1.54 Kč
-03:00 +1	🟡 Šetřit	Šetřím (Lv7<12), SOC 29%	7	3.21 Kč	1.53 Kč
-04:00 +1	🟡 Šetřit	Šetřím (Lv9<12), SOC 28%	9	3.25 Kč	1.58 Kč
-05:00 +1	🟢 Normální	drahá (Lv13≥eff6), vybíjení SOC 27% → ~22%	13	3.72 Kč	1.96 Kč
-06:00 +1	🟢 Normální	drahá (Lv22≥eff6), vybíjení SOC 22% → ~20%	22	5.94 Kč	3.16 Kč
-
-PROC KLESA SOC BATERIE? VIZ ZAKONY
-
+- Celkove se mi to zatim libi, sluc projekt do gitu do main vetve, kdyztak se vratime. ALE PREDTIM ZKOTROLUJ, ZE NEMAME NEKDE ZASADNI BUGY,
+ktere udelaji projekt nefunkci!!! Zkontroluj prosim, ze je vse dle ZAKONU!!! KDYZTAK SE ZEPTEJ...

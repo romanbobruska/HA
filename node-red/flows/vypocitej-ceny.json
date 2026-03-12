@@ -1275,35 +1275,6 @@
         ]
     },
     {
-        "id": "6d97960f9560e05b",
-        "type": "sqlitedb",
-        "db": "/homeassistant/home-assistant_v2.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "bc29fc50a7482dd1",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-node-sqlite": "1.1.1",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
         "id": "aa11bb22cc33dd44",
         "type": "sqlite",
         "z": "d32891aad318f0e3",

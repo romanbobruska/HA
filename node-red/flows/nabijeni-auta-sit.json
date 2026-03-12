@@ -29,7 +29,7 @@
             "feec8727ed6c0ea4"
         ],
         "x": 14,
-        "y": 479,
+        "y": 519,
         "w": 912,
         "h": 282
     },
@@ -70,7 +70,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 500,
-        "y": 198,
+        "y": 220,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -94,7 +94,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "d31a8b64172a3eab"
@@ -129,7 +129,7 @@
         "domain": "select",
         "service": "select_option",
         "x": 770,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "0360f471b476ef16"
@@ -162,7 +162,7 @@
         "domain": "switch",
         "service": "turn_off",
         "x": 1000,
-        "y": 220,
+        "y": 242,
         "wires": [
             []
         ]
@@ -193,7 +193,7 @@
         "domain": "automation",
         "service": "trigger",
         "x": 990,
-        "y": 440,
+        "y": 462,
         "wires": [
             []
         ]
@@ -217,7 +217,7 @@
         "allowrate": false,
         "outputs": 1,
         "x": 160,
-        "y": 720,
+        "y": 760,
         "wires": [
             [
                 "a9e5aa5fbd19b5c0"
@@ -276,7 +276,7 @@
             }
         ],
         "x": 130,
-        "y": 520,
+        "y": 560,
         "wires": [
             [
                 "a9e5aa5fbd19b5c0"
@@ -327,7 +327,7 @@
         "repair": false,
         "outputs": 6,
         "x": 270,
-        "y": 240,
+        "y": 262,
         "wires": [
             [
                 "22e344a6bf0c5b70"
@@ -386,7 +386,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 120,
-        "y": 240,
+        "y": 262,
         "wires": [
             [
                 "e2fbe35de1091fa3"
@@ -430,7 +430,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 500,
-        "y": 138,
+        "y": 160,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -477,7 +477,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 500,
-        "y": 258,
+        "y": 280,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -524,7 +524,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 500,
-        "y": 318,
+        "y": 340,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -560,7 +560,7 @@
         "domain": "input_boolean",
         "service": "turn_off",
         "x": 990,
-        "y": 140,
+        "y": 162,
         "wires": [
             [
                 "7612c188de813d7c"
@@ -593,7 +593,7 @@
         "domain": "input_boolean",
         "service": "turn_on",
         "x": 980,
-        "y": 300,
+        "y": 322,
         "wires": [
             [
                 "d3c7e952ee2fc2a4"
@@ -622,7 +622,7 @@
         "repair": false,
         "outputs": 2,
         "x": 820,
-        "y": 660,
+        "y": 700,
         "wires": [
             [
                 "d26f96e53531f384"
@@ -669,7 +669,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 140,
-        "y": 120,
+        "y": 142,
         "wires": [
             [
                 "707a53451c626ff1"
@@ -717,7 +717,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 240,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "8518fd99f86a1202"
@@ -731,11 +731,10 @@
         "z": "a86ad952ad7756aa",
         "name": "IN nabíjení ze sítě",
         "links": [
-            "f95d3971ad3d46f7",
             "link_out_sit"
         ],
         "x": 55,
-        "y": 40,
+        "y": 62,
         "wires": [
             [
                 "542205d3587ae7f0"
@@ -779,7 +778,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 500,
-        "y": 380,
+        "y": 402,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -826,7 +825,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 490,
-        "y": 80,
+        "y": 102,
         "wires": [
             [
                 "96f43cae137cc3b1"
@@ -874,7 +873,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 440,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "feec8727ed6c0ea4"
@@ -919,7 +918,7 @@
         "entity_location": "data",
         "override_data": "msg",
         "x": 600,
-        "y": 600,
+        "y": 640,
         "wires": [
             [
                 "49fdcac28d31c133"
@@ -939,7 +938,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 40,
+        "y": 62,
         "wires": [
             [
                 "707a53451c626ff1"
@@ -962,7 +961,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 380,
+        "y": 402,
         "wires": [
             [
                 "707a53451c626ff1"
@@ -971,28 +970,6 @@
                 "d26f96e53531f384"
             ]
         ]
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "0e950e94592319fb",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
     },
     {
         "id": "b1c2d3e4f5060003",
@@ -1033,7 +1010,7 @@
             }
         ],
         "x": 130,
-        "y": 440,
+        "y": 462,
         "wires": [
             [
                 "pretizeni_check_func"

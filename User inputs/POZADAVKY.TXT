@@ -13,6 +13,9 @@ jistá, NEZASADÍ a vysvětlí proč.
 1. OBECNÉ POŽADAVKY A ABSOLUTNÍ PRAVIDLA
 ================================================================================
 
+1.0 MAIN GOAL CELEHO PROJEKTU - NEBRAT ZE SITE VICE, NEZ JE POTREBA - GOAL JE CO NEJMENE UTRATIT ZA ELEKTRINU
+    V NAKUPU, PRIPADNE JESTE VYDELAT NA PRODEJI. MAXIMALNE VYUZIT SOLAR A SPOTOVE CENY!!!
+
 1.1 PRIORITNÍ POŘADÍ SPOTŘEBIČŮ (od nejvyšší priority)
     1. Topení domu (NIBE) — pokud dům potřebuje teplo
     2. Nabíjení baterie FVE — baterie má přednost před autem i patrony
@@ -27,19 +30,28 @@ jistá, NEZASADÍ a vysvětlí proč.
     - NIBE nesmí být vypnuto (47371=0) pokud kompresor právě běží
     - Chceme maximalne vyuzit solarni vyrobu - omezovat jen v kritickych pripadech (vetsinou to budou chyby) - pokud bude vse v tomto
         projektu nastaveno spravne, SOLARNI VYROBA SE NESMI OMEZIT - DESIRE STATE!!!
-
+    - POKUD BUDE ZAPORNA NAKUPNI CENA, POUZIJ VSE DO MAXIMA SPOTREBY SE SITE PODLE PRIORIT!!! Oni nam v tomto pripade jeste zaplati za odber!!!
+            zapni vse, co se da zapnout, abycom brali co nejvice 
+    - NIKDY NEMEN NR FLOW INIT SET VICTRON! 
 1.3 OBECNÉ POŽADAVKY NA KÓD
     - Všechny parametry čerpat z fve_config (global) nebo HA entit
     - Žádné magické konstanty v kódu — vše pojmenováno a konfigurovatelné
     - Každý cyklus musí logovat do fve_log.jsonl (ts, mode, soc, spotřeba, aktuátory)
     - Žádný odběr ze sítě kvůli automatizaci — pokud automatizace způsobuje grid draw, je to bug
     - Pokud si AI nebude jistý v požadavku - bude tam konflikt s aktuálně nastavenými pravidly, uživatele se nejdříve zeptá, jak to myslel a dá mu na výběr
+    - Chci maximalni jednoduchost, abych se na to mohl koukat a upravovat to, ne slozite kody ve funkcich v NR, ktere bych musel studovat. Funkce jsou povoleny,
+        ale jednodussi, tak maximalne rekneme 100 radku - vice ne. Pokud potrebujes, pridej si dalsi funkci a spravne ji napoj v NR, hlavne, ze bude
+        NR upravitelne a jednoduse pochopitelne i clovekem, ktery ma s programovanim cca 5 let zkusenosti
+    - Dodrzuj design patterny, ktere jsou v NR. Muzes pridat vylepseni, ale hlavne flows nerozbij
 
 1.4 SOLÁRNÍ FVE INSTALACE
     - Výkon: 17 kWp, Horoušany (50.10°N, 14.74°E)
     - Azimut: 190° (mírně JZ), Sklon: 45°
     - Baterie: Pylontech, kapacita 28 kWh, min_soc = 20% (uživatel nastavuje v HA)
     - VICTRON ESS — grid-tied, wallbox je připojen na GRID (mimo Victron ESS)
+
+1.5 DODATEČNÉ POŽADAVKY
+    - NEPOUŽÍVEJ POWERSHELL VE SVÝCH SKRIPTECH, POUŽÍVEJ CO NEJVÍCE PYTHON, JE NAINSTALOVÁN
 
 ================================================================================
 2. DEPLOYMENT A WORKFLOW
@@ -156,6 +168,13 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Musi byt zachovano pravidlo, ze chceme maximalne vyuzit solarni vyrobu
     - U zakazu pretoku pamatuj na to, ze pokud bude BATERIE NA VYSOKEM SOC (SOC≥95%), tak se bude OMEZOVAT VYROBA SOLARU 
         - TO JE nekolikrat ZMINENO v tomto SOUBORU v jinem kontextu
+    - NESMIME OMEZOVAT SOLARNI VYROBU - TOMU PRIZPUSOB VSECHNO, CO S TIM JE SPOJENE - OBECNE - CHCEME MAXIMALNE VYUZIT SOLARNI 
+            VYROBU, NE JI OMEZOVAT - POKUD MAS KAM DAT TU PREBYTECNOU ENERGII - TZN POKUD JE BATERIE NAD 95 PROCENTAMA - TAK JI 
+            DEJ VSUDE, KDE JE TO POTREBA PODLE PRIORIT, ABYCHOM MAXIMALNE VYUZILI SOLARNI ZISK. CTI PRAVIDLA V TOMTO SOUBORU
+    - Lepsi je brat z baterie, nez omezovat solarni vykon.
+    - Lepsi je vyuzit solarni vyrobu a vybijet baterii na spotebice, ktere to potrebuji, nez omezovat solarni vykon. 
+    - v nejhorsim pripadne se omezi solarni vyroba - ale to necheme obecne
+
 
 4.7 BALANCOVÁNÍ
     - Frekvence: 1× za 30 dní (config: balancing_interval_days = 30)
@@ -192,7 +211,10 @@ jistá, NEZASADÍ a vysvětlí proč.
             - Normal: SOC klesá o config.soc_drop_normal_pct za hodinu (aktivní vybíjení)
             - Nabíjet ze sítě: SOC roste dle config.charge_rate_kwh
             - Prodávat: SOC klesá dle max_feed_in a kapacity baterie
-            - Solární hodiny: SOC roste dle predikce solárního zisku
+            - Solární hodiny: SOC roste dle predikce solárního zisku (Open Meteo per-hour forecast)
+              Odhad spotřeby NIBE v simulaci: přičíst POUZE pokud solární forecast pro danou hodinu
+              překročí topeni_solar_override_w/1000 (8 kWh). Pod tímto prahem NIBE v simulaci neuvažovat.
+              Pokud NIBE ovlivňuje výpočet, uvést v důvodu „(NIBE topí)".
         - Pokud simulace ukazuje stejné SOC přes více hodin → je to BUG
 
     4.9.2 ROZHODOVÁNÍ O MÓDECH — LOGICKÁ NÁVAZNOST
@@ -222,6 +244,27 @@ jistá, NEZASADÍ a vysvětlí proč.
             × Nabíjet ze sítě při dobré solární předpovědi (solar to udělá zadarmo)
             × SOC 37% neměnné přes 3+ hodiny Šetřit (nerealistické)
             × Vybíjet v levné hodině a šetřit v drahé (obrácená logika)
+    4.9.4 FORMÁT SLOUPCE „DŮVOD" V PLÁNU
+        Každý řádek plánu MUSÍ v důvodu obsahovat:
+        a) Srozumitelný český popis situace (žádné zkratky typu „Sol", „Lv", „Arb")
+        b) Aktuální SOC baterie a očekávanou změnu: „SOC XX→~YY%"
+        c) Pokud je cenová úroveň relevantní: „úroveň X" (ne „LvX")
+
+        Správné příklady:
+            „Drahá hodina (úroveň 23), SOC 26→~21%"
+            „Solární hodina, SOC 21→~28%"
+            „Solární + drahá hodina (úroveň 12), SOC 21→~21%"
+            „Šetřím baterii (úroveň 8), SOC 31%"
+            „Nabíjení ze sítě na 60%, SOC 25→~43%"
+            „Záporná prodejní cena, SOC 37%"
+            „Prodej do sítě (zisk 2.3 Kč/kWh), SOC 55→~38%"
+
+        Chybné příklady (ZAKÁZÁNO):
+            × „Sol, SOC 29→~34%" — zkratka „Sol"
+            × „Sol+drahá Lv12" — zkratky + chybí SOC
+            × „drahá Lv23, vybíjení" — zkratka + chybí SOC
+            × „Arbitráž→h14" — nesrozumitelné
+            × „Šetřím Lv8, SOC 44%" — zkratka „Lv"
 
 ================================================================================
 5. FLOW: NABÍJENÍ AUTA ZE SLUNCE (nabijeni-auta-slunce.json)
@@ -230,6 +273,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ NABÍJENÍ AUTA ZE SLUNCE
 
     - SOC BATERIE je vetsi nez 85%
+    - KROKY V KOREKCNI SMYCCE +- 1A PO 20 SEKUNDACH
     - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!!
     - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
     - Korekcni smycka reguluje dynamicky amperaci na chargeru podle:
@@ -302,16 +346,22 @@ jistá, NEZASADÍ a vysvětlí proč.
     └──────────┴────────────────────────────────────────────────────┘
 
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
+    - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
     - NIBE a patrony NIKDY současně (viz 1.2)
     - auto_ma_hlad=ON → patrony NESMÍ běžet. ABSOLUTNÍ pravidlo. Žádná výjimka.
     - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
     - Automatizace OFF → 1× bezpečnostně zastavit patrony, pak ABSOLUTNĚ na nic nesahat
+    - Při topení v zimním režimu platí pravidlo, že dum musi byt natopen na pozadovanou teplotu (stejnou nebo vyssi, zadna hystereze) 
+        nejpozdeji v posledni hodine solarni vyroby. Pokud ze zbyvajici solarni energie > 20kWH a do posledni solarni hodiny budou zbyvat
+        mene nez 3 hodiny, NIBE se spusti podle pravidel nejnizsich nakupnich cen.
+    
+
 
 8.3 NIBE (switch.nibe_topeni, reg 47371)
     Rozhodování (první splněná podmínka):
-    1. Pokud bude dostatek odhadovane solarni energie, staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
-        od definovane teploty v dome - vse je v konfigu, nic nehardcodovat
+    1. Pokud bude dostatek zbývající odhadovane solarni energie (30kWH), staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
+        od definovane teploty v dome a pote se bude cekat na solarni vyrobu na dotopeni - vse je v konfigu, nic nehardcodovat
     2. Grid Lost / Krb / Nádrž > MAX_TANK / Patrony aktivní → NIBE OFF
     2. Drahá hodina (lvl ≥ 12) a solar < 8kW → NIBE OFF (žádná výjimka)
     3. Drahá hodina a solar ≥ 8kW (free energy) → NIBE ON + BLOKACE BATERIE OFF
@@ -321,6 +371,9 @@ jistá, NEZASADÍ a vysvětlí proč.
        - canDeferHeat: pokud indoorTemp ≥ safeTemp, lze odložit na levnější hodinu
     5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže) - jen, pokud neni vyhodnejsi topit pres patrony a bod 1 plati
     6. Jinak → NIBE OFF
+    7. DULEZITE JE, ZE DUM BUDE NATOPENY ZA CO NEJLEPSI CENU TAK, ABY TEPLOTA V DOME BYLA PODLE PRAVIDEL HYSTEREZE - TY JSOU DEFINOVANY V TOMTO SOUBORU. PLATI 
+        I PRO TOPENI I PRO CHLAZENI DOMU - POKUD JE CHAZENI ZAPNUTO, OPET PLATI TEPLOTA V DOME, KTERA JE NASTAVENA. TEPLOTA V DOME JE URCUJICI.
+    
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
     COOLDOWN: min. 3 minut mezi přepnutími
@@ -344,6 +397,7 @@ jistá, NEZASADÍ a vysvětlí proč.
         - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
+    - Pokud bude prodejni cena vetsi nez 2 koruny (konfigurovatelny parametr), tak se patrony nepouziji
 
     Stupňování fází:
     - < 3kW přebytek → 0 fází (OFF)
@@ -456,8 +510,12 @@ jistá, NEZASADÍ a vysvětlí proč.
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
 
 11.4 ARBITRÁŽ A CENY
-    min_arbitrage_profit_czk: 2 (min zisk pro nabíjení z gridu, Kč/kWh)
-    min_sell_profit_czk: 2 (min zisk pro prodej do sítě, Kč/kWh)
+    - Základní pravidla arbitráže
+        - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
+         odberu a take ocekavane solarni vyrobe a pozdejsich cen za nakup. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
+         pri nabijeni a vybijeni baterie
+    min_arbitrage_profit_czk: 3 (min zisk pro nabíjení z gridu, Kč/kWh)
+    min_sell_profit_czk: 3 (min zisk pro prodej do sítě, Kč/kWh)
     prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh)
     night_reserve_kwh: 10 (noční rezerva — pod tuto hodnotu neprodávat)
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
