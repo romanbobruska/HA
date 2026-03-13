@@ -1,1 +1,6 @@
-zkontroluj moje upravy v zakonech a proved pripadny fix, zaroven zkontroluj zakonym, zda jsou logicke - to, co jsem odstranil, nevracej!!!
+over, ze v teto situaci, kdy je je solarni ophadovana vyroba velka a od dh9 do h14, co jsem schopen videt v planu, je zakaz pretoku,
+se NIBE spusti optimalne - za co nejlepsich podminek.
+
+OBECNE - ZE SE VYUZIJE MAXIMALNE SOLARNI VYROBA TAK, ABYCHOM NEMUSELI OMEZOVAT SOLARNI VYROBU.
+
+VSE PODLE PRIORIT - TY JSOU DOUFAM V KONFIGURACI - BATERIE ATD... uz to znas
