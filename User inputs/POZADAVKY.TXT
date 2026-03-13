@@ -15,6 +15,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 1.0 MAIN GOAL CELEHO PROJEKTU - NEBRAT ZE SITE VICE, NEZ JE POTREBA - GOAL JE CO NEJMENE UTRATIT ZA ELEKTRINU
     V NAKUPU, PRIPADNE JESTE VYDELAT NA PRODEJI. MAXIMALNE VYUZIT SOLAR A SPOTOVE CENY!!!
+    - MOCNI HODINY JSOU DEFAULT 22H - 04H. Je to parametr, ktery musi byt mozny konfigurovan v configu
 
 1.1 PRIORITNÍ POŘADÍ SPOTŘEBIČŮ (od nejvyšší priority)
     1. Topení domu (NIBE) — pokud dům potřebuje teplo
@@ -348,6 +349,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
     - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
     - NIBE a patrony NIKDY současně (viz 1.2)
+    - pokud je solarni vyroba na dany den vysoka (vice nez 50kWh) a je pravdepobnost, ze se natopi dum i z patron, NIBE se NESPUSTI, pokud:
+        - solarni vyroba bude dostatecna - viz ostatni pravidla
+        - hystereze teploty domu se timto zvysuje na -0.5 stupnu od nastavena_teplota_v_dome v ramci dennich hodin
+        - v ostatnich pripadech plati nastavene podminky
+        - je nutne kontrolovat zbyvajici solarni vyrobu, meni se to - aplikuj pravidla logicky tak, abychom meli natopeny dum a nemrlzi.
     - auto_ma_hlad=ON → patrony NESMÍ běžet. ABSOLUTNÍ pravidlo. Žádná výjimka.
     - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT

@@ -1,6 +1,2 @@
-oprav fve config - nevynam se v tom. nocni hodiny jsou jasne definovane 22 - 04. nevim, proc jsi vymyslel nocni hodinu az do 06h. chci mit config prehledny 
-jako predtim, nez jsme nasazovali refactoring - pekne okomentovany, v sekcich, paramtetry byly krasne v sekcich, aby to bylo citelne.
-
-Z novu zkontroluj, ze veschny dulezite parametry tohoto projektu jsou v konfigu a nejsou hardoded.
-
-Potom udelej vse, co je v zakonech - dalsi test - hlavne deploy a after deply pravidla. Zda se mi, ze to nedelas
+precti si zakony a rekni mi, zda ti to dava smysl. pokud ano, aplikuj pravidla. Nejdrive - na 30sekund - mi rekni, co chces zmenit. pokud nic neudelam, pak
+aplikuj zmeny
