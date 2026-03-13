@@ -1,6 +1,3 @@
-over, ze v teto situaci, kdy je je solarni ophadovana vyroba velka a od dh9 do h14, co jsem schopen videt v planu, je zakaz pretoku,
-se NIBE spusti optimalne - za co nejlepsich podminek.
+chci videt simulaci, ze je blokovane vybijeni baterie kvuli topeni nibe. chci tam videt ten popisek. Pokud to neni mozne, vyser se na to.
 
-OBECNE - ZE SE VYUZIJE MAXIMALNE SOLARNI VYROBA TAK, ABYCHOM NEMUSELI OMEZOVAT SOLARNI VYROBU.
-
-VSE PODLE PRIORIT - TY JSOU DOUFAM V KONFIGURACI - BATERIE ATD... uz to znas
+Plan vypada OK, proved merge.

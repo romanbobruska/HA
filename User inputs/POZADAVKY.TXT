@@ -343,6 +343,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     ├──────────┼────────────────────────────────────────────────────┤
     │ NIBE     │ tempGap > 0.2°C (dům je pod cílem)                 │
     │ Patrony  │ tempGap ≤ 0.3°C + SOC reálně dosáhne 95% + 3kW     │
+    │ NIBE     │ zákaz přetoků + SOC ≥ 85% + nádrž < max (dump soláru) │
     │ Vypnuto  │ teplota OK / autoHlad blokuje / žádný přebytek     │
     └──────────┴────────────────────────────────────────────────────┘
 
@@ -382,7 +383,13 @@ jistá, NEZASADÍ a vysvětlí proč.
        - Solar < 8kW → cheaperAhead/bigSolarTomorrow odklady platí
        - canDeferHeat: pokud indoorTemp ≥ safeTemp, lze odložit na levnější hodinu
     5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže) - jen, pokud neni vyhodnejsi topit pres patrony a bod 1 plati
-    6. Jinak → NIBE OFF
+    6. DUMP SOLÁRU DO NÁDRŽE: Pokud nelze exportovat do sítě (zákaz přetoků / záporná prodejní cena)
+       a dům již nepotřebuje topit, ale nádrž < max a SOC ≥ topeni_dump_solar_soc (85%):
+       → NIBE ON pro ohřev nádrže, blokace vybíjení OFF (baterie asistuje, žádný odběr ze sítě).
+       Důvod: Bez tohoto by se solární výroba omezila (curtailment), protože není kam energii dát.
+       Priorita: baterie se nejdříve nabije na 85%, pak se zbytek soláru vyhřívá nádrž přes NIBE.
+       Konfigurace: topeni_dump_solar_soc (výchozí 85%)
+    7. Jinak → NIBE OFF
     7. DULEZITE JE, ZE DUM BUDE NATOPENY ZA CO NEJLEPSI CENU TAK, ABY TEPLOTA V DOME BYLA PODLE PRAVIDEL HYSTEREZE - TY JSOU DEFINOVANY V TOMTO SOUBORU. PLATI 
         I PRO TOPENI I PRO CHLAZENI DOMU - POKUD JE CHAZENI ZAPNUTO, OPET PLATI TEPLOTA V DOME, KTERA JE NASTAVENA. TEPLOTA V DOME JE URCUJICI.
     
