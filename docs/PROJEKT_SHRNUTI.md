@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-13 (v25.16: High solar day NIBE deferral, config reformat)
+> Poslední aktualizace: 2026-03-13 (v25.17: Heating fixes — pump, effTgt, 3h rule, filtrace NIBE priority)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -67,7 +67,7 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 | `nabijeni-auta-sit.json` | Nabíjení auta ze sítě (cenové prahy, headroom) |
 | `nabijeni-auta-slunce.json` | Nabíjení auta ze solaru (closed-loop amperage) |
 | `boiler.json` | Automatizace bojleru (Meross termostat) |
-| `filtrace-bazenu.json` | Časové řízení filtrace bazénu |
+| `filtrace-bazenu.json` | Časové řízení filtrace bazénu + NIBE kompresor priorita |
 | `ostatni.json` | Drobné automatizace |
 
 ---
@@ -203,8 +203,32 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Config**: `topeni_solar_high_day_kwh: 50` (konfigurovatelný práh)
 - **Denní hystereze**: Na high-solar dnech v solárních hodinách `effTgt = tgtT - 0.5°C` (jako noční snížení)
 - **Bezpečnost**: NIBE startne pokud teplota klesne pod `tgtT - 0.7°C`, nebo při mustHeatFinal/mustHeatByPrice
-- **Node 1**: Čte `sensor.energy_production_today_3` → `h.solFcDnes`, `h.highSolDay`
-- **Node 2**: Nový deferral řádek v NIBE decision tree (L61)
+
+### v25.17: Opravy topení a filtrace (2026-03-13)
+
+**Oběhové čerpadlo** (`fve-heating.json`):
+- Čerpadlo používalo `h.effTgt` (22.8°C s highSolDay) místo `h.tgtT` (23.3°C) → nyní `h.tgtT` ve dne
+- Zákon 8.4: "teplota domu < cíl" = nastavená teplota, ne efektivní
+
+**effTgt deferral** (`fve-heating.json`):
+- highSolDay snížení effTgt platí JEN když patrony mohou běžet (`!h.autoHlad && !h.autoNabiji`)
+- Zákon 8.2: deferral "pokud je pravděpodobnost, že se natopí dům i z patron"
+
+**Patrony mode selection** (`fve-heating.json`):
+- Přidán `patMohou` check do první Patrony větve
+- Přidán globální 3h override: `if(mod==="Patrony" && hToLastSol<=finalHrs) mod="NIBE"`
+- `korekce` nyní respektuje `patBlkMod` — hlavní loop přebírá řízení fází od korekční smyčky
+- Config: `topeni_final_hours: 3` (konfigurovatelný)
+
+**Filtrace NIBE priorita** (`filtrace-bazenu.json`, zákon 10.5):
+- Když NIBE kompresor pracuje (`binary_sensor.nibe_kompresory_aktivni_binarni=ON`) → filtrace pauza
+- Kontroluje se stav kompresoru (pracuje), NE switch.nibe_topeni (zapnuto)
+- Anti-cycling se nepřeskakuje pro kompresor override
+- Zákon 10.5 aktualizován v POZADAVKY.TXT
+
+**Zákon 8.5 — pravidlo 3 hodin** (nový zákon v POZADAVKY.TXT):
+- Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
+- Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
 ---
 
