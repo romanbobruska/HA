@@ -447,29 +447,88 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Celková spotřeba + bojler > SAFE_LIMIT → neohřívat (přetížení sítě)
 
 ================================================================================
-10. BATERIE — PRAVIDLA VYBÍJENÍ A NABÍJENÍ
+10. FLOW: FILTRACE BAZÉNU (filtrace-bazenu.json)
 ================================================================================
 
-10.1 MAX_DISCHARGE_POWER (jak řídit vybíjení)
+10.1 ZÁKLADNÍ PRAVIDLA
+    - Filtrace bazénu je KRITICKÁ pro kvalitu vody — bez filtrace se tvoří řasy a bakterie
+    - Filtrace bere ze sítě ~2.5 kW pokud je zapnutá
+    - Ovládá se přes: switch.filtrace
+    - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1
+    - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu
+    - Rozhodování každé 2 minuty (inject → gate → data chain → rozhodovací funkce)
+
+10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU
+    - ZIMNÍ REŽIM: min 1 hodina (60 min) denně
+    - LETNÍ REŽIM: min 2 hodiny (120 min) denně, POKUD teplota bazénu > 10°C
+    - LETNÍ REŽIM + teplota bazénu ≤ 10°C: min 1 hodina (60 min) denně
+    - Denní čítač běhu se resetuje o půlnoci (flow context: filt_date, filt_run)
+    - Tvrdé vypnutí: 23:00 — po této hodině filtrace neběží
+
+10.3 OPTIMALIZACE ENERGIE — PRIORITNÍ ŘETĚZEC (od nejlepší po nejhorší)
+    1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500W) → zapnout
+       - Zdarma energie, nulový dopad na baterii
+       - Nejlepší podmínky — filtrace běží, dokud přebytek trvá
+    2. ŠETŘIT MÓD + žádný budoucí solar → zapnout (grid, baterie chráněna)
+       - Pouze pokud FVE plán nemá žádné solární hodiny vpředu
+       - A zbývající solární předpověď < filtrace_solar_ok_kwh (10 kWh)
+    3. URGENT DEADLINE + ŠETŘIT → zapnout (musíme splnit minimum)
+       - Deadline = zbývající čas do 23:00 ≤ zbývající minuty + 15 min buffer
+    4. URGENT DEADLINE + NORMAL + SOC ≥ filtrace_soc_low (40%) → zapnout
+       - Emergency: SOC musí být dostatečný pro grid běh v normal módu
+    5. SUPER URGENT (< 20 min do 23:00) → zapnout za každou cenu
+       - Absolutní poslední možnost — nesplnění minimální doby = degradace vody
+
+10.4 VYPÍNACÍ PODMÍNKY (když filtrace běží)
+    1. Hard cutoff 23:00 → OFF vždy
+    2. Minimum splněno + přebytek < filtrace_surplus_off_w (1500W) → OFF
+    3. NORMAL mód + SOC < filtrace_soc_low → OFF (ochrana baterie)
+    4. Min nesplněno + přebytek klesl + budoucí solar existuje → PAUZA (čeká na solar)
+    5. Min nesplněno + přebytek klesl + není šetřit + není urgent → PAUZA
+    - Pokud min splněno + přebytek OK → nechat běžet (free energy pro zdraví bazénu)
+
+10.5 OCHRANNÉ MECHANISMY
+    - Anti-cycling: min filtrace_anti_cycle_min (10 min) mezi ON/OFF přepnutími
+    - Priorita auta: pokud auto_ma_hlad=ON a SOC < 85% → filtrace nesmí startovat
+    - SOC ochrana: pod filtrace_soc_low (40%) neběžet na grid (pokud je solar dnes)
+    - Plán awareness: skenuje FVE plán na budoucí solární hodiny
+    - Solar forecast: čte sensor.energy_production_today_remaining_3
+
+10.6 KONFIGUROVATELNÉ PARAMETRY (fve_config)
+    filtrace_surplus_on_w: 2500        (min přebytek pro zapnutí, W)
+    filtrace_surplus_off_w: 1500       (hystereze pro vypnutí, W)
+    filtrace_min_zima_min: 60          (min běh v zimě, min/den)
+    filtrace_min_leto_min: 120         (min běh v létě, min/den)
+    filtrace_pool_temp_min: 10         (min teplota bazénu pro letní režim, °C)
+    filtrace_hard_cutoff_h: 23         (tvrdé vypnutí, hodina)
+    filtrace_anti_cycle_min: 10        (anti-cycling ochrana, min)
+    filtrace_soc_low: 40               (min SOC pro grid běh, %)
+    filtrace_solar_ok_kwh: 10          (zbývající solar = "čekej na solar", kWh)
+
+================================================================================
+11. BATERIE — PRAVIDLA VYBÍJENÍ A NABÍJENÍ
+================================================================================
+
+11.1 MAX_DISCHARGE_POWER (jak řídit vybíjení)
     - solar > 10W → Math.max(50, solar)  [solarPassthrough]
     - solar ≤ 10W → 0  [noc/zataženo — Victron transfer relay zajistí grid]
     - NIKDY nepoužívat number.min_soc k blokaci — jen max_discharge_power
 
-10.2 MAX_CHARGE_POWER
+11.2 MAX_CHARGE_POWER
     - SOC ≥ 95% a patrony aktivní → 0 (zastavit nabíjení baterie, patron vybíjí)
     - Jinak → -1 (bez omezení)
 
-10.3 BLOKACE VYBÍJENÍ — blockDischargeSoft
+11.3 BLOKACE VYBÍJENÍ — blockDischargeSoft
     Aktivo když: NIBE topí NEBO nabíjení auta ze sítě NEBO sauna
     → max_discharge_power = solarPassthrough (ne 0!)
     → Baterie stále může dodávat solární energii do AC
 
-10.4 AUTO NABÍJENÍ A BATERIE
+11.4 AUTO NABÍJENÍ A BATERIE
     - Wallbox bere ze SÍTĚ (grid-connected, mimo Victron ESS)
     - Baterie MŮŽE vybíjet pro domácnost i při nabíjení auta — to je správné
     - blockDischargeHard byl odstraněn — způsoboval grid draw pro domácnost
 
-10.5 SOC PRAHY (z config)
+11.5 SOC PRAHY (z config)
     - min_soc: 20% (uživatel, number.min_soc) — absolutní minimum
     - nabijeni_auta_min_soc_slunce: 85% — min SOC pro start solárního nabíjení auta
     - nabijeni_auta_soc_drain_prah: 95% — přepnutí charge→drain mód při sol. nabíjení
@@ -477,10 +536,10 @@ jistá, NEZASADÍ a vysvětlí proč.
     - noční rezerva: ~36% (night_reserve_kwh=10 / 28kWh × 100)
 
 ================================================================================
-11. KONFIGUROVATELNÉ PARAMETRY (fve_config — VŽDY z configu, nikdy hardcoded)
+12. KONFIGUROVATELNÉ PARAMETRY (fve_config — VŽDY z configu, nikdy hardcoded)
 ================================================================================
 
-11.1 OBECNÉ FVE
+12.1 OBECNÉ FVE
     kapacita_baterie_kwh: 28
     min_soc: 20 (čte z number.min_soc v HA — UŽIVATEL)
     prah_levna_energie: 4 (level)
@@ -488,7 +547,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     max_spotreba_sit_w: 22000
     safety_margin_w: 2000
 
-11.2 NABÍJENÍ AUTA
+12.2 NABÍJENÍ AUTA
     nabijeni_auta_forecast_kwh: 40 (min výroba dne pro solar nabíjení)
     nabijeni_auta_min_soc: 95 (min SOC baterie pro solar větev — manager)
     nabijeni_auta_solar_w: 4000 (min přebytek W pro solar nabíjení — manager)
@@ -502,7 +561,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     nabijeni_auta_cena_prah_nizsi: 3.0 (max Kč/kWh pro nabíjení ze sítě — nižší)
     nabijeni_auta_pretizeni_w: 18000 (max spotřeba sítě při nabíjení auta, W)
 
-11.3 TOPENÍ
+12.3 TOPENÍ
     topeni_min_teplota_nadrze: 30 (min teplota nádrže pro oběhové čerpadlo, °C)
     topeni_max_teplota_nadrze: 50 (max teplota nádrže pro topení, °C)
     topeni_nocni_snizeni: 0.5 (°C)
@@ -521,7 +580,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     topeni_solar_override_w: 8000 (min solar pro override deferral u NIBE, W)
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
 
-11.4 ARBITRÁŽ A CENY
+12.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
         - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
          odberu a take ocekavane solarni vyrobe a pozdejsich cen za nakup. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
@@ -533,14 +592,14 @@ jistá, NEZASADÍ a vysvětlí proč.
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
     setrit_grid_bias_w: 150 (PSP bias v Šetřit módu, W)
 
-11.5 BALANCOVÁNÍ
+12.5 BALANCOVÁNÍ
     balancing_interval_days: 30
     balancing_force_stop_hours: 2
     balancing_min_solar_kwh: 3
     balancing_grid_reserve_w: 1000
 
 ================================================================================
-12. ENTITY PRO MANUÁLNÍ OVERRIDE (UŽIVATEL NASTAVUJE)
+13. ENTITY PRO MANUÁLNÍ OVERRIDE (UŽIVATEL NASTAVUJE)
 ================================================================================
 
     input_number.nastavena_teplota_v_dome → cílová teplota domu (23.3°C)
@@ -553,7 +612,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     input_boolean.chlazeni → povolení chlazení
 
 ================================================================================
-13. VICTRON ESS — ENTITY A MQTT
+14. VICTRON ESS — ENTITY A MQTT
 ================================================================================
 
     MaxChargePower: number.max_charge_power / Settings/CGwacs/MaxChargePower
@@ -565,7 +624,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     MQTT prefix: victron, ID: c0619ab69c71
 
 ================================================================================
-14. VICTRON EV CHARGER — STAVY
+15. VICTRON EV CHARGER — STAVY
 ================================================================================
 
     0=Disconnected, 1=Connected, 2=Charging, 3=Charged, 4=WaitSun
@@ -573,7 +632,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     State 6 (WaitStart) = auto připojeno, čeká na StartStop=1 = MÁ HLAD
 
 ================================================================================
-15. LOGOVÁNÍ
+16. LOGOVÁNÍ
 ================================================================================
 
     Soubor: /homeassistant/fve_log.jsonl
@@ -582,7 +641,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     Balancování navíc: bal_current, bal_cell_diff, bal_soc_precise, bal_status
 
 ================================================================================
-16. NIBE — REGISTRY A ENTITY
+17. NIBE — REGISTRY A ENTITY
 ================================================================================
 
     Topení: reg 47371 (switch.nibe_topeni)
