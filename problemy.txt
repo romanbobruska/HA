@@ -1,3 +1,6 @@
-zkontroluj znovu zakony, zjisti, co se zmenilo a vyhodnot, zda je vse spravne v projektu - nechci ti napovidat - dalsi test.
+oprav fve config - nevynam se v tom. nocni hodiny jsou jasne definovane 22 - 04. nevim, proc jsi vymyslel nocni hodinu az do 06h. chci mit config prehledny 
+jako predtim, nez jsme nasazovali refactoring - pekne okomentovany, v sekcich, paramtetry byly krasne v sekcich, aby to bylo citelne.
 
-Pokud je vse OK, jen mi vypis, co se zmenilo a ze projekt je nastaveny spravne. Jinak nasad fix.
+Z novu zkontroluj, ze veschny dulezite parametry tohoto projektu jsou v konfigu a nejsou hardoded.
+
+Potom udelej vse, co je v zakonech - dalsi test - hlavne deploy a after deply pravidla. Zda se mi, ze to nedelas
