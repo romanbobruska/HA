@@ -415,6 +415,10 @@ jistá, NEZASADÍ a vysvětlí proč.
         spotrebu domu. Pak se spusti mod patrony.
     - Mod se spusti, jak je definovano vyse, pokud teplota v dome bude 0.2 stupne pod stanovenou teplotou v dome a zaroven budeme
         mit dostatek ocekavanych solarnich prebytku - tehdy NIBE OFF.
+    - PRAVIDLO 3 HODIN: Pokud je aktuální hodina v intervalu 3 hodin před poslední solární hodinou dne
+        (topeni_final_hours, výchozí 3), patrony se NESPUSTÍ a místo nich se použije NIBE.
+        Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby.
+        NIBE je efektivnější a zvládne natopil nádrž rychleji.
     - SOC baterie ≥ 90 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
     - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
@@ -494,9 +498,13 @@ jistá, NEZASADÍ a vysvětlí proč.
     2. NORMAL mód + SOC < filtrace_soc_low → OFF (ochrana baterie)
     3. Min nesplněno + přebytek klesl + budoucí solar existuje → PAUZA (čeká na solar)
     4. Min nesplněno + přebytek klesl + není šetřit + není urgent → PAUZA
-    - Pokud min splněno + přebytek OK → nechat běžet (free energy pro zdraví bazénu)
 
 10.5 OCHRANNÉ MECHANISMY
+    - PRIORITA NIBE: pokud NIBE kompresor aktivně pracuje (binary_sensor.nibe_kompresory_aktivni_binarni=ON),
+      filtrace se POZASTAVÍ (vypne). Důvod: nespotřebovávat energii pro filtraci a NIBE současně.
+      Jakmile kompresor přestane pracovat, filtrace se může znovu zapnout.
+      Anti-cycling se pro tuto podmínku NEPŘESKAKUJE — kompresor override má přednost.
+      POZOR: kontroluje se stav kompresoru (pracuje), NE switch.nibe_topeni (zapnuto)!
     - Anti-cycling: min filtrace_anti_cycle_min (10 min) mezi ON/OFF přepnutími
     - Priorita auta: pokud auto_ma_hlad=ON a SOC < 85% → filtrace nesmí startovat
     - SOC ochrana: pod filtrace_soc_low (40%) neběžet na grid (pokud je solar dnes)
