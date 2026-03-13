@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-13 (v25.15.5: Discharge optimalizace, blokace text fix, config reformat)
+> Poslední aktualizace: 2026-03-13 (v25.16: High solar day NIBE deferral, config reformat)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -197,6 +197,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Obnoveny komentáře a sekce v `fve-config.json` (186L)
 - Přidány chybějící parametry: `topeni_patron_min_solar_w`, `nibe_est_consumption_kwh`, `topeni_solar_defer_margin`, `topeni_final_solar_kwh`, `topeni_final_hours`
 - Fix: `topeni_min_soc_patron` 90→95 (dle POZADAVKY.TXT)
+
+### v25.16: High solar day NIBE deferral (zákon 8.2)
+- **Nové pravidlo**: Pokud denní solární forecast > 50kWh, NIBE se odloží na patrony během solárních hodin
+- **Config**: `topeni_solar_high_day_kwh: 50` (konfigurovatelný práh)
+- **Denní hystereze**: Na high-solar dnech v solárních hodinách `effTgt = tgtT - 0.5°C` (jako noční snížení)
+- **Bezpečnost**: NIBE startne pokud teplota klesne pod `tgtT - 0.7°C`, nebo při mustHeatFinal/mustHeatByPrice
+- **Node 1**: Čte `sensor.energy_production_today_3` → `h.solFcDnes`, `h.highSolDay`
+- **Node 2**: Nový deferral řádek v NIBE decision tree (L61)
 
 ---
 
