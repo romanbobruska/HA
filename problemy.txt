@@ -1,7 +1,1 @@
-znovu zkontroluj kod, ze je optimalizovany pro filtraci bazenu - je to krucialni - pokud se nebude filtrovat, budou se tvorit rasy a bakterie v bazenu.
-
--Zkontroluj, ze je vse OK dle casovych zakonu, ktere jsem ti rekl, ze si pamatujes, jak dlouho filtrace bazenu v danem dni bezela.
-
-
-POKUD TO BUDE VSE OK A NIC JSI NEPOSRAL, EXPLICITNE TE ZADAM O PRIDANI NOVE SEKCE DO ZAKONU O FILTRACI V BAZENU, KTERE JSME SI 
-TED SPOLU DOMLUVILI. SAMOZREJME, ZE ZAKLADNI PARAMETRY BUDOU DOSTUPNE V KONFIGURACI.
+zkontroluj moje upravy v zakonech a proved pripadny fix, zaroven zkontroluj zakonym, zda jsou logicke - to, co jsem odstranil, nevracej!!!

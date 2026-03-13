@@ -461,9 +461,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU
     - ZIMNÍ REŽIM: min 1 hodina (60 min) denně
     - LETNÍ REŽIM: min 2 hodiny (120 min) denně, POKUD teplota bazénu > 10°C
-    - LETNÍ REŽIM + teplota bazénu ≤ 10°C: min 1 hodina (60 min) denně
     - Denní čítač běhu se resetuje o půlnoci (flow context: filt_date, filt_run)
-    - Tvrdé vypnutí: 23:00 — po této hodině filtrace neběží
 
 10.3 OPTIMALIZACE ENERGIE — PRIORITNÍ ŘETĚZEC (od nejlepší po nejhorší)
     1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500W) → zapnout
@@ -473,18 +471,17 @@ jistá, NEZASADÍ a vysvětlí proč.
        - Pouze pokud FVE plán nemá žádné solární hodiny vpředu
        - A zbývající solární předpověď < filtrace_solar_ok_kwh (10 kWh)
     3. URGENT DEADLINE + ŠETŘIT → zapnout (musíme splnit minimum)
-       - Deadline = zbývající čas do 23:00 ≤ zbývající minuty + 15 min buffer
+       - Deadline = zbývající čas do filtrace_deadline_h ≤ zbývající minuty + 15 min buffer
     4. URGENT DEADLINE + NORMAL + SOC ≥ filtrace_soc_low (40%) → zapnout
        - Emergency: SOC musí být dostatečný pro grid běh v normal módu
-    5. SUPER URGENT (< 20 min do 23:00) → zapnout za každou cenu
+    5. SUPER URGENT (< 20 min do deadline) → zapnout za každou cenu
        - Absolutní poslední možnost — nesplnění minimální doby = degradace vody
 
 10.4 VYPÍNACÍ PODMÍNKY (když filtrace běží)
-    1. Hard cutoff 23:00 → OFF vždy
-    2. Minimum splněno + přebytek < filtrace_surplus_off_w (1500W) → OFF
-    3. NORMAL mód + SOC < filtrace_soc_low → OFF (ochrana baterie)
-    4. Min nesplněno + přebytek klesl + budoucí solar existuje → PAUZA (čeká na solar)
-    5. Min nesplněno + přebytek klesl + není šetřit + není urgent → PAUZA
+    1. Minimum splněno + přebytek < filtrace_surplus_off_w (1500W) → OFF
+    2. NORMAL mód + SOC < filtrace_soc_low → OFF (ochrana baterie)
+    3. Min nesplněno + přebytek klesl + budoucí solar existuje → PAUZA (čeká na solar)
+    4. Min nesplněno + přebytek klesl + není šetřit + není urgent → PAUZA
     - Pokud min splněno + přebytek OK → nechat běžet (free energy pro zdraví bazénu)
 
 10.5 OCHRANNÉ MECHANISMY
@@ -500,7 +497,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     filtrace_min_zima_min: 60          (min běh v zimě, min/den)
     filtrace_min_leto_min: 120         (min běh v létě, min/den)
     filtrace_pool_temp_min: 10         (min teplota bazénu pro letní režim, °C)
-    filtrace_hard_cutoff_h: 23         (tvrdé vypnutí, hodina)
+    filtrace_deadline_h: 23            (deadline pro splnění minima, hodina)
     filtrace_anti_cycle_min: 10        (anti-cycling ochrana, min)
     filtrace_soc_low: 40               (min SOC pro grid běh, %)
     filtrace_solar_ok_kwh: 10          (zbývající solar = "čekej na solar", kWh)
