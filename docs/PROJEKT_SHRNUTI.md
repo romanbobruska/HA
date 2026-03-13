@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-13 (v25.17: Heating fixes — pump, effTgt, 3h rule, filtrace NIBE priority)
+> Poslední aktualizace: 2026-03-14 (v25.18: Filtrace dashboard status, met=always OFF, NR restart counter seed)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -229,6 +229,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **Zákon 8.5 — pravidlo 3 hodin** (nový zákon v POZADAVKY.TXT):
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
+
+### v25.18: Filtrace — dashboard status + opravy (2026-03-14)
+
+**Filtrace met = vždy OFF** (`filtrace-bazenu.json`):
+- Odstraněna výjimka "free energy pro zdraví bazénu" — po splnění minima filtrace VŽDY OFF
+- Zákon 10.4 aktualizován uživatelem (odstraněn řádek o free energy)
+
+**NR restart counter seed** (`filtrace-bazenu.json`):
+- Po NR restartu v odpoledne (hr≥12): `filt_run = minReq` → minimum se považuje za splněné
+- Rozlišení: `isRestart` (sDate="") vs `newDay` (sDate=včera) — restart neresetuje counter zbytečně
+
+**Dashboard status filtrace** (zákon 10.6):
+- `filtrace_decision` exportuje `{run, minReq, met, remaining}` do `global.filtrace_status`
+- Oba write paths v orchestratoru (`Aktualizuj HA sensor` + `Aktualizuj blokaci`) zahrnují `filtrace_status` v `fve_plan.json`
+- `configuration.yaml`: přidán `filtrace_status` do `json_attributes` whitelistu command_line sensoru
+- `dashboard_fve_plan.md`: zobrazuje `Bazén: ✅ OK (XX/YY min)` nebo `Bazén: ❌ -ZZ min`
 
 ---
 
