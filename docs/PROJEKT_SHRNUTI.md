@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-11 (v25.1 REFACTORING: Všechny funkce ≤100L, hardcoded hodnoty nahrazeny config parametry, velké funkce rozděleny)
+> Poslední aktualizace: 2026-03-13 (v25.15.5: Discharge optimalizace, blokace text fix, config reformat)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -56,9 +56,9 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 | Soubor | Co dělá |
 |--------|---------|
-| `fve-orchestrator.json` | Plánovač módů na 12h — 5 funkcí: Příprava→Cena→Arbitráž→Plán→Výstup (v25.1 split z 1239L) |
+| `fve-orchestrator.json` | Plánovač módů na 12h — 5 funkcí: Příprava→Cena→Arbitráž→Plán→Výstup + Kontrola podmínek + blokace |
 | `fve-modes.json` | Implementace 7 FVE módů (Normal, Šetřit, Nabíjet, Prodávat, Zákaz, Solární, Balancování) |
-| `fve-config.json` | Centrální konfigurace (47L) + čtení HA stavů do globálů (30L) |
+| `fve-config.json` | Centrální konfigurace (~186L, komentovaná po sekcích) + čtení HA stavů do globálů |
 | `fve-heating.json` | Řízení topení — 3 funkce: Čtení stavu→Rozhodování→Pojistky+výstup (v25.1 split z 541L) |
 | `fve-history-learning.json` | Historická predikce solární výroby per hodina |
 | `init-set-victron.json` | Inicializace dat z Victron VRM API |
@@ -182,7 +182,25 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 ---
 
-## 9. Solární instalace
+## 9. v25.15 Discharge optimalizace + config (2026-03-13)
+
+### v25.15.1–15.2: Prioritizace vybíjení dle zákonů 4.9
+- **Problém**: hr=7 (drahá solární hodina, 4.68 CZK) v Šetřit místo Normal kvůli minSOC ochraně
+- **Fix node 3** (`rf_arb_trimming_3`): Budget-limited fill, solar-aware SOC drop, second-pass DRAHA trim
+- **Fix node 4** (`rf_gen_plan_0004`): Výjimka z minSOC ochrany pro solární discharge hodiny
+
+### v25.15.3: Blokace text fix
+- **Problém**: Dashboard zobrazoval "Blokace:top" místo "Topení"
+- **Fix** (`Kontrola podmínek`): Zkratky → plné názvy ("Topení", "Nab. auta", "Výpadek sítě", "Sauna")
+
+### v25.15.5: Config reformat
+- Obnoveny komentáře a sekce v `fve-config.json` (186L)
+- Přidány chybějící parametry: `topeni_patron_min_solar_w`, `nibe_est_consumption_kwh`, `topeni_solar_defer_margin`, `topeni_final_solar_kwh`, `topeni_final_hours`
+- Fix: `topeni_min_soc_patron` 90→95 (dle POZADAVKY.TXT)
+
+---
+
+## 10. Solární instalace
 
 - **Výkon**: 17 kWp, **Lokace**: Horoušany (50.10°N, 14.74°E)
 - **Azimut**: 190° (JZ), **Sklon**: 45°
