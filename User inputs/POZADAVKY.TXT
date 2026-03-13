@@ -435,8 +435,9 @@ jistá, NEZASADÍ a vysvětlí proč.
        d) Jinak → NIBE OFF
 
     4. LEVNÁ/STŘEDNÍ HODINA + nibeWant (needH=true NEBO nádrž < max):
-       a) DUMP SOLÁRU: zákaz přetoků + needH=false + SOC ≥ 85% + nádrž < max
-          → NIBE ON + blokace baterie OFF
+       a) DUMP SOLÁRU přes NIBE: zákaz přetoků + needH=false + SOC ≥ 85% + nádrž < max
+          + PATRONY NEMOHOU (jinak patrony mají přednost — viz 8.6 PRIORITA PATRONY)
+          → NIBE ON + blokace baterie OFF. Toto je ZÁCHYTNÁ varianta, patrony jsou lepší!
        b) bigSolTom odklad: solFcTom ≥ 30kWh + teplota ≥ (effTgt - 0.2°C)
           + není mustHeat → NIBE OFF (počkáme na solar zítra/dnes)
        c) highSolDay odklad: solFcDnes ≥ 50kWh + solární hodiny
@@ -472,12 +473,20 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Nezávislé na NIBE
 
 8.6 PATRONY (switch.patrona_faze_1/3_2/3, 3× 3kW)
+    PRIORITA PATRONY NAD NIBE PŘI ZÁKAZU PŘETOKŮ:
+    Patrony spotřebují až 9kW, NIBE jen ~2kW. Při zákazu přetoků (cantExport/ultraL)
+    se SOC práh pro patrony snižuje z 90% na topeni_dump_solar_soc (85%),
+    aby patrony měly VŽDY přednost před NIBE dump. NIBE dump se použije JEN pokud
+    patrony nemohou (jiný důvod než SOC — např. autoHlad, autoNabiji, balancování).
+    Důvod: Bez tohoto by NIBE startoval při SOC 85-89%, kompresor se rozjel,
+    a po dosažení SOC 90% nemohl být NIBE vypnut (ochrana kompresoru) → DEADLOCK.
+
     Podmínky start (patronyMohou) — VŠECHNY musí být splněny:
     - Uz nikam nemame dat solarni energii - ani do auta, ani do pripadne virivky, nikam - mam prebytek, ktery nikam nevyuzijeme, a zaroven uspokojime 
         spotrebu domu. Pak se spusti mod patrony.
     - Mod se spusti, jak je definovano vyse, pokud teplota v dome bude 0.2 stupne pod stanovenou teplotou v dome a zaroven budeme
         mit dostatek ocekavanych solarnich prebytku - tehdy NIBE OFF.
-    - SOC baterie ≥ 90 procent
+    - SOC baterie ≥ 90% (normálně) NEBO ≥ 85% při zákazu přetoků (dumpR=true)
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
     - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
         - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
