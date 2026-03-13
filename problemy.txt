@@ -1,5 +1,3 @@
-- zkontroluj, ze pokud bude blokace baterie NEBO NECO JINEHO - JE TO DAHSBOARD - uvidim v dashboardu presny nazev duvodu blokace - zobrazuje se mi Blokace:top místo blokace Topení.
-zapamatu si, ze nemuzes menit zavedene funkcionality, ktere funguji - zvlaste v dashboardu. Kdyztak se me na to zeptas, ale nezmenis to sam o sobe.
+zkontroluj znovu zakony, zjisti, co se zmenilo a vyhodnot, zda je vse spravne v projektu - nechci ti napovidat - dalsi test.
 
-- Celkove se mi to zatim libi, sluc projekt do gitu do main vetve, kdyztak se vratime. ALE PREDTIM ZKOTROLUJ, ZE NEMAME NEKDE ZASADNI BUGY,
-ktere udelaji projekt nefunkci!!! Zkontroluj prosim, ze je vse dle ZAKONU!!! KDYZTAK SE ZEPTEJ...
+Pokud je vse OK, jen mi vypis, co se zmenilo a ze projekt je nastaveny spravne. Jinak nasad fix.

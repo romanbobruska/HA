@@ -340,8 +340,8 @@ jistá, NEZASADÍ a vysvětlí proč.
     ┌──────────┬────────────────────────────────────────────────────┐
     │ Mód      │ Podmínka aktivace                                  │
     ├──────────┼────────────────────────────────────────────────────┤
-    │ NIBE     │ tempGap > 0.2°C (dům je pod cílem)                │
-    │ Patrony  │ tempGap ≤ 0.3°C + SOC reálně dosáhne 95% + 3kW   │
+    │ NIBE     │ tempGap > 0.2°C (dům je pod cílem)                 │
+    │ Patrony  │ tempGap ≤ 0.3°C + SOC reálně dosáhne 95% + 3kW     │
     │ Vypnuto  │ teplota OK / autoHlad blokuje / žádný přebytek     │
     └──────────┴────────────────────────────────────────────────────┘
 
@@ -355,6 +355,12 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Při topení v zimním režimu platí pravidlo, že dum musi byt natopen na pozadovanou teplotu (stejnou nebo vyssi, zadna hystereze) 
         nejpozdeji v posledni hodine solarni vyroby. Pokud ze zbyvajici solarni energie > 20kWH a do posledni solarni hodiny budou zbyvat
         mene nez 3 hodiny, NIBE se spusti podle pravidel nejnizsich nakupnich cen.
+    - v noci je povoleno a dokonce chteno mit v dome o 0.5 stupne mene, nez je nastavena teplota v dome (spime, nepotrebujeme mit tolik natopeny dum,
+            jsme prikriti perinou)
+        - pokud bude vyhodnejsi natopit nadrz v noci pres NIBE vzhledem k ostatnim parametrum - cena, solar atd... tak ok, natop se natopi nadrz
+            - teplota v dome -0.5 stupne od nastavene teploty v dome je chtena. ale - pokud nastanou podminky, ktere zapricini to, ze se 
+              musi natopit nadrz i v noci, ok - napr. je levna cena, zitra nebude seolarni vyroba dostatecna, teplota v noci 
+              je nizka, takze vychladi dum apod.
     
 
 
