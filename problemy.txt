@@ -1,3 +1,5 @@
-chci videt simulaci, ze je blokovane vybijeni baterie kvuli topeni nibe. chci tam videt ten popisek. Pokud to neni mozne, vyser se na to.
+zknotrololuj si plan. me se to nezda realisticke. 
 
-Plan vypada OK, proved merge.
+je to v souladu se zakony?
+
+14:00	🟣 Zákaz přetoků	Záporná prodejní cena, SOC 21%	3	1.00 Kč	-0.29 Kč
