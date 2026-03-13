@@ -1,12 +1,22 @@
+NASTUDUJ SI FLOW FILTRACE V BAZENU. NEPOSER TO, TVORIL JSEM TO JA, CHCI TO JEN VYLEPSIT - NEZPOMEN NA DESIGN PATTERNY.
+uprav filtraci v bazenu tak, aby i v pripade, ze je zimni rezim, si brala energii z pretOku solaru. - chci, aby to fungovalo optimalne i v zimnim rezimu - 
 
-co to delas??? ja uz mam v ha spustu komponentu - proc si nejdriv nezistis, jake jsou existujici???? nezasirej mi HA!!!!!
+NEPOSER TO 
 
-to neni dobre - v configu nevidim napr. nocni hodiny, nevidim ani hysterezi v topeni domu  - 0.5 stupnu.
+ZAMYSLI SE NAD TIM A IMPeLMENTUJ OPTIMALNE FLOW FILTRACE BAZEnu (FILTRACE BERE ZE SITE, POKUD JE ZAPNUTA, 2.5KWH). 
+Zaroven v zimnim rezimu musi byt zapnuta minimalne 1 hodinu denne, v letnim rezimu, pokud je teplota v bazenu vyssi nez 10 stupnu, 
+musi filtrace jet minimalne 2 hodiny denne.
 
-topeni_min_teplota_nadrze: 34,  
+vstupni entity:
 
-proc je tam tato hodnota? ta je dana v HA komponente, nechci ji editovat i v konfigu!!!! Proste si HA komponentu prectes!!!
+entity: switch.filtrace
+teplota v bazenu:   entity: sensor.hp2551ae_pro_v2_1_0_temperature_1
 
-zkotnroluj a proved refakturing do refaktoring branche v gitu. Nechci mit v configu parametry, ktere si muzu nastavit v HA - logicky.
+chci, aby filtrace fungovala maximalne optimalne - zakladni pravidla jsou:
 
-NIC NEROZBIJ!!!
+- v zimnim rezimu jede filtrace 1 hodinu denne
+- v letnim rezimu jede filtrace 2 hodiny denne
+
+ale za co nejlepsich podminek, abychom optimalizovali spotrebu energie 
+
+Chapeme se? Pripadne se zeptej...
