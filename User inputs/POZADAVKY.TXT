@@ -271,6 +271,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 5. FLOW: NABÍJENÍ AUTA ZE SLUNCE (nabijeni-auta-slunce.json)
 ================================================================================
 
+5.0 - PRI VYPNUTE AUTOMATIZACI NABIJENI AUTA SE NIC NEOVLIVNUJE - ANI CHARGER, ANI AMPERACE - NIC V RAMCI NABIJENI AUTA. 
+    NECHAVA SE TO NA UZIVATELI, JAK SI TO NASTAVI.
+    POKUD UZIVATEL VYPNE AUTOMATIZACI NABIJENI AUTA, TAK SE UZ DAL SE NIC NEOVLIVNUJE!!! TOTO PLATI OBECNE I PRO NABIJENI AUTA ZE SITE!!!
+    ANI MANAGER NABIJENI NESMI NIC OVLIVNOVAT - POKUD JE VYPNUTA AUTOMATIZACE - NIC SE NEOVLIVNUJE!!!
+
 5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ NABÍJENÍ AUTA ZE SLUNCE
 
     - SOC BATERIE je vetsi nez 85%
@@ -283,7 +288,7 @@ jistá, NEZASADÍ a vysvětlí proč.
         - aktualniho SOC baterie
         - Odberu ze site
         - Spravny stav je takovy, ze se auto nabiji ze solaru tak, aby mezi SOC fve baterie 85 - 95% se 
-        nabijela baterie cca 1kWh, nad 95% se vybijela cca 1kWH. Toto zarizuje korekcni smycka, ktera nastavuje
+        nabijela baterie cca 1kWh, nad 95% se vybijela cca 1,5kWH. Toto zarizuje korekcni smycka, ktera nastavuje
         amperaci na chargeru - meni se nebo zustava nahodnote A na chargeru dle podminek kazdych 20s (zajisteno input nodem).
         - Pokud korekcni smycka vyhodnoti, ze jsou podminky takove, ze se auto nemuze nabijet ani min. 6A, vypne korekcni smycka charger a 
         ceka se, co udela manager nabijeni auta!!!
@@ -338,140 +343,73 @@ jistá, NEZASADÍ a vysvětlí proč.
 ================================================================================
 
 8.1 TOPENÍ MOD — KLÍČOVÝ KONCEPT
-    Systém každých 60s (nebo při změně senzoru) vyhodnotí stav a zvolí JEDEN mód:
+    ┌──────────┬────────────────────────────────────────────────────┐
+    │ Mód      │ Podmínka aktivace                                  │
+    ├──────────┼────────────────────────────────────────────────────┤
+    │ NIBE     │ tempGap > 0.2°C (dům je pod cílem)                 │
+    │ Patrony  │ tempGap ≤ 0.3°C + SOC reálně dosáhne 95% + 3kW     │
+    │ NIBE     │ zákaz přetoků + SOC ≥ 85% + nádrž < max (dump soláru) │
+    │ Vypnuto  │ teplota OK / autoHlad blokuje / žádný přebytek     │
+    └──────────┴────────────────────────────────────────────────────┘
 
-    ┌──────────┬────────────────────────────────────────────────────────────┐
-    │ Mód      │ Podmínka aktivace (první splněná vyhrává, shora dolů)     │
-    ├──────────┼────────────────────────────────────────────────────────────┤
-    │ Patrony  │ solar hodiny + tempGap ≤ 0.3°C + reálný solární přebytek │
-    │          │ (SOC blízko 90%, dostatek zbývajícího soláru)             │
-    │ NIBE     │ tempGap > 0.3°C + dům potřebuje topit (needH=true)       │
-    │ Patrony  │ needH=false + patrony mohou (SOC≥90%, přebytek≥3kW...)   │
-    │ NIBE     │ needH=false + dump solár (zákaz přetoků + SOC≥85%        │
-    │          │ + nádrž < max)                                            │
-    │ Vypnuto  │ needH=false + žádná z výše uvedených                      │
-    │ NIBE     │ needH=true (záchytná podmínka — dům je pod cílem)         │
-    └──────────┴────────────────────────────────────────────────────────────┘
+8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
+    - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
+    - NIBE a patrony NIKDY současně (viz 1.2)
+    - pokud je solarni vyroba na dany den vysoka (vice nez 50kWh) a je pravdepobnost, ze se natopi dum i z patron, NIBE se NESPUSTI, pokud:
+        - solarni vyroba bude dostatecna - viz ostatni pravidla
+        - hystereze teploty domu se timto zvysuje na -0.5 stupnu od nastavena_teplota_v_dome v ramci dennich hodin
+        - v ostatnich pripadech plati nastavene podminky
+        - je nutne kontrolovat zbyvajici solarni vyrobu, meni se to - aplikuj pravidla logicky tak, abychom meli natopeny dum a nemrlzi.
+    - auto_ma_hlad=ON → patrony NESMÍ běžet. ABSOLUTNÍ pravidlo. Žádná výjimka.
+    - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
+    - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
+    - Automatizace OFF → 1× bezpečnostně zastavit patrony, pak ABSOLUTNĚ na nic nesahat
+    - Při topení v zimním režimu platí pravidlo, že dum musi byt natopen na pozadovanou teplotu (stejnou nebo vyssi, zadna hystereze) 
+        nejpozdeji v posledni hodine solarni vyroby. Pokud ze zbyvajici solarni energie > 20kWH a do posledni solarni hodiny budou zbyvat
+        mene nez 3 hodiny, NIBE se spusti podle pravidel nejnizsich nakupnich cen.
+    - v noci je povoleno a dokonce chteno mit v dome o 0.5 stupne mene, nez je nastavena teplota v dome (spime, nepotrebujeme mit tolik natopeny dum,
+            jsme prikriti perinou)
+        - pokud bude vyhodnejsi natopit nadrz v noci pres NIBE vzhledem k ostatnim parametrum - cena, solar atd... tak ok, natop se natopi nadrz
+            - teplota v dome -0.5 stupne od nastavene teploty v dome je chtena. ale - pokud nastanou podminky, ktere zapricini to, ze se 
+              musi natopit nadrz i v noci, ok - napr. je levna cena, zitra nebude seolarni vyroba dostatecna, teplota v noci 
+              je nizka, takze vychladi dum apod.
+    
 
-    NIBE a patrony NIKDY současně (viz 1.2).
 
-8.2 TEPLOTNÍ PRAHY A HYSTEREZE
-    ─────────────────────────────────────────────────────────────────────────
-    ZÁKLADNÍ CÍL: nastavena_teplota_v_dome (příklad: 23.3°C)
-
-    Systém pracuje se TŘEMI teplotními úrovněmi:
-
-    1) EFEKTIVNÍ CÍL (effTgt) — pod touto teplotou se systém POKOUŠÍ topit
-       ┌────────────────────────────────────────────┬──────────────────────┐
-       │ Situace                                     │ effTgt               │
-       ├────────────────────────────────────────────┼──────────────────────┤
-       │ Noc (22:00 – 6:00)                          │ základ - 0.5°C       │
-       │ Den + vysoký solar (>50kWh) + solární hod.  │ základ - 0.5°C       │
-       │ Den, ostatní                                │ základ (beze změny)  │
-       └────────────────────────────────────────────┴──────────────────────┘
-       Config: topeni_nocni_snizeni (výchozí 0.5), topeni_nocni_od (22),
-               topeni_nocni_do (6), topeni_solar_high_day_kwh (50)
-
-    2) SOLÁRNÍ ODKLADOVÝ PRÁH — pod effTgt, ale nad tímto prahem se odloží
-       topení na solární hodiny (pokud je bigSolTom nebo highSolDay)
-       = effTgt - topeni_solar_defer_margin (výchozí 0.2°C)
-
-    3) BEZPEČNÝ POKLES (safeTemp) — absolutní minimum, pod kterým se topí
-       VŽDY, bez ohledu na jakékoli odklady (cheaperAhead, bigSolTom...)
-       = effTgt - topeni_bezpecny_pokles (výchozí 0.7°C)
-
-    ─────────────────────────────────────────────────────────────────────────
-    PŘÍKLAD pro základ 23.3°C:
-
-    ┌──────────────────┬─────────┬──────────────┬──────────────┬──────────┐
-    │ Situace          │ effTgt  │ Solární odkl.│ Bezpečný min │ Celkem   │
-    │                  │         │ (effTgt-0.2) │ (effTgt-0.7) │ od zákl. │
-    ├──────────────────┼─────────┼──────────────┼──────────────┼──────────┤
-    │ Noc              │ 22.8°C  │ 22.6°C       │ 22.1°C       │ -1.2°C   │
-    │ Den, velký solar │ 22.8°C  │ 22.6°C       │ 22.1°C       │ -1.2°C   │
-    │ Den, norm. solar │ 23.3°C  │ 23.1°C       │ 22.6°C       │ -0.7°C   │
-    └──────────────────┴─────────┴──────────────┴──────────────┴──────────┘
-
-    JAK TO FUNGUJE V PRAXI (příklad: noc, základ 23.3°C, velký solar zítra):
-    - Dům 23.0°C → effTgt 22.8 → needH=false → mod=Vypnuto → NIBE OFF
-    - Dům 22.7°C → needH=true → bigSolTom odklad (22.7 ≥ 22.6) → NIBE OFF
-    - Dům 22.5°C → bigSolTom selže → cheaperAhead odklad (22.5 ≥ 22.1) → NIBE OFF
-    - Dům 22.0°C → VŠECHNY odklady selhávají → NIBE ON (nouzové topení)
-
-    KLÍČOVÝ PRINCIP: Dům musí být natopen na ZÁKLAD (bez hystereze) nejpozději
-    v poslední hodině solární výroby. Odklady pouze posouvají MOMENT topení
-    do levnějších/solárních hodin — nikdy nesmí způsobit, že dům zůstane studený.
-
-8.3 ABSOLUTNÍ PRAVIDLA (nelze obejít žádným odkladem)
-    A1. LETNÍ/ZIMNÍ REŽIM: V létě se chladí (pokud chlazení zapnuto v HA),
-        v zimě se topí. Nikdy obojí současně.
-    A2. auto_ma_hlad=ON → patrony NESMÍ běžet. Žádná výjimka.
-    A3. autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení má vyšší prioritu).
-    A4. Krb (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT.
-    A5. Automatizace OFF → 1× bezpečnostně zastavit patrony, pak na nic nesahat.
-    A6. NIBE a patrony NIKDY současně.
-    A7. NIKDY nevypínat NIBE (reg 47371=0) pokud kompresor běží.
-    A8. Noční snížení -0.5°C je ŽÁDOUCÍ (spíme, jsme přikrytí peřinou).
-        Pokud však podmínky vyžadují noční ohřev nádrže (levná cena,
-        zítra nedostatek soláru, nízká venkovní teplota), NIBE smí topit
-        i v noci — noční teplotní cíl zůstává základ - 0.5°C.
-    A9. Dům MUSÍ být natopen na plný základ (žádná hystereze) nejpozději
-        v poslední solární hodině. Pokud zbývající solar > 20kWh a do konce
-        solární výroby < 3h, NIBE se spustí za nejlevnější dostupnou cenu.
-
-8.4 NIBE — ROZHODOVACÍ ŘETĚZEC (switch.nibe_topeni, reg 47371)
-    Vyhodnocuje se SHORA DOLŮ, první splněná podmínka vyhrává:
-
-    1. BLOKACE: Grid Lost / Krb / Nádrž > MAX_TANK / mod=Patrony/Vypnuto
-       → NIBE OFF (pokud kompresor neběží)
-
-    2. BALANCOVÁNÍ aktivní + dům nepotřebuje topit → NIBE OFF
-
-    3. DRAHÁ HODINA (lvl ≥ prah_draha_energie, výchozí 12):
-       a) Solar ≥ 8kW (topeni_solar_override_w) → NIBE ON + blokace baterie OFF
-          (free energy — solár pokryje spotřebu NIBE)
-       b) Dům pod cílem + poslední solární hodina (mustHeatFinal) → NIBE ON
-       c) Dům pod cílem + blíží se konec soláru + není levnější hodina před → NIBE ON
-       d) Jinak → NIBE OFF
-
-    4. LEVNÁ/STŘEDNÍ HODINA + nibeWant (needH=true NEBO nádrž < max):
-       a) DUMP SOLÁRU: zákaz přetoků + needH=false + SOC ≥ 85% + nádrž < max
-          → NIBE ON + blokace baterie OFF
-       b) bigSolTom odklad: solFcTom ≥ 30kWh + teplota ≥ (effTgt - 0.2°C)
-          + není mustHeat → NIBE OFF (počkáme na solar zítra/dnes)
-       c) highSolDay odklad: solFcDnes ≥ 50kWh + solární hodiny
-          + teplota ≥ (effTgt - 0.2°C) → NIBE OFF (počkáme na solar dnes)
-       d) cheaperAhead odklad: existuje levnější hodina v horizontu
-          + teplota ≥ (effTgt - 0.7°C) → NIBE OFF (počkáme na levnější hodinu)
-       e) Solar ≥ 8kW → NIBE ON + blokace baterie OFF
-       f) ZÁCHYTNÁ: žádný odklad nesplněn → NIBE ON
-
-    5. nibeWant=false → NIBE OFF
+8.3 NIBE (switch.nibe_topeni, reg 47371)
+    Rozhodování (první splněná podmínka):
+    1. Pokud bude dostatek zbývající odhadovane solarni energie (30kWH), staci, kdyz NIBE natopi dum na teplotu v hysterezi -0.2 stupne 
+        od definovane teploty v dome a pote se bude cekat na solarni vyrobu na dotopeni - vse je v konfigu, nic nehardcodovat
+    2. Grid Lost / Krb / Nádrž > MAX_TANK / Patrony aktivní → NIBE OFF
+    2. Drahá hodina (lvl ≥ 12) a solar < 8kW → NIBE OFF (žádná výjimka)
+    3. Drahá hodina a solar ≥ 8kW (free energy) → NIBE ON + BLOKACE BATERIE OFF
+    4. Levná/střední hodina + potřeba topit:
+       - Solar ≥ 8kW (topeni_solar_override_w) → NIBE ON bez odkladu
+       - Solar < 8kW → cheaperAhead/bigSolarTomorrow odklady platí
+       - canDeferHeat: pokud indoorTemp ≥ safeTemp, lze odložit na levnější hodinu
+    5. Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže) - jen, pokud neni vyhodnejsi topit pres patrony a bod 1 plati
+    6. DUMP SOLÁRU DO NÁDRŽE: Pokud nelze exportovat do sítě (zákaz přetoků / záporná prodejní cena)
+       a dům již nepotřebuje topit, ale nádrž < max a SOC ≥ topeni_dump_solar_soc (85%):
+       → NIBE ON pro ohřev nádrže, blokace vybíjení OFF (baterie asistuje, žádný odběr ze sítě).
+       Důvod: Bez tohoto by se solární výroba omezila (curtailment), protože není kam energii dát.
+       Priorita: baterie se nejdříve nabije na 85%, pak se zbytek soláru vyhřívá nádrž přes NIBE.
+       Konfigurace: topeni_dump_solar_soc (výchozí 85%)
+    7. Jinak → NIBE OFF
+    7. DULEZITE JE, ZE DUM BUDE NATOPENY ZA CO NEJLEPSI CENU TAK, ABY TEPLOTA V DOME BYLA PODLE PRAVIDEL HYSTEREZE - TY JSOU DEFINOVANY V TOMTO SOUBORU. PLATI 
+        I PRO TOPENI I PRO CHLAZENI DOMU - POKUD JE CHAZENI ZAPNUTO, OPET PLATI TEPLOTA V DOME, KTERA JE NASTAVENA. TEPLOTA V DOME JE URCUJICI.
+    
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
-    COOLDOWN: min. topeni_nibe_cooldown_min (výchozí 1) minut mezi přepnutími
+    COOLDOWN: min. 3 minut mezi přepnutími
 
-    KONFIGURACE (vše v fve-config.json):
-    - topeni_nocni_snizeni: 0.5          (°C snížení v noci)
-    - topeni_bezpecny_pokles: 0.7        (°C max. pokles pod effTgt pro odklady)
-    - topeni_solar_defer_margin: 0.2     (°C margin pro solární odklady)
-    - topeni_solar_forecast_kwh: 30      (kWh práh pro bigSolTom)
-    - topeni_solar_high_day_kwh: 50      (kWh práh pro highSolDay)
-    - topeni_solar_override_w: 8000      (W solár překrývá všechny odklady)
-    - topeni_dump_solar_soc: 85          (% SOC pro dump soláru do nádrže)
-    - topeni_final_solar_kwh: 20         (kWh zbývající solar pro mustHeat)
-    - topeni_final_hours: 3              (hodiny do konce soláru pro mustHeat)
-    - prah_draha_energie: 12             (cenový level pro drahou hodinu)
-    - nibe_cooldown_min: 1               (min. minuty mezi přepnutími NIBE)
-
-8.5 OBĚHOVÉ ČERPADLO (switch.teplota_smesovac)
+8.4 OBĚHOVÉ ČERPADLO (switch.teplota_smesovac)
     - ON pokud: teplota domu < cíl A nádrž ≥ nastavena teplota v nadrzi 
     - OFF pokud: nádrž < config teplota v nadrzi NEBO krb aktivní (nesahat!)
     - Noční omezení (22-6h): jen pokud indoorTemp < targetTemp - 0.5°C
     - Horní limit nádrže pro oběhové čerpadlo: NENÍ (50°C jen pro patrony)
     - Nezávislé na NIBE
 
-8.6 PATRONY (switch.patrona_faze_1/3_2/3, 3× 3kW)
+8.5 PATRONY (switch.patrona_faze_1/3_2/3, 3× 3kW)
     Podmínky start (patronyMohou) — VŠECHNY musí být splněny:
     - Uz nikam nemame dat solarni energii - ani do auta, ani do pripadne virivky, nikam - mam prebytek, ktery nikam nevyuzijeme, a zaroven uspokojime 
         spotrebu domu. Pak se spusti mod patrony.
@@ -493,7 +431,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 
     Start: hlavní loop vždy spustí jen 1 fázi → korekce přidá další
 
-8.7 KOREKCE PATRONY (pat_korekce_func, každých 20s) - tady neplatí cooldown, patrony fungují okamžitě
+8.6 KOREKCE PATRONY (pat_korekce_func, každých 20s) - tady neplatí cooldown, patrony fungují okamžitě
    - Tady to funguje stejne jako u nabíjení auta ze solaru -  s tím rozdílem, že patrony mají nejmenší prioritu
     a spouští se až po 90% SOC baterie. Precti si ta pravidla, plati stejna - obecne - pokud mame prebytek solaru na 
     patrony, pak spustme 1, 2 nebo 3 faze - pokud ne, tak nic.
