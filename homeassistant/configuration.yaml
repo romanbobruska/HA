@@ -46,6 +46,7 @@ command_line:
         - plan
         - last_update
         - blokace_text
+        - filtrace_status
       scan_interval: 30
 
 # -----------------------------------------------------------------------------
