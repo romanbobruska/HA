@@ -1,2 +1,12 @@
-precti si zakony a rekni mi, zda ti to dava smysl. pokud ano, aplikuj pravidla. Nejdrive - na 30sekund - mi rekni, co chces zmenit. pokud nic neudelam, pak
-aplikuj zmeny
+
+co to delas??? ja uz mam v ha spustu komponentu - proc si nejdriv nezistis, jake jsou existujici???? nezasirej mi HA!!!!!
+
+to neni dobre - v configu nevidim napr. nocni hodiny, nevidim ani hysterezi v topeni domu  - 0.5 stupnu.
+
+topeni_min_teplota_nadrze: 34,  
+
+proc je tam tato hodnota? ta je dana v HA komponente, nechci ji editovat i v konfigu!!!! Proste si HA komponentu prectes!!!
+
+zkotnroluj a proved refakturing do refaktoring branche v gitu. Nechci mit v configu parametry, ktere si muzu nastavit v HA - logicky.
+
+NIC NEROZBIJ!!!
