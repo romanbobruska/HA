@@ -23,7 +23,7 @@
 
 <b>Aktuální mód:</b> {{ mode_icons[current_mode] | default('⚫') }} {{ mode_names[current_mode] | default(current_mode) }} | <b>Blokace vybíjení baterie:</b> {{ blokace | default('NE') }}
 
-<b>Aktualizováno:</b> {% if last_update %}{{ as_timestamp(last_update) | timestamp_custom('%d.%m.%Y %H:%M:%S') }}{% else %}N/A{% endif %}
+<b>Aktualizováno:</b> {% if last_update %}{{ as_timestamp(last_update) | timestamp_custom('%d.%m.%Y %H:%M:%S') }}{% else %}N/A{% endif %} | {% set fs = state_attr('sensor.fve_plan_data', 'filtrace_status') %}{% if fs %}<b>Bazén:</b> {% if fs.met %}✅ OK ({{ fs.run }}/{{ fs.minReq }} min){% else %}❌ -{{ fs.remaining }} min{% endif %}{% endif %}
 
 {% if plan and plan | length > 0 %}
 <table>

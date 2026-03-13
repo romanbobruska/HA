@@ -511,7 +511,15 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Plán awareness: skenuje FVE plán na budoucí solární hodiny
     - Solar forecast: čte sensor.energy_production_today_remaining_3
 
-10.6 KONFIGUROVATELNÉ PARAMETRY (fve_config)
+10.6 DASHBOARD — ZOBRAZENÍ STAVU FILTRACE
+    - V dashboardu (dashboard_fve_plan.md) se zobrazuje stav filtrace bazénu:
+      - ✅ OK (XX/YY min) — minimum splněno (XX = skutečný běh, YY = požadované minimum)
+      - ❌ -ZZ min — minimum NESPLNĚNO, zbývá ZZ minut do splnění
+    - Data pocházejí z atributu filtrace_status v sensor.fve_plan_data
+    - filtrace_decision exportuje stav do global kontextu (filtrace_status)
+    - Orchestrator přenáší filtrace_status do sensor.fve_plan_data atributů
+
+10.7 KONFIGUROVATELNÉ PARAMETRY (fve_config)
     filtrace_surplus_on_w: 2500        (min přebytek pro zapnutí, W)
     filtrace_surplus_off_w: 1500       (hystereze pro vypnutí, W)
     filtrace_min_zima_min: 60          (min běh v zimě, min/den)
