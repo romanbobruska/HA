@@ -1,2 +1,3 @@
-precti si zakony a rekni mi, zda ti to dava smysl. pokud ano, aplikuj pravidla. Nejdrive - na 30sekund - mi rekni, co chces zmenit. pokud nic neudelam, pak
-aplikuj zmeny
+chci videt simulaci, ze je blokovane vybijeni baterie kvuli topeni nibe. chci tam videt ten popisek. Pokud to neni mozne, vyser se na to.
+
+Plan vypada OK, proved merge.
