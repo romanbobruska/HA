@@ -246,6 +246,12 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - `configuration.yaml`: přidán `filtrace_status` do `json_attributes` whitelistu command_line sensoru
 - `dashboard_fve_plan.md`: zobrazuje `Bazén: ✅ OK (XX/YY min)` nebo `Bazén: ❌ -ZZ min`
 
+**History learning persistance** (`fve-history-learning.json`):
+- BUG: `consumption_history` byl uložen pouze v `flow.set()` (in-memory) → ztráta dat při každém NR restartu
+- FIX: `fve_history_store` nyní zapisuje i do `/homeassistant/fve_consumption_history.json`
+- `fve_history_predict_calc` a `fve_history_analyze_calc` načítají z souboru pokud je flow context prázdný
+- Výsledek: predikce spotřeby se akumulují a přežijí NR restart → přesnější SOC simulace v plánu
+
 ---
 
 ## 10. Solární instalace
