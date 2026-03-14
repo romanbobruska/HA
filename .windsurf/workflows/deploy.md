@@ -9,15 +9,17 @@ description: Jak správně provést deploy změn do HA/Node-RED
 - Přečíst `problemy.txt` (uživatelovy aktuální problémy/požadavky)
 - Přečíst `docs/PROJEKT_SHRNUTI.md` (kontext systému)
 
-### 2. Před úpravou JAKÉHOKOLIV flow souboru
+### 2. Před úpravou JAKÉHOKOLIV flow souboru (ABSOLUTNÍ ZÁKON 1.2 + 2.3)
+**VŽDY má přednost stav Node-RED na serveru HA před lokální verzí. NIKDY nepřepisovat stav v HA lokální verzí.**
 // turbo
 - Stáhnout aktuální flows ze serveru:
 ```
 ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 "cat /addon_configs/a0d7b954_nodered/flows.json" > "$env:TEMP\_server_flows.json"
 ```
-- Použít SERVEROVOU verzi jako základ — NIKDY git verzi
+- **Serverová verze = PRAVDA** — zahrnuje VŠECHNO: flows, nody, layout (x,y,w,h), parametry, config hodnoty
 - Aplikovat POUZE cílené změny na serverovou verzi
-- NIKDY nepřepisovat uživatelovy ruční změny (layout, parametry, config hodnoty)
+- NIKDY nepřepisovat uživatelovy ruční změny — uživatel mění parametry přímo v NR UI na serveru
+- Deploy.sh nahrazuje CELÉ taby z gitu → git MUSÍ obsahovat aktuální serverovou verzi + moje změny
 
 ### 3. Deploy
 ```

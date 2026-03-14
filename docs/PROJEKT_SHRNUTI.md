@@ -9,9 +9,9 @@
 > **Pravidla pro AI (POVINNÁ při KAŽDÉM promptu):**
 > - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
 > - **NA ZAČÁTKU každého promptu**: přečíst `User inputs/POZADAVKY.TXT` (ZÁKONY) + `problemy.txt` (aktuální problémy)
-> - **PŘED úpravou flow**: stáhnout aktuální flows ze serveru (`ssh ... "cat flows.json"`) — SERVEROVÁ verze = PRAVDA
-> - **NIKDY nepřepsat uživatelovy změny na serveru** — uživatel mění parametry v NR UI / config přímo na serveru
-> - **Deploy.sh nahrazuje CELÉ taby z gitu** → git musí obsahovat aktuální serverovou verzi + moje změny
+> - **ABSOLUTNÍ ZÁKON 1.2 + 2.3**: VŽDY má přednost stav NR na serveru HA před lokální verzí. NIKDY nepřepisovat stav v HA lokální verzí.
+> - **PŘED úpravou flow**: stáhnout aktuální flows ze serveru (`ssh ... "cat flows.json"`) — SERVEROVÁ verze = PRAVDA (flows, nody, layout, parametry, config — VŠECHNO)
+> - **Deploy.sh nahrazuje CELÉ taby z gitu** → git MUSÍ obsahovat aktuální serverovou verzi + moje cílené změny
 > - Před deploymentem ověřit soulad se VŠEMI zákony
 > - Po deploymentu: ověřit HA stavy, NR logy, grid draw
 > - `User inputs/POZADAVKY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
