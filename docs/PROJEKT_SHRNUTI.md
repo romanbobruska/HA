@@ -230,27 +230,36 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
-### v25.18: Filtrace — dashboard status + opravy (2026-03-14)
+### v25.19: Filtrace — opravy logiky + persistance (2026-03-14)
 
-**Filtrace met = vždy OFF** (`filtrace-bazenu.json`):
-- Odstraněna výjimka "free energy pro zdraví bazénu" — po splnění minima filtrace VŽDY OFF
-- Zákon 10.4 aktualizován uživatelem (odstraněn řádek o free energy)
+**Filtrace: met → VŽDY OFF, bez výjimek** (`filtrace-bazenu.json`):
+- Zákon: "FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO" (10.1)
+- `if (met) { act = "off"; }` — po splnění minima = STOP, bez ohledu na přebytek
+- Solar surplus ON podmínka přidán `!met` check: `if (gSurp && !carP && !met)` — surplus zapne filtraci POUZE pokud minimum NENÍ splněno
 
-**NR restart counter seed** (`filtrace-bazenu.json`):
-- Po NR restartu v odpoledne (hr≥12): `filt_run = minReq` → minimum se považuje za splněné
-- Rozlišení: `isRestart` (sDate="") vs `newDay` (sDate=včera) — restart neresetuje counter zbytečně
+**Filtrace: filt_run persistance přes NR restart**:
+- BUG: `flow.set("filt_run")` = in-memory, ztráta counteru při NR restartu → filtrace běžela znovu od 0
+- FIX: counter se zapisuje do `/config/filt_persist.json` přes `global.get("fs").writeFileSync()`
+- Na NR restart se načte z persist souboru → counter přežije restart
+- Prerekvizita: `fs:require("fs")` přidáno do `functionGlobalContext` v NR `settings.js`
+
+**Filtrace: pool freeze check** (zákon 10.1):
+- Nový konfig parametr `filtrace_min_pool_temp` (výchozí 2°C)
+- Pokud teplota bazénu < 2°C → filtrace se NESPUSTÍ / VYPNE
+- Obě větve (ON/OFF) kontrolují freeze podmínku
 
 **Dashboard status filtrace** (zákon 10.6):
 - `filtrace_decision` exportuje `{run, minReq, met, remaining}` do `global.filtrace_status`
-- Oba write paths v orchestratoru (`Aktualizuj HA sensor` + `Aktualizuj blokaci`) zahrnují `filtrace_status` v `fve_plan.json`
-- `configuration.yaml`: přidán `filtrace_status` do `json_attributes` whitelistu command_line sensoru
+- Oba write paths v orchestratoru zahrnují `filtrace_status` v `fve_plan.json`
 - `dashboard_fve_plan.md`: zobrazuje `Bazén: ✅ OK (XX/YY min)` nebo `Bazén: ❌ -ZZ min`
 
 **History learning persistance** (`fve-history-learning.json`):
-- BUG: `consumption_history` byl uložen pouze v `flow.set()` (in-memory) → ztráta dat při každém NR restartu
-- FIX: `fve_history_store` nyní zapisuje i do `/homeassistant/fve_consumption_history.json`
-- `fve_history_predict_calc` a `fve_history_analyze_calc` načítají z souboru pokud je flow context prázdný
-- Výsledek: predikce spotřeby se akumulují a přežijí NR restart → přesnější SOC simulace v plánu
+- BUG: `require("fs")` nefunguje v NR function nodes (není v scope)
+- FIX: všechny 3 nody (`fve_history_store`, `fve_history_predict_calc`, `fve_history_analyze_calc`) přepsány na `global.get("fs")` — čte `fs` z `functionGlobalContext`
+- Persist soubor: `/config/consumption_history.json`
+
+**NR settings.js**:
+- Přidáno `fs:require("fs")` do `functionGlobalContext` → dostupné ve všech function nodes jako `global.get("fs")`
 
 ---
 
