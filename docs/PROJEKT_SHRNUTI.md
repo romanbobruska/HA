@@ -6,14 +6,21 @@
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
 >
-> **Pravidla pro AI:**
+> **Pravidla pro AI (POVINNÁ při KAŽDÉM promptu):**
 > - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
-> - Před každou prací PŘEČÍST `User inputs/POZADAVKY.TXT` (ZÁKONY)
+> - **NA ZAČÁTKU každého promptu**: přečíst `User inputs/POZADAVKY.TXT` (ZÁKONY) + `problemy.txt` (aktuální problémy)
+> - **PŘED úpravou flow**: stáhnout aktuální flows ze serveru (`ssh ... "cat flows.json"`) — SERVEROVÁ verze = PRAVDA
+> - **NIKDY nepřepsat uživatelovy změny na serveru** — uživatel mění parametry v NR UI / config přímo na serveru
+> - **Deploy.sh nahrazuje CELÉ taby z gitu** → git musí obsahovat aktuální serverovou verzi + moje změny
 > - Před deploymentem ověřit soulad se VŠEMI zákony
-> - Po deploymentu ověřit HA stavy, logy, grid draw
+> - Po deploymentu: ověřit HA stavy, NR logy, grid draw
 > - `User inputs/POZADAVKY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
 > - Aktualizovat tento soubor po každém úspěšném nasazení
-> - Po sobě VŽDY uklidit dočasné soubory (`_*.py`, `_*.js`, `fix_*.py`)
+> - Po sobě VŽDY uklidit dočasné soubory (`_*.py`, `_*.js`, `_fix_*`, `_check_*`) lokálně i na serveru
+>
+> **Komunikační kanál:**
+> - Uživatel píše problémy/požadavky do `problemy.txt` — AI ho čte na začátku každého promptu
+> - AI odpovídá v chatu a provádí opravy — NIKDY nepíše do `problemy.txt`
 
 ---
 
