@@ -237,6 +237,20 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.20: Topení — proaktivní ohřev nádrže za levnou cenu (2026-03-15)
+
+**BUG: Nádrž se neohřívala, když dům byl natopen ale solar nízký** (`fve-heating.json`, `rf_htg_decide2`):
+- Zákon 8.2: "POKUD JE DUM NATOPEN, ALE NADRZ NE, DOTOPI SE NADRZ ZA CO NEJNIZSI CENU"
+- Zákon 8.3.5: "Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže)"
+- BUG: Když `!needH` (dům natopen) a `!patMohou` (SOC nízké), mód = "Vypnuto" → `nibeBlkMod=true` → NIBE zablokováno
+- FIX: Nová podmínka v mode selection: `!needH && tankT < maxTank && lvl <= LEVNA && !highSolDay && !patMohou → mod="NIBE"`
+- NIBE pak ohřívá nádrž z gridu za levnou cenu, baterie se nevybíjí (nibeBlkDch=true pokud SOC≤90%)
+- Existující deferral logika (cheaperAhead) optimalizuje na nejlevnější dostupnou hodinu
+
+**Plan reason: "(NIBE topí)" jen když NIBE skutečně topí** (`fve-orchestrator.json`, `rf_prep_params_01`):
+- BUG: `nibeK` se počítal i když dům nepotřeboval topit (tgT-inT > -0.5 příliš široký)
+- FIX: `nibeK` jen pokud `switch.nibe_topeni=on` OR `inT < tgT` (skutečná potřeba)
+
 ### v25.19: Filtrace — opravy logiky + persistance (2026-03-14)
 
 **Filtrace: met → VŽDY OFF, bez výjimek** (`filtrace-bazenu.json`):
