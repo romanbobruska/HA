@@ -237,6 +237,17 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.22: FVE Plan — cross-day cenový ranking pro šetřit mód (2026-03-16)
+
+**BUG: levelBuy je per-day rank (1-24), nesrovnatelný přes půlnoc** (`fve-orchestrator.json`, `rf_cena_discharge2`):
+- Zákon 4.3: "VŽDY ŠETŘÍME ZA CO NEJNIŽŠÍ CENY, pozor na přechod přes půlnoc"
+- Root cause: `levelBuy` = rank v rámci jednoho dne. Hodina 23 dnes (3.75 CZK, nejlevnější) měla level 13 (→ DRAHÁ), zatímco hodina 1 zítra (3.93 CZK, dražší) měla level 3 (→ LEVNÁ)
+- 9 míst v kódu používalo `levelBuy` pro threshold porovnání (`>=DRAHA`, `<=LEVNA`)
+- FIX: Po sestavení `hp[]` přepočet levelBuy jako cross-day rank seřazený podle skutečné buy ceny
+- Originální per-day level uložen jako `origLevel` pro dashboard display
+- `rf_gen_plan_0004`: `priceLevel: pd.origLevel || pd.levelBuy` pro zobrazení
+- Výsledek: hodina 23 (3.75 CZK) správně → level 2 (LEVNÁ) → šetřit místo vybíjení
+
 ### v25.21: Topení — hystereze NIBE/oběhové, cooldown 3min (2026-03-16)
 
 **BUG: NIBE a oběhové čerpadlo se zapínaly/vypínaly synchronně** (`fve-heating.json`):
