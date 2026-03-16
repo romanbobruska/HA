@@ -28,6 +28,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Pokud auto_ma_hlad=ON → patrony NESMÍ běžet. BEZ VÝJIMKY. BEZ OVERRIDE.
     - number.min_soc je VÝHRADNĚ pod kontrolou uživatele — žádný flow nesmí tuto entitu měnit
     - NIKDY hardcodovat hodnoty které jsou v fve_config nebo HA entitách
+    - VZDY MA PREDNOST STAV NODE RED NA SERVERU HA PRED LOKALNI VERZI. NIKDY NEPREPISUJ STAV V HA LOKALNI VERZI
     - NIBE nesmí být vypnuto (47371=0) pokud kompresor právě běží
     - Chceme maximalne vyuzit solarni vyrobu - omezovat jen v kritickych pripadech (vetsinou to budou chyby) - pokud bude vse v tomto
         projektu nastaveno spravne, SOLARNI VYROBA SE NESMI OMEZIT - DESIRE STATE!!!
@@ -355,6 +356,9 @@ jistá, NEZASADÍ a vysvětlí proč.
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
     - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
     - NIBE a patrony NIKDY současně (viz 1.2)
+    - NIBE A OBEHOVE CERPADLO PRACUJI NAPROSTO NEZAVISLE NA SOBE!!!
+    - POKUD JE SELARNI VYROBA NIZKA, ROZHODUJI O TOPENI CO NEJNIZSI CENY. POKUD JE DUM NATOPEN, ALE NADRZ NE, DOTOPI SE NADRZ ZA CO NEJNIZSI CENU,
+        POKUD NENI SOLARNY VYROBA DOSTATECNA A ANI NENI V DANY DEN VYHLED, ZE BUDE
     - pokud je solarni vyroba na dany den vysoka (vice nez 50kWh) a je pravdepobnost, ze se natopi dum i z patron, NIBE se NESPUSTI, pokud:
         - solarni vyroba bude dostatecna - viz ostatni pravidla
         - hystereze teploty domu se timto zvysuje na -0.5 stupnu od nastavena_teplota_v_dome v ramci dennich hodin
@@ -473,7 +477,10 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1
     - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu
     - Rozhodování každé 2 minuty (inject → gate → data chain → rozhodovací funkce)
-
+    - FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO, ZÁROVEŇ MUSÍ BÝT DODRŽENA MINIMÁLNÍ DOBA BĚHU
+    - pokud je teplota vody nizsi nez 2 stupne, filtrace NESMI BEZET!!! FILTRACE SE ZAPINA JEN TEHDY, POKUD JE TEPLOTA VODY VYSSI NEZ 2 STUPNE!
+        - TOTO JE KONFIGUROVATELENY PARAMETR
+ 
 10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU
     - ZIMNÍ REŽIM: min 1 hodina (60 min) denně
     - LETNÍ REŽIM: min 2 hodiny (120 min) denně, POKUD teplota bazénu > 10°C

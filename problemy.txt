@@ -1,7 +1,3 @@
-hlavni chyba je, ze se nezapnul mod patrony, pokud byly podminky priznive - velka solarni vyroba a natopen dum na prijatelnou uroven. SOC limit na baterii pri modu patrony by
-mel zustat stejny - KURVA, PROC MENIS ZAKONY SAM OD SEBE!!!!!! TO JE ZAKAZANO!!! VZDY SE RID DLE ZAKONU!!! DEBILEEE!!!
+stale se mi stava, ze se nibe zapne a pak hned vypne - hlavne, kdyz se zapne obehove cerpadlo. PROC!!!
 
-zaroven nevim, proc 
-zeru ye site pri topeni NIBE, kdyz je vyroba pres 13 kwh!!!
-
-oprav to!!! pokud nemas jasny zakon, uprav v krajnim pripade i konkretni casti zakona pro topeni, aby ti to uz bylo doprdele jasne!!!
+ZKONTROLUJ SI ZAKONY A NASAD FIX!!!
