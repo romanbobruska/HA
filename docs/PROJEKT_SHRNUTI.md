@@ -245,6 +245,8 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - FIX 2: `nHO` hystereze — pokud oběhové běží (`h.obehOn`), nHO=true dokud `inT < oTgt + HYST`
 - FIX 3: NIBE cooldown default 1→3 min (zákon 8.3: "min. 3 minut mezi přepnutími")
 - FIX 4: Tank heating rozšířen z `lvl<=LEVNA` na `!isDraha` — cheaperAhead deferral optimalizuje na nejlevnější hodinu
+- FIX 5: `mustHeatByPrice` a `mustHeatFinal` používaly raw `h.inT<h.tgtT` BEZ hystereze → NIBE se vypínalo hned po zapnutí oběhového (0.1°C nárůst stačil k flipu mustHeatByPrice=false → isDraha fallback → nibe_off)
+- FIX 5: Obě proměnné nyní používají `needH` (s hysterezí) místo `h.inT<h.tgtT`
 - Výsledek: NIBE a oběhové jsou nyní nezávislé (zákon 8.4) — každý má vlastní stav pro hysterezi
 
 ### v25.20: Topení — proaktivní ohřev nádrže za levnou cenu (2026-03-15)
