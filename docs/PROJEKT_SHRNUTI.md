@@ -237,15 +237,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.21: Topení — hystereze NIBE/oběhové, cooldown 3min (2026-03-16)
+
+**BUG: NIBE a oběhové čerpadlo se zapínaly/vypínaly synchronně** (`fve-heating.json`):
+- Root cause: oba závisí na `inT < tgtT` BEZ hystereze → toggle na přesně stejné teplotě
+- FIX 1: `needH` hystereze — pokud NIBE topí (`h.nibeOn`), needH=true dokud `inT < effTgt + HYST` (0.2°C, konfigurovatelné `topeni_hystereze`)
+- FIX 2: `nHO` hystereze — pokud oběhové běží (`h.obehOn`), nHO=true dokud `inT < oTgt + HYST`
+- FIX 3: NIBE cooldown default 1→3 min (zákon 8.3: "min. 3 minut mezi přepnutími")
+- FIX 4: Tank heating rozšířen z `lvl<=LEVNA` na `!isDraha` — cheaperAhead deferral optimalizuje na nejlevnější hodinu
+- Výsledek: NIBE a oběhové jsou nyní nezávislé (zákon 8.4) — každý má vlastní stav pro hysterezi
+
 ### v25.20: Topení — proaktivní ohřev nádrže za levnou cenu (2026-03-15)
 
-**BUG: Nádrž se neohřívala, když dům byl natopen ale solar nízký** (`fve-heating.json`, `rf_htg_decide2`):
-- Zákon 8.2: "POKUD JE DUM NATOPEN, ALE NADRZ NE, DOTOPI SE NADRZ ZA CO NEJNIZSI CENU"
-- Zákon 8.3.5: "Levná hodina + nádrž < MAX_TANK → NIBE ON (proaktivní ohřev nádrže)"
-- BUG: Když `!needH` (dům natopen) a `!patMohou` (SOC nízké), mód = "Vypnuto" → `nibeBlkMod=true` → NIBE zablokováno
-- FIX: Nová podmínka v mode selection: `!needH && tankT < maxTank && lvl <= LEVNA && !highSolDay && !patMohou → mod="NIBE"`
-- NIBE pak ohřívá nádrž z gridu za levnou cenu, baterie se nevybíjí (nibeBlkDch=true pokud SOC≤90%)
-- Existující deferral logika (cheaperAhead) optimalizuje na nejlevnější dostupnou hodinu
+**Nádrž se neohřívala, když dům byl natopen ale solar nízký** (`fve-heating.json`, `rf_htg_decide2`):
+- Zákon 8.2+8.3.5: proaktivní ohřev nádrže za levnou cenu při nízkém solaru
+- FIX: `!needH && tankT < maxTank && !isDraha && !highSolDay && !patMohou → mod="NIBE"`
+- cheaperAhead deferral optimalizuje na nejlevnější dostupnou hodinu
 
 **Plan reason: "(NIBE topí)" jen když NIBE skutečně topí** (`fve-orchestrator.json`, `rf_prep_params_01`):
 - BUG: `nibeK` se počítal i když dům nepotřeboval topit (tgT-inT > -0.5 příliš široký)
