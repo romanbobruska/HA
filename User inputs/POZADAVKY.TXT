@@ -149,6 +149,8 @@ jistá, NEZASADÍ a vysvětlí proč.
 4.3 ŠETŘIT MÓD
     - baterie se nesmí vybíjet
     - PSP = config.setrit_grid_bias_w (150W) — kompenzuje inverter standby
+    - VŽDY ŠETŘÍME ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK - ZA CO NEJNIŽŠÍ CENY. ZVLÁŠTĚ JE TŘEBA SI DÁT POZOR PŘI PŘECHODU DNE PŘES
+        PŮLNOC - LEVELY TAM NEMUSÍ ODPOVÍDAT SKUTEČNÉMU POŘADÍ CEN OD NEJLEVNĚJŠÍHO, JELIKOŽ LEVELY JSOU POČÍTÁNY V RÁMCI 1 DNE OD PŮNOCI DO PŮLNOCI 
 
 4.4 NABÍJET ZE SÍTĚ
     - Scheduled charging přes Victron ESS
