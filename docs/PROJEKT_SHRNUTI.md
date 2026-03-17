@@ -237,6 +237,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.26: Patrony — drain bypass pro sell price check (2026-03-17)
+
+**KONFLIKT v zákoně 8.5: sell price vs. "nikam dát energii"** (`fve-heating.json`, `rf_htg_decide2`):
+- Zákon 8.5: "Uz nikam nemame dat solarni energii → patrony" vs. "prodejni cena > 2 CZK → ne patrony"
+- Root cause: `patSellOk = (sellPrice <= 2)` blokoval patrony i při SOC 99% — baterie plná, auto neběží, tank 40°C → solár se prodával za 2.08 CZK místo ohřevu nádrže
+- FIX: `drainBypass = h.soc >= DRAIN_P` (95%) — bypass sell price check když baterie plná
+- `patMohou = (patSellOk || drainBypass) && patSolOk && ...`
+- Výsledek: při SOC ≥ 95% patrony ohřejí nádrž místo prodeje za nízkou cenu
+
 ### v25.25: Solární nabíjení auta — odstranění GRID_DRAIN tolerance (2026-03-17)
 
 **BUG: Korekční smyčka tolerovala 500W grid draw v drain módu** (`nabijeni-auta-slunce.json`, `788e188fae8d1fca`):
