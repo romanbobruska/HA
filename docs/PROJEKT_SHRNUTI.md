@@ -251,6 +251,12 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - FIX: `h.lvl` se počítá z plánu pomocí cross-day rankingu podle skutečné buy ceny
 - Fallback na per-day levely pokud plán není k dispozici
 
+**Filtrace: min nepřetržitý běh + odstranění priority auta** (`filtrace-bazenu.json`, `filtrace_decision`):
+- Zákon 10.1 (nový): filtrace musí běžet v kuse min 15 min (`filtrace_min_run_min: 15` v configu)
+- Zákon 10.5 (odebrán): blokace `auto_ma_hlad + SOC < 85%` zrušena
+- FIX: `minRunOk` tracking — pokud filtrace běží < 15 min, žádná OFF akce (kromě pool freeze < 2°C)
+- FIX: odstraněna proměnná `carP` a všech 5 `&& !carP` podmínek
+
 ### v25.22: FVE Plan — cross-day cenový ranking pro šetřit mód (2026-03-16)
 
 **BUG: levelBuy je per-day rank (1-24), nesrovnatelný přes půlnoc** (`fve-orchestrator.json`, `rf_cena_discharge2`):
