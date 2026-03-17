@@ -237,6 +237,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.27: Zákon 8.5 — 3h pravidlo + sell price 3 CZK + PM 0.2 (2026-03-17)
+
+**3 opravy dle aktualizovaných zákonů** (`fve-heating.json`, `rf_htg_decide2`):
+- **3h pravidlo:** přidána podmínka `h.inT<=h.tgtT` — pokud dům je nad cílem, 3h pravidlo NEplatí, patrony mohou běžet
+- **Sell price default:** 2 → 3 CZK (zákon 8.5: "prodejni cena > 3 CZK → ne patrony")
+- **PM (patrony margin):** 0.3 → 0.2 (zákon 8.5: "0.2 stupne pod stanovenou teplotou")
+
 ### v25.26: Patrony — drain bypass pro sell price check (2026-03-17)
 
 **KONFLIKT v zákoně 8.5: sell price vs. "nikam dát energii"** (`fve-heating.json`, `rf_htg_decide2`):
