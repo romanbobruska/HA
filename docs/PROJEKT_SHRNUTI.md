@@ -237,10 +237,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.28: Patrony korekce — sell default 3 + drainBypass (2026-03-17)
+
+**BUG: Patrony oscilace — htg_decide2 zapne, pat_korekce_func za 20s vypne** (`fve-heating.json`, `pat_korekce_func`):
+- Root cause: `topeni_patron_max_sell_price||2` v korekci (htg_decide2 měl ||3) + chyběl drainBypass
+- Sell 2.48 CZK: htg_decide2 OK (≤3) → p1_on, korekce FAIL (>2) → p1_off → oscilace 60s
+- FIX: sell default `||3` + `soc>=DRAIN_P` bypass v sell price check
+- Monitoring: patrona fáze 1 ON stabilně, grid 0W, baterie +198W ✅
+
 ### v25.27: Zákon 8.5 — 3h pravidlo + sell price 3 CZK + PM 0.2 (2026-03-17)
 
-**3 opravy dle aktualizovaných zákonů** (`fve-heating.json`, `rf_htg_decide2`):
-- **3h pravidlo:** přidána podmínka `h.inT<=h.tgtT` — pokud dům je nad cílem, 3h pravidlo NEplatí, patrony mohou běžet
+**Opravy dle aktualizovaných zákonů** (`fve-heating.json`, `rf_htg_decide2`):
+- **3h pravidlo:** podmínka `tankT < TANK_3H` (35°C, konfig.) — pokud nádrž je nad 35°C, 3h pravidlo NEplatí
 - **Sell price default:** 2 → 3 CZK (zákon 8.5: "prodejni cena > 3 CZK → ne patrony")
 - **PM (patrony margin):** 0.3 → 0.2 (zákon 8.5: "0.2 stupne pod stanovenou teplotou")
 
