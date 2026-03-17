@@ -237,6 +237,20 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.23: Topení — oběhové effTgt + h.lvl cross-day + odstranění horní hystereze (2026-03-17)
+
+**BUG 1: Oběhové čerpadlo běželo nad cílovou teplotou** (`fve-heating.json`, `rf_htg_decide2`):
+- Zákon 8.4: "ON pokud teplota domu < cíl" — dům 23.4°C, cíl 23.3°C → mělo být OFF
+- Root cause 1: `oTgt` používalo `h.tgtT` místo `h.effTgt` → ignorovalo highSolDay snížení
+- Root cause 2: horní hystereze `nHO = obehOn ? (inT < oTgt + 0.2)` držela oběhové ON 0.2°C nad cílem
+- FIX: `oTgt = h.effTgt` (respektuje highSolDay + noční snížení)
+- FIX: `nHO = h.inT < oTgt` — přísná podmínka bez horní hystereze (zákon 8.4)
+
+**BUG 2: h.lvl v topení používalo per-day levely** (`rf_htg_read_001`):
+- Zákon 8.2: cross-day levely pro topení (analogie k šetření)
+- FIX: `h.lvl` se počítá z plánu pomocí cross-day rankingu podle skutečné buy ceny
+- Fallback na per-day levely pokud plán není k dispozici
+
 ### v25.22: FVE Plan — cross-day cenový ranking pro šetřit mód (2026-03-16)
 
 **BUG: levelBuy je per-day rank (1-24), nesrovnatelný přes půlnoc** (`fve-orchestrator.json`, `rf_cena_discharge2`):
