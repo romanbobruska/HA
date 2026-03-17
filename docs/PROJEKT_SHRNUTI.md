@@ -237,6 +237,25 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.31: Drain mode range-based control — konec oscilace (2026-03-17)
+
+**BUG: Patrony oscilují 2↔3 fáze v drain mode** (`fve-heating.json`, `pat_korekce_func`):
+- Root cause: target-based control (dTgt=-1500W, DB=500W) s krokem 3kW nemůže trefit cíl
+  - 2 fáze: bCh=-500W → err=1000>500 → přidej F3
+  - 3 fáze: bCh=-3500W → err=-2000<-500 → odeber F3 → cyklus se opakuje
+- FIX: **Range-based** logika místo target-based:
+  - `bCh > 300W` (nabíjí) → charge bypass přidá fázi (bypass cooldown)
+  - `bCh < -2500W` (příliš vybíjí) → odeber fázi
+  - `-2500 ≤ bCh ≤ 300` → **STABILNÍ** (žádná akce)
+- Monitoring: 2 fáze stabilní 60+s, baterie -1443W (vybíjí ~1.4kW), grid 33W ≈ 0 ✅
+
+### v25.30: Charge bypass — okamžitá reakce na nabíjení (2026-03-17)
+
+**BUG: SOC 99%, baterie +291W (nabíjí), korekce nereaguje** (`fve-heating.json`, `pat_korekce_func`):
+- Root cause: cooldown 30s + dead band bránily okamžité reakci
+- FIX: nový blok PŘED cooldown — `soc>=95% && bCh>300 && act>0` → okamžitě přidej fázi
+- Drain target default 1000→1500W (zákon: 1-2kWh)
+
 ### v25.29: Patrony korekce drain — dead band fix (2026-03-17)
 
 **BUG: Korekce nepřidávala fáze v drain mode** (`fve-heating.json`, `pat_korekce_func`):
