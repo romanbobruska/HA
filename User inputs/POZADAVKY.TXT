@@ -284,6 +284,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     - SOC BATERIE je vetsi nez 85%
     - KROKY V KOREKCNI SMYCCE +- 1A PO 20 SEKUNDACH
     - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!!
+    - Pri nabijeni auta ze solaru NIKDY NESMI BYT BLOKOVANE VYBIJENI BATERIE!!!!!!!!!!
     - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
     - Korekcni smycka reguluje dynamicky amperaci na chargeru podle:
         - aktualni spotreby domu
@@ -478,6 +479,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 10.1 ZÁKLADNÍ PRAVIDLA
     - Filtrace bazénu je KRITICKÁ pro kvalitu vody — bez filtrace se tvoří řasy a bakterie
     - Filtrace bere ze sítě ~2.5 kW pokud je zapnutá
+    - Filtrace musí běžet v kuse alespoň 15 minut (konfigurovatelny parametr) - nepřerušovat nikdy, pokud není splněna tato podmínka!
     - Ovládá se přes: switch.filtrace
     - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1
     - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu
@@ -518,7 +520,6 @@ jistá, NEZASADÍ a vysvětlí proč.
       Anti-cycling se pro tuto podmínku NEPŘESKAKUJE — kompresor override má přednost.
       POZOR: kontroluje se stav kompresoru (pracuje), NE switch.nibe_topeni (zapnuto)!
     - Anti-cycling: min filtrace_anti_cycle_min (10 min) mezi ON/OFF přepnutími
-    - Priorita auta: pokud auto_ma_hlad=ON a SOC < 85% → filtrace nesmí startovat
     - SOC ochrana: pod filtrace_soc_low (40%) neběžet na grid (pokud je solar dnes)
     - Plán awareness: skenuje FVE plán na budoucí solární hodiny
     - Solar forecast: čte sensor.energy_production_today_remaining_3

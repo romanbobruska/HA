@@ -1,10 +1,2 @@
-TY ZMRDE, NA TVOJE MYSLENKOVE POCHODY SE NEDA DIVAT!
-
-NAPOVIM TI!!!!
-
-
-1/ ZKONTROLUJ SI ZAKONY TOPENI
-- zkontroluj, zda je spravne, ze AKTUALNE bezi obehove cerpadlo A PROC JE TO SPATNE!!!
-- PRIDANO NOVE PRAVIDLO DO TOPENI, IMPLEMENTUJ OPRAVU
-
-ZAROVEN ZKONTROLUJ STAV FILTRACE, ZDA SE DNES SPUSTI ZA CO NEJVYHODNEJSICH PODMINEK!
+- provedl jsem upravu v zakonech pro filtraci, zjisti, o jakou se jedna a nasad fix
+- Sleduj korekcni smycku u nabijeni auta ze solaru a rekni mi, zda funguje dle zakonu!!! ZMRDEEEE!!!
