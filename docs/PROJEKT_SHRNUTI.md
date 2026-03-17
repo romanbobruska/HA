@@ -237,6 +237,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.29: Patrony korekce drain — dead band fix (2026-03-17)
+
+**BUG: Korekce nepřidávala fáze v drain mode** (`fve-heating.json`, `pat_korekce_func`):
+- Zákon 8.5: "SOC >=95% → baterie se VYBÍJÍ ~1kWh" (drain mode, obdobně jako nabíjení auta ze solaru)
+- Root cause: `DB = max(DB_CFG=500, FAZE_W/2=1500) = 1500W` — dead band 1500W příliš velký
+- S dTgt=-1000W a bCh=+198W: err=1198 < DB=1500 → žádná akce → fáze se nepřidávaly
+- FIX: `DB_DR = DB_CFG` (500W) pro drain mode — menší dead band umožňuje reakci
+- Monitoring: 1→2→3 fáze přidány, baterie -2756W, tank 40→45°C, grid ≈0W ✅
+
 ### v25.28: Patrony korekce — sell default 3 + drainBypass (2026-03-17)
 
 **BUG: Patrony oscilace — htg_decide2 zapne, pat_korekce_func za 20s vypne** (`fve-heating.json`, `pat_korekce_func`):
