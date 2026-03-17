@@ -237,6 +237,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.25: Solární nabíjení auta — odstranění GRID_DRAIN tolerance (2026-03-17)
+
+**BUG: Korekční smyčka tolerovala 500W grid draw v drain módu** (`nabijeni-auta-slunce.json`, `788e188fae8d1fca`):
+- Zákon 5.1: "NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!! NIKDY!!!"
+- Root cause: `GRID_DRAIN=500W` — když SOC ≥ 95%, `gMax=GRID_DRAIN` místo `GRID_MAX` (200W)
+- Uživatel viděl ~500W grid draw při solárním nabíjení s SOC 99%
+- FIX: `gMax=GRID_MAX` vždy — stejný threshold 200W pro všechny SOC režimy
+
 ### v25.24: Blokace vybíjení — odebrání "Nab. auta" z blokaceText (2026-03-17)
 
 **BUG: Dashboard ukazoval "Blokace: ANO - Nab. auta" při solárním nabíjení** (`fve-orchestrator.json`, `c36915a8599c5282` Kontrola podmínek):
