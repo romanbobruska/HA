@@ -237,6 +237,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.24: Blokace vybíjení — odebrání "Nab. auta" z blokaceText (2026-03-17)
+
+**BUG: Dashboard ukazoval "Blokace: ANO - Nab. auta" při solárním nabíjení** (`fve-orchestrator.json`, `c36915a8599c5282` Kontrola podmínek):
+- Zákon 5.1: "Pri nabijeni auta ze solaru NIKDY NESMI BYT BLOKOVANE VYBIJENI BATERIE"
+- Root cause: `if(autoN)bI.push("Nab. auta")` přidávalo auto do blokace textu, i když mode logika (NORMAL, SOLÁRNÍ NABÍJENÍ) vybíjení NEblokuje
+- FIX: odstraněn `autoN` z `bI[]` pole — blokaceText nyní správně ukazuje "NE" při solárním nabíjení auta
+
 ### v25.23: Topení — oběhové effTgt + h.lvl cross-day + odstranění horní hystereze (2026-03-17)
 
 **BUG 1: Oběhové čerpadlo běželo nad cílovou teplotou** (`fve-heating.json`, `rf_htg_decide2`):
