@@ -237,6 +237,23 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
 
+### v25.32: Korekce nabíjení auta ze solaru — range-based + charger stop (2026-03-18)
+
+**BUG 1: Deploy přepsal uživatelské timing změny** (`nabijeni-auta-slunce.json`):
+- Uživatel změnil heartbeat a delay z 20s na 5s na serveru → deploy přepsal zpět na 20s
+- FIX: git aktualizován na 5s (inject + delay), cooldown 15s→4s
+
+**BUG 2: Oscilace amperáže 8↔9A** (target-based control):
+- CHRG mode: bW=2325>TBW+DB=1500 → +1A → grid>200 → -1A → cyklus
+- FIX: Range-based control (stejný princip jako patrony v25.31):
+  - CHRG: `0 ≤ bW ≤ 2000W` → stable; increase jen pokud `gridW < gMax/2`
+  - DRAIN: `bW > 300` → +1A; `bW < -2500` → -1A; jinak stable
+
+**BUG 3: Korekce při tA<6 jen vypla boolean, nestopla charger**:
+- Switch "Amperace<6?" output 1 → jen `input_boolean.nastavuj_amperaci_chargeru_solar = OFF`
+- Charger běžel dál na 8A, grid 3.9kW (NIBE + auto)
+- FIX: přidán wire na "Vypni nabíjení" (wallbox stop) do output 1
+
 ### v25.31: Drain mode range-based control — konec oscilace (2026-03-17)
 
 **BUG: Patrony oscilují 2↔3 fáze v drain mode** (`fve-heating.json`, `pat_korekce_func`):
