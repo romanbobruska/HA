@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-19 (v25.50: Sync balancing laws — force_stop 3h, conditional datetime)
+> Poslední aktualizace: 2026-03-19 (v25.51: Config plain values, opp header global, conditional datetime)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -259,6 +259,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **Fix 2: opp_bal_check conditional datetime** (`fve-modes.json`, opp_bal_check):
 - Zákon 12.5: datetime update (posun dalšího plánovaného balancingu) JEN pokud pasivní monitoring trval ≥ `force_stop_hours` (3h)
 - Pokud < 3h: aktualizuje se JEN `pylontech_balancing_ok` (OK/NOK), datetime se NEMĚNÍ
+
+### v25.51: Config plain values + header oddělení (2026-03-19)
+
+**Fix 1: Config `balancing_force_stop_hours`** (`fve-config.json`):
+- Bylo: `getHAFloat("input_number.balancing_force_stop_hours", 2)` — HA entita
+- Nyní: `3` — přímá hodnota v configu (zákon: NE HA entity, konfig!)
+- Také: `balancing_min_solar_kwh: 2` → `3` (zákon 12.5)
+
+**Fix 2: Oddělení header info od planner datetime**:
+- `global.set("bal_header_info", {...})` — VŽDY se uloží při opp balancingu (pro header)
+- `input_datetime.last_pylontech_balanced` — aktualizuje se JEN pokud `durationH >= force_stop_hours` (pro planner)
+- Plan output čte `bal_header_info` global (pokud novější než entita) → header vždy aktuální
 
 ### v25.48: 3 opravy topení (2026-03-19)
 
