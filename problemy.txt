@@ -1,15 +1,9 @@
-ZMRDE!!!!!!!!!!!!!!
+to jsi pochopil spatne - precti si zakon: ad
 
-PATRONY SE ZAPINAJI AZ PRI SOC 95 PROCENT, MAJI SE ZAPINAT UZ PRI SOC 90 PROCENT, JAK JE V ZAKONECH!!!!
+pokud bude SOC 100 procent trvat více než hodinu, začne se sledovat balancning až do doby, kdy SOC baterie 
+            bude menší než 100 procent.
 
-ZAROVEN KURVA NEROZUMIM TOMU, PROC NEBEZI OBEHOVE CEPRADLO - KDE JE KOFLIKT V ZAKONECH???? TED SE MA NATOPIT DUM NA PRESNOU TEPLOTU,
-JE DENNI DOBA A VHODNE PODMINKY!!!!
+Ty pises> Oportunistický balancing: SOC=100% mimo plán → po 1h sledovat, pak aktualizovat stav v plánu (bez změny módu)
 
-TAKE MY VYPINAS PATRONY, POKUD VYPNU AUTOMATIZACI TOPENI - V ZAKONECH JE, ZE POKUD JE AUTOMATIZACE VYPNUTA, NA NIC NIKDY NESAHNES DO DOBY, NEZ SE ZASE ZAPNE!!!!!
-
-
-
-ZMRDEEEEEEEEEEEEE!!! OPRAV TO SPRAVNE!!!!!!!!!!
-
-KURVAAAAAAAAAAAA!!!
-
+To je spatne - ty mas sledovat, jak dlouho je baterie na 100 procentech a pokud je na 100 procentech vice nez hodinu, zacnes sledovat balancing
+az do doby, nez SOC baterie klesne. chapes to????

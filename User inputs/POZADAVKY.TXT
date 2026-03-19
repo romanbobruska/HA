@@ -637,8 +637,22 @@ A ZAKAZU PRETOKU
     setrit_grid_bias_w: 150 (PSP bias v Šetřit módu, W)
 
 12.5 BALANCOVÁNÍ
+    - Základní pravidla
+        - V plánu se zobrazuje stav balancingu v hlaviččce: např.⚡ Poslední balancing: 06.03. 15:00 ❌
+        - Pokud se balancování v plnánovaném intervalu nezdaří, zobrazí se ikonka křížku v plánu a počká se na další interval
+            Pokud se zdaří, zobrazí se v plánu křížek
+        Baterie je balancována OK, pokud se po dobu min 20 minut ani nenabíjí, ani nevybíjí - vybíjení a nabíjení baterie je stále 0
+        - Pokud SOC baterie dosáhne 100 procent i mimo dobu plánovaného balancingu, musí se sledovat, jak dlouho baterie na tomto SOC 
+            držela - pokud bude SOC 100 procent trvat více než hodinu, začne se sledovat balancing až do doby, kdy SOC baterie 
+            bude menší než 100 procent (neaplikuje se force stop). Poté se aktualizuje se v plánu datum a čas posledního balancingu a stav OK/NOK dle pravidel,
+            jako kdyby byl plánovaný mód balancing - to neznamená, že se naplánuje mód balancing, mód FVE zůstane, jaký je, ale přesto
+            se bude sledovat balancing, jako by byl naplánován - pouze bez pravidla, jak dlouho balancing musí trvat dlouho minimálně.
+        - Pokud tento pasivní balancing bude trvat min. 3 hodiny, jak je v konfigu, posune se dalsi naplanovany balancing
+            o pocet dni, ktere jsou v konfigu - jakoby balancing probehl planovane - at uz dopadne OK nebo NOK.
+            
+    - Config defaults
     balancing_interval_days: 30
-    balancing_force_stop_hours: 2
+    balancing_force_stop_hours: 3
     balancing_min_solar_kwh: 3
     balancing_grid_reserve_w: 1000
 
