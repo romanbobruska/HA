@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-19 (v25.49: Opp balancing monitoring, plan header status, contMin fix)
+> Poslední aktualizace: 2026-03-19 (v25.50: Sync balancing laws — force_stop 3h, conditional datetime)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -250,6 +250,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **Plan header**: `balancingStatus.text` = "⚡ Poslední balancing: DD.MM. HH:MM ✅/❌" v plánu
 
 **Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
+
+### v25.50: Sync balancing laws (2026-03-19)
+
+**Fix 1: `balancing_force_stop_hours` fallback 2→3** (`fve-orchestrator.json`, Rozhodnutí o akci):
+- Zákon 12.5: config default = 3h (bylo hardcoded 2)
+
+**Fix 2: opp_bal_check conditional datetime** (`fve-modes.json`, opp_bal_check):
+- Zákon 12.5: datetime update (posun dalšího plánovaného balancingu) JEN pokud pasivní monitoring trval ≥ `force_stop_hours` (3h)
+- Pokud < 3h: aktualizuje se JEN `pylontech_balancing_ok` (OK/NOK), datetime se NEMĚNÍ
 
 ### v25.48: 3 opravy topení (2026-03-19)
 

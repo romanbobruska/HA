@@ -648,7 +648,9 @@ A ZAKAZU PRETOKU
             jako kdyby byl plánovaný mód balancing - to neznamená, že se naplánuje mód balancing, mód FVE zůstane, jaký je, ale přesto
             se bude sledovat balancing, jako by byl naplánován - pouze bez pravidla, jak dlouho balancing musí trvat dlouho minimálně.
         - Pokud tento pasivní balancing bude trvat min. 3 hodiny, jak je v konfigu, posune se dalsi naplanovany balancing
-            o pocet dni, ktere jsou v konfigu - jakoby balancing probehl planovane - at uz dopadne OK nebo NOK.
+            o pocet dni, ktere jsou v konfigu - jakoby balancing probehl planovane - at uz dopadne OK nebo NOK. UDAJE V HALVICCE FVE
+            PLANU ALE ZUSTANOU - POSLEDNI DATETIME BALANCINGU A OK/NOK IKONA - POSUNE SE TIM POUZE INTERNE DALSI PLANOVANY START
+            BALANCINGU!!!
             
     - Config defaults
     balancing_interval_days: 30
