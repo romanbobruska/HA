@@ -251,6 +251,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
 
+### v25.53: Fix opp balancing header display (2026-03-19)
+
+**Root cause**: `opp_bal_check` neaktualizoval `input_datetime.last_pylontech_balanced` při opp < 3h (jen `bal_header_info` global, který je volatilní). Navíc `bal_svc_set_boolean` měl prázdnou konfiguraci — service call do HA se neprováděl.
+
+**Fix 1: `opp_bal_check` VŽDY aktualizuje HA entity** (`fve-modes.json`):
+- `input_datetime.last_pylontech_balanced` — VŽDY (pro header display)
+- `input_boolean.pylontech_balancing_ok` — VŽDY (pro OK/NOK ikonu)
+- `bal_header_info` global — VŽDY (s `qualifying` flag pro planner)
+- `last_qualifying_balance_ts` global — jen při opp >= `force_stop_hours` (pro planner)
+
+**Fix 2: Planner qualifying check** (`fve-orchestrator.json`, `4. Generování plánu`):
+- Pokud `bal_header_info.passive && !qualifying` → planner ignoruje aktualizovaný datetime a používá `last_qualifying_balance_ts` pro výpočet `daysSinceBalance`
+- Tím se zabrání posunu dalšího plánovaného balancingu při krátkém opp balancingu
+
+**Zákon 12.5**: Header VŽDY zobrazuje poslední balancing datetime + OK/NOK. Posun dalšího plánovaného balancingu JEN při opp >= 3h.
+
 ### v25.52: Fix CP852 encoding corruption (2026-03-19)
 
 **Root cause**: PowerShell `>` redirect při SSH stahování flows interpretuje UTF-8 bajty jako CP852 (český OEM codepage). Patch skripty pak zkopírovaly poškozené komentáře do gitu a deploy je nahrál na server.
