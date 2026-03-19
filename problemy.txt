@@ -1,4 +1,3 @@
-- dokonci sve predchozi ukoly
-- zkontroluj, ze bude balancing fungovat dle zakonu - ted se k tomu pripadu blizime. Monitoruj ha do doby, nez SOC baterie ziska 100
-procent, ze se nastartuje monitoring balancingu (tzn. nez bude SOC na 100 procentech), jak je psano v zakonech - staci jedenkrat za minutu zkontrolovat. pokud bude vse OK,
-nastartujes odpocet balawncingu
+Ale ja porad nevidim v planu v hlavicce posledni balancing - vidim toto: ⚡ Poslední balancing: 06.03. 15:00 ❌
+
+Je to spravne dle zakonu??? Prostuduj zakony a rekni mi, zda je to spravne
