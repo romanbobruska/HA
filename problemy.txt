@@ -1,3 +1,6 @@
-jeste jsem malinko upravil zakony pro balancing - zjisti, jake zmeny jsme udelal, vypis mi do tabulky, jak jsi to pochopil.
-zjisti, ze je reseni v syncu dle zakonu, pripadne nasad fix. 
-nezapomen na zakony pre a post deploy a na to, ze ctis me zmeny v HA i NR - konecne si to zapamatuj navzdycky, je to i v zakonech!!!
+AD - balancing_force_stop_hours: getHAFloat("input_number.balancing_force_stop_hours", 2)
+JA JSEM NECHTEL HA KOMPONENTU, KDO TI TO REKL??? CHCI, ABY TA HODNOTA BYLA PRIMO V KONFIGU!!!!
+
+VYMAZ TU HA KOMPONENTU A RID SE KONFIGEM!!!
+
+ZAROVEN JSEM JESTE UPRAVIL ZAKONY BALANCINGU - NASAD KONECNE FUNKCNI RESENI A OVER, ZE BUDE FUNGOVAT DLE ZAKONU!!!
