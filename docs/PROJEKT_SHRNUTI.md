@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-14 (v25.18: Filtrace dashboard status, met=always OFF, NR restart counter seed)
+> Poslední aktualizace: 2026-03-19 (v25.49: Opp balancing monitoring, plan header status, contMin fix)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -236,6 +236,33 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **Zákon 8.5 — pravidlo 3 hodin** (nový zákon v POZADAVKY.TXT):
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
+
+### v25.49: Oportunistický balancing monitoring (2026-03-19)
+
+**Zákon 12.5**: Pokud SOC baterie dosáhne 100% i mimo plánovaný balancing, sledovat pasivně:
+1. **Tracking SOC 100%**: Globál `opp_soc100_since` zaznamenává čas dosažení 100%
+2. **Po 1 hodině na 100%**: Spustí se monitoring proudu baterie (`opp_bal_monitoring=true`)
+3. **Sledování idle**: Pokud `|battery_dc_current| < 0.5A` po dobu 20 min → balanced OK
+4. **Vyhodnocení**: Když SOC klesne pod 100%, vyhodnotí se OK/NOK → aktualizuje `input_datetime.last_pylontech_balanced` + `input_boolean.pylontech_balancing_ok`
+5. **Nové nody**: `opp_bal_inject` (60s timer) + `opp_bal_check` (zpracování pending výsledku → service calls)
+- Mód FVE se NEMĚNÍ — pouze pasivní sledování
+
+**Plan header**: `balancingStatus.text` = "⚡ Poslední balancing: DD.MM. HH:MM ✅/❌" v plánu
+
+**Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
+
+### v25.48: 3 opravy topení (2026-03-19)
+
+**BUG 1: Patrony SOC 95→90** (`fve-config.json`):
+- `topeni_min_soc_patron: 95` → `90` (zákon 8.5: SOC ≥ 90%)
+
+**BUG 2: Oběhové čerpadlo neběželo** (`fve-heating.json`, `rf_htg_decide2`):
+- `oTgt = h.effTgt` → `oTgt = h.isNight ? h.effTgt : h.tgtT`
+- Zákon 8.4: ve dne cíl = nastavená teplota (ne effTgt s highSolSniz)
+
+**BUG 3: Auto OFF vypínalo patrony** (`fve-heating.json`, `rf_htg_decide2`):
+- Blok `if(!h.auto)` dělal safety shutdown patron → odstraněn
+- Zákon 8.2: "Automatizace OFF → ABSOLUTNĚ na nic nesahat"
 
 ### v25.32: Korekce nabíjení auta ze solaru — range-based + charger stop (2026-03-18)
 
