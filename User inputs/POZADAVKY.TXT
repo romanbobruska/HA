@@ -176,6 +176,8 @@ jistá, NEZASADÍ a vysvětlí proč.
             VYROBU, NE JI OMEZOVAT - POKUD MAS KAM DAT TU PREBYTECNOU ENERGII - TZN POKUD JE BATERIE NAD 95 PROCENTAMA - TAK JI 
             DEJ VSUDE, KDE JE TO POTREBA PODLE PRIORIT, ABYCHOM MAXIMALNE VYUZILI SOLARNI ZISK. CTI PRAVIDLA V TOMTO SOUBORU
     - Lepsi je brat z baterie, nez omezovat solarni vykon.
+    - 200Wh ODBERU ZE SITE JE POVOLENO PRI STAVU SOC BATERIE 100 PROCENT
+A ZAKAZU PRETOKU
     - Lepsi je vyuzit solarni vyrobu a vybijet baterii na spotebice, ktere to potrebuji, nez omezovat solarni vykon. 
     - v nejhorsim pripadne se omezi solarni vyroba - ale to necheme obecne
 
@@ -282,10 +284,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 5.1 ZÁKLADNÍ PODMÍNKY PRO SPUŠTĚNÍ NABÍJENÍ AUTA ZE SLUNCE
 
     - SOC BATERIE je vetsi nez 85%
-    - KROKY V KOREKCNI SMYCCE +- 1A PO 20 SEKUNDACH
-    - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!!
-    - Pri nabijeni auta ze solaru NIKDY NESMI BYT BLOKOVANE VYBIJENI BATERIE!!!!!!!!!!
+    - KROKY V KOREKCNI SMYCCE +- 1A PO X SEKUNDACH - ty jsou nastavene v NR FLOW - delay a heartbeat
+    - Pri nabijeni auta ze solaru NIKDY NESMI NASTAT, ZE SE BUDE BRAT ENERGIE ZE SITE!!! NIKDY!!! TOTO SE RIDI KOREKCNI SMYCKOU!!!
+    - Pri nabijeni auta ze solaru NIKDY NESMI BYT BLOKOVANE VYBIJENI BATERIE!!!!!!!!!! TOTO SE RIDI KOREKCNI SMYCKOU!!!
     - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
+    - NIKDY SE NESMI BRAT ZE SITE ANI 1WH!!!
     - Korekcni smycka reguluje dynamicky amperaci na chargeru podle:
         - aktualni spotreby domu
         - solarni vyroby
@@ -367,9 +370,10 @@ jistá, NEZASADÍ a vysvětlí proč.
         POKUD NENI SOLARNY VYROBA DOSTATECNA A ANI NENI V DANY DEN VYHLED, ZE BUDE
     - pokud je solarni vyroba na dany den vysoka (vice nez 50kWh) a je pravdepobnost, ze se natopi dum i z patron, NIBE se NESPUSTI, pokud:
         - solarni vyroba bude dostatecna - viz ostatni pravidla
-        - hystereze teploty domu se timto zvysuje na -0.5 stupnu od nastavena_teplota_v_dome v ramci dennich hodin
+        - hystereze teploty domu se timto zvysuje na -0.2 stupnu i pres den (konfigurovatelny parametr - nemusi byt natopen dum na presnou teplotu ve dne, pokud
+            dotopime z patron) od nastavena_teplota_v_dome v ramci dennich hodin
         - v ostatnich pripadech plati nastavene podminky
-        - je nutne kontrolovat zbyvajici solarni vyrobu, meni se to - aplikuj pravidla logicky tak, abychom meli natopeny dum a nemrlzi.
+        - je nutne kontrolovat zbyvajici solarni vyrobu, meni se to - aplikuj pravidla logicky tak, abychom meli natopeny dum a nemrzli.
     - auto_ma_hlad=ON → patrony NESMÍ běžet. ABSOLUTNÍ pravidlo. Žádná výjimka.
     - autoNabiji=ON → patrony NESMÍ běžet (auto nabíjení blokuje patrony)
     - Při krbu (topi_se_v_krbu=ON) → NIBE OFF, oběhové čerpadlo NESAHAT
@@ -426,16 +430,18 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Mod se spusti, jak je definovano vyse, pokud teplota v dome bude 0.2 stupne pod stanovenou teplotou v dome a zaroven budeme
         mit dostatek ocekavanych solarnich prebytku - tehdy NIBE OFF.
     - PRAVIDLO 3 HODIN: Pokud je aktuální hodina v intervalu 3 hodin před poslední solární hodinou dne
-        (topeni_final_hours, výchozí 3), patrony se NESPUSTÍ a místo nich se použije NIBE.
-        Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby.
+        (topeni_final_hours, výchozí 3), a teplota v nadrzi je blizko spodni hranici (cca pod 35 stupni (konfigurovatelne)), patrony se NESPUSTÍ a místo nich se použije NIBE.
+        Důvod: patrony nestihnou dostatečně natopit nádrž před koncem solární výroby.
         NIBE je efektivnější a zvládne natopil nádrž rychleji.
     - SOC baterie ≥ 90 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
     - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
-        - SOC baterie je <=95%, pak se nabiji baterie cca 1kWh. Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
+        - SOC baterie je >=95%, pak se VYBIJI baterie cca 1 - 2kWh - HLAVNE SE NESMI NABIJET!!!. Pokud se bateerie v tomto 
+            SOC bude nabijet, prida se 1 faze.
+        - Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
-    - Pokud bude prodejni cena vetsi nez 2 koruny (konfigurovatelny parametr), tak se patrony nepouziji
+    - Pokud bude prodejni cena vetsi nez 3 koruny (konfigurovatelny parametr), tak se patrony nepouziji
 
     Stupňování fází:
     - < 3kW přebytek → 0 fází (OFF)

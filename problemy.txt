@@ -1,2 +1,1 @@
-- provedl jsem upravu v zakonech pro filtraci, zjisti, o jakou se jedna a nasad fix
-- Sleduj korekcni smycku u nabijeni auta ze solaru a rekni mi, zda funguje dle zakonu!!! ZMRDEEEE!!!
+Upravil jsem zakony pro topeni, zjisti rozdil a aplikuj fix.
