@@ -76,6 +76,7 @@ jistá, NEZASADÍ a vysvětlí proč.
       ssh ... roman@192.168.0.30 "cat /addon_configs/a0d7b954_nodered/flows.json"
     - Serverová verze = PRAVDA. Nikdy nepřepisovat serverové změny lokálními.
     - Uživatel dělá ruční změny v NR UI — ty musí být zachovány
+    - ZKONTROLOVAT, ZE POUZIVAM SPRAVNOU ZNAKOVOU SADU!!!
 
 2.4 PO DEPLOYMENTU (VŽDY)
     - Ověřit HTTP 200 z Node-RED (deploy.sh to dělá automaticky)
@@ -89,6 +90,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Smazat dočasné soubory (_*.py, fix_*.py, _*.js, _*.txt apod.)
     - Přes SSH zkontrolovat /tmp/ — smazat dočasné skripty
     - Nikdy nenechavat spustene debug nody, pokud uz je nepotrebujeme, tzn. neprovadime debug - to zabira pamet HA
+    - ZKONTROLOVAT, ZE ZNAKOVA SADA JE OK!!!
 
 
 2.5 GIT PRAVIDLA
