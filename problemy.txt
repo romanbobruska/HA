@@ -1,5 +1,4 @@
-doprdele zase je posrane kodovani V NR - TO SE NAM STALO UZ MNOHOKRAT!!! PROC ZASE TED!! UZ TO NIKDY NEDELEJ!!!   // *** NIBE TEPELN├ë ─îERPADLO *** 
-- NACTI PRE A PO DEPLOY ZAKONY, zapamatuj si znakovou sadu do MD filu oprav to!!!
-
-- ZKONTROLUJ, ZE JSI TU HA ENTITU NA  URCENI DOBY BALANCINGU SMAZAL V HA - POKUD ANO, PROC JSI NERESTARTOVAL HA?
-nezasirej HA zbytecnymi komponentami!!!
+- dokonci sve predchozi ukoly
+- zkontroluj, ze bude balancing fungovat dle zakonu - ted se k tomu pripadu blizime. Monitoruj ha do doby, nez SOC baterie ziska 100
+procent, ze se nastartuje monitoring balancingu (tzn. nez bude SOC na 100 procentech), jak je psano v zakonech - staci jedenkrat za minutu zkontrolovat. pokud bude vse OK,
+nastartujes odpocet balawncingu

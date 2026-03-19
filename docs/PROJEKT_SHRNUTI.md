@@ -251,6 +251,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
 
+### v25.52: Fix CP852 encoding corruption (2026-03-19)
+
+**Root cause**: PowerShell `>` redirect při SSH stahování flows interpretuje UTF-8 bajty jako CP852 (český OEM codepage). Patch skripty pak zkopírovaly poškozené komentáře do gitu a deploy je nahrál na server.
+
+**Fix**: Python `line.encode('cp852').decode('utf-8')` na serveru — 102 řádků opraveno ve 2 nodech (`44025571f9d270fb` config, `rf_plan_output_05` plan output). Server + git synchronizovány.
+
+**Prevence**: NIKDY nepoužívat `ssh ... "cat file" > local_file`. Vždy base64 přenos nebo zpracování přímo na serveru.
+
+**Smazána HA entita**: `input_number.balancing_force_stop_hours` — odstraněna z entity registry přes WebSocket API. Hodnota je přímo v `fve-config.json` jako `3`.
+
 ### v25.50: Sync balancing laws (2026-03-19)
 
 **Fix 1: `balancing_force_stop_hours` fallback 2→3** (`fve-orchestrator.json`, Rozhodnutí o akci):
