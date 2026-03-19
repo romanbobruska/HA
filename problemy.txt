@@ -1,9 +1,3 @@
-to jsi pochopil spatne - precti si zakon: ad
-
-pokud bude SOC 100 procent trvat více než hodinu, začne se sledovat balancning až do doby, kdy SOC baterie 
-            bude menší než 100 procent.
-
-Ty pises> Oportunistický balancing: SOC=100% mimo plán → po 1h sledovat, pak aktualizovat stav v plánu (bez změny módu)
-
-To je spatne - ty mas sledovat, jak dlouho je baterie na 100 procentech a pokud je na 100 procentech vice nez hodinu, zacnes sledovat balancing
-az do doby, nez SOC baterie klesne. chapes to????
+jeste jsem malinko upravil zakony pro balancing - zjisti, jake zmeny jsme udelal, vypis mi do tabulky, jak jsi to pochopil.
+zjisti, ze je reseni v syncu dle zakonu, pripadne nasad fix. 
+nezapomen na zakony pre a post deploy a na to, ze ctis me zmeny v HA i NR - konecne si to zapamatuj navzdycky, je to i v zakonech!!!
