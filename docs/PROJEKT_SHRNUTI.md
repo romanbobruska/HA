@@ -251,6 +251,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
 
+### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
+
+**Root cause**: V `manager-nabijeni-auta.json` (`main_logic_func`) se kontrola `!hlad` (auto nemá hlad → STOP) prováděla PŘED kontrolou `!auto` (automatizace OFF → NIC). Když uživatel vypnul automatizaci a `auto_ma_hlad=OFF`, manager přesto zastavil wallbox.
+
+**Zákon 5.0**: „PŘI VYPNUTÉ AUTOMATIZACI NABÍJENÍ AUTA SE NIC NEOVLIVŇUJE — ANI CHARGER, ANI AMPÉRÁŽ — NIC."
+
+**Fix**: Přesunuta kontrola `if(!auto) return null;` na **první místo** v rozhodovací logice, před jakýkoli jiný check (hlad, SOC, balancování). Když auto=OFF, manager okamžitě vrátí `null` a nic neposílá.
+
 ### v25.53: Fix opp balancing header display (2026-03-19)
 
 **Root cause**: `opp_bal_check` neaktualizoval `input_datetime.last_pylontech_balanced` při opp < 3h (jen `bal_header_info` global, který je volatilní). Navíc `bal_svc_set_boolean` měl prázdnou konfiguraci — service call do HA se neprováděl.
