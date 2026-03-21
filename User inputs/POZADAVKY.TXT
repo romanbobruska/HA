@@ -362,13 +362,16 @@ A ZAKAZU PRETOKU
     └──────────┴────────────────────────────────────────────────────┘
 
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
+    - PO ZAPNUTI NIBE TRVA CCA 1 MINUTU, NEZ SE V HA OBJEVI, ZE JE NIBE ZAPNUTE!!!
     - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
     - NIBE a patrony NIKDY současně (viz 1.2)
     - NIBE A OBEHOVE CERPADLO PRACUJI NAPROSTO NEZAVISLE NA SOBE!!!
     - VŽDY TOPÍME ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK - ZA CO NEJNIŽŠÍ CENY. ZVLÁŠTĚ JE TŘEBA SI DÁT POZOR PŘI PŘECHODU DNE PŘES
         PŮLNOC - LEVELY TAM NEMUSÍ ODPOVÍDAT SKUTEČNÉMU POŘADÍ CEN OD NEJLEVNĚJŠÍHO, JELIKOŽ LEVELY JSOU POČÍTÁNY V RÁMCI 1 DNE OD PŮNOCI DO PŮLNOCI - 
         ANALOGIE K MODU SETRENI
-    - POKUD JE SELARNI VYROBA NIZKA, ROZHODUJI O TOPENI CO NEJNIZSI CENY. POKUD JE DUM NATOPEN, ALE NADRZ NE, DOTOPI SE NADRZ ZA CO NEJNIZSI CENU,
+    - VZDY JE DOBRE NATOPIT NADRZ I V PRIPADE, ZE JE NATOPEN DUM, A TO NA NOC! A TO ZA CO NEJVYHODNEJSICH PODMINEK - TZN. POKUD JE NATOPEN DUM A 
+        NADRZ JE CHLADNA, NEZNAMENA TO, ZE SE ZASTAVI NIBE, POKUD JSOU VYHODNE PODMINKY!!!
+    - POKUD JE SOLARNI VYROBA NIZKA, ROZHODUJI O TOPENI CO NEJNIZSI CENY. POKUD JE DUM NATOPEN, ALE NADRZ NE, DOTOPI SE NADRZ ZA CO NEJNIZSI CENU,
         POKUD NENI SOLARNY VYROBA DOSTATECNA A ANI NENI V DANY DEN VYHLED, ZE BUDE
     - pokud je solarni vyroba na dany den vysoka (vice nez 50kWh) a je pravdepobnost, ze se natopi dum i z patron, NIBE se NESPUSTI, pokud:
         - solarni vyroba bude dostatecna - viz ostatni pravidla
@@ -608,6 +611,7 @@ A ZAKAZU PRETOKU
     nabijeni_auta_pretizeni_w: 18000 (max spotřeba sítě při nabíjení auta, W)
 
 12.3 TOPENÍ
+
     topeni_min_teplota_nadrze: 30 (min teplota nádrže pro oběhové čerpadlo, °C)
     topeni_max_teplota_nadrze: 50 (max teplota nádrže pro topení, °C)
     topeni_nocni_snizeni: 0.5 (°C)
