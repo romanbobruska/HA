@@ -251,6 +251,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Fix contMin threshold**: BALANCOVÁNÍ Logic `contMin>=20` → `contMin>=80` (20 min při 15s/cyklus)
 
+### v25.55: Fix filtrace anti-cycling + heating proactive tank (2026-03-21)
+
+**Fix 1: Filtrace** (`filtrace-bazenu.json`, `filtrace_decision`):
+- **Root cause**: Anti-cycling (10 min) blokoval vypnutí filtrace i po splnění denního minima. Když se filtrace zapnula při run=58 min, za 2 min met=true, ale anti-cycling blokoval "off" → filtrace běžela 68/60 min.
+- **Zákon 10.1** (základní pravidlo, PRIORITA): „FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO"
+- **Fix**: Anti-cycling nyní má podmínku `&& !met` — když je minimum splněno, vypnutí proběhne okamžitě bez čekání na anti-cycling.
+
+**Fix 2: Topení** (`fve-heating.json`, `rf_htg_decide2`):
+- **Root cause**: Proaktivní ohřev nádrže (zákon 8.3.5) byl blokován podmínkou `!highSolDay`. Při SOC 33% a nejlevnější hodině (level 2) systém čekal na solar, který nestíhal nabít baterii.
+- **Zákon 8.2**: „POKUD JE SOLÁRNÍ VÝROBA NÍZKÁ, ROZHODUJÍ NEJNIŽŠÍ CENY"
+- **Fix**: Podmínka změněna na `(!highSolDay || soc < 60)` — při nízkém SOC se solar ignoruje a nádrž se ohřívá za levnou cenu.
+
 ### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
 
 **Root cause**: V `manager-nabijeni-auta.json` (`main_logic_func`) se kontrola `!hlad` (auto nemá hlad → STOP) prováděla PŘED kontrolou `!auto` (automatizace OFF → NIC). Když uživatel vypnul automatizaci a `auto_ma_hlad=OFF`, manager přesto zastavil wallbox.
