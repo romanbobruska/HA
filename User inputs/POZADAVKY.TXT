@@ -504,7 +504,7 @@ A ZAKAZU PRETOKU
 10.3 OPTIMALIZACE ENERGIE — PRIORITNÍ ŘETĚZEC (od nejlepší po nejhorší)
     1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500W) → zapnout
        - Zdarma energie, nulový dopad na baterii
-       - Nejlepší podmínky — filtrace běží, dokud přebytek trvá
+       - Nejlepší podmínky — filtrace běží, dokud přebytek trvá, do maxima povinného času - zároveň ale platí základní pravidla, ta jsou prioritní!
     2. ŠETŘIT MÓD + žádný budoucí solar → zapnout (grid, baterie chráněna)
        - Pouze pokud FVE plán nemá žádné solární hodiny vpředu
        - A zbývající solární předpověď < filtrace_solar_ok_kwh (10 kWh)
