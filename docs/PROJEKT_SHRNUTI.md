@@ -266,6 +266,8 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
   - L42 (proactive tank): `(!highSolDay || soc<60)`, odstraněn `autoHlad` (blokuje jen patrony)
   - L72 (bigSolTom deferral): `bigSolTom && soc>=60` — bypass při SOC < 60%
   - L73 (highSolDay NIBE off): `highSolDay && soc>=60` — bypass při SOC < 60%
+  - Nový config parametr `topeni_chladna_nadrz: 40` (°C) — práh chladné nádrže pro proaktivní ohřev
+  - L42 nyní porovnává `tankT < coldTank` (40°C) místo `maxTank` (50°C) — zákon: "chladnou nádrží se myslí teplota < 40°C"
 
 ### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
 

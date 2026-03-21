@@ -615,6 +615,7 @@ A ZAKAZU PRETOKU
 
     topeni_min_teplota_nadrze: 30 (min teplota nádrže pro oběhové čerpadlo, °C)
     topeni_max_teplota_nadrze: 50 (max teplota nádrže pro topení, °C)
+    topeni_chladna_nadrz: 40 (práh chladné nádrže pro proaktivní ohřev, °C)
     topeni_nocni_snizeni: 0.5 (°C)
     topeni_nocni_od: 22 (hodina)
     topeni_nocni_do: 6 (hodina)
