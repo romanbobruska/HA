@@ -259,9 +259,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Fix**: Anti-cycling nyní má podmínku `&& !met` — když je minimum splněno, vypnutí proběhne okamžitě bez čekání na anti-cycling.
 
 **Fix 2: Topení** (`fve-heating.json`, `rf_htg_decide2`):
-- **Root cause**: Proaktivní ohřev nádrže (zákon 8.3.5) byl blokován podmínkou `!highSolDay`. Při SOC 33% a nejlevnější hodině (level 2) systém čekal na solar, který nestíhal nabít baterii.
-- **Zákon 8.2**: „POKUD JE SOLÁRNÍ VÝROBA NÍZKÁ, ROZHODUJÍ NEJNIŽŠÍ CENY"
-- **Fix**: Podmínka změněna na `(!highSolDay || soc < 60)` — při nízkém SOC se solar ignoruje a nádrž se ohřívá za levnou cenu.
+- **Root cause**: Proaktivní ohřev nádrže byl blokován solárními deferraly (`highSolDay`, `bigSolTom`) a `autoHlad`. Při SOC 33% a nejlevnější hodině (level 2) systém čekal na solar, který nestíhal nabít baterii. Navíc `autoHlad` blokoval NIBE proaktivní ohřev, ačkoli zákon říká, že `autoHlad` blokuje jen patrony.
+- **Zákon 8.2**: „VŽDY JE DOBRÉ NATOPÍT NÁDRŽ I V PŘÍPADĚ, ŽE JE NATOPEN DŮM! A TO ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK"
+- **Fix**: 
+  - L38 (mode deferral): `highSolDay && soc>=60` — bypass při SOC < 60%
+  - L42 (proactive tank): `(!highSolDay || soc<60)`, odstraněn `autoHlad` (blokuje jen patrony)
+  - L72 (bigSolTom deferral): `bigSolTom && soc>=60` — bypass při SOC < 60%
+  - L73 (highSolDay NIBE off): `highSolDay && soc>=60` — bypass při SOC < 60%
 
 ### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
 
