@@ -45,6 +45,8 @@ jistá, NEZASADÍ a vysvětlí proč.
         ale jednodussi, tak maximalne rekneme 100 radku - vice ne. Pokud potrebujes, pridej si dalsi funkci a spravne ji napoj v NR, hlavne, ze bude
         NR upravitelne a jednoduse pochopitelne i clovekem, ktery ma s programovanim cca 5 let zkusenosti
     - Kod musi byt dobre citelny pro cloveka, dobre okomentovany!!!
+    - Vsechny promenne, parametry atd. budou pojmenovany deskriptivne, NE ZKRATKAMI, KTERYM NIKDO NEBUDE V KODU ROZUMET! PROSTE KOD
+        MUSI BYT CITELNY I BEZ TOHO, ABYCH MUSEL NEUSTALE VYHLEDAVAT, CO TO JE ZA PROMENNOU A JAK SE PLNI!!!
     - Dodrzuj design patterny, ktere jsou v NR. Muzes pridat vylepseni, ale hlavne flows nerozbij
 
 1.4 SOLÁRNÍ FVE INSTALACE
