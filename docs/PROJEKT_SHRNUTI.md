@@ -259,15 +259,19 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Fix**: Anti-cycling nyní má podmínku `&& !met` — když je minimum splněno, vypnutí proběhne okamžitě bez čekání na anti-cycling.
 
 **Fix 2: Topení** (`fve-heating.json`, `rf_htg_decide2`):
-- **Root cause**: Proaktivní ohřev nádrže byl blokován solárními deferraly (`highSolDay`, `bigSolTom`) a `autoHlad`. Při SOC 33% a nejlevnější hodině (level 2) systém čekal na solar, který nestíhal nabít baterii. Navíc `autoHlad` blokoval NIBE proaktivní ohřev, ačkoli zákon říká, že `autoHlad` blokuje jen patrony.
+- **Root cause**: Proaktivní ohřev nádrže blokován `autoHlad` v L42. Zákon říká, že `autoHlad` blokuje jen patrony, ne NIBE.
 - **Zákon 8.2**: „VŽDY JE DOBRÉ NATOPÍT NÁDRŽ I V PŘÍPADĚ, ŽE JE NATOPEN DŮM! A TO ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK"
 - **Fix**: 
-  - L38 (mode deferral): `highSolDay && soc>=60` — bypass při SOC < 60%
-  - L42 (proactive tank): `(!highSolDay || soc<60)`, odstraněn `autoHlad` (blokuje jen patrony)
-  - L72 (bigSolTom deferral): `bigSolTom && soc>=60` — bypass při SOC < 60%
-  - L73 (highSolDay NIBE off): `highSolDay && soc>=60` — bypass při SOC < 60%
+  - L42: odstraněn `autoHlad` (blokuje jen patrony, ne NIBE proaktivní ohřev)
   - Nový config parametr `topeni_chladna_nadrz: 40` (°C) — práh chladné nádrže pro proaktivní ohřev
   - L42 nyní porovnává `tankT < coldTank` (40°C) místo `maxTank` (50°C) — zákon: "chladnou nádrží se myslí teplota < 40°C"
+
+### v25.55d: REVERT — SOC bypass na L38/L72/L73 odstraněn (2026-03-22)
+
+**Root cause bugu**: V rámci v25.55b jsem přidal `soc>=60` bypass na L38, L72, L73 (highSolDay/bigSolTom deferraly). To způsobilo, že v noci (SOC je VŽDY nízké přes noc = normální stav) se ignorovaly solární deferraly a NIBE se zapnulo ve 4h ráno za drahých hodin, přestože dnešní solární forecast je vysoký.
+- **Zákon 8.2**: „pokud je solární výroba na daný den vysoká (>50kWh), NIBE se NESPUSTÍ"  
+- **Zákon 8.3.4**: „cheaperAhead/bigSolarTomorrow odklady platí"
+- **Fix**: SOC bypass z L38, L72, L73 kompletně odstraněn. Deferraly `highSolDay`/`bigSolTom` nyní opět fungují správně i v noci.
 
 ### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
 
