@@ -266,6 +266,19 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
   - Nový config parametr `topeni_chladna_nadrz: 40` (°C) — práh chladné nádrže pro proaktivní ohřev
   - L42 nyní porovnává `tankT < coldTank` (40°C) místo `maxTank` (50°C) — zákon: "chladnou nádrží se myslí teplota < 40°C"
 
+### v25.55e: Fix ŠETŘIT mód — baterie se nesmí vybíjet (2026-03-22)
+
+**Root cause**: V Šetřit módu se baterie vybíjela (~10A) přestože zákon 4.3 říká „baterie se nesmí vybíjet". 
+Původní kód nastavoval `PSP = 150W` (statický grid bias) a `max_discharge_power = currentSolar`. 
+Victron ESS control loop nestíhal reagovat a baterie pokrývala deficit.
+
+**Fix** (`fve-modes.json`, ŠETŘIT Logic `139cd450edbbde37`):
+1. **Dynamic PSP** = `max(gridBias, deficit + gridBias)` — grid aktivně pokrývá vše co solar nestíhá
+2. **effectiveMinSoc** = `max(minSoc, liveSoc)` — BMS zabrání vybíjení pod aktuální SOC
+3. **max_discharge_power = currentSolar** (solar DC passthrough, nelze 0 — blokuje solar)
+
+**Testováno**: `max_discharge_power=0` NEFUNGUJE na tomto Victron systému — solar jde celý do baterie, grid import skoční na 8.4kW.
+
 ### v25.55d: REVERT — SOC bypass na L38/L72/L73 odstraněn (2026-03-22)
 
 **Root cause bugu**: V rámci v25.55b jsem přidal `soc>=60` bypass na L38, L72, L73 (highSolDay/bigSolTom deferraly). To způsobilo, že v noci (SOC je VŽDY nízké přes noc = normální stav) se ignorovaly solární deferraly a NIBE se zapnulo ve 4h ráno za drahých hodin, přestože dnešní solární forecast je vysoký.
