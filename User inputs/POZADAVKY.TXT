@@ -89,7 +89,7 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Aktualizovat docs/PROJEKT_SHRNUTI.md (living document)
     - Smazat dočasné soubory (_*.py, fix_*.py, _*.js, _*.txt apod.)
     - Přes SSH zkontrolovat /tmp/ — smazat dočasné skripty
-    - Nikdy nenechavat spustene debug nody, pokud uz je nepotrebujeme, tzn. neprovadime debug - to zabira pamet HA
+    - Nikdy nenechavat spustene debug nody NEBO WARNINGY VE FUNKCICH, pokud uz je nepotrebujeme, tzn. neprovadime debug - to zabira pamet HA
     - ZKONTROLOVAT, ZE ZNAKOVA SADA JE OK!!!
 
 

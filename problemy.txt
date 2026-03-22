@@ -1,6 +1,2 @@
-- STALE SE BATERIE VYBIJI - NECH TU DYNAMIKU, ALE POUZIJ OPTIMISTICKY PRISTUP - 
-POKUD JE SOLARNI VYROBA A MA SE SETRIT BATERIE, AT SE BATERIE SPISE MIRNE NABIJI - CCA 500W.
-
-- ZAROVEN zkontroluj, ze jsi nerozbil mod setreni baterie v pripade, ze nebude zadna solarni vyroba - tam bude asi nejlepsi nastavit max discharge power na 0 rovnou.
-
-proved analyzu a nasad nejvhodnejsi fix, pokud to bude potreba.
+- ANO - POZOR, ZACHOVEJ LOGIKU!!! S TIM MAS PROBLEM!!!!
+- TY ZMRDE, A CO WARNINGY!!!!!!!!!!!???????????????????????

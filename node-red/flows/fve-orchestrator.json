@@ -32,10 +32,10 @@
             "rf_gen_plan_0004",
             "rf_plan_output_05"
         ],
-        "x": -6,
+        "x": 14,
         "y": 19,
         "w": 1052,
-        "h": 262
+        "h": 302
     },
     {
         "id": "c0d4d6462d4ebded",
@@ -62,7 +62,7 @@
             "lo_orch_balancovani"
         ],
         "x": 14,
-        "y": 299,
+        "y": 339,
         "w": 1032,
         "h": 332
     },
@@ -87,7 +87,7 @@
             "auto_trigger_plan"
         ],
         "x": 14,
-        "y": 599,
+        "y": 699,
         "w": 932,
         "h": 242
     },
@@ -109,7 +109,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
+        "x": 160,
         "y": 60,
         "wires": [
             [
@@ -124,7 +124,7 @@
         "g": "4580a451a0858d03",
         "name": "← Manuální trigger",
         "links": [],
-        "x": 55,
+        "x": 75,
         "y": 120,
         "wires": [
             [
@@ -145,7 +145,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 390,
         "y": 100,
         "wires": [
             [
@@ -166,7 +166,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
+        "x": 700,
         "y": 160,
         "wires": [
             [
@@ -188,8 +188,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 690,
-        "y": 240,
+        "x": 710,
+        "y": 280,
         "wires": []
     },
     {
@@ -205,7 +205,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
+        "x": 880,
         "y": 160,
         "wires": [
             [
@@ -225,8 +225,8 @@
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "utf8",
-        "x": 920,
-        "y": 240,
+        "x": 940,
+        "y": 280,
         "wires": [
             []
         ]
@@ -250,7 +250,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 160,
-        "y": 340,
+        "y": 380,
         "wires": [
             [
                 "c36915a8599c5282"
@@ -263,7 +263,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Kontrola podmínek",
-        "func": "// Kontrola podmínek — čte plán, řeší automatizaci, grid lost, SOC target switching\nvar cfg=global.get(\"fve_config\")||{},plan=global.get(\"fve_plan\")||{};\nvar planMode=(plan&&plan.currentMode)?plan.currentMode:\"normal\";\nvar manual=cfg.manual_mod||\"auto\";\nvar mode=manual!==\"auto\"?manual:planMode;\nif(manual!==\"auto\")node.warn(\"KP MANUAL:\"+manual+\" plan:\"+planMode);\nvar wasE=flow.get(\"automatizace_was_enabled\")||false;\nif(cfg.automatizace_enabled===false){\n    if(wasE){flow.set(\"automatizace_was_enabled\",false);flow.set(\"auto_off_normal_sent\",false);\n    global.set(\"fve_current_mode\",\"normal\");msg.currentMode=\"normal\";msg.autoNabijeniAktivni=false;\n    msg.cerpadloTopi=global.get(\"cerpadlo_topi\")||false;msg.saunaAktivni=global.get(\"sauna_aktivni\")||false;\n    node.status({fill:\"yellow\",shape:\"dot\",text:\"AUTO OFF→NORMAL\"});return msg;}\n    if(!(flow.get(\"auto_off_normal_sent\")||false)){flow.set(\"auto_off_normal_sent\",true);\n    global.set(\"fve_current_mode\",\"normal\");msg.currentMode=\"normal\";msg.autoNabijeniAktivni=false;\n    msg.cerpadloTopi=global.get(\"cerpadlo_topi\")||false;msg.saunaAktivni=global.get(\"sauna_aktivni\")||false;\n    node.status({fill:\"grey\",shape:\"ring\",text:\"Auto OFF (reset)\"});return msg;}\n    node.status({fill:\"grey\",shape:\"ring\",text:\"Auto OFF\"});return null;}\nflow.set(\"automatizace_was_enabled\",true);flow.set(\"auto_off_normal_sent\",false);\nvar autoN=global.get(\"auto_nabijeni_aktivni\")||false;\nvar glState=global.get(\"homeassistant.homeAssistant.states['sensor.grid_lost_ciselny']\")||{};\nvar gridLost=parseInt(glState.state||\"0\")>=2;\nvar cerp=global.get(\"cerpadlo_topi\")||false,sauna=global.get(\"sauna_aktivni\")||false;\nif(gridLost&&mode===\"nabijet_ze_site\"){mode=\"setrit\";node.status({fill:\"red\",shape:\"dot\",text:\"GRID LOST→Šetřit\"});}\nglobal.set(\"fve_current_mode\",mode);\nvar bI=[];if(gridLost)bI.push(\"Výpadek sítě\");if(cerp)bI.push(\"Topení\");if(sauna)bI.push(\"sauna\");\nvar bTxt=bI.length>0?\"ANO - \"+bI.join(\",\"):\"NE\";\nvar cp=global.get(\"fve_plan\")||{};if(!cp.status)cp.status={};cp.status.blokaceText=bTxt;global.set(\"fve_plan\",cp);\nmsg.blokaceText=bTxt;msg.autoNabijeniAktivni=autoN;msg.cerpadloTopi=cerp;msg.gridLost=gridLost;msg.saunaAktivni=sauna;msg.config=cfg;msg.plan=plan;\n// SOC target → přepnutí z nabíjení na šetřit\nif(mode===\"nabijet_ze_site\"&&manual===\"auto\"){\n    var tSoc=(plan&&plan.smartCharging)?plan.smartCharging.targetSocFromGrid:0;\n    var cSoc=(global.get(\"fve_status\")||{}).battery_soc||0;\n    if(tSoc>0&&cSoc>=tSoc){mode=\"setrit\";global.set(\"fve_current_mode\",mode);\n    node.status({fill:\"yellow\",shape:\"dot\",text:\"SOC \"+Math.round(cSoc)+\"%≥\"+tSoc+\"%→Šetřit\"});}}\n// Prodej → normal po dosažení cíle\nif(mode===\"prodavat\"&&manual===\"auto\"){\n    var sTgt=(plan&&plan.sellTargetSoc!==undefined)?plan.sellTargetSoc:0;\n    var cSoc2=(global.get(\"fve_status\")||{}).battery_soc||0;\n    if(sTgt>0&&cSoc2<=sTgt){mode=\"normal\";global.set(\"fve_current_mode\",mode);\n    node.status({fill:\"green\",shape:\"dot\",text:\"Prodej→Normal SOC:\"+Math.round(cSoc2)+\"%\"});}}\nmsg.sellTargetSoc=(plan&&plan.sellTargetSoc!==undefined)?plan.sellTargetSoc:(cfg.min_soc||20);\nmsg.currentMode=mode;\nvar src=manual!==\"auto\"?\"(man)\":\"(auto)\";\nvar info=\"\";if(gridLost)info+=\" ⚡GL\";if(cerp)info+=\" Čerp\";if(sauna)info+=\" Sauna\";if(autoN)info+=\" Auto\";\nnode.status({fill:manual!==\"auto\"?\"blue\":\"green\",shape:\"dot\",text:mode+\" \"+src+info});\n\n// --- Opportunistic balancing monitoring (law 12.5) ---\nvar _ha=global.get(\"homeassistant.homeAssistant.states\")||{};\nvar _cSoc=parseFloat((_ha[\"sensor.battery_percent\"]||{}).state)||0;\nvar _bI=parseFloat((_ha[\"sensor.battery_dc_current\"]||{}).state);\nvar _oppSince=global.get(\"opp_soc100_since\")||0;\nvar _oppMon=global.get(\"opp_bal_monitoring\")||false;\nvar _oppIdleMs=global.get(\"opp_bal_idle_ms\")||0;\nvar _oppMaxIdleMs=global.get(\"opp_bal_max_idle_ms\")||0;\nvar _oppLastCheck=global.get(\"opp_bal_last_check\")||0;\nvar _oppMonStart=global.get(\"opp_bal_mon_start\")||0;\nvar _now=Date.now();\nvar _cfg2=global.get(\"fve_config\")||{};\nvar _balForceH=_cfg2.balancing_force_stop_hours||2;\nvar _balIntDays=_cfg2.balancing_interval_days||30;\nif(_cSoc>=100){\n  if(!_oppSince){global.set(\"opp_soc100_since\",_now);global.set(\"opp_bal_last_check\",_now);}\n  else if(!_oppMon&&(_now-_oppSince)>3600000){\n    global.set(\"opp_bal_monitoring\",true);global.set(\"opp_bal_idle_ms\",0);\n    global.set(\"opp_bal_max_idle_ms\",0);global.set(\"opp_bal_last_check\",_now);\n    global.set(\"opp_bal_mon_start\",_now);\n    node.warn(\"Opp bal: SOC 100% > 1h, start monitoring\");\n  }\n  if(_oppMon&&_oppLastCheck>0){\n    var _dt=_now-_oppLastCheck;\n    if(!isNaN(_bI)&&Math.abs(_bI)<0.5){_oppIdleMs+=_dt;}else{_oppIdleMs=0;}\n    global.set(\"opp_bal_idle_ms\",_oppIdleMs);\n    if(_oppIdleMs>_oppMaxIdleMs)global.set(\"opp_bal_max_idle_ms\",_oppIdleMs);\n  }\n  global.set(\"opp_bal_last_check\",_now);\n}else{\n  if(_oppMon){\n    var _maxMs2=global.get(\"opp_bal_max_idle_ms\")||0;\n    var _isOk=_maxMs2>=1200000;\n    var _d=new Date();var _dtStr=_d.toISOString().slice(0,19).replace(\"T\",\" \");\n    var _monDurH=_oppMonStart>0?(_now-_oppMonStart)/3600000:0;\n    global.set(\"opp_bal_pending\",{datetime:_dtStr,ok:_isOk,passive:true,\n      durationH:Math.round(_monDurH*10)/10,maxIdleMin:Math.round(_maxMs2/60000)});\n    node.warn(\"Opp bal complete: \"+(_isOk?\"OK\":\"NOK\")+\" maxIdle:\"+Math.round(_maxMs2/60000)+\"min dur:\"+Math.round(_monDurH*10)/10+\"h\");\n  }\n  if(_oppSince||_oppMon){\n    global.set(\"opp_soc100_since\",0);global.set(\"opp_bal_monitoring\",false);\n    global.set(\"opp_bal_idle_ms\",0);global.set(\"opp_bal_max_idle_ms\",0);\n    global.set(\"opp_bal_last_check\",0);global.set(\"opp_bal_mon_start\",0);\n  }\n}\n\nreturn msg;",
+        "func": "// Kontrola podmínek — čte plán, řeší automatizaci, grid lost, SOC target switching\nvar cfg=global.get(\"fve_config\")||{},plan=global.get(\"fve_plan\")||{};\nvar planMode=(plan&&plan.currentMode)?plan.currentMode:\"normal\";\nvar manual=cfg.manual_mod||\"auto\";\nvar mode=manual!==\"auto\"?manual:planMode;\nif(manual!==\"auto\")\nvar wasE=flow.get(\"automatizace_was_enabled\")||false;\nif(cfg.automatizace_enabled===false){\n    if(wasE){flow.set(\"automatizace_was_enabled\",false);flow.set(\"auto_off_normal_sent\",false);\n    global.set(\"fve_current_mode\",\"normal\");msg.currentMode=\"normal\";msg.autoNabijeniAktivni=false;\n    msg.cerpadloTopi=global.get(\"cerpadlo_topi\")||false;msg.saunaAktivni=global.get(\"sauna_aktivni\")||false;\n    node.status({fill:\"yellow\",shape:\"dot\",text:\"AUTO OFF→NORMAL\"});return msg;}\n    if(!(flow.get(\"auto_off_normal_sent\")||false)){flow.set(\"auto_off_normal_sent\",true);\n    global.set(\"fve_current_mode\",\"normal\");msg.currentMode=\"normal\";msg.autoNabijeniAktivni=false;\n    msg.cerpadloTopi=global.get(\"cerpadlo_topi\")||false;msg.saunaAktivni=global.get(\"sauna_aktivni\")||false;\n    node.status({fill:\"grey\",shape:\"ring\",text:\"Auto OFF (reset)\"});return msg;}\n    node.status({fill:\"grey\",shape:\"ring\",text:\"Auto OFF\"});return null;}\nflow.set(\"automatizace_was_enabled\",true);flow.set(\"auto_off_normal_sent\",false);\nvar autoN=global.get(\"auto_nabijeni_aktivni\")||false;\nvar glState=global.get(\"homeassistant.homeAssistant.states['sensor.grid_lost_ciselny']\")||{};\nvar gridLost=parseInt(glState.state||\"0\")>=2;\nvar cerp=global.get(\"cerpadlo_topi\")||false,sauna=global.get(\"sauna_aktivni\")||false;\nif(gridLost&&mode===\"nabijet_ze_site\"){mode=\"setrit\";node.status({fill:\"red\",shape:\"dot\",text:\"GRID LOST→Šetřit\"});}\nglobal.set(\"fve_current_mode\",mode);\nvar bI=[];if(gridLost)bI.push(\"Výpadek sítě\");if(cerp)bI.push(\"Topení\");if(sauna)bI.push(\"sauna\");\nvar bTxt=bI.length>0?\"ANO - \"+bI.join(\",\"):\"NE\";\nvar cp=global.get(\"fve_plan\")||{};if(!cp.status)cp.status={};cp.status.blokaceText=bTxt;global.set(\"fve_plan\",cp);\nmsg.blokaceText=bTxt;msg.autoNabijeniAktivni=autoN;msg.cerpadloTopi=cerp;msg.gridLost=gridLost;msg.saunaAktivni=sauna;msg.config=cfg;msg.plan=plan;\n// SOC target → přepnutí z nabíjení na šetřit\nif(mode===\"nabijet_ze_site\"&&manual===\"auto\"){\n    var tSoc=(plan&&plan.smartCharging)?plan.smartCharging.targetSocFromGrid:0;\n    var cSoc=(global.get(\"fve_status\")||{}).battery_soc||0;\n    if(tSoc>0&&cSoc>=tSoc){mode=\"setrit\";global.set(\"fve_current_mode\",mode);\n    node.status({fill:\"yellow\",shape:\"dot\",text:\"SOC \"+Math.round(cSoc)+\"%≥\"+tSoc+\"%→Šetřit\"});}}\n// Prodej → normal po dosažení cíle\nif(mode===\"prodavat\"&&manual===\"auto\"){\n    var sTgt=(plan&&plan.sellTargetSoc!==undefined)?plan.sellTargetSoc:0;\n    var cSoc2=(global.get(\"fve_status\")||{}).battery_soc||0;\n    if(sTgt>0&&cSoc2<=sTgt){mode=\"normal\";global.set(\"fve_current_mode\",mode);\n    node.status({fill:\"green\",shape:\"dot\",text:\"Prodej→Normal SOC:\"+Math.round(cSoc2)+\"%\"});}}\nmsg.sellTargetSoc=(plan&&plan.sellTargetSoc!==undefined)?plan.sellTargetSoc:(cfg.min_soc||20);\nmsg.currentMode=mode;\nvar src=manual!==\"auto\"?\"(man)\":\"(auto)\";\nvar info=\"\";if(gridLost)info+=\" ⚡GL\";if(cerp)info+=\" Čerp\";if(sauna)info+=\" Sauna\";if(autoN)info+=\" Auto\";\nnode.status({fill:manual!==\"auto\"?\"blue\":\"green\",shape:\"dot\",text:mode+\" \"+src+info});\n\n// --- Opportunistic balancing monitoring (law 12.5) ---\nvar _ha=global.get(\"homeassistant.homeAssistant.states\")||{};\nvar _cSoc=parseFloat((_ha[\"sensor.battery_percent\"]||{}).state)||0;\nvar _bI=parseFloat((_ha[\"sensor.battery_dc_current\"]||{}).state);\nvar _oppSince=global.get(\"opp_soc100_since\")||0;\nvar _oppMon=global.get(\"opp_bal_monitoring\")||false;\nvar _oppIdleMs=global.get(\"opp_bal_idle_ms\")||0;\nvar _oppMaxIdleMs=global.get(\"opp_bal_max_idle_ms\")||0;\nvar _oppLastCheck=global.get(\"opp_bal_last_check\")||0;\nvar _oppMonStart=global.get(\"opp_bal_mon_start\")||0;\nvar _now=Date.now();\nvar _cfg2=global.get(\"fve_config\")||{};\nvar _balForceH=_cfg2.balancing_force_stop_hours||2;\nvar _balIntDays=_cfg2.balancing_interval_days||30;\nif(_cSoc>=100){\n  if(!_oppSince){global.set(\"opp_soc100_since\",_now);global.set(\"opp_bal_last_check\",_now);}\n  else if(!_oppMon&&(_now-_oppSince)>3600000){\n    global.set(\"opp_bal_monitoring\",true);global.set(\"opp_bal_idle_ms\",0);\n    global.set(\"opp_bal_max_idle_ms\",0);global.set(\"opp_bal_last_check\",_now);\n    global.set(\"opp_bal_mon_start\",_now);\n  }\n  if(_oppMon&&_oppLastCheck>0){\n    var _dt=_now-_oppLastCheck;\n    if(!isNaN(_bI)&&Math.abs(_bI)<0.5){_oppIdleMs+=_dt;}else{_oppIdleMs=0;}\n    global.set(\"opp_bal_idle_ms\",_oppIdleMs);\n    if(_oppIdleMs>_oppMaxIdleMs)global.set(\"opp_bal_max_idle_ms\",_oppIdleMs);\n  }\n  global.set(\"opp_bal_last_check\",_now);\n}else{\n  if(_oppMon){\n    var _maxMs2=global.get(\"opp_bal_max_idle_ms\")||0;\n    var _isOk=_maxMs2>=1200000;\n    var _d=new Date();var _dtStr=_d.toISOString().slice(0,19).replace(\"T\",\" \");\n    var _monDurH=_oppMonStart>0?(_now-_oppMonStart)/3600000:0;\n    global.set(\"opp_bal_pending\",{datetime:_dtStr,ok:_isOk,passive:true,\n      durationH:Math.round(_monDurH*10)/10,maxIdleMin:Math.round(_maxMs2/60000)});\n  }\n  if(_oppSince||_oppMon){\n    global.set(\"opp_soc100_since\",0);global.set(\"opp_bal_monitoring\",false);\n    global.set(\"opp_bal_idle_ms\",0);global.set(\"opp_bal_max_idle_ms\",0);\n    global.set(\"opp_bal_last_check\",0);global.set(\"opp_bal_mon_start\",0);\n  }\n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -285,7 +285,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Rozhodnutí o akci",
-        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\nvar config = global.get(\"fve_config\") || {};\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    default: msg.modeIndex = 0;\n}\n\n// v23: Track balancing start time\n// Force-stop is now handled by BALANCOVÁNÍ Logic (so it can send service call)\nif (mode === \"Balancování\") {\n    if (!global.get(\"balancing_started_at\")) {\n        global.set(\"balancing_started_at\", Date.now());\n    }\n    var startedAt = global.get(\"balancing_started_at\");\n    var maxMs = (config.balancing_force_stop_hours || 3) * 3600 * 1000;\n    if (Date.now() - startedAt > maxMs) {\n        // v23: Don't switch mode — let BALANCOVÁNÍ Logic handle force-stop\n        // This ensures the service call to update last_pylontech_balanced is sent\n        msg.forceStopBalancing = true;\n        node.warn(\"Balancování: max doba \" + (config.balancing_force_stop_hours || 3) + \"h překročena → forceStop flag pro BALANCOVÁNÍ Logic\");\n    }\n} else {\n    global.set(\"balancing_started_at\", null);\n    global.set(\"balancing_completed\", false);\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"Balancování\");\nif (mode !== \"Balancování\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
+        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\nvar config = global.get(\"fve_config\") || {};\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    default: msg.modeIndex = 0;\n}\n\n// v23: Track balancing start time\n// Force-stop is now handled by BALANCOVÁNÍ Logic (so it can send service call)\nif (mode === \"Balancování\") {\n    if (!global.get(\"balancing_started_at\")) {\n        global.set(\"balancing_started_at\", Date.now());\n    }\n    var startedAt = global.get(\"balancing_started_at\");\n    var maxMs = (config.balancing_force_stop_hours || 3) * 3600 * 1000;\n    if (Date.now() - startedAt > maxMs) {\n        // v23: Don't switch mode — let BALANCOVÁNÍ Logic handle force-stop\n        // This ensures the service call to update last_pylontech_balanced is sent\n        msg.forceStopBalancing = true;\n    }\n} else {\n    global.set(\"balancing_started_at\", null);\n    global.set(\"balancing_completed\", false);\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"Balancování\");\nif (mode !== \"Balancování\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -293,7 +293,7 @@
         "finalize": "",
         "libs": [],
         "x": 450,
-        "y": 420,
+        "y": 460,
         "wires": [
             [
                 "19a783a61de3519b"
@@ -349,7 +349,7 @@
         "repair": false,
         "outputs": 7,
         "x": 690,
-        "y": 420,
+        "y": 460,
         "wires": [
             [
                 "f10a91fcb4de6bd3"
@@ -385,7 +385,7 @@
             "8b55cfc5181b9eb7"
         ],
         "x": 1005,
-        "y": 340,
+        "y": 380,
         "wires": []
     },
     {
@@ -399,7 +399,7 @@
             "ec611f6aba7d5c59"
         ],
         "x": 1005,
-        "y": 380,
+        "y": 420,
         "wires": []
     },
     {
@@ -413,7 +413,7 @@
             "1d98a0541716ce58"
         ],
         "x": 1005,
-        "y": 420,
+        "y": 460,
         "wires": []
     },
     {
@@ -427,7 +427,7 @@
             "179ed150020d459c"
         ],
         "x": 1005,
-        "y": 460,
+        "y": 500,
         "wires": []
     },
     {
@@ -441,7 +441,7 @@
             "c682224043634fcd"
         ],
         "x": 1005,
-        "y": 500,
+        "y": 540,
         "wires": []
     },
     {
@@ -491,7 +491,7 @@
             }
         ],
         "x": 140,
-        "y": 740,
+        "y": 840,
         "wires": [
             [
                 "376106d716756636"
@@ -512,7 +512,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 740,
+        "y": 840,
         "wires": [
             [
                 "dc8da09248ec1e29"
@@ -543,7 +543,7 @@
         "to": "",
         "reg": false,
         "x": 600,
-        "y": 740,
+        "y": 840,
         "wires": [
             []
         ]
@@ -557,7 +557,7 @@
         "sqlquery": "fixed",
         "sql": "SELECT * FROM \"own_energy_prices_total\"",
         "name": "Čti čerstvé ceny z DB",
-        "x": 620,
+        "x": 640,
         "y": 100,
         "wires": [
             [
@@ -578,7 +578,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
+        "x": 900,
         "y": 100,
         "wires": [
             [
@@ -597,7 +597,7 @@
             "e93b8f3e662c6190"
         ],
         "x": 1005,
-        "y": 540,
+        "y": 580,
         "wires": []
     },
     {
@@ -640,7 +640,7 @@
             }
         ],
         "x": 130,
-        "y": 800,
+        "y": 900,
         "wires": [
             [
                 "sauna_set_global"
@@ -661,7 +661,7 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 800,
+        "y": 900,
         "wires": [
             [],
             [
@@ -683,7 +683,7 @@
         "finalize": "",
         "libs": [],
         "x": 380,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "blokace_file_write"
@@ -703,7 +703,7 @@
         "overwriteFile": "true",
         "encoding": "utf8",
         "x": 650,
-        "y": 540,
+        "y": 580,
         "wires": [
             []
         ]
@@ -734,8 +734,8 @@
         "blockInputOverrides": true,
         "domain": "number",
         "service": "set_value",
-        "x": 660,
-        "y": 800,
+        "x": 740,
+        "y": 900,
         "wires": [
             [
                 "sauna_trigger_plan"
@@ -756,7 +756,7 @@
         "finalize": "",
         "libs": [],
         "x": 820,
-        "y": 720,
+        "y": 820,
         "wires": [
             [
                 "9333668b1d326a83"
@@ -790,7 +790,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 600,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "auto_trigger_plan"
@@ -811,7 +811,7 @@
         "finalize": "",
         "libs": [],
         "x": 180,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "9333668b1d326a83"
@@ -829,7 +829,7 @@
             "li_modes_balancovani"
         ],
         "x": 1005,
-        "y": 590,
+        "y": 630,
         "wires": []
     },
     {
@@ -845,7 +845,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 220,
+        "x": 240,
         "y": 180,
         "wires": [
             [
@@ -866,7 +866,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 460,
+        "x": 480,
         "y": 180,
         "wires": [
             [
@@ -887,8 +887,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
-        "y": 180,
+        "x": 720,
+        "y": 200,
         "wires": [
             [
                 "rf_gen_plan_0004"
@@ -908,8 +908,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 180,
+        "x": 920,
+        "y": 220,
         "wires": [
             [
                 "rf_plan_output_05"
@@ -929,8 +929,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 240,
+        "x": 440,
+        "y": 280,
         "wires": [
             [
                 "df085ac4da095340",
