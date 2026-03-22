@@ -273,6 +273,11 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Zákon 8.3.4**: „cheaperAhead/bigSolarTomorrow odklady platí"
 - **Fix**: SOC bypass z L38, L72, L73 kompletně odstraněn. Deferraly `highSolDay`/`bigSolTom` nyní opět fungují správně i v noci.
 
+**Fix 3: Filtrace — min continuous run po NR restartu** (`filtrace-bazenu.json`, `filtrace_decision`):
+- **Root cause**: Po NR restartu se `contStart` (continuous run tracking) resetuje na `now` → `contRunMin=0` → `minRunOk=false`. L197 (`!minRunOk`) pak blokoval vypnutí i když `met=true` (denní minimum splněno). Stejný pattern jako anti-cycling bug.
+- **Zákon 10.1** (PRIORITA): „FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO"
+- **Fix**: L197 doplněno o `&& !met` — když je minimum splněno, min continuous run protection neblokuje vypnutí.
+
 ### v25.54: Fix Law 5.0 — auto=OFF nesmí ovlivňovat charger (2026-03-20)
 
 **Root cause**: V `manager-nabijeni-auta.json` (`main_logic_func`) se kontrola `!hlad` (auto nemá hlad → STOP) prováděla PŘED kontrolou `!auto` (automatizace OFF → NIC). Když uživatel vypnul automatizaci a `auto_ma_hlad=OFF`, manager přesto zastavil wallbox.
