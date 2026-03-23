@@ -21,10 +21,16 @@
 > **Příkazy — pravidla (POVINNÁ, prevence zaseknutí):**
 > - NIKDY `Start-Sleep` — uživatel nevidí nic. Použít non-blocking command + command_status s WaitDurationSeconds.
 > - NIKDY `python3 -c "..."` přes SSH — escapování se zasekne. VŽDY heredoc: `<< 'PYEOF' ... PYEOF`
+> - **POZOR na velké heredoc skripty** — pokud Python skript obsahuje assert, speciální znaky, uvozovky nebo `\n`:
+>   1. NEJPRVE zapsat skript na server: `ssh ... "sudo tee /tmp/skript.py > /dev/null << 'PYEOF' ... PYEOF"`
+>   2. POTOM spustit: `ssh ... "sudo python3 /tmp/skript.py"`
+>   3. NAKONEC smazat: `ssh ... "sudo rm -f /tmp/skript.py"`
+>   - Důvod: velké heredoc s inline `python3 <<` se zasekne kvůli escape problémům v PowerShell → uživatel musí ručně cancelovat
 > - NIKDY `2>/dev/null` — skrývá chyby, uživatel nevidí co se děje.
 > - NIKDY dlouhé pipe chains `ssh ... | node -e "..."` — PS opakuje command, vypadá zmateně. Zpracovat na serveru, stáhnout výsledek.
 > - `sudo docker restart` vždy NON-BLOCKING — trvá 30s. Spustit non-blocking, pak check status.
-> - File transfer: base64 encode na serveru → `ssh cat` → lokální soubor. Ne `Get-Content | ssh`.
+> - NR restart: `sudo bash -c 'source /etc/profile.d/homeassistant.sh 2>/dev/null; ha apps restart a0d7b954_nodered'` (ne `ha addons` — deprecated)
+> - File transfer: base64 encode na serveru → `ssh cat` → lokální soubor. Ne `Get-Content | ssh`. SCP nefunguje (subsystem error).
 > - Dlouhé SSH příkazy rozdělit na víc kroků s echo progress markers.
 > - Být samostatný — dokončit práci BEZ nutnosti interakce (cancel, klikání). Uživatel nehlídá terminál.
 >
