@@ -1,1 +1,1 @@
-Pokud je vse hotovo, vypis mi vystihujici zadani do zakonu, pridam to tam sam
+souhlasim. nezapomen aktualizovat entity: input_select.topeni_mod se spravnou ikonkou, at se mi spravne zobrazuje v dashboardu, ze tento mod nastal.

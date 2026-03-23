@@ -334,6 +334,21 @@ A ZAKAZU PRETOKU
 7.0. ZÁKLADNÍ PRAVIDLA
 7.0.1 -  KDYZ JE CHARGER (WALLBOX) VYPNUTY, TAK I KDYZ JE AUTO NABITE, VICTRON HLASI STAV CHARGERU 6 - WAITING FOR START.
             TEPRVE, KDYZ SE CHARGER ZAPNE, TAK, POKUD JE AUTO NABITE, CHARGER HLASI STAV 3 - CHARGED
+7.0.2 - DETEKCE HLADU AUTA (auto_ma_hlad) — SMART PROBE
+    - Když je charger VYPNUTÝ (StartStop=0), Victron hlásí stav 6 (WaitStart) bez ohledu na to,
+      zda je auto nabité nebo ne. Stav 3 (Charged) se zobrazí POUZE když je charger ZAPNUTÝ.
+    - Proto se auto_ma_hlad NEŘÍDÍ přímo stavem chargeru, ale přes NR "Smart Probe" logiku:
+      a) Při PŘIPOJENÍ auta (stav změní z 0 na nenulový) se automaticky spustí diagnostický probe:
+         - Nastaví se ampéráž na minimum (6A), charger se krátce zapne (~20s)
+         - Pokud auto je NABITÉ (stav 3): kontaktor se neuzavře, neteče žádná energie → auto_ma_hlad = OFF
+         - Pokud auto MÁ HLAD (stav 2): krátký odběr ~0.006 kWh na minimu → auto_ma_hlad = ON
+         - Po probe se charger opět vypne
+      b) Během běžného provozu: stav chargeru (2=nabíjí, 3=nabité, 0=odpojeno) přímo aktualizuje auto_ma_hlad
+      c) Venkovní wallbox: zachováno staré chování (stavy 2/4/6 = hlad, stavy 0/3 = bez hladu)
+      d) auto_ma_hlad = garage_hunger OR outdoor_hunger
+    - Logika auto_ma_hlad je KOMPLETNĚ v Node-RED (tab "Manager nabíjení auta", skupina "Auto Hunger Probe")
+    - Během probe (20s) hlavní rozhodovací logika manageru pozastaví činnost (probe_active flag)
+        
 7.1 PRIORITNÍ ROZHODOVÁNÍ (první splněná podmínka vyhraje)
     1. Auto nemá hlad (auto_ma_hlad=OFF) → STOP
     2. Automatizace OFF → STOP
