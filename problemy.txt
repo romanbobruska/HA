@@ -1,4 +1,7 @@
-Ctrl+Shift+R nepomaha. Pokud menis dashboard, vzdy je potreba restartovat HA. Zapamatuj si to. udelal jsem to, je to ok.
+Jde mi o to, ze kdyz si vypocitas, ze baterii vybijes na soc 70 procent, tak by asi tento cil nemel klesat - predpokladam, ze jsi si vypocital, ze pri danem 
+cilovem SOC pri vybijeni baterie stale budeme v zisku, kdyz pote v noci odebereme za draho.
 
-Ted zacneme pouzivat zbyvajici solarni hodinu. proved analyzu fve planu a rekni mi, co a jak implementujes, abys nerozbil stavajici logiku,
-pouze to pouzil spravne, hlavne v simulaci planu SOC atd.
+Asi tak - porad chceme vydelat pri prodeji - ne, ze prodame napr. za 7 korun/kWh 5kWh a pak vezmeme za 8 hodin v noci 5kWh za 6k korun/kWh. to by
+se nevyplatilo. Jelikoz mame ztraty pri nabijeni/vybijeni a amortizaci, ale to znas.
+
+Rozumime si?
