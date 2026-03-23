@@ -1,7 +1,4 @@
-Jde mi o to, ze kdyz si vypocitas, ze baterii vybijes na soc 70 procent, tak by asi tento cil nemel klesat - predpokladam, ze jsi si vypocital, ze pri danem 
-cilovem SOC pri vybijeni baterie stale budeme v zisku, kdyz pote v noci odebereme za draho.
+ne - zapis to vice citelne - pro uzivatele, ktery neumi programovat, ale rozumi logice - typicky business
+user - tak to budes psat vzxdy - zapamatuj si to.
 
-Asi tak - porad chceme vydelat pri prodeji - ne, ze prodame napr. za 7 korun/kWh 5kWh a pak vezmeme za 8 hodin v noci 5kWh za 6k korun/kWh. to by
-se nevyplatilo. Jelikoz mame ztraty pri nabijeni/vybijeni a amortizaci, ale to znas.
-
-Rozumime si?
+Od presnych definici mas MD fily - zakony jsou deskripce logiky

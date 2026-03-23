@@ -165,13 +165,19 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Solar coverage check: pokud solar baterii naplní sám, nechargrovat z gridu
 
 4.5 PRODÁVAT
-    - PSP = -maxFeedIn (aktivní prodej z baterie do sítě)
-    - Podmínka: prodejní cena × efficieny - costBasis ≥ <parametr z konfigu> AND SOC > minSoc+noční rezerva
-    - Prodej deferral: odložit pokud >20% lepší cena do 3h (neplatí pro předpočítané offsety)
-    - Nastavis si v modu prodavat SOC baterie, na kterou chces baterii vybit. Pod tu nepujdes. Jde o to, aby fungoval plan
-        i v dalsich modech a nevybil jsi si baterii na SOC, ktere pak bude brat ze site v drazsich hodinach. Ne, ze budes 
-        plan prepinat v aktualnim modu z prodavat na normal - to je spatne. Musis vedet min. hodinu predem, na jakou SOC 
-        chces baterii vybit.
+    - Aktivní prodej energie z baterie do sítě za výhodnou cenu.
+    - Prodej se spustí pouze pokud je zisk po odečtení ztrát a amortizace dostatečný (dle konfigu).
+    - Odložení prodeje: pokud je do 3 hodin o více než 20 % lepší cena, prodej se odloží.
+    - CÍLOVÉ SOC PRO PRODEJ:
+        - Před zahájením prodeje se vypočítá cílové SOC baterie — pod toto SOC se NIKDY neprodá.
+        - Cíl vychází z toho, kolik energie dům spotřebuje od teď do začátku solární výroby.
+          Musíme si nechat dost v baterii, abychom přes noc nemuseli kupovat energii ze sítě za drahé ceny.
+        - Tento cíl je STABILNÍ — nemění se každých 15 sekund. Závisí na spotřebě a cenách, ne na aktuálním SOC.
+        - Plán zobrazuje: "SOC XX% (cíl YY%)"
+    - HLAVNÍ PRAVIDLO: Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
+      ze sítě za vyšší cenu. Prodáváme jen to, co přes noc nepotřebujeme.
+    - Nejlevnější noční hodiny se automaticky nastaví na ŠETŘIT — baterie si udrží
+      rezervu na ráno, kdy ještě nesvítí slunce.
 
 
 4.6 ZÁKAZ PŘETOKŮ
