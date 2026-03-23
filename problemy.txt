@@ -1,1 +1,4 @@
-Ano
+Ctrl+Shift+R nepomaha. Pokud menis dashboard, vzdy je potreba restartovat HA. Zapamatuj si to. udelal jsem to, je to ok.
+
+Ted zacneme pouzivat zbyvajici solarni hodinu. proved analyzu fve planu a rekni mi, co a jak implementujes, abys nerozbil stavajici logiku,
+pouze to pouzil spravne, hlavne v simulaci planu SOC atd.
