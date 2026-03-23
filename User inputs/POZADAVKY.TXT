@@ -331,6 +331,9 @@ A ZAKAZU PRETOKU
 7. FLOW: MANAGER NABÍJENÍ AUTA (manager-nabijeni-auta.json)
 ================================================================================
 
+7.0. ZÁKLADNÍ PRAVIDLA
+7.0.1 -  KDYZ JE CHARGER (WALLBOX) VYPNUTY, TAK I KDYZ JE AUTO NABITE, VICTRON HLASI STAV CHARGERU 6 - WAITING FOR START.
+            TEPRVE, KDYZ SE CHARGER ZAPNE, TAK, POKUD JE AUTO NABITE, CHARGER HLASI STAV 3 - CHARGED
 7.1 PRIORITNÍ ROZHODOVÁNÍ (první splněná podmínka vyhraje)
     1. Auto nemá hlad (auto_ma_hlad=OFF) → STOP
     2. Automatizace OFF → STOP
