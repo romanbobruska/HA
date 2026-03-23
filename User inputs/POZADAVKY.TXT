@@ -498,7 +498,7 @@ A ZAKAZU PRETOKU
     - Všechna ostatní pravidla patron platí beze změny (SOC ≥ 90%, auto_ma_hlad=OFF, tank < maxTankPat, atd.)
     - Korekční smůdka patron řídí počet fází podle přebytku — žádný odběr ze sítě
     - Config: topeni_boost_max_sell_price (výchozí 2 Kč/kWh)
-    - Zobrazení: input_select.topeni_mod = "NIBE + Patrony", ikona mdi:radiator
+    - Zobrazení: input_select.topeni_mod = "NIBE + Patrony"
 
 ================================================================================
 9. FLOW: BOJLER (boiler.json)

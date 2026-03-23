@@ -27,6 +27,49 @@
         "h": 82
     },
     {
+        "id": "init_grp_pipeline",
+        "type": "group",
+        "z": "e451448d0e5cd53a",
+        "name": "VRM Data Pipeline",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "82516184e2da4aba",
+            "5bc15235de0be6d7",
+            "94fad41d26e0cad6",
+            "b3489292b6b19a0a",
+            "e898a34c99d763a9",
+            "12e5622470d1810f",
+            "cbe7aadb6a9789fb",
+            "ef45bce4eeb696b2",
+            "cf10227596934c6b",
+            "7de54d464c4599ae",
+            "b6bcdbf86abcbeb8",
+            "94b7b011f71e932d",
+            "492bb8db67a996d6",
+            "214177b52b123155",
+            "3bfaab9a23737f7e",
+            "4356e0d632c43221",
+            "d0cec879a0aa07e1",
+            "0924d118225c702a",
+            "d4aa59089ba5e79a",
+            "815f4827fac6b509",
+            "5efc09c5570e0e2d",
+            "7a40f647c053ea8e",
+            "06bafcba794da9e5",
+            "ea8178ed56fc307d",
+            "vrm_hourly_solar_fc",
+            "chg_hourly_solar_fc",
+            "svc_hourly_solar_fc"
+        ],
+        "x": 14,
+        "y": 99,
+        "w": 1112,
+        "h": 822
+    },
+    {
         "id": "8052afe0fea27044",
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
@@ -92,6 +135,7 @@
         "id": "82516184e2da4aba",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav forecast výrobu dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -114,16 +158,16 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 980,
-        "y": 100,
+        "y": 140,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "5bc15235de0be6d7",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav forecast výrobu zítra",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -146,16 +190,16 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 980,
-        "y": 160,
+        "y": 200,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "94fad41d26e0cad6",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -172,18 +216,18 @@
         "to": "",
         "reg": false,
         "x": 450,
-        "y": 140,
+        "y": 180,
         "wires": [
             [
                 "a9f0fdbe34b08f42"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "b3489292b6b19a0a",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Set globals",
         "rules": [
             {
@@ -200,11 +244,10 @@
         "to": "",
         "reg": false,
         "x": 110,
-        "y": 820,
+        "y": 880,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "f75eb57b02744611",
@@ -272,6 +315,7 @@
         "id": "e898a34c99d763a9",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -288,18 +332,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 260,
+        "y": 300,
         "wires": [
             [
                 "510d8c7a6922180c"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "12e5622470d1810f",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -316,18 +360,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 320,
+        "y": 360,
         "wires": [
             [
                 "a55129e755036403"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "cbe7aadb6a9789fb",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav spotřebu dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -350,11 +394,10 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 960,
-        "y": 240,
+        "y": 280,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "a55129e755036403",
@@ -391,6 +434,7 @@
         "id": "ef45bce4eeb696b2",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -407,18 +451,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 380,
+        "y": 420,
         "wires": [
             [
                 "90ecdd0dbac92033"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "cf10227596934c6b",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav spotřebu EV dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -441,11 +485,10 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 970,
-        "y": 320,
+        "y": 360,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "90ecdd0dbac92033",
@@ -482,6 +525,7 @@
         "id": "7de54d464c4599ae",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -498,13 +542,12 @@
         "to": "",
         "reg": false,
         "x": 440,
-        "y": 440,
+        "y": 480,
         "wires": [
             [
                 "c3dbf47b62785eff"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "c3dbf47b62785eff",
@@ -541,6 +584,7 @@
         "id": "b6bcdbf86abcbeb8",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -557,18 +601,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 500,
+        "y": 540,
         "wires": [
             [
                 "4236d9de7efc61ec"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "94b7b011f71e932d",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav výrobu solar dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -591,16 +635,16 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 970,
-        "y": 400,
+        "y": 440,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "492bb8db67a996d6",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav nabíjení baterie dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -623,11 +667,10 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 980,
-        "y": 480,
+        "y": 520,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "4236d9de7efc61ec",
@@ -664,6 +707,7 @@
         "id": "214177b52b123155",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -680,13 +724,12 @@
         "to": "",
         "reg": false,
         "x": 440,
-        "y": 560,
+        "y": 600,
         "wires": [
             [
                 "4245e7094a4f80b7"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "4245e7094a4f80b7",
@@ -723,6 +766,7 @@
         "id": "3bfaab9a23737f7e",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -739,18 +783,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 620,
+        "y": 660,
         "wires": [
             [
                 "3a3fb82b0bca8580"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "4356e0d632c43221",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav vybíjení baterie dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -773,11 +817,10 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 980,
-        "y": 560,
+        "y": 600,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "3a3fb82b0bca8580",
@@ -814,6 +857,7 @@
         "id": "d0cec879a0aa07e1",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -830,18 +874,18 @@
         "to": "",
         "reg": false,
         "x": 430,
-        "y": 680,
+        "y": 720,
         "wires": [
             [
                 "ea8178ed56fc307d"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "0924d118225c702a",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav prodej do sítě dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -864,16 +908,16 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 980,
-        "y": 640,
+        "y": 680,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "d4aa59089ba5e79a",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -890,28 +934,28 @@
         "to": "",
         "reg": false,
         "x": 450,
-        "y": 200,
+        "y": 240,
         "wires": [
             [
                 "f75eb57b02744611"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "815f4827fac6b509",
         "type": "function",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Spočítej hodnoty",
-        "func": "let forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") \nlet forecast_vyroba_zitra = global.get(\"forecast_vyroba_zitra\") \nlet grid_direct_use = global.get(\"grid_direct_use\")\nlet grid_to_battery = global.get(\"grid_to_battery\")\nlet ev_consumption = global.get(\"ev_consumption\")\nlet solar_consumption = global.get(\"solar_consumption\")\nlet solar_to_battery = global.get(\"solar_to_battery\")\nlet battery_consumption = global.get(\"battery_consumption\")\nlet battery_to_grid = global.get(\"battery_to_grid\")\nlet total_solar_yield = global.get(\"total_solar_yield\")\nlet forecast_vyroba_dnes_zbytek = global.get(\"forecast_zbytek_vyroba_dnes\") \n\n\nif (!Number.isFinite(forecast_vyroba_dnes)) {\n    forecast_vyroba_dnes = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_zitra)) {\n    forecast_vyroba_zitra = 0\n}\n\nif (!Number.isFinite(grid_direct_use)) {\n    grid_direct_use = 0\n}\n\nif (!Number.isFinite(grid_to_battery)) {\n    grid_to_battery = 0\n}\n\nif (!Number.isFinite(ev_consumption)) {\n    ev_consumption = 0\n}\n\nif (!Number.isFinite(solar_consumption)) {\n    solar_consumption = 0\n}\n\nif (!Number.isFinite(solar_to_battery)) {\n    solar_to_battery = 0\n}\n\nif (!Number.isFinite(battery_consumption)) {\n    battery_consumption = 0\n}\n\nif (!Number.isFinite(battery_to_grid)) {\n    battery_to_grid = 0\n}\n\nif (!Number.isFinite(total_solar_yield)) {\n    total_solar_yield = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_dnes_zbytek)) {\n    forecast_vyroba_dnes_zbytek = 0\n}\n\nmsg.payload_forecast_vyroba_dnes = (forecast_vyroba_dnes / 1000).toFixed(2)\n\nmsg.payload_forecast_vyroba_zitra = (forecast_vyroba_zitra / 1000).toFixed(2)\n\nmsg.payload_grid = (grid_direct_use +\n    grid_to_battery).toFixed(2)\n\nmsg.payload_ev = ev_consumption.toFixed(2)\n\nmsg.payload_solar = total_solar_yield.toFixed(2)\n\nmsg.payload_battery_plus = (solar_to_battery + grid_to_battery).toFixed(2)\n\nmsg.payload_battery_minus = (battery_consumption + battery_to_grid).toFixed(2)\n\nmsg.payload_vyroba = ((total_solar_yield - (solar_to_battery + solar_consumption))\n    + battery_to_grid).toFixed(2)\n\nmsg.payload_forecast_vyroba_dnes_zbytek = (forecast_vyroba_dnes_zbytek / 1000).toFixed(2)\n\n// Store computed values in global for other flows\nglobal.set(\"fve_spotreba_sit_kwh\", parseFloat(msg.payload_grid))\nglobal.set(\"fve_spotreba_ev_kwh\", parseFloat(msg.payload_ev))\nglobal.set(\"fve_vyroba_solar_kwh\", parseFloat(msg.payload_solar))\nglobal.set(\"fve_nabijeni_bat_kwh\", parseFloat(msg.payload_battery_plus))\nglobal.set(\"fve_vybijeni_bat_kwh\", parseFloat(msg.payload_battery_minus))\nglobal.set(\"fve_prodej_sit_kwh\", parseFloat(msg.payload_vyroba))\n    \nreturn msg",
+        "func": "let forecast_vyroba_dnes = global.get(\"forecast_vyroba_dnes\") \nlet forecast_vyroba_zitra = global.get(\"forecast_vyroba_zitra\") \nlet grid_direct_use = global.get(\"grid_direct_use\")\nlet grid_to_battery = global.get(\"grid_to_battery\")\nlet ev_consumption = global.get(\"ev_consumption\")\nlet solar_consumption = global.get(\"solar_consumption\")\nlet solar_to_battery = global.get(\"solar_to_battery\")\nlet battery_consumption = global.get(\"battery_consumption\")\nlet battery_to_grid = global.get(\"battery_to_grid\")\nlet total_solar_yield = global.get(\"total_solar_yield\")\nlet forecast_vyroba_dnes_zbytek = global.get(\"forecast_zbytek_vyroba_dnes\") \nlet forecast_vyroba_hodina_zbytek = global.get(\"forecast_zbytek_vyroba_hodina\") \n\n\nif (!Number.isFinite(forecast_vyroba_dnes)) {\n    forecast_vyroba_dnes = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_zitra)) {\n    forecast_vyroba_zitra = 0\n}\n\nif (!Number.isFinite(grid_direct_use)) {\n    grid_direct_use = 0\n}\n\nif (!Number.isFinite(grid_to_battery)) {\n    grid_to_battery = 0\n}\n\nif (!Number.isFinite(ev_consumption)) {\n    ev_consumption = 0\n}\n\nif (!Number.isFinite(solar_consumption)) {\n    solar_consumption = 0\n}\n\nif (!Number.isFinite(solar_to_battery)) {\n    solar_to_battery = 0\n}\n\nif (!Number.isFinite(battery_consumption)) {\n    battery_consumption = 0\n}\n\nif (!Number.isFinite(battery_to_grid)) {\n    battery_to_grid = 0\n}\n\nif (!Number.isFinite(total_solar_yield)) {\n    total_solar_yield = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_dnes_zbytek)) {\n    forecast_vyroba_dnes_zbytek = 0\n}\n\nif (!Number.isFinite(forecast_vyroba_hodina_zbytek)) {\n    forecast_vyroba_hodina_zbytek = 0\n}\n\nmsg.payload_forecast_vyroba_dnes = (forecast_vyroba_dnes / 1000).toFixed(2)\n\nmsg.payload_forecast_vyroba_zitra = (forecast_vyroba_zitra / 1000).toFixed(2)\n\nmsg.payload_grid = (grid_direct_use +\n    grid_to_battery).toFixed(2)\n\nmsg.payload_ev = ev_consumption.toFixed(2)\n\nmsg.payload_solar = total_solar_yield.toFixed(2)\n\nmsg.payload_battery_plus = (solar_to_battery + grid_to_battery).toFixed(2)\n\nmsg.payload_battery_minus = (battery_consumption + battery_to_grid).toFixed(2)\n\nmsg.payload_vyroba = ((total_solar_yield - (solar_to_battery + solar_consumption))\n    + battery_to_grid).toFixed(2)\n\nmsg.payload_forecast_vyroba_dnes_zbytek = (forecast_vyroba_dnes_zbytek / 1000).toFixed(2)\n\n// Store computed values in global for other flows\nglobal.set(\"fve_spotreba_sit_kwh\", parseFloat(msg.payload_grid))\nglobal.set(\"fve_spotreba_ev_kwh\", parseFloat(msg.payload_ev))\nglobal.set(\"fve_vyroba_solar_kwh\", parseFloat(msg.payload_solar))\nglobal.set(\"fve_nabijeni_bat_kwh\", parseFloat(msg.payload_battery_plus))\nglobal.set(\"fve_vybijeni_bat_kwh\", parseFloat(msg.payload_battery_minus))\nglobal.set(\"fve_prodej_sit_kwh\", parseFloat(msg.payload_vyroba))\n    \nmsg.payload_forecast_vyroba_hodina_zbytek = (forecast_vyroba_hodina_zbytek / 1000).toFixed(2)\n\nreturn msg",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
-        "y": 400,
+        "x": 710,
+        "y": 460,
         "wires": [
             [
                 "82516184e2da4aba",
@@ -922,10 +966,10 @@
                 "492bb8db67a996d6",
                 "4356e0d632c43221",
                 "0924d118225c702a",
-                "5efc09c5570e0e2d"
+                "5efc09c5570e0e2d",
+                "svc_hourly_solar_fc"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "d90b66fb1f48e589",
@@ -1012,6 +1056,7 @@
         "id": "5efc09c5570e0e2d",
         "type": "api-call-service",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "Nastav zbytek solar dnes",
         "server": "c7421fe2.cb11c",
         "version": 7,
@@ -1034,18 +1079,18 @@
         "domain": "input_number",
         "service": "set_value",
         "x": 970,
-        "y": 700,
+        "y": 740,
         "wires": [
             []
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "ea8178ed56fc307d",
         "type": "vrm-api",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "vrm": "e1bd0d865b19d57e",
-        "name": "Zbývající solární spotřeba",
+        "name": "Zbývající solární výroba",
         "api_type": "installations",
         "idUser": "",
         "idSite": "741273",
@@ -1065,10 +1110,9 @@
         "transform_price_schedule": false,
         "outputs": 1,
         "x": 150,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "06bafcba794da9e5",
                 "7a40f647c053ea8e"
             ]
         ]
@@ -1077,6 +1121,7 @@
         "id": "7a40f647c053ea8e",
         "type": "change",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "",
         "rules": [
             {
@@ -1093,19 +1138,18 @@
         "to": "",
         "reg": false,
         "x": 480,
-        "y": 740,
+        "y": 780,
         "wires": [
             [
-                "815f4827fac6b509",
-                "b3489292b6b19a0a"
+                "vrm_hourly_solar_fc"
             ]
-        ],
-        "g": "init_grp_pipeline"
+        ]
     },
     {
         "id": "06bafcba794da9e5",
         "type": "debug",
         "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
         "name": "debug",
         "active": false,
         "tosidebar": true,
@@ -1116,75 +1160,100 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 370,
-        "y": 820,
-        "wires": [],
-        "g": "init_grp_pipeline"
+        "y": 880,
+        "wires": []
     },
     {
-        "id": "e1bd0d865b19d57e",
-        "type": "config-vrm-api",
-        "name": "VRM api"
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "537aaa7c69c02576",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "victron-vrm-api": "0.3.11",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "init_grp_pipeline",
-        "type": "group",
+        "id": "vrm_hourly_solar_fc",
+        "type": "vrm-api",
         "z": "e451448d0e5cd53a",
-        "name": "VRM Data Pipeline",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "82516184e2da4aba",
-            "5bc15235de0be6d7",
-            "94fad41d26e0cad6",
-            "b3489292b6b19a0a",
-            "e898a34c99d763a9",
-            "12e5622470d1810f",
-            "cbe7aadb6a9789fb",
-            "ef45bce4eeb696b2",
-            "cf10227596934c6b",
-            "7de54d464c4599ae",
-            "b6bcdbf86abcbeb8",
-            "94b7b011f71e932d",
-            "492bb8db67a996d6",
-            "214177b52b123155",
-            "3bfaab9a23737f7e",
-            "4356e0d632c43221",
-            "d0cec879a0aa07e1",
-            "0924d118225c702a",
-            "d4aa59089ba5e79a",
-            "815f4827fac6b509",
-            "5efc09c5570e0e2d",
-            "7a40f647c053ea8e",
-            "06bafcba794da9e5"
+        "g": "init_grp_pipeline",
+        "vrm": "e1bd0d865b19d57e",
+        "name": "Zbývající solar HODINA",
+        "api_type": "installations",
+        "idUser": "",
+        "idSite": "741273",
+        "installations": "stats",
+        "attribute": "solar_yield_forecast",
+        "stats_interval": "hours",
+        "show_instance": false,
+        "stats_start": "0",
+        "stats_end": "eod",
+        "use_utc": false,
+        "gps_start": "",
+        "gps_end": "",
+        "widgets": "",
+        "instance": "",
+        "store_in_global_context": false,
+        "verbose": false,
+        "outputs": 1,
+        "x": 150,
+        "y": 820,
+        "wires": [
+            [
+                "chg_hourly_solar_fc"
+            ]
+        ]
+    },
+    {
+        "id": "chg_hourly_solar_fc",
+        "type": "change",
+        "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
+        "name": "Set global hodina",
+        "rules": [
+            {
+                "t": "set",
+                "p": "forecast_zbytek_vyroba_hodina",
+                "pt": "global",
+                "to": "payload.records.solar_yield_forecast[0][1]",
+                "tot": "msg"
+            }
         ],
-        "x": 14,
-        "y": 80,
-        "w": 1090,
-        "h": 780
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 820,
+        "wires": [
+            [
+                "815f4827fac6b509",
+                "b3489292b6b19a0a"
+            ]
+        ]
+    },
+    {
+        "id": "svc_hourly_solar_fc",
+        "type": "api-call-service",
+        "z": "e451448d0e5cd53a",
+        "g": "init_grp_pipeline",
+        "name": "Nastav zbytek solar hodina",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.zbyvajici_solarni_vyroba_tato_hodina"
+        ],
+        "labelId": [],
+        "data": "{\"value\":payload_forecast_vyroba_hodina_zbytek}",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 980,
+        "y": 800,
+        "wires": [
+            []
+        ]
     }
 ]
