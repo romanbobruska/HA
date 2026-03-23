@@ -1,1 +1,8 @@
-aktualne v modu prodavat plan obcas preskoci na normal a pak se zase vrati na prodavat - proc? oprav to
+ok. obcas ti musim zrusit command, protoze trva dlouho - typicky kdyz je tam >dev&null nebo jina vec, ktera se zasekne a ja nevidim, co se deje.
+
+To nechci. Podivej se do historie promptu, kde a kdy jsem dal cancel a jak jsi to opravil. Zapamatuj si to do MD filu jednou pro vzdy,
+at uz to nemusis delat - chci, abys byl samostatny - pouze, kdyz te pozadam o interakci otazka odpoved, budu cekat na vystup - jinak budu ocekavat,
+ze praci dokoncis i bez toho, abych musel sedet u pocitace a hlidat, co ti kde mam zrusit a kde na co kliknout, abys 
+mohl pokracovat dal.
+
+Rozumime si?

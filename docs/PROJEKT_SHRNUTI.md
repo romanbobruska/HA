@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-19 (v25.51: Config plain values, opp header global, conditional datetime)
+> Poslední aktualizace: 2026-03-23 (v25.63: PRODÁVAT sell target SOC fix)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -17,6 +17,11 @@
 > - `User inputs/POZADAVKY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
 > - Aktualizovat tento soubor po každém úspěšném nasazení
 > - Po sobě VŽDY uklidit dočasné soubory (`_*.py`, `_*.js`, `_fix_*`, `_check_*`) lokálně i na serveru
+>
+> **SSH příkazy — pravidla:**
+> - NIKDY `python3 -c "..."` s inline kódem — escapování se zasekne. VŽDY heredoc: `<< 'PYEOF' ... PYEOF`
+> - NIKDY `2>/dev/null` v SSH příkazech — uživatel nevidí co se děje
+> - Být samostatný — dokončit práci bez nutnosti interakce (cancel, klikání), pokud uživatel explicitně nepožádá
 >
 > **Komunikační kanál:**
 > - Uživatel píše problémy/požadavky do `problemy.txt` — AI ho čte na začátku každého promptu
@@ -236,6 +241,38 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **Zákon 8.5 — pravidlo 3 hodin** (nový zákon v POZADAVKY.TXT):
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 - Důvod: patrony nestihnou dostatečně natopil nádrž před koncem solární výroby
+
+### v25.61–63: PRODÁVAT — stabilní cílové SOC (2026-03-23)
+
+**Problém 1: Baterie se drainovala na minSOC při prodeji**
+- Trim (KROK 7c) počítal rovnoměrně 5% drain/hodina, ale PRODÁVAT drainuje ~21%/hodina
+- Výsledek: baterie na 20% místo zachování rezervy na noc
+
+**Problém 2: Cílové SOC v plánu driftovalo**
+- Každých 15s přepočet dal jiný cíl → nestabilní plán
+
+**Problém 3: Oscilace PRODÁVAT ↔ NORMAL**
+- `eP` check projektoval SOC pro celý zbytek hodiny → při 30+ min selhával → flip na NORMAL
+
+**Fix v25.61** (node "2. Cenová mapa + discharge"):
+- Nový KROK 7.5: výpočet `sellTarget` = stabilní SOC pod které se nikdy neprodá
+- Vychází z noční spotřeby domu do solárního startu + marže
+- `sellTarget = max(minSoc + nResPct, minSoc + nightNeedSoc + nMargin)`
+
+**Fix v25.61** (node "3. Arbitráž + trim"):
+- Trim používá `sellTarget` jako efektivní start místo `cSoc`
+- Nejlevnější noční hodiny se ořežou na ŠETŘIT
+
+**Fix v25.61** (node "4. Generování plánu"):
+- `cM()`: `soc > sellTarget` místo `soc > minSoc + nResPct`
+- `sim()`: floor na `sellTarget` místo `minSoc` pro PRODÁVAT
+- Reason: `"SOC XX% (cíl YY%)"` — stabilní zobrazení
+
+**Fix v25.63** (node "4. Generování plánu"):
+- Odstraněn redundantní `eP >= sellTarget` check — způsoboval oscilaci
+- Stačí vstupní `soc > sellTarget` + `sim()` floor
+
+**Zákon 4.5 aktualizován** v POZADAVKY.TXT — business-user-friendly popis sell target logiky.
 
 ### v25.49: Oportunistický balancing monitoring (2026-03-19)
 
