@@ -1,4 +1,1 @@
-ne - zapis to vice citelne - pro uzivatele, ktery neumi programovat, ale rozumi logice - typicky business
-user - tak to budes psat vzxdy - zapamatuj si to.
-
-Od presnych definici mas MD fily - zakony jsou deskripce logiky
+aktualne v modu prodavat plan obcas preskoci na normal a pak se zase vrati na prodavat - proc? oprav to
