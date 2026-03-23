@@ -18,10 +18,15 @@
 > - Aktualizovat tento soubor po každém úspěšném nasazení
 > - Po sobě VŽDY uklidit dočasné soubory (`_*.py`, `_*.js`, `_fix_*`, `_check_*`) lokálně i na serveru
 >
-> **SSH příkazy — pravidla:**
-> - NIKDY `python3 -c "..."` s inline kódem — escapování se zasekne. VŽDY heredoc: `<< 'PYEOF' ... PYEOF`
-> - NIKDY `2>/dev/null` v SSH příkazech — uživatel nevidí co se děje
-> - Být samostatný — dokončit práci bez nutnosti interakce (cancel, klikání), pokud uživatel explicitně nepožádá
+> **Příkazy — pravidla (POVINNÁ, prevence zaseknutí):**
+> - NIKDY `Start-Sleep` — uživatel nevidí nic. Použít non-blocking command + command_status s WaitDurationSeconds.
+> - NIKDY `python3 -c "..."` přes SSH — escapování se zasekne. VŽDY heredoc: `<< 'PYEOF' ... PYEOF`
+> - NIKDY `2>/dev/null` — skrývá chyby, uživatel nevidí co se děje.
+> - NIKDY dlouhé pipe chains `ssh ... | node -e "..."` — PS opakuje command, vypadá zmateně. Zpracovat na serveru, stáhnout výsledek.
+> - `sudo docker restart` vždy NON-BLOCKING — trvá 30s. Spustit non-blocking, pak check status.
+> - File transfer: base64 encode na serveru → `ssh cat` → lokální soubor. Ne `Get-Content | ssh`.
+> - Dlouhé SSH příkazy rozdělit na víc kroků s echo progress markers.
+> - Být samostatný — dokončit práci BEZ nutnosti interakce (cancel, klikání). Uživatel nehlídá terminál.
 >
 > **Komunikační kanál:**
 > - Uživatel píše problémy/požadavky do `problemy.txt` — AI ho čte na začátku každého promptu

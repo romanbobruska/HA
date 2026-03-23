@@ -1,8 +1,3 @@
-ok. obcas ti musim zrusit command, protoze trva dlouho - typicky kdyz je tam >dev&null nebo jina vec, ktera se zasekne a ja nevidim, co se deje.
+Projdi si historii promptu alespon za poslednich 48 hodin, zda to byl jen tento problem. Myslim, ze commandy visi i z jinych duvodu.
 
-To nechci. Podivej se do historie promptu, kde a kdy jsem dal cancel a jak jsi to opravil. Zapamatuj si to do MD filu jednou pro vzdy,
-at uz to nemusis delat - chci, abys byl samostatny - pouze, kdyz te pozadam o interakci otazka odpoved, budu cekat na vystup - jinak budu ocekavat,
-ze praci dokoncis i bez toho, abych musel sedet u pocitace a hlidat, co ti kde mam zrusit a kde na co kliknout, abys 
-mohl pokracovat dal.
-
-Rozumime si?
+Proved analyzu a udelej to same, co predtim - zapamatuj si to.
