@@ -1,12 +1,1 @@
-Hodnota z VRM bude v Wh — chceš ji v HA uložit v kWh (dělení 1000), jako u ostatních forecast entit?
-ANO
-
-Tento nový node se vloží do stávajícího řetězce (sériově, jako ostatní) — žádný existující node se nezmění, jen se přidá nový článek do řetězce.
-ANO
-
-AD Nový api-call-service node zapíše do:
-
-input_number.zbyvajici_solarni_vyroba_tato_hodina
-
-proc novy Nový api-call-service node? pouzivam na to edit action mode - podivej se - a udelej to stejne, jako to mam ve flow
-init set victron u jinych komponent
+Ano
