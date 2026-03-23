@@ -380,6 +380,7 @@ A ZAKAZU PRETOKU
     ├──────────┼────────────────────────────────────────────────────┤
     │ NIBE     │ tempGap > 0.2°C (dům je pod cílem)                 │
     │ Patrony  │ tempGap ≤ 0.3°C + SOC reálně dosáhne 95% + 3kW     │
+    │ NIBE+Pat │ NIBE topí + patrony hřejí nádrž při NIBE idle (boost) │
     │ NIBE     │ zákaz přetoků + SOC ≥ 85% + nádrž < max (dump soláru) │
     │ Vypnuto  │ teplota OK / autoHlad blokuje / žádný přebytek     │
     └──────────┴────────────────────────────────────────────────────┘
@@ -387,7 +388,7 @@ A ZAKAZU PRETOKU
 8.2 ABSOLUTNÍ PRAVIDLA TOPENÍ
     - PO ZAPNUTI NIBE TRVA CCA 1 MINUTU, NEZ SE V HA OBJEVI, ZE JE NIBE ZAPNUTE!!!
     - V LETNIM REZIMU SE CHLADI A NETOPI DO DOMU, POKUD JE CHLAZENI V HA ZAPNUTO, V ZIMNIM REZIMU SE TOPI DO DOMU A NECHLADI SE!!! 
-    - NIBE a patrony NIKDY současně (viz 1.2)
+    - NIBE a patrony NIKDY současně, POKUD NIBE PRACUJE (kompresor/čerpadlo aktivní). V módu "NIBE + Patrony" patrony běží pouze během NIBE idle period (viz 8.7)
     - NIBE A OBEHOVE CERPADLO PRACUJI NAPROSTO NEZAVISLE NA SOBE!!!
     - VŽDY TOPÍME ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK - ZA CO NEJNIŽŠÍ CENY. ZVLÁŠTĚ JE TŘEBA SI DÁT POZOR PŘI PŘECHODU DNE PŘES
         PŮLNOC - LEVELY TAM NEMUSÍ ODPOVÍDAT SKUTEČNÉMU POŘADÍ CEN OD NEJLEVNĚJŠÍHO, JELIKOŽ LEVELY JSOU POČÍTÁNY V RÁMCI 1 DNE OD PŮNOCI DO PŮLNOCI - 
@@ -485,6 +486,19 @@ A ZAKAZU PRETOKU
     a spouští se až po 90% SOC baterie. Precti si ta pravidla, plati stejna - obecne - pokud mame prebytek solaru na 
     patrony, pak spustme 1, 2 nebo 3 faze - pokud ne, tak nic.
 
+8.7 MÓD "NIBE + Patrony" — SOLAR BOOST
+    - Kombinovaný mód: NIBE topí dům, patrony ohřívají nádrž v době, kdy NIBE NEPRACUJE (kompresor idle)
+    - Aktivace: mód by byl "NIBE", ALE zároveň jsou splněny podmínky pro patrony (patMohou) + přebytek ≥ 3kW
+      + jedna z podmínek:
+        a) Zákaz přetoků / záporná prodejní cena (cantExport)
+        b) Prodejní cena ≤ topeni_boost_max_sell_price (výchozí 2 Kč/kWh)
+        c) SOC ≥ 95% (baterie plná, energy overflow)
+    - PRAVIDLO KOMPRESORU: Patrony se OKAMŽITĚ vypnou, jakmile NIBE kompresor nebo čerpadlo začne pracovat.
+      Kontrola probíhá v hlavní smůdce (60s) i v korekční smůdce patron (20s).
+    - Všechna ostatní pravidla patron platí beze změny (SOC ≥ 90%, auto_ma_hlad=OFF, tank < maxTankPat, atd.)
+    - Korekční smůdka patron řídí počet fází podle přebytku — žádný odběr ze sítě
+    - Config: topeni_boost_max_sell_price (výchozí 2 Kč/kWh)
+    - Zobrazení: input_select.topeni_mod = "NIBE + Patrony", ikona mdi:radiator
 
 ================================================================================
 9. FLOW: BOJLER (boiler.json)

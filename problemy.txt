@@ -1,1 +1,1 @@
-souhlasim. nezapomen aktualizovat entity: input_select.topeni_mod se spravnou ikonkou, at se mi spravne zobrazuje v dashboardu, ze tento mod nastal.
+dobre - vyjimecne te zadam, abys upravil zakony sam - pozor - nerozbij je, jen pridej nova pravidla tak, aby to davalo smysl a ty jsi chapal context
