@@ -1,5 +1,5 @@
-Vysvetli mi, proc jsi zatopil za draho ve 4 hodiny rano a dotopil jsi dum misto toho, abys pockal na solarni vyrobu, ktera bude dnes velka.
-OPET OPET OPET!!!! PORAD DOKOLECKA!!!!
+Zavadim nove pravidlo pro topeni pres patrony - pokud bude posledni solarni hodina a bude solarni zisk mensi nez 
+4 kWh a nebude zakaz pretoku, patrony se vypnou - bude lepsi, kdyz se baterie dostane na soc 100 procent na vyuziti v noci,
+nez ji vybijet.
 
-DEBILEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!
-
+Chapes zadani? kdyztak se zeptej. Pokud chapes, aplikuj fix a dopln zakony - explicitne te o to zadam.

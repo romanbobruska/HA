@@ -478,6 +478,12 @@ A ZAKAZU PRETOKU
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
     - Pokud bude prodejni cena vetsi nez 3 koruny (konfigurovatelny parametr), tak se patrony nepouziji
+    - PRAVIDLO POSLEDNÍ SOLÁRNÍ HODINY: Pokud je aktuální hodina POSLEDNÍ solární hodinou dne a zbývající
+        solární výroba je menší než 4 kWh (konfigurovatelný parametr topeni_patron_last_sol_min_kwh, výchozí 4)
+        a NENÍ zákaz přetoků (záporná prodejní cena), patrony se VYPNOU.
+        Důvod: je lepší nechat baterii nabít na 100% SOC pro využití v noci, než ji vybíjet přes patrony
+        při nízkém zbytkovém solárním zisku.
+        Toto pravidlo přepisuje i mód "NIBE + Patrony" (patrony se vypnou, NIBE pokračuje).
 
     Stupňování fází:
     - < 3kW přebytek → 0 fází (OFF)
