@@ -1,1 +1,3 @@
-udelal jsi vse podle deploy zakonu? ploc jsi si nezkontroloval, ze je na serveru vse podle zakonu???
+presel jsem na pro rezim. nechapu, proc jsem musel zaplatit 20$ za pouziti api klice a dalsich 20 dolaru za 
+povoleni pro rezimu, abych mohl pouzivat ai model opus 4.6. vysvetli mi, co delam 
+v cursoru spatne a jak to zoptimalizovat

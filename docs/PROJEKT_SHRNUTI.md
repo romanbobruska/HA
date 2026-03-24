@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-24 (v25.65: Solar guard SOC fix + heating highSolDay defer + patrony last solar hour)
+> Poslední aktualizace: 2026-03-24 (doplněno: ~25 % „před solárem“ vs. kód / MCP plán)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -43,6 +43,15 @@
 ## 1. Co tento systém dělá
 
 Automatizuje FVE elektrárnu (17 kWp), tepelné čerpadlo NIBE, nabíjení elektroaut a dalších spotřebičů v Home Assistant + Node-RED na základě spotových cen elektřiny, solární výroby a aktuální spotřeby.
+
+### 1.1 SOC baterie ve „solárních hodinách“ — právo vs. POZADAVKY.TXT
+
+- Soubor `User inputs/POZADAVKY.TXT` jsou **pravidla a cíle tohoto projektu** (prioritizace spotřebičů, módy Victronu, plán 12 h, ekonomika). **Neobsahují odkaz na konkrétní paragrafy zákonů ČR**; u „zákonů“ v názvu jde o závazná pravidla *pro kód a provoz automatiky*.
+- **Úroveň státní regulace** (obecně): u domácí FVE s akumulací typicky rozhoduje **připojení k distribuční soustavě** (dovolený výkon / odkup / měření), **technické normy** (bezpečné připojení zařízení) a **smlouva s operátorem distribuce**. **Samotná výška nabití baterie ve dne** obvykle **není** předmětem zákazu ve stylu „nesmíte mít v poledne vysoký SOC“. Pro jistotu u konkrétního případech platí jen **text připojení / obchodní podmínky** u vašeho DS a typ měření (např. limity přetoku, případné požadavky na řízení výkonu).
+- **Uvnitř projektu** (`POZADAVKY` § 4.9): cíl **cca 25 % SOC před první solární hodinou** je **strategická rezerva** (místo v akumulátoru na dopolední výrobu), ne požadavek „ve dne musí být baterie prázdná“. V § 4.9.1 mají **solární hodiny SOC v simulaci růst** — tedy **vysoký SOC ve dne při dobré výrobě je konzistentní** s pravidly plánu, pokud nedochází k nežádoucímu přetoku přes limity systému (to řeší mód **Zákaz přetoků** a konfigurace `max_feed_in` atd., ne „limit SOC“).
+- **Závěr pro vývoj**: žádná oprava flow **jen proto, že je SOC ve dne vysoký**, z dokumentovaných pravidel neplyne. Pokud by něco odporovalo **připojovacím podmínkám**, je třeba je mít konkrétně vyjmenované (např. limit příkonu / exportu), ne odhad z SOC.
+- **Častý omyl — „25 % na konci první solární hodiny“**: V § 4.9 je text **„před první solární hodinou“** (vstup do solárního okna), ne „po první solární hodině“. **Během** solárních hodin má simulace SOC podle § 4.9.1 **růst** — tedy po začátku slunce je **normální**, že SOC už není ~25 %, ale vyšší.
+- **Co z toho dělá kód** (`fve-orchestrator.json`, node „4. Generování plánu“, `cM`): proměnná `C.socN` (z noční rezervy / marginu) se v kombinaci s `min_soc` používá jako práh typu **`minSoc + socN`** (typicky 20 %+5 % → **cca 25 %**) pro rozhodování **solární hodina vs. šetřit / vybíjet** — jde o **ochranný práh v plánovači**, ne o tvrdý požadavek „vždy vybit na 25 % před východem slunce“. Plán začíná od **aktuálního SOC** a dál ekonomikou (NORMAL / ŠETŘIT / …); žádná samostatná optimalizace „vynuť přesně 25 % v hodině před `solS`“ v tomto node není.
 
 ---
 
