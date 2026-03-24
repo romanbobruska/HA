@@ -326,6 +326,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Prep node: přidán `liveCons` + `autoK` do plánovacího kontextu
 - Výsledek: noc 23→5h SOC 66→46% (nový) vs 67→39% (starý) — rozdíl +7%
 
+**v25.67 — Fix history learning: restart corruption + sanity checks**
+- BUG 1: `fve_history_collect` — po NR restartu `prev_hourly_values` prázdný → delta = kumulativní denní hodnota (24.92 kWh místo ~1 kWh)
+  - FIX: skip první run po restartu (`prevValues.hour === undefined`) — uloží baseline, čeká na další cyklus
+  - Sanity check: reject `solarKwh > 20` nebo `consumptionKwh > 15` per hodina
+- BUG 2: `fve_history_store` — po restartu `flow.get("consumption_history")` prázdný → přepíše validní persist file vadným vzorkem
+  - FIX: na startu načte z `/homeassistant/fve_consumption_history.json` pokud flow context prázdný
+- Reset korumpovaného `consumption_history.json` na `{}`
+
 ### v25.49: Oportunistický balancing monitoring (2026-03-19)
 
 **Zákon 12.5**: Pokud SOC baterie dosáhne 100% i mimo plánovaný balancing, sledovat pasivně:
