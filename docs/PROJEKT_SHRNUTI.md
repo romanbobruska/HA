@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-23 (v25.63: PRODÁVAT sell target SOC fix)
+> Poslední aktualizace: 2026-03-24 (v25.65: Solar guard SOC fix + heating highSolDay defer + patrony last solar hour)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -284,6 +284,26 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Stačí vstupní `soc > sellTarget` + `sim()` floor
 
 **Zákon 4.5 aktualizován** v POZADAVKY.TXT — business-user-friendly popis sell target logiky.
+
+### v25.64–65: Solar guard + heating fixes (2026-03-24)
+
+**v25.64 — Orchestrátor: Solar guard SOC check**
+- `cM()` line 52: solar guard kontroluje výsledné SOC `R(soc+sg)` místo aktuálního `soc`
+- `cM()` line 56: solar+drahá kontroluje `R(soc+sg)>=minSoc+socN`
+- `cM()` lines 59,62: non-solar discharge kontroluje `R(soc-socN*f)>=minSoc+socN`
+- Prevence zbytečného vybíjení když by SOC kleslo pod 25%
+
+**v25.64 — Topení: highSolDay defer i v noci**
+- BUG: `fve-heating.json` line 95 + 205 vyžadovaly `h.isSol` pro highSolDay defer
+- Ve 4 ráno `isSol=false` → NIBE topila ze sítě za 3.9 Kč/kWh přes forecast 65 kWh
+- FIX: odstraněn `h.isSol` z obou podmínek — defer funguje i v noci
+- Bezpečnost: `_canDeferHSD` (inT >= safeT) zajistí NIBE start při poklesu teploty
+
+**v25.65 — Patrony: pravidlo poslední solární hodiny**
+- Nové pravidlo (zákon 8.5): poslední solární hodina + zbývající solar < 4 kWh + bez zákazu přetoků → patrony OFF
+- Důvod: lepší nechat baterii nabít na 100% SOC pro noc než vybíjet přes patrony
+- Config: `topeni_patron_last_sol_min_kwh` (default 4)
+- Přepisuje i NIBE+Patrony mód (NIBE pokračuje, patrony stop)
 
 ### v25.49: Oportunistický balancing monitoring (2026-03-19)
 

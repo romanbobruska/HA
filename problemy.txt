@@ -1,5 +1,1 @@
-Zavadim nove pravidlo pro topeni pres patrony - pokud bude posledni solarni hodina a bude solarni zisk mensi nez 
-4 kWh a nebude zakaz pretoku, patrony se vypnou - bude lepsi, kdyz se baterie dostane na soc 100 procent na vyuziti v noci,
-nez ji vybijet.
-
-Chapes zadani? kdyztak se zeptej. Pokud chapes, aplikuj fix a dopln zakony - explicitne te o to zadam.
+udelal jsi vse podle deploy zakonu? ploc jsi si nezkontroloval, ze je na serveru vse podle zakonu???
