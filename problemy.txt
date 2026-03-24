@@ -1,3 +1,7 @@
-presel jsem na pro rezim. nechapu, proc jsem musel zaplatit 20$ za pouziti api klice a dalsich 20 dolaru za 
-povoleni pro rezimu, abych mohl pouzivat ai model opus 4.6. vysvetli mi, co delam 
-v cursoru spatne a jak to zoptimalizovat
+- mam ve windsurf spoustu otevrenych filu - proc? chci mit jen svoje problemy.txt, proc oteviras temp fily? Zapamautj si to do md filu a zavri vse, co nepotrebujeme.
+- myslel jsem to tak, ze pouzijes logy spotreby - proto si je zapisujeme - na uceni a realnou simulaci planu. nezapisujeme si logy jen tak zbuhdarma.
+
+v budoucnu muze pribyt dalsi spotreba - treba virivka apod... a ja chci, abys to v planu zohlednil. Podle logu a predpokladane spotreby - 
+kdyz vis, ze auto ma hlad, kdyz vis, ze se musi nabit baterie, kdyz vis, ze se bude topit atd...
+
+chapeme se?

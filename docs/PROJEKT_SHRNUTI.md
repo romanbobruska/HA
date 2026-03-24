@@ -314,6 +314,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Config: `topeni_patron_last_sol_min_kwh` (default 4)
 - Přepisuje i NIBE+Patrony mód (NIBE pokračuje, patrony stop)
 
+**v25.66 — Realistická simulace plánu: dynamická spotřeba místo plochého socN**
+- BUG: `sim()` pro NORMAL mód v noci používala plochý `socN=5%/h` (1.4 kWh/h)
+- Skutečná noční spotřeba domu bez NIBE: ~1.0 kWh/h (3.5%/h) — přeceňování o 40-70%
+- FIX: nová funkce `cN(h,f)` — dynamický výpočet spotřeby per hodina:
+  1. Historie (`avgConsumptionKwh`, `sampleCount≥3`) → skutečná data
+  2. Live spotřeba (`sensor.celkova_spotreba`) → reálný proxy
+  3. Fallback: `dayCons/24` (0.83 kWh/h)
+- `sim()` NORMAL non-solar: `cN(h,f)` místo `C.socN*f`
+- `cM()` discharge thresholds: `cN()` pro SOC odhady (safety margin `C.socN` zachován)
+- Prep node: přidán `liveCons` + `autoK` do plánovacího kontextu
+- Výsledek: noc 23→5h SOC 66→46% (nový) vs 67→39% (starý) — rozdíl +7%
+
 ### v25.49: Oportunistický balancing monitoring (2026-03-19)
 
 **Zákon 12.5**: Pokud SOC baterie dosáhne 100% i mimo plánovaný balancing, sledovat pasivně:

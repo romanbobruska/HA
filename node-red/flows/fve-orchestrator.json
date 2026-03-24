@@ -8,101 +8,6 @@
         "env": []
     },
     {
-        "id": "ea6d31715793bece",
-        "type": "tab",
-        "label": "Automatizuj filtraci v bazénu",
-        "disabled": false,
-        "info": "Filtrace bazénu v3 — plně optimalizovaná.\nPreferuje solar, skenuje FVE plán, chrání baterii.\nLÉTO: min 2h/den (>10°C), ZIMA: min 1h/den.",
-        "env": []
-    },
-    {
-        "id": "3f2680578b66e78f",
-        "type": "tab",
-        "label": "FVE Config",
-        "disabled": false,
-        "info": "Konfigurace FVE automatizace - parametry a inicializace",
-        "env": []
-    },
-    {
-        "id": "f1e2d3c4b5a60001",
-        "type": "tab",
-        "label": "FVE Heating",
-        "disabled": false,
-        "info": "Kompletní řízení topení domu v2.0\nNIBE + oběhové čerpadlo + patrony + ventil + chlazení"
-    },
-    {
-        "id": "fve_history_tab",
-        "type": "tab",
-        "label": "FVE History Learning",
-        "disabled": false,
-        "info": "Učení z historie spotřeby pro lepší plánování",
-        "env": []
-    },
-    {
-        "id": "bb3654998a6bf514",
-        "type": "tab",
-        "label": "FVE Modes",
-        "disabled": false,
-        "info": "Implementace jednotlivých módů FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
-        "env": []
-    },
-    {
-        "id": "d86bb11fab512182",
-        "type": "tab",
-        "label": "FVE Orchestrator",
-        "disabled": false,
-        "info": "Hlavní orchestrace FVE - plánování a rozhodování o módech",
-        "env": []
-    },
-    {
-        "id": "e451448d0e5cd53a",
-        "type": "tab",
-        "label": "Init & Set Victron",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "7ceb7c5337692ae5",
-        "type": "tab",
-        "label": "Manager nabíjení auta",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "a86ad952ad7756aa",
-        "type": "tab",
-        "label": "Automatizuj nabíjení auta ze sítě",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "49921d17efb0cefe",
-        "type": "tab",
-        "label": "Automatizuj nabíjení auta ze slunce",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "58f453ee71c85d6d",
-        "type": "tab",
-        "label": "Automatizuj ostatní",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
-        "id": "d32891aad318f0e3",
-        "type": "tab",
-        "label": "Vypočítej ceny",
-        "disabled": false,
-        "info": "",
-        "env": []
-    },
-    {
         "id": "3cf7f93b204c1246",
         "type": "group",
         "z": "0a2df88897520187",
@@ -195,1173 +100,6 @@
         "y": 39,
         "w": 772,
         "h": 82
-    },
-    {
-        "id": "filtrace_grp_data",
-        "type": "group",
-        "z": "ea6d31715793bece",
-        "name": "Sběr dat",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "filtrace_st_state",
-            "filtrace_st_letni",
-            "filtrace_st_surplus",
-            "filtrace_st_soc",
-            "filtrace_st_auto",
-            "filtrace_st_flag"
-        ],
-        "x": 274,
-        "y": 119,
-        "w": 602,
-        "h": 182
-    },
-    {
-        "id": "filtrace_grp_logic",
-        "type": "group",
-        "z": "ea6d31715793bece",
-        "name": "Rozhodování",
-        "style": {
-            "fill": "#fff2cc",
-            "label": true
-        },
-        "nodes": [
-            "filtrace_decision"
-        ],
-        "x": 474,
-        "y": 344,
-        "w": 232,
-        "h": 112
-    },
-    {
-        "id": "filtrace_grp_actions",
-        "type": "group",
-        "z": "ea6d31715793bece",
-        "name": "Akce",
-        "style": {
-            "fill": "#ffbfbf",
-            "label": true
-        },
-        "nodes": [
-            "filtrace_act_on",
-            "filtrace_act_off",
-            "filtrace_flag_on",
-            "filtrace_flag_off"
-        ],
-        "x": 364,
-        "y": 499,
-        "w": 502,
-        "h": 182
-    },
-    {
-        "id": "filtrace_grp_trigger",
-        "type": "group",
-        "z": "ea6d31715793bece",
-        "name": "Trigger",
-        "style": {
-            "fill": "#f3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "e840eaa72d311da7",
-            "filtrace_auto_check"
-        ],
-        "x": -6,
-        "y": 19,
-        "w": 432,
-        "h": 82
-    },
-    {
-        "id": "2d77556df552e86d",
-        "type": "group",
-        "z": "3f2680578b66e78f",
-        "name": "Konfigurace FVE",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "2df5b10f83b0e39d",
-            "44025571f9d270fb",
-            "2e5f28e1a0b06f19"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 702,
-        "h": 82
-    },
-    {
-        "id": "c7e025194045b1be",
-        "type": "group",
-        "z": "3f2680578b66e78f",
-        "name": "Aktuální ceny energie",
-        "style": {
-            "fill": "#f3e8d3",
-            "label": true
-        },
-        "nodes": [
-            "7c3b58eeb3106ded",
-            "caf460b8b3af03dd",
-            "402735a3f30a84e8",
-            "f1cea1e4214578c4"
-        ],
-        "x": 14,
-        "y": 279,
-        "w": 822,
-        "h": 82
-    },
-    {
-        "id": "da4c9bfc3dddec82",
-        "type": "group",
-        "z": "3f2680578b66e78f",
-        "name": "Aktuální stav systému",
-        "style": {
-            "fill": "#f3d3d3",
-            "label": true
-        },
-        "nodes": [
-            "322c6a3de64b51b5",
-            "90dca62607936795",
-            "88d08735b548d24c",
-            "8cfae471cfa68d3f"
-        ],
-        "x": 14,
-        "y": 379,
-        "w": 832,
-        "h": 82
-    },
-    {
-        "id": "452576adb7294b87",
-        "type": "group",
-        "z": "3f2680578b66e78f",
-        "name": "Synchronizace s Home Assistant",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "2986fe2bccfe8740",
-            "ae5590b0cd6e6b6a",
-            "3fefdad956c6ae27",
-            "4a5169173535c2a2",
-            "f4160d8797285db7",
-            "926f790a1d6a8f6e"
-        ],
-        "x": 14,
-        "y": 119,
-        "w": 832,
-        "h": 142
-    },
-    {
-        "id": "heating_g_main_v2",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Řízení topení",
-        "style": {
-            "label": true,
-            "fill": "#ffffbf"
-        },
-        "nodes": [
-            "htg_inject_60s",
-            "htg_trig_auto",
-            "htg_trig_temp",
-            "htg_debug",
-            "rf_htg_read_001",
-            "rf_htg_decide2",
-            "rf_htg_output3"
-        ],
-        "x": 14,
-        "y": 18,
-        "w": 852,
-        "h": 223
-    },
-    {
-        "id": "heating_g_exec_v2",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Exekuce akcí",
-        "style": {
-            "label": true,
-            "fill": "#ffbfbf"
-        },
-        "nodes": [
-            "htg_action_switch",
-            "htg_svc_nibe_on",
-            "htg_svc_nibe_off",
-            "htg_svc_obehove_on",
-            "htg_svc_obehove_off",
-            "htg_svc_p1_on",
-            "htg_svc_p1_off",
-            "htg_svc_p2_on",
-            "htg_svc_p2_off",
-            "htg_svc_p3_on",
-            "htg_svc_p3_off",
-            "htg_svc_ventil_off",
-            "htg_svc_cool_on",
-            "htg_svc_cool_off",
-            "htg_svc_stop_auto_solar",
-            "htg_svc_stop_auto_grid"
-        ],
-        "x": 94,
-        "y": 439,
-        "w": 436,
-        "h": 762
-    },
-    {
-        "id": "f1e2d3c4b5a60004",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Ochrana baterie",
-        "style": {
-            "label": true
-        },
-        "nodes": [
-            "htg_prot_trig",
-            "htg_prot_func",
-            "htg_prot_set"
-        ],
-        "x": 14,
-        "y": 1239,
-        "w": 712,
-        "h": 82
-    },
-    {
-        "id": "heating_g_away",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Režim nepřítomnosti",
-        "style": {
-            "stroke": "#ff9900",
-            "label": true,
-            "color": "#ff9900"
-        },
-        "nodes": [
-            "htg_away_trigger",
-            "htg_away_func",
-            "htg_away_set_temp"
-        ],
-        "x": 14,
-        "y": 1539,
-        "w": 662,
-        "h": 82
-    },
-    {
-        "id": "htg_g_pat_korekce",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Patrony korekce vybíjení (5s)",
-        "style": {
-            "stroke": "#ff7f0e",
-            "stroke-opacity": "1",
-            "fill": "#fff3e6",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#ff7f0e"
-        },
-        "nodes": [
-            "pat_korekce_inject",
-            "pat_korekce_func",
-            "pat_korekce_router",
-            "pat_max_charge_svc"
-        ],
-        "x": 14,
-        "y": 249,
-        "w": 732,
-        "h": 172
-    },
-    {
-        "id": "htg_g_topeni_mod",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Topení MOD → HA sync",
-        "style": {
-            "stroke": "#1f77b4",
-            "stroke-opacity": "1",
-            "fill": "#e8f4fd",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#1f77b4"
-        },
-        "nodes": [
-            "htg_topeni_mod_change",
-            "htg_topeni_mod_api"
-        ],
-        "x": 14,
-        "y": 1339,
-        "w": 442,
-        "h": 82
-    },
-    {
-        "id": "htg_g_reload",
-        "type": "group",
-        "z": "f1e2d3c4b5a60001",
-        "name": "Inicializace (startup)",
-        "style": {
-            "stroke": "#2ca02c",
-            "stroke-opacity": "1",
-            "fill": "#e8f8e8",
-            "fill-opacity": "0.5",
-            "label": true,
-            "label-position": "nw",
-            "color": "#2ca02c"
-        },
-        "nodes": [
-            "htg_reload_input_select_inject",
-            "htg_reload_input_select_api"
-        ],
-        "x": 14,
-        "y": 1439,
-        "w": 532,
-        "h": 82
-    },
-    {
-        "id": "fve_history_collect_group",
-        "type": "group",
-        "z": "fve_history_tab",
-        "name": "Sběr historických dat (každou hodinu)",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "fve_history_trigger",
-            "fve_history_collect",
-            "fve_history_store",
-            "fve_history_debug"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 952,
-        "h": 82
-    },
-    {
-        "id": "fve_history_predict_group",
-        "type": "group",
-        "z": "fve_history_tab",
-        "name": "Predikce spotřeby",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "fve_history_predict_in",
-            "fve_history_predict_calc",
-            "fve_history_predict_out"
-        ],
-        "x": 14,
-        "y": 119,
-        "w": 622,
-        "h": 82
-    },
-    {
-        "id": "fve_history_analyze_group",
-        "type": "group",
-        "z": "fve_history_tab",
-        "name": "Analýza vzorců spotřeby",
-        "style": {
-            "fill": "#f3e8d3",
-            "label": true
-        },
-        "nodes": [
-            "fve_history_analyze_trigger",
-            "fve_history_analyze_calc",
-            "fve_history_analyze_save"
-        ],
-        "x": 14,
-        "y": 219,
-        "w": 642,
-        "h": 82
-    },
-    {
-        "id": "fve_history_export_group",
-        "type": "group",
-        "z": "fve_history_tab",
-        "name": "Export/Import historie",
-        "style": {
-            "fill": "#f3d3d3",
-            "label": true
-        },
-        "nodes": [
-            "fve_history_export_trigger",
-            "fve_history_export_func",
-            "fve_history_export_file"
-        ],
-        "x": 14,
-        "y": 319,
-        "w": 602,
-        "h": 82
-    },
-    {
-        "id": "mode_grp_normal",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: NORMAL - Standardní provoz",
-        "style": {
-            "fill": "#d3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "8b55cfc5181b9eb7",
-            "670432a909cf3b26",
-            "lo_victron_normal",
-            "lo_log_normal"
-        ],
-        "x": 24,
-        "y": 6,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "mode_grp_setrit",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: ŠETŘIT - Minimální vybíjení baterie",
-        "style": {
-            "fill": "#f3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "ec611f6aba7d5c59",
-            "139cd450edbbde37",
-            "lo_victron_setrit",
-            "lo_log_setrit"
-        ],
-        "x": 24,
-        "y": 106,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "mode_grp_nabijet",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
-        "style": {
-            "fill": "#d3d3f3",
-            "label": true
-        },
-        "nodes": [
-            "1d98a0541716ce58",
-            "ebcf9e560f598c02",
-            "lo_victron_nabijet",
-            "lo_log_nabijet"
-        ],
-        "x": 24,
-        "y": 206,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "mode_grp_prodavat",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: PRODÁVAT - Prodej do sítě",
-        "style": {
-            "fill": "#f3d3d3",
-            "label": true
-        },
-        "nodes": [
-            "179ed150020d459c",
-            "68992d178ce105ed",
-            "lo_victron_prodavat",
-            "lo_log_prodavat"
-        ],
-        "x": 24,
-        "y": 306,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "mode_grp_zakaz",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: ZÁKAZ PŘETOKŮ - Záporná cena",
-        "style": {
-            "fill": "#e3d3f3",
-            "label": true
-        },
-        "nodes": [
-            "c682224043634fcd",
-            "75d1f9e77bc15e0a",
-            "lo_victron_zakaz",
-            "lo_log_zakaz"
-        ],
-        "x": 24,
-        "y": 406,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "mode_grp_solar",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Mód: SOLÁRNÍ NABÍJENÍ",
-        "style": {
-            "fill": "#fffacd",
-            "label": true
-        },
-        "nodes": [
-            "e93b8f3e662c6190",
-            "d27d27bacf98eec0",
-            "lo_victron_solar",
-            "lo_log_solar"
-        ],
-        "x": 24,
-        "y": 506,
-        "w": 442,
-        "h": 108
-    },
-    {
-        "id": "fve_modes_g_shared_svc",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Victron Actions (sdílený)",
-        "style": {
-            "fill": "#dce6f0",
-            "label": true
-        },
-        "nodes": [
-            "li_victron_shared",
-            "shared_fanout_func",
-            "shared_psp",
-            "shared_sched_soc",
-            "shared_sched_dur",
-            "shared_sched_day",
-            "shared_max_disch",
-            "shared_max_charge",
-            "shared_min_soc",
-            "shared_debug",
-            "shared_feedin_switch",
-            "shared_feedin_on",
-            "shared_feedin_off",
-            "shared_maxfeedin_val",
-            "shared_prevent_off",
-            "shared_prevent_on"
-        ],
-        "x": 24,
-        "y": 839,
-        "w": 942,
-        "h": 422
-    },
-    {
-        "id": "fve_modes_g_log",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Log",
-        "style": {
-            "fill": "#e8e8e8",
-            "label": true
-        },
-        "nodes": [
-            "li_log_shared",
-            "fve_log_writer_001",
-            "fve_log_file_001",
-            "fve_log_rotate_inject",
-            "fve_log_rotate_func"
-        ],
-        "x": 494,
-        "y": 159,
-        "w": 492,
-        "h": 182
-    },
-    {
-        "id": "grp_balancovani",
-        "type": "group",
-        "z": "bb3654998a6bf514",
-        "name": "Balancování baterie",
-        "style": {
-            "fill": "#e0f7fa",
-            "label": true
-        },
-        "nodes": [
-            "li_modes_balancovani",
-            "bal_logic_func",
-            "bal_svc_set_datetime",
-            "lo_victron_bal",
-            "lo_log_bal",
-            "bal_svc_set_boolean",
-            "opp_bal_inject",
-            "opp_bal_check"
-        ],
-        "x": 24,
-        "y": 619,
-        "w": 662,
-        "h": 202
-    },
-    {
-        "id": "4580a451a0858d03",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Plánování",
-        "style": {
-            "fill": "#fff3cd",
-            "label": true
-        },
-        "nodes": [
-            "22e7b3b8965c20db",
-            "f037d87ec94c7da2",
-            "9333668b1d326a83",
-            "df085ac4da095340",
-            "39019d1a78677231",
-            "517215d5f730e80c",
-            "701e94d82c3aead0",
-            "aabb001122334455",
-            "aabb001122334466",
-            "rf_prep_params_01",
-            "rf_cena_discharge2",
-            "rf_arb_trimming_3",
-            "rf_gen_plan_0004",
-            "rf_plan_output_05"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 1052,
-        "h": 302
-    },
-    {
-        "id": "c0d4d6462d4ebded",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Exekuce plánu",
-        "style": {
-            "fill": "#d4edda",
-            "label": true
-        },
-        "nodes": [
-            "44d31ff3c04741b7",
-            "c36915a8599c5282",
-            "8eef6d1d51c9c644",
-            "19a783a61de3519b",
-            "f10a91fcb4de6bd3",
-            "7f051a6595e57c3e",
-            "185f95d7c56fe799",
-            "a706b353f30c25d1",
-            "a86bc5233cfa0458",
-            "solar123456789abc",
-            "blokace_file_update",
-            "blokace_file_write",
-            "lo_orch_balancovani"
-        ],
-        "x": 14,
-        "y": 339,
-        "w": 1032,
-        "h": 332
-    },
-    {
-        "id": "66210c073baa5af0",
-        "type": "group",
-        "z": "d86bb11fab512182",
-        "name": "Kontrola priorit",
-        "style": {
-            "fill": "#d1ecf1",
-            "label": true
-        },
-        "nodes": [
-            "fc848e97e2c781c1",
-            "376106d716756636",
-            "dc8da09248ec1e29",
-            "sauna_state_changed",
-            "sauna_set_global",
-            "sauna_reset_minsoc",
-            "sauna_trigger_plan",
-            "auto_reset_minsoc",
-            "auto_trigger_plan"
-        ],
-        "x": 14,
-        "y": 699,
-        "w": 932,
-        "h": 242
-    },
-    {
-        "id": "60ea726b8bbc5fbc",
-        "type": "group",
-        "z": "e451448d0e5cd53a",
-        "name": "Spouštěcí algoritmus",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true
-        },
-        "nodes": [
-            "d90b66fb1f48e589",
-            "0b40707ee362a5e8",
-            "9a0e0c189982adb7"
-        ],
-        "x": 14,
-        "y": -1,
-        "w": 612,
-        "h": 82
-    },
-    {
-        "id": "init_grp_pipeline",
-        "type": "group",
-        "z": "e451448d0e5cd53a",
-        "name": "VRM Data Pipeline",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "82516184e2da4aba",
-            "5bc15235de0be6d7",
-            "94fad41d26e0cad6",
-            "b3489292b6b19a0a",
-            "e898a34c99d763a9",
-            "12e5622470d1810f",
-            "cbe7aadb6a9789fb",
-            "ef45bce4eeb696b2",
-            "cf10227596934c6b",
-            "7de54d464c4599ae",
-            "b6bcdbf86abcbeb8",
-            "94b7b011f71e932d",
-            "492bb8db67a996d6",
-            "214177b52b123155",
-            "3bfaab9a23737f7e",
-            "4356e0d632c43221",
-            "d0cec879a0aa07e1",
-            "0924d118225c702a",
-            "d4aa59089ba5e79a",
-            "815f4827fac6b509",
-            "5efc09c5570e0e2d",
-            "7a40f647c053ea8e",
-            "06bafcba794da9e5",
-            "ea8178ed56fc307d",
-            "vrm_hourly_solar_fc",
-            "chg_hourly_solar_fc",
-            "svc_hourly_solar_fc"
-        ],
-        "x": 14,
-        "y": 99,
-        "w": 1112,
-        "h": 822
-    },
-    {
-        "id": "mgr_grp_logic",
-        "type": "group",
-        "z": "7ceb7c5337692ae5",
-        "name": "Rozhodovací logika",
-        "style": {
-            "fill": "#d3e8f3",
-            "label": true
-        },
-        "nodes": [
-            "40686c99d0404f36",
-            "8f1a7b3a93bc777c",
-            "main_logic_func",
-            "svc_grid_off",
-            "svc_solar_off_stop",
-            "svc_solar_off_slunce",
-            "svc_grid_off_slunce",
-            "link_out_slunce",
-            "svc_solar_off_sit",
-            "svc_grid_off_sit",
-            "link_out_sit",
-            "wallbox_stop_svc_main"
-        ],
-        "x": 14,
-        "y": 39,
-        "w": 892,
-        "h": 262
-    },
-    {
-        "id": "8002c1778266b948",
-        "type": "group",
-        "z": "a86ad952ad7756aa",
-        "name": "Cyklus nabíjení",
-        "style": {
-            "fill": "#ffbfbf",
-            "label": true,
-            "label-position": "n",
-            "color": "#3f3f3f"
-        },
-        "nodes": [
-            "49fdcac28d31c133",
-            "1f5e371852712ac6",
-            "0360f471b476ef16",
-            "ec6bef21ab14caa8",
-            "d31a8b64172a3eab",
-            "a9e5aa5fbd19b5c0",
-            "8518fd99f86a1202",
-            "feec8727ed6c0ea4"
-        ],
-        "x": 14,
-        "y": 519,
-        "w": 912,
-        "h": 282
-    },
-    {
-        "id": "68ded079ca35f344",
-        "type": "group",
-        "z": "49921d17efb0cefe",
-        "name": "Cyklus nabíjení",
-        "style": {
-            "fill": "#ffbfbf",
-            "label": true,
-            "label-position": "n",
-            "color": "#3f3f3f"
-        },
-        "nodes": [
-            "788e188fae8d1fca",
-            "41a9b59ceb3ddd02",
-            "44281067ced2dc56",
-            "0ef0c77eb8bb4570",
-            "82f8a5c6cfa6c254",
-            "67d2ddc059b23ea8",
-            "f4f87ba21653eda5",
-            "98dc3d2a8b804b92",
-            "b2f8f7968bd30604",
-            "795e263cb06160dd",
-            "04485a466ad52c1e",
-            "solar_corr_inject_20s"
-        ],
-        "x": 26,
-        "y": 459,
-        "w": 1082,
-        "h": 382
-    },
-    {
-        "id": "115b21930df59327",
-        "type": "group",
-        "z": "58f453ee71c85d6d",
-        "name": "Světla TV",
-        "style": {
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "d172dcd2f5166a9d",
-            "7522f4d106cb49a7",
-            "ea195d59b673f480",
-            "71953129eb896707"
-        ],
-        "x": 14,
-        "y": 19,
-        "w": 692,
-        "h": 142
-    },
-    {
-        "id": "34989895a7491a91",
-        "type": "group",
-        "z": "58f453ee71c85d6d",
-        "name": "Průtokáč altán",
-        "style": {
-            "fill": "#ffff00",
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "ee0d741fdc5cbfdd",
-            "7cab9c28a5473d81",
-            "02750065ac5e632a",
-            "6d245da5ca53613e",
-            "4d56aa02abf550cf",
-            "9750b05dcbbff9f7",
-            "5d99886761325d1d"
-        ],
-        "x": 14,
-        "y": 179,
-        "w": 832,
-        "h": 202
-    },
-    {
-        "id": "c7058c6bcde0cfc8",
-        "type": "group",
-        "z": "58f453ee71c85d6d",
-        "name": "Horní žebřík",
-        "style": {
-            "fill": "#ffdf7f",
-            "label": true,
-            "color": "#000000"
-        },
-        "nodes": [
-            "af6f98e63742ea83",
-            "79b4a2cb676426f1",
-            "a25c4f2c2d82868b",
-            "e9bfb79af53f16df",
-            "2d1eda397588e770",
-            "5c777d8344b192ab"
-        ],
-        "x": 14,
-        "y": 413,
-        "w": 852,
-        "h": 148
-    },
-    {
-        "id": "f3b107d658fd3d97",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Výpočet vstupní ceny",
-        "style": {
-            "label": true,
-            "color": "#000000",
-            "fill": "#ffefbf",
-            "label-position": "n"
-        },
-        "nodes": [
-            "20afdbcb97fc200c",
-            "9f764aa37d5d6306",
-            "90f59037daf537b9",
-            "7e338e3827c2fb15",
-            "6f9d67a8012a6eb6",
-            "4f702344aaf9fca2"
-        ],
-        "x": 14,
-        "y": 239,
-        "w": 992,
-        "h": 142
-    },
-    {
-        "id": "b44cdb66e54727f6",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Naplnění vstupní tabulky cen z http",
-        "style": {
-            "label": true,
-            "fill": "#ffbfbf",
-            "color": "#001f60",
-            "label-position": "n",
-            "fill-opacity": "0.74"
-        },
-        "nodes": [
-            "19c197e0feac1b52",
-            "13d6e53e918e0d48",
-            "90dbd055aecc8822",
-            "b9d72daaacf95105",
-            "7b8e1478ae7abdcf",
-            "f06592760349c26a",
-            "a0375fbe89ce7386",
-            "0dccef44f2f263b7",
-            "ae99347c2a610653",
-            "8cf74ed44cce80e6",
-            "9866761975399c7f",
-            "a32eeea0e1e3c08c"
-        ],
-        "x": 15,
-        "y": 19,
-        "w": 989,
-        "h": 202
-    },
-    {
-        "id": "1de9e9b5f7d0b99b",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Nastavení hodnot v HA",
-        "style": {
-            "fill": "#e3f3d3",
-            "label": true,
-            "label-position": "n",
-            "color": "#000000"
-        },
-        "nodes": [
-            "5a22ed0e7c4d5702",
-            "6fe01f7863dcb990",
-            "b359790448907d03",
-            "6e5e0e1e73619d88",
-            "44373b9aeb728378",
-            "6a8bdcb07260ad46",
-            "7b088fc43e03bf25",
-            "e6adfa0d8b466c82",
-            "066e002ec5e2bf91",
-            "387ff685c8cf03fa",
-            "d173bd3e17fdc145",
-            "d5fa96c6f4f58178",
-            "155a17c737dae05c",
-            "1b7a9a50b5223ade",
-            "edd5f8a98135c890",
-            "6b80d46b88a7b7f4",
-            "4f7ccdc7d353ca8f",
-            "7fcb518ffcddab0a",
-            "b09c70d2e97274ae",
-            "20578829b67ce0e5",
-            "9b1d4e00a2b10c24",
-            "fb19e54c699bb253"
-        ],
-        "x": 14,
-        "y": 559,
-        "w": 992,
-        "h": 762
-    },
-    {
-        "id": "0c2e8e7121147d0a",
-        "type": "group",
-        "z": "d32891aad318f0e3",
-        "name": "Spočítej levely cen",
-        "style": {
-            "fill": "#ffcf3f",
-            "label": true,
-            "label-position": "n",
-            "color": "#000000"
-        },
-        "nodes": [
-            "5399c8ddb45ab412",
-            "107622cfabfa9725",
-            "3884e595660a1150",
-            "6efbe1cbe0b8efcb",
-            "e3701f53a6d9c32d",
-            "aa11bb22cc33dd44",
-            "ee55ff66aa77bb88"
-        ],
-        "x": 14,
-        "y": 399,
-        "w": 992,
-        "h": 142
-    },
-    {
-        "id": "probe_grp",
-        "type": "group",
-        "z": "7ceb7c5337692ae5",
-        "name": "Auto Hunger Probe",
-        "style": {
-            "fill": "#fff2cc",
-            "label": true
-        },
-        "nodes": [
-            "probe_state_trigger",
-            "probe_decision_func",
-            "probe_set_6a_svc",
-            "probe_charger_on_svc",
-            "probe_delay_20s",
-            "probe_result_func",
-            "probe_hlad_on_svc",
-            "probe_hlad_off_svc",
-            "probe_charger_off_svc"
-        ],
-        "x": 14,
-        "y": 319,
-        "w": 932,
-        "h": 262
-    },
-    {
-        "id": "e1bd0d865b19d57e",
-        "type": "config-vrm-api",
-        "name": "VRM api"
-    },
-    {
-        "id": "c7421fe2.cb11c",
-        "type": "server",
-        "name": "Home Assistant",
-        "addon": true,
-        "rejectUnauthorizedCerts": true,
-        "ha_boolean": "",
-        "connectionDelay": false,
-        "cacheJson": false,
-        "heartbeat": false,
-        "heartbeatInterval": "",
-        "statusSeparator": "",
-        "enableGlobalContextStore": false
-    },
-    {
-        "id": "537aaa7c69c02576",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "victron-vrm-api": "0.3.11",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "b6ac39c28a43ec7d",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "46f74c8e57a22280",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "0e950e94592319fb",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "c10a96016983ea1f",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-contrib-time-range-switch": "1.2.0",
-            "node-red-contrib-moment": "5.0.0"
-        }
-    },
-    {
-        "id": "923d94c2c4b1ba5f",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-contrib-moment": "5.0.0",
-            "node-red-contrib-time-range-switch": "1.2.0"
-        }
-    },
-    {
-        "id": "6d97960f9560e05b",
-        "type": "sqlitedb",
-        "db": "/homeassistant/home-assistant_v2.db",
-        "mode": "RWC"
-    },
-    {
-        "id": "bc29fc50a7482dd1",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-node-sqlite": "1.1.1",
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "2a6f2d8e070c0b5f",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-node-sqlite": "1.1.1"
-        }
-    },
-    {
-        "id": "3e053bdac00312e5",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3",
-            "node-red-node-sqlite": "1.1.1"
-        }
-    },
-    {
-        "id": "ef7e88d904689f1b",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "53db4341d374e728",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
-    },
-    {
-        "id": "d291a07dcab752d6",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
     },
     {
         "id": "6d9185dedec4cb65",
@@ -1967,7 +705,7 @@
         "z": "0a2df88897520187",
         "g": "09797f9996ff875a",
         "name": "🧠 Rozhodovací logika",
-        "func": "// 🧠 Rozhodovací logika bojleru — cílová teplota dle přebytku, ceny, forecastu\n\n// === KONFIGURACE (z flow kontextu) ===\nvar teplotaMax = flow.get(\"TEPLOTA_MAX\") || 69, teplotaVysoka = flow.get(\"TEPLOTA_VYSOKA\") || 60, teplotaStredni = flow.get(\"TEPLOTA_STREDNI\") || 55;\nvar teplotaMin = flow.get(\"TEPLOTA_MIN\") || 20, teplotaPovinnySolar = flow.get(\"TEPLOTA_POVINNY_SOLAR\") || 40;\nvar hystereze = flow.get(\"HYSTEREZE\") || 500, spotrebaBojler = flow.get(\"SPOTREBA_BOJLER\") || 2500;\nvar priceLevelLevny = flow.get(\"PRICE_LEVEL_LEVNY\") || 3, cenaKwhLevna = flow.get(\"CENA_KWH_LEVNA\") || 2.6;\nvar forecastThreshold = flow.get(\"FORECAST_THRESHOLD\") || 35000;\n\n// === GLOBÁLNÍ STAV ===\nvar maxSpotrebaSit = global.get(\"max_spotreba_sit\") || 24000, forecastDnes = global.get(\"forecast_vyroba_dnes\") || 0, forecastZitra = global.get(\"forecast_vyroba_zitra\") || 0;\nvar cerpadloTopi = global.get(\"cerpadlo_topi\") === true;\nvar climateEntity = global.get(\"homeassistant.homeAssistant.states['climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53']\") || {};\nvar aktualniTeplota = parseFloat((climateEntity.attributes || {}).temperature) || 0;\nvar cfg = global.get(\"fve_config\") || {}, maxGrid = cfg.max_spotreba_sit_w || 22000, safetyMargin = cfg.safety_margin_w || 2000, sitLimit = maxGrid - safetyMargin;\n\n// === VSTUPY Z MSG ===\nvar jsmeDoma = msg.jsme_doma === \"on\", rychleVoda = msg.rychle_voda === \"on\", teplotaBojleru = msg.teplota_bojleru || 0;\nvar spotrebaBojleruAkt = msg.spotreba_bojleru || 0, batteryPercent = msg.battery_percent || 0, rozdilVyroby = msg.rozdil_vyroby || 0;\nvar letniRezim = msg.letni_rezim === \"on\", autoHlad = msg.auto_hlad === \"on\", autoAutomatizace = msg.auto_automatizace === \"on\";\nvar priceLevel = msg.price_level || 24, cenaKwh = msg.cena_kwh || 10, celkovaSpotreba = msg.celkova_spotreba || 0, spotrebaZeSite = msg.spotreba_ze_site || 0;\n\n// === ČASOVÉ PODMÍNKY ===\nvar hour = new Date().getHours(), minute = new Date().getMinutes(), currentMinute = hour * 60 + minute;\nvar jePovinnyOhrevCas = currentMinute >= 17 * 60 && currentMinute <= 19 * 60 + 30, bojlerZapnut = spotrebaBojleruAkt > 100, volnaKapacita = sitLimit - celkovaSpotreba, maZalohu = bojlerZapnut || (volnaKapacita >= spotrebaBojler);\n\n// === PRAHY PŘEBYTKU ===\nvar prahZapMax = 4000 + spotrebaBojler + hystereze, prahVelkyMax = 4000, prahZapVysoka = spotrebaBojler + hystereze, prahVypVysoka = -hystereze;\n\n// === CENOVÉ + FORECAST PODMÍNKY ===\nvar jeLevnaEnergie = (priceLevel <= priceLevelLevny) || (cenaKwh <= cenaKwhLevna), solarniDenDnes = forecastDnes > forecastThreshold, solarniDenZitra = forecastZitra > forecastThreshold;\n\n// === ROZHODOVÁNÍ ===\nvar cilovaTeplota = teplotaMin, duvod = \"\";\n\nif (!jsmeDoma) {\n    cilovaTeplota = teplotaMin;\n    duvod = \"Není doma\";\n}\nelse if (rychleVoda) {\n    cilovaTeplota = teplotaMax;\n    duvod = \"Rychle voda\";\n}\n// --- Povinný čas 17:00-19:30 ---\nelse if (jePovinnyOhrevCas && teplotaBojleru < 58) {\n    if (!maZalohu) {\n        cilovaTeplota = teplotaMin;\n        duvod = \"Pov.čas limit sítě\";\n    }\n    else if (solarniDenZitra && teplotaBojleru >= teplotaPovinnySolar) {\n        cilovaTeplota = teplotaPovinnySolar;\n        duvod = \"Pov.čas zítra sol→\" + teplotaPovinnySolar + \"°C\";\n    }\n    else if (solarniDenZitra) {\n        cilovaTeplota = teplotaPovinnySolar;\n        duvod = \"Pov.ohřev na \" + teplotaPovinnySolar + \"°C\";\n    }\n    else {\n        cilovaTeplota = teplotaVysoka;\n        duvod = \"Pov.ohřev 17-19:30\";\n    }\n}\n// --- NIBE kompresor běží a nízký přebytek ---\nelse if (cerpadloTopi && rozdilVyroby < prahZapVysoka) {\n    cilovaTeplota = teplotaMin;\n    duvod = \"NIBE přeb:\" + Math.round(rozdilVyroby / 1000) + \"kW\";\n}\n// --- Baterie > 96% ---\nelse if (batteryPercent > 96) {\n    var prahMax = bojlerZapnut ? prahVelkyMax : prahZapMax, prahVysoka = bojlerZapnut ? prahVypVysoka : prahZapVysoka;\n    if (rozdilVyroby > prahMax) {\n        cilovaTeplota = autoHlad && autoAutomatizace ? teplotaVysoka : teplotaMax;\n        duvod = (autoHlad ? \"Přeb+auto\" : \"Bat plné+přeb \") + (Math.round(rozdilVyroby / 1000)) + \"kW\";\n    }\n    else if (rozdilVyroby > prahVysoka) {\n        cilovaTeplota = teplotaVysoka;\n        duvod = \"Přeb \" + Math.round(rozdilVyroby / 1000) + \"kW\";\n    }\n    else if (bojlerZapnut && rozdilVyroby > -spotrebaBojler) {\n        cilovaTeplota = flow.get(\"posledni_cilova_teplota\") || teplotaMin;\n        duvod = \"Hystereze \" + cilovaTeplota + \"°C\";\n    }\n    else {\n        if (!letniRezim && jeLevnaEnergie && maZalohu) {\n            cilovaTeplota = teplotaStredni;\n            duvod = \"Levná L\" + priceLevel;\n        } else {\n            cilovaTeplota = teplotaMin;\n            duvod = letniRezim ? \"Léto čeká\" : \"Drahá/málo\";\n        }\n    }\n}\n// --- Běžný stav (baterie <= 96%) ---\nelse {\n    var prahVysokaBat = bojlerZapnut ? prahVypVysoka : prahZapVysoka, prahMaxBat = bojlerZapnut ? prahVelkyMax : prahZapMax;\n    if (rozdilVyroby > prahMaxBat) {\n        cilovaTeplota = teplotaMax;\n        duvod = \"Velký přeb \" + Math.round(rozdilVyroby / 1000) + \"kW bat:\" + batteryPercent + \"%\";\n    }\n    else if (rozdilVyroby > prahVysokaBat) {\n        cilovaTeplota = teplotaVysoka;\n        duvod = \"Přeb \" + Math.round(rozdilVyroby / 1000) + \"kW bat:\" + batteryPercent + \"%\";\n    }\n    else if (bojlerZapnut && rozdilVyroby > -spotrebaBojler) {\n        cilovaTeplota = flow.get(\"posledni_cilova_teplota\") || teplotaMin;\n        duvod = \"Hystereze \" + cilovaTeplota + \"°C\";\n    }\n    else if (letniRezim && solarniDenDnes) {\n        cilovaTeplota = teplotaMin;\n        duvod = \"Léto fc:\" + Math.round(forecastDnes / 1000) + \"kWh\";\n    }\n    else if (!letniRezim && jeLevnaEnergie && maZalohu) {\n        cilovaTeplota = teplotaStredni;\n        duvod = \"Levná L\" + priceLevel + \" \" + cenaKwh + \"Kč\";\n    }\n    else {\n        cilovaTeplota = teplotaMin;\n        duvod = letniRezim ? \"Léto solar\" : !maZalohu ? \"Limit sítě\" : \"Drahá\";\n    }\n}\n\n// === VÝSTUP ===\nflow.set(\"posledni_cilova_teplota\", cilovaTeplota);\n\nvar climateState = (climateEntity || {}).state || \"unavailable\";\nif (climateState === \"unavailable\") { node.status({fill: \"red\", shape: \"ring\", text: \"Meross UNAVAIL\"}); return null; }\nif (cilovaTeplota === aktualniTeplota) { node.status({fill: \"blue\", shape: \"dot\", text: cilovaTeplota + \"/\" + aktualniTeplota + \"°C BEZ ZMĚNY \" + duvod}); return null; }\n\nmsg.payload = {teplota: cilovaTeplota, duvod: duvod, debug: {dom: jsmeDoma, rv: rychleVoda, tB: teplotaBojleru, bat: batteryPercent, rV: rozdilVyroby, let2: letniRezim, pL: priceLevel, cK: cenaKwh, jLE: jeLevnaEnergie, cS: celkovaSpotreba, mZ: maZalohu}};\nvar barva = \"grey\"; if (cilovaTeplota >= teplotaVysoka) barva = \"green\"; else if (cilovaTeplota >= teplotaStredni) barva = \"yellow\";\nnode.status({fill: barva, shape: bojlerZapnut ? \"ring\" : \"dot\", text: cilovaTeplota + \"°C \" + duvod});\nreturn msg;\n",
+        "func": "// 🧠 Rozhodovací logika bojleru — cílová teplota dle přebytku, ceny, forecastu\nvar TM=flow.get(\"TEPLOTA_MAX\")||69,TV=flow.get(\"TEPLOTA_VYSOKA\")||60,TS=flow.get(\"TEPLOTA_STREDNI\")||55;\nvar TMI=flow.get(\"TEPLOTA_MIN\")||20,TPS=flow.get(\"TEPLOTA_POVINNY_SOLAR\")||40;\nvar HY=flow.get(\"HYSTEREZE\")||500,SB=flow.get(\"SPOTREBA_BOJLER\")||2500;\nvar PLV=flow.get(\"PRICE_LEVEL_LEVNY\")||3,CKL=flow.get(\"CENA_KWH_LEVNA\")||2.6;\nvar FT=flow.get(\"FORECAST_THRESHOLD\")||35000;\nvar mxS=global.get(\"max_spotreba_sit\")||24000,fD=global.get(\"forecast_vyroba_dnes\")||0,fZ=global.get(\"forecast_vyroba_zitra\")||0;\nvar cerp=global.get(\"cerpadlo_topi\")===true;\nvar clE=global.get(\"homeassistant.homeAssistant.states['climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53']\")||{};\nvar aktT=parseFloat((clE.attributes||{}).temperature)||0;\nvar cfg=global.get(\"fve_config\")||{},MG=cfg.max_spotreba_sit_w||22000,SM=cfg.safety_margin_w||2000,SL=MG-SM;\nvar dom=msg.jsme_doma===\"on\",rv=msg.rychle_voda===\"on\",tB=msg.teplota_bojleru||0;\nvar sBA=msg.spotreba_bojleru||0,bat=msg.battery_percent||0,rV=msg.rozdil_vyroby||0;\nvar let2=msg.letni_rezim===\"on\",aH=msg.auto_hlad===\"on\",aA=msg.auto_automatizace===\"on\";\nvar pL=msg.price_level||24,cK=msg.cena_kwh||10,cS=msg.celkova_spotreba||0,sSit=msg.spotreba_ze_site||0;\nvar hr=new Date().getHours(),mn=new Date().getMinutes(),cm=hr*60+mn;\nvar jPC=cm>=17*60&&cm<=19*60+30,bO=sBA>100,vK=SL-cS,mZ=bO||(vK>=SB);\nvar PZM=4000+SB+HY,PVM=4000,PZV=SB+HY,PVV=-HY;\nvar jLE=(pL<=PLV)||(cK<=CKL),sD=fD>FT,sDZ=fZ>FT;\nvar cT=TMI,dv=\"\";\nif(!dom){cT=TMI;dv=\"Není doma\";}\nelse if(rv){cT=TM;dv=\"Rychle voda\";}\nelse if(jPC&&tB<58){if(!mZ){cT=TMI;dv=\"Pov.čas limit sítě\";}\nelse if(sDZ&&tB>=TPS){cT=TPS;dv=\"Pov.čas zítra sol→\"+TPS+\"°C\";}\nelse if(sDZ){cT=TPS;dv=\"Pov.ohřev na \"+TPS+\"°C\";}\nelse{cT=TV;dv=\"Pov.ohřev 17-19:30\";}}\nelse if(cerp&&rV<PZV){cT=TMI;dv=\"NIBE přeb:\"+Math.round(rV/1000)+\"kW\";}\nelse if(bat>96){var pM=bO?PVM:PZM,pV=bO?PVV:PZV;\nif(rV>pM){cT=aH&&aA?TV:TM;dv=(aH?\"Přeb+auto\":\"Bat plné+přeb \")+(Math.round(rV/1000))+\"kW\";}\nelse if(rV>pV){cT=TV;dv=\"Přeb \"+Math.round(rV/1000)+\"kW\";}\nelse if(bO&&rV>-SB){cT=flow.get(\"posledni_cilova_teplota\")||TMI;dv=\"Hystereze \"+cT+\"°C\";}\nelse{if(!let2&&jLE&&mZ){cT=TS;dv=\"Levná L\"+pL;}else{cT=TMI;dv=let2?\"Léto čeká\":\"Drahá/málo\";}}}\nelse{var p5=bO?PVV:PZV,pM5=bO?PVM:PZM;\nif(rV>pM5){cT=TM;dv=\"Velký přeb \"+Math.round(rV/1000)+\"kW bat:\"+bat+\"%\";}\nelse if(rV>p5){cT=TV;dv=\"Přeb \"+Math.round(rV/1000)+\"kW bat:\"+bat+\"%\";}\nelse if(bO&&rV>-SB){cT=flow.get(\"posledni_cilova_teplota\")||TMI;dv=\"Hystereze \"+cT+\"°C\";}\nelse if(let2&&sD){cT=TMI;dv=\"Léto fc:\"+Math.round(fD/1000)+\"kWh\";}\nelse if(!let2&&jLE&&mZ){cT=TS;dv=\"Levná L\"+pL+\" \"+cK+\"Kč\";}\nelse{cT=TMI;dv=let2?\"Léto solar\":!mZ?\"Limit sítě\":\"Drahá\";}}\nflow.set(\"posledni_cilova_teplota\",cT);\nvar clSt=(clE||{}).state||\"unavailable\";\nif(clSt===\"unavailable\"){node.status({fill:\"red\",shape:\"ring\",text:\"Meross UNAVAIL\"});return null;}\nif(cT===aktT){node.status({fill:\"blue\",shape:\"dot\",text:cT+\"/\"+aktT+\"°C BEZ ZMĚNY \"+dv});return null;}\nmsg.payload={teplota:cT,duvod:dv,debug:{dom:dom,rv:rv,tB:tB,bat:bat,rV:rV,let2:let2,pL:pL,cK:cK,jLE:jLE,cS:cS,mZ:mZ}};\nvar b=\"grey\";if(cT>=TV)b=\"green\";else if(cT>=TS)b=\"yellow\";\nnode.status({fill:b,shape:bO?\"ring\":\"dot\",text:cT+\"°C \"+dv});\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -2058,6 +796,91 @@
                 "d8271d02d0bbbfd8"
             ]
         ]
+    },
+    {
+        "id": "ea6d31715793bece",
+        "type": "tab",
+        "label": "Automatizuj filtraci v bazénu",
+        "disabled": false,
+        "info": "Filtrace bazénu v3 — plně optimalizovaná.\nPreferuje solar, skenuje FVE plán, chrání baterii.\nLÉTO: min 2h/den (>10°C), ZIMA: min 1h/den.",
+        "env": []
+    },
+    {
+        "id": "filtrace_grp_data",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Sběr dat",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "filtrace_st_state",
+            "filtrace_st_letni",
+            "filtrace_st_surplus",
+            "filtrace_st_soc",
+            "filtrace_st_auto",
+            "filtrace_st_flag"
+        ],
+        "x": 274,
+        "y": 119,
+        "w": 602,
+        "h": 182
+    },
+    {
+        "id": "filtrace_grp_logic",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Rozhodování",
+        "style": {
+            "fill": "#fff2cc",
+            "label": true
+        },
+        "nodes": [
+            "filtrace_decision"
+        ],
+        "x": 474,
+        "y": 344,
+        "w": 232,
+        "h": 112
+    },
+    {
+        "id": "filtrace_grp_actions",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Akce",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true
+        },
+        "nodes": [
+            "filtrace_act_on",
+            "filtrace_act_off",
+            "filtrace_flag_on",
+            "filtrace_flag_off"
+        ],
+        "x": 364,
+        "y": 499,
+        "w": 502,
+        "h": 182
+    },
+    {
+        "id": "filtrace_grp_trigger",
+        "type": "group",
+        "z": "ea6d31715793bece",
+        "name": "Trigger",
+        "style": {
+            "fill": "#f3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "e840eaa72d311da7",
+            "filtrace_auto_check"
+        ],
+        "x": -6,
+        "y": 19,
+        "w": 432,
+        "h": 82
     },
     {
         "id": "e840eaa72d311da7",
@@ -2522,6 +1345,95 @@
         ]
     },
     {
+        "id": "3f2680578b66e78f",
+        "type": "tab",
+        "label": "FVE Config",
+        "disabled": false,
+        "info": "Konfigurace FVE automatizace - parametry a inicializace",
+        "env": []
+    },
+    {
+        "id": "2d77556df552e86d",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Konfigurace FVE",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "2df5b10f83b0e39d",
+            "44025571f9d270fb",
+            "2e5f28e1a0b06f19"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 702,
+        "h": 82
+    },
+    {
+        "id": "c7e025194045b1be",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Aktuální ceny energie",
+        "style": {
+            "fill": "#f3e8d3",
+            "label": true
+        },
+        "nodes": [
+            "7c3b58eeb3106ded",
+            "caf460b8b3af03dd",
+            "402735a3f30a84e8",
+            "f1cea1e4214578c4"
+        ],
+        "x": 14,
+        "y": 279,
+        "w": 822,
+        "h": 82
+    },
+    {
+        "id": "da4c9bfc3dddec82",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Aktuální stav systému",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "322c6a3de64b51b5",
+            "90dca62607936795",
+            "88d08735b548d24c",
+            "8cfae471cfa68d3f"
+        ],
+        "x": 14,
+        "y": 379,
+        "w": 832,
+        "h": 82
+    },
+    {
+        "id": "452576adb7294b87",
+        "type": "group",
+        "z": "3f2680578b66e78f",
+        "name": "Synchronizace s Home Assistant",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "2986fe2bccfe8740",
+            "ae5590b0cd6e6b6a",
+            "3fefdad956c6ae27",
+            "4a5169173535c2a2",
+            "f4160d8797285db7",
+            "926f790a1d6a8f6e"
+        ],
+        "x": 14,
+        "y": 119,
+        "w": 832,
+        "h": 142
+    },
+    {
         "id": "2df5b10f83b0e39d",
         "type": "inject",
         "z": "3f2680578b66e78f",
@@ -2949,6 +1861,177 @@
         "x": 805,
         "y": 180,
         "wires": []
+    },
+    {
+        "id": "f1e2d3c4b5a60001",
+        "type": "tab",
+        "label": "FVE Heating",
+        "disabled": false,
+        "info": "Kompletní řízení topení domu v2.0\nNIBE + oběhové čerpadlo + patrony + ventil + chlazení"
+    },
+    {
+        "id": "heating_g_main_v2",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Řízení topení",
+        "style": {
+            "label": true,
+            "fill": "#ffffbf"
+        },
+        "nodes": [
+            "htg_inject_60s",
+            "htg_trig_auto",
+            "htg_trig_temp",
+            "htg_debug",
+            "rf_htg_read_001",
+            "rf_htg_decide2",
+            "rf_htg_output3"
+        ],
+        "x": 14,
+        "y": 18,
+        "w": 852,
+        "h": 223
+    },
+    {
+        "id": "heating_g_exec_v2",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Exekuce akcí",
+        "style": {
+            "label": true,
+            "fill": "#ffbfbf"
+        },
+        "nodes": [
+            "htg_action_switch",
+            "htg_svc_nibe_on",
+            "htg_svc_nibe_off",
+            "htg_svc_obehove_on",
+            "htg_svc_obehove_off",
+            "htg_svc_p1_on",
+            "htg_svc_p1_off",
+            "htg_svc_p2_on",
+            "htg_svc_p2_off",
+            "htg_svc_p3_on",
+            "htg_svc_p3_off",
+            "htg_svc_ventil_off",
+            "htg_svc_cool_on",
+            "htg_svc_cool_off",
+            "htg_svc_stop_auto_solar",
+            "htg_svc_stop_auto_grid"
+        ],
+        "x": 94,
+        "y": 439,
+        "w": 436,
+        "h": 762
+    },
+    {
+        "id": "f1e2d3c4b5a60004",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Ochrana baterie",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "htg_prot_trig",
+            "htg_prot_func",
+            "htg_prot_set"
+        ],
+        "x": 14,
+        "y": 1239,
+        "w": 712,
+        "h": 82
+    },
+    {
+        "id": "heating_g_away",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Režim nepřítomnosti",
+        "style": {
+            "stroke": "#ff9900",
+            "label": true,
+            "color": "#ff9900"
+        },
+        "nodes": [
+            "htg_away_trigger",
+            "htg_away_func",
+            "htg_away_set_temp"
+        ],
+        "x": 14,
+        "y": 1539,
+        "w": 662,
+        "h": 82
+    },
+    {
+        "id": "htg_g_pat_korekce",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Patrony korekce vybíjení (5s)",
+        "style": {
+            "stroke": "#ff7f0e",
+            "stroke-opacity": "1",
+            "fill": "#fff3e6",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#ff7f0e"
+        },
+        "nodes": [
+            "pat_korekce_inject",
+            "pat_korekce_func",
+            "pat_korekce_router",
+            "pat_max_charge_svc"
+        ],
+        "x": 14,
+        "y": 249,
+        "w": 732,
+        "h": 172
+    },
+    {
+        "id": "htg_g_topeni_mod",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Topení MOD → HA sync",
+        "style": {
+            "stroke": "#1f77b4",
+            "stroke-opacity": "1",
+            "fill": "#e8f4fd",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#1f77b4"
+        },
+        "nodes": [
+            "htg_topeni_mod_change",
+            "htg_topeni_mod_api"
+        ],
+        "x": 14,
+        "y": 1339,
+        "w": 442,
+        "h": 82
+    },
+    {
+        "id": "htg_g_reload",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Inicializace (startup)",
+        "style": {
+            "stroke": "#2ca02c",
+            "stroke-opacity": "1",
+            "fill": "#e8f8e8",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#2ca02c"
+        },
+        "nodes": [
+            "htg_reload_input_select_inject",
+            "htg_reload_input_select_api"
+        ],
+        "x": 14,
+        "y": 1439,
+        "w": 532,
+        "h": 82
     },
     {
         "id": "htg_inject_60s",
@@ -4221,6 +3304,91 @@
         ]
     },
     {
+        "id": "fve_history_tab",
+        "type": "tab",
+        "label": "FVE History Learning",
+        "disabled": false,
+        "info": "Učení z historie spotřeby pro lepší plánování",
+        "env": []
+    },
+    {
+        "id": "fve_history_collect_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Sběr historických dat (každou hodinu)",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_trigger",
+            "fve_history_collect",
+            "fve_history_store",
+            "fve_history_debug"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 952,
+        "h": 82
+    },
+    {
+        "id": "fve_history_predict_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Predikce spotřeby",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_predict_in",
+            "fve_history_predict_calc",
+            "fve_history_predict_out"
+        ],
+        "x": 14,
+        "y": 119,
+        "w": 622,
+        "h": 82
+    },
+    {
+        "id": "fve_history_analyze_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Analýza vzorců spotřeby",
+        "style": {
+            "fill": "#f3e8d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_analyze_trigger",
+            "fve_history_analyze_calc",
+            "fve_history_analyze_save"
+        ],
+        "x": 14,
+        "y": 219,
+        "w": 642,
+        "h": 82
+    },
+    {
+        "id": "fve_history_export_group",
+        "type": "group",
+        "z": "fve_history_tab",
+        "name": "Export/Import historie",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "fve_history_export_trigger",
+            "fve_history_export_func",
+            "fve_history_export_file"
+        ],
+        "x": 14,
+        "y": 319,
+        "w": 602,
+        "h": 82
+    },
+    {
         "id": "fve_history_trigger",
         "type": "inject",
         "z": "fve_history_tab",
@@ -4327,7 +3495,7 @@
         "z": "fve_history_tab",
         "g": "fve_history_predict_group",
         "name": "Výpočet predikce (v18)",
-        "func": "// Výpočet predikce spotřeby a výroby na základě historie (v18)\nlet history = flow.get(\"consumption_history\") || {};\n\n// Load from file if flow context is empty (NR restart)\nif (Object.keys(history).length === 0) {\n    try {\n        var fs = global.get(\"fs\");\n        var raw = fs.readFileSync(\"/homeassistant/fve_consumption_history.json\", \"utf8\");\n        history = JSON.parse(raw);\n        flow.set(\"consumption_history\", history);\n    } catch(e) { /* no file yet */ }\n}\n\nconst now = new Date();\nconst currentHour = now.getHours();\nconst dayOfWeek = now.getDay();\nconst isWeekend = dayOfWeek === 0 || dayOfWeek === 6;\nconst dayType = isWeekend ? \"weekend\" : \"weekday\";\n\nconst horizont = 12;\nconst predictions = [];\n\nfor (let i = 0; i < horizont; i++) {\n    const predictHour = (currentHour + i) % 24;\n    const predictDayType = dayType;\n\n    let prediction = {\n        hour: predictHour,\n        offset: i,\n        avgSoc: 50,\n        confidence: \"low\",\n        sampleCount: 0,\n        // v18: výroba a spotřeba\n        avgSolarKwh: 0,\n        avgConsumptionKwh: 1.5, // fallback: ~1.5 kWh/h (36 kWh/den / 24h)\n        avgSurplusKwh: 0,\n        netSolarGainKwh: 0 // přebytek solaru po odečtení spotřeby\n    };\n\n    if (history[predictHour] && history[predictHour][predictDayType]) {\n        const entry = history[predictHour][predictDayType];\n        prediction.avgSoc = entry.avgSoc;\n        prediction.sampleCount = entry.count;\n\n        if (entry.count >= 14) {\n            prediction.confidence = \"high\";\n        } else if (entry.count >= 7) {\n            prediction.confidence = \"medium\";\n        } else {\n            prediction.confidence = \"low\";\n        }\n\n        // v18: výroba a spotřeba z historie\n        if (entry.avgSolarKwh !== undefined) {\n            prediction.avgSolarKwh = entry.avgSolarKwh;\n        }\n        if (entry.avgConsumptionKwh !== undefined && entry.avgConsumptionKwh > 0) {\n            prediction.avgConsumptionKwh = entry.avgConsumptionKwh;\n        }\n        if (entry.avgSurplusKwh !== undefined) {\n            prediction.avgSurplusKwh = entry.avgSurplusKwh;\n        }\n\n        // Čistý solární přírůstek pro baterii = výroba - spotřeba\n        prediction.netSolarGainKwh = Math.max(0, prediction.avgSolarKwh - prediction.avgConsumptionKwh);\n    }\n\n    predictions.push(prediction);\n}\n\nmsg.payload = {\n    currentHour: currentHour,\n    dayType: dayType,\n    predictions: predictions,\n    generatedAt: now.toISOString()\n};\n\nglobal.set(\"fve_consumption_predictions\", predictions);\n\n// Souhrn pro status\nvar totalSolar = 0, totalCons = 0, totalSurplus = 0;\nfor (var s = 0; s < predictions.length; s++) {\n    totalSolar += predictions[s].avgSolarKwh;\n    totalCons += predictions[s].avgConsumptionKwh;\n    totalSurplus += predictions[s].netSolarGainKwh;\n}\n\nnode.status({fill:\"blue\", shape:\"dot\", text:`${horizont}h | ☀${totalSolar.toFixed(1)}kWh | ⚡${totalCons.toFixed(1)}kWh | net:${totalSurplus.toFixed(1)}kWh`});\n\nreturn msg;",
+        "func": "// Výpočet predikce spotřeby a výroby na základě historie (v18)\nlet history = flow.get(\"consumption_history\") || {};\n\n// Load from file if flow context is empty (NR restart)\nif (Object.keys(history).length === 0) {\n    try {\n        var fs = global.get(\"fs\");\n        var raw = fs.readFileSync(\"/homeassistant/fve_consumption_history.json\", \"utf8\");\n        history = JSON.parse(raw);\n        flow.set(\"consumption_history\", history);\n        node.warn(\"History loaded from file: \" + Object.keys(history).length + \" hours\");\n    } catch(e) { /* no file yet */ }\n}\n\nconst now = new Date();\nconst currentHour = now.getHours();\nconst dayOfWeek = now.getDay();\nconst isWeekend = dayOfWeek === 0 || dayOfWeek === 6;\nconst dayType = isWeekend ? \"weekend\" : \"weekday\";\n\nconst horizont = 12;\nconst predictions = [];\n\nfor (let i = 0; i < horizont; i++) {\n    const predictHour = (currentHour + i) % 24;\n    const predictDayType = dayType;\n\n    let prediction = {\n        hour: predictHour,\n        offset: i,\n        avgSoc: 50,\n        confidence: \"low\",\n        sampleCount: 0,\n        // v18: výroba a spotřeba\n        avgSolarKwh: 0,\n        avgConsumptionKwh: 1.5, // fallback: ~1.5 kWh/h (36 kWh/den / 24h)\n        avgSurplusKwh: 0,\n        netSolarGainKwh: 0 // přebytek solaru po odečtení spotřeby\n    };\n\n    if (history[predictHour] && history[predictHour][predictDayType]) {\n        const entry = history[predictHour][predictDayType];\n        prediction.avgSoc = entry.avgSoc;\n        prediction.sampleCount = entry.count;\n\n        if (entry.count >= 14) {\n            prediction.confidence = \"high\";\n        } else if (entry.count >= 7) {\n            prediction.confidence = \"medium\";\n        } else {\n            prediction.confidence = \"low\";\n        }\n\n        // v18: výroba a spotřeba z historie\n        if (entry.avgSolarKwh !== undefined) {\n            prediction.avgSolarKwh = entry.avgSolarKwh;\n        }\n        if (entry.avgConsumptionKwh !== undefined && entry.avgConsumptionKwh > 0) {\n            prediction.avgConsumptionKwh = entry.avgConsumptionKwh;\n        }\n        if (entry.avgSurplusKwh !== undefined) {\n            prediction.avgSurplusKwh = entry.avgSurplusKwh;\n        }\n\n        // Čistý solární přírůstek pro baterii = výroba - spotřeba\n        prediction.netSolarGainKwh = Math.max(0, prediction.avgSolarKwh - prediction.avgConsumptionKwh);\n    }\n\n    predictions.push(prediction);\n}\n\nmsg.payload = {\n    currentHour: currentHour,\n    dayType: dayType,\n    predictions: predictions,\n    generatedAt: now.toISOString()\n};\n\nglobal.set(\"fve_consumption_predictions\", predictions);\n\n// Souhrn pro status\nvar totalSolar = 0, totalCons = 0, totalSurplus = 0;\nfor (var s = 0; s < predictions.length; s++) {\n    totalSolar += predictions[s].avgSolarKwh;\n    totalCons += predictions[s].avgConsumptionKwh;\n    totalSurplus += predictions[s].netSolarGainKwh;\n}\n\nnode.status({fill:\"blue\", shape:\"dot\", text:`${horizont}h | ☀${totalSolar.toFixed(1)}kWh | ⚡${totalCons.toFixed(1)}kWh | net:${totalSurplus.toFixed(1)}kWh`});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4392,7 +3560,7 @@
         "z": "fve_history_tab",
         "g": "fve_history_analyze_group",
         "name": "Analýza vzorců (v18)",
-        "func": "// Analýza vzorců spotřeby a výroby pro optimalizaci (v18)\nlet history = flow.get(\"consumption_history\") || {};\n\n// Load from file if flow context is empty (NR restart)\nif (Object.keys(history).length === 0) {\n    try {\n        var fs = global.get(\"fs\");\n        var raw = fs.readFileSync(\"/homeassistant/fve_consumption_history.json\", \"utf8\");\n        history = JSON.parse(raw);\n        flow.set(\"consumption_history\", history);\n    } catch(e) { /* no file yet */ }\n}\n\nconst analysis = {\n    weekday: {\n        peakHours: [],\n        lowHours: [],\n        avgPattern: {},\n        // v18\n        solarPattern: {},\n        consumptionPattern: {},\n        surplusPattern: {}\n    },\n    weekend: {\n        peakHours: [],\n        lowHours: [],\n        avgPattern: {},\n        solarPattern: {},\n        consumptionPattern: {},\n        surplusPattern: {}\n    },\n    recommendations: []\n};\n\nfor (const dayType of [\"weekday\", \"weekend\"]) {\n    const hourlyData = [];\n\n    for (let hour = 0; hour < 24; hour++) {\n        if (history[hour] && history[hour][dayType]) {\n            const entry = history[hour][dayType];\n            hourlyData.push({\n                hour: hour,\n                avgSoc: entry.avgSoc,\n                count: entry.count,\n                avgSolarKwh: entry.avgSolarKwh || 0,\n                avgConsumptionKwh: entry.avgConsumptionKwh || 0,\n                avgSurplusKwh: entry.avgSurplusKwh || 0\n            });\n            analysis[dayType].avgPattern[hour] = entry.avgSoc;\n            // v18\n            analysis[dayType].solarPattern[hour] = entry.avgSolarKwh || 0;\n            analysis[dayType].consumptionPattern[hour] = entry.avgConsumptionKwh || 0;\n            analysis[dayType].surplusPattern[hour] = entry.avgSurplusKwh || 0;\n        }\n    }\n\n    const sorted = [...hourlyData].sort((a, b) => a.avgSoc - b.avgSoc);\n    analysis[dayType].peakHours = sorted.slice(0, 3).map(h => h.hour);\n    analysis[dayType].lowHours = sorted.slice(-3).map(h => h.hour);\n}\n\nif (analysis.weekday.peakHours.length > 0) {\n    const peakStr = analysis.weekday.peakHours.join(\", \");\n    analysis.recommendations.push(`Špičkové hodiny (pracovní dny): ${peakStr}:00 - zvážit nabíjení baterie předem`);\n}\n\nif (analysis.weekday.lowHours.length > 0) {\n    const lowStr = analysis.weekday.lowHours.join(\", \");\n    analysis.recommendations.push(`Nízká spotřeba (pracovní dny): ${lowStr}:00 - ideální pro nabíjení ze sítě`);\n}\n\nflow.set(\"consumption_analysis\", analysis);\nglobal.set(\"fve_consumption_analysis\", analysis);\n\nmsg.payload = analysis;\n\nnode.status({fill:\"green\", shape:\"dot\", text:`Analýza dokončena | ${analysis.recommendations.length} doporučení`});\nreturn msg;",
+        "func": "// Analýza vzorců spotřeby a výroby pro optimalizaci (v18)\nlet history = flow.get(\"consumption_history\") || {};\n\n// Load from file if flow context is empty (NR restart)\nif (Object.keys(history).length === 0) {\n    try {\n        var fs = global.get(\"fs\");\n        var raw = fs.readFileSync(\"/homeassistant/fve_consumption_history.json\", \"utf8\");\n        history = JSON.parse(raw);\n        flow.set(\"consumption_history\", history);\n        node.warn(\"History loaded from file: \" + Object.keys(history).length + \" hours\");\n    } catch(e) { /* no file yet */ }\n}\n\nconst analysis = {\n    weekday: {\n        peakHours: [],\n        lowHours: [],\n        avgPattern: {},\n        // v18\n        solarPattern: {},\n        consumptionPattern: {},\n        surplusPattern: {}\n    },\n    weekend: {\n        peakHours: [],\n        lowHours: [],\n        avgPattern: {},\n        solarPattern: {},\n        consumptionPattern: {},\n        surplusPattern: {}\n    },\n    recommendations: []\n};\n\nfor (const dayType of [\"weekday\", \"weekend\"]) {\n    const hourlyData = [];\n\n    for (let hour = 0; hour < 24; hour++) {\n        if (history[hour] && history[hour][dayType]) {\n            const entry = history[hour][dayType];\n            hourlyData.push({\n                hour: hour,\n                avgSoc: entry.avgSoc,\n                count: entry.count,\n                avgSolarKwh: entry.avgSolarKwh || 0,\n                avgConsumptionKwh: entry.avgConsumptionKwh || 0,\n                avgSurplusKwh: entry.avgSurplusKwh || 0\n            });\n            analysis[dayType].avgPattern[hour] = entry.avgSoc;\n            // v18\n            analysis[dayType].solarPattern[hour] = entry.avgSolarKwh || 0;\n            analysis[dayType].consumptionPattern[hour] = entry.avgConsumptionKwh || 0;\n            analysis[dayType].surplusPattern[hour] = entry.avgSurplusKwh || 0;\n        }\n    }\n\n    const sorted = [...hourlyData].sort((a, b) => a.avgSoc - b.avgSoc);\n    analysis[dayType].peakHours = sorted.slice(0, 3).map(h => h.hour);\n    analysis[dayType].lowHours = sorted.slice(-3).map(h => h.hour);\n}\n\nif (analysis.weekday.peakHours.length > 0) {\n    const peakStr = analysis.weekday.peakHours.join(\", \");\n    analysis.recommendations.push(`Špičkové hodiny (pracovní dny): ${peakStr}:00 - zvážit nabíjení baterie předem`);\n}\n\nif (analysis.weekday.lowHours.length > 0) {\n    const lowStr = analysis.weekday.lowHours.join(\", \");\n    analysis.recommendations.push(`Nízká spotřeba (pracovní dny): ${lowStr}:00 - ideální pro nabíjení ze sítě`);\n}\n\nflow.set(\"consumption_analysis\", analysis);\nglobal.set(\"fve_consumption_analysis\", analysis);\n\nmsg.payload = analysis;\n\nnode.status({fill:\"green\", shape:\"dot\", text:`Analýza dokončena | ${analysis.recommendations.length} doporučení`});\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4489,6 +3657,211 @@
         "x": 500,
         "y": 360,
         "wires": []
+    },
+    {
+        "id": "bb3654998a6bf514",
+        "type": "tab",
+        "label": "FVE Modes",
+        "disabled": false,
+        "info": "Implementace jednotlivých módů FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
+        "env": []
+    },
+    {
+        "id": "mode_grp_normal",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: NORMAL - Standardní provoz",
+        "style": {
+            "fill": "#d3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "8b55cfc5181b9eb7",
+            "670432a909cf3b26",
+            "lo_victron_normal",
+            "lo_log_normal"
+        ],
+        "x": 24,
+        "y": 6,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "mode_grp_setrit",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ŠETŘIT - Minimální vybíjení baterie",
+        "style": {
+            "fill": "#f3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "ec611f6aba7d5c59",
+            "139cd450edbbde37",
+            "lo_victron_setrit",
+            "lo_log_setrit"
+        ],
+        "x": 24,
+        "y": 106,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "mode_grp_nabijet",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: NABÍJET ZE SÍTĚ - Levná energie",
+        "style": {
+            "fill": "#d3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "1d98a0541716ce58",
+            "ebcf9e560f598c02",
+            "lo_victron_nabijet",
+            "lo_log_nabijet"
+        ],
+        "x": 24,
+        "y": 206,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "mode_grp_prodavat",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: PRODÁVAT - Prodej do sítě",
+        "style": {
+            "fill": "#f3d3d3",
+            "label": true
+        },
+        "nodes": [
+            "179ed150020d459c",
+            "68992d178ce105ed",
+            "lo_victron_prodavat",
+            "lo_log_prodavat"
+        ],
+        "x": 24,
+        "y": 306,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "mode_grp_zakaz",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ZÁKAZ PŘETOKŮ - Záporná cena",
+        "style": {
+            "fill": "#e3d3f3",
+            "label": true
+        },
+        "nodes": [
+            "c682224043634fcd",
+            "75d1f9e77bc15e0a",
+            "lo_victron_zakaz",
+            "lo_log_zakaz"
+        ],
+        "x": 24,
+        "y": 406,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "mode_grp_solar",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: SOLÁRNÍ NABÍJENÍ",
+        "style": {
+            "fill": "#fffacd",
+            "label": true
+        },
+        "nodes": [
+            "e93b8f3e662c6190",
+            "d27d27bacf98eec0",
+            "lo_victron_solar",
+            "lo_log_solar"
+        ],
+        "x": 24,
+        "y": 506,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "fve_modes_g_shared_svc",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Victron Actions (sdílený)",
+        "style": {
+            "fill": "#dce6f0",
+            "label": true
+        },
+        "nodes": [
+            "li_victron_shared",
+            "shared_fanout_func",
+            "shared_psp",
+            "shared_sched_soc",
+            "shared_sched_dur",
+            "shared_sched_day",
+            "shared_max_disch",
+            "shared_max_charge",
+            "shared_min_soc",
+            "shared_debug",
+            "shared_feedin_switch",
+            "shared_feedin_on",
+            "shared_feedin_off",
+            "shared_maxfeedin_val",
+            "shared_prevent_off",
+            "shared_prevent_on"
+        ],
+        "x": 24,
+        "y": 839,
+        "w": 942,
+        "h": 422
+    },
+    {
+        "id": "fve_modes_g_log",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Log",
+        "style": {
+            "fill": "#e8e8e8",
+            "label": true
+        },
+        "nodes": [
+            "li_log_shared",
+            "fve_log_writer_001",
+            "fve_log_file_001",
+            "fve_log_rotate_inject",
+            "fve_log_rotate_func"
+        ],
+        "x": 494,
+        "y": 159,
+        "w": 492,
+        "h": 182
+    },
+    {
+        "id": "grp_balancovani",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Balancování baterie",
+        "style": {
+            "fill": "#e0f7fa",
+            "label": true
+        },
+        "nodes": [
+            "li_modes_balancovani",
+            "bal_logic_func",
+            "bal_svc_set_datetime",
+            "lo_victron_bal",
+            "lo_log_bal",
+            "bal_svc_set_boolean",
+            "opp_bal_inject",
+            "opp_bal_check"
+        ],
+        "x": 24,
+        "y": 619,
+        "w": 662,
+        "h": 202
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -5645,13 +5018,13 @@
         "z": "bb3654998a6bf514",
         "g": "grp_balancovani",
         "name": "Opp Bal Check",
-        "func": "// Check for pending opportunistic balancing result\nvar p=global.get(\"opp_bal_pending\");\nif(!p)return[null,null];\nglobal.set(\"opp_bal_pending\",null);\nvar _cfg=global.get(\"fve_config\")||{};\nvar _fsh=_cfg.balancing_force_stop_hours||3;\n// Law 12.5: ALWAYS store latest passive bal info for plan header\nvar _qual=p.durationH>=_fsh;\nglobal.set(\"bal_header_info\",{datetime:p.datetime,ok:p.ok,passive:true,durationH:p.durationH,maxIdleMin:p.maxIdleMin,qualifying:_qual});\n// Law 12.5: ALWAYS update datetime entity (for header display)\nvar dtMsg={payload:{action:\"input_datetime.set_datetime\",target:{entity_id:\"input_datetime.last_pylontech_balanced\"},data:{datetime:p.datetime}}};\n// Law 12.5: ALWAYS update boolean entity (for header OK/NOK)\nvar bMsg={payload:{action:\"input_boolean.\"+(p.ok?\"turn_on\":\"turn_off\"),target:{entity_id:\"input_boolean.pylontech_balancing_ok\"},data:{}}};\nif(_qual){\n  global.set(\"last_qualifying_balance_ts\",Date.now());\n}else{\n}\nnode.status({fill:p.ok?\"green\":\"red\",shape:\"dot\",text:(p.ok?\"OK\":\"NOK\")+\" \"+p.datetime+\" \"+p.durationH.toFixed(1)+\"h\"});\nreturn[dtMsg,bMsg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
+        "func": "// Check for pending opportunistic balancing result\nvar p=global.get(\"opp_bal_pending\");\nif(!p)return[null,null];\nglobal.set(\"opp_bal_pending\",null);\nvar _cfg=global.get(\"fve_config\")||{};\nvar _fsh=_cfg.balancing_force_stop_hours||3;\n// Law 12.5: ALWAYS store latest passive bal info for plan header\nvar _qual=p.durationH>=_fsh;\nglobal.set(\"bal_header_info\",{datetime:p.datetime,ok:p.ok,passive:true,durationH:p.durationH,maxIdleMin:p.maxIdleMin,qualifying:_qual});\n// Law 12.5: ALWAYS update datetime entity (for header display)\nvar dtMsg={payload:{action:\"input_datetime.set_datetime\",target:{entity_id:\"input_datetime.last_pylontech_balanced\"},data:{datetime:p.datetime}}};\n// Law 12.5: ALWAYS update boolean entity (for header OK/NOK)\nvar bMsg={payload:{action:\"input_boolean.\"+(p.ok?\"turn_on\":\"turn_off\"),target:{entity_id:\"input_boolean.pylontech_balancing_ok\"},data:{}}};\nif(_qual){\n  global.set(\"last_qualifying_balance_ts\",Date.now());\n}else{\n}\nnode.status({fill:p.ok?\"green\":\"red\",shape:\"dot\",text:(p.ok?\"OK\":\"NOK\")+\" \"+p.datetime+\" \"+p.durationH.toFixed(1)+\"h\"});\nreturn[dtMsg,bMsg];",
         "x": 420,
         "y": 860,
         "wires": [
@@ -5662,6 +5035,633 @@
                 "bal_svc_set_boolean"
             ]
         ]
+    },
+    {
+        "id": "d86bb11fab512182",
+        "type": "tab",
+        "label": "FVE Orchestrator",
+        "disabled": false,
+        "info": "Hlavní orchestrace FVE - plánování a rozhodování o módech",
+        "env": []
+    },
+    {
+        "id": "e451448d0e5cd53a",
+        "type": "tab",
+        "label": "Init & Set Victron",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "7ceb7c5337692ae5",
+        "type": "tab",
+        "label": "Manager nabíjení auta",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a86ad952ad7756aa",
+        "type": "tab",
+        "label": "Automatizuj nabíjení auta ze sítě",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "49921d17efb0cefe",
+        "type": "tab",
+        "label": "Automatizuj nabíjení auta ze slunce",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "58f453ee71c85d6d",
+        "type": "tab",
+        "label": "Automatizuj ostatní",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d32891aad318f0e3",
+        "type": "tab",
+        "label": "Vypočítej ceny",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "4580a451a0858d03",
+        "type": "group",
+        "z": "d86bb11fab512182",
+        "name": "Plánování",
+        "style": {
+            "fill": "#fff3cd",
+            "label": true
+        },
+        "nodes": [
+            "22e7b3b8965c20db",
+            "f037d87ec94c7da2",
+            "9333668b1d326a83",
+            "df085ac4da095340",
+            "39019d1a78677231",
+            "517215d5f730e80c",
+            "701e94d82c3aead0",
+            "aabb001122334455",
+            "aabb001122334466",
+            "rf_prep_params_01",
+            "rf_cena_discharge2",
+            "rf_arb_trimming_3",
+            "rf_gen_plan_0004",
+            "rf_plan_output_05"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 1052,
+        "h": 302
+    },
+    {
+        "id": "c0d4d6462d4ebded",
+        "type": "group",
+        "z": "d86bb11fab512182",
+        "name": "Exekuce plánu",
+        "style": {
+            "fill": "#d4edda",
+            "label": true
+        },
+        "nodes": [
+            "44d31ff3c04741b7",
+            "c36915a8599c5282",
+            "8eef6d1d51c9c644",
+            "19a783a61de3519b",
+            "f10a91fcb4de6bd3",
+            "7f051a6595e57c3e",
+            "185f95d7c56fe799",
+            "a706b353f30c25d1",
+            "a86bc5233cfa0458",
+            "solar123456789abc",
+            "blokace_file_update",
+            "blokace_file_write",
+            "lo_orch_balancovani"
+        ],
+        "x": 14,
+        "y": 339,
+        "w": 1032,
+        "h": 332
+    },
+    {
+        "id": "66210c073baa5af0",
+        "type": "group",
+        "z": "d86bb11fab512182",
+        "name": "Kontrola priorit",
+        "style": {
+            "fill": "#d1ecf1",
+            "label": true
+        },
+        "nodes": [
+            "fc848e97e2c781c1",
+            "376106d716756636",
+            "dc8da09248ec1e29",
+            "sauna_state_changed",
+            "sauna_set_global",
+            "sauna_reset_minsoc",
+            "sauna_trigger_plan",
+            "auto_reset_minsoc",
+            "auto_trigger_plan"
+        ],
+        "x": 14,
+        "y": 699,
+        "w": 932,
+        "h": 242
+    },
+    {
+        "id": "60ea726b8bbc5fbc",
+        "type": "group",
+        "z": "e451448d0e5cd53a",
+        "name": "Spouštěcí algoritmus",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true
+        },
+        "nodes": [
+            "d90b66fb1f48e589",
+            "0b40707ee362a5e8",
+            "9a0e0c189982adb7"
+        ],
+        "x": 14,
+        "y": -1,
+        "w": 612,
+        "h": 82
+    },
+    {
+        "id": "init_grp_pipeline",
+        "type": "group",
+        "z": "e451448d0e5cd53a",
+        "name": "VRM Data Pipeline",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "82516184e2da4aba",
+            "5bc15235de0be6d7",
+            "94fad41d26e0cad6",
+            "b3489292b6b19a0a",
+            "e898a34c99d763a9",
+            "12e5622470d1810f",
+            "cbe7aadb6a9789fb",
+            "ef45bce4eeb696b2",
+            "cf10227596934c6b",
+            "7de54d464c4599ae",
+            "b6bcdbf86abcbeb8",
+            "94b7b011f71e932d",
+            "492bb8db67a996d6",
+            "214177b52b123155",
+            "3bfaab9a23737f7e",
+            "4356e0d632c43221",
+            "d0cec879a0aa07e1",
+            "0924d118225c702a",
+            "d4aa59089ba5e79a",
+            "815f4827fac6b509",
+            "5efc09c5570e0e2d",
+            "7a40f647c053ea8e",
+            "06bafcba794da9e5",
+            "ea8178ed56fc307d",
+            "vrm_hourly_solar_fc",
+            "chg_hourly_solar_fc",
+            "svc_hourly_solar_fc"
+        ],
+        "x": 14,
+        "y": 99,
+        "w": 1112,
+        "h": 822
+    },
+    {
+        "id": "mgr_grp_logic",
+        "type": "group",
+        "z": "7ceb7c5337692ae5",
+        "name": "Rozhodovací logika",
+        "style": {
+            "fill": "#d3e8f3",
+            "label": true
+        },
+        "nodes": [
+            "40686c99d0404f36",
+            "8f1a7b3a93bc777c",
+            "main_logic_func",
+            "svc_grid_off",
+            "svc_solar_off_stop",
+            "svc_solar_off_slunce",
+            "svc_grid_off_slunce",
+            "link_out_slunce",
+            "svc_solar_off_sit",
+            "svc_grid_off_sit",
+            "link_out_sit",
+            "wallbox_stop_svc_main"
+        ],
+        "x": 14,
+        "y": 39,
+        "w": 892,
+        "h": 262
+    },
+    {
+        "id": "8002c1778266b948",
+        "type": "group",
+        "z": "a86ad952ad7756aa",
+        "name": "Cyklus nabíjení",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true,
+            "label-position": "n",
+            "color": "#3f3f3f"
+        },
+        "nodes": [
+            "49fdcac28d31c133",
+            "1f5e371852712ac6",
+            "0360f471b476ef16",
+            "ec6bef21ab14caa8",
+            "d31a8b64172a3eab",
+            "a9e5aa5fbd19b5c0",
+            "8518fd99f86a1202",
+            "feec8727ed6c0ea4"
+        ],
+        "x": 14,
+        "y": 519,
+        "w": 912,
+        "h": 282
+    },
+    {
+        "id": "68ded079ca35f344",
+        "type": "group",
+        "z": "49921d17efb0cefe",
+        "name": "Cyklus nabíjení",
+        "style": {
+            "fill": "#ffbfbf",
+            "label": true,
+            "label-position": "n",
+            "color": "#3f3f3f"
+        },
+        "nodes": [
+            "788e188fae8d1fca",
+            "41a9b59ceb3ddd02",
+            "44281067ced2dc56",
+            "0ef0c77eb8bb4570",
+            "82f8a5c6cfa6c254",
+            "67d2ddc059b23ea8",
+            "f4f87ba21653eda5",
+            "98dc3d2a8b804b92",
+            "b2f8f7968bd30604",
+            "795e263cb06160dd",
+            "04485a466ad52c1e",
+            "solar_corr_inject_20s"
+        ],
+        "x": 26,
+        "y": 459,
+        "w": 1082,
+        "h": 382
+    },
+    {
+        "id": "115b21930df59327",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Světla TV",
+        "style": {
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "d172dcd2f5166a9d",
+            "7522f4d106cb49a7",
+            "ea195d59b673f480",
+            "71953129eb896707"
+        ],
+        "x": 14,
+        "y": 19,
+        "w": 692,
+        "h": 142
+    },
+    {
+        "id": "34989895a7491a91",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Průtokáč altán",
+        "style": {
+            "fill": "#ffff00",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "ee0d741fdc5cbfdd",
+            "7cab9c28a5473d81",
+            "02750065ac5e632a",
+            "6d245da5ca53613e",
+            "4d56aa02abf550cf",
+            "9750b05dcbbff9f7",
+            "5d99886761325d1d"
+        ],
+        "x": 14,
+        "y": 179,
+        "w": 832,
+        "h": 202
+    },
+    {
+        "id": "c7058c6bcde0cfc8",
+        "type": "group",
+        "z": "58f453ee71c85d6d",
+        "name": "Horní žebřík",
+        "style": {
+            "fill": "#ffdf7f",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "af6f98e63742ea83",
+            "79b4a2cb676426f1",
+            "a25c4f2c2d82868b",
+            "e9bfb79af53f16df",
+            "2d1eda397588e770",
+            "5c777d8344b192ab"
+        ],
+        "x": 14,
+        "y": 413,
+        "w": 852,
+        "h": 148
+    },
+    {
+        "id": "f3b107d658fd3d97",
+        "type": "group",
+        "z": "d32891aad318f0e3",
+        "name": "Výpočet vstupní ceny",
+        "style": {
+            "label": true,
+            "color": "#000000",
+            "fill": "#ffefbf",
+            "label-position": "n"
+        },
+        "nodes": [
+            "20afdbcb97fc200c",
+            "9f764aa37d5d6306",
+            "90f59037daf537b9",
+            "7e338e3827c2fb15",
+            "6f9d67a8012a6eb6",
+            "4f702344aaf9fca2"
+        ],
+        "x": 14,
+        "y": 239,
+        "w": 992,
+        "h": 142
+    },
+    {
+        "id": "b44cdb66e54727f6",
+        "type": "group",
+        "z": "d32891aad318f0e3",
+        "name": "Naplnění vstupní tabulky cen z http",
+        "style": {
+            "label": true,
+            "fill": "#ffbfbf",
+            "color": "#001f60",
+            "label-position": "n",
+            "fill-opacity": "0.74"
+        },
+        "nodes": [
+            "19c197e0feac1b52",
+            "13d6e53e918e0d48",
+            "90dbd055aecc8822",
+            "b9d72daaacf95105",
+            "7b8e1478ae7abdcf",
+            "f06592760349c26a",
+            "a0375fbe89ce7386",
+            "0dccef44f2f263b7",
+            "ae99347c2a610653",
+            "8cf74ed44cce80e6",
+            "9866761975399c7f",
+            "a32eeea0e1e3c08c"
+        ],
+        "x": 15,
+        "y": 19,
+        "w": 989,
+        "h": 202
+    },
+    {
+        "id": "1de9e9b5f7d0b99b",
+        "type": "group",
+        "z": "d32891aad318f0e3",
+        "name": "Nastavení hodnot v HA",
+        "style": {
+            "fill": "#e3f3d3",
+            "label": true,
+            "label-position": "n",
+            "color": "#000000"
+        },
+        "nodes": [
+            "5a22ed0e7c4d5702",
+            "6fe01f7863dcb990",
+            "b359790448907d03",
+            "6e5e0e1e73619d88",
+            "44373b9aeb728378",
+            "6a8bdcb07260ad46",
+            "7b088fc43e03bf25",
+            "e6adfa0d8b466c82",
+            "066e002ec5e2bf91",
+            "387ff685c8cf03fa",
+            "d173bd3e17fdc145",
+            "d5fa96c6f4f58178",
+            "155a17c737dae05c",
+            "1b7a9a50b5223ade",
+            "edd5f8a98135c890",
+            "6b80d46b88a7b7f4",
+            "4f7ccdc7d353ca8f",
+            "7fcb518ffcddab0a",
+            "b09c70d2e97274ae",
+            "20578829b67ce0e5",
+            "9b1d4e00a2b10c24",
+            "fb19e54c699bb253"
+        ],
+        "x": 14,
+        "y": 559,
+        "w": 992,
+        "h": 762
+    },
+    {
+        "id": "0c2e8e7121147d0a",
+        "type": "group",
+        "z": "d32891aad318f0e3",
+        "name": "Spočítej levely cen",
+        "style": {
+            "fill": "#ffcf3f",
+            "label": true,
+            "label-position": "n",
+            "color": "#000000"
+        },
+        "nodes": [
+            "5399c8ddb45ab412",
+            "107622cfabfa9725",
+            "3884e595660a1150",
+            "6efbe1cbe0b8efcb",
+            "e3701f53a6d9c32d",
+            "aa11bb22cc33dd44",
+            "ee55ff66aa77bb88"
+        ],
+        "x": 14,
+        "y": 399,
+        "w": 992,
+        "h": 142
+    },
+    {
+        "id": "probe_grp",
+        "type": "group",
+        "z": "7ceb7c5337692ae5",
+        "name": "Auto Hunger Probe",
+        "style": {
+            "fill": "#fff2cc",
+            "label": true
+        },
+        "nodes": [
+            "probe_state_trigger",
+            "probe_decision_func",
+            "probe_set_6a_svc",
+            "probe_charger_on_svc",
+            "probe_delay_20s",
+            "probe_result_func",
+            "probe_hlad_on_svc",
+            "probe_hlad_off_svc",
+            "probe_charger_off_svc"
+        ],
+        "x": 14,
+        "y": 319,
+        "w": 932,
+        "h": 262
+    },
+    {
+        "id": "e1bd0d865b19d57e",
+        "type": "config-vrm-api",
+        "name": "VRM api"
+    },
+    {
+        "id": "c7421fe2.cb11c",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "537aaa7c69c02576",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "victron-vrm-api": "0.3.11",
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "b6ac39c28a43ec7d",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "46f74c8e57a22280",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "0e950e94592319fb",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "c10a96016983ea1f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-time-range-switch": "1.2.0",
+            "node-red-contrib-moment": "5.0.0"
+        }
+    },
+    {
+        "id": "923d94c2c4b1ba5f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-contrib-moment": "5.0.0",
+            "node-red-contrib-time-range-switch": "1.2.0"
+        }
+    },
+    {
+        "id": "6d97960f9560e05b",
+        "type": "sqlitedb",
+        "db": "/homeassistant/home-assistant_v2.db",
+        "mode": "RWC"
+    },
+    {
+        "id": "bc29fc50a7482dd1",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-sqlite": "1.1.1",
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "2a6f2d8e070c0b5f",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-node-sqlite": "1.1.1"
+        }
+    },
+    {
+        "id": "3e053bdac00312e5",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3",
+            "node-red-node-sqlite": "1.1.1"
+        }
+    },
+    {
+        "id": "ef7e88d904689f1b",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "53db4341d374e728",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    },
+    {
+        "id": "d291a07dcab752d6",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     },
     {
         "id": "22e7b3b8965c20db",
