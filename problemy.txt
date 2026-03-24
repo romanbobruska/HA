@@ -1,1 +1,16 @@
-implementuj vse
+KRETENE!!! 
+
+a proc mi plan zobrazuje toto ty debile???
+
+00:00	🟢 Normální	St┼Öedn├ş cena (├║rove┼ł 8), SOC 64Ôćĺ62%	7	2.82 Kč	1.22 Kč
+01:00	🟢 Normální	St┼Öedn├ş cena (├║rove┼ł 6), SOC 62Ôćĺ58%	6	2.78 Kč	1.18 Kč
+02:00	🟢 Normální	Drah├í hodina (├║rove┼ł 12), SOC 58Ôćĺ55%	9	2.85 Kč	1.24 Kč
+03:00	🟢 Normální	Drah├í hodina (├║rove┼ł 14), SOC 55Ôćĺ51%	9	2.85 Kč	1.24 Kč
+04:00	🟢 Normální	Drah├í hodina (├║rove┼ł 18), SOC 51Ôćĺ48%	11	2.99 Kč	1.35 Kč
+05:00	🟢 Normální	Sol├írn├ş (n├şzk├Ż zisk) + vyb├şjen├ş, SOC 48Ôćĺ45%	10	2.95 Kč	1.32 Kč
+06:00	🟢 Normální	Sol├írn├ş (n├şzk├Ż zisk) + vyb├şjen├ş, SOC 45Ôćĺ43%	18	4.53 Kč	2.00 Kč
+07:00	🟢 Normální	Sol├írn├ş + drah├í hodina (├║rove┼ł 22), SOC 43Ôćĺ45%	14	3.69 Kč	1.93 Kč
+08:00	🟢 Normální	Sol├írn├ş hodina, SOC 45Ôćĺ51%	8	2.84 Kč	1.23 Kč
+09:00	🟢 Normální	Sol├írn├ş hodina, SOC 51Ôćĺ60%	12	3.07 Kč	0.78 Kč
+10:00	🟣 Zákaz přetoků	Záporná prodejní cena, SOC 60→~76%	3	1.21 Kč	-0.12 Kč
+11:00	🟣 Zákaz přetoků	Záporná prodejní cena, SOC 76→~94%	1	0.84 Kč	-0.42 Kč
