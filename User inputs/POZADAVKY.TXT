@@ -250,6 +250,15 @@ A ZAKAZU PRETOKU
             * Pokud NIBE ovlivňuje výpočet (levná hodina, config fallback), uvést „(NIBE topí)".
             * Reálný profil: jeden cyklus NIBE = ~30 min, ~7 kWh. Peak ~13 kW.
             * Config: nibe_est_consumption_kwh = 7.0 kWh
+            * OMEZENÍ POČTU HODIN S NIBE (termodynamika):
+              - NIBE netopí celý den — počet cyklů závisí na teplotním rozdílu ΔT = (cílováT - venkovníT).
+              - Vzorec: nibeCyklu = max(1, round(ΔT / topeni_nibe_dt_per_cycle))
+              - Kalibrační data: při venkovní ~5°C (ΔT ≈ 18°C) → 3 cykly/den (uživatelovo měření).
+              - Config: topeni_nibe_dt_per_cycle = 6 (°C na jeden cyklus, default)
+              - V plánu se „(NIBE topí)" zobrazuje POUZE pro nibeCyklu levných solárních hodin.
+                Po vyčerpání rozpočtu (nibeZbyva = 0) zbylé levné solární hodiny nemají NIBE.
+              - Příklady: venkovní 10°C → ΔT=13 → 2 cykly, venkovní 0°C → ΔT=23 → 4 cykly,
+                venkovní 15°C → ΔT=8 → 1 cyklus.
           - Noční / nesluneční hodiny: SOC klesá dle historické spotřeby nebo config odhadu
 
         Pravidla pro každý mód:
@@ -715,6 +724,7 @@ A ZAKAZU PRETOKU
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
     nibe_est_consumption_kwh: 7 (odhadovaná spotřeba NIBE za hodinu, kWh — reálný cyklus ~30 min / ~7 kWh)
     nibe_peak_w: 14000 (peak odběr NIBE, W)
+    topeni_nibe_dt_per_cycle: 6 (°C teplotního rozdílu na 1 cyklus NIBE — kalibrováno: 3 cykly při ΔT=18°C)
 
 12.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
