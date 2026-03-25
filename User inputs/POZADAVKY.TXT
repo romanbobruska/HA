@@ -184,10 +184,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 4.6 ZÁKAZ PŘETOKŮ
     - Nesmi se exportovat do site, idealne ani 100 Wh. Zaroven se nesmi ze site brat (povoleno cca 150W)!
     - VÝJIMKA — ULTRA LEVNÁ CENA (buy < prah_ultra_levna_nakup, výchozí 1.0 Kč/kWh):
-      Pokud je nákupní cena ze sítě extrémně nízká (pod 1 Kč), dům se napájí ze sítě místo z baterie.
+      Pokud je nákupní cena ze sítě extrémně nízká (pod 1 Kč), baterie se NEVYBÍJÍ.
       Důvod: nemá smysl vybíjet baterii, když je síťová energie prakticky zadarmo.
       Baterie se šetří pro pozdější drahé hodiny, kde ji můžeme využít nebo prodat.
-      Implementace: PSP = ultra_levna_grid_setpoint_w (5000W), blokace vybíjení baterie.
+      Spotřebu domu pokrývá primárně solární výroba, případný deficit ze sítě (PSP zůstává 30W).
+      NESMÍ se aktivně nakupovat ze sítě (PSP se NEZVYŠUJE) — jen se blokuje vybíjení baterie.
       V plánu se zobrazí „(grid < X.X Kč)" u dotčených hodin.
     - Musi byt zachovano pravidlo, ze chceme maximalne vyuzit solarni vyrobu
     - U zakazu pretoku pamatuj na to, ze pokud bude BATERIE NA VYSOKEM SOC (SOC≥95%), tak se bude OMEZOVAT VYROBA SOLARU 
@@ -752,8 +753,7 @@ A ZAKAZU PRETOKU
          pri nabijeni a vybijeni baterie
     min_arbitrage_profit_czk: 3 (min zisk pro nabíjení z gridu, Kč/kWh)
     min_sell_profit_czk: 3 (min zisk pro prodej do sítě, Kč/kWh)
-    prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh — pod tímto prahem se v Zákaz přetoků bere ze sítě)
-    ultra_levna_grid_setpoint_w: 5000 (PSP při ultra levné ceně — dům se napájí ze sítě, W)
+    prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh — pod tímto prahem se v Zákaz přetoků blokuje vybíjení baterie)
     night_reserve_kwh: 10 (noční rezerva — pod tuto hodnotu neprodávat)
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
     setrit_grid_bias_w: 150 (PSP bias v Šetřit módu, W)
