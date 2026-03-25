@@ -306,13 +306,14 @@ A ZAKAZU PRETOKU
         Každý řádek plánu MUSÍ v důvodu obsahovat:
         a) Srozumitelný český popis situace (žádné zkratky typu „Sol", „Lv", „Arb")
         b) Aktuální SOC baterie a očekávanou změnu: „SOC XX→~YY%"
-        c) Pokud je cenová úroveň relevantní: „úroveň X" (ne „LvX")
+        c) Cenovou úroveň NEUVÁDĚT v důvodu — je již ve sloupci „Level" (priceLevel).
+           Duplicitní zobrazení úrovně v důvodu je ZAKÁZÁNO.
 
         Správné příklady:
-            „Drahá hodina (úroveň 23), SOC 26→~21%"
+            „Drahá hodina, SOC 26→~21%"
             „Solární hodina, SOC 21→~28%"
-            „Solární + drahá hodina (úroveň 12), SOC 21→~21%"
-            „Šetřím baterii (úroveň 8), SOC 31%"
+            „Solární + drahá hodina, SOC 21→~21%"
+            „Šetřím baterii, SOC 31%"
             „Nabíjení ze sítě na 60%, SOC 25→~43%"
             „Záporná prodejní cena, SOC 37%"
             „Prodej do sítě (zisk 2.3 Kč/kWh), SOC 55→~38%"
@@ -321,6 +322,7 @@ A ZAKAZU PRETOKU
             × „Sol, SOC 29→~34%" — zkratka „Sol"
             × „Sol+drahá Lv12" — zkratky + chybí SOC
             × „drahá Lv23, vybíjení" — zkratka + chybí SOC
+            × „Drahá hodina (úroveň 23), SOC 26→~21%" — úroveň patří do sloupce Level
             × „Arbitráž→h14" — nesrozumitelné
             × „Šetřím Lv8, SOC 44%" — zkratka „Lv"
 
