@@ -240,12 +240,16 @@ A ZAKAZU PRETOKU
         Co se počítá v každé hodině:
           - Solární hodiny (od solS do solE): SOC roste = (solární výroba - spotřeba domu) → do baterie
             * Spotřeba domu = data z historického logu NEBO config odhad
-            * NIBE: pokud topení NIBE běží (switch.nibe_topeni = ON nebo dům je pod cílovou teplotou),
-              přičíst odhadovanou spotřebu NIBE (config.nibe_est_consumption_kwh) KE SPOTŘEBĚ vždy,
-              když je to solární hodina — BEZ podmínky solárního prahu 8 kWh.
-              Dřívější podmínka „přičíst NIBE jen nad 8 kWh solárního výkonu" byla ZRUŠENA — způsobovala
-              nerealistické SOC skoky v plánu.
-            * Pokud NIBE ovlivňuje výpočet, uvést v důvodu „(NIBE topí)".
+            * NIBE: pokud topení NIBE běží (switch.nibe_topeni = ON nebo dům je pod cílovou teplotou):
+              - V LEVNÝCH HODINÁCH (level < prah_draha_energie): přičíst NIBE spotřebu
+              - V DRAHÝCH HODINÁCH (level ≥ 12): NIBE reálně netopí (§ 8.3 bod 2) → NEPŘIČÍTAT
+              - NIBE spotřebu přičítat JEN pokud nemáme historická data (config fallback).
+                Historický log (fve_consumption_history) již obsahuje NIBE spotřebu v průměru
+                za danou hodinu → přičtením nibeK navíc by vzniklo dvojí započtení.
+              - Config fallback (daily_consumption_kwh / 24) NIBE NEzahrnuje → tam přičíst.
+            * Pokud NIBE ovlivňuje výpočet (levná hodina, config fallback), uvést „(NIBE topí)".
+            * Reálný profil: jeden cyklus NIBE = ~30 min, ~7 kWh. Peak ~13 kW.
+            * Config: nibe_est_consumption_kwh = 7.0 kWh
           - Noční / nesluneční hodiny: SOC klesá dle historické spotřeby nebo config odhadu
 
         Pravidla pro každý mód:
@@ -468,6 +472,15 @@ A ZAKAZU PRETOKU
     7. DULEZITE JE, ZE DUM BUDE NATOPENY ZA CO NEJLEPSI CENU TAK, ABY TEPLOTA V DOME BYLA PODLE PRAVIDEL HYSTEREZE - TY JSOU DEFINOVANY V TOMTO SOUBORU. PLATI 
         I PRO TOPENI I PRO CHLAZENI DOMU - POKUD JE CHAZENI ZAPNUTO, OPET PLATI TEPLOTA V DOME, KTERA JE NASTAVENA. TEPLOTA V DOME JE URCUJICI.
     
+
+    PROFIL SPOTŘEBY NIBE (reálná data):
+    - Celý cyklus natopení nádrže trvá cca 30 minut
+    - Průběh: ~6 kW (start) → peak ~13 kW (kompresory) → ~7 kW (dobíhání)
+    - Celková spotřeba jednoho cyklu: ~7 kWh za 30 minut
+    - Pro plánování: pokud NIBE topí v dané hodině, odhadovaná spotřeba = 7 kWh/h
+      (config.nibe_est_consumption_kwh)
+    - V drahých hodinách (lvl ≥ 12) NIBE NETOPÍ (§ 8.3 bod 2) → v plánu se NIBE
+      spotřeba v drahých hodinách NEPŘIČÍTÁ a „(NIBE topí)" se NEZOBRAZUJE
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
     COOLDOWN: min. 3 minut mezi přepnutími
@@ -700,6 +713,8 @@ A ZAKAZU PRETOKU
     topeni_patron_change_cooldown: 6 (počet 5s cyklů mezi změnami fáze)
     topeni_solar_override_w: 8000 (min solar pro override deferral u NIBE, W)
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
+    nibe_est_consumption_kwh: 7 (odhadovaná spotřeba NIBE za hodinu, kWh — reálný cyklus ~30 min / ~7 kWh)
+    nibe_peak_w: 14000 (peak odběr NIBE, W)
 
 12.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
