@@ -1,7 +1,15 @@
-OK. ALE KAZDE ZATOPENI DO NADRZE A POTOM ODCERPANI PRES OBEHOVE CERPADLO MA
-SVOU SETRVACNOST. REKNEME, ZE KDYZ JE NATOPENA NADRZ A OBEHOVE CERPADLO BEZI,
-TRVA 1 HODINU, NEZ SE ZASE NIBE PRES STUPNE MINUTY DOSTANE DO STAVU, KDY ZACNE
-PRACOVAT - STUPNE MINUTY SENSOR MAME V HA. -30 STUPNU MINUT JE DEAD LINE, KDY CERPADLO ZACNBE PRACOVAT.
-
-over, ze je vse dle pravidel - popripade te explicitne zadam o upravu zakonu - 
-delas to automaticky - to nechci - jen, kdyz te explicitne pozadam
+podivej se na planovane
+04:00	🟢 Normální	Drahá hodina (úroveň 16), SOC 45→~40%	11	2.99 Kč	1.35 Kč
+05:00	🟢 Normální	Solární + drahá hodina (úroveň 14), SOC 40→~38%	10	2.95 Kč	1.32 Kč
+06:00	🟢 Normální	Solární + drahá hodina (úroveň 24), SOC 38→~37%	18	4.53 Kč	2.00 Kč
+07:00	🟢 Normální	Solární + drahá hodina (úroveň 22), SOC 37→~38%	14	3.69 Kč	1.93 Kč
+08:00	🟢 Normální	Solární + drahá hodina (úroveň 12), SOC 38→~42%	8	2.84 Kč	1.23 Kč
+09:00	🟢 Normální	Solární + drahá hodina (úroveň 18), SOC 42→~53%	12	3.07 Kč	0.78 Kč
+10:00	🟣 Zákaz přetoků	Záporná prodejní cena (NIBE topí), SOC 53→~44%	3	1.21 Kč	-0.12 Kč
+11:00	🟣 Zákaz přetoků	Záporná prodejní cena, SOC 44→~63%	1	0.84 Kč	-0.42 Kč
+12:00	🟣 Zákaz přetoků	Záporná prodejní cena (NIBE topí), SOC 63→~54%	2	0.86 Kč	-0.40 Kč
+13:00	🟡 Šetřit	Solární hodina (levná cena, nabíjím ze slunce), SOC 54→~66%	4	2.13 Kč	0.01 Kč
+14:00	🟡 Šetřit	Solární hodina (levná cena, nabíjím ze slunce), SOC 66→~74%	5	2.52 Kč	0.97 Kč
+15:00	🟢 Normální	Solární + drahá hodina (úroveň 20), SOC 74→~83%	13	3.64 Kč	1.89 Kč
+ty urovne nesedi. chapu, ze pri prechodu pres pulnoc si pocitas urovne sam,
+ale proc jsou ty urovne jine nez je dany level v dnesnim dni?
