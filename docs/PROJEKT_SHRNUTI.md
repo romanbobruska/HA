@@ -14,6 +14,13 @@
 > - **Deploy.sh nahrazuje CELÉ taby z gitu** → git MUSÍ obsahovat aktuální serverovou verzi + moje cílené změny
 > - Před deploymentem ověřit soulad se VŠEMI zákony
 > - Po deploymentu: ověřit HA stavy, NR logy, grid draw
+> - **⚠️ DEPLOY WORKFLOW (§ 2.5 — ABSOLUTNÍ ZÁKON):**
+>   1. `git commit` lokálně (BEZ push!)
+>   2. `git push` na GitHub
+>   3. Deploy přes SSH (`deploy.sh`)
+>   4. **OVĚŘIT** nasazení (plán, stavy, logy)
+>   5. Teprve po potvrzení úspěchu → hotovo
+>   **NIKDY nepushovat PŘED ověřením nasazení!**
 > - `User inputs/POZADAVKY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
 > - Aktualizovat tento soubor po každém úspěšném nasazení
 > - Po sobě VŽDY uklidit dočasné soubory (`_*.py`, `_*.js`, `_fix_*`, `_check_*`) lokálně i na serveru
