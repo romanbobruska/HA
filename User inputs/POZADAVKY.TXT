@@ -97,6 +97,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 
 2.5 GIT PRAVIDLA
+    - proved git push az potom, co overis, ze bylo nasazeni OK. Drive ne.
     - Commit message: "v24.XX: stručný popis co a proč"
     - Git = záloha a dokumentace změn, ne jen deploy mechanismus
     - Po každé sadě změn: git add -A && git commit && git push
