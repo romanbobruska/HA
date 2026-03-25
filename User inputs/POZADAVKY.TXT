@@ -225,15 +225,34 @@ A ZAKAZU PRETOKU
     - Pokud je solarni vyoba nizka, pak plati ostatni pravidla - podle priorit. Hlavne mit co nejjednoduzsi flows!!!
 
     4.9.1 SIMULACE SOC MUSÍ BÝT REALISTICKÁ
-        - V KAŽDÉM módu se SOC mění — nikdy nestojí na místě celé hodiny:
-            - Šetřit: SOC BATERIE NESMÍ KLESAT - SETRI SE BATERIE
-            - Normal: SOC klesá o config.soc_drop_normal_pct za hodinu (aktivní vybíjení)
+        ZÁKLADNÍ PRINCIP: Plán musí ukazovat reálný odhad stavu baterie v každé hodině — jako by ses
+        díval na hodinový kalendář a viděl, co baterie bude dělat. Pokud plán ukazuje nereálné skoky
+        nebo že SOC stojí na místě, je to chyba!
+
+        Zdroj dat pro spotřebu (v pořadí priority):
+          1. HISTORICKÝ LOG SPOTŘEBY (fve_consumption_history.json) — pokud máme alespoň 3 vzorky
+             pro danou hodinu a typ dne (pracovní / víkend), použijeme průměrnou spotřebu z logu.
+             Tento log sbírá reálná data z domu každou hodinu (spotřeba, solární výroba, přebytky).
+          2. FORECAST SPOTŘEBY — pokud nemáme dostatek dat z logu, použijeme odhad z konfigurace
+             (config.daily_consumption_kwh / 24).
+
+        Co se počítá v každé hodině:
+          - Solární hodiny (od solS do solE): SOC roste = (solární výroba - spotřeba domu) → do baterie
+            * Spotřeba domu = data z historického logu NEBO config odhad
+            * NIBE: pokud topení NIBE běží (switch.nibe_topeni = ON nebo dům je pod cílovou teplotou),
+              přičíst odhadovanou spotřebu NIBE (config.nibe_est_consumption_kwh) KE SPOTŘEBĚ vždy,
+              když je to solární hodina — BEZ podmínky solárního prahu 8 kWh.
+              Dřívější podmínka „přičíst NIBE jen nad 8 kWh solárního výkonu" byla ZRUŠENA — způsobovala
+              nerealistické SOC skoky v plánu.
+            * Pokud NIBE ovlivňuje výpočet, uvést v důvodu „(NIBE topí)".
+          - Noční / nesluneční hodiny: SOC klesá dle historické spotřeby nebo config odhadu
+
+        Pravidla pro každý mód:
+            - Šetřit: SOC BATERIE NESMÍ KLESAT — šetříme baterii
+            - Normal: SOC klesá dle reálné spotřeby z logu (nebo config.soc_drop_normal_pct jako záloha)
             - Nabíjet ze sítě: SOC roste dle config.charge_rate_kwh
             - Prodávat: SOC klesá dle max_feed_in a kapacity baterie
-            - Solární hodiny: SOC roste dle predikce solárního zisku (Open Meteo per-hour forecast)
-              Odhad spotřeby NIBE v simulaci: přičíst POUZE pokud solární forecast pro danou hodinu
-              překročí topeni_solar_override_w/1000 (8 kWh). Pod tímto prahem NIBE v simulaci neuvažovat.
-              Pokud NIBE ovlivňuje výpočet, uvést v důvodu „(NIBE topí)".
+            - Solární hodiny: SOC roste dle výše popsaného výpočtu (forecast - reálná spotřeba)
         - Pokud simulace ukazuje stejné SOC přes více hodin → je to BUG
 
     4.9.2 ROZHODOVÁNÍ O MÓDECH — LOGICKÁ NÁVAZNOST
