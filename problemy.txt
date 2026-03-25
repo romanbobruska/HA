@@ -1,11 +1,7 @@
-OK. opravdu si myslis, ze budeme topit pre NIBE takhle dlouho?
+OK. ALE KAZDE ZATOPENI DO NADRZE A POTOM ODCERPANI PRES OBEHOVE CERPADLO MA
+SVOU SETRVACNOST. REKNEME, ZE KDYZ JE NATOPENA NADRZ A OBEHOVE CERPADLO BEZI,
+TRVA 1 HODINU, NEZ SE ZASE NIBE PRES STUPNE MINUTY DOSTANE DO STAVU, KDY ZACNE
+PRACOVAT - STUPNE MINUTY SENSOR MAME V HA. -30 STUPNU MINUT JE DEAD LINE, KDY CERPADLO ZACNBE PRACOVAT.
 
-10:00	🟣 Zákaz přetoků	Záporná prodejní cena (NIBE topí), SOC 54→~45%	3	1.21 Kč	-0.12 Kč
-11:00	🟣 Zákaz přetoků	Záporná prodejní cena (NIBE topí), SOC 45→~42%	1	0.84 Kč	-0.42 Kč
-12:00	🟣 Zákaz přetoků	Záporná prodejní cena (NIBE topí), SOC 42→~33%	2	0.86 Kč	-0.40 Kč
-13:00	🟡 Šetřit	Solární hodina, šetřím baterii (NIBE topí), SOC 33%	4	2.13 Kč	0.01 Kč
-14:00	🟡 Šetřit	Solární hodina, šetřím baterii (NIBE topí), SOC 33%	5	2.52 Kč	0.97 Kč
-
-priklad - pokud je venkovni teplota blizka nule a pres den cca 10 stupnu, staci nam 3 nadrze.
-mas logy, vyuzivej je.
-nacti si z dostupnych zdroju zakony termodynamiky a nasad fix.
+over, ze je vse dle pravidel - popripade te explicitne zadam o upravu zakonu - 
+delas to automaticky - to nechci - jen, kdyz te explicitne pozadam
