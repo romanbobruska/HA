@@ -259,6 +259,12 @@ A ZAKAZU PRETOKU
                 Po vyčerpání rozpočtu (nibeZbyva = 0) zbylé levné solární hodiny nemají NIBE.
               - Příklady: venkovní 10°C → ΔT=13 → 2 cykly, venkovní 0°C → ΔT=23 → 4 cykly,
                 venkovní 15°C → ΔT=8 → 1 cyklus.
+              - SETRVAČNOST (cooldown): Po každém cyklu natopení nádrže trvá ~1 hodinu,
+                než stupně minuty (sensor.nibe_degree_minutes) klesnou zpět na -30 DM
+                (práh pro start dalšího cyklu). Proto NIBE NEMŮŽE topit ve dvou po sobě
+                jdoucích hodinách. V plánu: po hodině s „(NIBE topí)" následuje hodina
+                bez NIBE (nibeCooldown = 1), pak teprve může přijít další cyklus.
+              - Senzor: sensor.nibe_degree_minutes (aktuální DM), práh = -30 DM.
           - Noční / nesluneční hodiny: SOC klesá dle historické spotřeby nebo config odhadu
 
         Pravidla pro každý mód:
@@ -490,6 +496,11 @@ A ZAKAZU PRETOKU
       (config.nibe_est_consumption_kwh)
     - V drahých hodinách (lvl ≥ 12) NIBE NETOPÍ (§ 8.3 bod 2) → v plánu se NIBE
       spotřeba v drahých hodinách NEPŘIČÍTÁ a „(NIBE topí)" se NEZOBRAZUJE
+    - SETRVAČNOST: po natopení nádrže trvá ~1 hodinu, než DM klesnou na -30 (práh startu).
+      NIBE nemůže topit dvě hodiny za sebou → v plánu 1h cooldown mezi cykly.
+      Senzor: sensor.nibe_degree_minutes, práh: -30 DM.
+    - POČET CYKLŮ ZA DEN: závisí na ΔT = (cílováT - venkovníT). Vzorec: max(1, round(ΔT/6)).
+      Příklad: venkovní 10°C, cíl 23°C → ΔT=13 → 2 cykly. Venkovní 0°C → 4 cykly.
 
     OCHRANA: NIKDY nevypínat 47371=0 pokud kompresor běží!
     COOLDOWN: min. 3 minut mezi přepnutími
