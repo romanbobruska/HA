@@ -111,6 +111,12 @@ else
         sudo -n -E python3 /tmp/HA/deploy_merge_flows.py 2>&1
     if [ $? -eq 0 ]; then
         echo "   ✅ Flows sloučeny úspěšně"
+        # Ověření opravy plánu balancování (refBalDays v uzlu rf_gen_plan_0004 — viz git ffb6bd7+)
+        if grep -q 'refBalDays' "$NODERED_DIR/flows.json" 2>/dev/null; then
+            echo "   ✅ Ověření: flows.json obsahuje refBalDays (výpočet dní od balancování)"
+        else
+            echo "   ⚠️  Ověření: refBalDays v flows.json chybí — zkontroluj branch origin/main a git pull"
+        fi
     else
         echo "   ❌ Chyba při slučování flows"
         exit 1
