@@ -661,7 +661,7 @@
         "z": "bb3654998a6bf514",
         "g": "fve_modes_g_shared_svc",
         "name": "Victron Fan-out",
-        "func": "// Fan-out: přečte msg.victron a nastaví msg properties pro Mustache templates\n// ZAKON: pokud je FVE automatizace OFF, nic neposilat na Victron\nvar fveAutoEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.fve_automatizace']\") || {};\nif (fveAutoEntity.state === \"off\") {\n    node.status({fill:\"grey\", shape:\"ring\", text:\"FVE AUTO OFF - skip Victron writes\"});\n    return null;\n}\n\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// DIAG: loguj co fan-out posílá do Victronu\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : (config.max_feed_in_w || 7600);\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
+        "func": "// Fan-out: přečte msg.victron a nastaví msg properties pro Mustache templates\n// ZAKON: pokud je FVE automatizace OFF, nic neposilat na Victron\nvar fveAutoEntity = global.get(\"homeassistant.homeAssistant.states['input_boolean.fve_automatizace']\") || {};\nif (fveAutoEntity.state === \"off\") {\n    node.status({fill:\"grey\", shape:\"ring\", text:\"FVE AUTO OFF - skip Victron writes\"});\n    return null;\n}\n\nvar v = msg.victron || {};\nmsg.victron = v;\n\n// Feed-in control\nmsg.feedin_on = (v.feedin_on !== false);\nmsg.feedin_max = (v.max_feed_in_power !== undefined) ? v.max_feed_in_power : (config.max_feed_in_w || 7600);\nmsg.prevent_feedback = v.prevent_feedback || 0;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
