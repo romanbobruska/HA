@@ -136,7 +136,7 @@ Kontrola: **statický rozbor kódu** oproti `User inputs/POZADAVKY.TXT` + stav f
 | `ffb6bd7`–`d5b1848` | Plán: `dnuOdBalance` / `last_pylontech`, Date.parse |
 | `3561bec`–`1848e8f` | Úklid deploy diag, DIAG fan-out |
 | `0110890` | v24.84: manager v24.2, solar v5.1, docs, problemy přesun |
-| *(aktuální commit v24.85)* | Patrony korekce v2.1: synchronizace `pat_block_charge` při časných návratech |
+| `cc0a578` | v24.85: Patrony korekce v2.1 — synchronizace `pat_block_charge` při časných návratech |
 
 ### Inkrementální oprava v24.85 (bez změny hlavní logiky smyčky)
 
