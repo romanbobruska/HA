@@ -5,7 +5,8 @@
         "label": "Automatizuj boiler",
         "disabled": false,
         "info": "Optimalizované flow pro řízení bojleru s hysterezí.\n\nKONFIGURACE: Klikni na node '⚙️ Konfigurace' a spusť ho pro nastavení výchozích hodnot.\nPro změnu parametrů uprav hodnoty v tom nodu a znovu ho spusť.\n\nPriorita rozhodování:\n1. Nejsme doma → MIN°C\n2. Rychle teplá voda → MAX°C\n3. 17:00-19:30 a voda < 58°C → VYSOKA°C\n4. Solární přebytek → MAX/VYSOKA°C\n5. Levná elektřina (ne v letním režimu) → STREDNI°C\n6. Jinak → MIN°C",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "3cf7f93b204c1246",
@@ -26,7 +27,8 @@
         "x": 5,
         "y": 5,
         "w": 272,
-        "h": 142
+        "h": 142,
+        "func": ""
     },
     {
         "id": "4716d6957365e423",
@@ -57,7 +59,8 @@
         "x": 54,
         "y": 179,
         "w": 972,
-        "h": 322
+        "h": 322,
+        "func": ""
     },
     {
         "id": "09797f9996ff875a",
@@ -78,7 +81,8 @@
         "x": 194,
         "y": 539,
         "w": 612,
-        "h": 150
+        "h": 150,
+        "func": ""
     },
     {
         "id": "7d6c1cd0300cfd29",
@@ -99,7 +103,8 @@
         "x": 294,
         "y": 39,
         "w": 772,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "6d9185dedec4cb65",
@@ -125,7 +130,8 @@
             [
                 "7efc2560d20a0a05"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7efc2560d20a0a05",
@@ -164,7 +170,8 @@
         "statusType": "auto",
         "x": 940,
         "y": 80,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "d7197dbac0af5dec",
@@ -190,7 +197,8 @@
             [
                 "d8271d02d0bbbfd8"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d8271d02d0bbbfd8",
@@ -229,7 +237,8 @@
             [
                 "6928b9ce6f9095d6"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6928b9ce6f9095d6",
@@ -268,7 +277,8 @@
             [
                 "205418b685f04054"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "205418b685f04054",
@@ -307,7 +317,8 @@
             [
                 "9bc05f8969dbf039"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9bc05f8969dbf039",
@@ -346,7 +357,8 @@
             [
                 "bd83ae614ae3aceb"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "bd83ae614ae3aceb",
@@ -385,7 +397,8 @@
             [
                 "9ae533d8f63f25b9"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9ae533d8f63f25b9",
@@ -424,7 +437,8 @@
             [
                 "7adb3cd3d88ce186"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7adb3cd3d88ce186",
@@ -463,7 +477,8 @@
             [
                 "e52ed86bbf0b492e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e52ed86bbf0b492e",
@@ -502,7 +517,8 @@
             [
                 "8d4c88c33909fdd1"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "8d4c88c33909fdd1",
@@ -541,7 +557,8 @@
             [
                 "d7e4abc357eeac72"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d7e4abc357eeac72",
@@ -580,7 +597,8 @@
             [
                 "23c46fbe21db7775"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "23c46fbe21db7775",
@@ -619,7 +637,8 @@
             [
                 "3b8dc5297620970b"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3b8dc5297620970b",
@@ -658,7 +677,8 @@
             [
                 "bb69a154a4c0febb"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "bb69a154a4c0febb",
@@ -697,7 +717,8 @@
             [
                 "f8bbbf2eb77de391"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f8bbbf2eb77de391",
@@ -751,7 +772,8 @@
         "y": 640,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3472b1985ec023f5",
@@ -769,7 +791,8 @@
         "statusType": "auto",
         "x": 650,
         "y": 580,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "39a25019f11040ab",
@@ -795,7 +818,8 @@
             [
                 "d8271d02d0bbbfd8"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ea6d31715793bece",
@@ -803,7 +827,8 @@
         "label": "Automatizuj filtraci v bazénu",
         "disabled": false,
         "info": "Filtrace bazénu v3 — plně optimalizovaná.\nPreferuje solar, skenuje FVE plán, chrání baterii.\nLÉTO: min 2h/den (>10°C), ZIMA: min 1h/den.",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "filtrace_grp_data",
@@ -825,7 +850,8 @@
         "x": 274,
         "y": 119,
         "w": 602,
-        "h": 182
+        "h": 182,
+        "func": ""
     },
     {
         "id": "filtrace_grp_logic",
@@ -842,7 +868,8 @@
         "x": 474,
         "y": 344,
         "w": 232,
-        "h": 112
+        "h": 112,
+        "func": ""
     },
     {
         "id": "filtrace_grp_actions",
@@ -862,7 +889,8 @@
         "x": 364,
         "y": 499,
         "w": 502,
-        "h": 182
+        "h": 182,
+        "func": ""
     },
     {
         "id": "filtrace_grp_trigger",
@@ -880,7 +908,8 @@
         "x": -6,
         "y": 19,
         "w": 432,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "e840eaa72d311da7",
@@ -910,7 +939,8 @@
             [
                 "filtrace_auto_check"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_auto_check",
@@ -950,7 +980,8 @@
                 "filtrace_st_state"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_state",
@@ -989,7 +1020,8 @@
             [
                 "filtrace_st_letni"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_letni",
@@ -1028,7 +1060,8 @@
             [
                 "filtrace_st_surplus"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_surplus",
@@ -1067,7 +1100,8 @@
             [
                 "filtrace_st_soc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_soc",
@@ -1106,7 +1140,8 @@
             [
                 "filtrace_st_auto"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_auto",
@@ -1145,7 +1180,8 @@
             [
                 "filtrace_st_flag"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_st_flag",
@@ -1184,7 +1220,8 @@
             [
                 "filtrace_decision"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_decision",
@@ -1246,7 +1283,8 @@
         "y": 540,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_act_off",
@@ -1278,7 +1316,8 @@
         "y": 540,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_flag_on",
@@ -1310,7 +1349,8 @@
         "y": 640,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "filtrace_flag_off",
@@ -1342,7 +1382,8 @@
         "y": 640,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3f2680578b66e78f",
@@ -1350,7 +1391,8 @@
         "label": "FVE Config",
         "disabled": false,
         "info": "Konfigurace FVE automatizace - parametry a inicializace",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "2d77556df552e86d",
@@ -1369,7 +1411,8 @@
         "x": 14,
         "y": 19,
         "w": 702,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "c7e025194045b1be",
@@ -1389,7 +1432,8 @@
         "x": 14,
         "y": 279,
         "w": 822,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "da4c9bfc3dddec82",
@@ -1409,7 +1453,8 @@
         "x": 14,
         "y": 379,
         "w": 832,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "452576adb7294b87",
@@ -1431,7 +1476,8 @@
         "x": 14,
         "y": 119,
         "w": 832,
-        "h": 142
+        "h": 142,
+        "func": ""
     },
     {
         "id": "2df5b10f83b0e39d",
@@ -1457,7 +1503,8 @@
             [
                 "44025571f9d270fb"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "44025571f9d270fb",
@@ -1496,7 +1543,8 @@
         "statusType": "auto",
         "x": 590,
         "y": 60,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "7c3b58eeb3106ded",
@@ -1522,7 +1570,8 @@
             [
                 "f1cea1e4214578c4"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "caf460b8b3af03dd",
@@ -1561,7 +1610,8 @@
         "statusType": "auto",
         "x": 710,
         "y": 320,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "322c6a3de64b51b5",
@@ -1587,7 +1637,8 @@
             [
                 "90dca62607936795"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "90dca62607936795",
@@ -1621,7 +1672,8 @@
             [
                 "88d08735b548d24c"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "88d08735b548d24c",
@@ -1660,7 +1712,8 @@
         "statusType": "auto",
         "x": 720,
         "y": 420,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "f1cea1e4214578c4",
@@ -1677,7 +1730,8 @@
             [
                 "caf460b8b3af03dd"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "2986fe2bccfe8740",
@@ -1748,7 +1802,8 @@
                 "3fefdad956c6ae27",
                 "ae5590b0cd6e6b6a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ae5590b0cd6e6b6a",
@@ -1782,7 +1837,8 @@
             [
                 "3fefdad956c6ae27"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3fefdad956c6ae27",
@@ -1830,7 +1886,8 @@
             [
                 "926f790a1d6a8f6e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f4160d8797285db7",
@@ -1848,7 +1905,8 @@
         "statusType": "auto",
         "x": 650,
         "y": 160,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "926f790a1d6a8f6e",
@@ -1860,14 +1918,16 @@
         "links": [],
         "x": 805,
         "y": 180,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "f1e2d3c4b5a60001",
         "type": "tab",
         "label": "FVE Heating",
         "disabled": false,
-        "info": "Kompletní řízení topení domu v2.0\nNIBE + oběhové čerpadlo + patrony + ventil + chlazení"
+        "info": "Kompletní řízení topení domu v2.0\nNIBE + oběhové čerpadlo + patrony + ventil + chlazení",
+        "func": ""
     },
     {
         "id": "heating_g_main_v2",
@@ -1890,7 +1950,8 @@
         "x": 14,
         "y": 18,
         "w": 852,
-        "h": 223
+        "h": 223,
+        "func": ""
     },
     {
         "id": "heating_g_exec_v2",
@@ -1922,7 +1983,8 @@
         "x": 94,
         "y": 439,
         "w": 436,
-        "h": 762
+        "h": 762,
+        "func": ""
     },
     {
         "id": "f1e2d3c4b5a60004",
@@ -1940,7 +2002,8 @@
         "x": 14,
         "y": 1239,
         "w": 712,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "heating_g_away",
@@ -1960,7 +2023,8 @@
         "x": 14,
         "y": 1539,
         "w": 662,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "htg_g_pat_korekce",
@@ -1985,7 +2049,8 @@
         "x": 14,
         "y": 249,
         "w": 732,
-        "h": 172
+        "h": 172,
+        "func": ""
     },
     {
         "id": "htg_g_topeni_mod",
@@ -2008,7 +2073,8 @@
         "x": 14,
         "y": 1339,
         "w": 442,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "htg_g_reload",
@@ -2031,7 +2097,8 @@
         "x": 14,
         "y": 1439,
         "w": 532,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "htg_inject_60s",
@@ -2061,7 +2128,8 @@
             [
                 "rf_htg_read_001"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_trig_auto",
@@ -2106,7 +2174,8 @@
             [
                 "rf_htg_read_001"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_trig_temp",
@@ -2151,7 +2220,8 @@
             [
                 "rf_htg_read_001"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_action_switch",
@@ -2282,7 +2352,8 @@
                 "htg_svc_stop_auto_solar",
                 "htg_svc_stop_auto_grid"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_obehove_on",
@@ -2314,7 +2385,8 @@
         "y": 580,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_obehove_off",
@@ -2346,7 +2418,8 @@
         "y": 630,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p1_on",
@@ -2378,7 +2451,8 @@
         "y": 680,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p1_off",
@@ -2410,7 +2484,8 @@
         "y": 730,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p2_on",
@@ -2442,7 +2517,8 @@
         "y": 780,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p2_off",
@@ -2474,7 +2550,8 @@
         "y": 830,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p3_on",
@@ -2506,7 +2583,8 @@
         "y": 880,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_p3_off",
@@ -2538,7 +2616,8 @@
         "y": 930,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_ventil_off",
@@ -2570,7 +2649,8 @@
         "y": 980,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_debug",
@@ -2588,7 +2668,8 @@
         "statusType": "auto",
         "x": 740,
         "y": 180,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "htg_prot_trig",
@@ -2633,7 +2714,8 @@
             [
                 "htg_prot_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_prot_func",
@@ -2680,7 +2762,8 @@
         "y": 1280,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_nibe_on",
@@ -2712,7 +2795,8 @@
         "y": 480,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_nibe_off",
@@ -2744,7 +2828,8 @@
         "y": 530,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_cool_on",
@@ -2776,7 +2861,8 @@
         "y": 1025,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_cool_off",
@@ -2808,7 +2894,8 @@
         "y": 1072,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_away_trigger",
@@ -2853,7 +2940,8 @@
             [
                 "htg_away_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_away_func",
@@ -2906,7 +2994,8 @@
         "y": 1580,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_topeni_mod_change",
@@ -2934,7 +3023,8 @@
             [
                 "htg_topeni_mod_api"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_topeni_mod_api",
@@ -2966,7 +3056,8 @@
         "y": 1380,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_reload_input_select_inject",
@@ -2992,7 +3083,8 @@
             [
                 "htg_reload_input_select_api"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_reload_input_select_api",
@@ -3022,7 +3114,8 @@
         "y": 1480,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "pat_korekce_inject",
@@ -3048,7 +3141,8 @@
             [
                 "pat_korekce_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "pat_korekce_func",
@@ -3138,7 +3232,8 @@
             [
                 "htg_svc_p3_on"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_stop_auto_solar",
@@ -3170,7 +3265,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "htg_svc_stop_auto_grid",
@@ -3202,7 +3298,8 @@
         "y": 1160,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "pat_max_charge_svc",
@@ -3234,7 +3331,8 @@
         "y": 380,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "rf_htg_read_001",
@@ -3309,7 +3407,8 @@
         "label": "FVE History Learning",
         "disabled": false,
         "info": "Učení z historie spotřeby pro lepší plánování",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "fve_history_collect_group",
@@ -3329,7 +3428,8 @@
         "x": 14,
         "y": 19,
         "w": 952,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "fve_history_predict_group",
@@ -3348,7 +3448,8 @@
         "x": 14,
         "y": 119,
         "w": 622,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "fve_history_analyze_group",
@@ -3367,7 +3468,8 @@
         "x": 14,
         "y": 219,
         "w": 642,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "fve_history_export_group",
@@ -3386,7 +3488,8 @@
         "x": 14,
         "y": 319,
         "w": 602,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "fve_history_trigger",
@@ -3412,7 +3515,8 @@
             [
                 "fve_history_collect"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_history_collect",
@@ -3472,7 +3576,8 @@
         "statusType": "auto",
         "x": 840,
         "y": 60,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "fve_history_predict_in",
@@ -3487,7 +3592,8 @@
             [
                 "fve_history_predict_calc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_history_predict_calc",
@@ -3526,7 +3632,8 @@
         "statusType": "auto",
         "x": 500,
         "y": 160,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "fve_history_analyze_trigger",
@@ -3552,7 +3659,8 @@
             [
                 "fve_history_analyze_calc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_history_analyze_calc",
@@ -3591,7 +3699,8 @@
         "statusType": "auto",
         "x": 530,
         "y": 260,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "fve_history_export_trigger",
@@ -3617,7 +3726,8 @@
             [
                 "fve_history_export_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_history_export_func",
@@ -3656,7 +3766,8 @@
         "statusType": "auto",
         "x": 500,
         "y": 360,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "bb3654998a6bf514",
@@ -3664,7 +3775,8 @@
         "label": "FVE Modes",
         "disabled": false,
         "info": "Implementace jednotlivých módů FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "mode_grp_normal",
@@ -3684,7 +3796,8 @@
         "x": 24,
         "y": 6,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_setrit",
@@ -3704,7 +3817,8 @@
         "x": 24,
         "y": 106,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_nabijet",
@@ -3724,7 +3838,8 @@
         "x": 24,
         "y": 206,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_prodavat",
@@ -3744,7 +3859,8 @@
         "x": 24,
         "y": 306,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_zakaz",
@@ -3764,7 +3880,8 @@
         "x": 24,
         "y": 406,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_solar",
@@ -3784,7 +3901,8 @@
         "x": 24,
         "y": 506,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "fve_modes_g_shared_svc",
@@ -3816,7 +3934,8 @@
         "x": 24,
         "y": 839,
         "w": 942,
-        "h": 422
+        "h": 422,
+        "func": ""
     },
     {
         "id": "fve_modes_g_log",
@@ -3837,7 +3956,8 @@
         "x": 494,
         "y": 159,
         "w": 492,
-        "h": 182
+        "h": 182,
+        "func": ""
     },
     {
         "id": "grp_balancovani",
@@ -3861,7 +3981,8 @@
         "x": 24,
         "y": 619,
         "w": 662,
-        "h": 202
+        "h": 202,
+        "func": ""
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -3878,7 +3999,8 @@
             [
                 "670432a909cf3b26"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "670432a909cf3b26",
@@ -3886,7 +4008,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_normal",
         "name": "NORMAL Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || global.get(\"cerpadlo_topi\") || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n// v19.4: Read charger state directly — global may be stale after NR restart\nvar chargerEntity = global.get(\"homeassistant.homeAssistant.states['sensor.charger_state_garage']\") || {};\nif (chargerEntity.state === \"2\") autoCharging = true;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n// v19.3: Proven pattern from ŠETŘIT — solar<=10W → MaxDischargePower=0\n// Eliminates ~130W DC bus standby loss. Victron transfer relay handles grid passthrough.\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\n\nvar nibeFromGrid = cerpadloTopi;  // NIBE topí → vždy blokovat vybíjení baterie\n// v19.4: Hard block discharge when car charges and SOC < threshold (battery priority)\nvar autoSocThreshold = config.nabijeni_auta_min_soc || 95;\n// v24.10: blockDischargeHard removed — car charges from grid (not Victron), battery must power house\nvar blockDischargeHard = false;\nvar blockDischargeSoft = nibeFromGrid || saunaAktivni;\nvar blockDischarge = blockDischargeHard || blockDischargeSoft;\n\nvar _solOvr = config.topeni_solar_override_w || 8000;\nvar _nibePsp = (cerpadloTopi && currentPvPower >= _solOvr) ? (config.nibe_psp_compensation_w || 800) : 0;\nmsg.victron = {\n    power_set_point: -_nibePsp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischargeHard || blockDischargeSoft) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischargeSoft) ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:0W\" : \"\";\nvar pspText = _nibePsp > 0 ? \" | PSP:-\" + _nibePsp : \"\";\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape:\"dot\", text:\"NORMAL | SOC:\" + currentSoc + \"%\" + consText + dischText + pspText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || global.get(\"cerpadlo_topi\") || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n// v19.4: Read charger state directly — global may be stale after NR restart\nvar chargerEntity = global.get(\"homeassistant.homeAssistant.states['sensor.charger_state_garage']\") || {};\nif (chargerEntity.state === \"2\") autoCharging = true;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n// v19.3: Proven pattern from ŠETŘIT — solar<=10W → MaxDischargePower=0\n// Eliminates ~130W DC bus standby loss. Victron transfer relay handles grid passthrough.\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\n\n// § 4.2 + § 8.3: blokace jen když NIBE a PV < solar override (jinak energie ze soláru)\nvar _solOvr = config.topeni_solar_override_w || 8000;\nvar nibeFromGrid = cerpadloTopi && currentPvPower < _solOvr;\nvar autoSocThreshold = config.nabijeni_auta_min_soc || 95;\nvar blockDischargeHard = false;\nvar blockDischargeSoft = nibeFromGrid || saunaAktivni;\nvar blockDischarge = blockDischargeHard || blockDischargeSoft;\n\nvar _nibePsp = (cerpadloTopi && currentPvPower >= _solOvr) ? (config.nibe_psp_compensation_w || 800) : 0;\nmsg.victron = {\n    power_set_point: -_nibePsp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischargeHard || blockDischargeSoft) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischargeSoft) ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:0W\" : \"\";\nvar pspText = _nibePsp > 0 ? \" | PSP:-\" + _nibePsp : \"\";\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape:\"dot\", text:\"NORMAL | SOC:\" + currentSoc + \"%\" + consText + dischText + pspText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -3914,7 +4036,8 @@
         ],
         "x": 425,
         "y": 47,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_normal",
@@ -3928,7 +4051,8 @@
         ],
         "x": 425,
         "y": 73,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "ec611f6aba7d5c59",
@@ -3945,7 +4069,8 @@
             [
                 "139cd450edbbde37"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "139cd450edbbde37",
@@ -3981,7 +4106,8 @@
         ],
         "x": 425,
         "y": 147,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_setrit",
@@ -3995,7 +4121,8 @@
         ],
         "x": 425,
         "y": 173,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "1d98a0541716ce58",
@@ -4012,7 +4139,8 @@
             [
                 "ebcf9e560f598c02"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ebcf9e560f598c02",
@@ -4048,7 +4176,8 @@
         ],
         "x": 425,
         "y": 247,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_nabijet",
@@ -4062,7 +4191,8 @@
         ],
         "x": 425,
         "y": 273,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "179ed150020d459c",
@@ -4079,7 +4209,8 @@
             [
                 "68992d178ce105ed"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "68992d178ce105ed",
@@ -4115,7 +4246,8 @@
         ],
         "x": 425,
         "y": 347,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_prodavat",
@@ -4129,7 +4261,8 @@
         ],
         "x": 425,
         "y": 373,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "c682224043634fcd",
@@ -4146,7 +4279,8 @@
             [
                 "75d1f9e77bc15e0a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "75d1f9e77bc15e0a",
@@ -4154,7 +4288,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_zakaz",
         "name": "ZÁKAZ PŘETOKŮ Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\n// v19.9: Blokace vybíjení baterie při topení NIBE nebo sauně (pattern z NORMAL)\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\nvar blockDischarge = cerpadloTopi || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: config.zakaz_pretoku_grid_setpoint_w || 30,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischarge || ultraLevna) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nmsg.blockDischarge = blockDischarge;\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:\" + solarPassthrough + \"W\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\n// v19.9: Blokace vybíjení baterie při topení NIBE nebo sauně (pattern z NORMAL)\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\nvar _solOvrZ = config.topeni_solar_override_w || 8000;\nvar blockDischarge = (cerpadloTopi && currentPvPower < _solOvrZ) || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: config.zakaz_pretoku_grid_setpoint_w || 30,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischarge || ultraLevna) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nmsg.blockDischarge = blockDischarge;\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:\" + solarPassthrough + \"W\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4182,7 +4316,8 @@
         ],
         "x": 425,
         "y": 447,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_zakaz",
@@ -4196,7 +4331,8 @@
         ],
         "x": 425,
         "y": 473,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "e93b8f3e662c6190",
@@ -4211,7 +4347,8 @@
             [
                 "d27d27bacf98eec0"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d27d27bacf98eec0",
@@ -4219,7 +4356,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_solar",
         "name": "SOLÁRNÍ NABÍJENÍ Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    // v19.3: Proven pattern — solar<=10W → 0 (eliminates DC bus standby loss)\n    max_discharge_power: blockDischarge ? (currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0) : -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solární\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\nvar _solOvrS = config.topeni_solar_override_w || 8000;\nvar nibeFromGrid = cerpadloTopi && currentPvPower < _solOvrS;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    // v19.3: Proven pattern — solar<=10W → 0 (eliminates DC bus standby loss)\n    max_discharge_power: blockDischarge ? (currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0) : -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solární\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4247,7 +4384,8 @@
         ],
         "x": 425,
         "y": 547,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_solar",
@@ -4261,7 +4399,8 @@
         ],
         "x": 425,
         "y": 573,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "li_victron_shared",
@@ -4283,7 +4422,8 @@
             [
                 "shared_fanout_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_fanout_func",
@@ -4343,7 +4483,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_soc",
@@ -4375,7 +4516,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_dur",
@@ -4407,7 +4549,8 @@
         "y": 1060,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_day",
@@ -4439,7 +4582,8 @@
         "y": 1060,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_max_disch",
@@ -4471,7 +4615,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_max_charge",
@@ -4503,7 +4648,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_min_soc",
@@ -4535,7 +4681,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_debug",
@@ -4553,7 +4700,8 @@
         "statusType": "auto",
         "x": 630,
         "y": 1120,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "shared_feedin_switch",
@@ -4587,7 +4735,8 @@
                 "shared_maxfeedin_val",
                 "shared_prevent_on"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_feedin_on",
@@ -4619,7 +4768,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_feedin_off",
@@ -4651,7 +4801,8 @@
         "y": 1080,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_maxfeedin_val",
@@ -4683,7 +4834,8 @@
         "y": 920,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_prevent_off",
@@ -4713,7 +4865,8 @@
         "y": 1140,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_prevent_on",
@@ -4743,7 +4896,8 @@
         "y": 1220,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "li_log_shared",
@@ -4765,7 +4919,8 @@
             [
                 "fve_log_writer_001"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_writer_001",
@@ -4804,7 +4959,8 @@
         "y": 200,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_rotate_inject",
@@ -4830,7 +4986,8 @@
             [
                 "fve_log_rotate_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_rotate_func",
@@ -4869,7 +5026,8 @@
             [
                 "bal_logic_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "bal_logic_func",
@@ -4933,7 +5091,8 @@
         "y": 740,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "lo_victron_bal",
@@ -4947,7 +5106,8 @@
         ],
         "x": 405,
         "y": 660,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_bal",
@@ -4961,7 +5121,8 @@
         ],
         "x": 405,
         "y": 700,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "bal_svc_set_boolean",
@@ -4990,7 +5151,8 @@
         "y": 780,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "opp_bal_inject",
@@ -5010,7 +5172,8 @@
             [
                 "opp_bal_check"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "opp_bal_check",
@@ -5042,7 +5205,8 @@
         "label": "FVE Orchestrator",
         "disabled": false,
         "info": "Hlavní orchestrace FVE - plánování a rozhodování o módech",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "e451448d0e5cd53a",
@@ -5050,7 +5214,8 @@
         "label": "Init & Set Victron",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "7ceb7c5337692ae5",
@@ -5058,7 +5223,8 @@
         "label": "Manager nabíjení auta",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "a86ad952ad7756aa",
@@ -5066,7 +5232,8 @@
         "label": "Automatizuj nabíjení auta ze sítě",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "49921d17efb0cefe",
@@ -5074,7 +5241,8 @@
         "label": "Automatizuj nabíjení auta ze slunce",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "58f453ee71c85d6d",
@@ -5082,7 +5250,8 @@
         "label": "Automatizuj ostatní",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "d32891aad318f0e3",
@@ -5090,7 +5259,8 @@
         "label": "Vypočítej ceny",
         "disabled": false,
         "info": "",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "4580a451a0858d03",
@@ -5120,7 +5290,8 @@
         "x": 14,
         "y": 19,
         "w": 1052,
-        "h": 302
+        "h": 302,
+        "func": ""
     },
     {
         "id": "c0d4d6462d4ebded",
@@ -5149,7 +5320,8 @@
         "x": 14,
         "y": 339,
         "w": 1032,
-        "h": 332
+        "h": 332,
+        "func": ""
     },
     {
         "id": "66210c073baa5af0",
@@ -5174,7 +5346,8 @@
         "x": 14,
         "y": 699,
         "w": 932,
-        "h": 242
+        "h": 242,
+        "func": ""
     },
     {
         "id": "60ea726b8bbc5fbc",
@@ -5193,7 +5366,8 @@
         "x": 14,
         "y": -1,
         "w": 612,
-        "h": 82
+        "h": 82,
+        "func": ""
     },
     {
         "id": "init_grp_pipeline",
@@ -5236,7 +5410,8 @@
         "x": 14,
         "y": 99,
         "w": 1112,
-        "h": 822
+        "h": 822,
+        "func": ""
     },
     {
         "id": "mgr_grp_logic",
@@ -5264,7 +5439,8 @@
         "x": 14,
         "y": 39,
         "w": 892,
-        "h": 262
+        "h": 262,
+        "func": ""
     },
     {
         "id": "8002c1778266b948",
@@ -5290,7 +5466,8 @@
         "x": 14,
         "y": 519,
         "w": 912,
-        "h": 282
+        "h": 282,
+        "func": ""
     },
     {
         "id": "68ded079ca35f344",
@@ -5320,7 +5497,8 @@
         "x": 26,
         "y": 459,
         "w": 1082,
-        "h": 382
+        "h": 382,
+        "func": ""
     },
     {
         "id": "115b21930df59327",
@@ -5340,7 +5518,8 @@
         "x": 14,
         "y": 19,
         "w": 692,
-        "h": 142
+        "h": 142,
+        "func": ""
     },
     {
         "id": "34989895a7491a91",
@@ -5364,7 +5543,8 @@
         "x": 14,
         "y": 179,
         "w": 832,
-        "h": 202
+        "h": 202,
+        "func": ""
     },
     {
         "id": "c7058c6bcde0cfc8",
@@ -5387,7 +5567,8 @@
         "x": 14,
         "y": 413,
         "w": 852,
-        "h": 148
+        "h": 148,
+        "func": ""
     },
     {
         "id": "f3b107d658fd3d97",
@@ -5411,7 +5592,8 @@
         "x": 14,
         "y": 239,
         "w": 992,
-        "h": 142
+        "h": 142,
+        "func": ""
     },
     {
         "id": "b44cdb66e54727f6",
@@ -5442,7 +5624,8 @@
         "x": 15,
         "y": 19,
         "w": 989,
-        "h": 202
+        "h": 202,
+        "func": ""
     },
     {
         "id": "1de9e9b5f7d0b99b",
@@ -5482,7 +5665,8 @@
         "x": 14,
         "y": 559,
         "w": 992,
-        "h": 762
+        "h": 762,
+        "func": ""
     },
     {
         "id": "0c2e8e7121147d0a",
@@ -5507,7 +5691,8 @@
         "x": 14,
         "y": 399,
         "w": 992,
-        "h": 142
+        "h": 142,
+        "func": ""
     },
     {
         "id": "probe_grp",
@@ -5532,12 +5717,14 @@
         "x": 14,
         "y": 319,
         "w": 932,
-        "h": 262
+        "h": 262,
+        "func": ""
     },
     {
         "id": "e1bd0d865b19d57e",
         "type": "config-vrm-api",
-        "name": "VRM api"
+        "name": "VRM api",
+        "func": ""
     },
     {
         "id": "c7421fe2.cb11c",
@@ -5551,7 +5738,8 @@
         "heartbeat": false,
         "heartbeatInterval": "",
         "statusSeparator": "",
-        "enableGlobalContextStore": false
+        "enableGlobalContextStore": false,
+        "func": ""
     },
     {
         "id": "537aaa7c69c02576",
@@ -5560,7 +5748,8 @@
         "modules": {
             "victron-vrm-api": "0.3.11",
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "b6ac39c28a43ec7d",
@@ -5568,7 +5757,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "46f74c8e57a22280",
@@ -5576,7 +5766,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "0e950e94592319fb",
@@ -5584,7 +5775,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "c10a96016983ea1f",
@@ -5594,7 +5786,8 @@
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-contrib-time-range-switch": "1.2.0",
             "node-red-contrib-moment": "5.0.0"
-        }
+        },
+        "func": ""
     },
     {
         "id": "923d94c2c4b1ba5f",
@@ -5604,13 +5797,15 @@
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-contrib-moment": "5.0.0",
             "node-red-contrib-time-range-switch": "1.2.0"
-        }
+        },
+        "func": ""
     },
     {
         "id": "6d97960f9560e05b",
         "type": "sqlitedb",
         "db": "/homeassistant/home-assistant_v2.db",
-        "mode": "RWC"
+        "mode": "RWC",
+        "func": ""
     },
     {
         "id": "bc29fc50a7482dd1",
@@ -5619,7 +5814,8 @@
         "modules": {
             "node-red-node-sqlite": "1.1.1",
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "2a6f2d8e070c0b5f",
@@ -5628,7 +5824,8 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-node-sqlite": "1.1.1"
-        }
+        },
+        "func": ""
     },
     {
         "id": "3e053bdac00312e5",
@@ -5637,7 +5834,8 @@
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3",
             "node-red-node-sqlite": "1.1.1"
-        }
+        },
+        "func": ""
     },
     {
         "id": "ef7e88d904689f1b",
@@ -5645,7 +5843,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "53db4341d374e728",
@@ -5653,7 +5852,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "d291a07dcab752d6",
@@ -5661,7 +5861,8 @@
         "env": [],
         "modules": {
             "node-red-contrib-home-assistant-websocket": "0.80.3"
-        }
+        },
+        "func": ""
     },
     {
         "id": "22e7b3b8965c20db",
@@ -5687,7 +5888,8 @@
             [
                 "9333668b1d326a83"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f037d87ec94c7da2",
@@ -5702,7 +5904,8 @@
             [
                 "9333668b1d326a83"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9333668b1d326a83",
@@ -5762,7 +5965,8 @@
         "statusType": "auto",
         "x": 710,
         "y": 280,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "517215d5f730e80c",
@@ -5801,7 +6005,8 @@
         "y": 280,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "44d31ff3c04741b7",
@@ -5827,7 +6032,8 @@
             [
                 "c36915a8599c5282"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "c36915a8599c5282",
@@ -5944,7 +6150,8 @@
             [
                 "lo_orch_balancovani"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f10a91fcb4de6bd3",
@@ -5958,7 +6165,8 @@
         ],
         "x": 1005,
         "y": 380,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "7f051a6595e57c3e",
@@ -5972,7 +6180,8 @@
         ],
         "x": 1005,
         "y": 420,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "185f95d7c56fe799",
@@ -5986,7 +6195,8 @@
         ],
         "x": 1005,
         "y": 460,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "a706b353f30c25d1",
@@ -6000,7 +6210,8 @@
         ],
         "x": 1005,
         "y": 500,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "a86bc5233cfa0458",
@@ -6014,7 +6225,8 @@
         ],
         "x": 1005,
         "y": 540,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "fc848e97e2c781c1",
@@ -6068,7 +6280,8 @@
             [
                 "376106d716756636"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "376106d716756636",
@@ -6118,7 +6331,8 @@
         "y": 840,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "aabb001122334455",
@@ -6135,7 +6349,8 @@
             [
                 "aabb001122334466"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "aabb001122334466",
@@ -6170,7 +6385,8 @@
         ],
         "x": 1005,
         "y": 580,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "sauna_state_changed",
@@ -6217,7 +6433,8 @@
             [
                 "sauna_set_global"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "sauna_set_global",
@@ -6278,7 +6495,8 @@
         "y": 580,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "sauna_reset_minsoc",
@@ -6312,7 +6530,8 @@
             [
                 "sauna_trigger_plan"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "sauna_trigger_plan",
@@ -6367,7 +6586,8 @@
             [
                 "auto_trigger_plan"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "auto_trigger_plan",
@@ -6402,7 +6622,8 @@
         ],
         "x": 1005,
         "y": 630,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "rf_prep_params_01",
@@ -6539,7 +6760,8 @@
             [
                 "94fad41d26e0cad6"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "a9f0fdbe34b08f42",
@@ -6570,7 +6792,8 @@
             [
                 "d4aa59089ba5e79a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "82516184e2da4aba",
@@ -6602,7 +6825,8 @@
         "y": 140,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5bc15235de0be6d7",
@@ -6634,7 +6858,8 @@
         "y": 200,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "94fad41d26e0cad6",
@@ -6662,7 +6887,8 @@
             [
                 "a9f0fdbe34b08f42"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b3489292b6b19a0a",
@@ -6688,7 +6914,8 @@
         "y": 880,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f75eb57b02744611",
@@ -6719,7 +6946,8 @@
             [
                 "e898a34c99d763a9"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "510d8c7a6922180c",
@@ -6750,7 +6978,8 @@
             [
                 "12e5622470d1810f"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e898a34c99d763a9",
@@ -6778,7 +7007,8 @@
             [
                 "510d8c7a6922180c"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "12e5622470d1810f",
@@ -6806,7 +7036,8 @@
             [
                 "a55129e755036403"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "cbe7aadb6a9789fb",
@@ -6838,7 +7069,8 @@
         "y": 280,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "a55129e755036403",
@@ -6869,7 +7101,8 @@
             [
                 "ef45bce4eeb696b2"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ef45bce4eeb696b2",
@@ -6897,7 +7130,8 @@
             [
                 "90ecdd0dbac92033"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "cf10227596934c6b",
@@ -6929,7 +7163,8 @@
         "y": 360,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "90ecdd0dbac92033",
@@ -6960,7 +7195,8 @@
             [
                 "7de54d464c4599ae"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7de54d464c4599ae",
@@ -6988,7 +7224,8 @@
             [
                 "c3dbf47b62785eff"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "c3dbf47b62785eff",
@@ -7019,7 +7256,8 @@
             [
                 "b6bcdbf86abcbeb8"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b6bcdbf86abcbeb8",
@@ -7047,7 +7285,8 @@
             [
                 "4236d9de7efc61ec"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "94b7b011f71e932d",
@@ -7079,7 +7318,8 @@
         "y": 440,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "492bb8db67a996d6",
@@ -7111,7 +7351,8 @@
         "y": 520,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4236d9de7efc61ec",
@@ -7142,7 +7383,8 @@
             [
                 "214177b52b123155"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "214177b52b123155",
@@ -7170,7 +7412,8 @@
             [
                 "4245e7094a4f80b7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4245e7094a4f80b7",
@@ -7201,7 +7444,8 @@
             [
                 "3bfaab9a23737f7e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3bfaab9a23737f7e",
@@ -7229,7 +7473,8 @@
             [
                 "3a3fb82b0bca8580"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4356e0d632c43221",
@@ -7261,7 +7506,8 @@
         "y": 600,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3a3fb82b0bca8580",
@@ -7292,7 +7538,8 @@
             [
                 "d0cec879a0aa07e1"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d0cec879a0aa07e1",
@@ -7320,7 +7567,8 @@
             [
                 "ea8178ed56fc307d"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0924d118225c702a",
@@ -7352,7 +7600,8 @@
         "y": 680,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d4aa59089ba5e79a",
@@ -7380,7 +7629,8 @@
             [
                 "f75eb57b02744611"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "815f4827fac6b509",
@@ -7440,7 +7690,8 @@
             [
                 "0b40707ee362a5e8"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0b40707ee362a5e8",
@@ -7491,7 +7742,8 @@
             [
                 "8052afe0fea27044"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5efc09c5570e0e2d",
@@ -7523,7 +7775,8 @@
         "y": 740,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ea8178ed56fc307d",
@@ -7556,7 +7809,8 @@
             [
                 "7a40f647c053ea8e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7a40f647c053ea8e",
@@ -7584,7 +7838,8 @@
             [
                 "vrm_hourly_solar_fc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "06bafcba794da9e5",
@@ -7602,7 +7857,8 @@
         "statusType": "auto",
         "x": 370,
         "y": 880,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "vrm_hourly_solar_fc",
@@ -7634,7 +7890,8 @@
             [
                 "chg_hourly_solar_fc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "chg_hourly_solar_fc",
@@ -7663,7 +7920,8 @@
                 "815f4827fac6b509",
                 "b3489292b6b19a0a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "svc_hourly_solar_fc",
@@ -7695,7 +7953,8 @@
         "y": 800,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "40686c99d0404f36",
@@ -7725,7 +7984,8 @@
             [
                 "main_logic_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "8f1a7b3a93bc777c",
@@ -7785,7 +8045,8 @@
             [
                 "main_logic_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "main_logic_func",
@@ -7846,7 +8107,8 @@
             [
                 "wallbox_stop_svc_main"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "svc_solar_off_stop",
@@ -7880,7 +8142,8 @@
             [
                 "svc_grid_off"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "svc_solar_off_slunce",
@@ -7914,7 +8177,8 @@
             [
                 "svc_grid_off_slunce"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "svc_grid_off_slunce",
@@ -7948,7 +8212,8 @@
             [
                 "link_out_slunce"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "link_out_slunce",
@@ -7962,7 +8227,8 @@
         ],
         "x": 865,
         "y": 200,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "svc_solar_off_sit",
@@ -7996,7 +8262,8 @@
             [
                 "svc_grid_off_sit"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "svc_grid_off_sit",
@@ -8030,7 +8297,8 @@
             [
                 "link_out_sit"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "link_out_sit",
@@ -8044,7 +8312,8 @@
         ],
         "x": 865,
         "y": 260,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "wallbox_stop_svc_main",
@@ -8076,7 +8345,8 @@
         "y": 80,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_state_trigger",
@@ -8136,7 +8406,8 @@
             [
                 "probe_decision_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_decision_func",
@@ -8197,7 +8468,8 @@
             [
                 "probe_charger_on_svc"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_charger_on_svc",
@@ -8231,7 +8503,8 @@
             [
                 "probe_delay_20s"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_delay_20s",
@@ -8257,7 +8530,8 @@
             [
                 "probe_result_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_result_func",
@@ -8316,7 +8590,8 @@
         "y": 440,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_hlad_off_svc",
@@ -8348,7 +8623,8 @@
         "y": 520,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "probe_charger_off_svc",
@@ -8380,7 +8656,8 @@
         "y": 480,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0f16dca17f84783e",
@@ -8427,7 +8704,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "49fdcac28d31c133",
@@ -8483,7 +8761,8 @@
             [
                 "0360f471b476ef16"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7612c188de813d7c",
@@ -8514,7 +8793,8 @@
         "y": 242,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d3c7e952ee2fc2a4",
@@ -8545,7 +8825,8 @@
         "y": 462,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0360f471b476ef16",
@@ -8571,7 +8852,8 @@
             [
                 "a9e5aa5fbd19b5c0"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ec6bef21ab14caa8",
@@ -8631,7 +8913,8 @@
                 "a9e5aa5fbd19b5c0"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e2fbe35de1091fa3",
@@ -8696,7 +8979,8 @@
             [
                 "5ddb5d94494bcb4d"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0e9ad909cb38430e",
@@ -8740,7 +9024,8 @@
             [
                 "e2fbe35de1091fa3"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d59cea4bd7885a65",
@@ -8787,7 +9072,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b19eb944cb946785",
@@ -8834,7 +9120,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "2ab649c94e2517e5",
@@ -8881,7 +9168,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d26f96e53531f384",
@@ -8914,7 +9202,8 @@
             [
                 "7612c188de813d7c"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "707a53451c626ff1",
@@ -8947,7 +9236,8 @@
             [
                 "d3c7e952ee2fc2a4"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d31a8b64172a3eab",
@@ -8979,7 +9269,8 @@
             [
                 "1f5e371852712ac6"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "542205d3587ae7f0",
@@ -9026,7 +9317,8 @@
             [
                 "0e9ad909cb38430e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "a9e5aa5fbd19b5c0",
@@ -9072,7 +9364,8 @@
                 "8518fd99f86a1202"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4c0ccbe3229bb4f8",
@@ -9088,7 +9381,8 @@
             [
                 "542205d3587ae7f0"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5ddb5d94494bcb4d",
@@ -9135,7 +9429,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "22e344a6bf0c5b70",
@@ -9182,7 +9477,8 @@
             [
                 "b542785e15e32db7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "8518fd99f86a1202",
@@ -9227,7 +9523,8 @@
             [
                 "feec8727ed6c0ea4"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "feec8727ed6c0ea4",
@@ -9272,7 +9569,8 @@
             [
                 "49fdcac28d31c133"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b542785e15e32db7",
@@ -9364,7 +9662,8 @@
             [
                 "pretizeni_check_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "pretizeni_check_func",
@@ -9416,7 +9715,8 @@
         "y": 400,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d027326abd49e85d",
@@ -9470,7 +9770,8 @@
         "y": 220,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3ae97b682b8fceee",
@@ -9517,7 +9818,8 @@
             [
                 "49cb84e8d86431ed"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e7b12c271da1e268",
@@ -9537,7 +9839,8 @@
                 "c1b904a337bbf0a5"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d83891ae820948bf",
@@ -9562,7 +9865,8 @@
             [
                 "e7b12c271da1e268"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "788e188fae8d1fca",
@@ -9628,7 +9932,8 @@
             [
                 "788e188fae8d1fca"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "44281067ced2dc56",
@@ -9663,7 +9968,8 @@
             [
                 "0ef0c77eb8bb4570"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0ef0c77eb8bb4570",
@@ -9689,7 +9995,8 @@
             [
                 "f4f87ba21653eda5"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "82f8a5c6cfa6c254",
@@ -9722,7 +10029,8 @@
             [
                 "44281067ced2dc56"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "67d2ddc059b23ea8",
@@ -9782,7 +10090,8 @@
                 "04485a466ad52c1e"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "f4f87ba21653eda5",
@@ -9828,7 +10137,8 @@
                 "04485a466ad52c1e"
             ],
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "c1b904a337bbf0a5",
@@ -9859,7 +10169,8 @@
             [
                 "7e1e1d4a89bf0bc1"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5ae66c11fe946b89",
@@ -9892,7 +10203,8 @@
             [
                 "459839492fb6e054"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b007af166f6ef45c",
@@ -9925,7 +10237,8 @@
             [
                 "7e1e1d4a89bf0bc1"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "98dc3d2a8b804b92",
@@ -9970,7 +10283,8 @@
             [
                 "41a9b59ceb3ddd02"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "bd970168cfe6cecf",
@@ -9986,7 +10300,8 @@
             [
                 "3ae97b682b8fceee"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "49cb84e8d86431ed",
@@ -10033,7 +10348,8 @@
             [
                 "d027326abd49e85d"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b2f8f7968bd30604",
@@ -10078,7 +10394,8 @@
             [
                 "98dc3d2a8b804b92"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "795e263cb06160dd",
@@ -10123,7 +10440,8 @@
             [
                 "b2f8f7968bd30604"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "04485a466ad52c1e",
@@ -10168,7 +10486,8 @@
             [
                 "795e263cb06160dd"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "solar_corr_inject_20s",
@@ -10188,7 +10507,8 @@
             [
                 "f4f87ba21653eda5"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d172dcd2f5166a9d",
@@ -10247,7 +10567,8 @@
             [
                 "7522f4d106cb49a7"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7522f4d106cb49a7",
@@ -10281,7 +10602,8 @@
             [
                 "71953129eb896707"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ea195d59b673f480",
@@ -10313,7 +10635,8 @@
         "y": 60,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "71953129eb896707",
@@ -10345,7 +10668,8 @@
         "y": 120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ee0d741fdc5cbfdd",
@@ -10375,7 +10699,8 @@
             [
                 "5d99886761325d1d"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7cab9c28a5473d81",
@@ -10423,7 +10748,8 @@
             [
                 "02750065ac5e632a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "02750065ac5e632a",
@@ -10449,7 +10775,8 @@
             [
                 "6d245da5ca53613e"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6d245da5ca53613e",
@@ -10472,7 +10799,8 @@
             [
                 "4d56aa02abf550cf"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4d56aa02abf550cf",
@@ -10504,7 +10832,8 @@
         "y": 280,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9750b05dcbbff9f7",
@@ -10536,7 +10865,8 @@
         "y": 340,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5d99886761325d1d",
@@ -10584,7 +10914,8 @@
             [
                 "4d56aa02abf550cf"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "af6f98e63742ea83",
@@ -10614,7 +10945,8 @@
             [
                 "79b4a2cb676426f1"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "79b4a2cb676426f1",
@@ -10662,7 +10994,8 @@
             [
                 "a25c4f2c2d82868b"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "a25c4f2c2d82868b",
@@ -10688,7 +11021,8 @@
             [
                 "e9bfb79af53f16df"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e9bfb79af53f16df",
@@ -10711,7 +11045,8 @@
             [
                 "2d1eda397588e770"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "2d1eda397588e770",
@@ -10743,7 +11078,8 @@
         "y": 454,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5c777d8344b192ab",
@@ -10775,7 +11111,8 @@
         "y": 520,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "20afdbcb97fc200c",
@@ -10792,7 +11129,8 @@
             [
                 "9f764aa37d5d6306"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9f764aa37d5d6306",
@@ -10813,7 +11151,8 @@
             [
                 "90f59037daf537b9"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "90f59037daf537b9",
@@ -10851,7 +11190,8 @@
             [
                 "20afdbcb97fc200c"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6f9d67a8012a6eb6",
@@ -10868,7 +11208,8 @@
             [
                 "4f702344aaf9fca2"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "5a22ed0e7c4d5702",
@@ -10900,7 +11241,8 @@
         "y": 600,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6fe01f7863dcb990",
@@ -10932,7 +11274,8 @@
         "y": 640,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b359790448907d03",
@@ -11000,7 +11343,8 @@
             [
                 "7b088fc43e03bf25"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "19c197e0feac1b52",
@@ -11030,7 +11374,8 @@
             [
                 "8cf74ed44cce80e6"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "13d6e53e918e0d48",
@@ -11055,7 +11400,8 @@
             [
                 "90dbd055aecc8822"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "90dbd055aecc8822",
@@ -11072,7 +11418,8 @@
             [
                 "b9d72daaacf95105"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "b9d72daaacf95105",
@@ -11093,7 +11440,8 @@
             [
                 "f06592760349c26a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7b8e1478ae7abdcf",
@@ -11135,7 +11483,8 @@
             [
                 "7b8e1478ae7abdcf"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "a0375fbe89ce7386",
@@ -11152,7 +11501,8 @@
             [
                 "13d6e53e918e0d48"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "0dccef44f2f263b7",
@@ -11169,7 +11519,8 @@
             [
                 "9866761975399c7f"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ae99347c2a610653",
@@ -11199,7 +11550,8 @@
             [
                 "8cf74ed44cce80e6"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "44373b9aeb728378",
@@ -11231,7 +11583,8 @@
         "y": 720,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6a8bdcb07260ad46",
@@ -11263,7 +11616,8 @@
         "y": 680,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7b088fc43e03bf25",
@@ -11322,7 +11676,8 @@
             [
                 "107622cfabfa9725"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "107622cfabfa9725",
@@ -11343,7 +11698,8 @@
             [
                 "3884e595660a1150"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "3884e595660a1150",
@@ -11381,7 +11737,8 @@
             [
                 "e3701f53a6d9c32d"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "e6adfa0d8b466c82",
@@ -11413,7 +11770,8 @@
         "y": 880,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "066e002ec5e2bf91",
@@ -11445,7 +11803,8 @@
         "y": 920,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "387ff685c8cf03fa",
@@ -11477,7 +11836,8 @@
         "y": 960,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d173bd3e17fdc145",
@@ -11509,7 +11869,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d5fa96c6f4f58178",
@@ -11541,7 +11902,8 @@
         "y": 1040,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "155a17c737dae05c",
@@ -11573,7 +11935,8 @@
         "y": 1080,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "1b7a9a50b5223ade",
@@ -11605,7 +11968,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "edd5f8a98135c890",
@@ -11637,7 +12001,8 @@
         "y": 1160,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "6b80d46b88a7b7f4",
@@ -11669,7 +12034,8 @@
         "y": 1200,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "4f7ccdc7d353ca8f",
@@ -11701,7 +12067,8 @@
         "y": 1240,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "7fcb518ffcddab0a",
@@ -11733,7 +12100,8 @@
         "y": 1280,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "8cf74ed44cce80e6",
@@ -11828,7 +12196,8 @@
         "y": 760,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "20578829b67ce0e5",
@@ -11860,7 +12229,8 @@
         "y": 840,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "9b1d4e00a2b10c24",
@@ -11892,7 +12262,8 @@
         "y": 800,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fb19e54c699bb253",
@@ -11922,7 +12293,8 @@
             [
                 "b359790448907d03"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "aa11bb22cc33dd44",
@@ -11939,7 +12311,8 @@
             [
                 "ee55ff66aa77bb88"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ee55ff66aa77bb88",
@@ -11990,6 +12363,7 @@
             [
                 "8cf74ed44cce80e6"
             ]
-        ]
+        ],
+        "func": ""
     }
 ]

@@ -5,7 +5,8 @@
         "label": "FVE Modes",
         "disabled": false,
         "info": "Implementace jednotlivých módů FVE automatizace (refaktor v3 - link-out/link-in, 0 crossing wires)",
-        "env": []
+        "env": [],
+        "func": ""
     },
     {
         "id": "mode_grp_normal",
@@ -25,7 +26,8 @@
         "x": 24,
         "y": 6,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_setrit",
@@ -45,7 +47,8 @@
         "x": 24,
         "y": 106,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_nabijet",
@@ -65,7 +68,8 @@
         "x": 24,
         "y": 206,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_prodavat",
@@ -85,7 +89,8 @@
         "x": 24,
         "y": 306,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_zakaz",
@@ -105,7 +110,8 @@
         "x": 24,
         "y": 406,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "mode_grp_solar",
@@ -125,7 +131,8 @@
         "x": 24,
         "y": 506,
         "w": 442,
-        "h": 108
+        "h": 108,
+        "func": ""
     },
     {
         "id": "fve_modes_g_shared_svc",
@@ -157,7 +164,8 @@
         "x": 24,
         "y": 839,
         "w": 942,
-        "h": 422
+        "h": 422,
+        "func": ""
     },
     {
         "id": "fve_modes_g_log",
@@ -178,7 +186,8 @@
         "x": 494,
         "y": 159,
         "w": 492,
-        "h": 182
+        "h": 182,
+        "func": ""
     },
     {
         "id": "grp_balancovani",
@@ -202,7 +211,8 @@
         "x": 24,
         "y": 619,
         "w": 662,
-        "h": 202
+        "h": 202,
+        "func": ""
     },
     {
         "id": "8b55cfc5181b9eb7",
@@ -219,7 +229,8 @@
             [
                 "670432a909cf3b26"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "670432a909cf3b26",
@@ -227,7 +238,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_normal",
         "name": "NORMAL Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || global.get(\"cerpadlo_topi\") || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n// v19.4: Read charger state directly — global may be stale after NR restart\nvar chargerEntity = global.get(\"homeassistant.homeAssistant.states['sensor.charger_state_garage']\") || {};\nif (chargerEntity.state === \"2\") autoCharging = true;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n// v19.3: Proven pattern from ŠETŘIT — solar<=10W → MaxDischargePower=0\n// Eliminates ~130W DC bus standby loss. Victron transfer relay handles grid passthrough.\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\n\n// v19: Blokace vybijeni: POUZE pri nabijeni ze site, NIBE bez solaru, nebo saune\n\nvar nibeFromGrid = cerpadloTopi;  // NIBE topí → vždy blokovat vybíjení baterie\n// v19.4: Hard block discharge when car charges and SOC < threshold (battery priority)\nvar autoSocThreshold = config.nabijeni_auta_min_soc || 95;\n// v24.10: blockDischargeHard removed — car charges from grid (not Victron), battery must power house\nvar blockDischargeHard = false;\nvar blockDischargeSoft = nibeFromGrid || saunaAktivni;\nvar blockDischarge = blockDischargeHard || blockDischargeSoft;\n\nvar _solOvr = config.topeni_solar_override_w || 8000;\nvar _nibePsp = (cerpadloTopi && currentPvPower >= _solOvr) ? (config.nibe_psp_compensation_w || 800) : 0;\nmsg.victron = {\n    power_set_point: -_nibePsp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischargeHard || blockDischargeSoft) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischargeSoft) ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:0W\" : \"\";\nvar pspText = _nibePsp > 0 ? \" | PSP:-\" + _nibePsp : \"\";\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape:\"dot\", text:\"NORMAL | SOC:\" + currentSoc + \"%\" + consText + dischText + pspText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || global.get(\"cerpadlo_topi\") || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\n// v19.4: Read charger state directly — global may be stale after NR restart\nvar chargerEntity = global.get(\"homeassistant.homeAssistant.states['sensor.charger_state_garage']\") || {};\nif (chargerEntity.state === \"2\") autoCharging = true;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\n// v19: Aktualni PV vykon pro rozhodovani o blokaci\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n// v19.3: Proven pattern from ŠETŘIT — solar<=10W → MaxDischargePower=0\n// Eliminates ~130W DC bus standby loss. Victron transfer relay handles grid passthrough.\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\n\n// § 4.2 + § 8.3: blokace jen když NIBE a PV < solar override (jinak energie ze soláru)\nvar _solOvr = config.topeni_solar_override_w || 8000;\nvar nibeFromGrid = cerpadloTopi && currentPvPower < _solOvr;\nvar autoSocThreshold = config.nabijeni_auta_min_soc || 95;\nvar blockDischargeHard = false;\nvar blockDischargeSoft = nibeFromGrid || saunaAktivni;\nvar blockDischarge = blockDischargeHard || blockDischargeSoft;\n\nvar _nibePsp = (cerpadloTopi && currentPvPower >= _solOvr) ? (config.nibe_psp_compensation_w || 800) : 0;\nmsg.victron = {\n    power_set_point: -_nibePsp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischargeHard || blockDischargeSoft) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischargeSoft) ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"normal\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = blockDischarge ? 0 : -1;\nmsg.maxChargePower = blockDischarge ? 0 : -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (autoCharging) consumers.push(\"Auto\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:0W\" : \"\";\nvar pspText = _nibePsp > 0 ? \" | PSP:-\" + _nibePsp : \"\";\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape:\"dot\", text:\"NORMAL | SOC:\" + currentSoc + \"%\" + consText + dischText + pspText});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"normal\",\n    battery_charging: false,\n    battery_charge_rate_w: 0,\n    power_set_point: 0,\n    consumers_active: consumers,\n    max_discharge_allowed: !blockDischarge,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -255,7 +266,8 @@
         ],
         "x": 425,
         "y": 47,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_normal",
@@ -269,7 +281,8 @@
         ],
         "x": 425,
         "y": 73,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "ec611f6aba7d5c59",
@@ -286,7 +299,8 @@
             [
                 "139cd450edbbde37"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "139cd450edbbde37",
@@ -322,7 +336,8 @@
         ],
         "x": 425,
         "y": 147,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_setrit",
@@ -336,7 +351,8 @@
         ],
         "x": 425,
         "y": 173,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "1d98a0541716ce58",
@@ -353,7 +369,8 @@
             [
                 "ebcf9e560f598c02"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "ebcf9e560f598c02",
@@ -389,7 +406,8 @@
         ],
         "x": 425,
         "y": 247,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_nabijet",
@@ -403,7 +421,8 @@
         ],
         "x": 425,
         "y": 273,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "179ed150020d459c",
@@ -420,7 +439,8 @@
             [
                 "68992d178ce105ed"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "68992d178ce105ed",
@@ -456,7 +476,8 @@
         ],
         "x": 425,
         "y": 347,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_prodavat",
@@ -470,7 +491,8 @@
         ],
         "x": 425,
         "y": 373,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "c682224043634fcd",
@@ -487,7 +509,8 @@
             [
                 "75d1f9e77bc15e0a"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "75d1f9e77bc15e0a",
@@ -495,7 +518,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_zakaz",
         "name": "ZÁKAZ PŘETOKŮ Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\n// v19.9: Blokace vybíjení baterie při topení NIBE nebo sauně (pattern z NORMAL)\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\nvar blockDischarge = cerpadloTopi || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: config.zakaz_pretoku_grid_setpoint_w || 30,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischarge || ultraLevna) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nmsg.blockDischarge = blockDischarge;\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:\" + solarPassthrough + \"W\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\n\n// === ULTRA LEVNA DETEKCE ===\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar plan = global.get(\"fve_plan\") || {};\nvar solarStart = (plan && plan.solarStartHour) || 9;\nvar solarEnd = (plan && plan.solarEndHour) || 17;\nvar isSolarHour = (hour >= solarStart && hour < solarEnd);\nvar PRAH_ULTRA_LEVNA = config.prah_ultra_levna_nakup || 1.0;\n\nvar currentBuyPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 99;\n        break;\n    }\n}\n\nvar ultraLevna = isSolarHour && currentBuyPrice < PRAH_ULTRA_LEVNA;\nglobal.set(\"ultra_levna_energie\", ultraLevna);\n\n// v19.9: Blokace vybíjení baterie při topení NIBE nebo sauně (pattern z NORMAL)\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\nvar _solOvrZ = config.topeni_solar_override_w || 8000;\nvar blockDischarge = (cerpadloTopi && currentPvPower < _solOvrZ) || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: config.zakaz_pretoku_grid_setpoint_w || 30,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: (blockDischarge || ultraLevna) ? solarPassthrough : -1,\n    max_charge_power: (patBlockCharge || blockDischarge) ? 0 : -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: 1\n};\nmsg.mode = \"zakaz_pretoku\";\nmsg.blockDischarge = blockDischarge;\nvar autoText = msg.autoNabijeniAktivni ? \" + Auto\" : \"\";\nvar dischText = blockDischarge ? \" | BLOK_DISCH:\" + solarPassthrough + \"W\" : \"\";\n\nif (ultraLevna) {\n    node.status({fill:\"yellow\", shape:\"dot\", text:\"ULTRA LEVNA \" + currentBuyPrice.toFixed(2) + \" Kc\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n} else {\n    node.status({fill:\"purple\", shape:\"dot\", text:\"Zakaz pretoku\" + autoText + dischText + \" | SOC \" + currentSoc + \"%\"});\n}\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(\"Topeni\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nif (ultraLevna) consumers.push(\"UltraLevna\");\n\nglobal.set(\"energy_arbiter\", {\n    mode: ultraLevna ? \"ultra_levna\" : \"zakaz_pretoku\",\n    battery_charging: false,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -523,7 +546,8 @@
         ],
         "x": 425,
         "y": 447,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_zakaz",
@@ -537,7 +561,8 @@
         ],
         "x": 425,
         "y": 473,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "e93b8f3e662c6190",
@@ -552,7 +577,8 @@
             [
                 "d27d27bacf98eec0"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "d27d27bacf98eec0",
@@ -560,7 +586,7 @@
         "z": "bb3654998a6bf514",
         "g": "mode_grp_solar",
         "name": "SOLÁRNÍ NABÍJENÍ Logic",
-        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\n\nvar nibeFromGrid = cerpadloTopi;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    // v19.3: Proven pattern — solar<=10W → 0 (eliminates DC bus standby loss)\n    max_discharge_power: blockDischarge ? (currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0) : -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solární\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
+        "func": "var patBlockCharge = global.get(\"pat_block_charge\") || false;\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar minSoc = config.min_soc || 20;\nvar currentSoc = status.battery_soc || 50;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar autoCharging = msg.autoNabijeniAktivni || false;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar minDischargeBlokaceW = config.min_vybijeni_blokace_w || 1300;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar dynamicDischargeW = Math.max(0, Math.round(minDischargeBlokaceW - currentPvPower));\nvar _solOvrS = config.topeni_solar_override_w || 8000;\nvar nibeFromGrid = cerpadloTopi && currentPvPower < _solOvrS;\nvar blockDischarge = nibeFromGrid || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    // v19.3: Proven pattern — solar<=10W → 0 (eliminates DC bus standby loss)\n    max_discharge_power: blockDischarge ? (currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0) : -1,\n    max_charge_power: patBlockCharge ? 0 : -1,\n    feedin_on: true,\n    max_feed_in_power: (config.max_feed_in_w || 7600),\n    prevent_feedback: 0\n};\nmsg.mode = \"solar_charging\";\nmsg.blockDischarge = blockDischarge;\nmsg.maxDischargePower = -1;\n\nvar consumers = [];\nif (cerpadloTopi) consumers.push(nibeFromGrid ? \"NIBE(sit)\" : \"NIBE(sol)\");\nif (autoCharging) consumers.push(\"Auto(sol)\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nvar consText = consumers.length > 0 ? \" | \" + consumers.join(\"+\") : \"\";\n\nnode.status({\n    fill: \"yellow\",\n    shape: \"ring\",\n    text: \"Solární\" + consText + \" | SOC: \" + currentSoc + \"%\" + (blockDischarge ? \" (BAT LOCKED)\" : \"\")\n});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"solar_charging\",\n    battery_charging: !blockDischarge,\n    battery_discharging: !blockDischarge,\n    reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: consumers,\n    timestamp: Date.now()\n});\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -588,7 +614,8 @@
         ],
         "x": 425,
         "y": 547,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_solar",
@@ -602,7 +629,8 @@
         ],
         "x": 425,
         "y": 573,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "li_victron_shared",
@@ -624,7 +652,8 @@
             [
                 "shared_fanout_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_fanout_func",
@@ -684,7 +713,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_soc",
@@ -716,7 +746,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_dur",
@@ -748,7 +779,8 @@
         "y": 1060,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_sched_day",
@@ -780,7 +812,8 @@
         "y": 1060,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_max_disch",
@@ -812,7 +845,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_max_charge",
@@ -844,7 +878,8 @@
         "y": 1120,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_min_soc",
@@ -876,7 +911,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_debug",
@@ -894,7 +930,8 @@
         "statusType": "auto",
         "x": 630,
         "y": 1120,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "shared_feedin_switch",
@@ -928,7 +965,8 @@
                 "shared_maxfeedin_val",
                 "shared_prevent_on"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_feedin_on",
@@ -960,7 +998,8 @@
         "y": 1000,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_feedin_off",
@@ -992,7 +1031,8 @@
         "y": 1080,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_maxfeedin_val",
@@ -1024,7 +1064,8 @@
         "y": 920,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_prevent_off",
@@ -1054,7 +1095,8 @@
         "y": 1140,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "shared_prevent_on",
@@ -1084,7 +1126,8 @@
         "y": 1220,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "li_log_shared",
@@ -1106,7 +1149,8 @@
             [
                 "fve_log_writer_001"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_writer_001",
@@ -1145,7 +1189,8 @@
         "y": 200,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_rotate_inject",
@@ -1171,7 +1216,8 @@
             [
                 "fve_log_rotate_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "fve_log_rotate_func",
@@ -1210,7 +1256,8 @@
             [
                 "bal_logic_func"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "bal_logic_func",
@@ -1274,7 +1321,8 @@
         "y": 740,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "lo_victron_bal",
@@ -1288,7 +1336,8 @@
         ],
         "x": 405,
         "y": 660,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "lo_log_bal",
@@ -1302,7 +1351,8 @@
         ],
         "x": 405,
         "y": 700,
-        "wires": []
+        "wires": [],
+        "func": ""
     },
     {
         "id": "bal_svc_set_boolean",
@@ -1331,7 +1381,8 @@
         "y": 780,
         "wires": [
             []
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "opp_bal_inject",
@@ -1351,7 +1402,8 @@
             [
                 "opp_bal_check"
             ]
-        ]
+        ],
+        "func": ""
     },
     {
         "id": "opp_bal_check",
