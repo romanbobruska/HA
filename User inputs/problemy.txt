@@ -1,6 +1,6 @@
-DOPRDELE ZA TO SJI ODPOVEDNY TY!!!
+proved kompletni analyzu zmen od stable verze. proved vsechny nutne upravy, ktere jsou inkrementalni
+a neposerou nam stavajici logiku - podivej se do historie promptu.
 
-CHCI, ABY BYLI VSECHNY ZMENY COMITOVANE DO GITU A DEPLOYNUTE DLE ZAKONU!!!
+Zamysli se nad tim, zda to dava smysl.
 
-
-NASTUDUJ SI VSECHNY ZAKONY A MD FILY A REKNI MI, CO JE SPATNE. NASTUDUJ SI CELY PROJEKT!!!
+prepinam na agent mod.

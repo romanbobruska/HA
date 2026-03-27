@@ -50,6 +50,7 @@ Tento soubor slouží k **přehledným tabulkám** a shrnutím z práce s AI.
 | `manager-nabijeni-auta.json` na v24.1: chyběl `probe_active`, § 5.0 až po „nemá hlad“ | Vysoká | Obnovena logika **v24.2** ze stabilního `75d56bb` |
 | `nabijeni-auta-slunce.json`: u `curA ≥ 6` chyběla priorita snížení A při překročení odběru ze sítě | Vysoká | Znovu **grid větev (2 cykly)** před větví DRAIN; DRAIN **vzorec** zachován → označení **v5.1** |
 | § 3.4 uživatelské flow | Procesní | Změny jen po tvém srozumění / jako oprava regrese |
+| Zastaralý `pat_block_charge` při manuálu topení / FVE OFF / NIBE boost | Střední | **v24.85:** Patrony korekce v2.1 — vždy sync globálu před časným returnem |
 
 ---
 
@@ -84,7 +85,7 @@ Kontrola: **statický rozbor kódu** oproti `User inputs/POZADAVKY.TXT` + stav f
 
 ### Git
 
-Změny **manager** + **nabijeni-auta-slunce** + **docs** mohou být jen **lokálně necommitnuté** — po ověření na HA je vhodné commitnout a pushnout dle tvého workflow.
+**Aktualizace:** změny z relace (v24.84+) jsou na `main` commitnuté a pushnuté, dokud nevzniknou nové lokální úpravy.
 
 ---
 
@@ -102,3 +103,47 @@ Změny **manager** + **nabijeni-auta-slunce** + **docs** mohou být jen **lokál
 **Závěr:** Spíš než „chyba v jedné proměnné“ jde o **jiný aktivní FVE mód** (často Šetřit) oproti profilu **Solární nabíjení**, plus **wallbox mimo Victron**. Chování po zapnutí patronů je tedy **očekávatelně jiné**, ne že by korekční smyčky byly identické vůči Victronu.
 
 **Možné zpřesnění (návrh, ne implementováno):** při aktivním solárním nabíjení auta buď v „Kontrola podmínek“ **vynutit** `solar_charging`, nebo ve Šetřit při `auto_nabijeni_aktivni` sladit PSP/min_soc s režimem solárního nabíjení — to už je změna pravidel, ne jen bugfix.
+
+---
+
+## 8. Kompletní analýza změn od stabilní verze (`75d56bb`, 26. 3. 2026 02:00)
+
+### Dává to smysl?
+
+**Ano v rámci cíle:** levná energie, solár, zákon 4.3 (Šetřit bez zbytečného čerpání při přebytku), bezpečnost NIBE×patrony, plán 4.9, auto § 5.x, vypnutá FVE automatizace → žádné zápisy Victron. Řada commitů je **úzce provázaná** (DRAIN větev u auta, pak návrat grid priority) — finální stav po **v24.84** je konzistentní se zákony z diskuse.
+
+**Riziko:** složitost (§ 1.3) roste; každá další větev v plánu nebo módu zvyšuje náklad na testování na HA.
+
+### Seznam commitů `75d56bb..HEAD` (chronologicky od nejstaršího po nejnovější)
+
+| Commit | Zkratka obsahu |
+|--------|----------------|
+| `466afc7` | Šetřit: PSP při solárním přebytku nečerpá ze sítě |
+| `f783e25` | Šetřit PSP dle § 4.3 |
+| `2b89a31` | Dočasná instrumentace (později pryč) |
+| `6745012` | NIBE × highSolDay × `patMohou` |
+| `1340562` | Blok výběje NIBE jen při PV pod override |
+| `ff0c21f` | Odstranění debug ingest |
+| `1928828` | Korekce auta při high solar |
+| `25676b5`–`3e0a4ba` | Agresivní NORMAL, § 4.9, NORMAL+NIBE |
+| `6558403`–`746b9be` | EV smyčka: grid senzor, grid priorita, clamp |
+| `365904b`–`6b592ed` | NORMAL: výběj při NIBE, grid-support |
+| `3ee09d3` | Victron OFF při vypnuté FVE auto |
+| `c6207c7`–`2705d77` | EV / hunger / SOC>95 iterace |
+| `4b70326` | Obnova stabilních hunger + EV větví |
+| `a110388`–`3c6452d` | DRAIN u auta: cíl, no-grid, vzorec |
+| `1e37aea` | Hard-stop korekcí patronů při FVE OFF |
+| `ffb6bd7`–`d5b1848` | Plán: `dnuOdBalance` / `last_pylontech`, Date.parse |
+| `3561bec`–`1848e8f` | Úklid deploy diag, DIAG fan-out |
+| `0110890` | v24.84: manager v24.2, solar v5.1, docs, problemy přesun |
+| *(aktuální commit v24.85)* | Patrony korekce v2.1: synchronizace `pat_block_charge` při časných návratech |
+
+### Inkrementální oprava v24.85 (bez změny hlavní logiky smyčky)
+
+**Patrony korekce v2.1** (`fve-orchestrator.json` + `fve-heating.json`, stejný uzel):
+
+- Při **FVE automatizace OFF** → `global.set("pat_block_charge", false)` před návratem (jinak mohla zůstat **zastaralá** hodnota z minulého cyklu a Šetřit/Normal by špatně nastavovaly `max_charge_power`).
+- Při **automatizovat topení OFF** (manuál) → ihned `pat_block_charge = false` (dříve se hlavní synchronizační řádek neprovedl).
+- Při **NIBE boost → patrony OFF** → stejná synchronizace `pat_block_charge` a `chgMsg(_pN)` jako při normálním výpočtu (místo slepého `chgMsg(-1)`).
+
+Tím se Victron konfigurace z globálu **nesplituje** s tím, co posílá druhý výstup korekce.
