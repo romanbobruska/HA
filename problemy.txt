@@ -1,11 +1,10 @@
-ty kretene!!!
+PROSTUDUJ ZAKONY PRO BALANCOVANI BATERIE.
 
-tak za A:
+DNES JSME BALANCOVALI, PLAN MI UKAZUJE ⚡ Poslední balancing: 27.03. 16:07 ❌
 
-teplotni cidlo je sensor.hp2551ae_pro_v2_1_0_indoor_temperature - ne to stare, cos mi psal - tohle pouzivame uz hodne dlouho
+V H8 SE NAPLANOVALO BALANCOVANI. VIZ
+08:00 +1	⚡ Balancování	Balancování baterie (4.2 kWh solární), SOC 35%, 999 dní od posledního	2	2.83 Kč	1.22 Kč
 
-za B:
+CO TO JE ZA BLBOST KURVA???
 
-JAK ZE CEKAME NA PATRONY??? VZDYT MA AUTO HLAD!!! BATERIE NENI NABITA!!! KURVA!!! CO SE PISE V ZAKONECH????
-
-ZNOVU SI PROSTUDUJ ZAKONY A REKNI MI, ZDA OPRAVDU KOD DELA TO, CO MA DLE ZAKONU TY DEBILE!!!!
+NIC NENASAZUJ BEZ MEHO SOUHLASU. VYSVETLI MI, PROC TO NASTALO.
