@@ -11,7 +11,7 @@
 > - **`UZIVATELSKA_PRIRUCKA.md`** — pohled uživatele (senzory, módy).
 > - **`KONVERZACE_KONTEXT.md`** — starší poznámky; **nízká priorita**, při rozporu platí POZADAVKY + tento soubor.
 > - **`AI_PREHLED_TABULEK.md`** — **jediný** soubor, kam AI **na tvé vyžádání v chatu** doplní krátký výstup; neobsahuje „pravdu“ o zákonech (ta je v POZADAVKY).
-> - **`TOPENI_POZADAVKY.md`** — reference entit; zákony topení vždy z **POZADAVKY.TXT**.
+> - **`TOPENI_POZADAVKY.md`** — jen **entity + `fve_config` klíče**; žádná duplicitní pravidla — zákony výhradně **POZADAVKY.TXT**.
 >
 > **Pravidla pro AI (POVINNÁ při KAŽDÉM promptu):**
 > - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
