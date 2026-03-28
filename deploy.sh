@@ -2,8 +2,9 @@
 # ============================================================
 # Deploy skript pro HA + Node-RED
 # Spusťte přes SSH na Home Assistant
-# Usage: bash deploy.sh                       # klonuje/aktualizuje repo + deploy Node-RED
-#        bash deploy.sh --with-ha             # + restart Home Assistant
+# Usage: bash deploy.sh                       # výchozí: kopie HA config + NR + restart HA Core
+#        bash deploy.sh --no-ha              # bez restartu Core (jen NR; šablony až po ručním reloadu)
+#        bash deploy.sh --with-ha             # totéž jako výchozí
 #        bash deploy.sh --branch=feature/xyz  # deploy z jiné branch
 #        bash deploy.sh --force               # deploy i když server flows jsou novější
 # ============================================================
@@ -15,7 +16,7 @@ REPO_URL="https://github.com/romanbobruska/HA.git"
 BRANCH="main"
 HA_CONFIG="/config"
 NODERED_DIR="/addon_configs/a0d7b954_nodered"
-RESTART_HA=false
+RESTART_HA=true
 FORCE=false
 
 for arg in "$@"; do
@@ -169,7 +170,7 @@ if $RESTART_HA; then
         echo "   ⚠️  HA restart přes API selhal (HTTP $HA_RESTART) — restartujte ručně: Nastavení → Systém → Restartovat"
     fi
 else
-    echo "   ℹ️  Home Assistant NEBYL restartován (--no-ha flag)"
+    echo "   ℹ️  Home Assistant NEBYL restartován (použit přepínač --no-ha — šablony/input_select se mohou projevit až po ručním reloadu/restartu Core)"
 fi
 
 # --- 7. Úklid repozitáře ---

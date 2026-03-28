@@ -84,6 +84,10 @@ Automatizuje FVE elektrárnu (17 kWp), tepelné čerpadlo NIBE, nabíjení elekt
 | **FVE Log** | `/homeassistant/fve_log.jsonl` |
 
 ### Deploy příkaz
+`deploy.sh` **výchozí chování (§ 2.1):** zkopíruje HA YAML (`configuration`, šablony, …), sloučí NR flows, restartuje Node-RED **a restartuje Home Assistant Core** — aby se projevily nové `template` senzory, volby `input_select`, atd.
+
+Rychlý deploy **jen Node-RED** bez restartu Core: `bash deploy.sh --no-ha` (potom případně ručně *Vývojářské nástroje → YAML → Znovu načíst šablony*).
+
 ```bash
 ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 \
   "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash deploy.sh 2>&1"
