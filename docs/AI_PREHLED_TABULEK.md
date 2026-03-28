@@ -62,6 +62,12 @@ Tento soubor slouží k **přehledným tabulkám** a shrnutím z práce s AI.
 | AI | Odpovídá v chatu a **doplňuje / aktualizuje tabulky v tomto souboru**, pokud jde o shrnutí k projektu |
 | Git | `HA` repo — po ověření na HA commit + push dle tvého workflow |
 
+### Pravidlo nasazení na Home Assistant (odsouhlasení)
+
+1. AI **nejprve vypíše**, co by se nasadilo (rozsah / commity / stručný důvod vůči zákonům).  
+2. **Deploy přes SSH** podle `User inputs/POZADAVKY.TXT` § 2.1 AI **nespouští**, dokud ty **výslovně neodsouhlasíš** („nasadit“, „spusť deploy“, apod.).  
+3. Pokud najde **zásadní rozpor se zákony**, **neposouvá nasazení** — nejdřív popis a návrh, čeká na tvé rozhodnutí.
+
 *Poslední aktualizace tabulek: souhrn stavu po opravách manager + solární korekce (v24.2 / v5.1).*
 
 ---
