@@ -313,6 +313,39 @@
     {% set kapacita = states('input_number.fve_kapacita_baterie') | float(28) %}
     {{ (((100 - soc) / 100) * kapacita) | round(2) }}
 
+# Topení: UX pro dashboard — shoda s logikou NR (dispMod v rf_htg_output3)
+# Když input_select říká NIBE ale fyzicky jen oběh z nádrže → ukázat Obehove (§ 8.4).
+- name: "Topeni mod zobrazeni dashboard"
+  unique_id: topeni_mod_zobrazeni_dashboard
+  icon: >
+    {% set mod = states('input_select.topeni_mod') %}
+    {% set nibe = is_state('switch.nibe_topeni', 'on') %}
+    {% set obeh = is_state('switch.teplota_smesovac', 'on') %}
+    {% if mod in ['NIBE', 'NIBE + Patrony'] and not nibe and obeh %}
+      mdi:pump
+    {% elif mod == 'Patrony' %}
+      mdi:radiator
+    {% elif mod == 'NIBE' %}
+      mdi:heat-pump
+    {% elif mod == 'Vypnuto' %}
+      mdi:radiator-off
+    {% else %}
+      mdi:home-thermometer-outline
+    {% endif %}
+  state: >
+    {% set mod = states('input_select.topeni_mod') %}
+    {% set nibe = is_state('switch.nibe_topeni', 'on') %}
+    {% set obeh = is_state('switch.teplota_smesovac', 'on') %}
+    {% if mod in ['NIBE', 'NIBE + Patrony'] and not nibe and obeh %}
+      Obehove
+    {% else %}
+      {{ mod }}
+    {% endif %}
+  attributes:
+    zdroj_nr: "{{ states('input_select.topeni_mod') }}"
+    nibe_topeni: "{{ states('switch.nibe_topeni') }}"
+    obeh_smesovac: "{{ states('switch.teplota_smesovac') }}"
+
 # Plán - čte data z command_line sensoru
 - name: "FVE Plan"
   unique_id: fve_plan
