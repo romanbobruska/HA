@@ -314,7 +314,7 @@
     {{ (((100 - soc) / 100) * kapacita) | round(2) }}
 
 # Topení: UX pro dashboard — shoda s logikou NR (dispMod v rf_htg_output3)
-# Když input_select říká NIBE ale fyzicky jen oběh z nádrže → ukázat Obehove (§ 8.4).
+# Když input_select říká NIBE ale fyzicky jen oběh z nádrže → ukázat Oběhové (§ 8.4).
 - name: "Topeni mod zobrazeni dashboard"
   unique_id: topeni_mod_zobrazeni_dashboard
   icon: >
@@ -337,7 +337,7 @@
     {% set nibe = is_state('switch.nibe_topeni', 'on') %}
     {% set obeh = is_state('switch.teplota_smesovac', 'on') %}
     {% if mod in ['NIBE', 'NIBE + Patrony'] and not nibe and obeh %}
-      Obehove
+      Oběhové
     {% else %}
       {{ mod }}
     {% endif %}

@@ -133,6 +133,6 @@ input_select:
       - "Patrony"
       - "NIBE"
       - "NIBE + Patrony"
-      - "Obehove"
+      - "Oběhové"
       - "Vypnuto"
     icon: mdi:radiator
