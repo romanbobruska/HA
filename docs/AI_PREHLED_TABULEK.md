@@ -61,9 +61,15 @@ Při problémech se vracet k tomuto stavu (`git checkout 75d56bb` / diff / cherr
 
 ## 5. Jak to používat
 
+**Tvůj ruční vstup do projektu je jen z těchto míst:**  
+1) **`User inputs/problemy.txt`** — zadání a otázky pro AI (AI soubor **nemění**).  
+2) **`User inputs/POZADAVKY.TXT`** — úpravy zákonů / pravidel (**jen ty**; AI je nemění bez výslovné žádosti).  
+
+Nemusíš nic „vyplňovat“ jinde v repu kvůli běžné práci — git, docs kromě výše, úpravy flow řeší AI v chatu. **Výjimka:** krátké **odsouhlasení v chatu** u rizikových kroků (např. deploy na HA), jak je popsáno níže.
+
 | Kdo | Co |
 |-----|-----|
-| Ty | Pišeš zadání / otázky do **`User inputs/problemy.txt`** |
+| Ty | **`problemy.txt`** + případně **`POZADAVKY.TXT`**; v chatu jen souhlas u deploye / rozcestí |
 | AI | Odpovídá v chatu a **doplňuje / aktualizuje tabulky v tomto souboru**, pokud jde o shrnutí k projektu |
 | Git | `HA` repo — po ověření na HA commit + push dle tvého workflow |
 

@@ -46,8 +46,8 @@
 > - Být samostatný — dokončit práci BEZ nutnosti interakce (cancel, klikání). Uživatel nehlídá terminál.
 >
 > **Komunikační kanál:**
-> - Uživatel píše problémy/požadavky do `problemy.txt` — AI ho čte na začátku každého promptu
-> - AI odpovídá v chatu a provádí opravy — NIKDY nepíše do `problemy.txt`
+> - Ruční vstup uživatele do repa: **`User inputs/problemy.txt`** (zadání) a **`User inputs/POZADAVKY.TXT`** (zákony — edituje výhradně uživatel). Nic dalšího v projektu kvůli běžné práci vyplňovat nemusíš.
+> - AI čte `problemy.txt` na začátku úkolu; odpovídá v chatu a provádí opravy — **NIKDY nepíše do `problemy.txt`**
 
 ---
 

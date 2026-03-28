@@ -2,6 +2,8 @@
 
 Rychlá navigace — **není** v `README.md`; tento soubor slouží jako vstupní tabulka odkazů.
 
+**Tvůj vstup:** prakticky jen **`User inputs/problemy.txt`** a úpravy **`User inputs/POZADAVKY.TXT`** — viz `docs/AI_PREHLED_TABULEK.md` § 5.
+
 | Co | Soubor |
 |----|--------|
 | **Zákony projektu** (pravidla pro kód a provoz) | `User inputs/POZADAVKY.TXT` |
