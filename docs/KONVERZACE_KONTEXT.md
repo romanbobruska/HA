@@ -22,10 +22,9 @@ Všechny fixy jsou nasazeny a ověřeny.
 - **Problém**: NIBE nenatápělo nádrž v nejlevnějších hodinách (`isDraha` a `cheaperAhead` blokovali)
 - **Fix**: `isDraha` respektuje `planCurrentMode === "setrit"`. `cheaperAhead`/`bigSolarTomorrow` skippovány když plan je `setrit`.
 
-### Deploy pravidla
-- **NIKDY nerestartovat HA** (`deploy.sh` BEZ `--with-ha`)
-- Restartuje se pouze Node-RED
-- Deploy skript v `/tmp/HA`
+### Deploy pravidla (historický zápis — aktuální stav v `docs/PROJEKT_SHRNUTI.md`)
+- Dříve platilo „jen Node-RED“; **`deploy.sh` na `main` nyní výchozí restartuje i Home Assistant Core** (šablony, `input_select`, …). Pro nasazení jen flow bez restartu Core: **`bash deploy.sh --no-ha`**.
+- Deploy se spouští klonem do `/tmp/HA` podle § 2.1 v `POZADAVKY.TXT`.
 
 ---
 
