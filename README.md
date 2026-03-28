@@ -2,7 +2,7 @@
 
 Kompletní řešení pro automatizaci fotovoltaické elektrárny (Victron), tepelného čerpadla (Nibe) a nabíjení elektromobilů v Home Assistant s Node-RED.
 
-**Orientace (tabulka odkazů):** [`docs/KDE_CO_NAJDES.md`](docs/KDE_CO_NAJDES.md)
+**Dokumentace:** přehled souborů a kontext pro AI — [`docs/PROJEKT_SHRNUTI.md`](docs/PROJEKT_SHRNUTI.md).
 
 ## Architektura
 
@@ -52,10 +52,11 @@ HA/
 ├── database/                # Databázové schéma
 │   └── schema.sql               # Tabulka spotových cen
 └── docs/                    # Dokumentace
-    ├── KDE_CO_NAJDES.md         # Tabulka: zákony, tabulky AI, problemy, odkazy
-    ├── AI_PREHLED_TABULEK.md    # Přehledy tabulek + AI výstupy
-    ├── PROJEKT_SHRNUTI.md       # Living kontext projektu
-    └── UZIVATELSKA_PRIRUCKA.md  # Uživatelská příručka
+    ├── PROJEKT_SHRNUTI.md       # Hlavní kontext projektu (AI + vývoj)
+    ├── UZIVATELSKA_PRIRUCKA.md  # Uživatelská příručka
+    ├── KONVERZACE_KONTEXT.md    # Historické poznámky (volitelně)
+    ├── AI_PREHLED_TABULEK.md    # Jediný soubor pro AI výstupy na vyžádání
+    └── TOPENI_POZADAVKY.md      # Reference entit topení (zákony = POZADAVKY)
 ```
 
 ## Globální proměnné Node-RED

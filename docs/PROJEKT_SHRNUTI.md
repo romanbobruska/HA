@@ -6,13 +6,17 @@
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
 >
-> **📊 Orientace:** rychlé odkazy (zákony, tabulky, problemy) — **`docs/KDE_CO_NAJDES.md`**.  
-> **Přehled tabulek (AI):** veškeré tabulkové shrnutí, stabilní commit, pravidla nasazení a šablony při konfliktu zadání vs. POZADAVKY jsou v **`docs/AI_PREHLED_TABULEK.md`**.
+> **Dokumentace v `docs/` (účel — bez zbytečných tabulek):**
+> - **`PROJEKT_SHRNUTI.md`** (tento soubor) — hlavní technický kontext pro AI a vývoj.
+> - **`UZIVATELSKA_PRIRUCKA.md`** — pohled uživatele (senzory, módy).
+> - **`KONVERZACE_KONTEXT.md`** — starší poznámky; **nízká priorita**, při rozporu platí POZADAVKY + tento soubor.
+> - **`AI_PREHLED_TABULEK.md`** — **jediný** soubor, kam AI **na tvé vyžádání v chatu** doplní krátký výstup; neobsahuje „pravdu“ o zákonech (ta je v POZADAVKY).
+> - **`TOPENI_POZADAVKY.md`** — reference entit; zákony topení vždy z **POZADAVKY.TXT**.
 >
 > **Pravidla pro AI (POVINNÁ při KAŽDÉM promptu):**
 > - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
-> - **Trvalá pravidla v Cursoru** jsou v `.cursor/rules/ha-problemy.mdc` (`alwaysApply`) — max. kontext ze všech MD v `HA/`, soulad se zákony, **žádné nasazování v rozporu s POZADAVKY** (nejprve vysvětlit konflikt).
-> - **NA ZAČÁTKU každého promptu**: přečíst `User inputs/POZADAVKY.TXT` (ZÁKONY) + `problemy.txt` (aktuální problémy) + tento soubor + při shrnutích `docs/AI_PREHLED_TABULEK.md`; ostatní MD v `HA/` dle tématu (viz tabulka v `ha-problemy.mdc`)
+> - **Trvalá pravidla v Cursoru** jsou v `.cursor/rules/ha-problemy.mdc` (`alwaysApply`) — soulad se **POZADAVKY**, **žádné nasazování v rozporu** (nejprve vysvětlit konflikt).
+> - **NA ZAČÁTKU úkolu**: `User inputs/POZADAVKY.TXT` + `User inputs/problemy.txt` + **tento soubor**; `UZIVATELSKA_PRIRUCKA.md` dle tématu; `AI_PREHLED_TABULEK.md` jen pokud jde o doplnění výstupu, který tam má skončit.
 > - **ABSOLUTNÍ ZÁKON 1.2 + 2.3**: VŽDY má přednost stav NR na serveru HA před lokální verzí. NIKDY nepřepisovat stav v HA lokální verzí.
 > - **PŘED úpravou flow**: stáhnout aktuální flows ze serveru (`ssh ... "cat flows.json"`) — SERVEROVÁ verze = PRAVDA (flows, nody, layout, parametry, config — VŠECHNO)
 > - **Deploy.sh nahrazuje CELÉ taby z gitu** → git MUSÍ obsahovat aktuální serverovou verzi + moje cílené změny
