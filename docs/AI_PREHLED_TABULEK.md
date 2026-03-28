@@ -1,18 +1,23 @@
 # Přehledy pro uživatele (AI výstupy)
 
 Tento soubor slouží k **přehledným tabulkám** a shrnutím z práce s AI.  
-**Vstupní poznámky** píš do `User inputs/problemy.txt` — ten soubor AI **nemění**.
+**Vstupní poznámky** píš do `User inputs/problemy.txt` — ten soubor AI **nemění**.  
+**Orientace v repu:** tabulka odkazů je v **`docs/KDE_CO_NAJDES.md`** (ne v `README.md`).
 
 ---
 
-## 1. Řez „stabilní verze“ v gitu
+## 1. Řez „stabilní verze“ v gitu (**svatý grál**)
+
+Při problémech se vracet k tomuto stavu (`git checkout 75d56bb` / diff / cherry-pick dle potřeby) a porovnávat `main`.
 
 | Položka | Hodnota |
 |--------|---------|
-| Datum / čas řezu | čtvrtek **26. 3. 2026, 02:00** |
-| Přibližný commit | `75d56bb` (poslední commit před tímto okamžikem na `main`) |
+| **Git commit (plný)** | `75d56bbc0e04f9fb17431379d70df6d1f1f2d4c3` |
+| **Datum / čas v gitu** (Author i Commit) | **středa 25. 3. 2026, 13:00:09** (časové pásmo **+0100** CET) |
+| Zpráva commitu | `fix: repair CP852 encoding corruption in fve-orchestrator.json (228 nodes)` |
+| Referenční okamžik řezu (projekt) | čtvrtek **26. 3. 2026, 02:00** — „poslední commit před tímto okamžikem na `main`“ = výše uvedený `75d56bb` |
 | Commity poté | první změny až **27. 3. 2026** (mezi řezem a půlnocí 27. 3. nebyl commit) |
-| Seznam změn | `git log 75d56bb..HEAD --oneline` v adresáři `HA` |
+| Seznam změn od stabilní | `git log 75d56bb..HEAD --oneline` v adresáři `HA` |
 
 ---
 
@@ -153,3 +158,39 @@ Kontrola: **statický rozbor kódu** oproti `User inputs/POZADAVKY.TXT` + stav f
 - Při **NIBE boost → patrony OFF** → stejná synchronizace `pat_block_charge` a `chgMsg(_pN)` jako při normálním výpočtu (místo slepého `chgMsg(-1)`).
 
 Tím se Victron konfigurace z globálu **nesplituje** s tím, co posílá druhý výstup korekce.
+
+---
+
+## 9. Terminologie + rozhodnutí o změně (příklad: odběr ze sítě v NORMAL)
+
+### 9.1 „Zákony“ v tomto projektu
+
+| Co si pod tím představit | Co to **není** |
+|--------------------------|----------------|
+| Soubor **`User inputs/POZADAVKY.TXT`** = tvá **závazná pravidla** pro kód, módy, deploy a prioritu zařízení | **Ne** jsou to paragrafy zákonů ČR ani obecná „legal“ interpretace — při rozporu s fyzikou nebo Victronem se řeší **technicky** a případně **úpravou tvých pravidel v tom souboru** (edituješ ty). |
+
+### 9.2 Požadavek (test): „zařídit braní ze sítě i v NORMAL módu“
+
+Rozlišují se **dva významy** stejné věty:
+
+| Varianta změny | Udělám / neudělám | Proč (podle **tvých** pravidel v POZADAVKY) |
+|----------------|-------------------|---------------------------------------------|
+| **A)** Spotřeba domu > to, co pokryje výběj baterie → **doplnění deficitu ze sítě** (pasivně, „zbytek ze sítě“) | **Ne jako nová funkce** — § **4.2 NORMAL** už říká, že baterie se vybíjí podle spotřeby a **zbytek se bere ze sítě**. Pokud to na krabičce nevidíš, jde o **bug / nastavení Victronu (PSP, limity)**, ne o chybějící „dovolení“ v pravidlech. | Úprava kódu jen **po důkazu z běhu** (senzory, log), ne „protože legal“. |
+| **B)** Ve **drahé** hodině v NORMALu **záměrně zvyšovat nákup ze sítě** (např. aktivně nabíjet baterii z DS v tom samém módu, který má být „vybíjí baterii“) | **Neudělám bez tvé změny POZADAVKY** | Odporuje smyslu módu v § **4.1** (Normal = drahé hodiny, vybíjí baterii) a cíli § **1.0** / § **4.9** (nekupovat zbytečně draze). Nabíjení z DS patří do **„Nabíjet ze sítě“** § **4.4** za podmínek plánu. |
+| **C)** Nasadit cokoli, co **nesedí** s aktuálním textem POZADAVKY | **Ne** | Nejdřív **vysvětlím rozpor**; nasazení až po tvém rozhodnutí / úpravě pravidel (viz § **5** výše — deploy po odsouhlasení). |
+
+*Poslední doplněk sekce 9: reakce na upřesnění „zákony = jen moje pravidla, ne legal“.*
+
+---
+
+## 10. Šablona odpovědi AI, když zadání **odporuje** POZADAVKY
+
+*(Včetně záměrného testu — stejná struktura; Cursor to má i v `.cursor/rules/ha-problemy.mdc`.)*
+
+| Krok | Obsah odpovědi |
+|------|----------------|
+| 1 | **Přepis požadavku** — co přesně má být uděláno (1 věta). |
+| 2 | **Konflikt** — odkaz na **konkrétní § / odstavec** v `User inputs/POZADAVKY.TXT` a proč je to v rozporu. |
+| 3 | **Zákaz akce** — **ne** změna flow / konfigurace / **deploy**, dokud se pravidla neupraví v POZADAVKY nebo nedáš výslovnou výjimku. |
+| 4 | **Možnosti pro tebe** — upravit POZADAVKY sám; přeformulovat zadání v souladu s pravidly; nebo požádat o návrh nového odstavce do POZADAVKY. |
+| 5 | *(Test)* Krátké potvrzení, že šlo o kontrolu chování AI — při reálném konfliktu platí 1–4. |
