@@ -1,3 +1,9 @@
-REKNI MI, PROC SE NETOPI PRES NIBE. V PLANU SE PISE, ZE SE TOPI, ALE NIBE ZAPNUTE NENI.
+souhlasim s 1 a 3.
 
-POROVNEJ SE ZAKONY A REKNI  MI, KDE JE PROBLEM.
+bod 2
+
+2	!h.isDraha blokuje noční ohřev v drahých hodinách	STŘEDNÍ	Nahradit za kontrolu "je to nejlevnější dostupná hodina" (cheapest in remaining hours before solar)
+
+souhlasim, pokud zustane logika, ze se NIBE ZAPINA V CO NEJLEVNEJSICH HODINACH NEBO V SOLARNI VYROBE - A POKUD JE TO POTREBA.
+
+OBECNE PLATI, ZE TOPIME ZA CO NEJVYHODNEJSICH PODMINEK, ABY BYLY TEPLOTY DOMA SPLNENE DLE PRAVIDEL.
