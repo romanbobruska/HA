@@ -1,6 +1,3 @@
-proved kompletni analyzu zmen od stable verze. proved vsechny nutne upravy, ktere jsou inkrementalni
-a neposerou nam stavajici logiku - podivej se do historie promptu.
+REKNI MI, PROC SE NETOPI PRES NIBE. V PLANU SE PISE, ZE SE TOPI, ALE NIBE ZAPNUTE NENI.
 
-Zamysli se nad tim, zda to dava smysl.
-
-prepinam na agent mod.
+POROVNEJ SE ZAKONY A REKNI  MI, KDE JE PROBLEM.

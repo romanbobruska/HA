@@ -333,6 +333,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Config: `topeni_patron_last_sol_min_kwh` (default 4)
 - Přepisuje i NIBE+Patrony mód (NIBE pokračuje, patrony stop)
 
+**v25.68 — Fix NIBE nezapíná: off-by-one chyba v needH a tGap hranicích**
+- BUG: `rf_htg_decide2` řádek 53: `needH = h.inT < h.effTgt - HYST` (strict `<`)
+  - Při inT=23.1°C, effTgt=23.3°C, HYST=0.2 → 23.1 < 23.1 = **false** → NIBE se nezapne
+  - FIX: `<` → `<=` (zapnout i na hranici hystereze)
+- BUG: řádek 96: `tGap > PM` (strict `>`, PM=0.2)
+  - Při tGap=0.2 → 0.2 > 0.2 = **false** → NIBE mód se nenastaví
+  - FIX: `>` → `>=`
+- Zákon §8.2: "dům musí být natopen na požadovanou teplotu (stejnou nebo vyšší)"
+- Po opravě: `switch.nibe_topeni = ON`, `topení mód = NIBE`
+
 **v25.66 — Realistická simulace plánu: dynamická spotřeba místo plochého socN**
 - BUG: `sim()` pro NORMAL mód v noci používala plochý `socN=5%/h` (1.4 kWh/h)
 - Skutečná noční spotřeba domu bez NIBE: ~1.0 kWh/h (3.5%/h) — přeceňování o 40-70%
