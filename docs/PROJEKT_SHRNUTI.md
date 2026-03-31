@@ -333,6 +333,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Config: `topeni_patron_last_sol_min_kwh` (default 4)
 - Přepisuje i NIBE+Patrony mód (NIBE pokračuje, patrony stop)
 
+**v25.70 — Fix dashboard "Bazén: ❌ -0 min" po NR restartu**
+- BUG 1: `filtrace_decision` early returns (NIBE komp, freeze lock) přeskočily export `filtrace_status`
+  - Dashboard zobrazoval `{run:0, minReq:0, met:false}` protože globál se nikdy nenastavil
+  - FIX: přidán `global.set("filtrace_status", ...)` před každý early return
+- BUG 2: `fs` persistence nefunguje — `global.get("fs")` vrací `undefined` v NR function nodes
+  - `filt_persist.json` se nikdy nezapsal/nepřečetl → run counter ztracen po NR restartu
+  - FIX: nahrazeno za `global.set/get("filt_persist")` (přežije NR restart)
+- BUG 3: `minReq` použito na řádku 66 před definicí na řádku 97 → `undefined`
+  - FIX: `minReq` přesunuto před inicializační blok
+
 **v25.69 — Fix proaktivní ohřev nádrže na noc + coldTank + cheapestTankHour**
 - BUG 1 (KRITICKÝ): `h.coldTank` chybělo v `rf_htg_read_001` → `undefined` → `h.tankT < undefined` = vždy false
   - Proaktivní ohřev nádrže se NIKDY nespustil
