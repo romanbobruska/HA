@@ -793,7 +793,7 @@
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "lock.terraforma"
+            "lock.yale_chytry_zamek"
         ],
         "labelId": [],
         "data": "",
@@ -825,7 +825,7 @@
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "lock.terraforma"
+            "lock.yale_chytry_zamek"
         ],
         "labelId": [],
         "data": "",
@@ -848,14 +848,14 @@
         "type": "server-state-changed",
         "z": "58f453ee71c85d6d",
         "g": "314bb66109910b71",
-        "name": "Venkovní detektory",
+        "name": "Garáž alarm",
         "server": "c7421fe2.cb11c",
         "version": 6,
         "outputs": 1,
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "alarm_control_panel.horousany_sekce_6_venkovni_detekto"
+                "alarm_control_panel.horousany_sekce_7_garaz_alarm"
             ],
             "substring": [],
             "regex": []
@@ -894,7 +894,7 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 150,
+        "x": 170,
         "y": 720,
         "wires": [
             [

@@ -5,8 +5,7 @@
         "label": "Manager nabíjení auta",
         "disabled": false,
         "info": "",
-        "env": [],
-        "func": ""
+        "env": []
     },
     {
         "id": "mgr_grp_logic",
@@ -34,8 +33,7 @@
         "x": 14,
         "y": 39,
         "w": 892,
-        "h": 262,
-        "func": ""
+        "h": 262
     },
     {
         "id": "probe_grp",
@@ -60,8 +58,7 @@
         "x": 34,
         "y": 319,
         "w": 912,
-        "h": 242,
-        "func": ""
+        "h": 242
     },
     {
         "id": "40686c99d0404f36",
@@ -91,8 +88,7 @@
             [
                 "main_logic_func"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "8f1a7b3a93bc777c",
@@ -152,8 +148,7 @@
             [
                 "main_logic_func"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "main_logic_func",
@@ -214,8 +209,7 @@
             [
                 "wallbox_stop_svc_main"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "svc_solar_off_stop",
@@ -249,8 +243,7 @@
             [
                 "svc_grid_off"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "svc_solar_off_slunce",
@@ -284,8 +277,7 @@
             [
                 "svc_grid_off_slunce"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "svc_grid_off_slunce",
@@ -319,8 +311,7 @@
             [
                 "link_out_slunce"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "link_out_slunce",
@@ -334,8 +325,7 @@
         ],
         "x": 865,
         "y": 200,
-        "wires": [],
-        "func": ""
+        "wires": []
     },
     {
         "id": "svc_solar_off_sit",
@@ -369,8 +359,7 @@
             [
                 "svc_grid_off_sit"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "svc_grid_off_sit",
@@ -404,8 +393,7 @@
             [
                 "link_out_sit"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "link_out_sit",
@@ -419,8 +407,7 @@
         ],
         "x": 865,
         "y": 260,
-        "wires": [],
-        "func": ""
+        "wires": []
     },
     {
         "id": "wallbox_stop_svc_main",
@@ -452,8 +439,7 @@
         "y": 80,
         "wires": [
             []
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_state_trigger",
@@ -513,8 +499,7 @@
             [
                 "probe_decision_func"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_decision_func",
@@ -575,8 +560,7 @@
             [
                 "probe_charger_on_svc"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_charger_on_svc",
@@ -610,8 +594,7 @@
             [
                 "probe_delay_20s"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_delay_20s",
@@ -637,8 +620,7 @@
             [
                 "probe_result_func"
             ]
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_result_func",
@@ -697,8 +679,7 @@
         "y": 440,
         "wires": [
             []
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_hlad_off_svc",
@@ -730,8 +711,7 @@
         "y": 520,
         "wires": [
             []
-        ],
-        "func": ""
+        ]
     },
     {
         "id": "probe_charger_off_svc",
@@ -763,7 +743,6 @@
         "y": 480,
         "wires": [
             []
-        ],
-        "func": ""
+        ]
     }
 ]
