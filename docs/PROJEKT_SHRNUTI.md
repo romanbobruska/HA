@@ -333,6 +333,17 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Config: `topeni_patron_last_sol_min_kwh` (default 4)
 - Přepisuje i NIBE+Patrony mód (NIBE pokračuje, patrony stop)
 
+**v25.69 — Fix proaktivní ohřev nádrže na noc + coldTank + cheapestTankHour**
+- BUG 1 (KRITICKÝ): `h.coldTank` chybělo v `rf_htg_read_001` → `undefined` → `h.tankT < undefined` = vždy false
+  - Proaktivní ohřev nádrže se NIKDY nespustil
+  - FIX: přidáno `coldTank:cfg.topeni_chladna_nadrz||40` do h objektu
+- BUG 2: `!h.isDraha` blokoval noční ohřev nádrže — v noci mohou být všechny hodiny drahé
+  - FIX: nahrazeno za `cheapestTankHour()` — najde nejlevnější hodinu před solarem
+  - Zákon §8.2: "topíme za co nejvýhodnějších podmínek"
+- FIX 3: nová noční větev — pokud je noc, nádrž < coldTank, zítra nízký solar → NIBE ON v nejlevnější hodině
+- INCIDENT: deploy přepsal "Automatizuj ostatní" (9 chybějících nodů + broken encoding)
+  - Obnoveno ze zálohy `.flows.json.backup`, synced VŠECH 13 tabů server→git
+
 **v25.68 — Fix NIBE nezapíná: off-by-one chyba v needH a tGap hranicích**
 - BUG: `rf_htg_decide2` řádek 53: `needH = h.inT < h.effTgt - HYST` (strict `<`)
   - Při inT=23.1°C, effTgt=23.3°C, HYST=0.2 → 23.1 < 23.1 = **false** → NIBE se nezapne

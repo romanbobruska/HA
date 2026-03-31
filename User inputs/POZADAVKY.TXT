@@ -62,6 +62,8 @@ jistá, NEZASADÍ a vysvětlí proč.
 2. DEPLOYMENT A WORKFLOW
 ================================================================================
 
+2.0 OBECNE PLATI, ZE NASAZUJEME JEN ZMENENE A NOVE OBJEKTY - NENASAZUJEME VZDY VSE!!! DALE PLATI, ZE UDRZUJEME SERVER, 
+    LOKALNI ULOZISTE A GIT CISTY OD NEPOTREBNYCH OBJEKTU - NENECHAVAME STARE, NEPOTREBNE OBJEKTY HNIT
 2.1 DEPLOY PŘÍKAZ (jediný správný způsob)
     ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com \
       roman@192.168.0.30 \
