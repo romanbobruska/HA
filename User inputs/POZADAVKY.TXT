@@ -63,7 +63,10 @@ jistá, NEZASADÍ a vysvětlí proč.
 ================================================================================
 
 2.0 OBECNE PLATI, ZE NASAZUJEME JEN ZMENENE A NOVE OBJEKTY - NENASAZUJEME VZDY VSE!!! DALE PLATI, ZE UDRZUJEME SERVER, 
-    LOKALNI ULOZISTE A GIT CISTY OD NEPOTREBNYCH OBJEKTU - NENECHAVAME STARE, NEPOTREBNE OBJEKTY HNIT
+    LOKALNI ULOZISTE A GIT CISTY OD NEPOTREBNYCH OBJEKTU - NENECHAVAME STARE, NEPOTREBNE OBJEKTY HNIT.
+    Proto musíme mít v gitu aktuální server verzi VŠECH tabů (sync server→git před každou změnou), aby merge nic nepřepsal.
+2.0.1 NACIST SI VZDY ZAKONY A MD FILY, POKUD TO NEMAM, 
+    ABYCH BYL V KONTEXTU PRED TIM, NEZ ZACNU NECO ANALYZOVAT NEBO DOKONCE NASAZOVAT!!!
 2.1 DEPLOY PŘÍKAZ (jediný správný způsob)
     ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com \
       roman@192.168.0.30 \
