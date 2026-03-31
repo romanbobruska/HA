@@ -32,9 +32,9 @@
             "04485a466ad52c1e",
             "solar_corr_inject_20s"
         ],
-        "x": 24,
+        "x": 26,
         "y": 459,
-        "w": 1084,
+        "w": 1082,
         "h": 382
     },
     {
@@ -62,7 +62,7 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 940,
+        "x": 960,
         "y": 400,
         "wires": [
             []
@@ -116,8 +116,8 @@
         "blockInputOverrides": true,
         "domain": "automation",
         "service": "trigger",
-        "x": 890,
-        "y": 208,
+        "x": 930,
+        "y": 220,
         "wires": [
             []
         ]
@@ -272,7 +272,7 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 722,
+        "x": 710,
         "y": 660,
         "wires": [
             [
@@ -471,8 +471,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 152,
-        "y": 729,
+        "x": 160,
+        "y": 720,
         "wires": [
             [
                 "04485a466ad52c1e"
@@ -503,7 +503,7 @@
         "blockInputOverrides": true,
         "domain": "select",
         "service": "select_option",
-        "x": 920,
+        "x": 940,
         "y": 160,
         "wires": [
             [
@@ -536,8 +536,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 910,
-        "y": 320,
+        "x": 930,
+        "y": 340,
         "wires": [
             [
                 "459839492fb6e054"
@@ -569,8 +569,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_on",
-        "x": 920,
-        "y": 260,
+        "x": 940,
+        "y": 280,
         "wires": [
             [
                 "7e1e1d4a89bf0bc1"
@@ -614,7 +614,7 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 512,
+        "x": 500,
         "y": 660,
         "wires": [
             [
@@ -832,8 +832,8 @@
         "once": true,
         "onceDelay": "30",
         "topic": "",
-        "x": 160,
-        "y": 760,
+        "x": 470,
+        "y": 720,
         "wires": [
             [
                 "f4f87ba21653eda5"

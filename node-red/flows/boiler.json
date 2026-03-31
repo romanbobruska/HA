@@ -75,7 +75,7 @@
             "8d401c2a5bd5d0ef",
             "3472b1985ec023f5"
         ],
-        "x": 214,
+        "x": 194,
         "y": 539,
         "w": 612,
         "h": 150
@@ -712,7 +712,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 330,
         "y": 620,
         "wires": [
             [
@@ -747,7 +747,7 @@
         "blockInputOverrides": false,
         "domain": "climate",
         "service": "set_temperature",
-        "x": 690,
+        "x": 670,
         "y": 640,
         "wires": [
             []
@@ -767,7 +767,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 670,
+        "x": 650,
         "y": 580,
         "wires": []
     },
