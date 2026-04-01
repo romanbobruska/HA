@@ -353,6 +353,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+**v25.72 — Pravidlo posledních solárních hodin pro auto + patrony (2026-04-01)**
+- NOVÝ §5.2 v zákonech: v posledních N solárních hodinách (config `posledni_solarni_hodiny: 2`)
+  se auto NENABÍJÍ ze solaru a patrony se NEVYPUSTÍ — přednost má nabití baterie na 100% SOC
+- FIX 1: `fve-config.json` — nový parametr `posledni_solarni_hodiny: 2`
+- FIX 2: `rf_htg_decide2` ř.118 — `hToLastSol <= 0` → `hToLastSol < LAST_SOL_HRS` (patrony)
+- FIX 3: `main_logic_func` (manager nabíjení auta) — nový blok po SOC check:
+  pokud isSol && hToLastSol < 2 && zbSolar < 4kWh && !zákazPřetoků → STOP (nenabíjet auto)
+- Podmínka: pravidlo se NEaplikuje při zákazu přetoků (záporná prodejní cena)
+- Deploy: `--no-ha`, server flows synced předem
+
 **v25.71 — Fix NIBE topí nádrž ze sítě při velkém solaru (2026-04-01)**
 - BUG: `rf_htg_decide2` řádek 100: `!needH && tankT < coldTank && cheapestTankHour()` → `mod = "NIBE"`
   - Chyběla kontrola `!h.highSolDay` — NIBE topila nádrž ze sítě (4.53 Kč/kWh × 7 kWh = ~32 Kč)
