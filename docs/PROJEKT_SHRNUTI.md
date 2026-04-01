@@ -353,6 +353,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+**v25.73 — Fix fve_dostupny_prebytek ukazoval výrobu místo přebytku (2026-04-01)**
+- BUG: `template_sensors.yaml` sensor `fve_rozdil_vyroby_a_spotreby` četl neexistující entity:
+  - `sensor.ac_loads_L1/L2/L3` → neexistují, float(0)=0 → spotřeba=0
+  - `sensor.battery_power_plus` → neexistuje, float(0)=0 → nabíjení=0
+  - Výsledek: přebytek = výroba (4973W místo reálných ~293W)
+- DOPAD: manager nabíjení auta spouštěl solární nabíjení i když výroba nestačila na 6A + spotřebu domu
+- FIX: opraveny entity IDs na `sensor.ac_loads/ac_loads_2/ac_loads_3` + `sensor.nabijeni_baterii_plus`
+- Deploy: s HA restartem (template sensor změna), ověřeno — sensor teď ukazuje reálný přebytek
+
 **v25.72 — Pravidlo posledních solárních hodin pro auto + patrony (2026-04-01)**
 - NOVÝ §5.2 v zákonech: v posledních N solárních hodinách (config `posledni_solarni_hodiny: 2`)
   se auto NENABÍJÍ ze solaru a patrony se NEVYPUSTÍ — přednost má nabití baterie na 100% SOC
