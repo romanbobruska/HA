@@ -353,6 +353,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+**v25.74 — Fix trim logiky — zbytečné Šetřit místo vybíjení baterie (2026-04-01)**
+- BUG: Trim v rf_arb_trimming_3 používal `sellTarget` (§4.5 cíl pro PRODEJ) jako základ pro projected
+  end SOC. Tím odebíral levné hodiny z discharge plánu → Šetřit (kupuje ze sítě za 4+ Kč) místo
+  NORMAL (baterie pokryje spotřebu zadarmo). Porušení §4.9.
+- FIX: `(x.sellTarget||x.cSoc)` → `x.cSoc` (4 výskyty). sellTarget zůstává pro PRODEJ v kroku 4.
+- DOPAD: Plán vybíjí baterii ve všech hodinách kde je to ekonomicky výhodné. Solar další den dobije.
+- Soubor: fve-orchestrator.json (node rf_arb_trimming_3)
+
 **v25.73 — Fix fve_dostupny_prebytek ukazoval výrobu místo přebytku (2026-04-01)**
 - BUG: `template_sensors.yaml` sensor `fve_rozdil_vyroby_a_spotreby` četl neexistující entity:
   - `sensor.ac_loads_L1/L2/L3` → neexistují, float(0)=0 → spotřeba=0
