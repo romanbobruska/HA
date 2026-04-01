@@ -353,6 +353,17 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+**v25.75 — NIBE spotřeba v nočních hodinách simulace plánu (2026-04-01)**
+- BUG: spotrebovaZtrataProc (nesluneční hodiny) nepřičítala NIBE spotřebu. Plán ukazoval pokles
+  SOC jen ~5%/h (spotřeba domu), ale NIBE v levné noční hodině přidává 7 kWh (→ dalších ~25% SOC).
+- FIX v rf_gen_plan_0004:
+  1. spotrebovaZtrataProc přijímá level parametr, přičítá NIBE v levných hodinách (level<DRAHA)
+  2. nibeVNoci flag + "(NIBE topí)" reason v nočních hodinách
+  3. Consumption cap zvýšen z dayCons/4 na dayCons/2 (umožňuje NIBE peak 7 kWh + spotřeba)
+- Pravidla: §4.9.1 ř.255-262 — NIBE jen v levných hodinách (§8.3: v drahých NIBE netopí)
+- NIBE se nepřičítá pokud historický log má data (už obsahuje NIBE v průměru)
+- Soubor: fve-orchestrator.json (node rf_gen_plan_0004)
+
 **v25.74 — Fix trim logiky — zbytečné Šetřit místo vybíjení baterie (2026-04-01)**
 - BUG: Trim v rf_arb_trimming_3 používal `sellTarget` (§4.5 cíl pro PRODEJ) jako základ pro projected
   end SOC. Tím odebíral levné hodiny z discharge plánu → Šetřit (kupuje ze sítě za 4+ Kč) místo
