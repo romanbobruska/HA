@@ -232,11 +232,11 @@
   device_class: power
   state: >
     {% set vyroba = states('sensor.vyroba_fve') | float(0) %}
-    {% set spotreba_L1 = states('sensor.ac_loads_L1') | float(0) %}
-    {% set spotreba_L2 = states('sensor.ac_loads_L2') | float(0) %}
-    {% set spotreba_L3 = states('sensor.ac_loads_L3') | float(0) %}
+    {% set spotreba_L1 = states('sensor.ac_loads') | float(0) %}
+    {% set spotreba_L2 = states('sensor.ac_loads_2') | float(0) %}
+    {% set spotreba_L3 = states('sensor.ac_loads_3') | float(0) %}
     {% set spotreba = spotreba_L1 + spotreba_L2 + spotreba_L3 %}
-    {% set nabijeni_baterie = states('sensor.battery_power_plus') | float(0) %}
+    {% set nabijeni_baterie = states('sensor.nabijeni_baterii_plus') | float(0) %}
     {{ (vyroba - spotreba - nabijeni_baterie) | round(0) }}
 
 - name: "FVE Dostupný přebytek"
