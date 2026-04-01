@@ -353,6 +353,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+**v25.71 — Fix NIBE topí nádrž ze sítě při velkém solaru (2026-04-01)**
+- BUG: `rf_htg_decide2` řádek 100: `!needH && tankT < coldTank && cheapestTankHour()` → `mod = "NIBE"`
+  - Chyběla kontrola `!h.highSolDay` — NIBE topila nádrž ze sítě (4.53 Kč/kWh × 7 kWh = ~32 Kč)
+    i když solar forecast dnes = 53 kWh → patrony/NIBE by natopily zadarmo v solárních hodinách
+  - Zákon §8.2: "DOTOPI SE NADRZ ZA CO NEJNIZSI CENU, POKUD NENI SOLARNI VYROBA DOSTATECNA"
+- FIX: přidáno `!h.highSolDay` na řádky 100 a 102 (obecná + noční větev)
+  - Pokud `highSolDay` (dnes ≥ 50 kWh): NIBE NETOPÍ nádrž ze sítě, čeká na solární hodiny
+- Deploy: `--no-ha` (jen NR restart), server flows synced předem
+
 **v25.70 — Fix dashboard "Bazén: ❌ -0 min" po NR restartu**
 - BUG 1: `filtrace_decision` early returns (NIBE komp, freeze lock) přeskočily export `filtrace_status`
   - Dashboard zobrazoval `{run:0, minReq:0, met:false}` protože globál se nikdy nenastavil
