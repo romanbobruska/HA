@@ -370,6 +370,16 @@ A ZAKAZU PRETOKU
         - tato korekcni smycka by mela automaticky zastavit charger, pokud se zvedne spotreba domu - napr. zacne topit
             NIBE - jelikoz to bude mit v rozdilu spotreby a vyroby. Nepotrebujeme zadny MUTEX
 
+5.2 PRAVIDLO POSLEDNÍCH SOLÁRNÍCH HODIN PRO NABÍJENÍ AUTA ZE SLUNCE
+    - Pokud je aktuální hodina v posledních N solárních hodinách dne (config: posledni_solarni_hodiny, výchozí 2)
+      a zbývající solární výroba je menší než topeni_patron_last_sol_min_kwh (výchozí 4 kWh)
+      a NENÍ zákaz přetoků (záporná prodejní cena):
+      → auto se NENABÍJÍ ze solaru, přednost má nabití baterie na 100% SOC.
+    - Důvod: v posledních solárních hodinách je lepší nechat baterii nabít na 100% pro využití v noci,
+      než ji vybíjet přes nabíjení auta při nízkém zbytkovém solárním zisku.
+    - Toto pravidlo je analogické k §8.5 PRAVIDLO POSLEDNÍ SOLÁRNÍ HODINY pro patrony.
+    - Config parametr posledni_solarni_hodiny je sdílený pro patrony i nabíjení auta.
+
 
 ================================================================================
 6. FLOW: NABÍJENÍ AUTA ZE SÍTĚ (nabijeni-auta-sit.json)
