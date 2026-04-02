@@ -1,7 +1,7 @@
 # Kontext konverzace — FVE řízení
 
 > **⚠️ ZASTARALÝ SOUBOR** — Historický log sessions. Aktuální stav systému je v `docs/PROJEKT_SHRNUTI.md`.
-> Požadavky a zákony jsou výhradně v `User inputs/POZADAVKY.TXT`.
+> Požadavky a zákony jsou výhradně v `User inputs/ZAKONY.TXT`.
 
 ## Aktuální stav (v19.3, 2026-03-04)
 
@@ -24,7 +24,7 @@ Všechny fixy jsou nasazeny a ověřeny.
 
 ### Deploy pravidla (historický zápis — aktuální stav v `docs/PROJEKT_SHRNUTI.md`)
 - Dříve platilo „jen Node-RED“; **`deploy.sh` na `main` nyní výchozí restartuje i Home Assistant Core** (šablony, `input_select`, …). Pro nasazení jen flow bez restartu Core: **`bash deploy.sh --no-ha`**.
-- Deploy se spouští klonem do `/tmp/HA` podle § 2.1 v `POZADAVKY.TXT`.
+- Deploy se spouští klonem do `/tmp/HA` podle § 2.1 v `ZAKONY.TXT`.
 
 ---
 

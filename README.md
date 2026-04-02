@@ -56,7 +56,7 @@ HA/
     ├── UZIVATELSKA_PRIRUCKA.md  # Uživatelská příručka
     ├── KONVERZACE_KONTEXT.md    # Historické poznámky (volitelně)
     ├── AI_PREHLED_TABULEK.md    # Jediný soubor pro AI výstupy na vyžádání
-    └── TOPENI_POZADAVKY.md      # Reference entit topení (zákony = POZADAVKY)
+    └── TOPENI_POZADAVKY.md      # Reference entit topení (zákony = User inputs/ZAKONY.TXT)
 ```
 
 ## Globální proměnné Node-RED

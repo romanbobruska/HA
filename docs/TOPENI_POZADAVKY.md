@@ -1,8 +1,8 @@
 # Topení — reference entit a `fve_config` (ne zákony)
 
 > **⚠️ Tento soubor není zdroj pravidel.**  
-> Všechna závazná pravidla chování (NIBE × patrony, drahé hodiny, ochrana kompresoru, `auto_ma_hlad`, bazén, …) jsou **výhradně** v **`User inputs/POZADAVKY.TXT`**.  
-> Při jakémkoli rozporu nebo pochybnosti platí **POZADAVKY** — ne tento soubor.
+> Všechna závazná pravidla chování (NIBE × patrony, drahé hodiny, ochrana kompresoru, `auto_ma_hlad`, bazén, …) jsou **výhradně** v **`User inputs/ZAKONY.TXT`**.  
+> Při jakémkoli rozporu nebo pochybnosti platí **`ZAKONY.TXT`** — ne tento soubor.
 
 **Účel tohoto souboru:** rychlý přehled **HA entit**, **aktuátorů** a **jmenných klíčů** v `fve_config` souvisejících s topením.  
 **Implementace:** `node-red/flows/fve-heating.json`.
@@ -13,7 +13,7 @@
 
 - **NIBE F1345** — nádrž (~14 kW peak), řízení allow přes Modbus 47371  
 - **Oběhové čerpadlo** — tlačí teplo z nádrže do domu  
-- **Patrony** (3× ~3 kW) — přetok do nádrže dle logiky ve flow a **POZADAVKY**  
+- **Patrony** (3× ~3 kW) — přetok do nádrže dle logiky ve flow a **`ZAKONY.TXT`**  
 - **Bazénový ventil** — přepínání okruhu  
 
 ---
@@ -71,4 +71,4 @@
 | `topeni_max_teplota_patron` | 60 | Max. °C nádrže při patronách |
 | `prah_draha_energie` | 12 | Level drahé energie (sdíleno s FVE) |
 
-*(Další klíče pro patrony / NIBE / solar override jsou v `fve_config` ve flow — pravda o významu a limitech v **POZADAVKY** a v kódu `fve-heating.json`.)*
+*(Další klíče pro patrony / NIBE / solar override jsou v `fve_config` ve flow — pravda o významu a limitech v **`ZAKONY.TXT`** a v kódu `fve-heating.json`.)*

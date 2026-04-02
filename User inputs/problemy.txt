@@ -1,2 +1,3 @@
-dokonci vse dle zakonu!!! nenechavej nic na me!!! zmonitoruj server, ze je vse dle zakonu ok a ze tvoje nasazeni 
-opravy zafungovalo!
+PREJMENOVAL JSEM POZADAVKY.TXT NA ZAKONY.TXT. ZAPAMATUJ SI, ZE ZAKONY JSOU OD TETO CHVILE V ZAKONY.TXT.
+
+ZAROVEN VIDIM, ZE  Bazén: ✅ OK (60/60 min). PREDTIM TAM BYLO 62 MINUT. PROC SE TO ZMENILO?

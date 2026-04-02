@@ -5,7 +5,7 @@ description: Jak správně provést deploy změn do HA/Node-RED
 ## Povinný workflow pro KAŽDÝ prompt
 
 ### 1. Na začátku KAŽDÉHO promptu
-- Přečíst `User inputs/POZADAVKY.TXT` (zákony projektu)
+- Přečíst `User inputs/ZAKONY.TXT` (zákony projektu)
 - Přečíst `problemy.txt` (uživatelovy aktuální problémy/požadavky)
 - Přečíst `docs/PROJEKT_SHRNUTI.md` (kontext systému)
 
@@ -29,7 +29,7 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 ### 4. Po deployi (VŽDY)
 - Zkontrolovat NR logy: `ssh ... "sudo docker logs addon_a0d7b954_nodered --since 2m 2>&1 | grep -i -E 'error|warn|exception' | tail -10"`
 - Ověřit HA stavy (filtrace, baterie, grid draw, wallbox)
-- Ověřit soulad se zákony z POZADAVKY.TXT
+- Ověřit soulad se zákony z ZAKONY.TXT
 - Aktualizovat `docs/PROJEKT_SHRNUTI.md`
 - Git commit + push
 
