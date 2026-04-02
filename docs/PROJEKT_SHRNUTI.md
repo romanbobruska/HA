@@ -359,6 +359,7 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Fix** (`filtrace-bazenu.json`): oba výstupy gate vedou na `filtrace_st_state`; do zprávy `automatizovatFiltrace`; v `filtrace_decision` při `autoOn === false` se nevolají služby ON/OFF, jen se pokračuje v inkrementu `filt_run`, persist `filt_persist` a export `filtrace_status`.
 - **Deploy**: `deploy.sh --no-ha`; git `main` commit `08302fe`. Post-deploy ověření: `flows.json` na serveru obsahuje `autoOn` / `automatizovatFiltrace` (grep).
 - **Poznámka**: `ha apps logs …` z běžné SSH session bez tokenu může vracet 401 — logy NR ověřit v UI doplňku nebo přes API s tokenem.
+- **Monitoring (2026-04-02, po nasazení)**: Home Assistant API — `sensor.fve_plan_data` → `filtrace_status` platné (např. `run`/`minReq`/`met`); SSH `ha apps info a0d7b954_nodered` → `state: started`; na serveru smazány dočasné `/tmp/check*.py` dle § 2.4.
 
 **v25.75 — NIBE spotřeba v nočních hodinách simulace plánu (2026-04-01)**
 - BUG: spotrebovaZtrataProc (nesluneční hodiny) nepřičítala NIBE spotřebu. Plán ukazoval pokles
