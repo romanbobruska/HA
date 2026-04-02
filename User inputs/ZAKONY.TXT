@@ -1,5 +1,5 @@
 ================================================================================
-  POŽADAVKY A ZÁKONY PROJEKTU FVE AUTOMATIZACE
+  ZÁKONY PROJEKTU FVE AUTOMATIZACE
   Horoušany — 17 kWp, Pylontech 28 kWh, Victron ESS, NIBE F1345
 ================================================================================
 
@@ -10,7 +10,7 @@ ověří, že navrhované řešení je v souladu s těmito zákony. Pokud si AI 
 jistá, NEZASADÍ a vysvětlí proč.
 
 ================================================================================
-1. OBECNÉ POŽADAVKY A ABSOLUTNÍ PRAVIDLA
+1. OBECNÉ ZÁKONY A ABSOLUTNÍ PRAVIDLA
 ================================================================================
 
 1.0 MAIN GOAL CELEHO PROJEKTU - NEBRAT ZE SITE VICE, NEZ JE POTREBA - GOAL JE CO NEJMENE UTRATIT ZA ELEKTRINU
@@ -437,7 +437,7 @@ A ZAKAZU PRETOKU
     - Stop path fyzicky zastavuje wallbox (switch.wallbox_garaz_start_stop = OFF)
 
 7.3 AUTO MÁ HLAD — DEFINICE
-    - input_boolean.auto_ma_hlad = ON nebo OFF. Pokud ON, auto se chce nab9jet, pokud OFF, auto uz je nabito. nic více, nic méně.
+    - input_boolean.auto_ma_hlad = ON nebo OFF. Pokud ON, auto se chce nabíjet, pokud OFF, auto uz je nabito. nic více, nic méně.
 
 ================================================================================
 8. FLOW: TOPENÍ DOMU (fve-heating.json)
@@ -486,6 +486,7 @@ A ZAKAZU PRETOKU
             - teplota v dome -0.5 stupne od nastavene teploty v dome je chtena. ale - pokud nastanou podminky, ktere zapricini to, ze se 
               musi natopit nadrz i v noci, ok - napr. je levna cena, zitra nebude seolarni vyroba dostatecna, teplota v noci 
               je nizka, takze vychladi dum apod.
+    - MOD PATRONY SE ZAPNE AZ TEHDY, KDY TO DAVA SMYSL - NE NAPR. V NOCI, KDY NENI SOLARNI PREBYTEK ATP.
     
 
 
