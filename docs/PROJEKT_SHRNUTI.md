@@ -744,6 +744,18 @@ Victron ESS control loop nestíhal reagovat a baterie pokrývala deficit.
 
 ---
 
+### v25.78: Probe lock proti race condition (2026-04-02)
+
+**Fix konfliktu probe vs. solární smyčka** (`manager-nabijeni-auta.json`, `nabijeni-auta-slunce.json`):
+- Root cause: Smart Probe (20s diagnostika) a solární korekční smyčka řídily ve stejný čas stejný wallbox start/stop.
+- Důsledek: oscilace a konflikt příkazů, které vedly k nestabilnímu chování nabíjení auta.
+- Fix:
+  - `manager-nabijeni-auta.json`: během probe se nastavuje globální lock `garage_probe_active=true`, po ukončení/rušení probe se vrací na `false`.
+  - `nabijeni-auta-slunce.json`: při `garage_probe_active=true` se korekční smyčka okamžitě pozastaví (`return null`) a na wallbox nesahá.
+- Deploy: `deploy.sh --no-ha`, Node-RED start HTTP 200, audit groups OK.
+
+---
+
 ## 10. Solární instalace
 
 - **Výkon**: 17 kWp, **Lokace**: Horoušany (50.10°N, 14.74°E)
