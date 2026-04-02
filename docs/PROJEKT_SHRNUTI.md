@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-03-31 (deploy workflow poučení, v25.68-70)
+> Poslední aktualizace: 2026-04-02 (v25.76 filtrace ruční měření, post-deploy § 2.4)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -352,6 +352,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 **INCIDENT 3: Git push před ověřením**
 - Příčina: Porušení §2.5 — pushoval jsem do gitu PŘED ověřením, že nasazení je OK.
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
+
+**v25.76 — Filtrace: měření času i při vypnuté automatizaci (2026-04-02)**
+- **Problém**: Gate „Automatizovat filtraci?“ posílal zprávu při OFF automatizace na prázdný výstup → `filtrace_decision` se nespouštěla → `filt_run` / `global.filtrace_status` neodpovídaly ručnímu běhu čerpadla (dashboard „Bazén: XX/YY min“).
+- **Zákon**: POZADAVKY § 10 — do celkového času se započítá veškerá filtrace včetně ručního spuštění.
+- **Fix** (`filtrace-bazenu.json`): oba výstupy gate vedou na `filtrace_st_state`; do zprávy `automatizovatFiltrace`; v `filtrace_decision` při `autoOn === false` se nevolají služby ON/OFF, jen se pokračuje v inkrementu `filt_run`, persist `filt_persist` a export `filtrace_status`.
+- **Deploy**: `deploy.sh --no-ha`; git `main` commit `08302fe`. Post-deploy ověření: `flows.json` na serveru obsahuje `autoOn` / `automatizovatFiltrace` (grep).
+- **Poznámka**: `ha apps logs …` z běžné SSH session bez tokenu může vracet 401 — logy NR ověřit v UI doplňku nebo přes API s tokenem.
 
 **v25.75 — NIBE spotřeba v nočních hodinách simulace plánu (2026-04-01)**
 - BUG: spotrebovaZtrataProc (nesluneční hodiny) nepřičítala NIBE spotřebu. Plán ukazoval pokles
