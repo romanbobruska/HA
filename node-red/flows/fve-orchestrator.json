@@ -379,7 +379,7 @@
         "type": "link out",
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
-        "name": "Ôćĺ Normal",
+        "name": "→ Normal",
         "mode": "link",
         "links": [
             "8b55cfc5181b9eb7"
@@ -449,7 +449,7 @@
         "type": "server-state-changed",
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
-        "name": "Zm─Ťna stavu wallboxu",
+        "name": "Změna stavu wallboxu",
         "server": "c7421fe2.cb11c",
         "version": 6,
         "outputs": 1,
@@ -605,7 +605,7 @@
         "type": "server-state-changed",
         "z": "d86bb11fab512182",
         "g": "66210c073baa5af0",
-        "name": "Zm─Ťna stavu sauny",
+        "name": "Změna stavu sauny",
         "server": "c7421fe2.cb11c",
         "version": 6,
         "outputs": 1,

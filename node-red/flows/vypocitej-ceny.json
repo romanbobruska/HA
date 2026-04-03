@@ -211,7 +211,7 @@
         "mydb": "6d97960f9560e05b",
         "sqlquery": "msg.topic",
         "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
-        "name": "Prove─Ć insert",
+        "name": "Proveď insert",
         "x": 650,
         "y": 340,
         "wires": [
@@ -429,7 +429,7 @@
         "type": "split",
         "z": "d32891aad318f0e3",
         "g": "b44cdb66e54727f6",
-        "name": "Rozd─Ťl sekce",
+        "name": "Rozděl sekce",
         "splt": "\\n",
         "spltType": "str",
         "arraySplt": "1",
@@ -512,7 +512,7 @@
         "mydb": "6d97960f9560e05b",
         "sqlquery": "msg.topic",
         "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
-        "name": "Prove─Ć insert",
+        "name": "Proveď insert",
         "x": 648,
         "y": 180,
         "wires": [
@@ -724,7 +724,7 @@
         "mydb": "6d97960f9560e05b",
         "sqlquery": "msg.topic",
         "sql": "CREATE TABLE \"own_energy_prices\"   (\n  \"day\" VARCHAR(20) NOT NULL,\n  \"hour\" INTEGER NOT NULL,\n  \"minute\" INTEGER NOT NULL,\n  \"priceEur\" REAL NOT NULL,\n  \"priceCZK\" REAL NOT NULL,\n  \"level\" VARCHAR(20) NOT NULL,\n  \"levelNum\" INTEGER NOT NULL\n);\n",
-        "name": "Prove─Ć update",
+        "name": "Proveď update",
         "x": 651,
         "y": 440,
         "wires": [
