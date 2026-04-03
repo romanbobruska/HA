@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-02 (v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
+> Poslední aktualizace: 2026-04-03 (v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -357,6 +357,14 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - Jediný soubor zákonů projektu je nyní **`User inputs/ZAKONY.TXT`** (obsah beze změny názvu uvnitř souboru).
 - Aktualizovány odkazy: `.cursor/rules/ha-problemy.mdc`, `docs/*`, `README.md`, `.windsurf/workflows/deploy.md`.
 - Git: odstraněn track `POZADAVKY.TXT`, přidán `ZAKONY.TXT`.
+
+**v25.78 — Auto nabíjení při zákazu přetoků + vysokém SOC (2026-04-03)**
+- **Problém**: Při `zakaz_pretoku` (záporná prodejní cena), SOC≥95 % a solární výrobě manager nabíjení auta nespouštěl solární nabíjení — vyžadoval `fve_dostupny_prebytek > 4000W`, ale při zákazu přetoků přebytek nízký (baterie plná, export blokovaný).
+- **Zákon**: §4.6 — při SOC≥95 % a nemožnosti exportu → energii do spotřebičů dle priorit; §5.1 — solární nabíjení auta; §1 — auto priorita 2.
+- **Fix** (`manager-nabijeni-auta.json`, `main_logic_func`): nový blok před `solCyklus` check:
+  `zakaz_pretoku + SOC≥drain_prah(95%) + solar>1kW + gridDraw<200W → SLUNCE`
+- Grid draw kontrola (`_gridW < nabijeni_auta_max_grid_w`) zabraňuje spuštění když dům už bere hodně ze sítě (prevence oscilace zapnout/vypnout).
+- Deploy: `--no-ha`, commity `44d6839` + `25498b4`.
 
 **v25.76 — Filtrace: měření času i při vypnuté automatizaci (2026-04-02)**
 - **Problém**: Gate „Automatizovat filtraci?“ posílal zprávu při OFF automatizace na prázdný výstup → `filtrace_decision` se nespouštěla → `filt_run` / `global.filtrace_status` neodpovídaly ručnímu běhu čerpadla (dashboard „Bazén: XX/YY min“).
