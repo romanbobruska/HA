@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-03 (v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
+> Poslední aktualizace: 2026-04-03 (v25.79 fix hladu auta + ultra levná vybíjení; v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -764,6 +764,25 @@ Victron ESS control loop nestíhal reagovat a baterie pokrývala deficit.
 - Přidáno `fs:require("fs")` do `functionGlobalContext` → dostupné ve všech function nodes jako `global.get("fs")`
 
 ---
+
+### v25.79: Fix hladu auta + ultra levná vybíjení při zákazu přetoků (2026-04-03)
+
+**Problém 1: `auto_ma_hlad = OFF` i když auto mělo hlad**
+- Root cause: `probe_decision_func` neošetřoval stav 6 (WaitStart). Když manager zastavil wallbox (stav přešel na 6), probe nereagoval a `garage_hunger` zůstal na poslední hodnotě. Pokud se mezitím ztratil (ručně/jiný mechanismus), nikdo probe znovu nespustil.
+- Fix: přidáno ošetření `newState === 6` — pokud auto dosud nebylo probeováno (`garage_probed = false`), spustí se probe. Jinak se zachová aktuální `garage_hunger`.
+- Nový flag `garage_probed` (flow context): nastaví se na `true` po dokončení probe (`probe_result_func`), na `false` při startu nového probe.
+
+**Problém 2: Baterie se nevybíjela při ultra levné ceně + SOC ≥ 95%**
+- Root cause: `zakaz_pretoku` logika (`75d1f9e77bc15e0a`) při ultra levné ceně (buy < 1.0 Kč) blokovala vybíjení baterie (`max_discharge_power = solarPassthrough`). Ale zákon §4.6 říká: při SOC ≥ 95% energie MUSÍ jít do spotřebičů dle priorit, aby se neomezovala solární výroba.
+- Fix: nová proměnná `ultraLevnaBlokuj = ultraLevna && currentSoc < DRAIN_PRAH (95%)`. Při SOC ≥ 95% se vybíjení NEblokuje i při ultra levné ceně.
+- Výsledek: `max_discharge_power = -1` (neomezeno), grid draw klesl z 1094 W na ~37 W.
+
+**Problém 3: Manager nespouštěl nabíjení auta při ultra levné ceně**
+- Root cause: podmínka `_zakazOk` v `main_logic_func` vyžadovala `_gridW < 200W`. Při ultra levné ceně grid draw byl vysoký (protože baterie nevybíjela), takže podmínka nebyla splněna.
+- Fix: uvolněna podmínka: `_gridW < 200 || _ultraLevna` — při ultra levné ceně grid draw je očekávaný a po spuštění nabíjení auta se sníží (baterie začne vybíjet).
+
+**Nasazeno**: deploy.sh (s HA restartem), commit `91e1a66`.
+**Ověřeno**: auto_ma_hlad=ON, wallbox=ON, charger_state=2 (nabíjí), grid=17W, solár=5285W.
 
 ### v25.78: Probe lock proti race condition (2026-04-02)
 
