@@ -1,3 +1,8 @@
-PREJMENOVAL JSEM POZADAVKY.TXT NA ZAKONY.TXT. ZAPAMATUJ SI, ZE ZAKONY JSOU OD TETO CHVILE V ZAKONY.TXT.
+chtel bych, abych se prepnul na MINT, nainstaloval cursor a maximalne spustil 
+jeden ssh soubor - a byl bych v tom samem projektu, s nastavenim, ktere
+mam tady. nic nic nechci delat. dej mi ten soubor do tohoto projektu do 
+diru migrace - pokud budes potebovat 2 soubory, ok. ale chci na ne pouze kliknout.
 
-ZAROVEN VIDIM, ZE  Bazén: ✅ OK (60/60 min). PREDTIM TAM BYLO 62 MINUT. PROC SE TO ZMENILO?
+ne resit, jak nastavit mct, ssh key a podobne.
+
+rozumime si???
