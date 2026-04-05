@@ -333,7 +333,10 @@ A ZAKAZU PRETOKU
         2. Nabíjení baterie — automaticky přes PSP, neomezeně
         3. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě
         4. Patrony — zapnout max fází BEZ ohledu na SOC/solar/auto_ma_hlad
-        5. Filtrace bazénu — NEJNIŽŠÍ PRIORITA. Zapnout JEN pokud je prostor pod jističem
+        5. Bojler — nastavit MAX (69°C) pokud je prostor pod jističem
+           (max_spotreba_sit_w - aktuální_odběr >= 2500W). Ignoruje normální prahy přebytku,
+           auto_ma_hlad degradaci a baterie/forecast podmínky. Bojler je VŽDY důležitější než filtrace!
+        6. Filtrace bazénu — NEJNIŽŠÍ PRIORITA. Zapnout JEN pokud je prostor pod jističem
            (max_spotreba_sit_w - aktuální_odběr >= 2500W). I když minimum splněno (met=true).
            NIBE kompresor NEBLOKUJE filtraci v tomto módu. T_FREEZE stále platí (bezpečnost).
            Anti-cycling a min continuous run (15 min) zachovány proti oscilaci.
@@ -351,6 +354,9 @@ A ZAKAZU PRETOKU
         - NIBE a patrony NIKDY současně (§1.2) — NEPLATÍ! Mohou jet oba najednou.
         - auto_ma_hlad=ON blokuje patrony (§1.2) — NEPLATÍ! Obě jsou flexibilní.
         - autoNabiji blokuje patrony (§8.2) — NEPLATÍ! Auto i patrony jedou ze sítě.
+        - Bojler prahy přebytku (§9.1: 7kW/3kW) — NEPLATÍ! Bojler na MAX pokud prostor pod jističem.
+        - Bojler auto_ma_hlad degradace MAX→VYSOKA (§9.1) — NEPLATÍ! MAX bez ohledu na auto.
+        - Bojler baterie > 96% podmínka (§9.1) — NEPLATÍ! Nastavit MAX bez ohledu na SOC.
         - Filtrace denní minimum splněno → OFF (§10.1) — NEPLATÍ! Filtrovat dál pokud prostor.
         - NIBE kompresor blokuje filtraci (§10.5) — NEPLATÍ! Vše jede současně.
 
