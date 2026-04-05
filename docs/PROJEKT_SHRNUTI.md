@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-05 (v25.83 fix simulace SOC v planu — zakaz_pretoku v noci pouziva realnou spotrebu misto konstanty 1%; ikona 💰 + nazev pro zaporna_nakupni_cena v dashboardu; v25.82 fix oscilace patron pri drain; v25.81 fix patrony drain bypass; v25.80 implementace modu zaporna nakupni cena)
+> Poslední aktualizace: 2026-04-05 (v25.86 blokaceText v hlavicce planu zobrazuje Zaporna nakupni cena pri aktivnim modu; v25.85 zaporna cena NIBE+patrony soucasne, dynamicky PSP; v25.84 implementace modu ZAPORNA NAKUPNI CENA; v25.83 fix simulace SOC v planu)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
