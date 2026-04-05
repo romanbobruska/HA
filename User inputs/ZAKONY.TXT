@@ -315,33 +315,52 @@ A ZAKAZU PRETOKU
     - JEDINÁ OMEZENÍ: max_spotreba_sit_w (jistič) a priority spotřebičů.
 
     4.10.1 VICTRON ESS NASTAVENÍ
-        - PSP = max_spotreba_sit_w - safety_margin (KLADNÉ = import ze sítě!!!)
+        - PSP = max_spotreba_sit_w - DYNAMICKÁ REZERVA (KLADNÉ = import ze sítě!!!)
+        - DYNAMICKÁ REZERVA závisí na tom, co běží:
+            - NIBE běží (neflexibilní, ~14kW) → rezerva = zaporna_nibe_reserve_w (výchozí 5000W)
+            - NIBE neběží (jen flexibilní spotřebiče) → rezerva = zaporna_flex_reserve_w (výchozí 3000W)
+            - Důvod: pokud najednou spadne solární výroba, NIBE nelze okamžitě vypnout,
+              ale patrony a auto ampéráž se přizpůsobí. Větší rezerva = ochrana jističe.
         - Baterie se NABÍJÍ neomezeně (max_charge_power = -1)
         - Baterie se NEVYBÍJÍ (max_discharge_power = solarPassthrough)
         - Export do sítě ZAKÁZÁN (feedin_on = false, prevent_feedback = 1)
         - Scheduled charging NEPOUŽITO
 
-    4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší)
+    4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší) — VŠECHNY MOHOU JET SOUČASNĚ!
         1. NIBE — zapnout pokud nádrž < max_teplota_nadrze, BEZ ohledu na cenu/solar/čas
         2. Nabíjení baterie — automaticky přes PSP, neomezeně
         3. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě
-        4. Patrony — zapnout max fází pokud NIBE nepracuje (kompresor idle), BEZ ohledu na SOC/solar
+        4. Patrony — zapnout max fází BEZ ohledu na SOC/solar/auto_ma_hlad
+        KLÍČOVÝ ROZDÍL OD NORMÁLNÍHO REŽIMU:
+        - NIBE + patrony MOHOU jet současně! Patrony hřejí nádrž, NIBE topí dům.
+        - auto_ma_hlad NEBLOKUJE patrony! Auto i patrony jsou flexibilní (škálovatelné).
+        - Všechny flexibilní spotřebiče (patrony fáze, auto ampéráž) se přizpůsobí aktuální situaci.
 
-    4.10.3 SUSPENDOVANÁ PRAVIDLA (platí JEN v tomto módu)
+    4.10.3 SUSPENDOVANÁ PRAVIDLA (platí JEN v tomto módu — GAMECHANGER)
         - SOC minimum pro patrony (§8.5: 90%) — patrony jedou i při nízkém SOC
         - Solární přebytek pro patrony (§8.5: 5000W) — patrony jedou ze sítě
         - Sell price check pro patrony — neplatí (nekonkuruje s prodejem)
         - Cenová optimalizace NIBE (cheaperAhead, bigSolTom, isDraha) — topíme HNED
         - Pravidlo poslední solární hodiny — neplatí
+        - NIBE a patrony NIKDY současně (§1.2) — NEPLATÍ! Mohou jet oba najednou.
+        - auto_ma_hlad=ON blokuje patrony (§1.2) — NEPLATÍ! Obě jsou flexibilní.
+        - autoNabiji blokuje patrony (§8.2) — NEPLATÍ! Auto i patrony jedou ze sítě.
 
     4.10.4 ZACHOVANÁ ABSOLUTNÍ PRAVIDLA (platí VŽDY, i v tomto módu)
-        - NIBE a patrony NIKDY současně pokud NIBE pracuje (§1.2)
-        - auto_ma_hlad=ON → patrony NESMÍ (§1.2)
         - max_spotreba_sit_w (§12.1) — celkový odběr NESMÍ překročit jistič
         - NIBE nelze vypnout pokud kompresor běží (§1.2)
         - Automatizace OFF → nic neovlivňovat (§8.2)
+        - Teplota nádrže < max → patrony OFF (již nepotřeba)
 
-    4.10.5 KOMBINACE SE ZÁKAZEM PŘETOKŮ
+    4.10.5 OCHRANA JISTIČE — DYNAMICKÝ SAFETY MARGIN
+        Problém: NIBE je NEFLEXIBILNÍ (~14kW peak). Pokud spadne solar z 14kW na 5kW,
+        NIBE nelze okamžitě vypnout. Patrony a auto ANO (škálovatelné).
+        Řešení: PSP se dynamicky snižuje dle typu běžících spotřebičů:
+        - NIBE běží → PSP = max_spotreba_sit_w - zaporna_nibe_reserve_w (default 5000W)
+        - jen flexibilní → PSP = max_spotreba_sit_w - zaporna_flex_reserve_w (default 3000W)
+        Config parametry: zaporna_nibe_reserve_w (5000), zaporna_flex_reserve_w (3000)
+
+    4.10.6 KOMBINACE SE ZÁKAZEM PŘETOKŮ
         Pokud je zároveň záporná nákupní I prodejní cena:
         - Platí vše výše (max odběr ze sítě)
         - PLUS: žádný export (prevent_feedback)
