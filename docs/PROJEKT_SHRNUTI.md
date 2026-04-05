@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-05 (v25.82 fix oscilace patron při drain — korekční smyčka měla příliš nízký MAX_DR (2500W), při zákazu přetoků nyní dynamicky faze_w*act+1000; v25.81 fix patrony drain bypass — při SOC≥95% + zákaz přetoků se baterie vybíjí přes patrony i bez solárního přebytku; oprava přebytek senzor na rozdil_vyroby_a_spotreby; v25.80 implementace módu záporná nákupní cena §4.9.2 bod 7)
+> Poslední aktualizace: 2026-04-05 (v25.83 fix simulace SOC v planu — zakaz_pretoku v noci pouziva realnou spotrebu misto konstanty 1%; ikona 💰 + nazev pro zaporna_nakupni_cena v dashboardu; v25.82 fix oscilace patron pri drain; v25.81 fix patrony drain bypass; v25.80 implementace modu zaporna nakupni cena)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
