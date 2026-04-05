@@ -333,6 +333,10 @@ A ZAKAZU PRETOKU
         2. Nabíjení baterie — automaticky přes PSP, neomezeně
         3. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě
         4. Patrony — zapnout max fází BEZ ohledu na SOC/solar/auto_ma_hlad
+        5. Filtrace bazénu — NEJNIŽŠÍ PRIORITA. Zapnout JEN pokud je prostor pod jističem
+           (max_spotreba_sit_w - aktuální_odběr >= 2500W). I když minimum splněno (met=true).
+           NIBE kompresor NEBLOKUJE filtraci v tomto módu. T_FREEZE stále platí (bezpečnost).
+           Anti-cycling a min continuous run (15 min) zachovány proti oscilaci.
         KLÍČOVÝ ROZDÍL OD NORMÁLNÍHO REŽIMU:
         - NIBE + patrony MOHOU jet současně! Patrony hřejí nádrž, NIBE topí dům.
         - auto_ma_hlad NEBLOKUJE patrony! Auto i patrony jsou flexibilní (škálovatelné).
@@ -347,6 +351,8 @@ A ZAKAZU PRETOKU
         - NIBE a patrony NIKDY současně (§1.2) — NEPLATÍ! Mohou jet oba najednou.
         - auto_ma_hlad=ON blokuje patrony (§1.2) — NEPLATÍ! Obě jsou flexibilní.
         - autoNabiji blokuje patrony (§8.2) — NEPLATÍ! Auto i patrony jedou ze sítě.
+        - Filtrace denní minimum splněno → OFF (§10.1) — NEPLATÍ! Filtrovat dál pokud prostor.
+        - NIBE kompresor blokuje filtraci (§10.5) — NEPLATÍ! Vše jede současně.
 
     4.10.4 ZACHOVANÁ ABSOLUTNÍ PRAVIDLA (platí VŽDY, i v tomto módu)
         - max_spotreba_sit_w (§12.1) — celkový odběr NESMÍ překročit jistič
@@ -356,7 +362,7 @@ A ZAKAZU PRETOKU
 
     4.10.5 OCHRANA JISTIČE — DYNAMICKÝ SAFETY MARGIN
         Problém: NIBE je NEFLEXIBILNÍ (~14kW peak). Pokud spadne solar z 14kW na 5kW,
-        NIBE nelze okamžitě vypnout. Patrony a auto ANO (škálovatelné).
+        NIBE nelze okamžitě vypnout. Patrony a auto ANO (flexibilní).
         Řešení: PSP se dynamicky snižuje dle typu běžících spotřebičů:
         - NIBE běží → PSP = max_spotreba_sit_w - zaporna_nibe_reserve_w (default 5000W)
         - jen flexibilní → PSP = max_spotreba_sit_w - zaporna_flex_reserve_w (default 3000W)
