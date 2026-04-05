@@ -73,6 +73,16 @@ jistá, NEZASADÍ a vysvětlí proč.
       "rm -rf /tmp/HA; cd /tmp && git clone -b main https://github.com/romanbobruska/HA.git \
        && cd /tmp/HA && bash deploy.sh 2>&1"
 
+2.1.1 POVINNÝ VÝBĚR DEPLOY REŽIMU — VŽDY PŘED SPUŠTĚNÍM DEPLOY.SH ROZHODNU:
+    - `deploy.sh --no-ha`  = VÝCHOZÍ VOLBA! Použít VŽDY, když se mění JEN Node-RED flows
+                             (jakékoliv soubory v node-red/flows/*.json) a/nebo dokumentace.
+    - `deploy.sh`          = Restart HA Core. Použít JEN když se mění HA konfigurace:
+                             template_sensors.yaml, template_switches.yaml, input_numbers.yaml,
+                             automations.yaml, scripts.yaml, configuration.yaml, mqtt.yaml, modbus.yaml,
+                             themes/*.yaml nebo scenes.yaml.
+    - RESTART HA CORE JE DESTRUKTIVNÍ OPERACE — způsobuje výpadek celého systému!
+    - Pokud si nejsem jistý → VŽDY `--no-ha`. Nikdy nerestartovat HA Core zbytečně.
+
 2.2 WORKFLOW: Ruční změna v Node-RED UI - Pozor, jen pokud se nepovede bod 2.1!
     1. Uživatel provede změnu v NR UI → klikne Deploy v NR
     2. Uživatel řekne AI "hotovo"
