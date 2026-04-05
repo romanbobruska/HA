@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-05 (v25.86 blokaceText v hlavicce planu zobrazuje Zaporna nakupni cena pri aktivnim modu; v25.85 zaporna cena NIBE+patrony soucasne, dynamicky PSP; v25.84 implementace modu ZAPORNA NAKUPNI CENA; v25.83 fix simulace SOC v planu)
+> Poslední aktualizace: 2026-04-05 (v25.87 filtrace bazenu jako 5. priorita v zaporna nakupni cena modu; v25.86 blokaceText v hlavicce; v25.85 NIBE+patrony soucasne, dynamicky PSP; v25.84 implementace ZAPORNA NAKUPNI CENA)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
