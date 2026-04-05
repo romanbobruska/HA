@@ -302,6 +302,50 @@ A ZAKAZU PRETOKU
         4. Prodávat: viz pravidla 4.5
         5. Normal (vybíjení): cena ≥ prah_draha_energie AND SOC > min_soc + rezerva
         6. Šetřit: default — baterie se nevybíjí, solar jde do baterie/sítě
+        7. ZÁPORNÁ NÁKUPNÍ CENA - MÓD EXTREMNĚ VYSOKÉ SPOTŘEBY
+            BABTERIE SE NEVYBÍJÍ, SPOTŘEBOVÁVÁ SE ZE SÍTĚ CO MOŽNÁ NEJVÍCE DLE PRIORIT!!! CHCEME MÍT V TOMTO
+            MÓDU CO MOŽNÁ NEJVĚTŠÍ ODBĚR, CO TO JDE, ABYCHOM NA TOM VYDĚLALI!!!      
+                POKUD PRI TOMTO MODU BUDE I ZAKAZ PRETOKU, MUSI SE BRAT V POTAZ TO, ZE NEEXPORTUJEME NIC DO SITE,
+                ALE PLATI MAXIMALNI SPOTREBA ZE SITE!!! BEREME DO MAX ZE SITE, NEDAVAME
+                DO SITE NIC, NEVYBIJIME BATERII!!!
+
+4.10 ZÁPORNÁ NÁKUPNÍ CENA — MÓD MAXIMÁLNÍ SPOTŘEBY ZE SÍTĚ
+    - AKTIVACE: Nákupní cena elektřiny je záporná (< 0 Kč/kWh). Nám platí za odběr!
+    - CÍL: Maximální odběr ze sítě dle priorit, abychom na záporné ceně vydělali.
+    - JEDINÁ OMEZENÍ: max_spotreba_sit_w (jistič) a priority spotřebičů.
+
+    4.10.1 VICTRON ESS NASTAVENÍ
+        - PSP = max_spotreba_sit_w - safety_margin (KLADNÉ = import ze sítě!!!)
+        - Baterie se NABÍJÍ neomezeně (max_charge_power = -1)
+        - Baterie se NEVYBÍJÍ (max_discharge_power = solarPassthrough)
+        - Export do sítě ZAKÁZÁN (feedin_on = false, prevent_feedback = 1)
+        - Scheduled charging NEPOUŽITO
+
+    4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší)
+        1. NIBE — zapnout pokud nádrž < max_teplota_nadrze, BEZ ohledu na cenu/solar/čas
+        2. Nabíjení baterie — automaticky přes PSP, neomezeně
+        3. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě
+        4. Patrony — zapnout max fází pokud NIBE nepracuje (kompresor idle), BEZ ohledu na SOC/solar
+
+    4.10.3 SUSPENDOVANÁ PRAVIDLA (platí JEN v tomto módu)
+        - SOC minimum pro patrony (§8.5: 90%) — patrony jedou i při nízkém SOC
+        - Solární přebytek pro patrony (§8.5: 5000W) — patrony jedou ze sítě
+        - Sell price check pro patrony — neplatí (nekonkuruje s prodejem)
+        - Cenová optimalizace NIBE (cheaperAhead, bigSolTom, isDraha) — topíme HNED
+        - Pravidlo poslední solární hodiny — neplatí
+
+    4.10.4 ZACHOVANÁ ABSOLUTNÍ PRAVIDLA (platí VŽDY, i v tomto módu)
+        - NIBE a patrony NIKDY současně pokud NIBE pracuje (§1.2)
+        - auto_ma_hlad=ON → patrony NESMÍ (§1.2)
+        - max_spotreba_sit_w (§12.1) — celkový odběr NESMÍ překročit jistič
+        - NIBE nelze vypnout pokud kompresor běží (§1.2)
+        - Automatizace OFF → nic neovlivňovat (§8.2)
+
+    4.10.5 KOMBINACE SE ZÁKAZEM PŘETOKŮ
+        Pokud je zároveň záporná nákupní I prodejní cena:
+        - Platí vše výše (max odběr ze sítě)
+        - PLUS: žádný export (prevent_feedback)
+        - Baterie se stále nabíjí, nevybíjí
 
     4.9.3 KONZISTENCE PLÁNU
         - Plán musí zajistit, že SOC na konci horizontu ≥ min_soc
