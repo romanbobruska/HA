@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-05 (v25.80 implementace módu záporná nákupní cena §4.9.2 bod 7; v25.79 fix hladu auta + ultra levná vybíjení; v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
+> Poslední aktualizace: 2026-04-05 (v25.81 fix patrony drain bypass — při SOC≥95% + zákaz přetoků se baterie vybíjí přes patrony i bez solárního přebytku; oprava přebytek senzor na rozdil_vyroby_a_spotreby; v25.80 implementace módu záporná nákupní cena §4.9.2 bod 7; v25.79 fix hladu auta + ultra levná vybíjení; v25.78 auto nabíjení při zákazu přetoků)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
