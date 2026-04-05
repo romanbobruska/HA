@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-03 (v25.79 fix hladu auta + ultra levná vybíjení; v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
+> Poslední aktualizace: 2026-04-05 (v25.80 implementace módu záporná nákupní cena §4.9.2 bod 7; v25.79 fix hladu auta + ultra levná vybíjení; v25.78 auto nabíjení při zákazu přetoků; v25.77 přejmenování POZADAVKY → ZAKONY.TXT; v25.76 filtrace)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
