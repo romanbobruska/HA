@@ -313,6 +313,8 @@ A ZAKAZU PRETOKU
     - AKTIVACE: Nákupní cena elektřiny je záporná (< 0 Kč/kWh). Nám platí za odběr!
     - CÍL: Maximální odběr ze sítě dle priorit, abychom na záporné ceně vydělali.
     - JEDINÁ OMEZENÍ: max_spotreba_sit_w (jistič) a priority spotřebičů.
+    - NIKDY NEVIBÍJET BATERII V TOMTO MODU!!! NASTAVIT BLOKACI VYBÍJENÍ BATERIE Z DŮVODU TOHOTO FVE MODU!!!
+    - HLAVIČKA PLÁNU musí zobrazovat „Blokace: ANO, Záporná nákupní cena" když je tento mód aktivní.
 
     4.10.1 VICTRON ESS NASTAVENÍ
         - PSP = max_spotreba_sit_w - DYNAMICKÁ REZERVA (KLADNÉ = import ze sítě!!!)
