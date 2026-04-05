@@ -9,7 +9,8 @@
   'nabijet_ze_site': '🔵',
   'prodavat': '🔴',
   'prodavat_misto_nabijeni': '⚪',
-  'zakaz_pretoku': '🟣'
+  'zakaz_pretoku': '🟣',
+  'zaporna_nakupni_cena': '💰'
 } %}
 
 {% set mode_names = {
@@ -18,7 +19,8 @@
   'nabijet_ze_site': 'Nabíjet',
   'prodavat': 'Prodávat',
   'prodavat_misto_nabijeni': 'Prodej přebytku',
-  'zakaz_pretoku': 'Zákaz přetoků'
+  'zakaz_pretoku': 'Zákaz přetoků',
+  'zaporna_nakupni_cena': 'Záporná nákupní cena'
 } %}
 
 <b>Aktuální mód:</b> {{ mode_icons[current_mode] | default('⚫') }} {{ mode_names[current_mode] | default(current_mode) }} | <b>Blokace vybíjení baterie:</b> {{ blokace | default('NE') }}
