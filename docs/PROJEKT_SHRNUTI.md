@@ -796,7 +796,53 @@ Victron ESS control loop nestíhal reagovat a baterie pokrývala deficit.
 
 ---
 
-## 10. Solární instalace
+## 10. Lovelace Dashboard — pravidla nasazování
+
+**Dashboard FVE plán** je uložen na serveru v `/homeassistant/.storage/lovelace.rizeni_fve` (key: `lovelace.rizeni_fve`, url_path: `rizeni-fve`, mode: `storage`).
+
+### KRITICKÉ: Jak aktualizovat dashboard
+
+HA cachuje `.storage` soubory v paměti — přímá editace souboru na disku se **NEPROJEVÍ** bez restartu HA Core! Správný postup:
+
+1. **Přes WebSocket API** (preferovaný, bez restartu HA):
+   - `lovelace/config/save` s `url_path: "rizeni-fve"` a `config: {...}`
+   - Příklad: viz `_save_dashboard.py` v historii konverzace
+   - Změna se projeví okamžitě v dashboardu (stačí refresh prohlížeče)
+
+2. **Přes HA restart** (destruktivní, jen jako fallback):
+   - Editovat soubor na disku, pak restartovat HA Core
+   - **NEŽÁDOUCÍ** — způsobuje výpadek celého systému
+
+### Mode mappings (MUSÍ být synchronizované)
+
+Při přidání nového FVE módu je nutné přidat záznam do OBOU slovníků v dashboard šabloně:
+
+```jinja2
+{% set mode_icons = {
+  'normal': '🟢', 'setrit': '🟡', 'nabijet_ze_site': '🔵',
+  'prodavat': '🔴', 'prodavat_misto_nabijeni': '⚪', 'zakaz_pretoku': '🟣',
+  'Balancování': '⚡', 'zaporna_nakupni_cena': '💰'
+} %}
+{% set mode_names = {
+  'normal': 'Normální', 'setrit': 'Šetřit', 'nabijet_ze_site': 'Nabíjet',
+  'prodavat': 'Prodávat', 'prodavat_misto_nabijeni': 'Prodej přebytku',
+  'zakaz_pretoku': 'Zákaz přetoků', 'Balancování': 'Balancování',
+  'zaporna_nakupni_cena': 'Záporná nákupní cena'
+} %}
+```
+
+Pokud mód chybí v těchto slovnících → dashboard zobrazí `⚫` (default ikona) a raw interní název módu místo českého překladu.
+
+### Lokální kopie vs. server
+
+- **Server = pravda** (jako u NR flows)
+- Lokální `homeassistant/dashboard_fve_plan.md` je reference/záloha
+- `deploy.sh` dashboard **NEKOPÍRUJE** — musí se nasadit ručně přes WS API
+- Po každé změně dashboard na serveru: sync do `dashboard_fve_plan.md` v gitu
+
+---
+
+## 11. Solární instalace
 
 - **Výkon**: 17 kWp, **Lokace**: Horoušany (50.10°N, 14.74°E)
 - **Azimut**: 190° (JZ), **Sklon**: 45°
