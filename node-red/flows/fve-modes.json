@@ -1376,5 +1376,92 @@
                 "bal_svc_set_boolean"
             ]
         ]
+    },
+    {
+        "id": "grp_zaporna_nakup",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: ZÁPORNÁ NÁKUPNÍ CENA",
+        "style": {
+            "fill": "#fce8e6",
+            "label": true
+        },
+        "nodes": [
+            "li_modes_zaporna_nakup",
+            "zaporna_nakup_logic",
+            "lo_victron_zaporna_nakup",
+            "lo_log_zaporna_nakup"
+        ],
+        "x": 24,
+        "y": 714,
+        "w": 442,
+        "h": 108
+    },
+    {
+        "id": "li_modes_zaporna_nakup",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "grp_zaporna_nakup",
+        "name": "→ Záporná nákupní cena",
+        "links": [
+            "lo_orch_zaporna_nakup"
+        ],
+        "x": 65,
+        "y": 754,
+        "wires": [
+            [
+                "zaporna_nakup_logic"
+            ]
+        ]
+    },
+    {
+        "id": "zaporna_nakup_logic",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "grp_zaporna_nakup",
+        "name": "ZÁPORNÁ NÁKUPNÍ CENA Logic",
+        "func": "// ZÁPORNÁ NÁKUPNÍ CENA (§4.9.2 bod 7) — max odběr ze sítě, baterie se nevybíjí\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\n// Detekce záporné prodejní ceny (zákaz přetoků)\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar currentBuyPrice = 99;\nvar currentSellPrice = 0;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 0;\n        currentSellPrice = parseFloat(prices[i].priceCZKhourProd) || 0;\n        break;\n    }\n}\nvar zakazPretoku = currentSellPrice <= 0;\n\n// Solar passthrough — baterie se nevybíjí, solar může nabíjet\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\n\n// PSP: záporná → aktivní odběr ze sítě (Victron bere maximum)\n// Pokud zároveň zákaz přetoků → PSP kladné (neexportujeme), jinak záporné (bereme ze sítě)\nvar psp = zakazPretoku ? (config.zakaz_pretoku_grid_setpoint_w || 30) : -(config.max_spotreba_sit_w || 22000);\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: solarPassthrough,\n    max_charge_power: -1,\n    feedin_on: zakazPretoku ? false : true,\n    max_feed_in_power: zakazPretoku ? 0 : (config.max_feed_in_w || 7600),\n    prevent_feedback: zakazPretoku ? 1 : 0\n};\nmsg.mode = \"zaporna_nakupni_cena\";\nmsg.blockDischarge = true;\n\nvar zakazText = zakazPretoku ? \" + zákaz přetoků\" : \"\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"ZÁP.NAKUP \" + currentBuyPrice.toFixed(2) + \" Kč\" + zakazText + \" | SOC \" + currentSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"zaporna_nakupni_cena\",\n    battery_charging: false,\n    max_discharge_allowed: false,\n    consumers_active: [\"ZápornáNákup\" + (zakazPretoku ? \"+ZP\" : \"\")],\n    timestamp: Date.now()\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 754,
+        "wires": [
+            [
+                "lo_victron_zaporna_nakup",
+                "lo_log_zaporna_nakup"
+            ]
+        ]
+    },
+    {
+        "id": "lo_victron_zaporna_nakup",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "grp_zaporna_nakup",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 425,
+        "y": 741,
+        "wires": []
+    },
+    {
+        "id": "lo_log_zaporna_nakup",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "grp_zaporna_nakup",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 425,
+        "y": 767,
+        "wires": []
     }
 ]
