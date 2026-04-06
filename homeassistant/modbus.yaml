@@ -101,6 +101,18 @@
       data_type: uint16
       scan_interval: 30
 
+    # Temporary Lux — jednorázové zvýšení teploty TUV
+    # 0=Off, 1=3h, 2=6h, 3=12h, 4=One time increase
+    - name: "Nibe - Temporary Lux"
+      unique_id: "nibe_temporary_lux"
+      address: 48132
+      slave: 1
+      input_type: holding
+      data_type: int16
+      scale: 1
+      precision: 0
+      scan_interval: 30
+
     # Degree Minutes (16 bit) - stupeň minut při topení
     # Rozsah: -32768 až 32767, factor 10 (hodnota se dělí 10)
     - name: "Nibe - Degree Minutes"

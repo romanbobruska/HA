@@ -55,21 +55,23 @@
         value: [0]
   icon: "{{ 'mdi:water-boiler' if states('sensor.nibe_stav_tuv') | int(0) == 1 else 'mdi:water-boiler-off' }}"
 
-# Přepínač: ON = komfort TUV „Luxusní“ (Modbus 47041 = 2), OFF = „Normální“ (47041 = 1).
-# Stav z reálného Modbus senzoru; akce jdou přes input_select → existující automatizace „Nibe TUV komfort - zapis do modbus“.
-- name: "Nibe — přepínač TUV luxusní teplota"
-  unique_id: nibe_tuv_luxusni_teplota_prepinac
-  state: "{{ states('sensor.nibe_rezim_komfortu_tuv') | int(-1) == 2 }}"
+# Přepínač: ON = jednorázové zvýšení teploty TUV (Modbus 48132 = 4), OFF = vypnuto (48132 = 0).
+# Registr 48132 "Temporary Lux": 0=Off, 1=3h, 2=6h, 3=12h, 4=One time increase
+- name: "Nibe — jednorázové zvýšení TUV"
+  unique_id: nibe_tuv_jednorazove_zvyseni
+  state: "{{ states('sensor.nibe_temporary_lux') | int(0) == 4 }}"
   turn_on:
-    - action: input_select.select_option
-      target:
-        entity_id: input_select.nibe_tuv_komfort
+    - action: modbus.write_register
       data:
-        option: "Luxusní"
+        hub: nibe
+        slave: 1
+        address: 48132
+        value: [4]
   turn_off:
-    - action: input_select.select_option
-      target:
-        entity_id: input_select.nibe_tuv_komfort
+    - action: modbus.write_register
       data:
-        option: "Normální"
-  icon: "{{ 'mdi:water-boiler' if (states('sensor.nibe_rezim_komfortu_tuv') | int(-1) == 2) else 'mdi:water-boiler-off' }}"
+        hub: nibe
+        slave: 1
+        address: 48132
+        value: [0]
+  icon: "{{ 'mdi:water-boiler-alert' if (states('sensor.nibe_temporary_lux') | int(0) == 4) else 'mdi:water-boiler-off' }}"
