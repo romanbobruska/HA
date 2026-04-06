@@ -737,7 +737,7 @@
         "y": 62,
         "wires": [
             [
-                "542205d3587ae7f0"
+                "zapnak_bypass_sit"
             ]
         ]
     },
@@ -1036,6 +1036,29 @@
                 "a9e5aa5fbd19b5c0"
             ],
             []
+        ]
+    },
+    {
+        "id": "zapnak_bypass_sit",
+        "type": "function",
+        "z": "a86ad952ad7756aa",
+        "name": "§4.10.2 Záporná→SÍŤ bypass",
+        "func": "// §4.10.2 bod 3: záporná nákupní cena → nabíjet auto ze sítě na max, bypass cenových kontrol\nvar fpa = (global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\") || {}).attributes || {};\nvar mode = fpa.current_mode || \"\";\nif (mode === \"zaporna_nakupni_cena\") {\n    node.status({fill:\"red\",shape:\"dot\",text:\"💰ZápNak→SÍŤ MAX\"});\n    return [msg, null];\n}\nnode.status({fill:\"grey\",shape:\"ring\",text:\"Normal→cheapest hours\"});\nreturn [null, msg];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 225,
+        "y": 62,
+        "wires": [
+            [
+                "707a53451c626ff1"
+            ],
+            [
+                "542205d3587ae7f0"
+            ]
         ]
     }
 ]
