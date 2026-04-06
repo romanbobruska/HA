@@ -50,6 +50,7 @@
 | Aktuátor | Ovládání | Popis |
 |----------|----------|--------|
 | NIBE topení | Modbus reg 47371 (0/1) | Povolení / zákaz hřát nádrž |
+| NIBE TUV luxusní teplota | `switch.nibe_prepinac_tuv_luxusni_teplota` (template) | ON = komfort TUV Luxusní (47041=2), OFF = Normální (47041=1), přes `input_select.nibe_tuv_komfort` |
 | Oběhové čerpadlo | `switch.teplota_smesovac` | ON/OFF |
 | Patrony | `switch.patrona_faze_*` | ON/OFF |
 | Bazénový ventil | `switch.bazen_ventil_smesovac` | Kontrola |

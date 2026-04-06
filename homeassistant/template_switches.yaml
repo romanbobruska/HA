@@ -54,3 +54,22 @@
         address: 47387
         value: [0]
   icon: "{{ 'mdi:water-boiler' if states('sensor.nibe_stav_tuv') | int(0) == 1 else 'mdi:water-boiler-off' }}"
+
+# Přepínač: ON = komfort TUV „Luxusní“ (Modbus 47041 = 2), OFF = „Normální“ (47041 = 1).
+# Stav z reálného Modbus senzoru; akce jdou přes input_select → existující automatizace „Nibe TUV komfort - zapis do modbus“.
+- name: "Nibe — přepínač TUV luxusní teplota"
+  unique_id: nibe_tuv_luxusni_teplota_prepinac
+  state: "{{ states('sensor.nibe_rezim_komfortu_tuv') | int(-1) == 2 }}"
+  turn_on:
+    - action: input_select.select_option
+      target:
+        entity_id: input_select.nibe_tuv_komfort
+      data:
+        option: "Luxusní"
+  turn_off:
+    - action: input_select.select_option
+      target:
+        entity_id: input_select.nibe_tuv_komfort
+      data:
+        option: "Normální"
+  icon: "{{ 'mdi:water-boiler' if (states('sensor.nibe_rezim_komfortu_tuv') | int(-1) == 2) else 'mdi:water-boiler-off' }}"

@@ -1,7 +1,7 @@
 # FVE Automatizace — Kontext projektu
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
-> Poslední aktualizace: 2026-04-05 (v25.87 filtrace bazenu jako 5. priorita v zaporna nakupni cena modu; v25.86 blokaceText v hlavicce; v25.85 NIBE+patrony soucasne, dynamicky PSP; v25.84 implementace ZAPORNA NAKUPNI CENA)
+> Poslední aktualizace: 2026-04-06 (přepínač NIBE TUV luxusní teplota) (v25.87 filtrace bazenu jako 5. priorita v zaporna nakupni cena modu; v25.86 blokaceText v hlavicce; v25.85 NIBE+patrony soucasne, dynamicky PSP; v25.84 implementace ZAPORNA NAKUPNI CENA)
 >
 > **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
@@ -148,7 +148,8 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 - Feed-in: `switch.overvoltage_feed_in`, `number.max_feed_in_power`, `PreventFeedback` (MQTT)
 
 **NIBE** (MyUplink + Modbus):
-- Topení: reg 47371, Chlazení: reg 47372, TUV: reg 47387
+- Topení: reg 47371, Chlazení: reg 47372, TUV: reg 47387, komfort TUV reg 47041 (`sensor.nibe_rezim_komfortu_tuv` / `input_select.nibe_tuv_komfort`)
+- Přepínač **TUV luxusní teplota** (template): název v UI *Nibe — přepínač TUV luxusní teplota*, typicky `switch.nibe_prepinac_tuv_luxusni_teplota` — ON = Luxusní, OFF = Normální (zápis přes stávající automatizaci do 47041)
 - Stav: `sensor.nibe_aktualni_realny_stav`
 
 **Wallbox**:
