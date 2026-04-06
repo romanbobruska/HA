@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-03-31 (deploy workflow poučení, v25.68-70)
+> Poslední aktualizace: 2026-04-06 (v25.79-81: NIBE TUV one-time increase, solar MPPT throttling fix)
 
 >
 
@@ -707,6 +707,25 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
 
+
+**v25.81 — Fix solar MPPT throttling při záporné nákupní ceně (2026-04-06)**
+
+- BUG: V módu `zaporna_nakupni_cena` při SOC=100% Victron MPPT throttloval solární výrobu na 0W.
+  Příčina: `prevent_feedback: 1` + `max_discharge_power: 0` (chicken-and-egg: PV=0 → passthrough=0 → PV zůstane 0).
+  Důsledek: veškerá spotřeba (~20kW) šla ze sítě → riziko vyhození pojistek při spotřebě >22kW.
+- FIX v `zaporna_nakup_logic` (fve-modes.json):
+  1. `prevent_feedback: 0` (bylo 1) — `feedin_on:false` + `max_feed_in_power:0` stále brání exportu,
+     ale bez agresivního MPPT throttlingu (§1.2: nesmíme omezovat solární výrobu)
+  2. Minimum `solarPassthrough` = 5000W během denních hodin (6-20h) — konfigurovatelné
+     přes `config.zaporna_min_solar_passthrough_w`. Zabraňuje chicken-and-egg problému.
+- Výsledek: solar z 0W → 7464W do 2 minut po deploy, grid 19.7kW — obojí funguje současně.
+
+**v25.79-80 — NIBE jednorázové zvýšení teploty TUV (2026-04-06)**
+
+- Nový Modbus sensor: registr 48132 "Temporary Lux" (0=Off, 1=3h, 2=6h, 3=12h, 4=One time increase)
+- Nový template switch: `switch.nibe_jednorazove_zvyseni_tuv` — ON zapíše 4 (One time increase), OFF zapíše 0
+- Vrácen omylem smazaný switch `switch.nibe_prepinac_tuv_luxusni_teplota` (v25.80)
+- Soubory: modbus.yaml, template_switches.yaml
 
 **v25.75 — NIBE spotřeba v nočních hodinách simulace plánu (2026-04-01)**
 
