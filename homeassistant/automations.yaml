@@ -74,34 +74,6 @@
           {% set val = states('sensor.nibe_rezim_komfortu_tuv') | int(-1) %}
           {% if val == 0 %}Ekonomický{% elif val == 1 %}Normální{% elif val == 2 %}Luxusní{% elif val == 4 %}Smart Control{% else %}Normální{% endif %}
   mode: single
-- id: "1739307600003"
-  alias: "Nibe TUV jednorázový boost"
-  description: >
-    Po stisku tlačítka nastaví komfort TUV na Luxusní, po uplynutí nastavených minut
-    vrátí předchozí volbu (Modbus 47041 přes stávající automatizaci).
-  triggers:
-    - trigger: state
-      entity_id: input_button.nibe_tuv_jednorazovy_boost
-  actions:
-    - variables:
-        predchozi: "{{ states('input_select.nibe_tuv_komfort') }}"
-    - if:
-        - condition: template
-          value_template: "{{ predchozi != 'Luxusní' }}"
-      then:
-        - action: input_select.select_option
-          target:
-            entity_id: input_select.nibe_tuv_komfort
-          data:
-            option: "Luxusní"
-        - delay:
-            minutes: "{{ states('input_number.nibe_tuv_boost_trvani_min') | int(60) }}"
-        - action: input_select.select_option
-          target:
-            entity_id: input_select.nibe_tuv_komfort
-          data:
-            option: "{{ predchozi }}"
-  mode: restart
 - id: "1746052767671"
   alias: Publikuj VIctron
   description: ""

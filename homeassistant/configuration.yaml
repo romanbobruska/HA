@@ -70,14 +70,6 @@ input_boolean:
     icon: mdi:battery-check
 
 # -----------------------------------------------------------------------------
-# INPUT BUTTON — jednorázové akce (bez stavu)
-# -----------------------------------------------------------------------------
-input_button:
-  nibe_tuv_jednorazovy_boost:
-    name: "Nibe — jednorázový boost TUV"
-    icon: mdi:water-boiler-alert
-
-# -----------------------------------------------------------------------------
 # INPUT NUMBERS - Nastavitelné parametry
 # -----------------------------------------------------------------------------
 

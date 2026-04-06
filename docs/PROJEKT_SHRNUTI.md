@@ -298,7 +298,7 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 
 **NIBE** (MyUplink + Modbus):
 
-- Topení: reg 47371, Chlazení: reg 47372, TUV: reg 47387
+- Topení: reg 47371, Chlazení: reg 47372, TUV: reg 47387; jednorázový ohřev TUV: zápis **48132 = 4** přes skript **`script.nibe_tuv_jednorazovy_ohrev`** (viz `modbus.csv` — Temporary Lux / One time increase)
 
 - Stav: `sensor.nibe_aktualni_realny_stav`
 

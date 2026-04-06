@@ -1,13 +1,3 @@
-nibe_tuv_boost_trvani_min:
-  name: "Nibe TUV boost — trvání"
-  min: 15
-  max: 180
-  step: 15
-  unit_of_measurement: "min"
-  icon: mdi:timer-outline
-  mode: box
-  initial: 60
-
 topeni_max_teplota_patron:
   name: "Max teplota nádrže pro patrony"
   min: 40

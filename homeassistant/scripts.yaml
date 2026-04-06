@@ -1,1 +1,13 @@
-# Prázdný soubor - skripty se spravují přes UI
+# Skripty v YAML (UI skripty se dle verze HA mohou slučovat)
+# Jednorázový ohřev TUV — Modbus F1345 reg. 48132 hodnota 4 = „One time increase“ (modbus.csv / ModbusManager)
+nibe_tuv_jednorazovy_ohrev:
+  alias: "Nibe — jednorázový ohřev TUV"
+  description: "Zápis Modbus 48132 = 4 (jednorázové zvýšení dle nastavení v čerpadle). Nemění input_select ani NR."
+  icon: mdi:water-boiler-alert
+  sequence:
+    - action: modbus.write_register
+      data:
+        hub: nibe
+        slave: 1
+        address: 48132
+        value: [4]
