@@ -1,8 +1,3 @@
-chtel bych, abych se prepnul na MINT, nainstaloval cursor a maximalne spustil 
-jeden ssh soubor - a byl bych v tom samem projektu, s nastavenim, ktere
-mam tady. nic nic nechci delat. dej mi ten soubor do tohoto projektu do 
-diru migrace - pokud budes potebovat 2 soubory, ok. ale chci na ne pouze kliknout.
+JA JSEM CHTEL KOMPONENTU V HA, KTERA BY MI DOVOLILA ZAPNOUT JEDNORAZOVE NAVYSENI TEPLOTY DLE NASTAVENI V NIBE!!!!!!!!!!!!!!
 
-ne resit, jak nastavit mct, ssh key a podobne.
-
-rozumime si???
+SWITCH ON OFF - TO JE CELE. rekni mi, zda tomu rozumis
