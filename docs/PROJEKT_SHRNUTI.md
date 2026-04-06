@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-06 (v25.79-81: NIBE TUV one-time increase, solar MPPT throttling fix)
+> Poslední aktualizace: 2026-04-06 (v25.79-82: NIBE TUV, solar MPPT fix, filtrace counter persistence)
 
 >
 
@@ -707,6 +707,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
 
+
+**v25.82 — Fix filtrace čítač persistence přes NR restart (2026-04-06)**
+
+- BUG: Po NR restartu se ztratil čítač filtrace (in-memory `global.set("filt_persist")`).
+  Fallback `else if (hr >= 12) { run = minReq }` nastavil čítač na přesně 60 min (zimní minimum),
+  i když reálná filtrace trvala déle. Porušení §10.1 (započítávat veškerou filtraci).
+- FIX v `filtrace_decision` (filtrace-bazenu.json):
+  1. Přidán `fs` modul do `libs` pro přístup k souborovému systému
+  2. Čítač se zapisuje do `/homeassistant/filt_counter.json` (přežije NR restart)
+  3. Při NR restartu se čte ze souboru místo ztracené globální proměnné
+  4. Odstraněn hacky fallback `hr >= 12` — čítač začne od 0 pokud soubor neexistuje
+- Soubor: filtrace-bazenu.json (node filtrace_decision)
 
 **v25.81 — Fix solar MPPT throttling při záporné nákupní ceně (2026-04-06)**
 
