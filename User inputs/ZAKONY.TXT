@@ -252,6 +252,7 @@ A ZAKAZU PRETOKU
     jeden mód (Normal, Šetřit, Nabíjet ze sítě, Prodávat, Zákaz přetoků, Balancování).
     Plán MUSÍ být logicky konzistentní — módy musí na sebe navazovat realisticky.
     - Zaroven plati zakladni pravidlo - pred prvni solarni hodinou musime mit SOC cca 25 procent  v baterii.
+        - SPISE MENE NEZ VICE!!!
     - Pokud je solarni vyoba nizka, pak plati ostatni pravidla - podle priorit. Hlavne mit co nejjednoduzsi flows!!!
 
     4.9.1 SIMULACE SOC MUSÍ BÝT REALISTICKÁ
