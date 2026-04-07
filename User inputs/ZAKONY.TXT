@@ -238,6 +238,13 @@ A ZAKAZU PRETOKU
     - POKUD BEZI NIBE 
     - POKUD JE ZAPNUTA SAUNA (HA KOMPONENTA)
 
+4.8.1 BLOKACE PRODEJE Z BATERIE (BEZ BLOKACE VYBÍJENÍ)
+    - POKUD JE ZAPNUTA VÍŘIVKA (input_boolean.virivka) → NESMÍ SE PRODÁVAT z baterie do sítě
+    - Baterie se SMNÍ vybíjet (Normal mód funguje normálně)
+    - Rozdíl od sauny: sauna blokuje vybíjení I prodej, vířivka blokuje JEN prodej
+    - Pokud orchestrátor naplánuje mód PRODÁVAT a vířivka je ON → přepne se na NORMAL
+    - Blokace se zobrazí v hlavičce plánu: „Blokace: ANO — vířivka"
+
 4.9 FVE PLÁN — PRAVIDLA PRO 12h PLÁN (fve-orchestrator.json)
     - OBECNE PRAVIDLO, KTERE JE PODSTATOU CELEHO PROJEKTU I A ZVLASTE TETO SEKCE - NAKUPUJEME ZA CO NEJMENSI PENIZE, PRODAVAME ZA CO NEJVETSI PENIZE!!!
         TZN. NEBUDEME SETRIT V LEVNEJSICH HODINACH, KDYZ PAK POZDEJI NAKOUPIME ENERGII ZA DRAZ - CO NEJLEVNEJSI PRISTUP TADY PLATI!!!
