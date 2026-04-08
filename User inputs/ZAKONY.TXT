@@ -647,6 +647,9 @@ A ZAKAZU PRETOKU
     - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
         - SOC baterie je >=95%, pak se VYBIJI baterie cca 1 - 2kWh - HLAVNE SE NESMI NABIJET!!!. Pokud se bateerie v tomto 
             SOC bude nabijet, prida se 1 faze.
+            - POKUD JE SOC BATERIE >=95% A JE ZAROVEN ZAKAZ PRETOKU, ZAPNOU SE VSECHNY FAZE A NEVYPNOU SE AZ DO DOBY, KDY SE BATERIE VYBIJE POD SOC 95%.
+            korekcni smycka je vyrazena.
+                - TOTO SAMOZREJME PLATI, POKUD PATRONY MOHOU BEZET - NEMA AUTO HLAD, NETOPI SE ATD!!!
         - Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
@@ -682,8 +685,8 @@ A ZAKAZU PRETOKU
       Kontrola probíhá v hlavní smůdce (60s) i v korekční smůdce patron (20s).
     - Všechna ostatní pravidla patron platí beze změny (SOC ≥ 90%, auto_ma_hlad=OFF, tank < maxTankPat, atd.)
     - Korekční smůdka patron řídí počet fází podle přebytku — žádný odběr ze sítě
-    - Config: topeni_boost_max_sell_price (výchozí 2 Kč/kWh)
-    - Zobrazení: input_select.topeni_mod = "NIBE + Patrony"
+    - Config: topeni_boost_max_sell_price (výchozí 2 Kč/kWh) 
+        - Zobrazení: input_select.topeni_mod = "NIBE + Patrony"
 
 ================================================================================
 9. FLOW: BOJLER (boiler.json)
