@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-08 (v25.104: plán — spotrebovaZtrataProc fromSoc + bez socN podlahy při historii; drahá před solárem = Normal až k min_soc, § 4.9)
+> Poslední aktualizace: 2026-04-09 (v25.106: plán §4.3 — Šetřit v nejlevnějších hodinách okna `level<=setritRank` (výchozí 2 = H1/H2 v okně); výjimka drain před solarem; volitelně `fve_config.plan_cheapest_hours_setrit`)
 
 >
 
