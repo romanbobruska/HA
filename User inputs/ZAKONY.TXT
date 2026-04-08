@@ -183,7 +183,7 @@ jistá, NEZASADÍ a vysvětlí proč.
 4.5 PRODÁVAT
     - Aktivní prodej energie z baterie do sítě za výhodnou cenu.
     - Prodej se spustí pouze pokud je zisk po odečtení ztrát a amortizace dostatečný (dle konfigu).
-    - Odložení prodeje: pokud je do 3 hodin o více než 20 % lepší cena, prodej se odloží.
+    - PRODÁVÁME ZA NEJDRAŽŠÍ HODINY — pořadí prodeje = od nejvyšší sell ceny dolů.
     - CÍLOVÉ SOC PRO PRODEJ:
         - Před zahájením prodeje se vypočítá cílové SOC baterie — pod toto SOC se NIKDY neprodá.
         - Cíl vychází z toho, kolik energie dům spotřebuje od teď do začátku solární výroby.
