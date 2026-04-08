@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-06 (v25.79-82: NIBE TUV, solar MPPT fix, filtrace counter persistence)
+> Poslední aktualizace: 2026-04-08 (v25.104: plán — spotrebovaZtrataProc fromSoc + bez socN podlahy při historii; drahá před solárem = Normal až k min_soc, § 4.9)
 
 >
 
