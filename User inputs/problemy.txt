@@ -1,1 +1,7 @@
-plan uplne zmizel!!!
+nechapu, proc plan ukazuje natovyto drain v noci - jaky je k tomu duvod? podivej se do logu a do historie - je to opravdu realne???
+
+20:00	🟢 Normální	Drahá hodina, SOC 65→~51%	22	5.47 Kč	3.41 Kč
+21:00	🟢 Normální	Drahá hodina, SOC 51→~36%	18	4.82 Kč	2.87 Kč
+22:00	🟢 Normální	Drahá hodina, SOC 36→~22%	14	4.28 Kč	2.43 Kč
+
+myslim, ze ne.
