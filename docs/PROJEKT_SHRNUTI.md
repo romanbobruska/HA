@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (dokumentace: `d7ecc29` topení — odklad NIBE na zákaz přetoků dle řádku plánu `sensor.fve_plan`; dříve `4301ef3` bojler ZP/ZN, `1e97038` buffer)
+> Poslední aktualizace: 2026-04-12 (`29056e3` orchestrátor — VICTRON: `fPH` z dnešního `energy_production_today_3`, `fPHT` ze zítřka; dříve `d7ecc29` topení ČekámZP dle plánu)
 
 >
 
@@ -728,6 +728,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 - **Konfig** (beze změny): `topeni_zakaz_pretok_defer_max_sol_kwh`, `topeni_zakaz_pretok_defer_safe_margin_extra` (doplňková rezerva k `topeni_bezpecny_pokles`).
 - **Nasazení**: `deploy.sh --no-ha`; commit `d7ecc29`.
 - **§2.4**: Po deploy ověřeny logy — `docker logs addon_a0d7b954_nodered`: start flows bez chyb funkcí.
+
+
+**v25.84 — Orchestrátor: dnešní hodinovka PV ve větvi VICTRON (2026-04-12)**
+
+- **BUG**: Při `solar_forecast_source !== OPEN_METEO` (výchozí VICTRON) se `forecastPerHour` (`fPH`) plnilo **jen** z `sensor.energy_production_tomorrow_3` → simulace SOC pro **dnešní** hodiny používala **zítřejší** rozpad po hodinách (omylem místo dnešní predikce).
+- **FIX** (`fve-orchestrator.json`, node „Sbírka dat pro plánování“): jako u OPEN_METEO — `energy_production_today_3` → `fPH`, `energy_production_tomorrow_3` → `fPHT` (sloučení v „1. Příprava parametrů“ beze změny).
+- **Nasazení**: `deploy.sh --no-ha`; commit `29056e3`.
 
 **v25.81 — Fix solar MPPT throttling při záporné nákupní ceně (2026-04-06)**
 
