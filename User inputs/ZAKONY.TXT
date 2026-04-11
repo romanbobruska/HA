@@ -691,6 +691,8 @@ A ZAKAZU PRETOKU
 9.1 ROZHODOVÁNÍ (první splněná podmínka vyhraje)
     1. Nejsme doma → MIN (20°C)
     2. Rychle teplá voda (override) → MAX (69°C)
+    2a. FVE mód Zákaz přetoků NEBO záporná nákupní cena + je rezerva pod jističem (bojler lze zapnout bez přetížení)
+        + auto NEMÁ hlad (auto_ma_hlad=OFF) → MAX (69°C) — dump energie místo omezování soláru / přetoků bez odbytu (§4.10.2)
     3. Povinný čas 17-19:30 + voda < 58°C:
        - Zítra velký solar (forecast > 35kWh) → 40°C (solar dohřeje)
        - Jinak → VYSOKA (60°C)
