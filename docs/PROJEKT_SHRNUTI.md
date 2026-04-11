@@ -4,11 +4,11 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-11 (nasazeno `4301ef3`: bojler — MAX ve ZP/ZN při `maZalohu` a `auto_ma_hlad` OFF, §9.1 bod 2a; dříve `1e97038` buffer baterie ZP/ZN)
+> Poslední aktualizace: 2026-04-12 (dokumentace: `d7ecc29` topení — odklad NIBE na zákaz přetoků dle řádku plánu `sensor.fve_plan`; dříve `4301ef3` bojler ZP/ZN, `1e97038` buffer)
 
 >
 
-> **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/POZADAVKY.TXT`.**
+> **⚠️ VŠECHNY požadavky, zákony a pravidla jsou v `User inputs/ZAKONY.TXT`.**
 
 > Tento soubor obsahuje pouze technický kontext a stav systému — NE požadavky.
 
@@ -20,11 +20,11 @@
 
 > - **`UZIVATELSKA_PRIRUCKA.md`** — pohled uživatele (senzory, módy).
 
-> - **`KONVERZACE_KONTEXT.md`** — starší poznámky; **nízká priorita**, při rozporu platí POZADAVKY + tento soubor.
+> - **`KONVERZACE_KONTEXT.md`** — starší poznámky; **nízká priorita**, při rozporu platí ZAKONY.TXT + tento soubor.
 
-> - **`AI_PREHLED_TABULEK.md`** — **jediný** soubor, kam AI **na tvé vyžádání v chatu** doplní krátký výstup; neobsahuje „pravdu“ o zákonech (ta je v POZADAVKY).
+> - **`AI_PREHLED_TABULEK.md`** — **jediný** soubor, kam AI **na tvé vyžádání v chatu** doplní krátký výstup; neobsahuje „pravdu“ o zákonech (ta je v ZAKONY.TXT).
 
-> - **`TOPENI_POZADAVKY.md`** — jen **entity + `fve_config` klíče**; žádná duplicitní pravidla — zákony výhradně **POZADAVKY.TXT**.
+> - **`TOPENI_POZADAVKY.md`** — jen **entity + `fve_config` klíče**; žádná duplicitní pravidla — zákony výhradně **ZAKONY.TXT**.
 
 >
 
@@ -32,9 +32,9 @@
 
 > - **VŽDY komunikovat v ČEŠTINĚ** — základní pravidlo
 
-> - **Trvalá pravidla v Cursoru** jsou v `.cursor/rules/ha-problemy.mdc` (`alwaysApply`) — soulad se **POZADAVKY**, **žádné nasazování v rozporu** (nejprve vysvětlit konflikt).
+> - **Trvalá pravidla v Cursoru** jsou v `.cursor/rules/ha-problemy.mdc` (`alwaysApply`) — soulad se **ZAKONY.TXT**, **žádné nasazování v rozporu** (nejprve vysvětlit konflikt).
 
-> - **NA ZAČÁTKU úkolu**: `User inputs/POZADAVKY.TXT` + `User inputs/problemy.txt` + **tento soubor**; `UZIVATELSKA_PRIRUCKA.md` dle tématu; `AI_PREHLED_TABULEK.md` jen pokud jde o doplnění výstupu, který tam má skončit.
+> - **NA ZAČÁTKU úkolu**: `User inputs/ZAKONY.TXT` + `User inputs/problemy.txt` + **tento soubor**; `UZIVATELSKA_PRIRUCKA.md` dle tématu; `AI_PREHLED_TABULEK.md` jen pokud jde o doplnění výstupu, který tam má skončit.
 
 > - **ABSOLUTNÍ ZÁKON 1.2 + 2.3**: VŽDY má přednost stav NR na serveru HA před lokální verzí. NIKDY nepřepisovat stav v HA lokální verzí.
 
@@ -66,7 +66,7 @@
 
 >   **deploy.sh přepínače:** `--no-ha` (jen NR, BEZ HA restartu — PREFEROVAT!), `--with-ha` (default), `--force`, `--branch=xyz`
 
-> - `User inputs/POZADAVKY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
+> - `User inputs/ZAKONY.TXT` NESMÍ AI MĚNIT — edituje výhradně uživatel
 
 > - Aktualizovat tento soubor po každém úspěšném nasazení
 
@@ -108,7 +108,7 @@
 
 > **Komunikační kanál:**
 
-> - Ruční vstup uživatele do repa: **`User inputs/problemy.txt`** (zadání) a **`User inputs/POZADAVKY.TXT`** (zákony — edituje výhradně uživatel). Nic dalšího v projektu kvůli běžné práci vyplňovat nemusíš.
+> - Ruční vstup uživatele do repa: **`User inputs/problemy.txt`** (zadání) a **`User inputs/ZAKONY.TXT`** (zákony — edituje výhradně uživatel). Nic dalšího v projektu kvůli běžné práci vyplňovat nemusíš.
 
 > - AI čte `problemy.txt` na začátku úkolu; odpovídá v chatu a provádí opravy — **NIKDY nepíše do `problemy.txt`**
 
@@ -126,15 +126,15 @@ Automatizuje FVE elektrárnu (17 kWp), tepelné čerpadlo NIBE, nabíjení elekt
 
 
 
-### 1.1 SOC baterie ve „solárních hodinách“ — právo vs. POZADAVKY.TXT
+### 1.1 SOC baterie ve „solárních hodinách“ — právo vs. ZAKONY.TXT
 
 
 
-- Soubor `User inputs/POZADAVKY.TXT` jsou **pravidla a cíle tohoto projektu** (prioritizace spotřebičů, módy Victronu, plán 12 h, ekonomika). **Neobsahují odkaz na konkrétní paragrafy zákonů ČR**; u „zákonů“ v názvu jde o závazná pravidla *pro kód a provoz automatiky*.
+- Soubor `User inputs/ZAKONY.TXT` jsou **pravidla a cíle tohoto projektu** (prioritizace spotřebičů, módy Victronu, plán 12 h, ekonomika). **Neobsahují odkaz na konkrétní paragrafy zákonů ČR**; u „zákonů“ v názvu jde o závazná pravidla *pro kód a provoz automatiky*.
 
 - **Úroveň státní regulace** (obecně): u domácí FVE s akumulací typicky rozhoduje **připojení k distribuční soustavě** (dovolený výkon / odkup / měření), **technické normy** (bezpečné připojení zařízení) a **smlouva s operátorem distribuce**. **Samotná výška nabití baterie ve dne** obvykle **není** předmětem zákazu ve stylu „nesmíte mít v poledne vysoký SOC“. Pro jistotu u konkrétního případech platí jen **text připojení / obchodní podmínky** u vašeho DS a typ měření (např. limity přetoku, případné požadavky na řízení výkonu).
 
-- **Uvnitř projektu** (`POZADAVKY` § 4.9): cíl **cca 25 % SOC před první solární hodinou** je **strategická rezerva** (místo v akumulátoru na dopolední výrobu), ne požadavek „ve dne musí být baterie prázdná“. V § 4.9.1 mají **solární hodiny SOC v simulaci růst** — tedy **vysoký SOC ve dne při dobré výrobě je konzistentní** s pravidly plánu, pokud nedochází k nežádoucímu přetoku přes limity systému (to řeší mód **Zákaz přetoků** a konfigurace `max_feed_in` atd., ne „limit SOC“).
+- **Uvnitř projektu** (ZAKONY.TXT § 4.9): cíl **cca 25 % SOC před první solární hodinou** je **strategická rezerva** (místo v akumulátoru na dopolední výrobu), ne požadavek „ve dne musí být baterie prázdná“. V § 4.9.1 mají **solární hodiny SOC v simulaci růst** — tedy **vysoký SOC ve dne při dobré výrobě je konzistentní** s pravidly plánu, pokud nedochází k nežádoucímu přetoku přes limity systému (to řeší mód **Zákaz přetoků** a konfigurace `max_feed_in` atd., ne „limit SOC“).
 
 - **Závěr pro vývoj**: žádná oprava flow **jen proto, že je SOC ve dne vysoký**, z dokumentovaných pravidel neplyne. Pokud by něco odporovalo **připojovacím podmínkám**, je třeba je mít konkrétně vyjmenované (např. limit příkonu / exportu), ne odhad z SOC.
 
@@ -502,7 +502,7 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - Přidány chybějící parametry: `topeni_patron_min_solar_w`, `nibe_est_consumption_kwh`, `topeni_solar_defer_margin`, `topeni_final_solar_kwh`, `topeni_final_hours`
 
-- Fix: `topeni_min_soc_patron` 90→95 (dle POZADAVKY.TXT)
+- Fix: `topeni_min_soc_patron` 90→95 (dle ZAKONY.TXT)
 
 
 
@@ -558,11 +558,11 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - Anti-cycling se nepřeskakuje pro kompresor override
 
-- Zákon 10.5 aktualizován v POZADAVKY.TXT
+- Zákon 10.5 aktualizován v ZAKONY.TXT
 
 
 
-**Zákon 8.5 — pravidlo 3 hodin** (nový zákon v POZADAVKY.TXT):
+**Zákon 8.5 — pravidlo 3 hodin** (nový zákon v ZAKONY.TXT):
 
 - Pokud aktuální hodina ≤ 3h před poslední solární hodinou → patrony se nespustí, NIBE preferováno
 
@@ -630,7 +630,7 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
-**Zákon 4.5 aktualizován** v POZADAVKY.TXT — business-user-friendly popis sell target logiky.
+**Zákon 4.5 aktualizován** v ZAKONY.TXT — business-user-friendly popis sell target logiky.
 
 
 
@@ -719,6 +719,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
   3. Při NR restartu se čte ze souboru místo ztracené globální proměnné
   4. Odstraněn hacky fallback `hr >= 12` — čítač začne od 0 pokud soubor neexistuje
 - Soubor: filtrace-bazenu.json (node filtrace_decision)
+
+
+**v25.83 — Topení: odklad NIBE na zákaz přetoků podle řádku plánu (2026-04-12)**
+
+- **Kontext**: Odklad topení do hodiny plánované jako zákaz přetoků má vycházet z **plánu** (`sensor.fve_plan` → `attributes.plan`), ne z proxy přes prodejní cenu.
+- **Změna** (`fve-heating.json`, node `rf_htg_read_001`): při hledání nejbližšího budoucího kroku se používá `row.mode === "zakaz_pretoku"` a `offset > 0` (stejný řetězec módu jako v orchestrátoru `MODY.ZAKAZ`), místo `priceSell <= 0`.
+- **Konfig** (beze změny): `topeni_zakaz_pretok_defer_max_sol_kwh`, `topeni_zakaz_pretok_defer_safe_margin_extra` (doplňková rezerva k `topeni_bezpecny_pokles`).
+- **Nasazení**: `deploy.sh --no-ha`; commit `d7ecc29`.
+- **§2.4**: Po deploy ověřeny logy — `docker logs addon_a0d7b954_nodered`: start flows bez chyb funkcí.
 
 **v25.81 — Fix solar MPPT throttling při záporné nákupní ceně (2026-04-06)**
 
