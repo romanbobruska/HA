@@ -198,13 +198,11 @@ jistá, NEZASADÍ a vysvětlí proč.
 
 4.6 ZÁKAZ PŘETOKŮ
     - Nesmi se exportovat do site, idealne ani 100 Wh. Zaroven se nesmi ze site brat (povoleno cca 150W)!
-    - VÝJIMKA — ULTRA LEVNÁ CENA (buy < prah_ultra_levna_nakup, výchozí 1.0 Kč/kWh):
-      Pokud je nákupní cena ze sítě extrémně nízká (pod 1 Kč), baterie se NEVYBÍJÍ.
-      Důvod: nemá smysl vybíjet baterii, když je síťová energie prakticky zadarmo.
-      Baterie se šetří pro pozdější drahé hodiny, kde ji můžeme využít nebo prodat.
-      Spotřebu domu pokrývá primárně solární výroba, případný deficit ze sítě (PSP zůstává 30W).
-      NESMÍ se aktivně nakupovat ze sítě (PSP se NEZVYŠUJE) — jen se blokuje vybíjení baterie.
-      V plánu se zobrazí „(grid < X.X Kč)" u dotčených hodin.
+    - OZNAČENÍ — ULTRA LEVNÁ CENA (buy < prah_ultra_levna_nakup, výchozí 1.0 Kč/kWh):
+      Hodiny s extrémně levným nákupem se v plánu označí (např. „(grid < X.X Kč)").
+      Baterie se v tomto módu NESMÍ blokovat kvůli ekonomice — musí zůstat dostupná jako buffer
+      proti výkyvům (ochrana jističe / DC přechody). Platí §4.2 a §4.8 (blokace jen NIBE/sauna).
+      NESMÍ se aktivně zvyšovat odběr ze sítě nad zakaz_pretoku_grid_setpoint_w kvůli „dokupu“ — PSP zůstává na úrovni Zákazu přetoků.
     - Musi byt zachovano pravidlo, ze chceme maximalne vyuzit solarni vyrobu
     - U zakazu pretoku pamatuj na to, ze pokud bude BATERIE NA VYSOKEM SOC (SOC≥95%), tak se bude OMEZOVAT VYROBA SOLARU 
         - TO JE nekolikrat ZMINENO v tomto SOUBORU v jinem kontextu
@@ -321,18 +319,16 @@ A ZAKAZU PRETOKU
         5. Normal (vybíjení): cena ≥ prah_draha_energie AND SOC > min_soc + rezerva
         6. Šetřit: default — baterie se nevybíjí, solar jde do baterie/sítě
         7. ZÁPORNÁ NÁKUPNÍ CENA - MÓD EXTREMNĚ VYSOKÉ SPOTŘEBY
-            BABTERIE SE NEVYBÍJÍ, SPOTŘEBOVÁVÁ SE ZE SÍTĚ CO MOŽNÁ NEJVÍCE DLE PRIORIT!!! CHCEME MÍT V TOMTO
-            MÓDU CO MOŽNÁ NEJVĚTŠÍ ODBĚR, CO TO JDE, ABYCHOM NA TOM VYDĚLALI!!!      
-                POKUD PRI TOMTO MODU BUDE I ZAKAZ PRETOKU, MUSI SE BRAT V POTAZ TO, ZE NEEXPORTUJEME NIC DO SITE,
-                ALE PLATI MAXIMALNI SPOTREBA ZE SITE!!! BEREME DO MAX ZE SITE, NEDAVAME
-                DO SITE NIC, NEVYBIJIME BATERII!!!
+            CÍLEM JE MAXIMÁLNÍ ODBĚR ZE SÍTĚ DLE PRIORIT (PLATÍ NÁM ZA ODBĚR). BATERIE NESMÍ BÝT EKONOMICKY
+            „ZAKÁZÁNA“ — MUSÍ FUNGOVAT JAKO BUFFER (§4.2), JINAK HROZÍ ŠPIČKY NA JISTIČI.
+            POKUD JE ZÁROVEŇ ZÁKAZ PŘETOKŮ: ŽÁDNÝ EXPORT, MAX. ODBĚR DLE PSP A §4.10.5; PREVENT_FEEDBACK PODLE STAVU PRODEJNÍ CENY.
 
 4.10 ZÁPORNÁ NÁKUPNÍ CENA — MÓD MAXIMÁLNÍ SPOTŘEBY ZE SÍTĚ
     - AKTIVACE: Nákupní cena elektřiny je záporná (< 0 Kč/kWh). Nám platí za odběr!
     - CÍL: Maximální odběr ze sítě dle priorit, abychom na záporné ceně vydělali.
     - JEDINÁ OMEZENÍ: max_spotreba_sit_w (jistič) a priority spotřebičů.
-    - NIKDY NEVIBÍJET BATERII V TOMTO MODU!!! NASTAVIT BLOKACI VYBÍJENÍ BATERIE Z DŮVODU TOHOTO FVE MODU!!!
-    - HLAVIČKA PLÁNU musí zobrazovat „Blokace: ANO, Záporná nákupní cena" když je tento mód aktivní.
+    - Baterie nesmí být v tomto módu blokována „kvůli záporné ceně“ — max_discharge_power = -1 kromě §4.8 (NIBE/sauna soft blokace).
+    - Hlavička plánu: záporná nákupní cena už sama o sobě není „Blokace: ANO“ (blokace = §4.8 a podobně).
 
     4.10.1 VICTRON ESS NASTAVENÍ
         - PSP = max_spotreba_sit_w - DYNAMICKÁ REZERVA (KLADNÉ = import ze sítě!!!)
@@ -342,8 +338,8 @@ A ZAKAZU PRETOKU
             - Důvod: pokud najednou spadne solární výroba, NIBE nelze okamžitě vypnout,
               ale patrony a auto ampéráž se přizpůsobí. Větší rezerva = ochrana jističe.
         - Baterie se NABÍJÍ neomezeně (max_charge_power = -1)
-        - Baterie se NEVYBÍJÍ (max_discharge_power = solarPassthrough)
-        - Export do sítě ZAKÁZÁN (feedin_on = false, prevent_feedback = 1)
+        - max_discharge_power = -1 kromě §4.8 (NIBE + nízký solar / sauna → solarPassthrough jako soft blokace, viz §11.3)
+        - Export do sítě ZAKÁZÁN (feedin_on = false); prevent_feedback = 1 pokud platí zákaz přetoků (prodejní cena ≤ 0), jinak 0
         - Scheduled charging NEPOUŽITO
 
     4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší) — VŠECHNY MOHOU JET SOUČASNĚ!
@@ -393,10 +389,10 @@ A ZAKAZU PRETOKU
         Config parametry: zaporna_nibe_reserve_w (5000), zaporna_flex_reserve_w (3000)
 
     4.10.6 KOMBINACE SE ZÁKAZEM PŘETOKŮ
-        Pokud je zároveň záporná nákupní I prodejní cena:
-        - Platí vše výše (max odběr ze sítě)
-        - PLUS: žádný export (prevent_feedback)
-        - Baterie se stále nabíjí, nevybíjí
+        Pokud je zároveň záporná nákupní I nekladná prodejní cena:
+        - Platí vše výše (max odběr ze sítě dle PSP)
+        - PLUS: žádný export (prevent_feedback = 1)
+        - Baterie zůstává bufferem (bez ekonomické blokace vybíjení); §4.8 zůstává
 
     4.9.3 KONZISTENCE PLÁNU
         - Plán musí zajistit, že SOC na konci horizontu ≥ min_soc
@@ -868,7 +864,7 @@ A ZAKAZU PRETOKU
          pri nabijeni a vybijeni baterie
     min_arbitrage_profit_czk: 3 (min zisk pro nabíjení z gridu, Kč/kWh)
     min_sell_profit_czk: 3 (min zisk pro prodej do sítě, Kč/kWh)
-    prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh — pod tímto prahem se v Zákaz přetoků blokuje vybíjení baterie)
+    prah_ultra_levna_nakup: 1.0 (ultra levná energie, Kč/kWh — práh pro označení hodin v plánu; neblokuje vybíjení kvůli ekonomice)
     night_reserve_kwh: 10 (noční rezerva — pod tuto hodnotu neprodávat)
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
     setrit_grid_bias_w: 150 (PSP bias v Šetřit módu, W)
