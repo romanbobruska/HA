@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-11 (nasazeno commit `1e97038`: Zákaz přetoků + záporná nákupní cena — baterie jako buffer, `max_discharge_power` -1 kromě §4.8; orchestrátor bez falešné položky „Záporná nákupní cena“ v blokaci; `ZAKONY.TXT` sladěny)
+> Poslední aktualizace: 2026-04-11 (nasazeno `4301ef3`: bojler — MAX ve ZP/ZN při `maZalohu` a `auto_ma_hlad` OFF, §9.1 bod 2a; dříve `1e97038` buffer baterie ZP/ZN)
 
 >
 
