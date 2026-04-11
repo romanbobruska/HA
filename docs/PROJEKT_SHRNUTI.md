@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-09 (v25.107: plán — `forceCheapSetrit`: N nejlevnějších nesolárních hodin podle Kč v 12h okně, výchozí N=3 přes `plan_cheapest_hours_setrit`; odstranění inverze typu H00 Šetřit / H01 Normal)
+> Poslední aktualizace: 2026-04-11 (nasazeno commit `1e97038`: Zákaz přetoků + záporná nákupní cena — baterie jako buffer, `max_discharge_power` -1 kromě §4.8; orchestrátor bez falešné položky „Záporná nákupní cena“ v blokaci; `ZAKONY.TXT` sladěny)
 
 >
 
