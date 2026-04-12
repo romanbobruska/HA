@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`71465a8` ZP+nízký solar — nabíjení ze sítě jen ultra levná hodina; dříve `6af9846`)
+> Poslední aktualizace: 2026-04-12 (`d4e200f` NABIJET při ZP — arbiter max_discharge_allowed; dříve `71465a8`)
 
 >
 
