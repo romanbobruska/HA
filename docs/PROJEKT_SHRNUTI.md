@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`c639e8b`: v25.94 Fix zakaz_pretoku blockDischarge pro NIBE/sauna)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`8975a0b`: v25.96 Fix zakaz_pretoku blockDischarge — přímé čtení NIBE z HA)
 
 >
 
@@ -708,11 +708,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
-**v25.94 — Fix zakaz_pretoku: obnovení blockDischarge pro NIBE/sauna (2026-04-12)**
+**v25.94–96 — Fix zakaz_pretoku: NIBE blokace vybíjení baterie (2026-04-12)**
 
-- **BUG**: `ZÁKAZ PŘETOKŮ Logic` (fve-modes.json, node `75d1f9e77bc15e0a`): `max_discharge_power: -1` vždy — ignoroval `blockDischarge`. Při NIBE + solar < 8kW baterie vybíjela na NIBE (SOC 25%), místo aby NIBE brala ze sítě. Regrese z P5 (v25.85).
-- **FIX**: `max_discharge_power: blockDischarge ? solarPassthrough : -1`. Obnovena §4.8 ochrana: NIBE/sauna → blokace vybíjení → Victron automaticky bere ze sítě.
-- **Nasazení**: `deploy.sh --no-ha`; commit `c639e8b`.
+- **BUG 1** (v25.94): `ZÁKAZ PŘETOKŮ Logic` (fve-modes.json, node `75d1f9e77bc15e0a`): `max_discharge_power: -1` vždy — ignoroval `blockDischarge`. Při NIBE + solar < 8kW baterie vybíjela na NIBE (SOC 25%), místo aby NIBE brala ze sítě. Regrese z P5 (v25.85).
+- **FIX 1**: `max_discharge_power: blockDischarge ? solarPassthrough : -1`.
+- **BUG 2** (v25.95): `cerpadloTopi = msg.cerpadloTopi || false` — chyběl fallback na `global.get("cerpadlo_topi")`.
+- **FIX 2**: Přidán `|| global.get("cerpadlo_topi")` fallback.
+- **BUG 3** (v25.96): `global.get("cerpadlo_topi")` je false i když NIBE topí! Příčina: fve-heating.json nastavuje `global.set("cerpadlo_topi", (isHtg||isTUV) && nBD)` kde `nBD = flow.get("nibe_block_discharge") !== false` — flow proměnná je false.
+- **FIX 3**: Přímé čtení z HA entity `binary_sensor.nibe_kompresory_aktivni_binarni` jako primární zdroj stavu NIBE. Spolehlivé, bez závislosti na stale globálech.
+- **Ověřeno**: `max_discharge_power` přešla z -1 na 1377 (solarPassthrough). NIBE bere ze sítě.
+- **Nasazení**: `deploy.sh --no-ha`; commit `8975a0b`.
 
 
 **v25.93 — Fix NABÍJET ZE SÍTĚ PSP + bojler MAX při ultra levné ceně (2026-04-12)**
