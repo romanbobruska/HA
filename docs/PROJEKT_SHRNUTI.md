@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`da3df8c`: ZP+NABIJET i při selhání `zpNabijetOk` kvůli rS — OR `fD<prah`; dříve `e5bf0ae` / `1314e01`)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`f79b675`: ZP+NABIJET i když krok 2 dá `tSoc==soc` — `_socNeedGrid`; dříve `da3df8c` / `f4faa03`)
 
 >
 
