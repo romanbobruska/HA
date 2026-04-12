@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`b4660d0`: plán ZP+ultra levná — NABIJET při predikci soláru <5 kWh/d + nízký SOC; předchozí `12ea14d` Kontrola / `7c759cc` PSP)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`1efad02`: `input_number.fve_plan_extreme_low_solar_kwh` + plán čte práh z config; ZAKONY §4.9.1a)
 
 >
 
