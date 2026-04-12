@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`1efad02`: `input_number.fve_plan_extreme_low_solar_kwh` + plán čte práh z config; ZAKONY §4.9.1a)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`ad45e02`: Fix NABÍJET PSP + bojler MAX při ultra levné ceně)
 
 >
 
@@ -706,6 +706,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.93 — Fix NABÍJET ZE SÍTĚ PSP + bojler MAX při ultra levné ceně (2026-04-12)**
+
+- **BUG 1 (KRITICKÝ)**: `NABÍJET ZE SÍTĚ Logic` (fve-modes.json, node `ebcf9e560f598c02`): `psp = -maxGridW` (-22000W) = **EXPORT do sítě**! Pro nabíjení ze sítě musí být PSP **kladné** (import). Baterie se nenabíjela i přesto, že plán říkal `nabijet_ze_site`.
+- **FIX**: `psp = -maxGridW` → `psp = maxGridW` (2 výskyty — s konzumenty + ZP, bez konzumentů). §4.10.1: "KLADNÉ = import ze sítě!!!"
+- **BUG 2**: Bojler logika (boiler.json) nastavovala MAX (69°C) jen při `zaporna_nakupni_cena`, ale ne při `nabijet_ze_site` (ultra levná cena). Při ultra levné ceně (buy < 1 Kč) bojler zůstával na 58°C.
+- **FIX**: Přidána podmínka `fve_mode==="nabijet_ze_site" && ma_prostor_pod_jisticem` → `TEPLOTA_MAX` za zápornou cenou check. §4.10.2 bod 5.
+- **Nasazení**: `deploy.sh --no-ha`; commit `ad45e02`.
+- **Ověřeno**: SOC 30→35% během H12 (ultra levná 0.96 Kč), PSP=+22000W. Bojler ověřen v kódu, runtime test v H14.
 
 
 **v25.82 — Fix filtrace čítač persistence přes NR restart (2026-04-06)**
