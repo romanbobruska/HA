@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`ad45e02`: Fix NABÍJET PSP + bojler MAX při ultra levné ceně)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`c639e8b`: v25.94 Fix zakaz_pretoku blockDischarge pro NIBE/sauna)
 
 >
 
@@ -706,6 +706,13 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.94 — Fix zakaz_pretoku: obnovení blockDischarge pro NIBE/sauna (2026-04-12)**
+
+- **BUG**: `ZÁKAZ PŘETOKŮ Logic` (fve-modes.json, node `75d1f9e77bc15e0a`): `max_discharge_power: -1` vždy — ignoroval `blockDischarge`. Při NIBE + solar < 8kW baterie vybíjela na NIBE (SOC 25%), místo aby NIBE brala ze sítě. Regrese z P5 (v25.85).
+- **FIX**: `max_discharge_power: blockDischarge ? solarPassthrough : -1`. Obnovena §4.8 ochrana: NIBE/sauna → blokace vybíjení → Victron automaticky bere ze sítě.
+- **Nasazení**: `deploy.sh --no-ha`; commit `c639e8b`.
 
 
 **v25.93 — Fix NABÍJET ZE SÍTĚ PSP + bojler MAX při ultra levné ceně (2026-04-12)**
