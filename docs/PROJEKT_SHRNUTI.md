@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`c2a8777`: plán — „| ⚡“ v důvodu bez slova Dobití; ZAKONY příklad)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`e5bf0ae`: ZP + slabý solár + ultra levná → plán `nabijet_ze_site` i bez `cO`, shodné s ⚡; dříve `c2a8777` / `2694978`)
 
 >
 
