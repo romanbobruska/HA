@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`9fc2a59` plán — „| ⚡ Dobití“ v důvodu; ZAKONY příklad; dříve `209f36c`)
+> Poslední aktualizace: 2026-04-12 (plán — „| ⚡“ v důvodu bez slova Dobití; ZAKONY příklad; dříve `9fc2a59` / `209f36c`)
 
 >
 
