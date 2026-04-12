@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`f79b675`: ZP+NABIJET i když krok 2 dá `tSoc==soc` — `_socNeedGrid`; dříve `da3df8c` / `f4faa03`)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`4bd007d`: Kontrola podmínek — živé SOC + 2 % hystereze před Šetřit při NABIJET; dříve `f79b675` / `a67e575`)
 
 >
 
