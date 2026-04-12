@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`6af9846` plán — „Možné dobíjení ze sítě“ jen při ultra levném nákupu + ZP; dříve `45c311d`)
+> Poslední aktualizace: 2026-04-12 (`71465a8` ZP+nízký solar — nabíjení ze sítě jen ultra levná hodina; dříve `6af9846`)
 
 >
 
