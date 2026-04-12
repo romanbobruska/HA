@@ -318,6 +318,10 @@ A ZAKAZU PRETOKU
         1. Zákaz přetoků: prodejní cena ≤ 0 → feed-in OFF, PSP kladné
         1a. Slabý solární den + zákaz přetoků: dokup elektřiny do baterie jen v hodinách s „ultra levným“ nákupem
              (prah_ultra_levna_nakup v konfiguraci). Nestačí jen obecně levná hodina — jinak by šlo zbytečně připlatit.
+             Doplňek: pokud predikce denní solární výroby (stejný zdroj jako plán — max z input_number.predpoved_solarni_vyroby_dnes
+             a sensor.energy_production_today_3) klesne POD práh plan_extreme_low_solar_kwh (výchozí 5 kWh/d,
+             entita input_number.fve_plan_extreme_low_solar_kwh), zároveň platí zákaz přetoků, ultra levný nákup a SOC baterie
+             pod max_daily_soc − 3 %, plán přiřadí mód Nabíjet ze sítě (logika Node-RED krok 4 plánu).
         2. Balancování: pokud je naplánováno (viz 4.7)
         3. Nabíjet ze sítě: POUZE pokud VŠECHNY podmínky splněny:
             a) Cena je pod prah_levna_energie (level ≤ config.prah_levna_energie)

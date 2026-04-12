@@ -52,3 +52,13 @@ fve_jistic:
   unit_of_measurement: "A"
   icon: mdi:flash
   mode: box
+
+fve_plan_extreme_low_solar_kwh:
+  name: "Plán — práh extrémně slabého soláru (kWh/d)"
+  min: 0
+  max: 50
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power-variant-outline
+  mode: box
+  initial: 5
