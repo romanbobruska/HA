@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`12ea14d`: Kontrola podmínek — při ZP držet NABIJET do `max_daily−2 %`; `7c759cc` PSP u NABIJET)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`b4660d0`: plán ZP+ultra levná — NABIJET při predikci soláru <5 kWh/d + nízký SOC; předchozí `12ea14d` Kontrola / `7c759cc` PSP)
 
 >
 
