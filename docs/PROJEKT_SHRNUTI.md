@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`45c311d` plán — důvod ZP/NABIJET při nízké predikci soláru; dříve `29056e3` VICTRON `fPH`/`fPHT`)
+> Poslední aktualizace: 2026-04-12 (`6af9846` plán — „Možné dobíjení ze sítě“ jen při ultra levném nákupu + ZP; dříve `45c311d`)
 
 >
 
