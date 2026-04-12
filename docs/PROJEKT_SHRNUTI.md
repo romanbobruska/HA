@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`209f36c` ZAKONY — slabý den + ZP, plán, baterie pro dům; kód `d4e200f`)
+> Poslední aktualizace: 2026-04-12 (`9fc2a59` plán — „| ⚡ Dobití“ v důvodu; ZAKONY příklad; dříve `209f36c`)
 
 >
 
