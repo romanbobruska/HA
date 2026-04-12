@@ -431,7 +431,7 @@ A ZAKAZU PRETOKU
             „Nabíjení ze sítě na 60%, SOC 25→~43%"
             „Záporná prodejní cena, SOC 37%"
             „Prodej do sítě (zisk 2.3 Kč/kWh), SOC 55→~38%"
-            „Ultra levná síť, SOC 44→~52% | Možné dobíjení ze sítě" — jen když je v té hodině skutečně „ultra levný“ nákup
+            „Ultra levná síť, SOC 44→~52% | ⚡ Dobití" — jen když je v té hodině skutečně „ultra levný“ nákup
                 a zároveň ten den málo slunce; krátká poznámka pro člověka, bez opakování čísel z jiných sloupců.
 
         Chybné příklady (ZAKÁZÁNO):
