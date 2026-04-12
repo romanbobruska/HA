@@ -1,0 +1,297 @@
+================================================================================
+  ZAKONY2 — LOGICKÉ ZADÁNÍ PROJEKTU (FVE, BATERIE, DŮM)
+  Horoušany — srozumitelná čeština + všechna rozhodovací pravidla
+================================================================================
+
+ÚČEL A PLATNOST
+  Tento soubor je hlavní zdroj SMYSLU a LOGIKY pro automatiku: co se smí, co ne,
+  v jakém pořadí se rozhoduje a jaké podmínky musí platit současně.
+  Popisuje CHOVÁNÍ, ne konkrétní názvy souborů ani programovací detaily.
+
+  Technické názvy entit, registrů a cesty k logům zůstávají v původním souboru
+  ZAKONY.TXT a v dokumentaci — použij je tam, kde je potřeba přesné napojení.
+
+  Pravidlo při pochybnosti: nejdřív sjednotit význam tady, pak implementaci.
+  Žádná implementace nesmí obcházet ABSOLUTNÍ ZÁKAZY v sekci 2.
+
+--------------------------------------------------------------------------------
+1. HLAVNÍ CÍL
+--------------------------------------------------------------------------------
+  • Platit ze sítě jen nezbytné minimum; maximalizovat vlastní solár a výhodné
+    spotové ceny.
+  • Nakupovat energii za co nejméně, prodávat přebytky za co nejvíc — plán a
+    reálné přepínání musí být v tomto smyslu KONZISTENTNÍ (viz sekce 11).
+  • „Mocné hodiny“ (typicky noční okno) musí jít nastavit v konfiguraci.
+
+--------------------------------------------------------------------------------
+2. ABSOLUTNÍ ZÁKAZY (NIKDY)
+--------------------------------------------------------------------------------
+  • NEPŘEKROČIT jistič — celkový odběr domu má horní limit (konfigurovatelný).
+  • NIBE (tepelné čerpadlo) a elektrické patrony v nádrži NESMÍ současně
+    způsobit nebezpečnou souhru špiček, která by jistič přetížila (viz také
+    topení: kompresor vs patrony).
+  • Pokud „auto má hlad“ (chce nabíjet) → patrony NESMÍ běžet. Bez výjimky.
+  • Minimální SOC baterie (spodní hranice) nastavuje VÝHRADNĚ uživatel —
+    automatika ji sama nemění.
+  • Kompresor NIBE nesmí být násilně „useknut“, když fyzicky běží.
+  • Nezahazovat solární výrobu bez nutnosti — výchozí přístup je maximalizovat
+    využití soláru; omezovat výrobu jen v kritických situacích.
+  • Při záporné nákupní ceně elektřiny: maximalizovat odběr ze sítě v mezích
+    jističe a priorit (viz sekce 15).
+  • Neprovádět zbytečný odběr ze sítě kvůli chybě v automatizaci (nechtěný
+    nákup kvůli logice = chyba).
+
+--------------------------------------------------------------------------------
+3. PRIORITA SPOTŘEBIČŮ (BĚŽNÝ PROVOZ)
+--------------------------------------------------------------------------------
+  Od nejvyšší priority:
+    1) Topení domu (NIBE), když dům potřebuje teplo
+    2) Nabíjení domácí baterie
+    3) Nabíjení auta (režim ze slunce nebo ze sítě dle pravidel)
+    4) Patrony nádrže — poslední; jen při reálném přebytku energie, který
+       jinam nedává smysl
+
+  Poznámka: V módu záporné nákupní ceny platí rozšířená priorita (sekce 15) —
+    tam mohou běžet více věcí paralelně v mezích jističe.
+
+--------------------------------------------------------------------------------
+4. PŘEHLED FVE MÓDŮ (CO ZNAMENAJÍ)
+--------------------------------------------------------------------------------
+  Normal        — drahé hodiny: běžná spotřeba z baterie dle modelu
+  Šetřit        — levné hodiny: baterie se nevybíjí (šetří se na horší časy)
+  Nabíjet ze sítě — plánované nabíjení baterie ze sítě za splnění podmínek
+  Prodávat      — aktivní prodej z baterie do sítě za dostatečný zisk
+  Zákaz přetoků — nelze rozumně exportovat (např. záporná prodejní cena)
+  Solární nabíjení — levné solární hodiny (souvisí s plánem / režimem)
+  Balancování — občasné vyrovnání článků baterie (interval z konfigurace)
+
+--------------------------------------------------------------------------------
+5. CHOVÁNÍ JEDNOTLIVÝCH MÓDŮ (LOGIKA)
+--------------------------------------------------------------------------------
+
+5.1 NORMAL
+  • Baterie se vybíjí podle reálné spotřeby; co chybí, bere dům ze sítě.
+  • Obecně bez zákazu vybíjení — výjimky jen u blokací (sekce 9).
+
+5.2 ŠETŘIT
+  • Baterie se NESMÍ vybíjet (stav v baterii neklesá kvůli vybíjení).
+  • Šetřit se má provádět za CO NEJVÝHODNĚJŠÍCH nákupních podmínek — pozor na
+    PŮLNOC: „levnost“ podle denní škály nemusí odpovídat skutečnému pořadí
+    korun za kWh mezi dny — rozhodují skutečné ceny v čase.
+  • V nesolární části dne má smysl upřednostnit Šetřit v hodinách s nejnižšími
+    skutečnými nákupními cenami v plánovacím okně (aby nevznikla obrácená
+    logika: šetřit v dražší hodině a běžet normálně v levnější).
+  • Je-li solární výroba a zároveň režim šetření baterie: využít solár primárně
+    na spotřebu domu; baterii spíš jemně dobíjet (řádově stovky W), dynamicky —
+    celý solární výkon má smysl využít, ne ho zahazovat.
+  • Je-li solár dostatečný a baterie se dobíjí, nesmí vzniknout účelový nákup
+    ze sítě kvůli tomu (ani zanedbatelné množství).
+
+5.3 NABÍJET ZE SÍTĚ
+  • Zapíná se jen pokud se arbitráž vyplatí: zisk po účincích a amortizaci
+    ≥ nastavený minimální zisk (konfigurace).
+  • Musí platit: solární předpověď nestačí sama pokrýt potřebu domu / baterie
+    v souladu s pravidly — pokud zítra „svítí dost“, nabíjet záměrně ze sítě
+    nedává smysl.
+  • Podmínky zahrnují také: cena v levné oblasti, SOC po soláru by jinak byl
+    pod minimem + noční rezerva, a smysluplný rozdíl mezi budoucím prodejem
+    a nákupem.
+
+5.4 PRODÁVAT
+  • Prodej jen pokud zisk po ztrátách a amortizaci ≥ práh z konfigurace.
+  • Prodej řadit od nejvyšší prodejní (sell) ceny dolů.
+  • Před prodejem se stanoví CÍLOVÉ SOC — pod tuto hranici se neprodává.
+    Cíl vychází z toho, kolik energie dům spotřebuje do začátku solární výroby;
+    cíl je stabilní v čase (ne každých pár sekund podle náhodného SOC).
+  • Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit dráž.
+  • Nejlevnější noční hodiny mají držet baterii v režimu šetření, aby zbývala
+    rezerva do rána před sluncem.
+
+5.5 ZÁKAZ PŘETOKŮ
+  • Neexportovat do sítě (ideálně ani stopové množství); odběr ze sítě jen
+    minimální technický, pokud je vyžadován.
+  • VÝJIMKA — ultra levný nákup (pod práh z konfigurace, typicky okolo 1 Kč/kWh):
+    baterii NEVYBÍJET (energie ze sítě je téměř zdarma — šetřit baterii na
+    dražší chvíle). Neaktivně „nepřikupovat“ záměrně — jde o blokaci vybíjení
+    a chytré pokrytí spotřeby solárem + minimem ze sítě.
+  • Při vysokém SOC a nemožnosti exportu směrovat energii do spotřeb v domě
+    (priorita), než omezovat solár — omezení soláru je poslední možnost.
+
+5.6 BALANCOVÁNÍ
+  • Interval typicky řádově jednou za N dní (konfigurace).
+  • Nespouštět v kombinaci, která dává rozumný smysl — např. špatné ráno bez
+    soláru, drahé podmínky, velký plánovaný odběr, nízký SOC, nenabité auto…
+  • Nikdy společně s módem zákazu přetoků (viz původní ZAKONY — technické
+    napojení).
+  • Po dokončení aktualizovat evidenci posledního úspěšného/neúspěšného cyklu
+    pro zobrazení uživateli.
+  • NIBE (topení domu) není kvůli balancování blokována — dům má přednost.
+  • Při plánování: preferovat solární hodiny; bez soláru opatrně s grid částí.
+
+--------------------------------------------------------------------------------
+6. BLOKACE VYBÍJENÍ A PRODEJE (DOMÁCNOST)
+--------------------------------------------------------------------------------
+  Blokace VYBÍJENÍ baterie (jen v těchto případech):
+    • běží NIBE (topení)
+    • zapnutá sauna
+
+  Blokace PRODEJE do sítě (běžné vybíjení pro dům může běžet):
+    • zapnutá vířivka → žádný prodej z baterie; pokud by plán chtěl prodávat,
+      přepnout na normální režim; v hlavičce plánu informovat o blokaci.
+
+--------------------------------------------------------------------------------
+7. DVACETIČTYŘHODINOVÝ PLÁN (ORCHESTRACE) — PRIORITA PRO KAŽDOU HODINU
+--------------------------------------------------------------------------------
+  Pro každou hodinu v horizontu platí v tomto POŘADÍ (první splněné pravidlo):
+
+  1) Zákaz přetoků: prodejní cena ≤ 0 → žádný export, řízení odběru
+  2) Balancování: pokud je v plánu a příhodné
+  3) Nabíjet ze sítě: JEN pokud současně
+       a) cena je v „levné“ oblasti (podle prahu z konfigurace)
+       b) solár nestačí pokrýt potřebu (podle předpovědi a pravidel)
+       c) po soláru by SOC byl stále pod minimum + noční rezerva
+       d) arbitráž dává smysl (minimální zisk po účincích)
+     → Když zítra svítí „až moc“, nabíjení ze sítě se ruší.
+  4) Prodávat: podle sekce 5.4
+  5) Normal (vybíjení): drahá cena a SOC nad minimem + rezerva
+  6) Šetřit: výchozí — baterii nevybíjet; solár jde primárně do spotřeby /
+     do baterie podle modelu
+  7) Záporná NÁKUPNÍ cena: mód extrémního odběru ze sítě (sekce 15) —
+     baterie se NEVYBÍJÍ; maximalizovat spotřebu ze sítě dle priorit.
+
+--------------------------------------------------------------------------------
+8. SIMULACE STAVU BATERIE V PLÁNU (MUSÍ BÝT REALISTICKÁ)
+--------------------------------------------------------------------------------
+  • Odhadovat SOC hodinu po hodině jako reálný průběh — stejné SOC přes dlouhé
+    úseky bez důvodu = chyba; nesmyslné skoky = chyba.
+  • Spotřeba domu: nejdřív z historického přehledu spotřeb (dostatek vzorků
+    pro danou hodinu a typ dne), jinak rozumný odhad z denní spotřeby / 24.
+  • Solární hodiny: růst SOC z přebytku výroby nad spotřebu (po započtení
+    modelu domu).
+  • NIBE v plánu: cykly závisí na rozdílu teplot (vnitřní cíl − venkovní);
+    jeden cyklus má typický objem a délku; mezi cykly musí být rozumná pauza
+    (servisní stav stupňů minut) — nelze plánovat nepřetržité topení po celý
+    den bez ohledu na fyziku. V drahých hodinách bez silného soláru NIBE v modelu
+    „netopí“. Historický log už NIBE v průměru obsahuje — nepřičítat dvakrát.
+  • Šetřit: SOC neklesá kvůli vybíjení. Normal: klesá dle spotřeby. Nabíjení
+    ze sítě: růst dle výkonu nabíjení. Prodávat: pokles dle prodeje.
+
+--------------------------------------------------------------------------------
+9. KONZISTENCE PLÁNU A EKONOMICKÁ LOGIKA
+--------------------------------------------------------------------------------
+  • Na konci horizontu musí být SOC ≥ uživatelské minimum (min_soc).
+  • Pokud se vybíjí v drahých hodinách, model musí nechat dost energie na zbytek
+    noci podle spotřeby.
+  • Nabíjení ze sítě v levných hodinách jen pokud dává smysl: buď solár zítra
+    nestačí, nebo existuje dostatečný prostor pro ziskovou arbitráž v drahých
+    hodinách.
+  • Zakázané myšlenkové skoky (příklady):
+      × Šetřit → nabíjet ze sítě → šetřit bez důvodu
+      × Nabíjet ze sítě při velmi dobré solární předpovědi
+      × Stejné SOC přes hodiny Šetřit bez vysvětlení
+      × Vybíjet v levné hodině a šetřit v dražší (obráceně než ekonomika)
+  • Cíl před první významnou solární hodinou: mít v baterii řádově 20–25 %
+    kapacity jako rozumnou rezervu (spíš méně než zbytečně víc). Má to vycházet
+    z modelu spotřeby a cen, ne z mechanického „dodatečného vybíjení bez smyslu“.
+
+--------------------------------------------------------------------------------
+10. SLOUPEC „DŮVOD“ V PLÁNU (FORMÁT)
+--------------------------------------------------------------------------------
+  • Čistá čeština, žádné zkratky typu „Sol“, „Lv“, „Arb“.
+  • Vždy uvést SOC a směr změny ve tvaru „SOC XX→~YY %“ (nebo stabilní stav).
+  • Cenovou „level“ číselnou úroveň NEOPAKOVAT — je ve sloupci Level.
+
+--------------------------------------------------------------------------------
+11. ZÁPORNÁ NÁKUPNÍ CENA — MAXIMÁLNÍ ODBĚR ZE SÍTĚ
+--------------------------------------------------------------------------------
+  • Aktivace: nákupní cena elektřiny < 0 (platí nám za odběr).
+  • Cíl: maximalizovat odběr v mezích jističe a priorit.
+  • Baterie se v tomto módu NEVYBÍJÍ — blokace vybíjení z tohoto důvodu.
+  • Export obvykle zakázán; kombinace se zápornou prodejní cenou = stále max.
+    odběr, žádný export, baterie se nabíjí, nevybíjí.
+  • Priority spotřebičů jsou jiné než v běžném dni (NIBE, baterie, auto,
+    patrony, bojler, filtrace…) — viz plný popis v ZAKONY.TXT sekce 4.10;
+    klíčové: škálovatelné věci se přizpůsobí, NIBE nelze okamžitě „useknout“
+    při pádu soláru — proto dynamická rezerva výkonu (bezpečnostní odstup od
+    jističe závisí na tom, co zrovna běží).
+
+--------------------------------------------------------------------------------
+12. TOPENÍ — STRUČNÁ LOGIKA (NIBE, PATRONY, KOMBINACE)
+--------------------------------------------------------------------------------
+  • Topit vždy za co nejvýhodnějších podmínek; u půlnoci platí stejná poznámka
+    o skutečných cenách jako u Šetřit.
+  • NIBE a patrony nesmí vést k zakázané souhře špiček — patrony při běžícím
+    kompresoru NIBE se chovají podle pravidla „boost“: patrony jen v době,
+    kdy NIBE nemá aktivní kompresor/čerpadlo, jinak patrony okamžitě dolů.
+  • auto_ma_hlad = ON → patrony NESMÍ (absolutní pravidlo i v jiných sekcích).
+  • auto nabíjí ze sítě → v běžných zákonech patrony ne; v módu záporné ceny
+    platí výjimky (viz ZAKONY 4.10).
+  • Krb: speciální pravidla pro NIBE/čerpadla — viz ZAKONY.
+  • Výjimka při zákazu exportu a vysokém SOC: řízený ohřev nádrže místo
+    hašení soláru — priorita je využít energii v domě.
+  • Patrony: start až když dává smysel (přebytek, teploty, SOC, prodejní cena
+    není příliš vysoká — detaily prahů v konfiguraci); v posledních solárních
+    hodinách s malým zbytkem výroby často přednost dobít baterii místo patronů.
+  • Pravidlo „poslední solární hodiny“ analogicky pro auto i patrony (konfig).
+
+--------------------------------------------------------------------------------
+13. NABÍJENÍ AUTA
+--------------------------------------------------------------------------------
+  • Ze slunce: NIKDY nesmí vzniknout účelový nákup ze sítě kvůli nabíjení auta;
+    výkon se reguluje plynule (žádné chaotické skákání amperáží).
+  • Ze sítě: jen v dohodnutých levných blocích / podmínkách; respektovat
+    limity přetížení sítě a priority ostatních okruhů.
+  • Vypnutá automatizace nabíjení auta = systém nesahá na nabíječku ani
+    amperáž — rozhoduje uživatel.
+
+--------------------------------------------------------------------------------
+14. BOJLER (OHŘEV VODY)
+--------------------------------------------------------------------------------
+  Rozhodování v řetězci podmínek (první platná vyhrává): od neúplnosti domova,
+  přes rychlé ohřevy, povinné časové okno, kolize s NIBE a přebytky, až po
+  levnou elektřinu a výchozí stav. Ochrana: nepřekročit bezpečný odběr kvůli
+  bojleru; nedělat zbytečné přepisy stejné teploty.
+
+--------------------------------------------------------------------------------
+15. FILTRACE BAZÉNU
+--------------------------------------------------------------------------------
+  • Musí splnit hygienický minimální denní provoz; délka závisí na ročním období.
+  • Zapínání podle priority: nejdřív solární přebytek nad prahem; pak nouzově
+    dokončení minima před deadlinem; ochrana SOC při běhu ze sítě.
+  • Běžící kompresor NIBE má přednost — filtrace se pozastaví (kontroluje se
+    fyzická práce kompresoru, ne jen „spínač topení“).
+  • Minimální souvislý běh mezi zapnutími/vypnutími (proti cukání); při teplotě
+    vody pod bezpečnostním prahem filtrace nesmí běžet.
+  • Celkový účtovaný čas zahrnuje i ruční spuštění.
+
+--------------------------------------------------------------------------------
+16. BATERIE — RÍZENÍ NABÍJENÍ / VYBÍJENÍ (HRUBÁ LOGIKA)
+--------------------------------------------------------------------------------
+  • Vybíjení: za denního soláru preferovat průchod solárem; v noci bez soláru
+    řeší přenos přes měnič — bez magického používání min_soc k „vypnutí výkonu“
+    místo správného max_discharge.
+  • Blokace měkká při NIBE / nabíjení auta ze sítě / sauna: omezit výkon tak,
+    aby baterie nepůsobila proti záměru, ale solární energii šlo dál používat.
+  • Při patronách a vysokém SOC: zastavit nabíjení baterie, aby patron mohl
+    vybíjet — viz konfigurované prahy.
+
+--------------------------------------------------------------------------------
+17. LOGOVÁNÍ A PARAMETRY
+--------------------------------------------------------------------------------
+  • Provozní log (čas, mód, SOC, spotřeba, klíčové akty) musí běžet — bez něj
+    nelze spolehlivě ladit chování.
+  • Všechny prahy a čísla jsou v konfiguraci — žádné „natvrdo“ v logice bez
+    důvodu.
+  • Uživatel přímo nastavuje minimální SOC baterie a další ruční přepínače
+    (teplota v domě, režimy) dle obrazovky v systému.
+
+--------------------------------------------------------------------------------
+18. KDY SE DVA DOKUMENTY LIŠÍ
+--------------------------------------------------------------------------------
+  Tento soubor (ZAKONY2) je KANON LOGIKY pro lidi a pro rozhodování „co chceme“.
+  ZAKONY.TXT obsahuje navíc technické povinnosti pro vývoj (entity, deploy,
+  Node-RED, MQTT) — ty musí vývoj stále dodržet, ale smysl pravidel ber odsud.
+
+================================================================================
+  Konec ZAKONY2 — upravuje uživatel; AI nemění bez výslovné žádosti v promptu.
+================================================================================
