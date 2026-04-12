@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`7c759cc`: NABÍJET ZE SÍTĚ — při ZP `psp=-maxGridW` i s čerpadlem/autem; předchozí `4bd007d` orchestrátor SOC)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`12ea14d`: Kontrola podmínek — při ZP držet NABIJET do `max_daily−2 %`; `7c759cc` PSP u NABIJET)
 
 >
 
