@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 (`d4e200f` NABIJET při ZP — arbiter max_discharge_allowed; dříve `71465a8`)
+> Poslední aktualizace: 2026-04-12 (`209f36c` ZAKONY — slabý den + ZP, plán, baterie pro dům; kód `d4e200f`)
 
 >
 
