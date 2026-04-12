@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`4bd007d`: Kontrola podmínek — živé SOC + 2 % hystereze před Šetřit při NABIJET; dříve `f79b675` / `a67e575`)
+> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`7c759cc`: NABÍJET ZE SÍTĚ — při ZP `psp=-maxGridW` i s čerpadlem/autem; předchozí `4bd007d` orchestrátor SOC)
 
 >
 
