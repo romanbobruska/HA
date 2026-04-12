@@ -179,6 +179,15 @@ jistá, NEZASADÍ a vysvětlí proč.
     - Scheduled charging přes Victron ESS
     - Aktivuje se jen pokud zisk z arbitráže ≥ min_arbitrage_profit_czk - vyčteš z konfigu
     - Solar coverage check: pokud solar baterii naplní sám, nechargrovat z gridu
+    - Slabý solární den a současně zákaz přetoků (pro majitele domu, ne „programátorský“ popis):
+        Když je ten den málo očekávané výroby ze slunce (práh je v konfiguraci, výchozí orientačně 30 kWh)
+        a zbytek dne by solár „nepokrýval“ spotřebu rozumně, smí se z elektřiny ze sítě dobíjet baterie
+        jen v hodinách s opravdu nejlevnějším nákupem — stejný smysl jako „ultra levná“ cena u odstavce 4.6.
+        V hodině, která je jen běžně levná, ale ne v tomto nejlevnějším pásu, se tímto účelem nedokupuje,
+        aby se neplatilo víc, než je nutné.
+    - Když zrovna běží nabíjení z elektřiny ze sítě a platí zákaz přetoků (neprodává se do sítě):
+        Baterie může dál napájet dům jako obvykle. Pravidlo se vztahuje na zákaz výstupu energie do sítě,
+        ne na to, že by dům nemohl brát z baterie.
 
 4.5 PRODÁVAT
     - Aktivní prodej energie z baterie do sítě za výhodnou cenu.
@@ -307,6 +316,8 @@ A ZAKAZU PRETOKU
         Pro každou hodinu platí (v pořadí priority):
 
         1. Zákaz přetoků: prodejní cena ≤ 0 → feed-in OFF, PSP kladné
+        1a. Slabý solární den + zákaz přetoků: dokup elektřiny do baterie jen v hodinách s „ultra levným“ nákupem
+             (prah_ultra_levna_nakup v konfiguraci). Nestačí jen obecně levná hodina — jinak by šlo zbytečně připlatit.
         2. Balancování: pokud je naplánováno (viz 4.7)
         3. Nabíjet ze sítě: POUZE pokud VŠECHNY podmínky splněny:
             a) Cena je pod prah_levna_energie (level ≤ config.prah_levna_energie)
@@ -420,6 +431,8 @@ A ZAKAZU PRETOKU
             „Nabíjení ze sítě na 60%, SOC 25→~43%"
             „Záporná prodejní cena, SOC 37%"
             „Prodej do sítě (zisk 2.3 Kč/kWh), SOC 55→~38%"
+            „Ultra levná síť, SOC 44→~52% | Možné dobíjení ze sítě" — jen když je v té hodině skutečně „ultra levný“ nákup
+                a zároveň ten den málo slunce; krátká poznámka pro člověka, bez opakování čísel z jiných sloupců.
 
         Chybné příklady (ZAKÁZÁNO):
             × „Sol, SOC 29→~34%" — zkratka „Sol"
