@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-12 — nasazeno `deploy.sh --no-ha` (`8975a0b`: v25.96 Fix zakaz_pretoku blockDischarge — přímé čtení NIBE z HA)
+> Poslední aktualizace: 2026-04-13 — nasazeno `deploy.sh --no-ha` (`badebfb`: v25.97 NIBE blockDischarge ve VŠECH módech + Kontrola podmínek)
 
 >
 
@@ -708,16 +708,19 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
-**v25.94–96 — Fix zakaz_pretoku: NIBE blokace vybíjení baterie (2026-04-12)**
+**v25.97 — NIBE blockDischarge ve VŠECH módech (2026-04-13)**
 
-- **BUG 1** (v25.94): `ZÁKAZ PŘETOKŮ Logic` (fve-modes.json, node `75d1f9e77bc15e0a`): `max_discharge_power: -1` vždy — ignoroval `blockDischarge`. Při NIBE + solar < 8kW baterie vybíjela na NIBE (SOC 25%), místo aby NIBE brala ze sítě. Regrese z P5 (v25.85).
-- **FIX 1**: `max_discharge_power: blockDischarge ? solarPassthrough : -1`.
-- **BUG 2** (v25.95): `cerpadloTopi = msg.cerpadloTopi || false` — chyběl fallback na `global.get("cerpadlo_topi")`.
-- **FIX 2**: Přidán `|| global.get("cerpadlo_topi")` fallback.
-- **BUG 3** (v25.96): `global.get("cerpadlo_topi")` je false i když NIBE topí! Příčina: fve-heating.json nastavuje `global.set("cerpadlo_topi", (isHtg||isTUV) && nBD)` kde `nBD = flow.get("nibe_block_discharge") !== false` — flow proměnná je false.
-- **FIX 3**: Přímé čtení z HA entity `binary_sensor.nibe_kompresory_aktivni_binarni` jako primární zdroj stavu NIBE. Spolehlivé, bez závislosti na stale globálech.
-- **Ověřeno**: `max_discharge_power` přešla z -1 na 1377 (solarPassthrough). NIBE bere ze sítě.
-- **Nasazení**: `deploy.sh --no-ha`; commit `8975a0b`.
+- **BUG**: NIBE blockDischarge fungoval JEN v ZÁKAZ PŘETOKŮ a ZÁPORNÁ CENA. V NORMAL, NABÍJET, PRODÁVAT, SOLÁRNÍ, BALANCOVÁNÍ chyběl. Dnes 10:40 UTC: mode=normal, NIBE=on, SOC=23%, block_discharge=false, přebytek=0W → baterie se vybíjela na NIBE!
+- **ROOT CAUSE**: `blockDischargeSoft = saunaAktivni` v NORMAL Logic — NIBE nebylo zahrnuto. Navíc `Kontrola podmínek` četla `cerpadlo_topi` globál (nespolehlivý kvůli `nBD` flow proměnné) → `blokace_text` ukazoval "NE" i když NIBE běží.
+- **FIX**: Přímé čtení `binary_sensor.nibe_kompresory_aktivni_binarni` z HA přidáno do VŠECH 7 módů + `Kontrola podmínek`. Pravidlo §4.8+§11.3: solar < 8kW → blockDischarge=solarPassthrough (NIBE ze sítě); solar >= 8kW → žádná blokace (NIBE ze solaru).
+- **Opravené nody**: NORMAL Logic, NABÍJET ZE SÍTĚ Logic, PRODÁVAT Logic, SOLÁRNÍ NABÍJENÍ Logic, BALANCOVÁNÍ Logic (+ již opravené ZÁKAZ PŘETOKŮ a ZÁPORNÁ CENA). Kontrola podmínek pro `blokace_text`.
+- **Nasazení**: `deploy.sh --no-ha`; commit `badebfb`.
+
+
+**v25.94–96 — Fix zakaz_pretoku: NIBE blokace (předchůdce v25.97, 2026-04-12)**
+
+- Postupné odhalení root cause: hardcoded -1 → chybějící global fallback → nespolehlivý globál → přímé čtení z HA entity.
+- Kompletně nahrazeno v25.97 (rozšíření na všechny módy).
 
 
 **v25.93 — Fix NABÍJET ZE SÍTĚ PSP + bojler MAX při ultra levné ceně (2026-04-12)**
