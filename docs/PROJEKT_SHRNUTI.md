@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-14 — nasazeno `deploy.sh --no-ha` (`62954a5`: v25.98 Automation guard předřazen všem akcím v Manager + Slunce nabíjení auta)
+> Poslední aktualizace: 2026-04-14 — nasazeno `deploy.sh --no-ha` (`2e590e4`: v25.99 Trimmer tE=minSoc — SOC 20% před solarem, žádné zbytečné šetření)
 
 >
 
@@ -706,6 +706,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.99 — Trimmer tE=minSoc, žádné zbytečné šetření (2026-04-14)**
+
+- **BUG**: Plán šetřil v H01 (4.28 Kč, level 10) a vybíjel v levějších H02 (4.14), H03 (4.09), H04 (4.10). SOC v první solární = 28% místo cíle 20%.
+- **ROOT CAUSE**: `rf_arb_trimming_3` (3. Arbitráž + trim): `tE = C.minSoc + C.nMargin = 25%`. Projected SOC 22% < 25% → trimmer odstraňoval nejlevnější non-drain hodinu (H01) a dělal z ní šetření. Drain-protected hodiny (H02-H04) zůstaly jako discharge → šetření v dražší hodině než discharge.
+- **FIX**: `tE = C.minSoc` (20%). §4.9: "IDEÁLNĚ KE 20% SOC". S tE=20: projected 22% ≥ 20% → žádné trimování → žádné zbytečné šetření.
+- **Ověřeno**: Plán 12h = vše normal, SOC 56→22% v první solární hodině.
+- **Nasazení**: `deploy.sh --no-ha`; commit `2e590e4`.
 
 
 **v25.98 — Automation guard předřazen všem akcím (2026-04-14)**
