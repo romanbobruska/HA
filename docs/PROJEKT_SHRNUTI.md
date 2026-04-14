@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-13 — nasazeno `deploy.sh --no-ha` (`badebfb`: v25.97 NIBE blockDischarge ve VŠECH módech + Kontrola podmínek)
+> Poslední aktualizace: 2026-04-14 — nasazeno `deploy.sh --no-ha` (`62954a5`: v25.98 Automation guard předřazen všem akcím v Manager + Slunce nabíjení auta)
 
 >
 
@@ -706,6 +706,16 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.98 — Automation guard předřazen všem akcím (2026-04-14)**
+
+- **BUG**: `Manager nabíjení auta` (Rozhodovací logika v2.7): `if(!hlad)return stop()` na L16 BĚHAL PŘED `if(!auto)` na L17. `stop()` vrací output 1 → vypínalo charger i při vypnuté automatizaci!
+- **ROOT CAUSE**: Pořadí kontrol: nejdřív hlad (který volá stop=vypíná charger), až pak automatizace guard.
+- **FIX**: Přehození pořadí: `if(!auto)return null` PŘED `if(!hlad)return stop()`. Při vypnuté automatizaci se vrací `null` (NIC se neděje).
+- **FIX 2**: `Vypočítej max amperaci v2` (nabíjení auta ze slunce): guard přesunut před cooldown check.
+- **Audit všech automatizací**: Sit ✅, FVE Victron Fan-out ✅, Topení 2. Rozhodování ✅, Patrony korekce ✅, Filtrace ✅.
+- **Nasazení**: `deploy.sh --no-ha`; commit `62954a5`.
 
 
 **v25.97 — NIBE blockDischarge ve VŠECH módech (2026-04-13)**
