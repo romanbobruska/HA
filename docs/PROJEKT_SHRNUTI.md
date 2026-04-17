@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-14 — nasazeno `deploy.sh --no-ha` (`2e590e4`: v25.99 Trimmer tE=minSoc — SOC 20% před solarem, žádné zbytečné šetření)
+> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh` (`cca833f`: v25.100 ZÁKAZ PŘETOKŮ max_charge_power=solar surplus — grid draw 2kW→135W)
 
 >
 
@@ -706,6 +706,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.100 — ZÁKAZ PŘETOKŮ: max_charge_power = solar surplus (2026-04-17)**
+
+- **BUG**: Při zákazu přetoků grid draw 677–2039W místo cíle ~30W (PSP). §4.6 povoluje max ~150W.
+- **ROOT CAUSE**: `max_charge_power: -1` (unlimited) v ZÁKAZ PŘETOKŮ Logic. Victron ESS neškrtí nabíjení baterie automaticky pro udržení PSP. Baterie nabíjela ~1250W z DC busu → inverter měl méně pro AC → síť pokrývala deficit.
+- **FIX**: `_maxCharge = max(0, solar - celkova_spotreba - psp)`. Baterie nabíjí JEN z přebytku soláru, ne ze sítě. Node status zobrazuje `CHG_LIM:XW`.
+- **Ověřeno**: Grid draw 2039W → **135W**, max_charge_power 998W, bat proud 24A → 4A.
+- **Nasazení**: `deploy.sh`; commit `cca833f`.
 
 
 **v25.99 — Trimmer tE=minSoc, žádné zbytečné šetření (2026-04-14)**
