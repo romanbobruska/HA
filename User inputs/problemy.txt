@@ -1,3 +1,4 @@
-podivej se - nastavil jsem manualne normal mod, auto na max 16a a misto vybijeni baterie se zere ze site.
+MISTO LADENI PATRON MONITORUJ NASTAVENI HA FVE VICTRON, ZDA SE NEPREPISUJI MQTT PARAMETRY A ZDA SE NEBLOKUJE VYBIJENI BATERIE!!!
 
-je v se ok i v normal modu?
+
+PROTOZE SE ZDA, ZE SE BLOKUJE VYBIJENI BATERIE!!!
