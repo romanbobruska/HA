@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh` (`cca833f`: v25.100 ZÁKAZ PŘETOKŮ max_charge_power=solar surplus — grid draw 2kW→135W)
+> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh --with-ha` (`669fa6a`: v25.108 Net grid flow template senzory — dashboard opět jen 1 šipka; UI helpery min_max `spotreba_ze_site`/`produkce_do_site` byly sumy per-phase importů/exportů a při PSP=0 oscilaci Victronu zobrazovaly 2 šipky zároveň; nové `sensor.fve_net_odber_ze_site` / `sensor.fve_net_dodavka_do_site` počítají čistý rozdíl; Lovelace karta (`/config/.storage/lovelace.lovelace`, záloha `.bak_net_20260418_000824`) byla přepsána na nové senzory)
 
 >
 
