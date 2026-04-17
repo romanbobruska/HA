@@ -283,22 +283,25 @@
 
 # --- Net grid flow (jedna šipka v dashboardu) ---
 # Dashboard má vidět ROZDÍL (import NEBO export), ne obě zároveň.
-# Per-phase oscilace (PSP=0) může dělat L1 import + L2/L3 export → UI min_max helpery
-# (sensor.spotreba_ze_site / produkce_do_site) jsou kladné oba zároveň = 2 šipky.
-# Tyto senzory vezmou čistý rozdíl a nechají kladnou jen tu správnou stranu.
+# Per-phase oscilace (PSP=0, max_charge_power=-1) může dělat L1 import + L2/L3 export
+# → UI min_max helpery (sensor.spotreba_ze_site / produkce_do_site) jsou oba nenulové = 2 šipky.
+# Victron konvence:
+#   grid_loads_L*     = kladné (import) nebo 0 (viz mqtt.yaml: {{0 if power<0 else power}})
+#   grid_production_L* = záporné (export) nebo 0          ({{0 if power>=0 else power}})
+# net = L_sum + P_sum (sečíst → kladné = čistý import, záporné = čistý export)
 - name: "FVE Net Odběr ze sítě"
   unique_id: fve_net_odber_site
   icon: mdi:transmission-tower-import
   unit_of_measurement: "W"
   device_class: power
   state: >
-    {% set L1 = states('sensor.grid_loads_L1') | float(0) %}
-    {% set L2 = states('sensor.grid_loads_L2') | float(0) %}
-    {% set L3 = states('sensor.grid_loads_L3') | float(0) %}
-    {% set P1 = states('sensor.grid_production_L1') | float(0) %}
-    {% set P2 = states('sensor.grid_production_L2') | float(0) %}
-    {% set P3 = states('sensor.grid_production_L3') | float(0) %}
-    {% set net = (L1 + L2 + L3) - (P1 + P2 + P3) %}
+    {% set L = (states('sensor.grid_loads_L1') | float(0))
+             + (states('sensor.grid_loads_L2') | float(0))
+             + (states('sensor.grid_loads_L3') | float(0)) %}
+    {% set P = (states('sensor.grid_production_L1') | float(0))
+             + (states('sensor.grid_production_L2') | float(0))
+             + (states('sensor.grid_production_L3') | float(0)) %}
+    {% set net = L + P %}
     {{ [net, 0] | max | round(0) }}
 
 - name: "FVE Net Dodávka do sítě"
@@ -307,14 +310,14 @@
   unit_of_measurement: "W"
   device_class: power
   state: >
-    {% set L1 = states('sensor.grid_loads_L1') | float(0) %}
-    {% set L2 = states('sensor.grid_loads_L2') | float(0) %}
-    {% set L3 = states('sensor.grid_loads_L3') | float(0) %}
-    {% set P1 = states('sensor.grid_production_L1') | float(0) %}
-    {% set P2 = states('sensor.grid_production_L2') | float(0) %}
-    {% set P3 = states('sensor.grid_production_L3') | float(0) %}
-    {% set net = (P1 + P2 + P3) - (L1 + L2 + L3) %}
-    {{ [net, 0] | max | round(0) }}
+    {% set L = (states('sensor.grid_loads_L1') | float(0))
+             + (states('sensor.grid_loads_L2') | float(0))
+             + (states('sensor.grid_loads_L3') | float(0)) %}
+    {% set P = (states('sensor.grid_production_L1') | float(0))
+             + (states('sensor.grid_production_L2') | float(0))
+             + (states('sensor.grid_production_L3') | float(0)) %}
+    {% set net = L + P %}
+    {{ [-net, 0] | max | round(0) }}
 
 - name: "FVE Energie v baterii"
   unique_id: fve_energie_v_baterii
