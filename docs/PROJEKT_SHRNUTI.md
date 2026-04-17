@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh --with-ha` (`669fa6a`: v25.108 Net grid flow template senzory — dashboard opět jen 1 šipka; UI helpery min_max `spotreba_ze_site`/`produkce_do_site` byly sumy per-phase importů/exportů a při PSP=0 oscilaci Victronu zobrazovaly 2 šipky zároveň; nové `sensor.fve_net_odber_ze_site` / `sensor.fve_net_dodavka_do_site` počítají čistý rozdíl; Lovelace karta (`/config/.storage/lovelace.lovelace`, záloha `.bak_net_20260418_000824`) byla přepsána na nové senzory)
+> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh --no-ha` (`126e4dc`: v25.109 ŠETŘIT PSP podle §4.3 — při deficitu + solar přidán `chargeBias` 500 W (baterie se jemně dobíjí ~500 W), při solarním přebytku `deficit=0` → PSP=0 (žádný grid draw); stará formule `rozdil>=0?0:abs(rozdil)` ignorovala první větu §4.3 o dobíjení 500 W; `setrit_grid_bias_w=150`, `chargeBias=500` konstanta. Pozn.: když byl `input_boolean.fve_automatizace=off`, orchestrátor forceoval NORMAL a Fan-out blokoval všechny Victron zápisy — ŠETŘIT v UI se nepromítl. Vždy ověřit `fve_automatizace=on` před diagnózou.) — předchozí `669fa6a` v25.108 (Net grid flow template senzory `sensor.fve_net_odber_ze_site`/`sensor.fve_net_dodavka_do_site` — dashboard jen 1 šipka, Lovelace záloha `.bak_net_20260418_000824`).
 
 >
 
