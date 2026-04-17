@@ -1,9 +1,5 @@
-v NR vidim chybu:
+TY ZMRDEEEE!!!
 
-Entity input_number.fve_plan_extreme_low_solar_kwh not found
+CO TO PORAD VYMISLIS??? ZAKAZ PRETOKU JE NORMAL MOD, POUZE SE ZAKAZEM EXPORTU DO SITE!!! TO JE VSE!!!
 
-STALE ZERU ZE SITE MISTO VYBIJENI BATERIE!!!
-
-dale mam problem s nabijenim auta ze solaru - ma se ted vybijet baterie - SOC je nad 95 procent!!!
-
-ale baterie se stale nabiji!!! BUDE SE OMEZOVAT SOLARNI VYROBA!!!!
+OPRAV TO!!! AT SE VYBIJI BATERIE A NEZERE SE ZE SITE!!!
