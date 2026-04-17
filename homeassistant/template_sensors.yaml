@@ -266,7 +266,7 @@
   device_class: power
   state: >
     {% set L1 = states('sensor.grid_loads_L1') | float(0) %}
-    {% set L2 = states('sensor.grid_loads_L2') | float(0) %}
+    {% set L2 = states('sensor.grid_loads_l1_2') | float(0) %}
     {% set L3 = states('sensor.grid_loads_L3') | float(0) %}
     {{ (L1 + L2 + L3) | round(0) }}
 
@@ -296,7 +296,7 @@
   device_class: power
   state: >
     {% set L = (states('sensor.grid_loads_L1') | float(0))
-             + (states('sensor.grid_loads_L2') | float(0))
+             + (states('sensor.grid_loads_l1_2') | float(0))
              + (states('sensor.grid_loads_L3') | float(0)) %}
     {% set P = (states('sensor.grid_production_L1') | float(0))
              + (states('sensor.grid_production_L2') | float(0))
@@ -311,7 +311,7 @@
   device_class: power
   state: >
     {% set L = (states('sensor.grid_loads_L1') | float(0))
-             + (states('sensor.grid_loads_L2') | float(0))
+             + (states('sensor.grid_loads_l1_2') | float(0))
              + (states('sensor.grid_loads_L3') | float(0)) %}
     {% set P = (states('sensor.grid_production_L1') | float(0))
              + (states('sensor.grid_production_L2') | float(0))
