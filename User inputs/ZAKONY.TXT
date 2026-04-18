@@ -302,6 +302,21 @@ A ZAKAZU PRETOKU
                 jdoucích hodinách. V plánu: po hodině s „(NIBE topí)" následuje hodina
                 bez NIBE (nibeCooldown = 1), pak teprve může přijít další cyklus.
               - Senzor: sensor.nibe_degree_minutes (aktuální DM), práh = -30 DM.
+            * PLÁN NESMÍ KVŮLI NIBE PŘEPLÁNOVAT CELOU HODINU NA ŠETŘIT (v26):
+              - NIBE v jedné solární hodině reálně topí ~30 min (nibe_est_consumption_kwh/Peak).
+              - Po zbytek hodiny je kompresor v cooldownu (DM < -30) — baterie se chová
+                jako v NORMAL (solární přebytek nabíjí, případné vybíjení krátce blokováno §4.8).
+              - Rozhodnutí módu pro solární hodinu proto MUSÍ být konzistentní s §4.8:
+                pokud plánovač označil hodinu jako „nibeVPlan" (levná solární hodina
+                s NIBE cyklem) a SOC > min_soc, volí NORMAL s popiskou
+                „Solární hodina (NIBE topí ~30 min, §4.8 chrání baterii)".
+              - Pád do fallbacku „Šetřit baterii (NIBE topí)" kvůli zápornému ziskProc,
+                který vznikl přičtením celého nibe_est_consumption_kwh ke spotřebě
+                1h slotu, JE PORUŠENÍ TOHOTO ZÁKONA — výpočet kWh zůstává v simulaci
+                SOC (bilance), ale nesmí ovlivnit výběr módu hodiny.
+              - Energetická bilance (simulujSOC / ziskProc pro výpočet budoucích SOC)
+                ZŮSTÁVÁ beze změny: NIBE se v !hist fallback větvi přičítá normálně —
+                zákaz platí POUZE pro krok „volba módu".
           - Noční / nesluneční hodiny: SOC klesá dle historické spotřeby nebo config odhadu
 
         Pravidla pro každý mód:
