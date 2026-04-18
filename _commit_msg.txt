@@ -1,0 +1,21 @@
+§4.5 agresivní prodej (v27): sellTarget stabilní, budget bez double-countu, frac pro current hour
+
+Cíle (§1.0): PRODÁVÁME za nejdražší, NAKUPUJEME za nejmenší, SOLÁR NEOMEZUJEME (§1.2).
+Dříve plán končil PRODAVAT předčasně, SOC nesjel na ~25 % před velkým slunečným dnem.
+
+Změny v rf_cena_discharge2 (fve-orchestrator.json):
+
+A) agresivniProdej bere v potaz i dnešní zbývající solár (x.rS), ne jen zítřek (x.fZ).
+   Důvod: v noci před velkým dnem musíme stihnout sjet SOC, jinak §1.2 porušíme.
+
+B) sellBudgetSoc v agresivním režimu NEobsahuje _normalDrainSoc.
+   Důvod: prodej nahrazuje vybíjení do domu — nemůžeme drain a prodej započítat dvakrát.
+
+C) sellMap iterace účtuje za aktuální (offset=0) hodinu jen fragment (x.fFrac).
+   Důvod: předtím se budget "docerpal" během hodiny a PRODAVAT se zastavilo.
+
+D) sellTarget bez cap min(cSoc, …).
+   §4.5 — CÍL JE STABILNÍ (nezavislý na cSoc). Cap předtím způsoboval oscilaci.
+
+ZAKONY.TXT §4.5: doplněna výjimka pro agresivní režim (target = min_soc + nMargin)
+a explicitní popis budgetu pro prodej (drain + frac pravidlo).

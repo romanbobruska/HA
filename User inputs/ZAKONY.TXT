@@ -205,6 +205,11 @@ jistá, NEZASADÍ a vysvětlí proč.
           NEBO zítra je ≥ plan_aggressive_solar_day_kwh (default 50 kWh), cíl se sníží na min_soc + night_target_soc_margin
           (typicky 25 %). Důvod: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ“ + §1.2 „SOLÁR NEOMEZUJEME“.
           Musíme baterii před velkým slunečným dnem sjet dolů, jinak solár narazí na strop SOC a bude omezovaný.
+        - AGRESIVNÍ REŽIM — profitabilita prodeje (v27):
+          V agresivním režimu se prodej NEPOSUZUJE vůči průměrné NÁKUPNÍ ceně (buy/rtEff + amort).
+          Důvod: baterii NEBUDEME dokupovat drahou sítí — doplní ji dnešní solar ZDARMA (§1.2 solár neomezujeme).
+          Jediný požadavek je: prodejní cena × dchEff − amortizace ≥ min_sell_profit_czk (agresivně zmírněno na 0.5 Kč).
+          V normálním režimu zůstává pravidlo: profit se počítá i s nákupními náklady.
         - BUDGET pro prodej (kolik SOC lze utratit do sítě):
             budget = cSoc − sellTarget − (v normálním režimu i „drain do domu“; v agresivním NE — prodej drain nahrazuje)
             První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty do konce hodiny ÷ 60),
