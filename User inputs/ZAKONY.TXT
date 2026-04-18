@@ -789,18 +789,29 @@ A ZAKAZU PRETOKU
     - Filtrace bere ze sítě ~2.5 kW pokud je zapnutá
     - Filtrace musí běžet v kuse alespoň 15 minut (konfigurovatelny parametr) - nepřerušovat nikdy, pokud není splněna tato podmínka!
     - Ovládá se přes: switch.filtrace
-    - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1
+    - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1 
     - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu
     - Rozhodování každé 2 minuty (inject → gate → data chain → rozhodovací funkce)
     - FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO, ZÁROVEŇ MUSÍ BÝT DODRŽENA MINIMÁLNÍ DOBA BĚHU
     - pokud je teplota vody nizsi nez 2 stupne, filtrace NESMI BEZET!!! FILTRACE SE ZAPINA JEN TEHDY, POKUD JE TEPLOTA VODY VYSSI NEZ 2 STUPNE!
         - TOTO JE KONFIGUROVATELENY PARAMETR
     - DO CELKOVEHO CASU FILTRACE BAZENU SE ZAPOCITAVA VESKERA FILTRACE - VCETNE MANUALNIHO SPUSTENI FILTRACE
- 
-10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU
-    - ZIMNÍ REŽIM: min 1 hodina (60 min) denně
-    - LETNÍ REŽIM: min 2 hodiny (120 min) denně, POKUD teplota bazénu > 10°C
-    - Denní čítač běhu se resetuje o půlnoci (flow context: filt_date, filt_run)
+    - ROZHODOVÁNÍ O DENNÍ DOBĚ BĚHU SE ŘÍDÍ VÝHRADNĚ TEPLOTOU VODY V BAZÉNU — NIKOLIV input_boolean.letni_rezim.
+        Detail viz §10.2 (prahy + hystereze).
+    - HARD CUT-OFF: Pokud teplota vody ≤ filtrace_pool_temp_min (výchozí 2 °C), filtrace NESMÍ BĚŽET — žádná výjimka.
+
+ 10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU (dle TEPLOTY VODY, NEZÁVISLE na letním/zimním režimu)
+    - input_boolean.letni_rezim NESMÍ být vstupem do tohoto rozhodnutí.
+    - Teplota vody (sensor.hp2551ae_pro_v2_1_0_temperature_1) určuje denní limit:
+        a) Teplota ≤ filtrace_pool_temp_min (2 °C)                       → filtrace VŮBEC NEBĚŽÍ (§10.1 hard cut-off)
+        b) filtrace_pool_temp_min < teplota < práh_studena_tepla         → min filtrace_min_studena_min (60 min/den)
+        c) Teplota ≥ práh_studena_tepla                                  → min filtrace_min_tepla_min  (120 min/den)
+    - PRÁH STUDENÁ↔TEPLÁ S HYSTEREZÍ (proti oscilaci kolem 10 °C):
+        * práh přechodu STUDENÁ → TEPLÁ : teplota ≥ filtrace_pool_temp_threshold_c                               (default 10 °C)
+        * práh přechodu TEPLÁ → STUDENÁ : teplota <  filtrace_pool_temp_threshold_c − filtrace_pool_temp_hysterese_c (default 10−1 = 9 °C)
+        * Mezi 9 °C a 10 °C režim drží předchozí stav (flow context: filt_temp_band ∈ {"studena", "tepla"}).
+        * Při startu flow (žádný předchozí stav): rozhodne aktuální teplota vůči filtrace_pool_temp_threshold_c bez hystereze.
+    - Denní čítač běhu se resetuje o půlnoci (flow context: filt_date, filt_run).
 
 10.3 OPTIMALIZACE ENERGIE — PRIORITNÍ ŘETĚZEC (od nejlepší po nejhorší)
     1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500W) → zapnout
@@ -842,15 +853,17 @@ A ZAKAZU PRETOKU
     - Orchestrator přenáší filtrace_status do sensor.fve_plan_data atributů
 
 10.7 KONFIGUROVATELNÉ PARAMETRY (fve_config)
-    filtrace_surplus_on_w: 2500        (min přebytek pro zapnutí, W)
-    filtrace_surplus_off_w: 1500       (hystereze pro vypnutí, W)
-    filtrace_min_zima_min: 60          (min běh v zimě, min/den)
-    filtrace_min_leto_min: 120         (min běh v létě, min/den)
-    filtrace_pool_temp_min: 10         (min teplota bazénu pro letní režim, °C)
-    filtrace_deadline_h: 23            (deadline pro splnění minima, hodina)
-    filtrace_anti_cycle_min: 10        (anti-cycling ochrana, min)
-    filtrace_soc_low: 40               (min SOC pro grid běh, %)
-    filtrace_solar_ok_kwh: 10          (zbývající solar = "čekej na solar", kWh)
+    filtrace_surplus_on_w: 2500           (min přebytek pro zapnutí, W)
+    filtrace_surplus_off_w: 1500          (hystereze pro vypnutí, W)
+    filtrace_pool_temp_min: 2             (HARD CUT-OFF: pod touto teplotou filtrace VŮBEC NEBĚŽÍ, °C — §10.1)
+    filtrace_pool_temp_threshold_c: 10    (přepínač studená↔teplá voda pro denní limit, °C — §10.2)
+    filtrace_pool_temp_hysterese_c: 1     (hystereze prahu studená/teplá, °C — proti oscilaci kolem prahu)
+    filtrace_min_studena_min: 60          (min běh při teplotě < threshold, min/den — §10.2)
+    filtrace_min_tepla_min: 120           (min běh při teplotě ≥ threshold, min/den — §10.2)
+    filtrace_deadline_h: 23               (deadline pro splnění minima, hodina)
+    filtrace_anti_cycle_min: 10           (anti-cycling ochrana, min)
+    filtrace_soc_low: 40                  (min SOC pro grid běh, %)
+    filtrace_solar_ok_kwh: 10             (zbývající solar = "čekej na solar", kWh)
 
 ================================================================================
 11. BATERIE — PRAVIDLA VYBÍJENÍ A NABÍJENÍ
