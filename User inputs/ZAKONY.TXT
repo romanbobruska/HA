@@ -353,7 +353,12 @@ A ZAKAZU PRETOKU
             - Důvod: pokud najednou spadne solární výroba, NIBE nelze okamžitě vypnout,
               ale patrony a auto ampéráž se přizpůsobí. Větší rezerva = ochrana jističe.
         - Baterie se NABÍJÍ neomezeně (max_charge_power = -1)
-        - max_discharge_power = -1 kromě §4.8 (NIBE + nízký solar / sauna → solarPassthrough jako soft blokace, viz §11.3)
+        - max_discharge_power = 0 (DEFAULT — baterie se NEVYBÍJÍ, chceme žrát maximum ze sítě).
+            Dynamicky se přepíná na -1 korekční smyčkou (§4.10.5) POUZE když hrozí přetížení
+            jističe — baterie pak slouží jako "safety buffer" pro krátké peaky (ručně zapnutý
+            spotřebič mimo automatizaci). Po ústupu peaku se vrací na 0 (s hysterezí).
+            §4.8 (soft-blok při NIBE/sauně) v tomto módu NEPLATÍ — primární ochrana je
+            dynamický PSP + korekční smyčka, ne statická blokace baterie.
         - Export do sítě ZAKÁZÁN (feedin_on = false); prevent_feedback = 1 pokud platí zákaz přetoků (prodejní cena ≤ 0), jinak 0
         - Scheduled charging NEPOUŽITO
 
@@ -395,13 +400,33 @@ A ZAKAZU PRETOKU
         - Automatizace OFF → nic neovlivňovat (§8.2)
         - Teplota nádrže < max → patrony OFF (již nepotřeba)
 
-    4.10.5 OCHRANA JISTIČE — DYNAMICKÝ SAFETY MARGIN
+    4.10.5 OCHRANA JISTIČE — DYNAMICKÝ SAFETY MARGIN + BATERIE JAKO BUFFER
         Problém: NIBE je NEFLEXIBILNÍ (~14kW peak). Pokud spadne solar z 14kW na 5kW,
-        NIBE nelze okamžitě vypnout. Patrony a auto ANO (flexibilní).
-        Řešení: PSP se dynamicky snižuje dle typu běžících spotřebičů:
-        - NIBE běží → PSP = max_spotreba_sit_w - zaporna_nibe_reserve_w (default 5000W)
-        - jen flexibilní → PSP = max_spotreba_sit_w - zaporna_flex_reserve_w (default 3000W)
-        Config parametry: zaporna_nibe_reserve_w (5000), zaporna_flex_reserve_w (3000)
+        NIBE nelze okamžitě vypnout. Patrony a auto ANO (flexibilní). Navíc uživatel
+        může ručně zapnout spotřebič MIMO automatizaci (např. 7kW sušička) a hrozí přetížení.
+
+        ŘEŠENÍ — DVĚ VRSTVY OCHRANY:
+
+        VRSTVA 1 — Dynamický PSP (staticky, dle typu běžících spotřebičů):
+            - NIBE běží → PSP = max_spotreba_sit_w - zaporna_nibe_reserve_w (default 5000W)
+            - jen flexibilní → PSP = max_spotreba_sit_w - zaporna_flex_reserve_w (default 3000W)
+            Config: zaporna_nibe_reserve_w (5000), zaporna_flex_reserve_w (3000)
+
+        VRSTVA 2 — Korekční smyčka baterie jako buffer (dynamicky, každých X sekund):
+            Samostatná NR smyčka běží JEN když je aktivní mód zaporna_nakupni_cena.
+            Sleduje skutečný odběr ze sítě (sensor.spotreba_ze_site) a přepíná baterii:
+            - PEAK detekce: spotreba_ze_site > zaporna_prah_critical_w (default 21000W)
+                → max_discharge_power = -1 (baterie OKAMŽITĚ poskytuje buffer)
+            - KLID detekce: spotreba_ze_site < zaporna_prah_safe_w (default 17000W)
+                → max_discharge_power = 0 (baterie se zase "zamkne", nevybíjí se)
+            - Hystereze 4kW (21→17) + cooldown zaporna_buffer_cooldown_s (default 30s)
+                mezi přepnutími proti oscilaci.
+            Config: zaporna_prah_critical_w (21000), zaporna_prah_safe_w (17000),
+                zaporna_buffer_cooldown_s (30), zaporna_buffer_interval_s (5)
+
+        CÍL: 95% času baterie zamčená → žrát ze sítě (bod 1/). Jen při skutečném peaku
+        > 21kW baterie asistuje jako buffer → jistič nevypadne (bod 2/). Baterie se
+        v tomto módu přirozeně NEVYBÍJÍ, jen při reálném peaku spotřeby > jističe.
 
     4.10.6 KOMBINACE SE ZÁKAZEM PŘETOKŮ
         Pokud je zároveň záporná nákupní I nekladná prodejní cena:

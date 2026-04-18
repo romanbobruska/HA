@@ -1422,7 +1422,7 @@
     "z": "bb3654998a6bf514",
     "g": "grp_zaporna_nakup",
     "name": "ZÁPORNÁ NÁKUPNÍ CENA Logic",
-    "func": "// ZÁPORNÁ NÁKUPNÍ CENA (§4.10) — max odběr ze sítě; baterie jako buffer (max_discharge -1 kromě §4.8)\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar currentBuyPrice = 99;\nvar currentSellPrice = 0;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 0;\n        currentSellPrice = parseFloat(prices[i].priceCZKhourProd) || 0;\n        break;\n    }\n}\nvar zakazPretoku = currentSellPrice <= 0;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar isDaylight = hour >= 6 && hour <= 20;\nvar minSolarPassthrough = isDaylight ? (config.zaporna_min_solar_passthrough_w || 5000) : 0;\nvar solarPassthrough = Math.max(minSolarPassthrough, currentPvPower > 10 ? Math.round(currentPvPower) : 0);\n\nvar maxGrid = config.max_spotreba_sit_w || 22000;\nvar nibeEntity = global.get(\"homeassistant.homeAssistant.states['binary_sensor.nibe_kompresory_aktivni_binarni']\") || {};\nvar nibePumpSt = (global.get(\"homeassistant.homeAssistant.states['sensor.nibe_aktualni_realny_stav']\") || {}).state || \"\";\nvar nibeRunning = nibeEntity.state === \"on\" || (nibePumpSt.indexOf(\"Klidový\") === -1 && nibePumpSt !== \"\");\nvar reserve = nibeRunning ? (config.zaporna_nibe_reserve_w || 5000) : (config.zaporna_flex_reserve_w || 3000);\nvar psp = maxGrid - reserve;\n\nvar _solOvrZ = config.topeni_solar_override_w || 8000;\nvar blockDischarge = (cerpadloTopi && currentPvPower < _solOvrZ) || saunaAktivni;\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: blockDischarge ? solarPassthrough : -1,\n    max_charge_power: -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: zakazPretoku ? 1 : 0\n};\nmsg.mode = \"zaporna_nakupni_cena\";\nmsg.blockDischarge = blockDischarge;\n\nvar zakazText = zakazPretoku ? \" + zákaz přetoků\" : \"\";\nvar nibeLabel = nibeRunning ? \" NIBE!\" : \"\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"ZÁP.NAKUP \" + currentBuyPrice.toFixed(2) + \" Kč | PSP +\" + psp + \"W (R\" + reserve + \")\" + nibeLabel + zakazText + \" | SOC \" + currentSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"zaporna_nakupni_cena\",\n    battery_charging: true,\n    max_discharge_allowed: !blockDischarge,\n    consumers_active: [\"ZápornáNákup\" + (zakazPretoku ? \"+ZP\" : \"\")],\n    timestamp: Date.now()\n});\n\nreturn msg;",
+    "func": "// ZÁPORNÁ NÁKUPNÍ CENA (§4.10) — max odběr ze sítě; baterie DEFAULT max_discharge=0 (nevybíjí se)\n// Buffer proti peaku jističe řeší samostatná korekční smyčka grp_zaporna_buffer_korekce (§4.10.5)\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar cerpadloTopi = msg.cerpadloTopi || false;\nvar saunaAktivni = msg.saunaAktivni || false;\n\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar currentBuyPrice = 99;\nvar currentSellPrice = 0;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        currentBuyPrice = parseFloat(prices[i].priceCZKhourBuy) || 0;\n        currentSellPrice = parseFloat(prices[i].priceCZKhourProd) || 0;\n        break;\n    }\n}\nvar zakazPretoku = currentSellPrice <= 0;\n\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar isDaylight = hour >= 6 && hour <= 20;\nvar minSolarPassthrough = isDaylight ? (config.zaporna_min_solar_passthrough_w || 5000) : 0;\nvar solarPassthrough = Math.max(minSolarPassthrough, currentPvPower > 10 ? Math.round(currentPvPower) : 0);\n\nvar maxGrid = config.max_spotreba_sit_w || 22000;\nvar nibeEntity = global.get(\"homeassistant.homeAssistant.states['binary_sensor.nibe_kompresory_aktivni_binarni']\") || {};\nvar nibePumpSt = (global.get(\"homeassistant.homeAssistant.states['sensor.nibe_aktualni_realny_stav']\") || {}).state || \"\";\nvar nibeRunning = nibeEntity.state === \"on\" || (nibePumpSt.indexOf(\"Klidový\") === -1 && nibePumpSt !== \"\");\nvar reserve = nibeRunning ? (config.zaporna_nibe_reserve_w || 5000) : (config.zaporna_flex_reserve_w || 3000);\nvar psp = maxGrid - reserve;\n\n// §4.10: Žádný statický soft-blok baterie. Buffer proti peaku řeší korekční smyčka dynamicky.\nvar blockDischarge = false;\n\nmsg.victron = {\n    power_set_point: psp,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: 0,\n    max_charge_power: -1,\n    feedin_on: false,\n    max_feed_in_power: 0,\n    prevent_feedback: zakazPretoku ? 1 : 0\n};\nmsg.mode = \"zaporna_nakupni_cena\";\nmsg.blockDischarge = false;\n\nvar zakazText = zakazPretoku ? \" + zákaz přetoků\" : \"\";\nvar nibeLabel = nibeRunning ? \" NIBE!\" : \"\";\nnode.status({fill:\"red\", shape:\"dot\", text:\"ZÁP.NAKUP \" + currentBuyPrice.toFixed(2) + \" Kč | PSP +\" + psp + \"W (R\" + reserve + \")\" + nibeLabel + zakazText + \" | SOC \" + currentSoc + \"%\"});\n\nglobal.set(\"energy_arbiter\", {\n    mode: \"zaporna_nakupni_cena\",\n    battery_charging: true,\n    max_discharge_allowed: true,\n    consumers_active: [\"ZápornáNákup\" + (zakazPretoku ? \"+ZP\" : \"\")],\n    timestamp: Date.now()\n});\n\nreturn msg;",
     "outputs": 1,
     "timeout": "",
     "noerr": 0,
@@ -1464,6 +1464,120 @@
     ],
     "x": 425,
     "y": 767,
+    "wires": []
+  },
+  {
+    "id": "grp_zaporna_buffer_korekce",
+    "type": "group",
+    "z": "bb3654998a6bf514",
+    "name": "§4.10.5 — Buffer korekce baterie (záp. nákupní cena)",
+    "style": {
+      "fill": "#fff2cc",
+      "label": true
+    },
+    "nodes": [
+      "zb_inject",
+      "zb_func",
+      "zb_api_set",
+      "lo_log_zb"
+    ],
+    "x": 24,
+    "y": 834,
+    "w": 592,
+    "h": 112
+  },
+  {
+    "id": "zb_inject",
+    "type": "inject",
+    "z": "bb3654998a6bf514",
+    "g": "grp_zaporna_buffer_korekce",
+    "name": "každých 5s",
+    "props": [
+      {
+        "p": "payload"
+      }
+    ],
+    "repeat": "5",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 880,
+    "wires": [
+      [
+        "zb_func"
+      ]
+    ]
+  },
+  {
+    "id": "zb_func",
+    "type": "function",
+    "z": "bb3654998a6bf514",
+    "g": "grp_zaporna_buffer_korekce",
+    "name": "Buffer korekce baterie",
+    "func": "// §4.10.5 BUFFER KOREKCE — baterie jako dynamický buffer proti peaku jističe.\n// Spouští se každých 5s, ale AKTIVUJE se JEN když aktuální FVE mód = zaporna_nakupni_cena.\n// V jiných módech vrací null (nic se neděje).\n//\n// Logika:\n//   gridW > prah_critical_w  →  max_discharge_power = -1  (BUFFER ON, baterie asistuje)\n//   gridW < prah_safe_w      →  max_discharge_power = 0   (BUFFER OFF, baterie zamčená)\n//   mezi prahy                →  zachovat aktuální stav (hystereze)\n// Plus cooldown (výchozí 30s) mezi přepnutími proti oscilaci.\n\nvar arbiter = global.get(\"energy_arbiter\") || {};\nif (arbiter.mode !== \"zaporna_nakupni_cena\") {\n    node.status({fill: \"grey\", shape: \"ring\", text: \"idle (mód: \" + (arbiter.mode || \"?\") + \")\"});\n    return null;\n}\n\nvar config = global.get(\"fve_config\") || {};\nvar critW     = config.zaporna_prah_critical_w   || 21000;\nvar safeW     = config.zaporna_prah_safe_w       || 17000;\nvar cooldownS = config.zaporna_buffer_cooldown_s || 30;\n\n// Aktuální skutečný odběr ze sítě (kladné = import)\nvar gridE = global.get(\"homeassistant.homeAssistant.states['sensor.spotreba_ze_site']\") || {};\nvar gridW = parseFloat(gridE.state);\nif (isNaN(gridW)) {\n    node.status({fill: \"grey\", shape: \"ring\", text: \"no grid sensor\"});\n    return null;\n}\n\n// Aktuální max_discharge_power v HA (0 = zamčeno, -1 = buffer, kladné = W limit)\nvar mdpE = global.get(\"homeassistant.homeAssistant.states['number.max_discharge_power']\") || {};\nvar currentMdp = parseFloat(mdpE.state);\nif (isNaN(currentMdp)) currentMdp = 0;\n\n// Cooldown timestamp\nvar lastSwitchMs = context.get(\"last_switch_ms\") || 0;\nvar sinceSwitchS = (Date.now() - lastSwitchMs) / 1000;\n\n// Rozhodnutí\nvar target = null;\nvar reason = \"\";\nif (gridW > critW && currentMdp >= 0) {\n    target = -1;\n    reason = \"PEAK \" + Math.round(gridW) + \"W > \" + critW + \"W → BUFFER ON\";\n} else if (gridW < safeW && currentMdp < 0) {\n    target = 0;\n    reason = \"SAFE \" + Math.round(gridW) + \"W < \" + safeW + \"W → BUFFER OFF\";\n}\n\n// Žádná změna — jen status\nif (target === null) {\n    var state = currentMdp < 0 ? \"BUFFER ON\" : \"ZAMČENO\";\n    var color = currentMdp < 0 ? \"red\" : \"green\";\n    node.status({fill: color, shape: \"dot\", text: state + \" | grid \" + Math.round(gridW) + \"W, mdp \" + currentMdp});\n    return null;\n}\n\n// Cooldown — nepřepínat dokud neuplyne\nif (sinceSwitchS < cooldownS) {\n    node.status({fill: \"yellow\", shape: \"ring\", text: \"COOLDOWN \" + Math.round(cooldownS - sinceSwitchS) + \"s | grid \" + Math.round(gridW) + \"W\"});\n    return null;\n}\n\n// Provést přepnutí\ncontext.set(\"last_switch_ms\", Date.now());\nnode.status({fill: \"orange\", shape: \"dot\", text: reason});\n\nmsg.victron = { max_discharge_power: target };\nmsg.topic = \"zaporna_buffer_korekce\";\nmsg.reason = reason;\nmsg.gridW = Math.round(gridW);\nmsg.currentMdp = currentMdp;\nmsg.targetMdp = target;\nreturn msg;",
+    "outputs": 1,
+    "timeout": "",
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 290,
+    "y": 880,
+    "wires": [
+      [
+        "zb_api_set",
+        "lo_log_zb"
+      ]
+    ]
+  },
+  {
+    "id": "zb_api_set",
+    "type": "api-call-service",
+    "z": "bb3654998a6bf514",
+    "g": "grp_zaporna_buffer_korekce",
+    "name": "Set max_discharge_power",
+    "server": "c7421fe2.cb11c",
+    "version": 7,
+    "debugenabled": false,
+    "action": "number.set_value",
+    "floorId": [],
+    "areaId": [],
+    "deviceId": [],
+    "entityId": [
+      "number.max_discharge_power"
+    ],
+    "labelId": [],
+    "data": "{\"value\": {{victron.max_discharge_power}}}",
+    "dataType": "json",
+    "mergeContext": "",
+    "mustacheAltTags": false,
+    "outputProperties": [],
+    "queue": "none",
+    "blockInputOverrides": true,
+    "domain": "number",
+    "service": "set_value",
+    "x": 490,
+    "y": 870,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "lo_log_zb",
+    "type": "link out",
+    "z": "bb3654998a6bf514",
+    "g": "grp_zaporna_buffer_korekce",
+    "name": "→ Log",
+    "mode": "link",
+    "links": [
+      "li_log_shared"
+    ],
+    "x": 495,
+    "y": 920,
     "wires": []
   }
 ]
