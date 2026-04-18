@@ -197,7 +197,18 @@ jistá, NEZASADÍ a vysvětlí proč.
         - Před zahájením prodeje se vypočítá cílové SOC baterie — pod toto SOC se NIKDY neprodá.
         - Cíl vychází z toho, kolik energie dům spotřebuje od teď do začátku solární výroby.
           Musíme si nechat dost v baterii, abychom přes noc nemuseli kupovat energii ze sítě za drahé ceny.
-        - Tento cíl je STABILNÍ — nemění se každých 15 sekund. Závisí na spotřebě a cenách, ne na aktuálním SOC.
+        - Tento cíl je STABILNÍ — závisí na spotřebě a cenách, ne na aktuálním SOC.
+          (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
+           dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
+           pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
+        - AGRESIVNÍ REŽIM — výjimka (v27): Pokud dnes zbývá ≥ plan_aggressive_solar_day_kwh solární výroby
+          NEBO zítra je ≥ plan_aggressive_solar_day_kwh (default 50 kWh), cíl se sníží na min_soc + night_target_soc_margin
+          (typicky 25 %). Důvod: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ“ + §1.2 „SOLÁR NEOMEZUJEME“.
+          Musíme baterii před velkým slunečným dnem sjet dolů, jinak solár narazí na strop SOC a bude omezovaný.
+        - BUDGET pro prodej (kolik SOC lze utratit do sítě):
+            budget = cSoc − sellTarget − (v normálním režimu i „drain do domu“; v agresivním NE — prodej drain nahrazuje)
+            První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty do konce hodiny ÷ 60),
+            aby se PRODAVAT nezastavoval uprostřed hodiny kvůli „plnému“ budgetu.
         - Plán zobrazuje: "SOC XX% (cíl YY%)"
     - HLAVNÍ PRAVIDLO: Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
       ze sítě za vyšší cenu. Prodáváme jen to, co přes noc nepotřebujeme.
