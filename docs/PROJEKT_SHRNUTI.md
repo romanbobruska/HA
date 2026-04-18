@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-17 — nasazeno `deploy.sh` (`c5bbb1c`: v25.110 FIX L2 typo v template sensorech: `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site` používaly neexistující `sensor.grid_loads_L2` → změněno na `sensor.grid_loads_l1_2` (skutečné entity_id L2 importu). Pre-existující bug podhodnocoval §4.10.4 jistič ochranu v `nabijeni-auta-sit` o L2 podíl (~30 %). Pozn.: `grid_production_L2` **existuje a funguje** — `fve_celkovy_prodej_do_site` je OK, nesahán. Ověřeno: L1(545)+L2(0)+L3(0) = `fve_celkovy_odber_ze_site` 545 W přesně.) — předchozí `126e4dc` v25.109 (ŠETŘIT PSP podle §4.3: při deficit+solar `chargeBias=500W`, při solarním přebytku `deficit=0` → PSP=0 žádný grid; `setrit_grid_bias_w=150`). Pozn.: když `input_boolean.fve_automatizace=off`, orchestrátor forceoval NORMAL a Fan-out blokoval Victron zápisy — vždy ověř `fve_automatizace=on` před diagnózou.
+> Poslední aktualizace: 2026-04-18 — nasazeno `deploy.sh --no-ha` (`e874be5`: v25.111 FILTRACE bazénu — denní limit dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
 
 >
 
@@ -391,6 +391,39 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+
+## v25.111: Filtrace bazénu — rozhodování dle TEPLOTY VODY (2026-04-18)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`):
+> „Pokud je konflikt se zákony s letním a zimním režimem, platí toto nové pravidlo — nad 10 °C (konf parametr). Uprav zákony tak, aby byly v souladu a nejelo se přes letní/zimní režim, ale dle teploty v bazénu."
+
+**ZAKONY.TXT §10 — přepsáno**:
+- **§10.1** (základní pravidla): explicitně uvedeno, že rozhodování o denní době běhu se řídí výhradně teplotou vody, NIKOLIV `input_boolean.letni_rezim`. HARD CUT-OFF: `poolT < filtrace_pool_temp_min` (default 2 °C) → filtrace VŮBEC neběží.
+- **§10.2** (minimální denní doba běhu): rozhodování dle pásma teploty:
+  - studená (`poolT < threshold − hyst`) → `filtrace_min_studena_min` (60 min/den)
+  - teplá (`poolT ≥ threshold`) → `filtrace_min_tepla_min` (120 min/den)
+  - hystereze proti oscilaci kolem 10 °C (default 1 °C — přechod studená→teplá ≥ 10 °C, teplá→studená < 9 °C; mezi: drž předchozí stav v `flow.filt_temp_band ∈ {"studena","tepla"}`).
+- **§10.7** (parametry):
+  - smazány: `filtrace_min_zima_min`, `filtrace_min_leto_min`
+  - přidány: `filtrace_pool_temp_threshold_c=10`, `filtrace_pool_temp_hysterese_c=1`, `filtrace_min_studena_min=60`, `filtrace_min_tepla_min=120`
+  - přesemantikováno: `filtrace_pool_temp_min` (10 → **2**) = hard cut-off
+
+**`node-red/flows/filtrace-bazenu.json`** (`Rozhodnutí filtrace` v4):
+- Logika `letni ? ... : ...` nahrazena výpočtem pásma `band` z `poolT` s hysterezí, persistovaným v `flow.filt_temp_band`.
+- `T_FREEZE` sloučeno do `T_MIN` (cut-off 2 °C, dříve oddělený parametr `filtrace_min_pool_temp`).
+- Odstraněn dead `api-current-state` node `filtrace_st_letni` (čítal `input_boolean.letni_rezim`) — incl. odebrání ze skupiny `filtrace_grp_data.nodes` a rewire `filtrace_st_state.wires` → `filtrace_st_surplus`.
+- Status řádek: prefix `L/Z` → `T/S` (Teplá/Studená).
+
+**`node-red/flows/fve-config.json`**: `fve_config` aktualizován dle §10.7.
+
+**Audit konzistence**: `letni|zimn|leto|zima|sezon` v sekci §10 = **0 výskytů**; v Node-RED flow `filtrace-bazenu.json` zbyl pouze komentář ve funkci („LETNI/ZIMNI REZIM JIZ NENI VSTUPEM TOHOTO ROZHODNUTI"). Ostatní flows (heating, boiler, manager-nabijeni-auta) `letni_rezim` používají dál — to je správně, mimo scope této úpravy.
+
+**Deploy & ověření** (`e874be5`):
+- `bash deploy.sh --no-ha` → HTTP 200, NR restartován bez chyb.
+- Po 2 minutách: `sensor.fve_plan_data.attributes.filtrace_status = {run: 62, minReq: 120, met: false, remaining: 58}` při `poolT=14.2 °C` → band „tepla“ správně, `MIN_WARM=120` aplikováno.
+- Counter zachován přes restart NR (`/homeassistant/filt_counter.json`).
+
+---
 
 ## 8. v25.6–25.8 Opravy korekčních smyček (2026-03-11)
 
