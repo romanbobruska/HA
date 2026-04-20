@@ -201,15 +201,59 @@ jistá, NEZASADÍ a vysvětlí proč.
           (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
            dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
            pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
-        - AGRESIVNÍ REŽIM — výjimka (v27): Pokud dnes zbývá ≥ plan_aggressive_solar_day_kwh solární výroby
-          NEBO zítra je ≥ plan_aggressive_solar_day_kwh (default 50 kWh), cíl se sníží na min_soc + night_target_soc_margin
-          (typicky 25 %). Důvod: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ“ + §1.2 „SOLÁR NEOMEZUJEME“.
-          Musíme baterii před velkým slunečným dnem sjet dolů, jinak solár narazí na strop SOC a bude omezovaný.
+        - AGRESIVNÍ REŽIM — výjimka (v28, upraveno): Cíl se sníží na min_soc + night_target_soc_margin
+          (typicky 25 %) POUZE pokud platí VŠECHNY tři podmínky současně:
+
+            (1) BILANCE ZÍTŘEJŠÍHO SOLÁRU — zítra bude dost slunce na dobití baterie:
+                • effSolar_zítra ≥ plan_aggressive_solar_day_kwh (default 50 kWh), kde
+                  effSolar_zítra = predpoved_solarni_vyroby_zitra
+                                  − plan_auto_demand_kwh   (default 25, jen pokud auto má hlad)
+                                  − nibe_est_consumption_kwh × nibe_cyklů  (jen pokud bude topit)
+                                  − daily_consumption_kwh  (denní spotřeba domu),
+                  NEBO
+                • zbývající_solar_dnes ≥ plan_aggressive_solar_day_kwh AND auto NEMÁ hlad
+                  (jinak by si dnešní zbytek soláru vzal automaticky charger).
+
+            (2) NOVÁ PODMÍNKA — NOČNÍ CENA ENERGIE (business pravidlo):
+                Nejvyšší nákupní cena v okně (od konce prodeje do první solární hodiny zítra)
+                musí být LEVNÁ nebo ZÁPORNÁ:
+                  max(buy v okně) ≤ prah_ultra_levna_nakup  (default 1.0 Kč/kWh)
+                  NEBO
+                  max(buy v okně) ≤ 0  (záporná nákupní cena)
+
+                Důvod: HLAVNÍ PRAVIDLO §4.5 — nikdy neprodávat energii, kterou bychom pak museli
+                v noci dokoupit ze sítě DRAŽ než za kolik jsme prodali. Zítřejší solár svítí
+                až RÁNO — mezi večerním prodejem a ranním sluncem je 8–10 hodin noci, kdy
+                dům spotřebovává energii. Pokud by v té noci byly drahé hodiny (≥ prah_draha_energie),
+                prodej pod noční rezervu by znamenal ztrátu (prodám za 2.6 Kč, koupím zpět za 4.2 Kč).
+
+          Pokud NEPLATÍ podmínka (2) — tj. noc bude drahá — použije se baseSellTarget
+          (min_soc + night_need_soc + nMargin), který obsahuje rezervu na celou noc.
+
+          Důvod AGRESIVNÍHO režimu: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ"
+          + §1.2 „SOLÁR NEOMEZUJEME". Aktivní jen když dává ekonomický smysl sjet baterii dolů
+          (zítřejší solár dobije + noc nepřidá žádné drahé dokupy).
+
+          (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
+          za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
+          noční cenový gate proti drain-then-buy-expensively ztrátě.)
         - AGRESIVNÍ REŽIM — profitabilita prodeje (v27):
           V agresivním režimu se prodej NEPOSUZUJE vůči průměrné NÁKUPNÍ ceně (buy/rtEff + amort).
           Důvod: baterii NEBUDEME dokupovat drahou sítí — doplní ji dnešní solar ZDARMA (§1.2 solár neomezujeme).
           Jediný požadavek je: prodejní cena × dchEff − amortizace ≥ min_sell_profit_czk (agresivně zmírněno na 0.5 Kč).
           V normálním režimu zůstává pravidlo: profit se počítá i s nákupními náklady.
+        - EKONOMICKÝ GUARD PRODEJE — pre-solar prodej (v28):
+          Pro každou kandidátní prodejní hodinu PŘED první sluneční hodinou v plánovacím horizontu
+          (offset < fSol) musí platit:
+              (sell × dchEff − amortizace_baterie_czk_kwh) − (max(buy v okně (offset, fSol)) / chEff)
+              ≥ min_sell_profit_czk
+          Pokud ne, hodina se z prodeje vyloučí (NEPRODÁVÁ SE).
+          Důvod: ZAKAZ §4.5 „nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit za vyšší cenu".
+          Příklad: prodej v h0 sell=2.40 Kč, max buy do první sluneční hodiny h6 buy=4.72 Kč:
+              netSell  = 2.40 × 0.9 − 1.5 = 0.66 Kč/kWh
+              replCost = 4.72 / 0.9       = 5.24 Kč/kWh
+              profit   = 0.66 − 5.24      = −4.58 Kč/kWh < 3 (min_sell_profit_czk) → SKIP ✓
+          Post-solar prodej (offset ≥ fSol) je z guardu vypnutý — solar mezitím dobije baterii zdarma.
         - BUDGET pro prodej (kolik SOC lze utratit do sítě):
             budget = cSoc − sellTarget − (v normálním režimu i „drain do domu“; v agresivním NE — prodej drain nahrazuje)
             První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty do konce hodiny ÷ 60),
