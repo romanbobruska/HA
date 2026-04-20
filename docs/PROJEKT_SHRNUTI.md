@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-20 — nasazeno `deploy.sh --no-ha` (`3e68a10`: v25.107 Fix cheapestTankHour — v solární hodině porovnává s ostatními solárními hodinami, §8.2) — předchozí aktualizace: FILTRACE BAZÉNU: řízení POUZE dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
+> Poslední aktualizace: 2026-04-20 — nasazeno `deploy.sh --no-ha` (`5a10033`: v25.108 Fix SyntaxError v BALANCOVÁNÍ Logic — stray `;,` mezi var deklaracemi, balancing mód od v25.97 nefungoval) + `3e68a10` v25.107 Fix cheapestTankHour (§8.2) — předchozí aktualizace: FILTRACE BAZÉNU: řízení POUZE dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
 
 >
 
@@ -739,6 +739,17 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.108 — Fix SyntaxError v BALANCOVÁNÍ Logic (2026-04-20)**
+
+- **BUG**: Při startu NR: `[function:BALANCOVÁNÍ Logic] SyntaxError: Unexpected token ',' (body:line 4)`. Od v25.97 (NIBE blockDischarge do všech módů) celý balancing mód nefungoval — funkce nikdy nevrátila výsledek.
+- **ROOT CAUSE**: Skript pro v25.97 nedokonale nahradil `,` za `;` v `bal_logic_func` řádek 4:
+  `var _nibeKompresoryOn = _nibeEntity.state === "on";,st=global.get("fve_status")||{};`
+  Zbytkový `,` po `;` → JS parser error → node se nenačetl.
+- **FIX**: Rozděleno na dvě samostatné `var` deklarace:
+  `var _nibeKompresoryOn = ...;` + `var st=global.get("fve_status")||{};`
+- **Nasazení**: `deploy.sh --no-ha`; commit `5a10033`. Ověřeno: NR logy čisté (jen harmless warn `Projects disabled`).
 
 
 **v25.107 — Fix cheapestTankHour: v solární hodině porovnávat s ostatními solárními hodinami (2026-04-20)**
