@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-20 — nasazeno `deploy.sh --no-ha` (`5a10033`: v25.108 Fix SyntaxError v BALANCOVÁNÍ Logic — stray `;,` mezi var deklaracemi, balancing mód od v25.97 nefungoval) + `3e68a10` v25.107 Fix cheapestTankHour (§8.2) — předchozí aktualizace: FILTRACE BAZÉNU: řízení POUZE dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
+> Poslední aktualizace: 2026-04-20 — nasazeno `deploy.sh --no-ha` (`788c98d`: v25.109 Fix sellTarget — agresivní snížení jen při levné/záporné noci, §4.5 v29) + `5a10033` v25.108 Fix SyntaxError v BALANCOVÁNÍ Logic + `3e68a10` v25.107 Fix cheapestTankHour (§8.2) — předchozí aktualizace: FILTRACE BAZÉNU: řízení POUZE dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
 
 >
 
@@ -739,6 +739,20 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.109 — Fix sellTarget: agresivní snížení jen při levné/záporné noci, §4.5 v29 (2026-04-20)**
+
+- **BUG (business)**: Plán prodával v h19/h20 (nejdražší večerní špička) a vybíjel baterii ze 100% na 39%. Následně h21–h22 označil jako „Šetřit" (drahé noční hodiny, buy 4.22–4.23 Kč). 8 hodin noci × ~5 %/h spotřeby = 40 % SOC pokles → baterie spadne pod `min_soc` → dům dokupoval ze sítě za drahé ceny. **Net ztráta: prodej 2.79 Kč → dokup 4.22 Kč = −1.43 Kč/kWh.** Porušení HLAVNÍHO PRAVIDLA §4.5: „Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit ze sítě za vyšší cenu."
+- **KONFLIKT V ZÁKONECH** (identifikováno a vyřešeno): §4.5 AGRESIVNÍ REŽIM snižoval `sellTarget` na `min_soc + nMargin` (25 %) pouze na základě zítřejšího soláru (`effSolar_zítra ≥ 50 kWh`), **bez kontroly nočních nákupních cen**. Zítřejší solár svítí až RÁNO — mezi večerním prodejem a ranním sluncem je 8–10 h noci, během kterých dům spotřebovává energii. Pokud v té noci jsou drahé hodiny, agresivní prodej porušuje HLAVNÍ PRAVIDLO.
+- **FIX — VARIANTA C (hybridní cíl dle nočních cen)**:
+  - **Zákon §4.5 v29** (`ZAKONY.TXT`): agresivní snížení `sellTarget` na 25 % nyní vyžaduje **dvě podmínky současně**:
+    1. Bilance zítřejšího soláru (≥ 50 kWh) — nezměněno.
+    2. **NOVÉ**: Max nákupní cena v okně od konce prodeje do první solární hodiny zítra ≤ `prah_ultra_levna_nakup` (1 Kč/kWh) NEBO ≤ 0.
+  - Pokud (2) neplatí (noc bude drahá) → `sellTarget = baseSellTarget` (obsahuje `nightNeedSoc` = rezerva na celou noc).
+  - **Kód** (`rf_cena_discharge2` v `fve-orchestrator.json`): přidán výpočet `_maxNocniBuy` (scan 1–36 h nesolárních hodin přes `x.fP`), zavedena proměnná `x.agresivniSellTargetOk = agresivniProdej && nocLevnaNeboZaporna`. `sellTarget` a `_normalDrainSoc` používají nový flag. `x.agresivniProdej` zůstává beze změny pro ostatní logiku (profit check, arbitráž).
+- **Ověřeno po deployi**: Původní plán h19/h20 PRODAVAT (SOC 100→39 %) → po fixu h19/h20 NORMAL „drahá hodina" (SOC 73→66 %), h21–h23 Šetřit s SOC 66 % → rezerva na celou noc. Žádný PRODAVAT, protože noc je drahá a gate je aktivní.
+- **Nasazení**: `deploy.sh --no-ha`; commit `788c98d`.
 
 
 **v25.108 — Fix SyntaxError v BALANCOVÁNÍ Logic (2026-04-20)**
