@@ -135,4 +135,7 @@ input_select:
       - "NIBE + Patrony"
       - "Oběhové"
       - "Vypnuto"
+      - "BAZÉN - Patrony"
+      - "BAZÉN - NIBE"
+      - "BAZÉN - NIBE + Patrony"
     icon: mdi:radiator

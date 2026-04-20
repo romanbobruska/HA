@@ -470,7 +470,7 @@ A ZAKAZU PRETOKU
         - NIBE kompresor blokuje filtraci (§10.5) — NEPLATÍ! Vše jede současně.
 
     4.10.4 ZACHOVANÁ ABSOLUTNÍ PRAVIDLA (platí VŽDY, i v tomto módu)
-        - max_spotreba_sit_w (§12.1) — celkový odběr NESMÍ překročit jistič
+        - max_spotreba_sit_w (§13.1) — celkový odběr NESMÍ překročit jistič
         - NIBE nelze vypnout pokud kompresor běží (§1.2)
         - Automatizace OFF → nic neovlivňovat (§8.2)
         - Teplota nádrže < max → patrony OFF (již nepotřeba)
@@ -887,6 +887,13 @@ A ZAKAZU PRETOKU
     - SOC ochrana: pod filtrace_soc_low (40%) neběžet na grid (pokud je solar dnes)
     - Plán awareness: skenuje FVE plán na budoucí solární hodiny
     - Solar forecast: čte sensor.energy_production_today_remaining_3
+    - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): pokud global.pool_heating_filtrace_lock_until > now(),
+      filtrace je FORCE ON bez ohledu na všechna pravidla výše (priorita NIBE, anti-cycling,
+      SOC ochrana, vypínací podmínky §10.4). Důvod: pokud se topí do výměníku bazénu, filtrace
+      MUSÍ běžet, jinak se výměník přehřeje (§11.4). Lock drží POOL Heating po celou dobu topení
+      + pool_filtrace_cooldown_min (10 min) po jeho skončení. Anti-cycling se pro tento override
+      NEPŘESKAKUJE — lock má nejvyšší přednost. Minuty běhu pod lockem se normálně započítávají
+      do denního čítače §10.2.
 
 10.6 DASHBOARD — ZOBRAZENÍ STAVU FILTRACE
     - V dashboardu (dashboard_fve_plan.md) se zobrazuje stav filtrace bazénu:
@@ -910,29 +917,227 @@ A ZAKAZU PRETOKU
     filtrace_solar_ok_kwh: 10             (zbývající solar = "čekej na solar", kWh)
 
 ================================================================================
-11. BATERIE — PRAVIDLA VYBÍJENÍ A NABÍJENÍ
+11. FLOW: VYTÁPĚNÍ BAZÉNU (pool-heating.json)
 ================================================================================
 
-11.1 MAX_DISCHARGE_POWER (jak řídit vybíjení)
+11.1 ZÁKLADNÍ PRAVIDLA A PŘEDPOKLADY
+    - Vytápění bazénu se provádí VÝHRADNĚ v LETNÍM REŽIMU (input_boolean.letni_rezim=ON).
+      V zimě je celý tento flow neaktivní — směšovací nádrž se v zimě používá pro topení domu (§8).
+    - Automatizace musí být zapnutá: input_boolean.automatizovat_vytapeni_bazenu=ON.
+      Pokud je OFF, nedělá se AUTOMATICKY NIC (stejné jako u topení, filtrace, auta).
+    - Teplota vody v bazénu se sleduje přes sensor.hp2551ae_pro_v2_1_0_temperature_1.
+      Topí se, dokud voda < input_number.pozadovana_teplota_v_bazenu.
+      Nad tuto hodnotu se automatika NIKDY nesmí dostat.
+    - Teplota ve směšovací nádrži (sensor.teplota_smesovac_teplota) NIKDY nesmí překročit
+      input_number.max_teplota_nadrz_bazen — je to ABSOLUTNÍ bezpečnostní strop (kavitace, obarné ventily).
+    - Priorita tohoto flow je NEJNIŽŠÍ (analogicky s patronami v §8): auto nesmí mít hlad,
+      bojler musí být natopen na svůj cíl (§9), SOC baterie ≥ pool_patrony_soc_min (default 90 %).
+      Výjimky tvoří jen speciální případy §11.6 (záporná cena, ultralevná cena, zákaz přetoků).
+    - Flow POOL Heating NESAHÁ na flow TOPENÍ DOMU (§8) ani na flow FILTRACE (§10).
+      Pouze jim posílá signály (viz §11.4 a §11.9).
+
+11.2 DVĚ CESTY, KUDY SE TEPLO DOSTANE DO BAZÉNU
+    a) Pomalá / levná cesta — PŘES SMĚŠOVACÍ NÁDRŽ (patrony):
+       1. Patrony (3/6/9 kW dle fáze) ohřívají vodu v nádrži. NIBE nádrž NIKDY neohřívá —
+          NIBE v režimu TUV topí přímo do výměníku bazénu (cesta b), nádrž obchází.
+       2. Jakmile nádrž dosáhne IDEÁLNÍ teploty (§11.3), otevře se switch.bazen_ventil_smesovac.
+       3. Teplá voda teče z nádrže do výměníku bazénu (místo do podlahovky domu).
+       4. Filtrace (§10) zajistí průtok bazénové vody přes výměník — teplo se předá do bazénu.
+       Tato cesta je pomalá, ale levná a flexibilní — ideální pro průběžné topení ze solárních přebytků.
+
+    b) Rychlá / dražší cesta — PŘÍMO PŘES NIBE (NIBE v TUV režimu, bypass nádrže):
+       1. Sepne se switch.nibe_jednorazove_zvyseni_tuv.
+       2. NIBE topí přímo do výměníku bazénu (14 kW peak kompresor).
+       3. Filtrace (§10) musí běžet, jinak se výměník přehřeje.
+       Používá se jen ve 4 specifických případech (§11.6) a vždy musí NIBE běžet
+       minimálně pool_nibe_min_runtime_sec (30 min) v kuse — kompresor neznáší krátké cykly.
+
+11.3 HYSTEREZE NÁDRŽE (kdy otevřít/zavřít ventil do bazénu)
+    - Ventil switch.bazen_ventil_smesovac má dvě pozice:
+        * ON  → voda z nádrže teče do VÝMĚNÍKU BAZÉNU (náš případ v létě)
+        * OFF → voda z nádrže NETEČE do VÝMĚNÍKU BAZÉNU
+        * switch.teplota_smesovac (OBEHOVE CERPADLO) → voda z nádrže teče do PODLAHOVKY DOMU (zimní režim — v létě to nikdy nezapneme,
+        PROTOZE BYCHOM PUSTILI TEPLOU VODU DO PODLAHY, KTEROU CHLADIME!!!)
+    - V ZIMNÍM REŽIMU je ventil VŽDY OFF — bez výjimky. Žádná část POOL Heating ho v zimě nesahá.
+    - V letním režimu ventil pracuje s HYSTEREZÍ (zamezuje oscilaci):
+        * OTEVŘENÍ (ON):  teplota_smesovac_teplota ≥ pool_ventil_start_c (default 50 °C)
+          — nečeká se na pouhé dosažení minima; čekáme na IDEÁL, aby voda nebyla jen vlažná.
+        * ZAVŘENÍ (OFF):  teplota_smesovac_teplota <  input_number.min_teplota_nadrz_bazen
+          (default 30 °C) — pod minimem už nemá smysl topit bazén z nádrže.
+        * Mezi 30 °C a 50 °C si ventil drží předchozí stav (anti-oscilace).
+    - ABSOLUTNÍ BEZPEČNOSTNÍ STROP NÁDRŽE: pokud teplota_smesovac_teplota ≥ input_number.max_teplota_nadrz_bazen,
+      VYPNOU SE patrony okamžitě, bez cooldown (NIBE se tohoto stropu netýká — nádrž neohřívá).
+    - ABSOLUTNÍ STROP TEPLOTY VODY V BAZÉNU: pokud teplota bazénu dosáhne/překročí
+      input_number.pozadovana_teplota_v_bazenu:
+        * Patrony (pokud topí kvůli bazénu) → OFF okamžitě.
+        * NIBE (jednorazove_zvyseni_tuv) → POVINNÝ doběh pool_nibe_min_runtime_sec (30 min) BEZ VÝJIMKY,
+          i kdyby bazén přetopil třeba o 1 °C. Kompresor nesmí do krátkých cyklů.
+        * Cooldown filtrace pool_filtrace_cooldown_min (~10 min) platí i v tomto případě.
+    - NIBE-TUV je VNITŘNÍ REŽIM NIBE čerpadla (ne HA switch). V LETNÍM REŽIMU se NIKDY nevypíná —
+      je to jen nastavení, v jakém režimu NIBE pracuje, když topí. Čerpadlo reálně začne topit do bazénu
+      teprve ve chvíli, kdy se v HA zapne switch.nibe_jednorazove_zvyseni_tuv. Po vypnutí toho switche
+      NIBE přestane topit do bazénu (pozor na povinný doběh 30 min viz výše).
+
+11.4 FILTRACE PŘI VYTÁPĚNÍ BAZÉNU (mutex s flow §10)
+    - Vždy, když do výměníku bazénu teče teplo (ať z nádrže, nebo přímo z NIBE),
+      FILTRACE MUSÍ BĚŽET. Jinak by se teplo v bazénové šachtě hromadilo místo v bazénu
+      (a mohlo by dojít k přehřátí výměníku).
+    - POOL Heating nastavuje global.pool_heating_filtrace_lock_until (timestamp):
+        * Po celou dobu aktivního topení bazénu je lock prodlužován +60 s.
+        * Po SKONČENÍ topení (ať přes patrony, nebo přes NIBE) drží lock ještě pool_filtrace_cooldown_min
+          (default 10 min) — aby se výměník pořádně vypláchl do bazénu.
+    - Flow FILTRACE (§10) tento lock respektuje: pokud lock_until > now(), filtrace je FORCE ON
+      bez ohledu na své vlastní rozhodování (přebytek, šetřit mód atd.).
+    - Filtrace běžící pod tímto lockem SE STANDARDNĚ ZAPOČÍTÁVÁ do denního čítače §10 —
+      uživatel v dashboardu vidí skutečné minuty běhu bez ohledu na to, kdo filtraci spustil.
+    - Filtrace NESMÍ být v průběhu topení ani bezprostředně po něm vypínána/zapínána anti-cycling logikou.
+
+11.5 KDY SMÍ POOL HEATING VŮBEC SPUSTIT TOPENÍ
+    Všechny tyto podmínky musí platit SOUČASNĚ (jinak flow nic nedělá):
+        1. letni_rezim = ON
+        2. automatizovat_vytapeni_bazenu = ON
+        3. teplota vody v bazénu <  input_number.pozadovana_teplota_v_bazenu
+        4. 
+        5. auto_ma_hlad = OFF  (auto má přednost — §1.2, BEZ VÝJIMKY pro patrony)
+        6. bojler dosáhl svého cíle (§9)  — neplýtváme patronami, když potřebuje bojler 
+            - POKUD ALE BUDE SKUTECNA I PLNOVANA VYROBA TAK VELKA, ZE V SOUCTU TO VYJDE, PATRONY I BOJLET MOHOU BEZET SOUCASNE
+        7. SOC baterie ≥ pool_patrony_soc_min (default 90 %, §11.10) — samostatný parametr
+           od topeni_min_soc_patron (§8), uživatel provede sjednocení až po dokončení POOL Heating.
+           VÝJIMKA: speciální případy §11.6 (záporná cena, ultralevná cena, zákaz přetoků) —
+           ty mohou tento SOC práh obejít, protože energie je buď zadarmo, nebo ji musíme někam dát.
+        8. TOPENI DO VYMENIKU BAZENU PRES VENTIL NADRZE SE SPUSTI POUZE TEHDY, POKUD JE DOSTUPNY switch.filtrace (da se ovladat).
+            Pokud NENI, JE POVOLENO NATOPIT POUZE NADRZ A CEKA SE, AZ TENTO SWITCH BUDE DOSTUPNY - NEZAPNULA BY SE FILTRACE.
+            JE ALE POVOLENO TOPENI PRIMO DO VYMENIKU PRES NIBE, JELIKOZ TOTO TOPENI SPOUSTI VLASTNI RELE V BAZENOVE SACHTE,
+            TAKZE TADY K PREHRATI VYMENIKU NEDOJDE, I KDYZ V HA FILTRACE NEBUDE DOSTUPNA.
+
+11.6 NIBE → BAZÉN — 4 PŘÍPADY, KDY SE AKTIVUJE PŘÍMÉ TOPENÍ
+    Přímá cesta NIBE → výměník (switch.nibe_jednorazove_zvyseni_tuv) se zapne POUZE
+    v jednom z těchto čtyř případů (jinak se NIKDY nespouští):
+
+    1. ZÁPORNÁ NÁKUPNÍ CENA
+       buy_price ≤ pool_nibe_zaporna_cena_threshold (default 0 Kč/kWh)
+       → Za odběr ze sítě nám platí. Topíme bazén maximem (§1.2 absolutní pravidlo).
+
+    2. ZÁKAZ PŘETOKŮ + SOLÁR NEMÁ KAM ODTÉCT
+       FVE mód = zakaz_pretoku  a  solární výroba ≥ pool_nibe_zakaz_pretoku_solar_kwh (default 13 kWh)
+       → Přebytek bychom museli omezit (§1.2 zakazuje!). Bazén je ideální sink.
+
+    3. bazen_na_max = ON + NEJLEPŠÍ PODMÍNKY (plánovač, §11.6.1)
+       → Uživatel chce bazén natopit do 24 h. POOL Heating si vybere nejlepší hodiny v plánu.
+
+    4. ULTRALEVNÁ CENA + bazen_na_max = ON
+       buy_price ≤ config.prah_ultra_levna_nakup (default 1 Kč/kWh)  AND  bazen_na_max = ON
+       → Energie je tak levná, že se vyplatí topit bazén i ze sítě, pokud chceme rychle natopit.
+
+    Mimo tyto čtyři případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
+    Ve všech čtyřech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
+    i kdyby podmínky během této doby pominuly.
+
+    - U TOPENI PRES NIBE PLATI STEJNE JAKO U TOPENI DO DOMU PRAVIDLO SOLARNI VYROBY 8KWH - NAD ZEREME BATERII, POD BEREME ZE SITE
+
+11.6.1 PLÁNOVAČ pro bazen_na_max (případ 3)
+    Princip: nezapnout NIBE hned a slepě, ale vybrat nejlepší hodiny v horizontu 24 h. JE NUTNO POCITAT I SE SKUTECNOU/PLANOVANOU SOLARNI VYROBOU
+        1. Odhadni počet potřebných cyklů NIBE: ΔT (cíl − aktuální teplota vody) × pool_cykly_per_degree.
+        2. Z sensor.fve_plan vyber TOLIK nejlevnějších hodin (podle buy_price) v okně
+           pool_nibe_plan_horizon_h (default 24 h), kolik cyklů potřebuješ.
+        3. Každých 60 s PLÁN PŘEPOČÍTEJ — podmínky se mění (solár, spotřeba, ceny).
+           Pokud se objeví výhodnější hodina, přesuň cyklus na ni (pokud už neběží).
+        4. Běžící 30min cyklus VŽDY doběhne — kompresor nedocyklujeme.
+        5. Pokud solární výroba ≥ pool_nibe_solar_zere_baterii_kwh (default 8 kWh) a NIBE běží,
+           zbytek se smí brát z BATERIE (analogicky s topením domu §8 — solar_override).
+
+11.7 PATRONY → NÁDRŽ (korekční smyčka, hlavní pracovní kůň letního režimu)
+    - Patrony v letním režimu mají JEDEN úkol: průběžně ohřívat směšovací nádrž pro bazén z přebytků.
+    - Korekční smyčka je IDENTICKÁ s patronami pro topení domu (§8.5) — closed-loop feedback
+      na baterii, dead band, cooldown mezi změnami fází (3/6/9 kW). Chová se jako tam.
+    - Rozdíl oproti §8: cílová entita je nádrž pro BAZÉN, ne pro dům. Fyzika je stejná.
+    - SPUŠTĚNÍ patron → nádrž (všechny platí):
+        * letni_rezim = ON, automatizovat_vytapeni_bazenu = ON
+        * solární výroba ≥ topeni_patron_min_solar_w (default 5000 W)
+        * SOC baterie ≥ pool_patrony_soc_min (default 90 %, §11.10) — kromě výjimek §11.6
+        * auto nemá hlad, bojler natopen (s výjimkou §11.5 bod 6 — pokud výroba pokryje oboje)
+        * teplota_smesovac_teplota <  input_number.max_teplota_nadrz_bazen − bezpečnostní rezerva
+    - ZASTAVENÍ patron → nádrž:
+        * teplota_smesovac_teplota ≥ input_number.max_teplota_nadrz_bazen  → OFF všech fází (§11.3)
+        * solar přestane stačit a nejsme ve výjimce §11.6                   → OFF
+        * SOC baterie < pool_patrony_soc_min (default 90 %)                 → OFF
+    - SOUBĚH PATRON + NIBE → BAZÉN je POVOLENÝ za těchto pravidel:
+        * patrony topí VÝHRADNĚ NÁDRŽ  (plní zásobu tepla na pozadí)
+        * NIBE topí VÝHRADNĚ PŘÍMO VÝMĚNÍK (switch.nibe_jednorazove_zvyseni_tuv)
+        * tzn. do VÝMĚNÍKU teče teplo jen z JEDNOHO zdroje (viz §11.8)
+      Tento souběh má smysl při zákazu přetoků a záporných cenách — maximalizujeme
+      využití energie, kterou bychom jinak museli omezit nebo za ni ztratit peníze.
+
+11.8 ABSOLUTNÍ ZÁKAZY (přidává k §1.2)
+    - Do VÝMĚNÍKU BAZÉNU smí v jednu chvíli téct teplo z POUZE JEDNOHO zdroje:
+        buď nádrž (ventilem), NEBO NIBE-TUV (přímo). NIKDY oba současně.
+        (Souběh patron do nádrže + NIBE do výměníku je OK — to jsou dva různé cíle, ne jeden.)
+    - teplota_smesovac_teplota NIKDY nesmí překročit input_number.max_teplota_nadrz_bazen.
+      Při překročení se okamžitě vypínají všechny zdroje ohřevu nádrže — tj. PATRONY
+      (NIBE-TUV nádrž neohřívá, takže se tohoto stropu netýká; topí přímo do výměníku, §11.2b).
+    - V ZIMNÍM REŽIMU (letni_rezim=OFF) POOL Heating nesahá na žádnou entitu.
+      switch.bazen_ventil_smesovac je v zimě vždy OFF — zajišťuje to HA (ne POOL Heating).
+    - Pokud FILTRACE není schopná startu (§10.5 anti-cycling, SOC ochrana bez výjimky, atd.),
+      POOL Heating topení nezahájí — jinak by hrozilo přehřátí výměníku.
+
+11.9 ZOBRAZENÍ STAVU V UI (input_select.topeni_mod + sensor.fve_plan)
+    - input_select.topeni_mod je SDÍLENÝ informativní selector (nastavuje ho automatika, ne uživatel).
+      V ZIMĚ ho ovládá flow TOPENÍ DOMU (§8) — hodnoty: Patrony / NIBE / NIBE + Patrony / Oběhové / Vypnuto.
+      V LÉTĚ ho ovládá POOL Heating — přidané hodnoty:
+        * "BAZÉN - Patrony"         — topí se přes nádrž s patronami (ventil otevřen)
+        * "BAZÉN - NIBE"            — topí se přímo NIBE do výměníku
+        * "BAZÉN - NIBE + Patrony"  — souběh (patrony do nádrže, NIBE do výměníku), §11.7
+        * "Vypnuto"                 — v létě POOL Heating momentálně netopí
+      Kolize není možná: v létě je topení domu (§8) vypnuté, v zimě je POOL Heating vypnutý.
+    - POOL Heating publikuje naplánované NIBE → bazén hodiny (§11.6.1) do sensor.fve_plan
+      přes orchestrátor — uživatel vidí v dashboardu, kdy se chystá topit bazén přes NIBE,
+      analogicky k tomu, jak se už dnes ukazují hodiny topení domu. Patrony → nádrž se v plánu
+      neukazují jako samostatná vrstva (stejně jako §8.5 patrony pro dům — jsou to reaktivní
+      přebytkové "žížaly" bez plánu).
+
+11.10 KONFIGUROVATELNÉ PARAMETRY (fve_config — §13)
+    pool_enabled                      (čte input_boolean.automatizovat_vytapeni_bazenu)
+    pool_na_max                       (čte input_boolean.bazen_na_max)
+    pool_patrony_soc_min: 90          (min SOC baterie pro patrony → bazén, % — §11.5, §11.7.
+                                       Samostatný parametr od topeni_min_soc_patron (§8) —
+                                       kontrolu sjednocení na 90 % i pro topení domu nechá
+                                       uživatel provést až po dokončení POOL Heating.)
+    pool_cilova_teplota_vody          (čte input_number.pozadovana_teplota_v_bazenu)
+    pool_min_teplota_nadrz            (čte input_number.min_teplota_nadrz_bazen, default 30 °C)
+    pool_max_teplota_nadrz            (čte input_number.max_teplota_nadrz_bazen, default 60 °C — ABSOLUTNÍ MAX)
+    pool_ventil_start_c: 50           (ideální teplota nádrže pro otevření ventilu, °C — §11.3)
+    pool_nibe_min_runtime_sec: 1800   (min doba běhu NIBE v kuse, s — kompresor, §11.6)
+    pool_nibe_solar_zere_baterii_kwh: 8 (solar práh, nad který smí NIBE žrát baterii, kWh — §11.6.1)
+    pool_nibe_plan_horizon_h: 24      (horizont plánovače pro bazen_na_max, h — §11.6.1)
+    pool_nibe_zaporna_cena_threshold: 0 (práh záporné ceny pro NIBE → bazén, Kč/kWh — §11.6 případ 1)
+    pool_nibe_zakaz_pretoku_solar_kwh: 13 (min solar pro trigger zákaz přetoků, kWh — §11.6 případ 2)
+    pool_cykly_per_degree: 2          (odhad cyklů NIBE na 1 °C bazénu — kalibrace §11.6.1)
+    pool_filtrace_cooldown_min: 10    (filtrace po konci topení, min — §11.4)
+
+================================================================================
+12. BATERIE — PRAVIDLA VYBÍJENÍ A NABÍJENÍ
+================================================================================
+
+12.1 MAX_DISCHARGE_POWER (jak řídit vybíjení)
     - solar > 10W → Math.max(50, solar)  [solarPassthrough]
     - solar ≤ 10W → 0  [noc/zataženo — Victron transfer relay zajistí grid]
     - NIKDY nepoužívat number.min_soc k blokaci — jen max_discharge_power
 
-11.2 MAX_CHARGE_POWER
+12.2 MAX_CHARGE_POWER
     - SOC ≥ 95% a patrony aktivní → 0 (zastavit nabíjení baterie, patron vybíjí)
     - Jinak → -1 (bez omezení)
 
-11.3 BLOKACE VYBÍJENÍ — blockDischargeSoft
+12.3 BLOKACE VYBÍJENÍ — blockDischargeSoft
     Aktivo když: NIBE topí NEBO nabíjení auta ze sítě NEBO sauna
     → max_discharge_power = solarPassthrough (ne 0!)
     → Baterie stále může dodávat solární energii do AC
 
-11.4 AUTO NABÍJENÍ A BATERIE
+12.4 AUTO NABÍJENÍ A BATERIE
     - Wallbox bere ze SÍTĚ (grid-connected, mimo Victron ESS)
     - Baterie MŮŽE vybíjet pro domácnost i při nabíjení auta — to je správné
     - blockDischargeHard byl odstraněn — způsoboval grid draw pro domácnost
 
-11.5 SOC PRAHY (z config)
+12.5 SOC PRAHY (z config)
     - min_soc: 20% (uživatel, number.min_soc) — absolutní minimum
     - nabijeni_auta_min_soc_slunce: 85% — min SOC pro start solárního nabíjení auta
     - nabijeni_auta_soc_drain_prah: 95% — přepnutí charge→drain mód při sol. nabíjení
@@ -940,10 +1145,10 @@ A ZAKAZU PRETOKU
     - noční rezerva: ~36% (night_reserve_kwh=10 / 28kWh × 100)
 
 ================================================================================
-12. KONFIGUROVATELNÉ PARAMETRY (fve_config — VŽDY z configu, nikdy hardcoded)
+13. KONFIGUROVATELNÉ PARAMETRY (fve_config — VŽDY z configu, nikdy hardcoded)
 ================================================================================
 
-12.1 OBECNÉ FVE
+13.1 OBECNÉ FVE
     kapacita_baterie_kwh: 28
     min_soc: 20 (čte z number.min_soc v HA — UŽIVATEL)
     prah_levna_energie: 4 (level)
@@ -951,7 +1156,7 @@ A ZAKAZU PRETOKU
     max_spotreba_sit_w: 22000
     safety_margin_w: 2000
 
-12.2 NABÍJENÍ AUTA
+13.2 NABÍJENÍ AUTA
     nabijeni_auta_forecast_kwh: 40 (min výroba dne pro solar nabíjení)
     nabijeni_auta_min_soc: 95 (min SOC baterie pro solar větev — manager)
     nabijeni_auta_solar_w: 4000 (min přebytek W pro solar nabíjení — manager)
@@ -965,7 +1170,7 @@ A ZAKAZU PRETOKU
     nabijeni_auta_cena_prah_nizsi: 3.0 (max Kč/kWh pro nabíjení ze sítě — nižší)
     nabijeni_auta_pretizeni_w: 18000 (max spotřeba sítě při nabíjení auta, W)
 
-12.3 TOPENÍ
+13.3 TOPENÍ
 
     topeni_min_teplota_nadrze: 30 (min teplota nádrže pro oběhové čerpadlo, °C)
     topeni_max_teplota_nadrze: 50 (max teplota nádrže pro topení, °C)
@@ -989,7 +1194,7 @@ A ZAKAZU PRETOKU
     nibe_peak_w: 14000 (peak odběr NIBE, W)
     topeni_nibe_dt_per_cycle: 6 (°C teplotního rozdílu na 1 cyklus NIBE — kalibrováno: 3 cykly při ΔT=18°C)
 
-12.4 ARBITRÁŽ A CENY
+13.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
         - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
          odberu a take ocekavane solarni vyrobe a pozdejsich cen za nakup. Pokud nabijeni baterie vyjde jako prodelecna, nema to smysl - samozrejme se vzdy berou v potaz ztraty a amortizace
@@ -1001,7 +1206,7 @@ A ZAKAZU PRETOKU
     night_target_soc_margin: 5 (margin nad minSOC pro noční cíl, %)
     setrit_grid_bias_w: 150 (PSP bias v Šetřit módu, W)
 
-12.5 BALANCOVÁNÍ
+13.5 BALANCOVÁNÍ
     - Základní pravidla
         - V plánu se zobrazuje stav balancingu v hlaviččce: např.⚡ Poslední balancing: 06.03. 15:00 ❌
         - Pokud se balancování v plnánovaném intervalu nezdaří, zobrazí se ikonka křížku v plánu a počká se na další interval
@@ -1024,7 +1229,7 @@ A ZAKAZU PRETOKU
     balancing_grid_reserve_w: 1000
 
 ================================================================================
-13. ENTITY PRO MANUÁLNÍ OVERRIDE (UŽIVATEL NASTAVUJE)
+14. ENTITY PRO MANUÁLNÍ OVERRIDE (UŽIVATEL NASTAVUJE)
 ================================================================================
 
     input_number.nastavena_teplota_v_dome → cílová teplota domu (23.3°C)
@@ -1037,7 +1242,7 @@ A ZAKAZU PRETOKU
     input_boolean.chlazeni → povolení chlazení
 
 ================================================================================
-14. VICTRON ESS — ENTITY A MQTT
+15. VICTRON ESS — ENTITY A MQTT
 ================================================================================
 
     MaxChargePower: number.max_charge_power / Settings/CGwacs/MaxChargePower
@@ -1049,7 +1254,7 @@ A ZAKAZU PRETOKU
     MQTT prefix: victron, ID: c0619ab69c71
 
 ================================================================================
-15. VICTRON EV CHARGER — STAVY
+16. VICTRON EV CHARGER — STAVY
 ================================================================================
 
     0=Disconnected, 1=Connected, 2=Charging, 3=Charged, 4=WaitSun
@@ -1057,7 +1262,7 @@ A ZAKAZU PRETOKU
     State 6 (WaitStart) = auto připojeno, čeká na StartStop=1 = MÁ HLAD
 
 ================================================================================
-16. LOGOVÁNÍ
+17. LOGOVÁNÍ
 ================================================================================
 
     Soubor: /homeassistant/fve_log.jsonl
@@ -1066,7 +1271,7 @@ A ZAKAZU PRETOKU
     Balancování navíc: bal_current, bal_cell_diff, bal_soc_precise, bal_status
 
 ================================================================================
-17. NIBE — REGISTRY A ENTITY
+18. NIBE — REGISTRY A ENTITY
 ================================================================================
 
     Topení: reg 47371 (switch.nibe_topeni)
