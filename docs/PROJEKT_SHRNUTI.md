@@ -4,7 +4,7 @@
 
 > **Living document** — aktuální stav systému. Po každé změně PŘEPSAT relevantní sekci.
 
-> Poslední aktualizace: 2026-04-18 — nasazeno `deploy.sh --no-ha` (`e874be5`: v25.111 FILTRACE bazénu — denní limit dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
+> Poslední aktualizace: 2026-04-20 — nasazeno `deploy.sh --no-ha` (`3e68a10`: v25.107 Fix cheapestTankHour — v solární hodině porovnává s ostatními solárními hodinami, §8.2) — předchozí aktualizace: FILTRACE BAZÉNU: řízení POUZE dle TEPLOTY VODY, NEZÁVISLE na `input_boolean.letni_rezim`. ZAKONY §10.1/§10.2/§10.7 přepsány: hard cut-off `filtrace_pool_temp_min` (default 2 °C), pásmo „studena/tepla“ s hysterezí kolem `filtrace_pool_temp_threshold_c` (10 °C ± `filtrace_pool_temp_hysterese_c` 1 °C), denní min `filtrace_min_studena_min` 60 / `filtrace_min_tepla_min` 120 min. Smazány `filtrace_min_zima_min`, `filtrace_min_leto_min`. NR: `filtrace-bazenu.json` (`Rozhodnutí filtrace` v4) — `band` v `flow.filt_temp_band`, `T_FREEZE` sloučeno do `T_MIN`, status `L/Z` → `T/S`; odstraněn dead node `filtrace_st_letni` (group + rewire). `fve-config.json` parametry aktualizovány. Po deployi ověřeno: poolT 14.2 °C → band „tepla“, `minReq=120`, `run=62` zachováno přes restart NR.) — předchozí `c5bbb1c` v25.110 FIX L2 typo v template sensorech (`sensor.grid_loads_L2` → `sensor.grid_loads_l1_2` u `fve_celkovy_odber_ze_site`, `fve_net_odber_ze_site`, `fve_net_dodavka_do_site`).
 
 >
 
@@ -739,6 +739,15 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 - **Poučení**: Push AŽ PO ověření (NR logy, HA stavy, kódování).
 
+
+
+**v25.107 — Fix cheapestTankHour: v solární hodině porovnávat s ostatními solárními hodinami (2026-04-20)**
+
+- **BUG**: NIBE se zapnulo v h10 (lokální 10:30, level 24 — **nejdražší hodina dne**) i když následující solární hodina h11 byla **o 1.71 CZK levnější** (level 10, 3.01 vs 4.72 CZK/kWh). Porušení §8.2: „VŽDY TOPÍME ZA CO NEJVÝHODNĚJŠÍCH PODMÍNEK — ZA CO NEJNIŽŠÍ CENY".
+- **ROOT CAUSE**: `cheapestTankHour()` v `rf_htg_decide2` vracela `true` pro jakoukoli solární hodinu bez porovnání s ostatními solárními hodinami — komentář „solární hodina = free energy" ignoroval fakt, že jiná solární hodina může být výrazně levnější. Větev `!needH && tankT < coldTank && !highSolDay && cheapestTankHour()` pak nastavila `mod = "NIBE"` → `isDraha` && `solW >= solOverride` (10700W ≥ 8000W) → `nibe_on`.
+- **FIX**: `scanEnd = h.isSol ? h.solE : h.solS` — v solární hodině scanuje všechny budoucí solární hodiny dnes (do `solE`), mimo solární okno jen hodiny před solárem (do `solS`). Pokud existuje levnější budoucí hodina → `return false` → `mod = "Vypnuto"` → `nibeBlkMod=true` → NIBE zůstane vypnuté.
+- **Trace dnes h10**: inT=22.7°C > tgtT=22°C (needH=false), tankT=39°C < coldTank=40°C, solar=10700W, lvl=24. Po fixu `cheapestTankHour()` uvidí h11 (lvl=10), h12 (lvl=4), h14 (lvl=2) → false → NIBE OFF → počkalo by se na h11.
+- **Nasazení**: `deploy.sh --no-ha`; commit `3e68a10`. Ověřeno v serverových `flows.json`: `scanEnd = h.isSol ? h.solE : h.solS` ✅.
 
 
 **v25.100 — ZÁKAZ PŘETOKŮ: max_charge_power = solar surplus (2026-04-17)**
