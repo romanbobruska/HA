@@ -766,7 +766,13 @@ A ZAKAZU PRETOKU
         - Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
-    - Pokud bude prodejni cena vetsi nez 3 koruny (konfigurovatelny parametr), tak se patrony nepouziji
+    - PRODEJNÍ CENA ELEKTŘINY ≤ 1,5 Kč/kWh (parametr topeni_patron_max_sell_price, výchozí 1,5 Kč/kWh, konfigurovatelné)
+        Logika: když mi trh platí za přebytek více než 1,5 Kč/kWh, je VÝHODNĚJŠÍ energii PRODAT
+        než ji spálit v patronách. Při záporné prodejní ceně (zákaz přetoků) toto pravidlo NEPLATÍ —
+        patrony naopak pomáhají spotřebovat energii, kterou nelze prodat (§4.10).
+        Parametr lze měnit přes input_number.topeni_patron_max_sell_price v HA (pokud existuje),
+        jinak platí výchozí 1,5 Kč/kWh z fve_config.
+        Platí pro topení DOMU (§8.5) i BAZÉNU (§11.7) — sdílený parametr, sdílené patrony.
     - PRAVIDLO POSLEDNÍ SOLÁRNÍ HODINY: Pokud je aktuální hodina POSLEDNÍ solární hodinou dne a zbývající
         solární výroba je menší než 4 kWh (konfigurovatelný parametr topeni_patron_last_sol_min_kwh, výchozí 4)
         a NENÍ zákaz přetoků (záporná prodejní cena), patrony se VYPNOU.
