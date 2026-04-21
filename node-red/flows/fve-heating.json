@@ -1,1441 +1,1441 @@
 [
-  {
-    "id": "f1e2d3c4b5a60001",
-    "type": "tab",
-    "label": "FVE Heating",
-    "disabled": false,
-    "info": "Kompletn├ş ┼Ö├şzen├ş topen├ş domu v2.0\nNIBE + ob─Ťhov├ę ─Źerpadlo + patrony + ventil + chlazen├ş"
-  },
-  {
-    "id": "heating_g_main_v2",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "┼ś├şzen├ş topen├ş",
-    "style": {
-      "label": true,
-      "fill": "#ffffbf"
+    {
+        "id": "f1e2d3c4b5a60001",
+        "type": "tab",
+        "label": "FVE Heating",
+        "disabled": false,
+        "info": "Kompletn├ş ┼Ö├şzen├ş topen├ş domu v2.0\nNIBE + ob─Ťhov├ę ─Źerpadlo + patrony + ventil + chlazen├ş"
     },
-    "nodes": [
-      "htg_inject_60s",
-      "htg_trig_auto",
-      "htg_trig_temp",
-      "htg_debug",
-      "rf_htg_read_001",
-      "rf_htg_decide2",
-      "rf_htg_output3"
-    ],
-    "x": 14,
-    "y": 18,
-    "w": 952,
-    "h": 223
-  },
-  {
-    "id": "heating_g_exec_v2",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Exekuce akc├ş",
-    "style": {
-      "label": true,
-      "fill": "#ffbfbf"
+    {
+        "id": "heating_g_main_v2",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "┼ś├şzen├ş topen├ş",
+        "style": {
+            "label": true,
+            "fill": "#ffffbf"
+        },
+        "nodes": [
+            "htg_inject_60s",
+            "htg_trig_auto",
+            "htg_trig_temp",
+            "htg_debug",
+            "rf_htg_read_001",
+            "rf_htg_decide2",
+            "rf_htg_output3"
+        ],
+        "x": 14,
+        "y": 18,
+        "w": 952,
+        "h": 223
     },
-    "nodes": [
-      "htg_action_switch",
-      "htg_svc_nibe_on",
-      "htg_svc_nibe_off",
-      "htg_svc_obehove_on",
-      "htg_svc_obehove_off",
-      "htg_svc_p1_on",
-      "htg_svc_p1_off",
-      "htg_svc_p2_on",
-      "htg_svc_p2_off",
-      "htg_svc_p3_on",
-      "htg_svc_p3_off",
-      "htg_svc_ventil_off",
-      "htg_svc_cool_on",
-      "htg_svc_cool_off",
-      "htg_svc_stop_auto_solar",
-      "htg_svc_stop_auto_grid"
-    ],
-    "x": 94,
-    "y": 439,
-    "w": 436,
-    "h": 762
-  },
-  {
-    "id": "f1e2d3c4b5a60004",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Ochrana baterie",
-    "style": {
-      "label": true
+    {
+        "id": "heating_g_exec_v2",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Exekuce akc├ş",
+        "style": {
+            "label": true,
+            "fill": "#ffbfbf"
+        },
+        "nodes": [
+            "htg_action_switch",
+            "htg_svc_nibe_on",
+            "htg_svc_nibe_off",
+            "htg_svc_obehove_on",
+            "htg_svc_obehove_off",
+            "htg_svc_p1_on",
+            "htg_svc_p1_off",
+            "htg_svc_p2_on",
+            "htg_svc_p2_off",
+            "htg_svc_p3_on",
+            "htg_svc_p3_off",
+            "htg_svc_ventil_off",
+            "htg_svc_cool_on",
+            "htg_svc_cool_off",
+            "htg_svc_stop_auto_solar",
+            "htg_svc_stop_auto_grid"
+        ],
+        "x": 94,
+        "y": 439,
+        "w": 436,
+        "h": 762
     },
-    "nodes": [
-      "htg_prot_trig",
-      "htg_prot_func",
-      "htg_prot_set"
-    ],
-    "x": 14,
-    "y": 1239,
-    "w": 712,
-    "h": 82
-  },
-  {
-    "id": "heating_g_away",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Re┼żim nep┼Ö├ştomnosti",
-    "style": {
-      "stroke": "#ff9900",
-      "label": true,
-      "color": "#ff9900"
+    {
+        "id": "f1e2d3c4b5a60004",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Ochrana baterie",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "htg_prot_trig",
+            "htg_prot_func",
+            "htg_prot_set"
+        ],
+        "x": 14,
+        "y": 1239,
+        "w": 712,
+        "h": 82
     },
-    "nodes": [
-      "htg_away_trigger",
-      "htg_away_func",
-      "htg_away_set_temp"
-    ],
-    "x": 14,
-    "y": 1539,
-    "w": 662,
-    "h": 82
-  },
-  {
-    "id": "htg_g_pat_korekce",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Patrony korekce vyb├şjen├ş (5s)",
-    "style": {
-      "stroke": "#ff7f0e",
-      "stroke-opacity": "1",
-      "fill": "#fff3e6",
-      "fill-opacity": "0.5",
-      "label": true,
-      "label-position": "nw",
-      "color": "#ff7f0e"
+    {
+        "id": "heating_g_away",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Re┼żim nep┼Ö├ştomnosti",
+        "style": {
+            "stroke": "#ff9900",
+            "label": true,
+            "color": "#ff9900"
+        },
+        "nodes": [
+            "htg_away_trigger",
+            "htg_away_func",
+            "htg_away_set_temp"
+        ],
+        "x": 14,
+        "y": 1539,
+        "w": 662,
+        "h": 82
     },
-    "nodes": [
-      "pat_korekce_inject",
-      "pat_korekce_func",
-      "pat_korekce_router",
-      "pat_max_charge_svc"
-    ],
-    "x": 14,
-    "y": 249,
-    "w": 732,
-    "h": 172
-  },
-  {
-    "id": "htg_g_topeni_mod",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Topen├ş MOD Ôćĺ HA sync",
-    "style": {
-      "stroke": "#1f77b4",
-      "stroke-opacity": "1",
-      "fill": "#e8f4fd",
-      "fill-opacity": "0.5",
-      "label": true,
-      "label-position": "nw",
-      "color": "#1f77b4"
+    {
+        "id": "htg_g_pat_korekce",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Patrony korekce vyb├şjen├ş (5s)",
+        "style": {
+            "stroke": "#ff7f0e",
+            "stroke-opacity": "1",
+            "fill": "#fff3e6",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#ff7f0e"
+        },
+        "nodes": [
+            "pat_korekce_inject",
+            "pat_korekce_func",
+            "pat_korekce_router",
+            "pat_max_charge_svc"
+        ],
+        "x": 14,
+        "y": 249,
+        "w": 732,
+        "h": 172
     },
-    "nodes": [
-      "htg_topeni_mod_change",
-      "htg_topeni_mod_api"
-    ],
-    "x": 14,
-    "y": 1339,
-    "w": 442,
-    "h": 82
-  },
-  {
-    "id": "htg_g_reload",
-    "type": "group",
-    "z": "f1e2d3c4b5a60001",
-    "name": "Inicializace (startup)",
-    "style": {
-      "stroke": "#2ca02c",
-      "stroke-opacity": "1",
-      "fill": "#e8f8e8",
-      "fill-opacity": "0.5",
-      "label": true,
-      "label-position": "nw",
-      "color": "#2ca02c"
+    {
+        "id": "htg_g_topeni_mod",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Topen├ş MOD Ôćĺ HA sync",
+        "style": {
+            "stroke": "#1f77b4",
+            "stroke-opacity": "1",
+            "fill": "#e8f4fd",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#1f77b4"
+        },
+        "nodes": [
+            "htg_topeni_mod_change",
+            "htg_topeni_mod_api"
+        ],
+        "x": 14,
+        "y": 1339,
+        "w": 442,
+        "h": 82
     },
-    "nodes": [
-      "htg_reload_input_select_inject",
-      "htg_reload_input_select_api"
-    ],
-    "x": 14,
-    "y": 1439,
-    "w": 532,
-    "h": 82
-  },
-  {
-    "id": "htg_inject_60s",
-    "type": "inject",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "Ka┼żd├Żch 60s",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "60",
-    "crontab": "",
-    "once": true,
-    "onceDelay": "10",
-    "topic": "timer",
-    "payload": "",
-    "payloadType": "date",
-    "x": 140,
-    "y": 59,
-    "wires": [
-      [
-        "rf_htg_read_001"
-      ]
-    ]
-  },
-  {
-    "id": "htg_trig_auto",
-    "type": "server-state-changed",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "Automatizace zm─Ťna",
-    "server": "c7421fe2.cb11c",
-    "version": 6,
-    "outputs": 1,
-    "exposeAsEntityConfig": "",
-    "entities": {
-      "entity": [
-        "input_boolean.automatizovat_topeni"
-      ],
-      "substring": [],
-      "regex": []
+    {
+        "id": "htg_g_reload",
+        "type": "group",
+        "z": "f1e2d3c4b5a60001",
+        "name": "Inicializace (startup)",
+        "style": {
+            "stroke": "#2ca02c",
+            "stroke-opacity": "1",
+            "fill": "#e8f8e8",
+            "fill-opacity": "0.5",
+            "label": true,
+            "label-position": "nw",
+            "color": "#2ca02c"
+        },
+        "nodes": [
+            "htg_reload_input_select_inject",
+            "htg_reload_input_select_api"
+        ],
+        "x": 14,
+        "y": 1439,
+        "w": 532,
+        "h": 82
     },
-    "outputInitially": false,
-    "stateType": "str",
-    "ifState": "",
-    "ifStateType": "str",
-    "ifStateOperator": "is",
-    "outputOnlyOnStateChange": true,
-    "for": "0",
-    "forType": "num",
-    "forUnits": "minutes",
-    "ignorePrevStateNull": false,
-    "ignorePrevStateUnknown": false,
-    "ignorePrevStateUnavailable": false,
-    "outputProperties": [
-      {
-        "property": "payload",
+    {
+        "id": "htg_inject_60s",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "Ka┼żd├Żch 60s",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "timer",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 59,
+        "wires": [
+            [
+                "rf_htg_read_001"
+            ]
+        ]
+    },
+    {
+        "id": "htg_trig_auto",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "Automatizace zm─Ťna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.automatizovat_topeni"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 160,
+        "y": 119,
+        "wires": [
+            [
+                "rf_htg_read_001"
+            ]
+        ]
+    },
+    {
+        "id": "htg_trig_temp",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "Teplota zm─Ťna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.hp2551ae_pro_v2_1_0_indoor_temperature"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "num",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 380,
+        "y": 200,
+        "wires": [
+            [
+                "rf_htg_read_001"
+            ]
+        ]
+    },
+    {
+        "id": "htg_action_switch",
+        "type": "switch",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Akce router",
+        "property": "action",
         "propertyType": "msg",
-        "value": "",
-        "valueType": "entityState"
-      }
-    ],
-    "x": 160,
-    "y": 119,
-    "wires": [
-      [
-        "rf_htg_read_001"
-      ]
-    ]
-  },
-  {
-    "id": "htg_trig_temp",
-    "type": "server-state-changed",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "Teplota zm─Ťna",
-    "server": "c7421fe2.cb11c",
-    "version": 6,
-    "outputs": 1,
-    "exposeAsEntityConfig": "",
-    "entities": {
-      "entity": [
-        "sensor.hp2551ae_pro_v2_1_0_indoor_temperature"
-      ],
-      "substring": [],
-      "regex": []
+        "rules": [
+            {
+                "t": "eq",
+                "v": "nibe_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "nibe_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "obehove_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "obehove_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p1_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p1_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p2_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p2_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p3_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p3_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "ventil_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "cool_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "cool_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "stop_auto_nabijeni",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 14,
+        "x": 190,
+        "y": 800,
+        "wires": [
+            [
+                "htg_svc_nibe_on"
+            ],
+            [
+                "htg_svc_nibe_off"
+            ],
+            [
+                "htg_svc_obehove_on"
+            ],
+            [
+                "htg_svc_obehove_off"
+            ],
+            [
+                "htg_svc_p1_on"
+            ],
+            [
+                "htg_svc_p1_off"
+            ],
+            [
+                "htg_svc_p2_on"
+            ],
+            [
+                "htg_svc_p2_off"
+            ],
+            [
+                "htg_svc_p3_on"
+            ],
+            [
+                "htg_svc_p3_off"
+            ],
+            [
+                "htg_svc_ventil_off"
+            ],
+            [
+                "htg_svc_cool_on"
+            ],
+            [
+                "htg_svc_cool_off"
+            ],
+            [
+                "htg_svc_stop_auto_solar",
+                "htg_svc_stop_auto_grid"
+            ]
+        ]
     },
-    "outputInitially": false,
-    "stateType": "num",
-    "ifState": "",
-    "ifStateType": "str",
-    "ifStateOperator": "is",
-    "outputOnlyOnStateChange": true,
-    "for": "0",
-    "forType": "num",
-    "forUnits": "minutes",
-    "ignorePrevStateNull": false,
-    "ignorePrevStateUnknown": false,
-    "ignorePrevStateUnavailable": false,
-    "outputProperties": [
-      {
-        "property": "payload",
-        "propertyType": "msg",
-        "value": "",
-        "valueType": "entityState"
-      }
-    ],
-    "x": 380,
-    "y": 200,
-    "wires": [
-      [
-        "rf_htg_read_001"
-      ]
-    ]
-  },
-  {
-    "id": "htg_action_switch",
-    "type": "switch",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Akce router",
-    "property": "action",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "nibe_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "nibe_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "obehove_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "obehove_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p1_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p1_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p2_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p2_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p3_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p3_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "ventil_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "cool_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "cool_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "stop_auto_nabijeni",
-        "vt": "str"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 14,
-    "x": 190,
-    "y": 800,
-    "wires": [
-      [
-        "htg_svc_nibe_on"
-      ],
-      [
-        "htg_svc_nibe_off"
-      ],
-      [
-        "htg_svc_obehove_on"
-      ],
-      [
-        "htg_svc_obehove_off"
-      ],
-      [
-        "htg_svc_p1_on"
-      ],
-      [
-        "htg_svc_p1_off"
-      ],
-      [
-        "htg_svc_p2_on"
-      ],
-      [
-        "htg_svc_p2_off"
-      ],
-      [
-        "htg_svc_p3_on"
-      ],
-      [
-        "htg_svc_p3_off"
-      ],
-      [
-        "htg_svc_ventil_off"
-      ],
-      [
-        "htg_svc_cool_on"
-      ],
-      [
-        "htg_svc_cool_off"
-      ],
-      [
-        "htg_svc_stop_auto_solar",
-        "htg_svc_stop_auto_grid"
-      ]
-    ]
-  },
-  {
-    "id": "htg_svc_obehove_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Ob─Ťhov├ę ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.teplota_smesovac"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 420,
-    "y": 580,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_obehove_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Ob─Ťhov├ę OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.teplota_smesovac"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 420,
-    "y": 630,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p1_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 1 ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_1"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 420,
-    "y": 680,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p1_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 1 OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_1"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 420,
-    "y": 730,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p2_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 2 ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_3_2"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 420,
-    "y": 780,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p2_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 2 OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_3_2"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 420,
-    "y": 830,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p3_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 3 ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_3"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 420,
-    "y": 880,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_p3_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Patrona 3 OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.patrona_faze_3"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 420,
-    "y": 930,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_ventil_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Ventil OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.bazen_ventil_smesovac"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 411,
-    "y": 980,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_debug",
-    "type": "debug",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "Heating Status",
-    "active": false,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": true,
-    "complete": "payload.reason",
-    "targetType": "msg",
-    "statusVal": "payload.reason",
-    "statusType": "auto",
-    "x": 740,
-    "y": 180,
-    "wires": []
-  },
-  {
-    "id": "htg_prot_trig",
-    "type": "server-state-changed",
-    "z": "f1e2d3c4b5a60001",
-    "g": "f1e2d3c4b5a60004",
-    "name": "NIBE stav zm─Ťna",
-    "server": "c7421fe2.cb11c",
-    "version": 6,
-    "outputs": 1,
-    "exposeAsEntityConfig": "",
-    "entities": {
-      "entity": [
-        "sensor.nibe_aktualni_realny_stav"
-      ],
-      "substring": [],
-      "regex": []
+    {
+        "id": "htg_svc_obehove_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Ob─Ťhov├ę ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.teplota_smesovac"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 420,
+        "y": 580,
+        "wires": [
+            []
+        ]
     },
-    "outputInitially": true,
-    "stateType": "str",
-    "ifState": "",
-    "ifStateType": "str",
-    "ifStateOperator": "is",
-    "outputOnlyOnStateChange": true,
-    "for": "0",
-    "forType": "num",
-    "forUnits": "minutes",
-    "ignorePrevStateNull": false,
-    "ignorePrevStateUnknown": false,
-    "ignorePrevStateUnavailable": false,
-    "outputProperties": [
-      {
-        "property": "payload",
-        "propertyType": "msg",
-        "value": "",
-        "valueType": "entityState"
-      }
-    ],
-    "x": 120,
-    "y": 1280,
-    "wires": [
-      [
-        "htg_prot_func"
-      ]
-    ]
-  },
-  {
-    "id": "htg_prot_func",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "f1e2d3c4b5a60004",
-    "name": "Detekce topen├ş vs TUV",
-    "func": "// Detekce topen├ş vs chlazen├ş ÔÇö blokace vyb├şjen├ş baterie\nvar state = msg.payload || \"\";\nvar isHeating = state.indexOf(\"Vyt├íp─Ťn├ş\") > -1;\nvar isTUV = state.indexOf(\"Oh┼Öev vody\") > -1 || state.indexOf(\"TUV\") > -1;\nvar blockDischarge = isHeating || isTUV;\nmsg.blockDischarge = blockDischarge;\nvar txt = blockDischarge\n    ? \"Blokace (\" + (isHeating ? \"topen├ş\" : \"TUV\") + \")\"\n    : \"OK - \" + state.substring(0, 30);\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape: \"dot\", text: txt});\nreturn msg;",
-    "outputs": 1,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 360,
-    "y": 1280,
-    "wires": [
-      [
-        "htg_prot_set"
-      ]
-    ]
-  },
-  {
-    "id": "htg_prot_set",
-    "type": "change",
-    "z": "f1e2d3c4b5a60001",
-    "g": "f1e2d3c4b5a60004",
-    "name": "Set cerpadlo_topi",
-    "rules": [
-      {
-        "t": "set",
-        "p": "cerpadlo_topi",
-        "pt": "global",
-        "to": "blockDischarge",
-        "tot": "msg"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 610,
-    "y": 1280,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_nibe_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "NIBE ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.nibe_topeni"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 410,
-    "y": 480,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_nibe_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "NIBE OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.nibe_topeni"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 420,
-    "y": 530,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_cool_on",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Chlazen├ş ON",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_on",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.nibe_chlazeni"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_on",
-    "x": 413,
-    "y": 1025,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_cool_off",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Chlazen├ş OFF",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "switch.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "switch.nibe_chlazeni"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "switch",
-    "service": "turn_off",
-    "x": 424,
-    "y": 1072,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_away_trigger",
-    "type": "server-state-changed",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_away",
-    "name": "Jsme doma zm─Ťna",
-    "server": "c7421fe2.cb11c",
-    "version": 6,
-    "outputs": 1,
-    "exposeAsEntityConfig": "",
-    "entities": {
-      "entity": [
-        "input_boolean.jsme_doma"
-      ],
-      "substring": [],
-      "regex": []
+    {
+        "id": "htg_svc_obehove_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Ob─Ťhov├ę OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.teplota_smesovac"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 630,
+        "wires": [
+            []
+        ]
     },
-    "outputInitially": false,
-    "stateType": "str",
-    "ifState": "",
-    "ifStateType": "str",
-    "ifStateOperator": "is",
-    "outputOnlyOnStateChange": true,
-    "for": "0",
-    "forType": "num",
-    "forUnits": "minutes",
-    "ignorePrevStateNull": false,
-    "ignorePrevStateUnknown": false,
-    "ignorePrevStateUnavailable": false,
-    "outputProperties": [
-      {
-        "property": "payload",
+    {
+        "id": "htg_svc_p1_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 1 ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_1"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 420,
+        "y": 680,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_p1_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 1 OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_1"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 730,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_p2_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 2 ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_3_2"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 420,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_p2_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 2 OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_3_2"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 830,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_p3_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 3 ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_3"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 420,
+        "y": 880,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_p3_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Patrona 3 OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.patrona_faze_3"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 930,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_ventil_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Ventil OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.bazen_ventil_smesovac"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 411,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_debug",
+        "type": "debug",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "Heating Status",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload.reason",
+        "targetType": "msg",
+        "statusVal": "payload.reason",
+        "statusType": "auto",
+        "x": 740,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "htg_prot_trig",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "NIBE stav zm─Ťna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.nibe_aktualni_realny_stav"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 120,
+        "y": 1280,
+        "wires": [
+            [
+                "htg_prot_func"
+            ]
+        ]
+    },
+    {
+        "id": "htg_prot_func",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "Detekce topen├ş vs TUV",
+        "func": "// Detekce topen├ş vs chlazen├ş ÔÇö blokace vyb├şjen├ş baterie\nvar state = msg.payload || \"\";\nvar isHeating = state.indexOf(\"Vyt├íp─Ťn├ş\") > -1;\nvar isTUV = state.indexOf(\"Oh┼Öev vody\") > -1 || state.indexOf(\"TUV\") > -1;\nvar blockDischarge = isHeating || isTUV;\nmsg.blockDischarge = blockDischarge;\nvar txt = blockDischarge\n    ? \"Blokace (\" + (isHeating ? \"topen├ş\" : \"TUV\") + \")\"\n    : \"OK - \" + state.substring(0, 30);\nnode.status({fill: blockDischarge ? \"yellow\" : \"green\", shape: \"dot\", text: txt});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 1280,
+        "wires": [
+            [
+                "htg_prot_set"
+            ]
+        ]
+    },
+    {
+        "id": "htg_prot_set",
+        "type": "change",
+        "z": "f1e2d3c4b5a60001",
+        "g": "f1e2d3c4b5a60004",
+        "name": "Set cerpadlo_topi",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cerpadlo_topi",
+                "pt": "global",
+                "to": "blockDischarge",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 610,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_nibe_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "NIBE ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 410,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_nibe_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "NIBE OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_topeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 420,
+        "y": 530,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_cool_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Chlazen├ş ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_on",
+        "x": 413,
+        "y": 1025,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_cool_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Chlazen├ş OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_chlazeni"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "switch",
+        "service": "turn_off",
+        "x": 424,
+        "y": 1072,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_away_trigger",
+        "type": "server-state-changed",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Jsme doma zm─Ťna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.jsme_doma"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 130,
+        "y": 1580,
+        "wires": [
+            [
+                "htg_away_func"
+            ]
+        ]
+    },
+    {
+        "id": "htg_away_func",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Away mode logika",
+        "func": "// Re┼żim nep┼Ö├ştomnosti ÔÇö sn├ş┼żen├ş teploty kdy┼ż nejsme doma\nvar config = global.get(\"fve_config\") || {};\nvar AWAY_TEMP = 21; // v├Żchoz├ş teplota nep┼Ö├ştomnosti\nvar letniRezim = config.letni_rezim === true;\n\nfunction getState(id) {\n    var e = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {};\n    return e.state;\n}\nfunction getFloat(id, def) {\n    var v = parseFloat(getState(id));\n    return isNaN(v) ? (def || 0) : v;\n}\n\nvar jsme_doma = getState(\"input_boolean.jsme_doma\") === \"on\";\nvar currentTemp = getFloat(\"input_number.nastavena_teplota_v_dome\", 22);\nvar savedTemp = flow.get(\"away_saved_temp\");\n\nif (!jsme_doma && !letniRezim) {\n    // Odchod z domu v zim─Ť Ôćĺ sn├ş┼żit teplotu\n    if (currentTemp > AWAY_TEMP) {\n        // Ulo┼żit aktu├íln├ş teplotu jen pokud jsme ji je┼ít─Ť neulo┼żili\n        if (!savedTemp || savedTemp <= AWAY_TEMP) {\n            flow.set(\"away_saved_temp\", currentTemp);\n        }\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"PRY─î Ôćĺ \" + AWAY_TEMP + \"┬░C (ulo┼żeno \" + currentTemp + \"┬░C)\"});\n        return {payload: AWAY_TEMP};\n    } else {\n        node.status({fill:\"yellow\", shape:\"ring\", text:\"PRY─î | teplota u┼ż \" + currentTemp + \"┬░C\"});\n        return null;\n    }\n} else if (jsme_doma && savedTemp && savedTemp > AWAY_TEMP) {\n    // P┼Ö├şchod dom┼» Ôćĺ obnovit ulo┼żenou teplotu\n    var restoreTemp = savedTemp;\n    flow.set(\"away_saved_temp\", null);\n    node.status({fill:\"green\", shape:\"dot\", text:\"DOMA Ôćĺ \" + restoreTemp + \"┬░C (obnoveno)\"});\n    return {payload: restoreTemp};\n} else {\n    node.status({fill:\"grey\", shape:\"ring\", text: jsme_doma ? \"DOMA\" : (letniRezim ? \"L├ëTO\" : \"PRY─î\")});\n    return null;\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1580,
+        "wires": [
+            [
+                "htg_away_set_temp"
+            ]
+        ]
+    },
+    {
+        "id": "htg_away_set_temp",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_away",
+        "name": "Nastav teplotu",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_number.nastavena_teplota_v_dome"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{payload}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_number",
+        "service": "set_value",
+        "x": 570,
+        "y": 1580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_topeni_mod_change",
+        "type": "change",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_topeni_mod",
+        "name": "Nastav topeni_mod",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "topeni_mod",
+                "tot": "global"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 130,
+        "y": 1380,
+        "wires": [
+            [
+                "htg_topeni_mod_api"
+            ]
+        ]
+    },
+    {
+        "id": "htg_topeni_mod_api",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_topeni_mod",
+        "name": "Set topeni_mod",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_select.select_option",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_select.topeni_mod"
+        ],
+        "labelId": [],
+        "data": "{\"option\": \"{{payload}}\"}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_select",
+        "service": "select_option",
+        "x": 350,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_reload_input_select_inject",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_reload",
+        "name": "Reload input_select (startup)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 8,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 1480,
+        "wires": [
+            [
+                "htg_reload_input_select_api"
+            ]
+        ]
+    },
+    {
+        "id": "htg_reload_input_select_api",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_reload",
+        "name": "Reload input_select",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_select.reload",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_select",
+        "service": "reload",
+        "x": 430,
+        "y": 1480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "pat_korekce_inject",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_pat_korekce",
+        "name": "Patrony korekce (20s)",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "20",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 10,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 320,
+        "wires": [
+            [
+                "pat_korekce_func"
+            ]
+        ]
+    },
+    {
+        "id": "pat_korekce_func",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_pat_korekce",
+        "name": "Patrony korekce",
+        "func": "// Patrony korekce v2.1 ÔÇö closed-loop battery feedback (20s cyklus)\nfunction getState(id){var e=global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\")||{};return e.state;}\nfunction getFloat(id,d){var v=parseFloat(getState(id));return isNaN(v)?(d||0):v;}\nfunction getBool(id){return getState(id)===\"on\";}\nfunction chgMsg(v){return{payload:{value:v}};}\nvar fveAuto=getBool(\"input_boolean.fve_automatizace\");\nif(!fveAuto){global.set(\"pat_block_charge\",false);node.status({fill:\"grey\",shape:\"ring\",text:\"FVE AUTO OFF -> NIC\"});return[null,null];}\nvar auto=getBool(\"input_boolean.automatizovat_topeni\");\nif(!auto){global.set(\"pat_block_charge\",false);var p1=!getBool(\"switch.patrona_faze_1\"),p2=!getBool(\"switch.patrona_faze_3_2\"),p3=!getBool(\"switch.patrona_faze_3\");\nvar off=p1&&p2&&p3,done=flow.get(\"pat_manual_stopped\")||false;\nif(!off&&!done){flow.set(\"pat_manual_stopped\",true);flow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nvar s=[];if(!p1)s.push({action:\"p1_off\"});if(!p2)s.push({action:\"p2_off\"});if(!p3)s.push({action:\"p3_off\"});\nnode.status({fill:\"grey\",shape:\"ring\",text:\"MANUAL:STOP\"});return[s,chgMsg(-1)];}\nnode.status({fill:\"grey\",shape:\"ring\",text:\"MANUAL\"});return[null,chgMsg(-1)];}\nflow.set(\"pat_manual_stopped\",false);\n// NIBE + Patrony: kompresor b─Ť┼ż├ş Ôćĺ patrony OFF (20s guard)\nvar _htgMod=flow.get(\"topeni_mod_active\")||\"\";\nif(_htgMod===\"NIBE + Patrony\"){var _comp=getBool(\"binary_sensor.nibe_kompresory_aktivni_binarni\");\nvar _pump=(getState(\"sensor.nibe_aktualni_realny_stav\")||\"\").indexOf(\"Klidov\")===-1&&(getState(\"sensor.nibe_aktualni_realny_stav\")||\"\")!==\"\";\nif(_comp||_pump){var _p1=getBool(\"switch.patrona_faze_1\"),_p2=getBool(\"switch.patrona_faze_3_2\"),_p3=getBool(\"switch.patrona_faze_3\");\nvar _sa=[];if(_p1)_sa.push({action:\"p1_off\"});if(_p2)_sa.push({action:\"p2_off\"});if(_p3)_sa.push({action:\"p3_off\"});\nflow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nvar _sN=getFloat(\"sensor.battery_percent\",0),_cN=global.get(\"fve_config\")||{},_dN=_cN.topeni_patron_drain_soc_prah||95;var _pN=_sN>=_dN?0:-1;global.set(\"pat_block_charge\",_sN>=_dN);node.status({fill:\"yellow\",shape:\"ring\",text:\"BOOST:NIBE pracujeÔćĺPAT OFF\"});return _sa.length>0?[_sa,chgMsg(_pN)]:[null,chgMsg(_pN)];}}\nfunction mkAct(cur,tgt,p1,p2,p3){var a=[];\nif(tgt>cur){if(tgt>=1&&!p1)a.push({action:\"p1_on\"});if(tgt>=2&&!p2)a.push({action:\"p2_on\"});if(tgt>=3&&!p3)a.push({action:\"p3_on\"});}\nelse{if(tgt<3&&p3)a.push({action:\"p3_off\"});if(tgt<2&&p2)a.push({action:\"p2_off\"});if(tgt<1&&p1)a.push({action:\"p1_off\"});}\nreturn a.length>0?a:null;}\nvar p1on=getBool(\"switch.patrona_faze_1\"),p2on=getBool(\"switch.patrona_faze_3_2\"),p3on=getBool(\"switch.patrona_faze_3\");\nvar act=(p1on?1:0)+(p2on?1:0)+(p3on?1:0);\nvar soc=getFloat(\"sensor.battery_percent\",0),config=global.get(\"fve_config\")||{};\nvar DRAIN_P=config.topeni_patron_drain_soc_prah||95, MIN_P=config.topeni_min_soc_patron||90;\nvar chP=(soc>=DRAIN_P)?0:-1; global.set(\"pat_block_charge\",soc>=DRAIN_P); var cm=chgMsg(chP);\n// ┬ž4.10: Z├üPORN├ü N├üKUPN├Ź CENA ÔÇö bypass SOC/solar/sell, max f├íz├ş\nvar _arbMode=((global.get(\"energy_arbiter\")||{}).mode)||\"\";\nvar isZapNak=_arbMode===\"zaporna_nakupni_cena\";\nif(isZapNak){\nvar _tankZ=getFloat(\"sensor.teplota_smesovac_teplota\",35);\nvar _maxTP=getFloat(\"input_number.topeni_max_teplota_patron\",config.topeni_max_teplota_patron||53);\nif(_tankZ>=_maxTP){var _sa5=[];if(p1on)_sa5.push({action:\"p1_off\"});if(p2on)_sa5.push({action:\"p2_off\"});if(p3on)_sa5.push({action:\"p3_off\"});\nnode.status({fill:\"green\",shape:\"dot\",text:\"Z├üP.NAK: tank \"+_tankZ.toFixed(0)+\"ÔëąmaxÔćĺOFF\"});return _sa5.length>0?[_sa5,chgMsg(-1)]:[null,chgMsg(-1)];}\nvar _cdZ=(config.topeni_patron_change_cooldown||6)*5000,_lcZ=flow.get(\"pat_last_change\")||0;\nif(act<3&&(Date.now()-_lcZ)>=_cdZ){flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"Z├üP.NAK: \"+act+\"Ôćĺ\"+(act+1)+\"f\"});return[mkAct(act,act+1,p1on,p2on,p3on),chgMsg(-1)];}\nnode.status({fill:\"red\",shape:\"dot\",text:\"Z├üP.NAK: \"+act+\"f SOC:\"+soc+\"%\"});return[null,chgMsg(-1)];}\nif(act===0){flow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nnode.status({fill:\"grey\",shape:\"dot\",text:\"OFF SOC:\"+soc+\"%\"});return[null,cm];}\n// ┬ž8.5: SOCÔëą95% + z├íkaz p┼Öetok┼» Ôćĺ korekce eskaluje na MAX (3 f├íze), korek─Źn├ş smy─Źka vy┼Öazena\nvar _fveMK=((global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{}).current_mode||\"normal\";\nif(soc>=DRAIN_P&&_fveMK===\"zakaz_pretoku\"){global.set(\"pat_block_charge\",true);\nif(act<3){flow.set(\"pat_last_change\",Date.now());node.status({fill:\"red\",shape:\"dot\",text:\"ZP+95%: \"+act+\"Ôćĺ\"+(act+1)+\"f MAX\"});return[mkAct(act,act+1,p1on,p2on,p3on),chgMsg(0)];}\nnode.status({fill:\"red\",shape:\"dot\",text:\"ZP+95%: 3f MAX (drain)\"});return[null,chgMsg(0)];}\n// ultraLevna + solar check z pl├ínu\nvar _pa=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{};\nvar _pl=_pa.plan||[],_h=new Date().getHours();\nvar _ss=(_pa.config||{}).solarStartHour||9,_se=(_pa.config||{}).solarEndHour||17,_iS=_h>=_ss&&_h<_se;\nvar _bp=99,_sp=99;for(var i=0;i<_pl.length;i++)if(_pl[i].hour===_h&&_pl[i].offset!==undefined){_bp=parseFloat(_pl[i].priceBuy)||99;_sp=parseFloat(_pl[i].priceSell)||99;break;}\nvar UL=config.prah_ultra_levna_nakup||1.0,ultraL=_iS&&_bp<UL&&_sp<=0,dumpR=ultraL||(_iS&&_sp<=0);\nvar MSP=config.topeni_patron_min_solar_w||5000,solW=getFloat(\"sensor.vyroba_fve\",0);\nvar fveM=_pa.current_mode||\"normal\",solOk=solW>=MSP||fveM===\"zakaz_pretoku\"||soc>=DRAIN_P||soc>=MIN_P;\nif(soc<MIN_P||!solOk){var sa=[];if(p1on)sa.push({action:\"p1_off\"});if(p2on)sa.push({action:\"p2_off\"});if(p3on)sa.push({action:\"p3_off\"});\nflow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nnode.status({fill:\"red\",shape:\"dot\",text:(soc<MIN_P?\"SOC\":\"solar\")+\"ÔćĺOFF\"});return sa.length>0?[sa,cm]:[null,cm];}\n// SELL PRICE CHECK ÔÇö if sell price > threshold, stop patrony (better to sell)\nvar PMSP=config.topeni_patron_max_sell_price||3;\nif(_sp<=PMSP||_sp>=99||soc>=DRAIN_P||fveM===\"zakaz_pretoku\"){/* price OK or drain bypass */}else{var sa2=[];if(p1on)sa2.push({action:\"p1_off\"});if(p2on)sa2.push({action:\"p2_off\"});if(p3on)sa2.push({action:\"p3_off\"});\nflow.set(\"pat_stable_count\",0);\nnode.status({fill:\"red\",shape:\"dot\",text:\"SELL \"+_sp.toFixed(1)+\">\"+PMSP+\"ÔćĺOFF\"});return sa2.length>0?[sa2,cm]:[null,cm];}\n// GRID DRAW SAFETY ÔÇö highest priority, overrides cooldown\nvar gridD=getFloat(\"sensor.spotreba_ze_site\",0),GT=config.topeni_patron_max_grid_draw_w||200;\nif(gridD>GT&&act>0){var drop=Math.min(act,Math.max(1,Math.ceil((gridD-GT)/(config.topeni_patron_faze_w||3000))));\nvar nt=act-drop;flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"ÔÜíGRID \"+Math.round(gridD)+\"WÔćĺ\"+act+\"Ôćĺ\"+nt+\"f\"});\nif(nt<act)return[mkAct(act,nt,p1on,p2on,p3on),cm];}\n// Z├üKON 8.5: SOC>=95% + baterie NAB├ŹJ├Ź Ôćĺ okam┼żit─Ť p┼Öidat f├ízi (bypass cooldown)\nvar _bChNow=getFloat(\"sensor.nabijeni_baterii\",0);\nif(soc>=DRAIN_P&&_bChNow>300&&act<3&&act>0){flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"ÔÜíCHRG! \"+Math.round(_bChNow)+\"WÔćĺ\"+(act+1)+\"f\"});\nreturn[mkAct(act,act+1,p1on,p2on,p3on),cm];}\n// Cooldown: min 30s between phase changes (config: topeni_patron_change_cooldown ├Ś 5s)\nvar CD_MS=(config.topeni_patron_change_cooldown||6)*5000,lastChg=flow.get(\"pat_last_change\")||0;\nif(Date.now()-lastChg<CD_MS){node.status({fill:\"blue\",shape:\"ring\",text:\"ÔĆ│CD \"+act+\"f batt=\"+Math.round(getFloat(\"sensor.nabijeni_baterii\",0))+\"W\"});return[null,cm];}\n// Closed-loop feedback ÔÇö patron-specific dead band (min faze_w/2 to prevent oscillation)\nvar bCh=getFloat(\"sensor.nabijeni_baterii\",0);\nvar FAZE_W=config.topeni_patron_faze_w||3000;\nvar TGT=config.topeni_patron_target_batt_w||config.nabijeni_auta_target_batt_w||1000;\nvar DB_CFG=config.topeni_patron_dead_band_w||500;\nvar DB=Math.max(DB_CFG,Math.floor(FAZE_W/2));\nif(soc>=MIN_P&&soc<DRAIN_P){var err=bCh-TGT;\nif(err>DB&&act<3){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"yellow\",shape:\"dot\",text:\"CHÔćĹ\"+act+\"Ôćĺ\"+(act+1)+\"f batt=\"+Math.round(bCh)+\"W err=\"+Math.round(err)});return[mkAct(act,act+1,p1on,p2on,p3on),cm];}\nif(err<-DB&&act>0){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"CHÔćô\"+act+\"Ôćĺ\"+(act-1)+\"f batt=\"+Math.round(bCh)+\"W err=\"+Math.round(err)});return[mkAct(act,act-1,p1on,p2on,p3on),cm];}\nnode.status({fill:\"green\",shape:\"dot\",text:\"CH=\"+act+\"f batt=\"+Math.round(bCh)+\"W DB=┬▒\"+DB+\" SOC:\"+soc+\"%\"});return[null,cm];}\nif(soc>=DRAIN_P){var _drainFveM=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes;_drainFveM=(_drainFveM&&_drainFveM.current_mode)||\"normal\";var MAX_DR=(_drainFveM===\"zakaz_pretoku\")?(config.topeni_patron_faze_w||3000)*act+1000:(config.topeni_patron_max_drain_w||2500);\n// Range-based: charging handled by bypass above, here only handle excess discharge\nif(bCh<-MAX_DR&&act>0){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"DRÔćô\"+act+\"Ôćĺ\"+(act-1)+\"f batt=\"+Math.round(bCh)+\"W max=-\"+MAX_DR});return[mkAct(act,act-1,p1on,p2on,p3on),cm];}\nnode.status({fill:\"green\",shape:\"dot\",text:\"DR=\"+act+\"f batt=\"+Math.round(bCh)+\"W SOC:\"+soc+\"% max=-\"+MAX_DR});return[null,cm];}\nnode.status({fill:\"grey\",shape:\"ring\",text:\"?\"+act+\"f SOC:\"+soc+\"%\"});",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "pat_korekce_router"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "pat_korekce_router",
+        "type": "switch",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_pat_korekce",
+        "name": "Korekce router",
+        "property": "action",
         "propertyType": "msg",
-        "value": "",
-        "valueType": "entityState"
-      }
-    ],
-    "x": 130,
-    "y": 1580,
-    "wires": [
-      [
-        "htg_away_func"
-      ]
-    ]
-  },
-  {
-    "id": "htg_away_func",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_away",
-    "name": "Away mode logika",
-    "func": "// Re┼żim nep┼Ö├ştomnosti ÔÇö sn├ş┼żen├ş teploty kdy┼ż nejsme doma\nvar config = global.get(\"fve_config\") || {};\nvar AWAY_TEMP = 21; // v├Żchoz├ş teplota nep┼Ö├ştomnosti\nvar letniRezim = config.letni_rezim === true;\n\nfunction getState(id) {\n    var e = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {};\n    return e.state;\n}\nfunction getFloat(id, def) {\n    var v = parseFloat(getState(id));\n    return isNaN(v) ? (def || 0) : v;\n}\n\nvar jsme_doma = getState(\"input_boolean.jsme_doma\") === \"on\";\nvar currentTemp = getFloat(\"input_number.nastavena_teplota_v_dome\", 22);\nvar savedTemp = flow.get(\"away_saved_temp\");\n\nif (!jsme_doma && !letniRezim) {\n    // Odchod z domu v zim─Ť Ôćĺ sn├ş┼żit teplotu\n    if (currentTemp > AWAY_TEMP) {\n        // Ulo┼żit aktu├íln├ş teplotu jen pokud jsme ji je┼ít─Ť neulo┼żili\n        if (!savedTemp || savedTemp <= AWAY_TEMP) {\n            flow.set(\"away_saved_temp\", currentTemp);\n        }\n        node.status({fill:\"yellow\", shape:\"dot\", text:\"PRY─î Ôćĺ \" + AWAY_TEMP + \"┬░C (ulo┼żeno \" + currentTemp + \"┬░C)\"});\n        return {payload: AWAY_TEMP};\n    } else {\n        node.status({fill:\"yellow\", shape:\"ring\", text:\"PRY─î | teplota u┼ż \" + currentTemp + \"┬░C\"});\n        return null;\n    }\n} else if (jsme_doma && savedTemp && savedTemp > AWAY_TEMP) {\n    // P┼Ö├şchod dom┼» Ôćĺ obnovit ulo┼żenou teplotu\n    var restoreTemp = savedTemp;\n    flow.set(\"away_saved_temp\", null);\n    node.status({fill:\"green\", shape:\"dot\", text:\"DOMA Ôćĺ \" + restoreTemp + \"┬░C (obnoveno)\"});\n    return {payload: restoreTemp};\n} else {\n    node.status({fill:\"grey\", shape:\"ring\", text: jsme_doma ? \"DOMA\" : (letniRezim ? \"L├ëTO\" : \"PRY─î\")});\n    return null;\n}",
-    "outputs": 1,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 350,
-    "y": 1580,
-    "wires": [
-      [
-        "htg_away_set_temp"
-      ]
-    ]
-  },
-  {
-    "id": "htg_away_set_temp",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_away",
-    "name": "Nastav teplotu",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "input_number.set_value",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "input_number.nastavena_teplota_v_dome"
-    ],
-    "labelId": [],
-    "data": "{\"value\": {{payload}}}",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "input_number",
-    "service": "set_value",
-    "x": 570,
-    "y": 1580,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_topeni_mod_change",
-    "type": "change",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_topeni_mod",
-    "name": "Nastav topeni_mod",
-    "rules": [
-      {
-        "t": "set",
-        "p": "payload",
-        "pt": "msg",
-        "to": "topeni_mod",
-        "tot": "global"
-      }
-    ],
-    "action": "",
-    "property": "",
-    "from": "",
-    "to": "",
-    "reg": false,
-    "x": 130,
-    "y": 1380,
-    "wires": [
-      [
-        "htg_topeni_mod_api"
-      ]
-    ]
-  },
-  {
-    "id": "htg_topeni_mod_api",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_topeni_mod",
-    "name": "Set topeni_mod",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "input_select.select_option",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "input_select.topeni_mod"
-    ],
-    "labelId": [],
-    "data": "{\"option\": \"{{payload}}\"}",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "input_select",
-    "service": "select_option",
-    "x": 350,
-    "y": 1380,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_reload_input_select_inject",
-    "type": "inject",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_reload",
-    "name": "Reload input_select (startup)",
-    "props": [
-      {
-        "p": "payload"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": true,
-    "onceDelay": 8,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 180,
-    "y": 1480,
-    "wires": [
-      [
-        "htg_reload_input_select_api"
-      ]
-    ]
-  },
-  {
-    "id": "htg_reload_input_select_api",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_reload",
-    "name": "Reload input_select",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "input_select.reload",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "input_select",
-    "service": "reload",
-    "x": 430,
-    "y": 1480,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "pat_korekce_inject",
-    "type": "inject",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_pat_korekce",
-    "name": "Patrony korekce (20s)",
-    "props": [
-      {
-        "p": "payload"
-      }
-    ],
-    "repeat": "20",
-    "crontab": "",
-    "once": true,
-    "onceDelay": 10,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 170,
-    "y": 320,
-    "wires": [
-      [
-        "pat_korekce_func"
-      ]
-    ]
-  },
-  {
-    "id": "pat_korekce_func",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_pat_korekce",
-    "name": "Patrony korekce",
-    "func": "// Patrony korekce v2.1 ÔÇö closed-loop battery feedback (20s cyklus)\nfunction getState(id){var e=global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\")||{};return e.state;}\nfunction getFloat(id,d){var v=parseFloat(getState(id));return isNaN(v)?(d||0):v;}\nfunction getBool(id){return getState(id)===\"on\";}\nfunction chgMsg(v){return{payload:{value:v}};}\nvar fveAuto=getBool(\"input_boolean.fve_automatizace\");\nif(!fveAuto){global.set(\"pat_block_charge\",false);node.status({fill:\"grey\",shape:\"ring\",text:\"FVE AUTO OFF -> NIC\"});return[null,null];}\nvar auto=getBool(\"input_boolean.automatizovat_topeni\");\nif(!auto){global.set(\"pat_block_charge\",false);var p1=!getBool(\"switch.patrona_faze_1\"),p2=!getBool(\"switch.patrona_faze_3_2\"),p3=!getBool(\"switch.patrona_faze_3\");\nvar off=p1&&p2&&p3,done=flow.get(\"pat_manual_stopped\")||false;\nif(!off&&!done){flow.set(\"pat_manual_stopped\",true);flow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nvar s=[];if(!p1)s.push({action:\"p1_off\"});if(!p2)s.push({action:\"p2_off\"});if(!p3)s.push({action:\"p3_off\"});\nnode.status({fill:\"grey\",shape:\"ring\",text:\"MANUAL:STOP\"});return[s,chgMsg(-1)];}\nnode.status({fill:\"grey\",shape:\"ring\",text:\"MANUAL\"});return[null,chgMsg(-1)];}\nflow.set(\"pat_manual_stopped\",false);\n// NIBE + Patrony: kompresor b─Ť┼ż├ş Ôćĺ patrony OFF (20s guard)\nvar _htgMod=flow.get(\"topeni_mod_active\")||\"\";\nif(_htgMod===\"NIBE + Patrony\"){var _comp=getBool(\"binary_sensor.nibe_kompresory_aktivni_binarni\");\nvar _pump=(getState(\"sensor.nibe_aktualni_realny_stav\")||\"\").indexOf(\"Klidov\")===-1&&(getState(\"sensor.nibe_aktualni_realny_stav\")||\"\")!==\"\";\nif(_comp||_pump){var _p1=getBool(\"switch.patrona_faze_1\"),_p2=getBool(\"switch.patrona_faze_3_2\"),_p3=getBool(\"switch.patrona_faze_3\");\nvar _sa=[];if(_p1)_sa.push({action:\"p1_off\"});if(_p2)_sa.push({action:\"p2_off\"});if(_p3)_sa.push({action:\"p3_off\"});\nflow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nvar _sN=getFloat(\"sensor.battery_percent\",0),_cN=global.get(\"fve_config\")||{},_dN=_cN.topeni_patron_drain_soc_prah||95;var _pN=_sN>=_dN?0:-1;global.set(\"pat_block_charge\",_sN>=_dN);node.status({fill:\"yellow\",shape:\"ring\",text:\"BOOST:NIBE pracujeÔćĺPAT OFF\"});return _sa.length>0?[_sa,chgMsg(_pN)]:[null,chgMsg(_pN)];}}\nfunction mkAct(cur,tgt,p1,p2,p3){var a=[];\nif(tgt>cur){if(tgt>=1&&!p1)a.push({action:\"p1_on\"});if(tgt>=2&&!p2)a.push({action:\"p2_on\"});if(tgt>=3&&!p3)a.push({action:\"p3_on\"});}\nelse{if(tgt<3&&p3)a.push({action:\"p3_off\"});if(tgt<2&&p2)a.push({action:\"p2_off\"});if(tgt<1&&p1)a.push({action:\"p1_off\"});}\nreturn a.length>0?a:null;}\nvar p1on=getBool(\"switch.patrona_faze_1\"),p2on=getBool(\"switch.patrona_faze_3_2\"),p3on=getBool(\"switch.patrona_faze_3\");\nvar act=(p1on?1:0)+(p2on?1:0)+(p3on?1:0);\nvar soc=getFloat(\"sensor.battery_percent\",0),config=global.get(\"fve_config\")||{};\nvar DRAIN_P=config.topeni_patron_drain_soc_prah||95, MIN_P=config.topeni_min_soc_patron||90;\nvar chP=(soc>=DRAIN_P)?0:-1; global.set(\"pat_block_charge\",soc>=DRAIN_P); var cm=chgMsg(chP);\n// ┬ž4.10: Z├üPORN├ü N├üKUPN├Ź CENA ÔÇö bypass SOC/solar/sell, max f├íz├ş\nvar _arbMode=((global.get(\"energy_arbiter\")||{}).mode)||\"\";\nvar isZapNak=_arbMode===\"zaporna_nakupni_cena\";\nif(isZapNak){\nvar _tankZ=getFloat(\"sensor.teplota_smesovac_teplota\",35);\nvar _maxTP=getFloat(\"input_number.topeni_max_teplota_patron\",config.topeni_max_teplota_patron||53);\nif(_tankZ>=_maxTP){var _sa5=[];if(p1on)_sa5.push({action:\"p1_off\"});if(p2on)_sa5.push({action:\"p2_off\"});if(p3on)_sa5.push({action:\"p3_off\"});\nnode.status({fill:\"green\",shape:\"dot\",text:\"Z├üP.NAK: tank \"+_tankZ.toFixed(0)+\"ÔëąmaxÔćĺOFF\"});return _sa5.length>0?[_sa5,chgMsg(-1)]:[null,chgMsg(-1)];}\nvar _cdZ=(config.topeni_patron_change_cooldown||6)*5000,_lcZ=flow.get(\"pat_last_change\")||0;\nif(act<3&&(Date.now()-_lcZ)>=_cdZ){flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"Z├üP.NAK: \"+act+\"Ôćĺ\"+(act+1)+\"f\"});return[mkAct(act,act+1,p1on,p2on,p3on),chgMsg(-1)];}\nnode.status({fill:\"red\",shape:\"dot\",text:\"Z├üP.NAK: \"+act+\"f SOC:\"+soc+\"%\"});return[null,chgMsg(-1)];}\nif(act===0){flow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nnode.status({fill:\"grey\",shape:\"dot\",text:\"OFF SOC:\"+soc+\"%\"});return[null,cm];}\n// ┬ž8.5: SOCÔëą95% + z├íkaz p┼Öetok┼» Ôćĺ korekce eskaluje na MAX (3 f├íze), korek─Źn├ş smy─Źka vy┼Öazena\nvar _fveMK=((global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{}).current_mode||\"normal\";\nif(soc>=DRAIN_P&&_fveMK===\"zakaz_pretoku\"){global.set(\"pat_block_charge\",true);\nif(act<3){flow.set(\"pat_last_change\",Date.now());node.status({fill:\"red\",shape:\"dot\",text:\"ZP+95%: \"+act+\"Ôćĺ\"+(act+1)+\"f MAX\"});return[mkAct(act,act+1,p1on,p2on,p3on),chgMsg(0)];}\nnode.status({fill:\"red\",shape:\"dot\",text:\"ZP+95%: 3f MAX (drain)\"});return[null,chgMsg(0)];}\n// ultraLevna + solar check z pl├ínu\nvar _pa=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{};\nvar _pl=_pa.plan||[],_h=new Date().getHours();\nvar _ss=(_pa.config||{}).solarStartHour||9,_se=(_pa.config||{}).solarEndHour||17,_iS=_h>=_ss&&_h<_se;\nvar _bp=99,_sp=99;for(var i=0;i<_pl.length;i++)if(_pl[i].hour===_h&&_pl[i].offset!==undefined){_bp=parseFloat(_pl[i].priceBuy)||99;_sp=parseFloat(_pl[i].priceSell)||99;break;}\nvar UL=config.prah_ultra_levna_nakup||1.0,ultraL=_iS&&_bp<UL&&_sp<=0,dumpR=ultraL||(_iS&&_sp<=0);\nvar MSP=config.topeni_patron_min_solar_w||5000,solW=getFloat(\"sensor.vyroba_fve\",0);\nvar fveM=_pa.current_mode||\"normal\",solOk=solW>=MSP||fveM===\"zakaz_pretoku\"||soc>=DRAIN_P||soc>=MIN_P;\nif(soc<MIN_P||!solOk){var sa=[];if(p1on)sa.push({action:\"p1_off\"});if(p2on)sa.push({action:\"p2_off\"});if(p3on)sa.push({action:\"p3_off\"});\nflow.set(\"pat_discharge_count\",0);flow.set(\"pat_stable_count\",0);\nnode.status({fill:\"red\",shape:\"dot\",text:(soc<MIN_P?\"SOC\":\"solar\")+\"ÔćĺOFF\"});return sa.length>0?[sa,cm]:[null,cm];}\n// SELL PRICE CHECK ÔÇö if sell price > threshold, stop patrony (better to sell)\nvar PMSP=config.topeni_patron_max_sell_price||3;\nif(_sp<=PMSP||_sp>=99||soc>=DRAIN_P||fveM===\"zakaz_pretoku\"){/* price OK or drain bypass */}else{var sa2=[];if(p1on)sa2.push({action:\"p1_off\"});if(p2on)sa2.push({action:\"p2_off\"});if(p3on)sa2.push({action:\"p3_off\"});\nflow.set(\"pat_stable_count\",0);\nnode.status({fill:\"red\",shape:\"dot\",text:\"SELL \"+_sp.toFixed(1)+\">\"+PMSP+\"ÔćĺOFF\"});return sa2.length>0?[sa2,cm]:[null,cm];}\n// GRID DRAW SAFETY ÔÇö highest priority, overrides cooldown\nvar gridD=getFloat(\"sensor.spotreba_ze_site\",0),GT=config.topeni_patron_max_grid_draw_w||200;\nif(gridD>GT&&act>0){var drop=Math.min(act,Math.max(1,Math.ceil((gridD-GT)/(config.topeni_patron_faze_w||3000))));\nvar nt=act-drop;flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"ÔÜíGRID \"+Math.round(gridD)+\"WÔćĺ\"+act+\"Ôćĺ\"+nt+\"f\"});\nif(nt<act)return[mkAct(act,nt,p1on,p2on,p3on),cm];}\n// Z├üKON 8.5: SOC>=95% + baterie NAB├ŹJ├Ź Ôćĺ okam┼żit─Ť p┼Öidat f├ízi (bypass cooldown)\nvar _bChNow=getFloat(\"sensor.nabijeni_baterii\",0);\nif(soc>=DRAIN_P&&_bChNow>300&&act<3&&act>0){flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"ÔÜíCHRG! \"+Math.round(_bChNow)+\"WÔćĺ\"+(act+1)+\"f\"});\nreturn[mkAct(act,act+1,p1on,p2on,p3on),cm];}\n// Cooldown: min 30s between phase changes (config: topeni_patron_change_cooldown ├Ś 5s)\nvar CD_MS=(config.topeni_patron_change_cooldown||6)*5000,lastChg=flow.get(\"pat_last_change\")||0;\nif(Date.now()-lastChg<CD_MS){node.status({fill:\"blue\",shape:\"ring\",text:\"ÔĆ│CD \"+act+\"f batt=\"+Math.round(getFloat(\"sensor.nabijeni_baterii\",0))+\"W\"});return[null,cm];}\n// Closed-loop feedback ÔÇö patron-specific dead band (min faze_w/2 to prevent oscillation)\nvar bCh=getFloat(\"sensor.nabijeni_baterii\",0);\nvar FAZE_W=config.topeni_patron_faze_w||3000;\nvar TGT=config.topeni_patron_target_batt_w||config.nabijeni_auta_target_batt_w||1000;\nvar DB_CFG=config.topeni_patron_dead_band_w||500;\nvar DB=Math.max(DB_CFG,Math.floor(FAZE_W/2));\nif(soc>=MIN_P&&soc<DRAIN_P){var err=bCh-TGT;\nif(err>DB&&act<3){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"yellow\",shape:\"dot\",text:\"CHÔćĹ\"+act+\"Ôćĺ\"+(act+1)+\"f batt=\"+Math.round(bCh)+\"W err=\"+Math.round(err)});return[mkAct(act,act+1,p1on,p2on,p3on),cm];}\nif(err<-DB&&act>0){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"CHÔćô\"+act+\"Ôćĺ\"+(act-1)+\"f batt=\"+Math.round(bCh)+\"W err=\"+Math.round(err)});return[mkAct(act,act-1,p1on,p2on,p3on),cm];}\nnode.status({fill:\"green\",shape:\"dot\",text:\"CH=\"+act+\"f batt=\"+Math.round(bCh)+\"W DB=┬▒\"+DB+\" SOC:\"+soc+\"%\"});return[null,cm];}\nif(soc>=DRAIN_P){var _drainFveM=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes;_drainFveM=(_drainFveM&&_drainFveM.current_mode)||\"normal\";var MAX_DR=(_drainFveM===\"zakaz_pretoku\")?(config.topeni_patron_faze_w||3000)*act+1000:(config.topeni_patron_max_drain_w||2500);\n// Range-based: charging handled by bypass above, here only handle excess discharge\nif(bCh<-MAX_DR&&act>0){flow.set(\"pat_stable_count\",0);flow.set(\"pat_last_change\",Date.now());\nnode.status({fill:\"red\",shape:\"dot\",text:\"DRÔćô\"+act+\"Ôćĺ\"+(act-1)+\"f batt=\"+Math.round(bCh)+\"W max=-\"+MAX_DR});return[mkAct(act,act-1,p1on,p2on,p3on),cm];}\nnode.status({fill:\"green\",shape:\"dot\",text:\"DR=\"+act+\"f batt=\"+Math.round(bCh)+\"W SOC:\"+soc+\"% max=-\"+MAX_DR});return[null,cm];}\nnode.status({fill:\"grey\",shape:\"ring\",text:\"?\"+act+\"f SOC:\"+soc+\"%\"});",
-    "outputs": 2,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 410,
-    "y": 320,
-    "wires": [
-      [
-        "pat_korekce_router"
-      ],
-      []
-    ]
-  },
-  {
-    "id": "pat_korekce_router",
-    "type": "switch",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_pat_korekce",
-    "name": "Korekce router",
-    "property": "action",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "p1_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p2_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p3_off",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p1_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p2_on",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "p3_on",
-        "vt": "str"
-      }
-    ],
-    "checkall": "false",
-    "repair": false,
-    "outputs": 6,
-    "x": 640,
-    "y": 320,
-    "wires": [
-      [
-        "htg_svc_p1_off"
-      ],
-      [
-        "htg_svc_p2_off"
-      ],
-      [
-        "htg_svc_p3_off"
-      ],
-      [
-        "htg_svc_p1_on"
-      ],
-      [
-        "htg_svc_p2_on"
-      ],
-      [
-        "htg_svc_p3_on"
-      ]
-    ]
-  },
-  {
-    "id": "htg_svc_stop_auto_solar",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Stop auto solar",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "input_boolean.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "input_boolean.nastavuj_amperaci_chargeru_solar"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "input_boolean",
-    "service": "turn_off",
-    "x": 420,
-    "y": 1120,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "htg_svc_stop_auto_grid",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_exec_v2",
-    "name": "Stop auto grid",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "input_boolean.turn_off",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "input_boolean.nastavuj_amperaci_chargeru_grid"
-    ],
-    "labelId": [],
-    "data": "",
-    "dataType": "jsonata",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": false,
-    "domain": "input_boolean",
-    "service": "turn_off",
-    "x": 420,
-    "y": 1160,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "pat_max_charge_svc",
-    "type": "api-call-service",
-    "z": "f1e2d3c4b5a60001",
-    "g": "htg_g_pat_korekce",
-    "name": "MaxChargePower",
-    "server": "c7421fe2.cb11c",
-    "version": 7,
-    "debugenabled": false,
-    "action": "number.set_value",
-    "floorId": [],
-    "areaId": [],
-    "deviceId": [],
-    "entityId": [
-      "number.max_charge_power"
-    ],
-    "labelId": [],
-    "data": "{\"value\": {{payload.value}}}",
-    "dataType": "json",
-    "mergeContext": "",
-    "mustacheAltTags": false,
-    "outputProperties": [],
-    "queue": "none",
-    "blockInputOverrides": true,
-    "domain": "number",
-    "service": "set_value",
-    "x": 420,
-    "y": 380,
-    "wires": [
-      []
-    ]
-  },
-  {
-    "id": "rf_htg_read_001",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "1. ─îten├ş stavu topen├ş",
-    "func": "// [1/3] Topen├ş ÔÇö ─Źten├ş stavu a parametr┼»\n// GUARD: skip if HA states not yet loaded (NR restart race condition)\nvar _ha=global.get(\"homeassistant.homeAssistant.states\")||{};\nif(!_ha[\"sensor.battery_percent\"]){node.status({fill:\"red\",shape:\"ring\",text:\"ÔĆ│ HA states not ready\"});return null;}\nvar cfg=global.get(\"fve_config\")||{},pr=global.get(\"fve_prices_forecast\")||[];\nfunction gS(id){return(global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\")||{}).state;}\nfunction gF(id,d){var v=parseFloat(gS(id));return isNaN(v)?(d||0):v;}\nfunction gB(id){return gS(id)===\"on\";}\nvar h={cfg:cfg,\n    minTank:(cfg.topeni_min_teplota_nadrze!=null&&!isNaN(Number(cfg.topeni_min_teplota_nadrze)))?Number(cfg.topeni_min_teplota_nadrze):33,maxTank:gF(\"input_number.topeni_max_teplota_nadrze\",50),\n    coldTank:cfg.topeni_chladna_nadrz||40,\n    nocSniz:cfg.topeni_nocni_snizeni||0.5,highSolSniz:cfg.topeni_high_sol_snizeni||0.2,nocOd:cfg.topeni_nocni_od||22,nocDo:cfg.topeni_nocni_do||6,\n    nouzT:cfg.topeni_nouzova_teplota||18,minPretok:cfg.topeni_min_pretok_patron_w||3000,\n    patW:cfg.topeni_patron_faze_w||3000,minSocPat:cfg.topeni_min_soc_patron||90,\n    DRAHA:cfg.prah_draha_energie||12,bezpPokles:cfg.topeni_bezpecny_pokles||0.7,\n    hystChlaz:cfg.topeni_hystereze_chlazeni||1.0,solForecast:cfg.topeni_solar_forecast_kwh||30,\n    solOverride:cfg.topeni_solar_override_w||8000,letni:cfg.letni_rezim===true,\n    LEVNA:cfg.prah_levna_energie||4,\n    maxTankPat:gF(\"input_number.topeni_max_teplota_patron\",cfg.topeni_max_teplota_patron||53),\n    auto:gB(\"input_boolean.automatizovat_topeni\"),tgtT:gF(\"input_number.nastavena_teplota_v_dome\",22),\n    inT:gF(\"sensor.hp2551ae_pro_v2_1_0_indoor_temperature\",20),outT:gF(\"sensor.hp2551ae_pro_v2_1_0_outdoor_temperature\",10),\n    tankT:gF(\"sensor.teplota_smesovac_teplota\",35),dm:gF(\"sensor.nibe_degree_minutes\",0),\n    soc:gF(\"sensor.battery_percent\",50),prebytek:gF(\"sensor.rozdil_vyroby_a_spotreby\",0),\n    comp:gB(\"binary_sensor.nibe_kompresory_aktivni_binarni\"),pumpSt:gS(\"sensor.nibe_aktualni_realny_stav\")||\"\",\n    krb:gB(\"input_boolean.topi_se_v_krbu\"),coolEn:gB(\"input_boolean.chlazeni\"),\n    autoHlad:gB(\"input_boolean.auto_ma_hlad\"),\n    autoNabiji:gB(\"input_boolean.nastavuj_amperaci_chargeru_solar\")||gB(\"input_boolean.nastavuj_amperaci_chargeru_grid\"),\n    nibeOn:gB(\"switch.nibe_topeni\"),obehOn:gB(\"switch.teplota_smesovac\"),\n    p1:gB(\"switch.patrona_faze_1\"),p2:gB(\"switch.patrona_faze_3_2\"),p3:gB(\"switch.patrona_faze_3\"),\n    ventil:gB(\"switch.bazen_ventil_smesovac\"),coolOn:gB(\"switch.nibe_chlazeni\"),\n    solW:gF(\"sensor.vyroba_fve\",0),gridLostRaw:gF(\"sensor.grid_lost_ciselny\",0)};\nh.gridLost=h.gridLostRaw>=2;h.nibePeak=cfg.nibe_peak_w||14000;\nvar hr=new Date().getHours(),now=Date.now();\nh.hr=hr;h.now=now;\nh.nibeCdMs=(cfg.nibe_cooldown_min||3)*60000;\nh.lastNibeSw=flow.get(\"last_nibe_switch\")||0;\nh.nibeCdOk=(now-h.lastNibeSw)>=h.nibeCdMs;\n// Plan + price info\nvar _pa=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{};\nvar plan=global.get(\"fve_plan\")||{};\nh.solS=(plan&&plan.solarStartHour)||9;h.solE=(plan&&plan.solarEndHour)||17;\nh.isSol=hr>=h.solS&&hr<h.solE;h.solLeft=h.isSol?(h.solE-hr):0;\nh.planMode=(plan&&plan.currentMode)||\"normal\";\nh.balActive=_pa.current_mode===\"Balancov├ín├ş\"||global.get(\"balancing_active\")||false;\nh.balSolDump=global.get(\"balancing_solar_dump\")||false;\nh.balBlockPump=global.get(\"balancing_block_pump\")||false;\n// Price level ÔÇö cross-day ranking (z├íkon 8.2: analogie k m├│du ┼íet┼Öen├ş)\nvar _planArr=_pa.plan||[];\nif(_planArr.length>0){var _ps=_planArr.slice().sort(function(a,b){return(a.priceBuy||99)-(b.priceBuy||99);});\nvar _N=_ps.length;for(var _r=0;_r<_N;_r++){_ps[_r]._xLvl=Math.ceil((_r+1)/_N*24);}\nh.lvl=99;for(var _q=0;_q<_ps.length;_q++){if(_ps[_q].hour===hr&&_ps[_q].offset!==undefined){h.lvl=_ps[_q]._xLvl;break;}}\nif(h.lvl===99){for(var i=0;i<pr.length;i++)if(pr[i].hour===hr&&(pr[i].minute===0||pr[i].minute===undefined)){h.lvl=pr[i].levelCheapestHourBuy||99;break;}}}\nelse{h.lvl=99;for(var i=0;i<pr.length;i++)if(pr[i].hour===hr&&(pr[i].minute===0||pr[i].minute===undefined)){h.lvl=pr[i].levelCheapestHourBuy||99;break;}}\nif(h.lvl===99)h.lvl=gF(\"input_number.levelcheapesthourbuy\",12);\n// Ultra levna\nvar _bp=99,_sp=99,_pl=_pa.plan||[];\nfor(var j=0;j<_pl.length;j++)if(_pl[j].hour===hr&&_pl[j].offset!==undefined){_bp=parseFloat(_pl[j].priceBuy)||99;_sp=parseFloat(_pl[j].priceSell)||99;break;}\nif(_bp>=99&&pr.length>0)for(var k=0;k<pr.length;k++)if(pr[k].hour===hr&&(pr[k].minute===0||pr[k].minute===undefined)){_bp=parseFloat(pr[k].priceCZKhourBuy)||99;_sp=parseFloat(pr[k].priceCZKhourProd)||99;break;}\nvar UL=cfg.prah_ultra_levna_nakup||1.0;\nh.ultraL=h.isSol&&_bp<UL&&_sp<=0;h.cantExport=h.isSol&&_sp<=0;h.sellPrice=_sp;var _lastSolH=-1;for(var si=0;si<_pl.length;si++){if(_pl[si].isSolarHour)_lastSolH=_pl[si].hour;}h.lastSolarHour=_lastSolH;\n// Solar forecast\nvar solSrc=(cfg.solar_forecast_source||\"VICTRON\").toUpperCase();\nvar eZit=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_tomorrow_3\":\"input_number.predpoved_solarni_vyroby_zitra\";\nh.solFcTom=gF(eZit,0);h.bigSolTom=h.solFcTom>=h.solForecast;\nvar eDnes=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_today_3\":\"input_number.predpoved_solarni_vyroby_dnes\";\nh.solFcDnes=gF(eDnes,0);h.highSolDay=h.solFcDnes>=(cfg.topeni_solar_high_day_kwh||50);\nvar eZbv=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_today_remaining_3\":\"input_number.zbyvajici_solarni_vyroba_dnes\";\nh.zbSolar=gF(eZbv,0)*1000;h.kapBat=(cfg.kapacita_baterie_kwh||28)*1000;\nh.solMarginH=cfg.topeni_solar_margin_hours||2;\n// Odlo┼żen├ş NIBE do p┼Ö├ş┼ít├ş hodiny se z├íkazem p┼Öetok┼» (n├şzk├í predikce sol├íru z├ştra) ÔÇö nouzov├í teplota m├í p┼Öednost (┬ž1.1)\nvar _maxSolZakDef = (cfg.topeni_zakaz_pretok_defer_max_sol_kwh != null && !isNaN(Number(cfg.topeni_zakaz_pretok_defer_max_sol_kwh)))\n    ? Number(cfg.topeni_zakaz_pretok_defer_max_sol_kwh) : (cfg.topeni_solar_forecast_kwh || 30);\nh.zakazDeferExtraCold = (cfg.topeni_zakaz_pretok_defer_safe_margin_extra != null && !isNaN(Number(cfg.topeni_zakaz_pretok_defer_safe_margin_extra)))\n    ? Number(cfg.topeni_zakaz_pretok_defer_safe_margin_extra) : 0.2;\nvar _plZ = _pa.plan || [];\nvar _minOffZak = null;\nfor (var _zix = 0; _zix < _plZ.length; _zix++) {\n    var _rwz = _plZ[_zix];\n    if (_rwz.mode !== \"zakaz_pretoku\") continue;\n    var _ofz = _rwz.offset;\n    if (_ofz === undefined || _ofz <= 0) continue;\n    if (_minOffZak === null || _ofz < _minOffZak) _minOffZak = _ofz;\n}\nh.deferNibeZakazWait = !h.letni && h.solFcTom < _maxSolZakDef && _minOffZak !== null && h.planMode !== \"zakaz_pretoku\";\nh.nextZakazPretokOffset = _minOffZak;\nmsg.h=h;\nnode.status({fill:\"blue\",shape:\"dot\",text:h.inT.toFixed(1)+\"/\"+h.tgtT+\"┬░C T:\"+h.tankT.toFixed(0)+\" Lv\"+h.lvl});\nreturn msg;",
-    "outputs": 1,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 380,
-    "y": 120,
-    "wires": [
-      [
-        "rf_htg_decide2"
-      ]
-    ]
-  },
-  {
-    "id": "rf_htg_decide2",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "2. Rozhodov├ín├ş topen├ş",
-    "func": "// [2/3] Topen├ş ÔÇö rozhodovac├ş logika\nvar h = msg.h, cfg = h.cfg;\n\n// === V├ŁPO─îTY STAVU ===\nh.isDraha = (h.lvl >= h.DRAHA) && (h.planMode !== \"setrit\");\nh.isNight = (h.hr >= h.nocOd || h.hr < h.nocDo);\nh.effTgt = h.isNight\n    ? (h.tgtT - h.nocSniz)\n    : (h.highSolDay && h.isSol && !h.autoHlad && !h.autoNabiji ? (h.tgtT - h.highSolSniz) : h.tgtT);\nh.actPat = (h.p1 ? 1 : 0) + (h.p2 ? 1 : 0) + (h.p3 ? 1 : 0);\nh.availPat = h.prebytek + h.actPat * h.patW;\nh.pumpWork = h.pumpSt.indexOf(\"Klidov\") === -1 && h.pumpSt !== \"\";\nh.canOffNibe = !h.comp && !h.pumpWork;\n\nvar a = [], reason = \"\", patTgt = 0, shutD = flow.get(\"shutdown_done\") || false;\n\n// === AUTO OFF ===\nif (!h.auto) {\n    reason = \"Auto OFF\";\n    h.actions = a; h.reason = reason; h.patTgt = 0; h.fS = false; msg.h = h; return msg;\n}\nelse {\n    var fS = false;\n\n    // === L├ëTO ===\n    if (h.letni) {\n        var sDone = flow.get(\"summer_setup_done\") || false;\n        if (!sDone) {\n            if (h.canOffNibe) a.push(\"nibe_on\");\n            if (h.obehOn) a.push(\"obehove_off\");\n            if (h.p1) a.push(\"p1_off\");\n            if (h.p2) a.push(\"p2_off\");\n            if (h.p3) a.push(\"p3_off\");\n            flow.set(\"summer_setup_done\", true);\n            reason = \"L├ęto init\";\n        }\n        if (h.coolEn) {\n            if (!h.coolOn && h.inT > h.effTgt + h.hystChlaz) a.push(\"cool_on\");\n            else if (h.coolOn && h.inT < h.effTgt) a.push(\"cool_off\");\n            reason = \"L├ęto \" + (h.coolOn ? \"chlaz\" : \"\");\n        } else {\n            if (h.coolOn) a.push(\"cool_off\");\n            reason = \"L├ęto\";\n        }\n    }\n    // === ZIMA ===\n    else {\n        flow.set(\"summer_setup_done\", false);\n        if (h.ventil) a.push(\"ventil_off\");\n        if (h.coolOn) a.push(\"cool_off\");\n\n        var mod = flow.get(\"topeni_mod_active\") || \"Vypnuto\";\n        var HYST = cfg.topeni_hystereze || 0.2;\n        var tankOk = h.tankT >= h.minTank, needH = h.nibeOn ? (h.inT < h.effTgt) : (h.inT <= h.effTgt - HYST);\n        var dumpR = h.ultraL || h.cantExport;\n        var _arbM=((global.get(\"energy_arbiter\")||{}).mode)||\"\";\n        var isZapNak=_arbM===\"zaporna_nakupni_cena\";\n        if(isZapNak){dumpR=true;h.isDraha=false;h.bigSolTom=false;h.highSolDay=false;h.lvl=1;}\n\n        // === PATRONY ÔÇö podm├şnky ===\n        var MSP = cfg.topeni_patron_min_solar_w || 5000, fveM = (global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\") || {}).attributes;\n        fveM = (fveM && fveM.current_mode) || h.planMode;\n        var DRAIN_P = cfg.topeni_patron_drain_soc_prah || 95;\n        var patSolOk = h.solW >= MSP || fveM === \"zakaz_pretoku\" || h.soc >= DRAIN_P || isZapNak;\n        var PMSP = cfg.topeni_patron_max_sell_price || 3, patSellOk = h.sellPrice <= PMSP || h.sellPrice >= 99;\n        var drainBypass = h.soc >= DRAIN_P; var cantSell = h.planMode === \"zakaz_pretoku\";\n\n        var patMohou = ((patSellOk || drainBypass || cantSell)\n            && patSolOk\n            && (!h.balActive || h.balSolDump)\n            && h.soc >= h.minSocPat\n            && !h.autoHlad && !h.autoNabiji\n            && h.tankT < h.maxTankPat\n            && (!h.gridLost || h.solW > 0))\n            || (isZapNak && h.tankT < h.maxTankPat);\n\n        var patMohouExceptSoc = ((patSellOk || drainBypass || cantSell)\n            && patSolOk\n            && (!h.balActive || h.balSolDump)\n            && !h.autoHlad && !h.autoNabiji\n            && h.tankT < h.maxTankPat\n            && (!h.gridLost || h.solW > 0))\n            || (isZapNak && h.tankT < h.maxTankPat);\n\n        // === PATRONY ÔÇö c├şlov├Ż po─Źet ===\n        var drainStart = drainBypass && (dumpR || fveM === \"zakaz_pretoku\");\n        if (patMohou && h.actPat === 0) {\n            // ┬ž8.5: drainBypass (SOC>=DRAIN_P) startuje 1f i bez 3kW p┼Öebytku ÔÇö vyb├şjet baterii\n            if (h.availPat >= h.minPretok || drainStart || drainBypass) { patTgt = 1; flow.set(\"pat_change_cooldown\", 0); }\n        }\n        else if (patMohou && h.actPat > 0) {\n            patTgt = (h.availPat < h.minPretok && !drainStart) ? 0 : h.actPat;\n        }\n        if(isZapNak && patMohou) patTgt=3;\n        if(!isZapNak && h.soc>=DRAIN_P && fveM===\"zakaz_pretoku\" && patMohou) patTgt=3;\n\n        // === M├ôD TOPEN├Ź ===\n        var _safeT = h.effTgt - (cfg.topeni_bezpecny_pokles || 0.7), _canDeferHSD = h.inT >= _safeT;\n        var PM = 0.2, tGap = h.effTgt - h.inT;\n        var hToLastSol = h.lastSolarHour >= 0 ? (h.lastSolarHour - h.hr) : 99, finalHrs = cfg.topeni_final_hours || 3;\n        var patSocR = h.soc >= (h.minSocPat - 15), bNeedWh = Math.max(0, (h.minSocPat - h.soc) / 100 * h.kapBat);\n        var consEst = h.solLeft * 1500, patReal = dumpR || (patSocR && h.zbSolar > (bNeedWh + consEst) * 1.5);\n\n        if (h.isSol && tGap <= PM && needH && patReal && patMohou && hToLastSol > finalHrs) mod = \"Patrony\";\n        else if (tGap > PM && needH && h.highSolDay && _canDeferHSD && !dumpR && patMohou) mod = \"Vypnuto\"; // ┬ž 8.3: odkl├ídej NIBE pouze pokud patrony mohou re├íln─Ť jet\n        else if (tGap > PM && needH && h.deferNibeZakazWait && h.inT >= (h.effTgt - h.bezpPokles - (h.zakazDeferExtraCold||0.2)) && h.inT >= h.nouzT && !dumpR && !isZapNak) mod = \"Vypnuto\"; // ─Źek├ín├ş na hodinu se z├íkazem p┼Öetok┼» (n├şzk├Ż sol├ír z├ştra)\n        else if (tGap >= PM && needH) mod = \"NIBE\";\n        else if (!needH && patMohou) {\n            var patronyMaSmysl = h.isSol || h.solW >= MSP || fveM === \"zakaz_pretoku\" || dumpR;\n            if (patronyMaSmysl) mod = \"Patrony\";\n            else { mod = \"Vypnuto\"; patTgt = 0; }\n        }\n        else if (!needH && dumpR && h.tankT < h.maxTank && h.soc >= (cfg.topeni_dump_solar_soc || 85) && !patMohouExceptSoc && !h.autoHlad && h.solW >= (cfg.topeni_solar_override_w || 8000)) mod = \"NIBE\";\n        // Z├íkon 8.2+8.3.5: proaktivn├ş oh┼Öev n├ídr┼że za levnou cenu p┼Öi n├şzk├ęm solaru\n        else if (!needH && h.tankT < h.coldTank && !h.highSolDay && cheapestTankHour()) mod = \"NIBE\";\n        // Z├íkon 8.2: proaktivn├ş oh┼Öev n├ídr┼że na noc za nejlevn─Ťj┼í├ş cenu\n        else if (!needH && h.isNight && h.tankT < h.coldTank && !h.bigSolTom && !h.highSolDay && cheapestTankHour()) mod = \"NIBE\";\n        else if (!needH) mod = \"Vypnuto\";\n        else mod = \"NIBE\";\n\n        // 3h pravidlo: patrony Ôćĺ NIBE pokud do konce sol├írn├ş v├Żroby zb├Żv├í ÔëĄ finalHrs\n        var TANK_3H = cfg.topeni_patron_3h_min_tank || 35;\n        if (mod === \"Patrony\" && h.isSol && hToLastSol <= finalHrs && h.tankT < TANK_3H) mod = \"NIBE\";\n\n        // === NIBE + Patrony ÔÇö kombinovan├Ż m├│d ===\n        var BOOST_SELL = cfg.topeni_boost_max_sell_price || 2;\n        var solarBoostOk = patMohou && h.availPat >= h.minPretok\n            && (h.cantExport || h.sellPrice <= BOOST_SELL || h.soc >= DRAIN_P);\n        if (mod === \"NIBE\" && (solarBoostOk || isZapNak)) mod = \"NIBE + Patrony\";\n\n        // Z├íkon 8.5: posledn├ş sol├írn├ş hodina + zb├Żvaj├şc├ş solar < 4kWh + bez z├íkazu p┼Öetok┼» Ôćĺ patrony OFF (baterie na 100%)\n        var PAT_LAST_SOL_KWH = cfg.topeni_patron_last_sol_min_kwh || 4;\n        var LAST_SOL_HRS = cfg.posledni_solarni_hodiny || 2;\n        if ((mod === \"Patrony\" || mod === \"NIBE + Patrony\") && h.isSol && hToLastSol < LAST_SOL_HRS && h.zbSolar < PAT_LAST_SOL_KWH * 1000 && !dumpR) {\n            mod = mod === \"NIBE + Patrony\" ? \"NIBE\" : \"Vypnuto\";\n            patTgt = 0;\n        }\n\n        flow.set(\"topeni_mod_active\", mod);\n        h.solarBoost = (mod === \"NIBE + Patrony\");\n\n        // === PATRONY ÔÇö v├Żstup ===\n        var nibeBlkMod = mod === \"Patrony\" || mod === \"Vypnuto\", patBlkMod = mod === \"NIBE\";\n        // NIBE + Patrony: kompresor/─Źerpadlo b─Ť┼ż├ş Ôćĺ patrony MUS├Ź b├Żt OFF\n        if (h.solarBoost && (h.comp || h.pumpWork) && !isZapNak) {\n            patTgt = 0;\n            if (h.p1) a.push(\"p1_off\"); if (h.p2) a.push(\"p2_off\"); if (h.p3) a.push(\"p3_off\");\n        }\n        // ┬ž8.5/┬ž4.10: V drain modech (zakaz_pretoku+SOC>=95% nebo z├íporn├í n├íkupn├ş cena)\n        // korekce ┼Ö├şd├ş svou vlastn├ş eskalaci ÔÇö manager d├íl escaluje kdy┼ż patTgt > actPat.\n        var managerEscalates = ((!isZapNak && h.soc >= DRAIN_P && fveM === \"zakaz_pretoku\") || isZapNak) && patTgt > h.actPat;\n        var korekce = h.actPat > 0 && patMohou && !patBlkMod && !managerEscalates;\n        if (!korekce) {\n            var pw = [patTgt >= 1 && !patBlkMod, patTgt >= 2 && !patBlkMod, patTgt >= 3 && !patBlkMod];\n            if (pw[0] !== h.p1) a.push(pw[0] ? \"p1_on\" : \"p1_off\");\n            if (pw[1] !== h.p2) a.push(pw[1] ? \"p2_on\" : \"p2_off\");\n            if (pw[2] !== h.p3) a.push(pw[2] ? \"p3_on\" : \"p3_off\");\n        }\n\n        // === NIBE ÔÇö rozhodov├ín├ş ON/OFF ===\n        var safeT = h.effTgt - h.bezpPokles, canDefer = h.inT >= safeT, solDM = cfg.topeni_solar_defer_margin || 0.2, canDeferSol = h.inT >= (h.effTgt - solDM), nibeBlkDch = true;\n        var finalSolWh = (cfg.topeni_final_solar_kwh || 20) * 1000, hasSolRes = h.zbSolar > finalSolWh;\n        var mustHeatByPrice = !h.letni && h.isSol && hToLastSol > 0 && hToLastSol <= finalHrs && needH;\n        var mustHeatFinal = !h.letni && h.isSol && h.lastSolarHour >= 0 && needH && hToLastSol <= 0;\n        var gridOk = !h.gridLost || (h.gridLost && h.solW >= h.nibePeak);\n\n        // Z├íkon 8.2+8.3.5: je aktu├íln├ş hodina nejlevn─Ťj┼í├ş pro oh┼Öev n├ídr┼że?\n        // Porovn├ív├í cenu s hodinami p┼Öed sol├írn├ş v├Żrobou\n        function cheapestTankHour() {\n            // ZAKON 8.2: \"VZDY TOPIME ZA CO NEJVYHODNEJSICH PODMINEK - CO NEJNIZSI CENY\"\n            // Porovnat aktualni hodinu se VSEMI budoucimi hodinami dnes do konce solarniho okna.\n            // V solarni hodine: scan do solE (jine solarni hodiny mohou byt levnejsi)\n            // Mimo solarni okno: scan do solS (pred solarem)\n            var fc = global.get(\"fve_prices_forecast\") || [];\n            var bestLvl = h.lvl;\n            var scanEnd = h.isSol ? h.solE : h.solS;\n            for (var i = 0; i < fc.length; i++) {\n                var p = fc[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if (p.hour >= scanEnd) break;\n                var pLvl = p.levelCheapestHourBuy || 99;\n                if (pLvl < bestLvl) return false; // levnejsi budouci hodina existuje -> pockat\n            }\n            return true; // toto je nejlevnejsi dostupna hodina\n        }\n\n        function cheaperAhead() {\n            for (var i = 0; i < (global.get(\"fve_prices_forecast\") || []).length; i++) {\n                var p = (global.get(\"fve_prices_forecast\") || [])[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if ((p.levelCheapestHourBuy || 99) < h.lvl) return true;\n            }\n            return false;\n        }\n        function cheaperBeforeSol() {\n            for (var i = 0; i < (global.get(\"fve_prices_forecast\") || []).length; i++) {\n                var p = (global.get(\"fve_prices_forecast\") || [])[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if (p.hour >= h.lastSolarHour) continue;\n                if ((p.levelCheapestHourBuy || 99) < h.lvl) return true;\n            }\n            return false;\n        }\n\n        var chAhead = cheaperAhead(), chBeforeSol = cheaperBeforeSol(), solCovers = h.isSol && h.prebytek >= h.solOverride;\n        var nibeWant = needH || (!h.isDraha && h.tankT < h.maxTank) || (isZapNak && h.tankT < h.maxTank);\n\n        if (!h.ultraL && !isZapNak && h.autoNabiji && nibeWant && !nibeBlkMod && h.solW < (cfg.topeni_solar_override_w || 8000)) a.push(\"stop_auto_nabijeni\");\n\n        if (!gridOk) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.krb) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.tankT > h.maxTank) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (nibeBlkMod) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.balActive && !needH) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.isDraha) {\n            if (h.solW >= h.solOverride) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                nibeBlkDch = false;\n            } else if (mustHeatFinal) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                reason += \" ÔÜíFINAL\";\n            } else if (mustHeatByPrice && !chBeforeSol) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                reason += \" ÔÜíPRICE\";\n            } else {\n                if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n            }\n        }\n        else if (nibeWant) {\n            var _zStop = h.deferNibeZakazWait && h.inT >= (h.effTgt - h.bezpPokles - (h.zakazDeferExtraCold||0.2)) && h.inT >= h.nouzT && !isZapNak;\n            if (_zStop) {\n                if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                reason += \"|─îek├ímZP\";\n            } else {\n\n            var dumpF = dumpR && !needH && h.soc >= (cfg.topeni_dump_solar_soc || 85)\n                && h.tankT < h.maxTank && !patMohouExceptSoc && !h.autoHlad\n                && h.solW >= (cfg.topeni_solar_override_w || 8000);\n            if (dumpF) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                nibeBlkDch = false;\n            }\n            else {\n                var planCh = h.planMode === \"setrit\" && h.lvl <= h.LEVNA;\n                if (!planCh && !solCovers && h.bigSolTom && (!needH || canDeferSol) && !mustHeatFinal && !mustHeatByPrice) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (!planCh && !solCovers && h.highSolDay && (!needH || canDeferSol) && !mustHeatFinal && !mustHeatByPrice) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (!planCh && !solCovers && (mustHeatByPrice ? chBeforeSol : chAhead) && (!needH || canDefer) && !mustHeatFinal) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (h.solW >= h.solOverride) {\n                    if (!h.nibeOn) a.push(\"nibe_on\");\n                    nibeBlkDch = false;\n                }\n                else {\n                    if (!h.nibeOn) a.push(\"nibe_on\");\n                    nibeBlkDch = h.soc <= 90;\n                }\n            }\n        \n            }\n}\n        else {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n\n        if (dumpR && !needH && h.tankT < h.maxTank) nibeBlkDch = false;\n        flow.set(\"nibe_block_discharge\", nibeBlkDch);\n\n        // === OB─ÜHOV├ë ─îERPADLO ===\n        if (!h.krb) {\n            var oTgt = h.isNight ? h.effTgt : h.tgtT, nHO = h.inT < oTgt;\n            if (h.balBlockPump) {\n                if (h.obehOn) a.push(\"obehove_off\");\n            }\n            else if (tankOk && nHO) a.push(\"obehove_on\");\n            else {\n                if (h.obehOn) a.push(\"obehove_off\");\n            }\n        }\n\n        // === REASON ===\n        reason = [\n            h.isDraha ? \"DRAH├ü(Lv\" + h.lvl + \")\" : \"Lv\" + h.lvl,\n            \"In:\" + h.inT.toFixed(1) + \"/\" + h.effTgt.toFixed(1),\n            \"Tnk:\" + h.tankT.toFixed(0)\n        ].join(\"|\");\n        if (patTgt > 0) reason += \"|PAT:\" + patTgt;\n        if (h.isSol) reason += \"|ÔśÇ\" + h.solLeft + \"h\";\n    }\n}\n\nh.actions = a;\nh.reason = reason;\nh.patTgt = patTgt;\nh.fS = flow.get(\"shutdown_done\") === false && h.auto;\nh.isZapNak = isZapNak || false;\nmsg.h = h;\nreturn msg;\n",
-    "outputs": 1,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 600,
-    "y": 120,
-    "wires": [
-      [
-        "rf_htg_output3"
-      ]
-    ]
-  },
-  {
-    "id": "rf_htg_output3",
-    "type": "function",
-    "z": "f1e2d3c4b5a60001",
-    "g": "heating_g_main_v2",
-    "name": "3. Pojistky + v├Żstup topen├ş",
-    "func": "// [3/3] Topen├ş ÔÇö bezpe─Źnostn├ş pojistky + v├Żstup\nvar h=msg.h,a=h.actions.slice(),reason=h.reason;\n// OCHRANA: nibe_off nelze pokud pracuje\nif(a.indexOf(\"nibe_off\")>-1&&!h.canOffNibe){a=a.filter(function(x){return x!==\"nibe_off\";});reason+=\" ÔÜá´ŞĆNIBE_PROT\";}\n// OCHRANA: nibe_on + nibe_off\nif(a.indexOf(\"nibe_on\")>-1&&a.indexOf(\"nibe_off\")>-1){a=a.filter(function(x){return x!==\"nibe_on\"&&x!==\"nibe_off\";});reason+=\" ÔÜá´ŞĆKONFL\";}\n// COOLDOWN\nvar hasOn=a.indexOf(\"nibe_on\")>-1,hasOff=a.indexOf(\"nibe_off\")>-1;\nif((hasOn&&!h.nibeOn)||(hasOff&&h.nibeOn&&h.canOffNibe)){\nif(!h.nibeCdOk&&!h.fS){a=a.filter(function(x){return x!==\"nibe_on\"&&x!==\"nibe_off\";});reason+=\" ÔĆ│CD\";}\nelse flow.set(\"last_nibe_switch\",h.now);}\n// MUTEX: NIBE + patrony (relaxed for solarBoost mode)\nhasOn=a.indexOf(\"nibe_on\")>-1;hasOff=a.indexOf(\"nibe_off\")>-1;\nvar hasPOn=a.indexOf(\"p1_on\")>-1||a.indexOf(\"p2_on\")>-1||a.indexOf(\"p3_on\")>-1;\nvar patRun=h.p1||h.p2||h.p3;\nvar boostMod=h.solarBoost||false;\nvar _zapNakMod=h.isZapNak||false;\nif(hasOn&&(hasPOn||patRun)&&!boostMod&&!_zapNakMod){a=a.filter(function(x){return x!==\"nibe_on\";});reason+=\" ÔÜá´ŞĆMX:NIBE\";}\nif(hasPOn&&h.nibeOn&&!hasOff&&!boostMod&&!_zapNakMod){a=a.filter(function(x){return x!==\"p1_on\"&&x!==\"p2_on\"&&x!==\"p3_on\";});reason+=\" ÔÜá´ŞĆMX:PAT\";}\nif(hasPOn&&hasOff){var ni=a.indexOf(\"nibe_off\");var pi2=Math.min(a.indexOf(\"p1_on\")>-1?a.indexOf(\"p1_on\"):999,a.indexOf(\"p2_on\")>-1?a.indexOf(\"p2_on\"):999,a.indexOf(\"p3_on\")>-1?a.indexOf(\"p3_on\"):999);\nif(ni>pi2){a=a.filter(function(x){return x!==\"nibe_off\";});a.unshift(\"nibe_off\");}}\n// UX: HA uk├í┼że Ob─Ťhov├ę kdy┼ż strategie NIBE ale fyzicky jen ob─Ťh z n├ídr┼że (┬ž 8.4)\nvar fMod=(typeof flow.get(\"topeni_mod_active\")!==\"undefined\")?flow.get(\"topeni_mod_active\"):(global.get(\"topeni_mod\")||\"Vypnuto\");\nvar dispMod=fMod;\nif((fMod===\"NIBE\"||fMod===\"NIBE + Patrony\")&&!h.nibeOn&&h.obehOn){dispMod=\"Ob─Ťhov├ę\";}\nglobal.set(\"topeni_mod\",dispMod);\n// cerpadlo_topi\nvar isHtg=h.pumpSt.indexOf(\"Vyt├íp─Ťn├ş\")>-1,isTUV=h.pumpSt.indexOf(\"Oh┼Öev vody\")>-1||h.pumpSt.indexOf(\"TUV\")>-1;\nvar nBD=flow.get(\"nibe_block_discharge\")!==false;\nglobal.set(\"cerpadlo_topi\",(isHtg||isTUV)&&nBD);\n// Status\nvar st=[h.auto?(h.letni?\"L├ëTO\":\"ZIMA\"):\"OFF\",h.inT.toFixed(1)+\"/\"+h.effTgt.toFixed(1)+\"┬░C\",\"T:\"+h.tankT.toFixed(0),\"Lv\"+h.lvl];\nif(a.length>0)st.push(\"Ôćĺ\"+a.join(\",\"));\nvar col=\"green\";if(!h.auto)col=\"grey\";else if(h.inT<h.nouzT)col=\"red\";else if(h.isDraha||h.patTgt>0)col=\"yellow\";\nnode.status({fill:col,shape:\"dot\",text:st.join(\"|\")});\nvar aM=null;if(a.length>0)aM=a.map(function(x){return{action:x};});\nreturn[aM,{payload:{auto:h.auto,letni:h.letni,inT:h.inT,tgtT:h.effTgt,tankT:h.tankT,\nlvl:h.lvl,isDraha:h.isDraha,nibeOn:h.nibeOn,obehOn:h.obehOn,patrony:h.actPat,patTgt:h.patTgt,\nkrb:h.krb,soc:h.soc,prebytek:h.prebytek,actions:a,reason:reason}}];",
-    "outputs": 2,
-    "timeout": "",
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 830,
-    "y": 120,
-    "wires": [
-      [
-        "htg_action_switch"
-      ],
-      [
-        "htg_debug",
-        "htg_topeni_mod_change"
-      ]
-    ]
-  }
+        "rules": [
+            {
+                "t": "eq",
+                "v": "p1_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p2_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p3_off",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p1_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p2_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "p3_on",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 6,
+        "x": 640,
+        "y": 320,
+        "wires": [
+            [
+                "htg_svc_p1_off"
+            ],
+            [
+                "htg_svc_p2_off"
+            ],
+            [
+                "htg_svc_p3_off"
+            ],
+            [
+                "htg_svc_p1_on"
+            ],
+            [
+                "htg_svc_p2_on"
+            ],
+            [
+                "htg_svc_p3_on"
+            ]
+        ]
+    },
+    {
+        "id": "htg_svc_stop_auto_solar",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Stop auto solar",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_solar"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 420,
+        "y": 1120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "htg_svc_stop_auto_grid",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_exec_v2",
+        "name": "Stop auto grid",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.nastavuj_amperaci_chargeru_grid"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": false,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 420,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "pat_max_charge_svc",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60001",
+        "g": "htg_g_pat_korekce",
+        "name": "MaxChargePower",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "number.set_value",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "number.max_charge_power"
+        ],
+        "labelId": [],
+        "data": "{\"value\": {{payload.value}}}",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "number",
+        "service": "set_value",
+        "x": 420,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "rf_htg_read_001",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "1. ─îten├ş stavu topen├ş",
+        "func": "// [1/3] Topen├ş ÔÇö ─Źten├ş stavu a parametr┼»\n// GUARD: skip if HA states not yet loaded (NR restart race condition)\nvar _ha=global.get(\"homeassistant.homeAssistant.states\")||{};\nif(!_ha[\"sensor.battery_percent\"]){node.status({fill:\"red\",shape:\"ring\",text:\"ÔĆ│ HA states not ready\"});return null;}\nvar cfg=global.get(\"fve_config\")||{},pr=global.get(\"fve_prices_forecast\")||[];\nfunction gS(id){return(global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\")||{}).state;}\nfunction gF(id,d){var v=parseFloat(gS(id));return isNaN(v)?(d||0):v;}\nfunction gB(id){return gS(id)===\"on\";}\nvar h={cfg:cfg,\n    minTank:(cfg.topeni_min_teplota_nadrze!=null&&!isNaN(Number(cfg.topeni_min_teplota_nadrze)))?Number(cfg.topeni_min_teplota_nadrze):33,maxTank:gF(\"input_number.topeni_max_teplota_nadrze\",50),\n    coldTank:cfg.topeni_chladna_nadrz||40,\n    nocSniz:cfg.topeni_nocni_snizeni||0.5,highSolSniz:cfg.topeni_high_sol_snizeni||0.2,nocOd:cfg.topeni_nocni_od||22,nocDo:cfg.topeni_nocni_do||6,\n    nouzT:cfg.topeni_nouzova_teplota||18,minPretok:cfg.topeni_min_pretok_patron_w||3000,\n    patW:cfg.topeni_patron_faze_w||3000,minSocPat:cfg.topeni_min_soc_patron||90,\n    DRAHA:cfg.prah_draha_energie||12,bezpPokles:cfg.topeni_bezpecny_pokles||0.7,\n    hystChlaz:cfg.topeni_hystereze_chlazeni||1.0,solForecast:cfg.topeni_solar_forecast_kwh||30,\n    solOverride:cfg.topeni_solar_override_w||8000,letni:cfg.letni_rezim===true,\n    LEVNA:cfg.prah_levna_energie||4,\n    maxTankPat:gF(\"input_number.topeni_max_teplota_patron\",cfg.topeni_max_teplota_patron||53),\n    auto:gB(\"input_boolean.automatizovat_topeni\"),tgtT:gF(\"input_number.nastavena_teplota_v_dome\",22),\n    inT:gF(\"sensor.hp2551ae_pro_v2_1_0_indoor_temperature\",20),outT:gF(\"sensor.hp2551ae_pro_v2_1_0_outdoor_temperature\",10),\n    tankT:gF(\"sensor.teplota_smesovac_teplota\",35),dm:gF(\"sensor.nibe_degree_minutes\",0),\n    soc:gF(\"sensor.battery_percent\",50),prebytek:gF(\"sensor.rozdil_vyroby_a_spotreby\",0),\n    comp:gB(\"binary_sensor.nibe_kompresory_aktivni_binarni\"),pumpSt:gS(\"sensor.nibe_aktualni_realny_stav\")||\"\",\n    krb:gB(\"input_boolean.topi_se_v_krbu\"),coolEn:gB(\"input_boolean.chlazeni\"),\n    autoHlad:gB(\"input_boolean.auto_ma_hlad\"),\n    autoNabiji:gB(\"input_boolean.nastavuj_amperaci_chargeru_solar\")||gB(\"input_boolean.nastavuj_amperaci_chargeru_grid\"),\n    nibeOn:gB(\"switch.nibe_topeni\"),obehOn:gB(\"switch.teplota_smesovac\"),\n    p1:gB(\"switch.patrona_faze_1\"),p2:gB(\"switch.patrona_faze_3_2\"),p3:gB(\"switch.patrona_faze_3\"),\n    ventil:gB(\"switch.bazen_ventil_smesovac\"),coolOn:gB(\"switch.nibe_chlazeni\"),\n    solW:gF(\"sensor.vyroba_fve\",0),gridLostRaw:gF(\"sensor.grid_lost_ciselny\",0)};\nh.gridLost=h.gridLostRaw>=2;h.nibePeak=cfg.nibe_peak_w||14000;\nvar hr=new Date().getHours(),now=Date.now();\nh.hr=hr;h.now=now;\nh.nibeCdMs=(cfg.nibe_cooldown_min||3)*60000;\nh.lastNibeSw=flow.get(\"last_nibe_switch\")||0;\nh.nibeCdOk=(now-h.lastNibeSw)>=h.nibeCdMs;\n// Plan + price info\nvar _pa=(global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\")||{}).attributes||{};\nvar plan=global.get(\"fve_plan\")||{};\nh.solS=(plan&&plan.solarStartHour)||9;h.solE=(plan&&plan.solarEndHour)||17;\nh.isSol=hr>=h.solS&&hr<h.solE;h.solLeft=h.isSol?(h.solE-hr):0;\nh.planMode=(plan&&plan.currentMode)||\"normal\";\nh.balActive=_pa.current_mode===\"Balancov├ín├ş\"||global.get(\"balancing_active\")||false;\nh.balSolDump=global.get(\"balancing_solar_dump\")||false;\nh.balBlockPump=global.get(\"balancing_block_pump\")||false;\n// Price level ÔÇö cross-day ranking (z├íkon 8.2: analogie k m├│du ┼íet┼Öen├ş)\nvar _planArr=_pa.plan||[];\nif(_planArr.length>0){var _ps=_planArr.slice().sort(function(a,b){return(a.priceBuy||99)-(b.priceBuy||99);});\nvar _N=_ps.length;for(var _r=0;_r<_N;_r++){_ps[_r]._xLvl=Math.ceil((_r+1)/_N*24);}\nh.lvl=99;for(var _q=0;_q<_ps.length;_q++){if(_ps[_q].hour===hr&&_ps[_q].offset!==undefined){h.lvl=_ps[_q]._xLvl;break;}}\nif(h.lvl===99){for(var i=0;i<pr.length;i++)if(pr[i].hour===hr&&(pr[i].minute===0||pr[i].minute===undefined)){h.lvl=pr[i].levelCheapestHourBuy||99;break;}}}\nelse{h.lvl=99;for(var i=0;i<pr.length;i++)if(pr[i].hour===hr&&(pr[i].minute===0||pr[i].minute===undefined)){h.lvl=pr[i].levelCheapestHourBuy||99;break;}}\nif(h.lvl===99)h.lvl=gF(\"input_number.levelcheapesthourbuy\",12);\n// Ultra levna\nvar _bp=99,_sp=99,_pl=_pa.plan||[];\nfor(var j=0;j<_pl.length;j++)if(_pl[j].hour===hr&&_pl[j].offset!==undefined){_bp=parseFloat(_pl[j].priceBuy)||99;_sp=parseFloat(_pl[j].priceSell)||99;break;}\nif(_bp>=99&&pr.length>0)for(var k=0;k<pr.length;k++)if(pr[k].hour===hr&&(pr[k].minute===0||pr[k].minute===undefined)){_bp=parseFloat(pr[k].priceCZKhourBuy)||99;_sp=parseFloat(pr[k].priceCZKhourProd)||99;break;}\nvar UL=cfg.prah_ultra_levna_nakup||1.0;\nh.ultraL=h.isSol&&_bp<UL&&_sp<=0;h.cantExport=h.isSol&&_sp<=0;h.sellPrice=_sp;var _lastSolH=-1;for(var si=0;si<_pl.length;si++){if(_pl[si].isSolarHour)_lastSolH=_pl[si].hour;}h.lastSolarHour=_lastSolH;\n// Solar forecast\nvar solSrc=(cfg.solar_forecast_source||\"VICTRON\").toUpperCase();\nvar eZit=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_tomorrow_3\":\"input_number.predpoved_solarni_vyroby_zitra\";\nh.solFcTom=gF(eZit,0);h.bigSolTom=h.solFcTom>=h.solForecast;\nvar eDnes=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_today_3\":\"input_number.predpoved_solarni_vyroby_dnes\";\nh.solFcDnes=gF(eDnes,0);h.highSolDay=h.solFcDnes>=(cfg.topeni_solar_high_day_kwh||50);\nvar eZbv=(solSrc===\"OPEN_METEO\")?\"sensor.energy_production_today_remaining_3\":\"input_number.zbyvajici_solarni_vyroba_dnes\";\nh.zbSolar=gF(eZbv,0)*1000;h.kapBat=(cfg.kapacita_baterie_kwh||28)*1000;\nh.solMarginH=cfg.topeni_solar_margin_hours||2;\n// Odlo┼żen├ş NIBE do p┼Ö├ş┼ít├ş hodiny se z├íkazem p┼Öetok┼» (n├şzk├í predikce sol├íru z├ştra) ÔÇö nouzov├í teplota m├í p┼Öednost (┬ž1.1)\nvar _maxSolZakDef = (cfg.topeni_zakaz_pretok_defer_max_sol_kwh != null && !isNaN(Number(cfg.topeni_zakaz_pretok_defer_max_sol_kwh)))\n    ? Number(cfg.topeni_zakaz_pretok_defer_max_sol_kwh) : (cfg.topeni_solar_forecast_kwh || 30);\nh.zakazDeferExtraCold = (cfg.topeni_zakaz_pretok_defer_safe_margin_extra != null && !isNaN(Number(cfg.topeni_zakaz_pretok_defer_safe_margin_extra)))\n    ? Number(cfg.topeni_zakaz_pretok_defer_safe_margin_extra) : 0.2;\nvar _plZ = _pa.plan || [];\nvar _minOffZak = null;\nfor (var _zix = 0; _zix < _plZ.length; _zix++) {\n    var _rwz = _plZ[_zix];\n    if (_rwz.mode !== \"zakaz_pretoku\") continue;\n    var _ofz = _rwz.offset;\n    if (_ofz === undefined || _ofz <= 0) continue;\n    if (_minOffZak === null || _ofz < _minOffZak) _minOffZak = _ofz;\n}\nh.deferNibeZakazWait = !h.letni && h.solFcTom < _maxSolZakDef && _minOffZak !== null && h.planMode !== \"zakaz_pretoku\";\nh.nextZakazPretokOffset = _minOffZak;\nmsg.h=h;\nnode.status({fill:\"blue\",shape:\"dot\",text:h.inT.toFixed(1)+\"/\"+h.tgtT+\"┬░C T:\"+h.tankT.toFixed(0)+\" Lv\"+h.lvl});\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 120,
+        "wires": [
+            [
+                "rf_htg_decide2"
+            ]
+        ]
+    },
+    {
+        "id": "rf_htg_decide2",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "2. Rozhodov├ín├ş topen├ş",
+        "func": "// [2/3] Topen├ş ÔÇö rozhodovac├ş logika\nvar h = msg.h, cfg = h.cfg;\n\n// === V├ŁPO─îTY STAVU ===\nh.isDraha = (h.lvl >= h.DRAHA);  // §8.3 bod 2: drahe = dle levelu, bez vyjimek\nh.isNight = (h.hr >= h.nocOd || h.hr < h.nocDo);\nh.effTgt = h.isNight\n    ? (h.tgtT - h.nocSniz)\n    : (h.highSolDay && h.isSol && !h.autoHlad && !h.autoNabiji ? (h.tgtT - h.highSolSniz) : h.tgtT);\nh.actPat = (h.p1 ? 1 : 0) + (h.p2 ? 1 : 0) + (h.p3 ? 1 : 0);\nh.availPat = h.prebytek + h.actPat * h.patW;\nh.pumpWork = h.pumpSt.indexOf(\"Klidov\") === -1 && h.pumpSt !== \"\";\nh.canOffNibe = !h.comp && !h.pumpWork;\n\nvar a = [], reason = \"\", patTgt = 0, shutD = flow.get(\"shutdown_done\") || false;\n\n// === AUTO OFF ===\nif (!h.auto) {\n    reason = \"Auto OFF\";\n    h.actions = a; h.reason = reason; h.patTgt = 0; h.fS = false; msg.h = h; return msg;\n}\nelse {\n    var fS = false;\n\n    // === L├ëTO ===\n    if (h.letni) {\n        var sDone = flow.get(\"summer_setup_done\") || false;\n        if (!sDone) {\n            if (h.canOffNibe) a.push(\"nibe_on\");\n            if (h.obehOn) a.push(\"obehove_off\");\n            if (h.p1) a.push(\"p1_off\");\n            if (h.p2) a.push(\"p2_off\");\n            if (h.p3) a.push(\"p3_off\");\n            flow.set(\"summer_setup_done\", true);\n            reason = \"L├ęto init\";\n        }\n        if (h.coolEn) {\n            if (!h.coolOn && h.inT > h.effTgt + h.hystChlaz) a.push(\"cool_on\");\n            else if (h.coolOn && h.inT < h.effTgt) a.push(\"cool_off\");\n            reason = \"L├ęto \" + (h.coolOn ? \"chlaz\" : \"\");\n        } else {\n            if (h.coolOn) a.push(\"cool_off\");\n            reason = \"L├ęto\";\n        }\n    }\n    // === ZIMA ===\n    else {\n        flow.set(\"summer_setup_done\", false);\n        if (h.ventil) a.push(\"ventil_off\");\n        if (h.coolOn) a.push(\"cool_off\");\n\n        var mod = flow.get(\"topeni_mod_active\") || \"Vypnuto\";\n        var HYST = cfg.topeni_hystereze || 0.2;\n        var tankOk = h.tankT >= h.minTank, needH = h.nibeOn ? (h.inT < h.effTgt) : (h.inT <= h.effTgt - HYST);\n        var dumpR = h.ultraL || h.cantExport;\n        var _arbM=((global.get(\"energy_arbiter\")||{}).mode)||\"\";\n        var isZapNak=_arbM===\"zaporna_nakupni_cena\";\n        if(isZapNak){dumpR=true;h.isDraha=false;h.bigSolTom=false;h.highSolDay=false;h.lvl=1;}\n\n        // === PATRONY ÔÇö podm├şnky ===\n        var MSP = cfg.topeni_patron_min_solar_w || 5000, fveM = (global.get(\"homeassistant.homeAssistant.states['sensor.fve_plan']\") || {}).attributes;\n        fveM = (fveM && fveM.current_mode) || h.planMode;\n        var DRAIN_P = cfg.topeni_patron_drain_soc_prah || 95;\n        var patSolOk = h.solW >= MSP || fveM === \"zakaz_pretoku\" || h.soc >= DRAIN_P || isZapNak;\n        var PMSP = cfg.topeni_patron_max_sell_price || 3, patSellOk = h.sellPrice <= PMSP || h.sellPrice >= 99;\n        var drainBypass = h.soc >= DRAIN_P; var cantSell = h.planMode === \"zakaz_pretoku\";\n\n        var patMohou = ((patSellOk || drainBypass || cantSell)\n            && patSolOk\n            && (!h.balActive || h.balSolDump)\n            && h.soc >= h.minSocPat\n            && !h.autoHlad && !h.autoNabiji\n            && h.tankT < h.maxTankPat\n            && (!h.gridLost || h.solW > 0))\n            || (isZapNak && h.tankT < h.maxTankPat);\n\n        var patMohouExceptSoc = ((patSellOk || drainBypass || cantSell)\n            && patSolOk\n            && (!h.balActive || h.balSolDump)\n            && !h.autoHlad && !h.autoNabiji\n            && h.tankT < h.maxTankPat\n            && (!h.gridLost || h.solW > 0))\n            || (isZapNak && h.tankT < h.maxTankPat);\n\n        // === PATRONY ÔÇö c├şlov├Ż po─Źet ===\n        var drainStart = drainBypass && (dumpR || fveM === \"zakaz_pretoku\");\n        if (patMohou && h.actPat === 0) {\n            // ┬ž8.5: drainBypass (SOC>=DRAIN_P) startuje 1f i bez 3kW p┼Öebytku ÔÇö vyb├şjet baterii\n            if (h.availPat >= h.minPretok || drainStart || drainBypass) { patTgt = 1; flow.set(\"pat_change_cooldown\", 0); }\n        }\n        else if (patMohou && h.actPat > 0) {\n            patTgt = (h.availPat < h.minPretok && !drainStart) ? 0 : h.actPat;\n        }\n        if(isZapNak && patMohou) patTgt=3;\n        if(!isZapNak && h.soc>=DRAIN_P && fveM===\"zakaz_pretoku\" && patMohou) patTgt=3;\n\n        // === M├ôD TOPEN├Ź ===\n        var _safeT = h.effTgt - (cfg.topeni_bezpecny_pokles || 0.7), _canDeferHSD = h.inT >= _safeT;\n        var PM = 0.2, tGap = h.effTgt - h.inT;\n        var hToLastSol = h.lastSolarHour >= 0 ? (h.lastSolarHour - h.hr) : 99, finalHrs = cfg.topeni_final_hours || 3;\n        var patSocR = h.soc >= (h.minSocPat - 15), bNeedWh = Math.max(0, (h.minSocPat - h.soc) / 100 * h.kapBat);\n        var consEst = h.solLeft * 1500, patReal = dumpR || (patSocR && h.zbSolar > (bNeedWh + consEst) * 1.5);\n\n        if (h.isSol && tGap <= PM && needH && patReal && patMohou && hToLastSol > finalHrs) mod = \"Patrony\";\n        else if (tGap > PM && needH && h.highSolDay && _canDeferHSD && !dumpR && patMohou) mod = \"Vypnuto\"; // ┬ž 8.3: odkl├ídej NIBE pouze pokud patrony mohou re├íln─Ť jet\n        else if (tGap > PM && needH && h.deferNibeZakazWait && h.inT >= (h.effTgt - h.bezpPokles - (h.zakazDeferExtraCold||0.2)) && h.inT >= h.nouzT && !dumpR && !isZapNak) mod = \"Vypnuto\"; // ─Źek├ín├ş na hodinu se z├íkazem p┼Öetok┼» (n├şzk├Ż sol├ír z├ştra)\n        else if (tGap >= PM && needH) mod = \"NIBE\";\n        else if (!needH && patMohou) {\n            var patronyMaSmysl = h.isSol || h.solW >= MSP || fveM === \"zakaz_pretoku\" || dumpR;\n            if (patronyMaSmysl) mod = \"Patrony\";\n            else { mod = \"Vypnuto\"; patTgt = 0; }\n        }\n        else if (!needH && dumpR && h.tankT < h.maxTank && h.soc >= (cfg.topeni_dump_solar_soc || 85) && !patMohouExceptSoc && !h.autoHlad && h.solW >= (cfg.topeni_solar_override_w || 8000)) mod = \"NIBE\";\n        // Z├íkon 8.2+8.3.5: proaktivn├ş oh┼Öev n├ídr┼że za levnou cenu p┼Öi n├şzk├ęm solaru\n        else if (!needH && h.tankT < h.coldTank && !h.highSolDay && cheapestTankHour()) mod = \"NIBE\";\n        // Z├íkon 8.2: proaktivn├ş oh┼Öev n├ídr┼że na noc za nejlevn─Ťj┼í├ş cenu\n        else if (!needH && h.isNight && h.tankT < h.coldTank && !h.bigSolTom && !h.highSolDay && cheapestTankHour()) mod = \"NIBE\";\n        else if (!needH) mod = \"Vypnuto\";\n        else mod = \"NIBE\";\n\n        // 3h pravidlo: patrony Ôćĺ NIBE pokud do konce sol├írn├ş v├Żroby zb├Żv├í ÔëĄ finalHrs\n        var TANK_3H = cfg.topeni_patron_3h_min_tank || 35;\n        if (mod === \"Patrony\" && h.isSol && hToLastSol <= finalHrs && h.tankT < TANK_3H) mod = \"NIBE\";\n\n        // === NIBE + Patrony ÔÇö kombinovan├Ż m├│d ===\n        var BOOST_SELL = cfg.topeni_boost_max_sell_price || 2;\n        var solarBoostOk = patMohou && h.availPat >= h.minPretok\n            && (h.cantExport || h.sellPrice <= BOOST_SELL || h.soc >= DRAIN_P);\n        if (mod === \"NIBE\" && (solarBoostOk || isZapNak)) mod = \"NIBE + Patrony\";\n\n        // Z├íkon 8.5: posledn├ş sol├írn├ş hodina + zb├Żvaj├şc├ş solar < 4kWh + bez z├íkazu p┼Öetok┼» Ôćĺ patrony OFF (baterie na 100%)\n        var PAT_LAST_SOL_KWH = cfg.topeni_patron_last_sol_min_kwh || 4;\n        var LAST_SOL_HRS = cfg.posledni_solarni_hodiny || 2;\n        if ((mod === \"Patrony\" || mod === \"NIBE + Patrony\") && h.isSol && hToLastSol < LAST_SOL_HRS && h.zbSolar < PAT_LAST_SOL_KWH * 1000 && !dumpR) {\n            mod = mod === \"NIBE + Patrony\" ? \"NIBE\" : \"Vypnuto\";\n            patTgt = 0;\n        }\n\n        flow.set(\"topeni_mod_active\", mod);\n        h.solarBoost = (mod === \"NIBE + Patrony\");\n\n        // === PATRONY ÔÇö v├Żstup ===\n        var nibeBlkMod = mod === \"Patrony\" || mod === \"Vypnuto\", patBlkMod = mod === \"NIBE\";\n        // NIBE + Patrony: kompresor/─Źerpadlo b─Ť┼ż├ş Ôćĺ patrony MUS├Ź b├Żt OFF\n        if (h.solarBoost && (h.comp || h.pumpWork) && !isZapNak) {\n            patTgt = 0;\n            if (h.p1) a.push(\"p1_off\"); if (h.p2) a.push(\"p2_off\"); if (h.p3) a.push(\"p3_off\");\n        }\n        // ┬ž8.5/┬ž4.10: V drain modech (zakaz_pretoku+SOC>=95% nebo z├íporn├í n├íkupn├ş cena)\n        // korekce ┼Ö├şd├ş svou vlastn├ş eskalaci ÔÇö manager d├íl escaluje kdy┼ż patTgt > actPat.\n        var managerEscalates = ((!isZapNak && h.soc >= DRAIN_P && fveM === \"zakaz_pretoku\") || isZapNak) && patTgt > h.actPat;\n        var korekce = h.actPat > 0 && patMohou && !patBlkMod && !managerEscalates;\n        if (!korekce) {\n            var pw = [patTgt >= 1 && !patBlkMod, patTgt >= 2 && !patBlkMod, patTgt >= 3 && !patBlkMod];\n            if (pw[0] !== h.p1) a.push(pw[0] ? \"p1_on\" : \"p1_off\");\n            if (pw[1] !== h.p2) a.push(pw[1] ? \"p2_on\" : \"p2_off\");\n            if (pw[2] !== h.p3) a.push(pw[2] ? \"p3_on\" : \"p3_off\");\n        }\n\n        // === NIBE ÔÇö rozhodov├ín├ş ON/OFF ===\n        var safeT = h.effTgt - h.bezpPokles, canDefer = h.inT >= safeT, solDM = cfg.topeni_solar_defer_margin || 0.2, canDeferSol = h.inT >= (h.effTgt - solDM), nibeBlkDch = true;\n        var finalSolWh = (cfg.topeni_final_solar_kwh || 20) * 1000, hasSolRes = h.zbSolar > finalSolWh;\n        var mustHeatByPrice = !h.letni && h.isSol && hToLastSol > 0 && hToLastSol <= finalHrs && needH;\n        var mustHeatFinal = !h.letni && h.isSol && h.lastSolarHour >= 0 && needH && hToLastSol <= 0;\n        var gridOk = !h.gridLost || (h.gridLost && h.solW >= h.nibePeak);\n\n        // Z├íkon 8.2+8.3.5: je aktu├íln├ş hodina nejlevn─Ťj┼í├ş pro oh┼Öev n├ídr┼że?\n        // Porovn├ív├í cenu s hodinami p┼Öed sol├írn├ş v├Żrobou\n        function cheapestTankHour() {\n            // ZAKON 8.2: \"VZDY TOPIME ZA CO NEJVYHODNEJSICH PODMINEK - CO NEJNIZSI CENY\"\n            // Porovnat aktualni hodinu se VSEMI budoucimi hodinami dnes do konce solarniho okna.\n            // V solarni hodine: scan do solE (jine solarni hodiny mohou byt levnejsi)\n            // Mimo solarni okno: scan do solS (pred solarem)\n            var fc = global.get(\"fve_prices_forecast\") || [];\n            var bestLvl = h.lvl;\n            var scanEnd = h.isSol ? h.solE : h.solS;\n            for (var i = 0; i < fc.length; i++) {\n                var p = fc[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if (p.hour >= scanEnd) break;\n                var pLvl = p.levelCheapestHourBuy || 99;\n                if (pLvl < bestLvl) return false; // levnejsi budouci hodina existuje -> pockat\n            }\n            return true; // toto je nejlevnejsi dostupna hodina\n        }\n\n        function cheaperAhead() {\n            for (var i = 0; i < (global.get(\"fve_prices_forecast\") || []).length; i++) {\n                var p = (global.get(\"fve_prices_forecast\") || [])[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if ((p.levelCheapestHourBuy || 99) < h.lvl) return true;\n            }\n            return false;\n        }\n        function cheaperBeforeSol() {\n            for (var i = 0; i < (global.get(\"fve_prices_forecast\") || []).length; i++) {\n                var p = (global.get(\"fve_prices_forecast\") || [])[i];\n                if (p.minute !== 0) continue;\n                if (p.hour <= h.hr) continue;\n                if (p.hour >= h.lastSolarHour) continue;\n                if ((p.levelCheapestHourBuy || 99) < h.lvl) return true;\n            }\n            return false;\n        }\n\n        var chAhead = cheaperAhead(), chBeforeSol = cheaperBeforeSol(), solCovers = h.isSol && h.prebytek >= h.solOverride;\n        var nibeWant = needH || (!h.isDraha && h.tankT < h.maxTank) || (isZapNak && h.tankT < h.maxTank);\n\n        if (!h.ultraL && !isZapNak && h.autoNabiji && nibeWant && !nibeBlkMod && h.solW < (cfg.topeni_solar_override_w || 8000)) a.push(\"stop_auto_nabijeni\");\n\n        if (!gridOk) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.krb) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.tankT > h.maxTank) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (nibeBlkMod) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.balActive && !needH) {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n        else if (h.isDraha) {\n            // §8.3 bod 2+7: v DRAHE hodine NIBE pouze pri:\n            //   (a) solar >= topeni_solar_override_w (free energy) NEBO\n            //   (b) OPRAVDU ZIMA v dome (inT < effTgt - bezpPokles, default -0.7°C)\n            var opravduZima = h.inT < (h.effTgt - h.bezpPokles);\n            if (h.solW >= h.solOverride) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                nibeBlkDch = false;\n                reason += \" SOL\";\n            } else if (opravduZima) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                reason += \" ZIMA\" + h.inT.toFixed(1);\n                // nibeBlkDch zustava true — dobijime ze site/baterie, ale safety first\n            } else {\n                if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                reason += \" DRAHA-OFF\";\n            }\n        }\n        else if (nibeWant) {\n            var _zStop = h.deferNibeZakazWait && h.inT >= (h.effTgt - h.bezpPokles - (h.zakazDeferExtraCold||0.2)) && h.inT >= h.nouzT && !isZapNak;\n            if (_zStop) {\n                if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                reason += \"|─îek├ímZP\";\n            } else {\n\n            var dumpF = dumpR && !needH && h.soc >= (cfg.topeni_dump_solar_soc || 85)\n                && h.tankT < h.maxTank && !patMohouExceptSoc && !h.autoHlad\n                && h.solW >= (cfg.topeni_solar_override_w || 8000);\n            if (dumpF) {\n                if (!h.nibeOn) a.push(\"nibe_on\");\n                nibeBlkDch = false;\n            }\n            else {\n                var planCh = h.planMode === \"setrit\" && h.lvl <= h.LEVNA;\n                if (!planCh && !solCovers && h.bigSolTom && (!needH || canDeferSol) && !mustHeatFinal && !mustHeatByPrice) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (!planCh && !solCovers && h.highSolDay && (!needH || canDeferSol) && !mustHeatFinal && !mustHeatByPrice) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (!planCh && !solCovers && (mustHeatByPrice ? chBeforeSol : chAhead) && (!needH || canDefer) && !mustHeatFinal) {\n                    if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n                }\n                else if (h.solW >= h.solOverride) {\n                    if (!h.nibeOn) a.push(\"nibe_on\");\n                    nibeBlkDch = false;\n                }\n                else {\n                    if (!h.nibeOn) a.push(\"nibe_on\");\n                    nibeBlkDch = h.soc <= 90;\n                }\n            }\n        \n            }\n}\n        else {\n            if (h.nibeOn && h.canOffNibe) a.push(\"nibe_off\");\n        }\n\n        if (dumpR && !needH && h.tankT < h.maxTank) nibeBlkDch = false;\n        flow.set(\"nibe_block_discharge\", nibeBlkDch);\n\n        // === OB─ÜHOV├ë ─îERPADLO ===\n        if (!h.krb) {\n            var oTgt = h.isNight ? h.effTgt : h.tgtT, nHO = h.inT < oTgt;\n            if (h.balBlockPump) {\n                if (h.obehOn) a.push(\"obehove_off\");\n            }\n            else if (tankOk && nHO) a.push(\"obehove_on\");\n            else {\n                if (h.obehOn) a.push(\"obehove_off\");\n            }\n        }\n\n        // === REASON ===\n        reason = [\n            h.isDraha ? \"DRAH├ü(Lv\" + h.lvl + \")\" : \"Lv\" + h.lvl,\n            \"In:\" + h.inT.toFixed(1) + \"/\" + h.effTgt.toFixed(1),\n            \"Tnk:\" + h.tankT.toFixed(0)\n        ].join(\"|\");\n        if (patTgt > 0) reason += \"|PAT:\" + patTgt;\n        if (h.isSol) reason += \"|ÔśÇ\" + h.solLeft + \"h\";\n    }\n}\n\nh.actions = a;\nh.reason = reason;\nh.patTgt = patTgt;\nh.fS = flow.get(\"shutdown_done\") === false && h.auto;\nh.isZapNak = isZapNak || false;\nmsg.h = h;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 120,
+        "wires": [
+            [
+                "rf_htg_output3"
+            ]
+        ]
+    },
+    {
+        "id": "rf_htg_output3",
+        "type": "function",
+        "z": "f1e2d3c4b5a60001",
+        "g": "heating_g_main_v2",
+        "name": "3. Pojistky + v├Żstup topen├ş",
+        "func": "// [3/3] Topen├ş ÔÇö bezpe─Źnostn├ş pojistky + v├Żstup\nvar h=msg.h,a=h.actions.slice(),reason=h.reason;\n// OCHRANA: nibe_off nelze pokud pracuje\nif(a.indexOf(\"nibe_off\")>-1&&!h.canOffNibe){a=a.filter(function(x){return x!==\"nibe_off\";});reason+=\" ÔÜá´ŞĆNIBE_PROT\";}\n// OCHRANA: nibe_on + nibe_off\nif(a.indexOf(\"nibe_on\")>-1&&a.indexOf(\"nibe_off\")>-1){a=a.filter(function(x){return x!==\"nibe_on\"&&x!==\"nibe_off\";});reason+=\" ÔÜá´ŞĆKONFL\";}\n// COOLDOWN\nvar hasOn=a.indexOf(\"nibe_on\")>-1,hasOff=a.indexOf(\"nibe_off\")>-1;\nif((hasOn&&!h.nibeOn)||(hasOff&&h.nibeOn&&h.canOffNibe)){\nif(!h.nibeCdOk&&!h.fS){a=a.filter(function(x){return x!==\"nibe_on\"&&x!==\"nibe_off\";});reason+=\" ÔĆ│CD\";}\nelse flow.set(\"last_nibe_switch\",h.now);}\n// MUTEX: NIBE + patrony (relaxed for solarBoost mode)\nhasOn=a.indexOf(\"nibe_on\")>-1;hasOff=a.indexOf(\"nibe_off\")>-1;\nvar hasPOn=a.indexOf(\"p1_on\")>-1||a.indexOf(\"p2_on\")>-1||a.indexOf(\"p3_on\")>-1;\nvar patRun=h.p1||h.p2||h.p3;\nvar boostMod=h.solarBoost||false;\nvar _zapNakMod=h.isZapNak||false;\nif(hasOn&&(hasPOn||patRun)&&!boostMod&&!_zapNakMod){a=a.filter(function(x){return x!==\"nibe_on\";});reason+=\" ÔÜá´ŞĆMX:NIBE\";}\nif(hasPOn&&h.nibeOn&&!hasOff&&!boostMod&&!_zapNakMod){a=a.filter(function(x){return x!==\"p1_on\"&&x!==\"p2_on\"&&x!==\"p3_on\";});reason+=\" ÔÜá´ŞĆMX:PAT\";}\nif(hasPOn&&hasOff){var ni=a.indexOf(\"nibe_off\");var pi2=Math.min(a.indexOf(\"p1_on\")>-1?a.indexOf(\"p1_on\"):999,a.indexOf(\"p2_on\")>-1?a.indexOf(\"p2_on\"):999,a.indexOf(\"p3_on\")>-1?a.indexOf(\"p3_on\"):999);\nif(ni>pi2){a=a.filter(function(x){return x!==\"nibe_off\";});a.unshift(\"nibe_off\");}}\n// UX: HA uk├í┼że Ob─Ťhov├ę kdy┼ż strategie NIBE ale fyzicky jen ob─Ťh z n├ídr┼że (┬ž 8.4)\nvar fMod=(typeof flow.get(\"topeni_mod_active\")!==\"undefined\")?flow.get(\"topeni_mod_active\"):(global.get(\"topeni_mod\")||\"Vypnuto\");\nvar dispMod=fMod;\nif((fMod===\"NIBE\"||fMod===\"NIBE + Patrony\")&&!h.nibeOn&&h.obehOn){dispMod=\"Ob─Ťhov├ę\";}\nglobal.set(\"topeni_mod\",dispMod);\n// cerpadlo_topi\nvar isHtg=h.pumpSt.indexOf(\"Vyt├íp─Ťn├ş\")>-1,isTUV=h.pumpSt.indexOf(\"Oh┼Öev vody\")>-1||h.pumpSt.indexOf(\"TUV\")>-1;\nvar nBD=flow.get(\"nibe_block_discharge\")!==false;\nglobal.set(\"cerpadlo_topi\",(isHtg||isTUV)&&nBD);\n// Status\nvar st=[h.auto?(h.letni?\"L├ëTO\":\"ZIMA\"):\"OFF\",h.inT.toFixed(1)+\"/\"+h.effTgt.toFixed(1)+\"┬░C\",\"T:\"+h.tankT.toFixed(0),\"Lv\"+h.lvl];\nif(a.length>0)st.push(\"Ôćĺ\"+a.join(\",\"));\nvar col=\"green\";if(!h.auto)col=\"grey\";else if(h.inT<h.nouzT)col=\"red\";else if(h.isDraha||h.patTgt>0)col=\"yellow\";\nnode.status({fill:col,shape:\"dot\",text:st.join(\"|\")});\nvar aM=null;if(a.length>0)aM=a.map(function(x){return{action:x};});\nreturn[aM,{payload:{auto:h.auto,letni:h.letni,inT:h.inT,tgtT:h.effTgt,tankT:h.tankT,\nlvl:h.lvl,isDraha:h.isDraha,nibeOn:h.nibeOn,obehOn:h.obehOn,patrony:h.actPat,patTgt:h.patTgt,\nkrb:h.krb,soc:h.soc,prebytek:h.prebytek,actions:a,reason:reason}}];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 120,
+        "wires": [
+            [
+                "htg_action_switch"
+            ],
+            [
+                "htg_debug",
+                "htg_topeni_mod_change"
+            ]
+        ]
+    }
 ]
