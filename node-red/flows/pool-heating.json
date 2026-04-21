@@ -87,7 +87,7 @@
         "id": "pool_g_exec_nibe",
         "type": "group",
         "z": "f1e2d3c4b5a60002",
-        "name": "Exekuce: NIBE (STUB — B3)",
+        "name": "NIBE logic + exec (§11.6)",
         "style": {
             "stroke": "#999999",
             "fill": "#f5e0ff",
@@ -100,8 +100,170 @@
         ],
         "x": 14,
         "y": 799,
-        "w": 327,
-        "h": 82
+        "w": 1100,
+        "h": 162
+    },
+    {
+        "id": "pool_nibe_inject_60s",
+        "type": "inject",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "tick 60s",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "6",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 840,
+        "wires": [
+            [
+                "pool_nibe_planner"
+            ]
+        ]
+    },
+    {
+        "id": "pool_nibe_planner",
+        "type": "function",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "POOL NIBE planner (§11.6.1)",
+        "func": "// §11.6.1 PLANOVAC NIBE->bazen pro bazen_na_max (case 3)\n// Vybere nejlevnejsich N hodin v horizontu podle pocitu potrebnych cyklu.\n// Nastavi flow.pool_nibe_planned_now = true pokud aktualni hodina je v top-N.\nconst cfg = global.get(\"fve_config\") || {};\nconst planData = global.get(\"fve_plan\") || {};\nconst plan = Array.isArray(planData.plan) ? planData.plan : [];\n\nfunction getFloat(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    const v = parseFloat(s.state);\n    return isNaN(v) ? def : v;\n}\nfunction getBool(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    return s.state === \"on\";\n}\n\nconst poolNaMax = getBool(\"input_boolean.bazen_na_max\", false);\nif (!poolNaMax || plan.length === 0) {\n    flow.set(\"pool_nibe_planned_now\", false);\n    flow.set(\"pool_nibe_planned_hours\", []);\n    node.status({fill: \"grey\", shape: \"ring\", text: \"bazen_na_max=off\"});\n    return msg;\n}\n\nconst vody = getFloat(\"sensor.hp2551ae_pro_v2_1_0_temperature_1\", 20);\nconst cil = getFloat(\"input_number.pozadovana_teplota_v_bazenu\", 28);\nconst deltaT = Math.max(0, cil - vody);\nconst cyklyPerDeg = cfg.pool_cykly_per_degree || 2;\nconst cyklesNeeded = Math.ceil(deltaT * cyklyPerDeg);\nif (cyklesNeeded === 0) {\n    flow.set(\"pool_nibe_planned_now\", false);\n    flow.set(\"pool_nibe_planned_hours\", []);\n    node.status({fill: \"green\", shape: \"ring\", text: \"cil dosazen \" + vody.toFixed(1) + \"°\"});\n    return msg;\n}\n\nconst horizon = Math.min(cfg.pool_nibe_plan_horizon_h || 24, plan.length);\nconst window = plan.slice(0, horizon);\nconst sorted = window\n    .map((p, idx) => ({ idx, price: parseFloat(p.priceBuy) }))\n    .filter(x => !isNaN(x.price))\n    .sort((a, b) => a.price - b.price);\nconst topIdxs = sorted.slice(0, cyklesNeeded).map(x => x.idx);\nconst plannedNow = topIdxs.includes(0);\nflow.set(\"pool_nibe_planned_hours\", topIdxs);\nflow.set(\"pool_nibe_planned_now\", plannedNow);\n\nnode.status({fill: plannedNow?\"blue\":\"grey\", shape: \"ring\",\n    text: \"cyklu=\" + cyklesNeeded + \" top=[\" + topIdxs.slice(0,6).join(\",\") + \"]\" + (plannedNow?\" NOW\":\"\")});\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 840,
+        "wires": [
+            [
+                "pool_nibe_decide"
+            ]
+        ]
+    },
+    {
+        "id": "pool_nibe_decide",
+        "type": "function",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "POOL NIBE decide (§11.6)",
+        "func": "// §11.6 NIBE -> bazen 4 use cases + 30 min runtime protection\n// In:  msg (z planneru). Out: {action:\"nibe_on\"/\"nibe_off\"} nebo NULL (no-op).\n// Flow: pool_nibe_running, pool_nibe_start_ts. Global: pool_heating_filtrace_lock_until.\nconst cfg = global.get(\"fve_config\") || {};\nif (cfg.letni_rezim !== true || cfg.pool_enabled !== true) {\n    flow.set(\"pool_nibe_running\", false);\n    flow.set(\"pool_nibe_start_ts\", 0);\n    node.status({fill: \"grey\", shape: \"ring\", text: \"OFF (letni/pool)\"});\n    return null;\n}\nfunction gF(id,d){const s=global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\");if(!s)return d;const v=parseFloat(s.state);return isNaN(v)?d:v;}\nfunction gB(id,d){const s=global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\");if(!s)return d;return s.state===\"on\";}\n\nconst nibeOn = gB(\"switch.nibe_jednorazove_zvyseni_tuv\", false);\nconst vody = gF(\"sensor.hp2551ae_pro_v2_1_0_temperature_1\", 20);\nconst cil = gF(\"input_number.pozadovana_teplota_v_bazenu\", 28);\nconst poolNaMax = gB(\"input_boolean.bazen_na_max\", false);\nconst planData = global.get(\"fve_plan\") || {};\nconst cur = (Array.isArray(planData.plan) && planData.plan.length) ? planData.plan[0] : {};\nconst buyPrice = parseFloat(cur.priceBuy);\nconst fveMode = global.get(\"fve_current_mode\") || (planData.current_mode || \"\");\nconst solarRemE = global.get(\"homeassistant.homeAssistant.states['sensor.energy_production_today_remaining_3']\") || {};\nconst solarRem = parseFloat(solarRemE.state) || 0;\n\nconst now = Date.now();\nconst startTs = flow.get(\"pool_nibe_start_ts\") || 0;\nconst runSec = (nibeOn && startTs) ? (now - startTs) / 1000 : 0;\nconst minRun = cfg.pool_nibe_min_runtime_sec || 1800;\nconst canStop = runSec >= minRun;\n\n// 1) STROP VODY: povinny dobeh min_runtime, pak off\nif (vody >= cil) {\n    if (nibeOn && !canStop) {\n        flow.set(\"pool_nibe_running\", true);\n        global.set(\"pool_heating_filtrace_lock_until\", now + 70000 + (cfg.pool_filtrace_cooldown_min||10)*60000);\n        node.status({fill:\"red\",shape:\"dot\",text:\"CIL \"+vody.toFixed(1)+\"° dobeh \"+Math.round(minRun-runSec)+\"s\"});\n        return null;\n    }\n    if (nibeOn) {\n        flow.set(\"pool_nibe_running\", false); flow.set(\"pool_nibe_start_ts\", 0);\n        node.status({fill:\"green\",shape:\"dot\",text:\"CIL \"+vody.toFixed(1)+\"° → OFF\"});\n        return {action: \"nibe_off\"};\n    }\n    flow.set(\"pool_nibe_running\", false);\n    node.status({fill:\"green\",shape:\"ring\",text:\"CIL \"+vody.toFixed(1)+\"° (off)\"});\n    return null;\n}\n\n// 2) USE CASES (§11.6)\nconst c1 = !isNaN(buyPrice) && buyPrice <= (cfg.pool_nibe_zaporna_cena_threshold ?? 0);\nconst c2 = (fveMode === \"zakaz_pretoku\") && (solarRem >= (cfg.pool_nibe_zakaz_pretoku_solar_kwh || 13));\nconst c3 = poolNaMax && (flow.get(\"pool_nibe_planned_now\") === true);\nconst c4 = poolNaMax && !isNaN(buyPrice) && buyPrice <= (cfg.prah_ultra_levna_nakup || 1.0);\nconst any = c1 || c2 || c3 || c4;\nconst tag = c1?\"zap\":c2?\"zak\":c3?\"plan\":c4?\"ultra\":\"-\";\n\nlet action = null; let reason = \"\";\nif (!nibeOn && any) {\n    flow.set(\"pool_nibe_start_ts\", now); flow.set(\"pool_nibe_running\", true);\n    action = \"nibe_on\"; reason = \"→ON \"+tag+(isNaN(buyPrice)?\"\":\" \"+buyPrice.toFixed(2)+\"Kc\");\n} else if (nibeOn && !any && canStop) {\n    flow.set(\"pool_nibe_running\", false); flow.set(\"pool_nibe_start_ts\", 0);\n    action = \"nibe_off\"; reason = \"→OFF no-case \"+Math.round(runSec/60)+\"m\";\n} else if (nibeOn && !any && !canStop) {\n    flow.set(\"pool_nibe_running\", true);\n    reason = \"dobeh \"+Math.round(minRun-runSec)+\"s\";\n} else if (nibeOn && any) {\n    flow.set(\"pool_nibe_running\", true);\n    reason = \"run \"+Math.round(runSec/60)+\"m \"+tag;\n}\nif (nibeOn || action === \"nibe_on\") {\n    global.set(\"pool_heating_filtrace_lock_until\", now + 70000 + (cfg.pool_filtrace_cooldown_min||10)*60000);\n}\nconst fill = (action===\"nibe_on\")?\"blue\":(action===\"nibe_off\")?\"yellow\":(nibeOn?\"blue\":\"grey\");\nconst shape = (nibeOn||action===\"nibe_on\")?\"dot\":\"ring\";\nnode.status({fill,shape,text:(action?action.toUpperCase()+\" | \":\"\")+reason+\" v=\"+vody.toFixed(1)+\"° cil=\"+cil.toFixed(1)});\nreturn action ? {action} : null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 840,
+        "wires": [
+            [
+                "pool_switch_nibe"
+            ]
+        ]
+    },
+    {
+        "id": "pool_switch_nibe",
+        "type": "switch",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "route on/off",
+        "property": "action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "nibe_on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "nibe_off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 740,
+        "y": 840,
+        "wires": [
+            [
+                "pool_svc_nibe_on"
+            ],
+            [
+                "pool_svc_nibe_off"
+            ]
+        ]
+    },
+    {
+        "id": "pool_svc_nibe_on",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "NIBE jednoraz TUV ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_jednorazove_zvyseni_tuv"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "x": 950,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "pool_svc_nibe_off",
+        "type": "api-call-service",
+        "z": "f1e2d3c4b5a60002",
+        "g": "pool_g_exec_nibe",
+        "name": "NIBE jednoraz TUV OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "switch.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "switch.nibe_jednorazove_zvyseni_tuv"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "x": 950,
+        "y": 860,
+        "wires": [
+            []
+        ]
     },
     {
         "id": "pool_g_filtrace_lock",
@@ -248,20 +410,6 @@
         ],
         "x": 605,
         "y": 260,
-        "wires": []
-    },
-    {
-        "id": "pool_link_to_nibe",
-        "type": "link out",
-        "z": "f1e2d3c4b5a60002",
-        "g": "pool_g_decide",
-        "name": "→ nibe (B3)",
-        "mode": "link",
-        "links": [
-            "pool_link_from_nibe"
-        ],
-        "x": 605,
-        "y": 300,
         "wires": []
     },
     {
@@ -653,41 +801,6 @@
         ]
     },
     {
-        "id": "pool_link_from_nibe",
-        "type": "link in",
-        "z": "f1e2d3c4b5a60002",
-        "g": "pool_g_exec_nibe",
-        "name": "← nibe",
-        "links": [
-            "pool_link_to_nibe"
-        ],
-        "x": 55,
-        "y": 840,
-        "wires": [
-            [
-                "pool_nibe_stub"
-            ]
-        ]
-    },
-    {
-        "id": "pool_nibe_stub",
-        "type": "debug",
-        "z": "f1e2d3c4b5a60002",
-        "g": "pool_g_exec_nibe",
-        "name": "NIBE STUB (B3)",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 205,
-        "y": 840,
-        "wires": []
-    },
-    {
         "id": "pool_link_from_lock",
         "type": "link in",
         "z": "f1e2d3c4b5a60002",
@@ -832,7 +945,7 @@
         "z": "f1e2d3c4b5a60002",
         "g": "pool_g_decide",
         "name": "POOL decide (§11.3/5/7)",
-        "func": "// POOL Heating — rozhodovaci logika (§11.3/§11.5/§11.7)\n// Vstup:  msg { cfg, data, stropReason }\n// Vystup: msg.decision = { patronyAllowed, patronyMaxFloor, ventilAction,\n//                          lockUntil, mod, statusText, statusFill }\n\nconst cfg = msg.cfg;\nconst data = msg.data;\nconst now = Date.now();\nconst filtraceCoolMin = cfg.pool_filtrace_cooldown_min || 10;\n\nconst dec = {\n    patronyAllowed: false,\n    patronyMaxFloor: 0,\n    ventilAction: null,      // \"on\" / \"off\" / null\n    lockUntil: null,         // ms\n    mod: \"Vypnuto\",\n    statusText: \"\",\n    statusFill: \"grey\",\n};\n\n// STROP VODY -> patrony OFF + cooldown filtrace\nif (msg.stropReason === \"voda\") {\n    dec.ventilAction = data.ventilOn ? \"off\" : null;\n    dec.lockUntil = now + filtraceCoolMin * 60000;\n    dec.mod = \"Vypnuto\";\n    dec.statusFill = \"green\";\n    dec.statusText = \"CIL voda=\" + data.teplotaVody.toFixed(1) + \"° cooldown \" + filtraceCoolMin + \"m\";\n    msg.decision = dec;\n    return msg;\n}\n// STROP NADRZE -> patrony OFF (NIBE neresi — topi primo)\nif (msg.stropReason === \"nadrz\") {\n    dec.statusFill = \"red\";\n    dec.statusText = \"MAX NADRZ \" + data.teplotaNadrz.toFixed(1) + \"°\";\n    msg.decision = dec;\n    return msg;\n}\n\n// PATRONY PODMINKY (§11.5 + §11.7)\nconst auto    = !data.autoMaHlad;\nconst socOk   = data.soc >= (cfg.pool_patrony_soc_min || 90);\nconst solarOk = data.solarW >= (cfg.topeni_patron_min_solar_w || 5000);\n// TODO B4: bojlerOk vyjimka §11.5 bod 6 (boiler_natopen s vyjimkou pro dostatecnou vyrobu)\nconst bojlerOk = true;\ndec.patronyAllowed = auto && socOk && solarOk && bojlerOk;\ndec.patronyMaxFloor = dec.patronyAllowed ? 3 : 0;\n\n// VENTIL HYSTEREZE (§11.3)\nconst minNadrz = cfg.pool_min_teplota_nadrz || 30;\nconst ventilStartC = cfg.pool_ventil_start_c || 50;\nif (data.ventilOn) {\n    if (data.teplotaNadrz < minNadrz) dec.ventilAction = \"off\";\n} else {\n    if (data.teplotaNadrz >= ventilStartC) dec.ventilAction = \"on\";\n}\n// Ventil ON vyzaduje dostupnou filtraci (§11.5 bod 8)\nif (dec.ventilAction === \"on\" && !data.filtraceAvail) {\n    dec.ventilAction = null;\n}\n\n// FILTRACE LOCK (§11.4): pokud ventil bude/je ON -> prodluz lock\nconst ventilActiveAfter = (dec.ventilAction === \"on\") || (data.ventilOn && dec.ventilAction !== \"off\");\nif (ventilActiveAfter) {\n    dec.lockUntil = now + 60000 + filtraceCoolMin * 60000;\n}\n\n// TOPENI_MOD (§11.9)\nconst nibeRunAfter = false;  // B3\nif (dec.patronyAllowed && nibeRunAfter) dec.mod = \"BAZÉN - NIBE + Patrony\";\nelse if (dec.patronyAllowed)            dec.mod = \"BAZÉN - Patrony\";\nelse if (nibeRunAfter)                  dec.mod = \"BAZÉN - NIBE\";\n\n// STATUS\nconst reasons = [];\nif (!dec.patronyAllowed) {\n    if (!auto)    reasons.push(\"auto\");\n    if (!socOk)   reasons.push(\"SOC<\" + (cfg.pool_patrony_soc_min || 90));\n    if (!solarOk) reasons.push(\"solar<\" + (cfg.topeni_patron_min_solar_w || 5000));\n}\ndec.statusFill = dec.patronyAllowed ? \"green\" : \"grey\";\ndec.statusText = (dec.patronyAllowed ? \"ALLOWED max=\" + dec.patronyMaxFloor + \"f\"\n                                      : \"BLOCKED:\" + reasons.join(\",\"))\n    + \" v=\" + data.teplotaVody.toFixed(1) + \"° n=\" + data.teplotaNadrz.toFixed(1)\n    + \"° SOC=\" + data.soc.toFixed(0) + \"%\";\n\nmsg.decision = dec;\nreturn msg;\n",
+        "func": "// POOL Heating — rozhodovaci logika (§11.3/§11.5/§11.7)\n// Vstup:  msg { cfg, data, stropReason }\n// Vystup: msg.decision = { patronyAllowed, patronyMaxFloor, ventilAction,\n//                          lockUntil, mod, statusText, statusFill }\n\nconst cfg = msg.cfg;\nconst data = msg.data;\nconst now = Date.now();\nconst filtraceCoolMin = cfg.pool_filtrace_cooldown_min || 10;\n\nconst dec = {\n    patronyAllowed: false,\n    patronyMaxFloor: 0,\n    ventilAction: null,      // \"on\" / \"off\" / null\n    lockUntil: null,         // ms\n    mod: \"Vypnuto\",\n    statusText: \"\",\n    statusFill: \"grey\",\n};\n\n// STROP VODY -> patrony OFF + cooldown filtrace\nif (msg.stropReason === \"voda\") {\n    dec.ventilAction = data.ventilOn ? \"off\" : null;\n    dec.lockUntil = now + filtraceCoolMin * 60000;\n    dec.mod = \"Vypnuto\";\n    dec.statusFill = \"green\";\n    dec.statusText = \"CIL voda=\" + data.teplotaVody.toFixed(1) + \"° cooldown \" + filtraceCoolMin + \"m\";\n    msg.decision = dec;\n    return msg;\n}\n// STROP NADRZE -> patrony OFF (NIBE neresi — topi primo)\nif (msg.stropReason === \"nadrz\") {\n    dec.statusFill = \"red\";\n    dec.statusText = \"MAX NADRZ \" + data.teplotaNadrz.toFixed(1) + \"°\";\n    msg.decision = dec;\n    return msg;\n}\n\n// PATRONY PODMINKY (§11.5 + §11.7)\nconst auto    = !data.autoMaHlad;\nconst socOk   = data.soc >= (cfg.pool_patrony_soc_min || 90);\nconst solarOk = data.solarW >= (cfg.topeni_patron_min_solar_w || 5000);\n// TODO B4: bojlerOk vyjimka §11.5 bod 6 (boiler_natopen s vyjimkou pro dostatecnou vyrobu)\nconst bojlerOk = true;\ndec.patronyAllowed = auto && socOk && solarOk && bojlerOk;\ndec.patronyMaxFloor = dec.patronyAllowed ? 3 : 0;\n\n// VENTIL HYSTEREZE (§11.3)\nconst minNadrz = cfg.pool_min_teplota_nadrz || 30;\nconst ventilStartC = cfg.pool_ventil_start_c || 50;\nif (data.ventilOn) {\n    if (data.teplotaNadrz < minNadrz) dec.ventilAction = \"off\";\n} else {\n    if (data.teplotaNadrz >= ventilStartC) dec.ventilAction = \"on\";\n}\n// Ventil ON vyzaduje dostupnou filtraci (§11.5 bod 8)\nif (dec.ventilAction === \"on\" && !data.filtraceAvail) {\n    dec.ventilAction = null;\n}\n\n// FILTRACE LOCK (§11.4): pokud ventil bude/je ON -> prodluz lock\nconst ventilActiveAfter = (dec.ventilAction === \"on\") || (data.ventilOn && dec.ventilAction !== \"off\");\nif (ventilActiveAfter) {\n    dec.lockUntil = now + 60000 + filtraceCoolMin * 60000;\n}\n\n// TOPENI_MOD (§11.9)\nconst nibeRunAfter = flow.get(\"pool_nibe_running\") === true;  // B3\nif (dec.patronyAllowed && nibeRunAfter) dec.mod = \"BAZÉN - NIBE + Patrony\";\nelse if (dec.patronyAllowed)            dec.mod = \"BAZÉN - Patrony\";\nelse if (nibeRunAfter)                  dec.mod = \"BAZÉN - NIBE\";\n\n// STATUS\nconst reasons = [];\nif (!dec.patronyAllowed) {\n    if (!auto)    reasons.push(\"auto\");\n    if (!socOk)   reasons.push(\"SOC<\" + (cfg.pool_patrony_soc_min || 90));\n    if (!solarOk) reasons.push(\"solar<\" + (cfg.topeni_patron_min_solar_w || 5000));\n}\ndec.statusFill = dec.patronyAllowed ? \"green\" : \"grey\";\ndec.statusText = (dec.patronyAllowed ? \"ALLOWED max=\" + dec.patronyMaxFloor + \"f\"\n                                      : \"BLOCKED:\" + reasons.join(\",\"))\n    + \" v=\" + data.teplotaVody.toFixed(1) + \"° n=\" + data.teplotaNadrz.toFixed(1)\n    + \"° SOC=\" + data.soc.toFixed(0) + \"%\";\n\nmsg.decision = dec;\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -853,8 +966,8 @@
         "z": "f1e2d3c4b5a60002",
         "g": "pool_g_decide",
         "name": "POOL build outputs",
-        "func": "// POOL Heating — sestaveni vystupu + publikace flow state pro korekci (5s)\n// Vstup:  msg.decision\n// Vystupy:\n//   1 -> ventil action   ({action: \"ventil_on\"/\"ventil_off\"} / null)\n//   2 -> filtrace lock   ({payload: ms} / null)\n//   3 -> NIBE action     (STUB v B2 - vzdy null; B3 doplni)\n//   4 -> topeni_mod sync ({payload: \"BAZÉN - ...\"/\"Vypnuto\"})\n\nconst dec = msg.decision;\n\n// Flow state pro korekcni smycku (5s tick)\nflow.set(\"pool_patrony_allowed\", dec.patronyAllowed);\nflow.set(\"pool_patrony_max_floor\", dec.patronyMaxFloor);\n\n// Status nodu (diagnostika v NR UI)\nnode.status({fill: dec.statusFill, shape: \"dot\", text: dec.statusText});\n\n// Sestaveni 4 vystupu\nconst out = [null, null, null, null];\nif (dec.ventilAction === \"on\")  out[0] = {action: \"ventil_on\"};\nif (dec.ventilAction === \"off\") out[0] = {action: \"ventil_off\"};\nif (dec.lockUntil !== null)     out[1] = {payload: dec.lockUntil};\n// out[2] NIBE STUB v B2 - zustava null\nout[3] = {payload: dec.mod};\n\nreturn out;\n",
-        "outputs": 4,
+        "func": "// POOL Heating — sestaveni vystupu + publikace flow state pro korekci (5s)\n// Vstup:  msg.decision\n// Vystupy:\n//   1 -> ventil action   ({action: \"ventil_on\"/\"ventil_off\"} / null)\n//   2 -> filtrace lock   ({payload: ms} / null)\n//   3 -> topeni_mod sync ({payload: \"BAZÉN - ...\"/\"Vypnuto\"})\n// POZN.: NIBE se od B3 rozhoduje separatne v pool_nibe_decide (60s)\n\nconst dec = msg.decision;\n\n// Flow state pro korekcni smycku (5s tick)\nflow.set(\"pool_patrony_allowed\", dec.patronyAllowed);\nflow.set(\"pool_patrony_max_floor\", dec.patronyMaxFloor);\n\n// Status nodu (diagnostika v NR UI)\nnode.status({fill: dec.statusFill, shape: \"dot\", text: dec.statusText});\n\n// Sestaveni 3 vystupu\nconst out = [null, null, null];\nif (dec.ventilAction === \"on\")  out[0] = {action: \"ventil_on\"};\nif (dec.ventilAction === \"off\") out[0] = {action: \"ventil_off\"};\nif (dec.lockUntil !== null)     out[1] = {payload: dec.lockUntil};\nout[2] = {payload: dec.mod};\n\nreturn out;\n",
+        "outputs": 3,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -868,9 +981,6 @@
             ],
             [
                 "pool_link_to_lock"
-            ],
-            [
-                "pool_link_to_nibe"
             ],
             [
                 "pool_link_to_mod"
