@@ -931,7 +931,7 @@ A ZAKAZU PRETOKU
     - Teplota ve směšovací nádrži (sensor.teplota_smesovac_teplota) NIKDY nesmí překročit
       input_number.max_teplota_nadrz_bazen — je to ABSOLUTNÍ bezpečnostní strop (kavitace, obarné ventily).
     - Priorita tohoto flow je NEJNIŽŠÍ (analogicky s patronami v §8): auto nesmí mít hlad,
-      bojler musí být natopen na svůj cíl (§9), SOC baterie ≥ pool_patrony_soc_min (default 90 %).
+      bojler musí být natopen na svůj cíl (§9), SOC baterie ≥ topeni_min_soc_patron (default 90 %, SDÍLENÝ §8).
       Výjimky tvoří jen speciální případy §11.6 (záporná cena, ultralevná cena, zákaz přetoků).
     - Flow POOL Heating NESAHÁ na flow TOPENÍ DOMU (§8) ani na flow FILTRACE (§10).
       Pouze jim posílá signály (viz §11.4 a §11.9).
@@ -1001,8 +1001,8 @@ A ZAKAZU PRETOKU
         5. auto_ma_hlad = OFF  (auto má přednost — §1.2, BEZ VÝJIMKY pro patrony)
         6. bojler dosáhl svého cíle (§9)  — neplýtváme patronami, když potřebuje bojler 
             - POKUD ALE BUDE SKUTECNA I PLNOVANA VYROBA TAK VELKA, ZE V SOUCTU TO VYJDE, PATRONY I BOJLET MOHOU BEZET SOUCASNE
-        7. SOC baterie ≥ pool_patrony_soc_min (default 90 %, §11.10) — samostatný parametr
-           od topeni_min_soc_patron (§8), uživatel provede sjednocení až po dokončení POOL Heating.
+        7. SOC baterie ≥ topeni_min_soc_patron (default 90 %, SDÍLENÝ se §8) — JEDEN parametr
+           společný pro topení domu i bazénu; uživatel mění přes fve-config na jediném místě.
            VÝJIMKA: speciální případy §11.6 (záporná cena, ultralevná cena, zákaz přetoků) —
            ty mohou tento SOC práh obejít, protože energie je buď zadarmo, nebo ji musíme někam dát.
         8. TOPENI DO VYMENIKU BAZENU PRES VENTIL NADRZE SE SPUSTI POUZE TEHDY, POKUD JE DOSTUPNY switch.filtrace (da se ovladat).
@@ -1054,13 +1054,13 @@ A ZAKAZU PRETOKU
     - SPUŠTĚNÍ patron → nádrž (všechny platí):
         * letni_rezim = ON, automatizovat_vytapeni_bazenu = ON
         * solární výroba ≥ topeni_patron_min_solar_w (default 5000 W)
-        * SOC baterie ≥ pool_patrony_soc_min (default 90 %, §11.10) — kromě výjimek §11.6
+        * SOC baterie ≥ topeni_min_soc_patron (default 90 %, SDÍLENÝ §8) — kromě výjimek §11.6
         * auto nemá hlad, bojler natopen (s výjimkou §11.5 bod 6 — pokud výroba pokryje oboje)
         * teplota_smesovac_teplota <  input_number.max_teplota_nadrz_bazen − bezpečnostní rezerva
     - ZASTAVENÍ patron → nádrž:
         * teplota_smesovac_teplota ≥ input_number.max_teplota_nadrz_bazen  → OFF všech fází (§11.3)
         * solar přestane stačit a nejsme ve výjimce §11.6                   → OFF
-        * SOC baterie < pool_patrony_soc_min (default 90 %)                 → OFF
+        * SOC baterie < topeni_min_soc_patron (default 90 %)                → OFF
     - SOUBĚH PATRON + NIBE → BAZÉN je POVOLENÝ za těchto pravidel:
         * patrony topí VÝHRADNĚ NÁDRŽ  (plní zásobu tepla na pozadí)
         * NIBE topí VÝHRADNĚ PŘÍMO VÝMĚNÍK (switch.nibe_jednorazove_zvyseni_tuv)
@@ -1098,10 +1098,8 @@ A ZAKAZU PRETOKU
 11.10 KONFIGUROVATELNÉ PARAMETRY (fve_config — §13)
     pool_enabled                      (čte input_boolean.automatizovat_vytapeni_bazenu)
     pool_na_max                       (čte input_boolean.bazen_na_max)
-    pool_patrony_soc_min: 90          (min SOC baterie pro patrony → bazén, % — §11.5, §11.7.
-                                       Samostatný parametr od topeni_min_soc_patron (§8) —
-                                       kontrolu sjednocení na 90 % i pro topení domu nechá
-                                       uživatel provést až po dokončení POOL Heating.)
+    (pro SOC baterie se POUŽÍVÁ topeni_min_soc_patron z §8 — JEDEN SDÍLENÝ parametr,
+     default 90 %, kromě výjimek §11.6)
     pool_cilova_teplota_vody          (čte input_number.pozadovana_teplota_v_bazenu)
     pool_min_teplota_nadrz            (čte input_number.min_teplota_nadrz_bazen, default 30 °C)
     pool_max_teplota_nadrz            (čte input_number.max_teplota_nadrz_bazen, default 60 °C — ABSOLUTNÍ MAX)
