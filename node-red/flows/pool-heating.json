@@ -98,10 +98,10 @@
             "pool_link_from_nibe",
             "pool_nibe_stub"
         ],
-        "x": 14,
+        "x": 17,
         "y": 799,
-        "w": 1100,
-        "h": 162
+        "w": 969,
+        "h": 202
     },
     {
         "id": "pool_nibe_inject_60s",
@@ -121,7 +121,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 130,
+        "x": 123,
         "y": 840,
         "wires": [
             [
@@ -142,7 +142,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 330,
+        "x": 350,
         "y": 840,
         "wires": [
             [
@@ -163,7 +163,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 550,
+        "x": 660,
         "y": 840,
         "wires": [
             [
@@ -194,8 +194,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 740,
-        "y": 840,
+        "x": 350,
+        "y": 920,
         "wires": [
             [
                 "pool_svc_nibe_on"
@@ -229,8 +229,8 @@
         "outputProperties": [],
         "queue": "none",
         "blockInputOverrides": true,
-        "x": 950,
-        "y": 820,
+        "x": 850,
+        "y": 900,
         "wires": [
             []
         ]
@@ -259,8 +259,8 @@
         "outputProperties": [],
         "queue": "none",
         "blockInputOverrides": true,
-        "x": 950,
-        "y": 860,
+        "x": 850,
+        "y": 960,
         "wires": [
             []
         ]
@@ -280,8 +280,8 @@
             "pool_link_from_lock",
             "pool_lock_change"
         ],
-        "x": 14,
-        "y": 899,
+        "x": 19,
+        "y": 1019,
         "w": 437,
         "h": 82
     },
@@ -301,8 +301,8 @@
             "pool_mod_change",
             "pool_mod_api"
         ],
-        "x": 14,
-        "y": 999,
+        "x": 21,
+        "y": 1119,
         "w": 517,
         "h": 82
     },
@@ -809,8 +809,8 @@
         "links": [
             "pool_link_to_lock"
         ],
-        "x": 55,
-        "y": 940,
+        "x": 60,
+        "y": 1060,
         "wires": [
             [
                 "pool_lock_change"
@@ -837,8 +837,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 265,
-        "y": 940,
+        "x": 270,
+        "y": 1060,
         "wires": [
             []
         ]
@@ -852,8 +852,8 @@
         "links": [
             "pool_link_to_mod"
         ],
-        "x": 55,
-        "y": 1040,
+        "x": 62,
+        "y": 1160,
         "wires": [
             [
                 "pool_mod_change"
@@ -880,8 +880,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 235,
-        "y": 1040,
+        "x": 242,
+        "y": 1160,
         "wires": [
             [
                 "pool_mod_api"
@@ -912,8 +912,8 @@
         "outputProperties": [],
         "queue": "none",
         "blockInputOverrides": true,
-        "x": 425,
-        "y": 1040,
+        "x": 432,
+        "y": 1160,
         "wires": [
             []
         ]
@@ -924,7 +924,7 @@
         "z": "f1e2d3c4b5a60002",
         "g": "pool_g_decide",
         "name": "POOL guard+data (§11)",
-        "func": "// POOL Heating — guard + cteni stavu + stropy (§11.3)\n// Vystup: msg { cfg, data, stropReason } -> pool_decide_logic.\n// Pokud guard zablokuje (zimni rezim / pool_enabled=off), vrati null (flow konci).\n\nconst cfg = global.get(\"fve_config\") || {};\n\n// Guard: letni_rezim + pool_enabled\nconst letniRezim = cfg.letni_rezim === true;\nconst poolEnabled = cfg.pool_enabled === true;\nif (!letniRezim || !poolEnabled) {\n    flow.set(\"pool_patrony_allowed\", false);\n    flow.set(\"pool_patrony_max_floor\", 0);\n    node.status({fill: \"grey\", shape: \"ring\",\n        text: \"OFF (letni=\" + (letniRezim?\"1\":\"0\") + \" enabled=\" + (poolEnabled?\"1\":\"0\") + \")\"});\n    return null;\n}\n\n// Helpery\nfunction getFloat(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    const v = parseFloat(s.state);\n    return isNaN(v) ? def : v;\n}\nfunction getBool(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    return s.state === \"on\";\n}\nfunction isAvail(id) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    return !!s && s.state !== \"unavailable\" && s.state !== \"unknown\";\n}\n\n// Stavove veliciny\nconst data = {\n    teplotaVody:   getFloat(\"sensor.hp2551ae_pro_v2_1_0_temperature_1\", 20),\n    teplotaNadrz:  getFloat(\"sensor.teplota_smesovac_teplota\", 20),\n    solarW:        getFloat(\"sensor.vyroba_fve\", 0),\n    soc:           getFloat(\"sensor.baterie_soc\", 0),\n    bCh:           getFloat(\"sensor.baterie_vykon\", 0),\n    autoMaHlad:    getBool(\"input_boolean.auto_ma_hlad\", false),\n    filtraceAvail: isAvail(\"switch.filtrace\"),\n    p1on:          getBool(\"switch.patrona_faze_1\", false),\n    p2on:          getBool(\"switch.patrona_faze_3_2\", false),\n    p3on:          getBool(\"switch.patrona_faze_3\", false),\n    ventilOn:      getBool(\"switch.bazen_ventil_smesovac\", false),\n    bojlerPower:   getFloat(\"sensor.spotreba_bojleru\", 0),\n};\ndata.activeFaze = (data.p1on?1:0) + (data.p2on?1:0) + (data.p3on?1:0);\n\n// Stropy (§11.3)\nlet stropReason = null;\nif (data.teplotaVody >= (cfg.pool_cilova_teplota_vody || 28)) {\n    stropReason = \"voda\";  // cil -> patrony OFF + cooldown filtrace\n} else if (data.teplotaNadrz >= (cfg.pool_max_teplota_nadrz || 60)) {\n    stropReason = \"nadrz\"; // strop nadrze -> patrony OFF (NIBE neresi)\n}\n\nmsg.cfg = cfg;\nmsg.data = data;\nmsg.stropReason = stropReason;\nreturn msg;\n",
+        "func": "// POOL Heating — guard + cteni stavu + stropy (§11.3)\n// Vystup: msg { cfg, data, stropReason } -> pool_decide_logic.\n// Pokud guard zablokuje (zimni rezim / pool_enabled=off), vrati null (flow konci).\n\nconst cfg = global.get(\"fve_config\") || {};\n\n// Guard: letni_rezim + pool_enabled\nconst letniRezim = cfg.letni_rezim === true;\nconst poolEnabled = cfg.pool_enabled === true;\nif (!letniRezim || !poolEnabled) {\n    flow.set(\"pool_patrony_allowed\", false);\n    flow.set(\"pool_patrony_max_floor\", 0);\n    node.status({fill: \"grey\", shape: \"ring\",\n        text: \"OFF (letni=\" + (letniRezim?\"1\":\"0\") + \" enabled=\" + (poolEnabled?\"1\":\"0\") + \")\"});\n    return null;\n}\n\n// Helpery\nfunction getFloat(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    const v = parseFloat(s.state);\n    return isNaN(v) ? def : v;\n}\nfunction getBool(id, def) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    if (!s) return def;\n    return s.state === \"on\";\n}\nfunction isAvail(id) {\n    const s = global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\");\n    return !!s && s.state !== \"unavailable\" && s.state !== \"unknown\";\n}\n\n// Stavove veliciny\nconst data = {\n    teplotaVody:   getFloat(\"sensor.hp2551ae_pro_v2_1_0_temperature_1\", 20),\n    teplotaNadrz:  getFloat(\"sensor.teplota_smesovac_teplota\", 20),\n    solarW:        getFloat(\"sensor.vyroba_fve\", 0),\n    soc:           getFloat(\"sensor.baterie_soc\", 0),\n    bCh:           getFloat(\"sensor.baterie_vykon\", 0),\n    autoMaHlad:    getBool(\"input_boolean.auto_ma_hlad\", false),\n    filtraceAvail: isAvail(\"switch.filtrace\"),\n    p1on:          getBool(\"switch.patrona_faze_1\", false),\n    p2on:          getBool(\"switch.patrona_faze_3_2\", false),\n    p3on:          getBool(\"switch.patrona_faze_3\", false),\n    ventilOn:      getBool(\"switch.bazen_ventil_smesovac\", false),\n    bojlerPower:   (function(){\n        const c = global.get(\"homeassistant.homeAssistant.states['climate.smart_socket_thermostat_24090276694597600801c4e7ae0a2e53']\");\n        return (c && c.attributes && c.attributes.hvac_action === \"heating\") ? 2000 : 0;\n    })(),  // §11.5 bod 6: konstanta 2 kW kdyz bojler topi (HA nema wattmetr)\n};\ndata.activeFaze = (data.p1on?1:0) + (data.p2on?1:0) + (data.p3on?1:0);\n\n// Stropy (§11.3)\nlet stropReason = null;\nif (data.teplotaVody >= (cfg.pool_cilova_teplota_vody || 28)) {\n    stropReason = \"voda\";  // cil -> patrony OFF + cooldown filtrace\n} else if (data.teplotaNadrz >= (cfg.pool_max_teplota_nadrz || 60)) {\n    stropReason = \"nadrz\"; // strop nadrze -> patrony OFF (NIBE neresi)\n}\n\nmsg.cfg = cfg;\nmsg.data = data;\nmsg.stropReason = stropReason;\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1004,9 +1004,9 @@
             "pool_split_pat_kor",
             "pool_link_to_pat_kor"
         ],
-        "x": 14,
-        "y": 1099,
-        "w": 707,
+        "x": 23,
+        "y": 1219,
+        "w": 697,
         "h": 82
     },
     {
@@ -1027,8 +1027,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 1140,
+        "x": 119,
+        "y": 1260,
         "wires": [
             [
                 "pool_pat_korekce_func"
@@ -1048,8 +1048,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 300,
-        "y": 1140,
+        "x": 309,
+        "y": 1260,
         "wires": [
             [
                 "pool_split_pat_kor"
@@ -1069,8 +1069,8 @@
         "stream": false,
         "addname": "",
         "property": "payload",
-        "x": 510,
-        "y": 1140,
+        "x": 519,
+        "y": 1260,
         "wires": [
             [
                 "pool_link_to_pat_kor"
@@ -1087,8 +1087,8 @@
         "links": [
             "pool_link_from_pat"
         ],
-        "x": 670,
-        "y": 1140,
+        "x": 679,
+        "y": 1260,
         "wires": []
     }
 ]
