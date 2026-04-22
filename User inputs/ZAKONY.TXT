@@ -237,27 +237,37 @@ jistá, NEZASADÍ a vysvětlí proč.
           (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
           za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
           noční cenový gate proti drain-then-buy-expensively ztrátě.)
-        - AGRESIVNÍ REŽIM — profitabilita prodeje (v27):
-          V agresivním režimu se prodej NEPOSUZUJE vůči průměrné NÁKUPNÍ ceně (buy/rtEff + amort).
-          Důvod: baterii NEBUDEME dokupovat drahou sítí — doplní ji dnešní solar ZDARMA (§1.2 solár neomezujeme).
-          Jediný požadavek je: prodejní cena × dchEff − amortizace ≥ min_sell_profit_czk (agresivně zmírněno na 0.5 Kč).
-          V normálním režimu zůstává pravidlo: profit se počítá i s nákupními náklady.
-        - EKONOMICKÝ GUARD PRODEJE — pre-solar prodej (v28):
-          Pro každou kandidátní prodejní hodinu PŘED první sluneční hodinou v plánovacím horizontu
-          (offset < fSol) musí platit:
-              (sell × dchEff − amortizace_baterie_czk_kwh) − (max(buy v okně (offset, fSol)) / chEff)
-              ≥ min_sell_profit_czk
-          Pokud ne, hodina se z prodeje vyloučí (NEPRODÁVÁ SE).
-          Důvod: ZAKAZ §4.5 „nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit za vyšší cenu".
-          Příklad: prodej v h0 sell=2.40 Kč, max buy do první sluneční hodiny h6 buy=4.72 Kč:
-              netSell  = 2.40 × 0.9 − 1.5 = 0.66 Kč/kWh
-              replCost = 4.72 / 0.9       = 5.24 Kč/kWh
-              profit   = 0.66 − 5.24      = −4.58 Kč/kWh < 3 (min_sell_profit_czk) → SKIP ✓
-          Post-solar prodej (offset ≥ fSol) je z guardu vypnutý — solar mezitím dobije baterii zdarma.
-        - BUDGET pro prodej (kolik SOC lze utratit do sítě):
-            budget = cSoc − sellTarget − (v normálním režimu i „drain do domu“; v agresivním NE — prodej drain nahrazuje)
-            První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty do konce hodiny ÷ 60),
-            aby se PRODAVAT nezastavoval uprostřed hodiny kvůli „plnému“ budgetu.
+        - PROFITABILITA PRODEJE — threshold (v30, upraveno):
+          Náklady prodeje = amortizace baterie (cyklus). BUYBACK náklad se NEPŘIČÍTÁ — o to, že nebudeme
+          v noci dokupovat drahou síť, se už stará sellTarget (drží rezervu na celou noc).
+          Dříve (v27/v28) se buyback přičítal k nákladům i v normálním režimu, což způsobilo, že
+          legitimní surplus prodej (SOC 99 %, prodej 4.98 Kč, profit ~3 Kč) byl double-count zamítnut.
+
+          Threshold min_sell_profit_czk (default 3 Kč) se RELAXUJE na 0.5 Kč, když je REÁLNÝ SURPLUS:
+            (a) agresivniSellTargetOk (velký solar dnes/zítra + levná/záporná noc — viz výše), NEBO
+            (b) aktuální SOC − sellTarget > nResPct / 2  (čistý SOC surplus výrazně nad nočním cílem)
+          Jinak platí plný threshold min_sell_profit_czk.
+
+          Příklad (v30, user scénář): cSoc=99 %, sellTarget=56 %, surplus=43 % > nResPct/2 (≈18 %) → relaxed.
+              zisk − náklady = 4.98 × 0.9 − 1.5 = 2.98 Kč ≥ 0.5 Kč → PRODEJ OK.
+          Po prodeji SOC → 69 %, za 9 hodin drain (včetně forceCheap drain-before-solar) na ~24 %. ✓ (§4.9)
+
+        - EKONOMICKÝ GUARD PRODEJE — pre-solar ochrana (v30, REDUKOVÁNO):
+          Pre-solar per-hour guard byl v v28 zaveden jako dodatečná ochrana proti drain-then-buy ztrátě.
+          Od v30 je REDUNDANTNÍ: sellTarget (baseSellTarget = min_soc + nResPct / night_need + margin)
+          drží dolní mez tak, že po prodeji zůstane dost energie pro celou noc + rezerva. Per-hour
+          ekonomický guard v30 NENÍ dodatečně vymáhán — HLAVNÍ PRAVIDLO §4.5 je vymáháno přes sellTarget.
+
+          POZOR: Toto zjednodušení platí JEN pokud sellTarget je správně spočítaný (baseSellTarget
+          obsahuje night_need + nocní rezervu). Pokud by baseSellTarget byl někdy nastaven nerealisticky
+          nízko, per-hour guard by musel vrátit.
+
+        - BUDGET pro prodej (kolik SOC lze utratit do sítě) — v30:
+            budget = cSoc − sellTarget
+            DRAIN DO DOMU se NEODEČÍTÁ: je to spotřeba v JINÝCH hodinách než prodej (nekoliduje).
+            Předchozí formule `− _normalDrainSoc` dvojí-započítávala a v noční scénáři způsobovala
+            nulový budget i když reálný surplus existoval (99 % − 56 % − 45 % = -2 → 0 → žádný prodej).
+            První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty / 60).
         - Plán zobrazuje: "SOC XX% (cíl YY%)"
     - HLAVNÍ PRAVIDLO: Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
       ze sítě za vyšší cenu. Prodáváme jen to, co přes noc nepotřebujeme.
