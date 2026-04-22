@@ -237,37 +237,37 @@ jistá, NEZASADÍ a vysvětlí proč.
           (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
           za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
           noční cenový gate proti drain-then-buy-expensively ztrátě.)
-        - PROFITABILITA PRODEJE — threshold (v30, upraveno):
-          Náklady prodeje = amortizace baterie (cyklus). BUYBACK náklad se NEPŘIČÍTÁ — o to, že nebudeme
-          v noci dokupovat drahou síť, se už stará sellTarget (drží rezervu na celou noc).
-          Dříve (v27/v28) se buyback přičítal k nákladům i v normálním režimu, což způsobilo, že
-          legitimní surplus prodej (SOC 99 %, prodej 4.98 Kč, profit ~3 Kč) byl double-count zamítnut.
+        - KDY PRODÁVÁME SURPLUS (v30):
+          Cíl: když je v baterii více, než potřebujeme na noc, přebytek PRODÁVÁME za nejdražší hodiny.
+          Chceme skončit v první ranní sluneční hodině na cca 20–25 % SOC (§4.9).
 
-          Threshold min_sell_profit_czk (default 3 Kč) se RELAXUJE na 0.5 Kč, když je REÁLNÝ SURPLUS:
-            (a) agresivniSellTargetOk (velký solar dnes/zítra + levná/záporná noc — viz výše), NEBO
-            (b) aktuální SOC − sellTarget > nResPct / 2  (čistý SOC surplus výrazně nad nočním cílem)
-          Jinak platí plný threshold min_sell_profit_czk.
+          Prodáváme, pokud platí VŠECHNY tyto podmínky zároveň:
+            1. Aktuální SOC je VÝRAZNĚ nad nočním cílem sellTarget (tj. máme skutečný přebytek).
+            2. Buď dnes/zítra bude VELKÝ SOLAR (aspoň 50 kWh), NEBO bude NOC LEVNÁ (kdyby bylo potřeba,
+               baterku doplníme lacino ze sítě).
+            3. Prodejní cena × účinnost vybíjení − amortizace ≥ 0.5 Kč/kWh (pokrytí cyklu + malý zisk).
 
-          Příklad (v30, user scénář): cSoc=99 %, sellTarget=56 %, surplus=43 % > nResPct/2 (≈18 %) → relaxed.
-              zisk − náklady = 4.98 × 0.9 − 1.5 = 2.98 Kč ≥ 0.5 Kč → PRODEJ OK.
-          Po prodeji SOC → 69 %, za 9 hodin drain (včetně forceCheap drain-before-solar) na ~24 %. ✓ (§4.9)
+          DŮLEŽITÁ OCHRANA — když bude zítra MÁLO SOLARU (méně než 50 kWh) a dnes už nic nezbývá:
+            → NEPRODÁVÁME nic z baterie v noci.
+            Důvod: zítra nebude dostatek energie na dobití baterie a potřebujeme ji na běžný provoz domu,
+            nabíjení auta a noční spotřebu. Pokud bychom prodali, musíme dokupovat ze sítě dráž.
 
-        - EKONOMICKÝ GUARD PRODEJE — pre-solar ochrana (v30, REDUKOVÁNO):
-          Pre-solar per-hour guard byl v v28 zaveden jako dodatečná ochrana proti drain-then-buy ztrátě.
-          Od v30 je REDUNDANTNÍ: sellTarget (baseSellTarget = min_soc + nResPct / night_need + margin)
-          drží dolní mez tak, že po prodeji zůstane dost energie pro celou noc + rezerva. Per-hour
-          ekonomický guard v30 NENÍ dodatečně vymáhán — HLAVNÍ PRAVIDLO §4.5 je vymáháno přes sellTarget.
+          Když prodáváme, náklady na prodej počítáme JEN jako amortizaci baterie (opotřebení cyklu).
+          Dokup energie zpátky ze sítě do nákladů neřešíme, protože sellTarget už drží rezervu na celou noc —
+          pod ni nikdy neprodáváme.
 
-          POZOR: Toto zjednodušení platí JEN pokud sellTarget je správně spočítaný (baseSellTarget
-          obsahuje night_need + nocní rezervu). Pokud by baseSellTarget byl někdy nastaven nerealisticky
-          nízko, per-hour guard by musel vrátit.
+          Příklad: V 20:00 máme SOC 99 %, noční cíl sellTarget = 56 %. Prodejní cena = 4.98 Kč/kWh,
+          zítra má být velký solar (90 kWh). Zisk = 4.98 × 0.9 − 1.5 = 2.98 Kč/kWh, což je výrazně
+          nad 0.5 Kč → PRODÁVÁME. SOC klesne postupně na 56 %, pak přes noc dodám dům → ráno 20–25 %.
 
-        - BUDGET pro prodej (kolik SOC lze utratit do sítě) — v30:
-            budget = cSoc − sellTarget
-            DRAIN DO DOMU se NEODEČÍTÁ: je to spotřeba v JINÝCH hodinách než prodej (nekoliduje).
-            Předchozí formule `− _normalDrainSoc` dvojí-započítávala a v noční scénáři způsobovala
-            nulový budget i když reálný surplus existoval (99 % − 56 % − 45 % = -2 → 0 → žádný prodej).
-            První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty / 60).
+        - BUDGET PRO PRODEJ (kolik SOC smíme poslat do sítě):
+            budget = aktuální SOC − sellTarget
+            Spotřeba domu přes noc se do budgetu NEZAPOČÍTÁVÁ — je to energie tekoucí v jiných hodinách
+            než prodej, vzájemně nekolidují. Dříve (před v30) se spotřeba dvakrát započítávala, čímž
+            budget vycházel nulový i při reálném přebytku a plán prodával jen 1 hodinu (nedosáhl cíle
+            20–25 % SOC před solárem).
+            Aktuální (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty / 60),
+            aby se PRODAVAT nezastavovalo uprostřed hodiny.
         - Plán zobrazuje: "SOC XX% (cíl YY%)"
     - HLAVNÍ PRAVIDLO: Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
       ze sítě za vyšší cenu. Prodáváme jen to, co přes noc nepotřebujeme.
