@@ -1,5 +1,2 @@
-zapinani - vypinani ventilu VZDY ZAJISTUJE POLL HEATING!!! NE VYTAPENI DOMU!!!
-
-POKUD JE AUTOMATIZACE VYTAPENI BAZENU VYPNUTA NEBO JE ZIMNI REZIM, AUTOMATIZACE NESMI NIC 
-DELAT!!! TATO AUTOMATIZACE FUNGUJE POUZE V LETE A POUZE POKUD JE AUTOMATIZACE
-VYTAPENI BAZENU NA ON!!!
+nacti si deploy zakony!!! uklidil jsi? monitoroval jsi??? doprdele, vzdy si nacti zakony
+a md files pred promptem, pokud nejsi v kontextu!!! TO JE V ZAKONECH!!!
