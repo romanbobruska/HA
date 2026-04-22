@@ -964,7 +964,7 @@ A ZAKAZU PRETOKU
         * OFF → voda z nádrže NETEČE do VÝMĚNÍKU BAZÉNU
         * switch.teplota_smesovac (OBEHOVE CERPADLO) → voda z nádrže teče do PODLAHOVKY DOMU (zimní režim — v létě to nikdy nezapneme,
         PROTOZE BYCHOM PUSTILI TEPLOU VODU DO PODLAHY, KTEROU CHLADIME!!!)
-    - V ZIMNÍM REŽIMU je ventil VŽDY OFF — bez výjimky. Žádná část POOL Heating ho v zimě nesahá.
+    - V ZIMNÍM REŽIMU je ventil VŽDY OFF. Žádná část POOL Heating ho v zimě nesahá.
     - V letním režimu ventil pracuje s HYSTEREZÍ (zamezuje oscilaci):
         * OTEVŘENÍ (ON):  teplota_smesovac_teplota ≥ pool_ventil_start_c (default 50 °C)
           — nečeká se na pouhé dosažení minima; čekáme na IDEÁL, aby voda nebyla jen vlažná.
@@ -1082,7 +1082,7 @@ A ZAKAZU PRETOKU
       Při překročení se okamžitě vypínají všechny zdroje ohřevu nádrže — tj. PATRONY
       (NIBE-TUV nádrž neohřívá, takže se tohoto stropu netýká; topí přímo do výměníku, §11.2b).
     - V ZIMNÍM REŽIMU (letni_rezim=OFF) POOL Heating nesahá na žádnou entitu.
-      switch.bazen_ventil_smesovac je v zimě vždy OFF — zajišťuje to HA (ne POOL Heating).
+      switch.bazen_ventil_smesovac je v zimě vždy OFF.
     - Pokud FILTRACE není schopná startu (§10.5 anti-cycling, SOC ochrana bez výjimky, atd.),
       POOL Heating topení nezahájí — jinak by hrozilo přehřátí výměníku.
 
