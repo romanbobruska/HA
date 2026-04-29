@@ -201,8 +201,12 @@ jistá, NEZASADÍ a vysvětlí proč.
           (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
            dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
            pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
-        - AGRESIVNÍ REŽIM — výjimka (v28, upraveno): Cíl se sníží na min_soc + night_target_soc_margin
-          (typicky 25 %) POUZE pokud platí VŠECHNY tři podmínky současně:
+        - AGRESIVNÍ REŽIM — výjimka (v28, upraveno): Cíl se sníží na min_soc + nMarginAgg
+          (v30.8: 2 % — tj. cíl 22 %, hlubší drain než normální nMargin=5 %).
+          Důvod hlubšího drainu: pokud platí (1) + (2)/(2b), zítřejší solar stejně zaplní baterii ZDARMA,
+          takže 2% rezerva chrání jen proti náhlému zamračení přes noc; 5% rezerva by zbytečně
+          ponechala ~1 kWh v baterii místo jejího prodeje za nejdražší sell cenu (§1.0 MAX zisk).
+          Platí POUZE pokud platí VŠECHNY tři podmínky současně:
 
             (1) BILANCE ZÍTŘEJŠÍHO SOLÁRU — zítra bude dost slunce na dobití baterie:
                 • effSolar_zítra ≥ plan_aggressive_solar_day_kwh (default 50 kWh), kde
