@@ -227,8 +227,23 @@ jistá, NEZASADÍ a vysvětlí proč.
                 dům spotřebovává energii. Pokud by v té noci byly drahé hodiny (≥ prah_draha_energie),
                 prodej pod noční rezervu by znamenal ztrátu (prodám za 2.6 Kč, koupím zpět za 4.2 Kč).
 
-          Pokud NEPLATÍ podmínka (2) — tj. noc bude drahá — použije se baseSellTarget
-          (min_soc + night_need_soc + nMargin), který obsahuje rezervu na celou noc.
+            (2b) v30.7 — TŘETÍ CESTA k (2): BILANCE SOLAR vs NOC+BATERIE
+                Podmínka (2) je OBCHÁZENA, pokud zítřejší solar dokáže zaplnit baterii
+                a zároveň pokryt dnešní noc s rezervou:
+                  (predpoved_solarni_vyroby_zitra)
+                  − (100 − current_soc)/100 × kapacita_baterie_kwh   (refill baterie na 100 %)
+                  − nightCons                                         (spotřeba domu do 1. sol. hod.)
+                  ≥ night_reserve_kwh                                  (default 10 kWh bezpečnostní rezerva)
+
+                Důvod: pokud solar zítra stejně přeteče baterii + dá ze sítě do domu dost
+                energie na pokrytí dne a následující noci, prodej dnes v drahých hodinách
+                je čistý zisk (solar nahradí prodanou energii ZDARMA — §1.2 solár neomezujeme).
+                Bez této cesty plán v evening drahé hodiny NEPRODÁ, i když má 80+ kWh solar
+                zítra připraveno — ztráta 2-3 Kč/kWh potenciálního zisku.
+
+          Pokud NEPLATÍ žádná z podmínek (2) ani (2b) — tj. noc bude drahá A solar nepokryje vše —
+          použije se baseSellTarget (min_soc + night_need_soc + nMargin), který obsahuje rezervu
+          na celou noc.
 
           Důvod AGRESIVNÍHO režimu: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ"
           + §1.2 „SOLÁR NEOMEZUJEME". Aktivní jen když dává ekonomický smysl sjet baterii dolů
