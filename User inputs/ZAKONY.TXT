@@ -597,18 +597,26 @@ A ZAKAZU PRETOKU
         - cyklus upravuje amperaci tak, aby nabijeni auta bylo optimalni a odpovidalo aktualnim podminkam v dome.
         - algoritmus vypoctu amperace musi byt spravny, aby nedochazelo k chaoticke oscilaci - 6A, za dalsich 10s 16A atp.
         - SINGLE-DECISION per cyklus: korekce vyhodnoti pouze JEDNU akci (UP / DOWN / HOLD), nikdy obe v jednom cyklu.
-        - v30.9 FIX ROZHODOVACI HIERARCHIE (PRIMARNI SIGNAL = nabijeni_baterii):
-            Korekcni smycka rozhoduje podle bW (nabijeni_baterii) v tomto poradi:
-              (1) HARD SAFETY: gridW > nabijeni_auta_grid_hard_w (default 1000 W) → -1A okamzite (skutecny grid draw, ne oscilace Victron ESS).
-              (2) PRIMARNI SIGNAL: bW vs cil (max_charge_w ± charge_deadband_w).
-                  • bW > cil + band → +1A (baterie sala prebytek, ktery mel jit do auta).
-                  • bW < cil − band → -1A (baterie vybiji, auto bere moc).
-                  • jinak → HOLD.
-            DULEZITE: gridW drive (pre-v30.9) mel PREDNOST pred bW se soft prahem 200 W.
-            Vysledek: pri Victron ESS osclilaci (baterie pomala odezva, gridW kratkodobe 200-500 W)
-            smycka SNIZOVALA amperaci, i kdyz baterie nabijela +4 kW prebytku. Spatne.
-            Nove: gridW je jen HARD safety; bW (primary = kolik energie zbyva po domacnosti + auto)
-            je spravny signal, protoze baterie = overflow buffer v Victron ESS topologii.
+        - v30.10 ROZHODOVACI ALGORITMUS — VYHRADNE bW SIGNAL (gridW SE IGNORUJE):
+            Korekcni smycka rozhoduje POUZE podle bW (sensor.nabijeni_baterii) vs cil:
+              • bW > MAX_CHR + CHR_BAND → +1A (baterie sala prebytek, auto bere malo)
+              • bW < MAX_CHR − CHR_BAND → -1A (baterie pod cilem nebo vybiji, auto bere moc)
+              • jinak → HOLD
+            Konfigurace: MAX_CHR = nabijeni_auta_max_charge_w (default 1000 W),
+                         CHR_BAND = nabijeni_auta_charge_deadband_w (default 300 W).
+            Krok korekce vzdy ±1A per 10s cyklus (anti-oscilace).
+            ZASADNI PRINCIP: Smycka SE NESMI DIVAT na sensor.spotreba_ze_site (gridW).
+              gridW odrazi ostatni spotrebice (boiler, NIBE, dum) — pokud se zapne boiler
+              a baterie pritom nabiji prebytek, smycka NESMI snizovat amperaci kvuli
+              gridW > 0. bW signal samotny implicitne reaguje na vsechny zmeny:
+                - Pokud auto bere prilis moc → baterie nabiji malo → bW klesne → -1A.
+                - Pokud auto bere malo → baterie nabiji moc → bW stoupne → +1A.
+                - Pokud se zapne boiler a solar nestaci → bW klesne → -1A spravne.
+            Historie chyb:
+              • pre-v30.9: gridW > 200 W (soft prah) mel PREDNOST → snizoval amperaci pri Victron lag.
+              • v30.9: gridW > 1000 W (HARD safety) → ALE pri zapnutem boileru gridW > 1000 W natural,
+                smycka oscilovala mezi 0/6A i kdyz baterie nabijela 5 kWh prebytek.
+              • v30.10 (final): gridW UPLNE ODSTRANEN ze smycky. Jen bW.
         - tato korekcni smycka by mela automaticky zastavit charger, pokud se zvedne spotreba domu - napr. zacne topit
             NIBE - jelikoz to bude mit v rozdilu spotreby a vyroby. Nepotrebujeme zadny MUTEX
     - SELL-PRICE GUARD (analogicky §8.5 patrony):
