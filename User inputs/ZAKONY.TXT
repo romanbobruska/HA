@@ -597,6 +597,18 @@ A ZAKAZU PRETOKU
         - cyklus upravuje amperaci tak, aby nabijeni auta bylo optimalni a odpovidalo aktualnim podminkam v dome.
         - algoritmus vypoctu amperace musi byt spravny, aby nedochazelo k chaoticke oscilaci - 6A, za dalsich 10s 16A atp.
         - SINGLE-DECISION per cyklus: korekce vyhodnoti pouze JEDNU akci (UP / DOWN / HOLD), nikdy obe v jednom cyklu.
+        - v30.9 FIX ROZHODOVACI HIERARCHIE (PRIMARNI SIGNAL = nabijeni_baterii):
+            Korekcni smycka rozhoduje podle bW (nabijeni_baterii) v tomto poradi:
+              (1) HARD SAFETY: gridW > nabijeni_auta_grid_hard_w (default 1000 W) → -1A okamzite (skutecny grid draw, ne oscilace Victron ESS).
+              (2) PRIMARNI SIGNAL: bW vs cil (max_charge_w ± charge_deadband_w).
+                  • bW > cil + band → +1A (baterie sala prebytek, ktery mel jit do auta).
+                  • bW < cil − band → -1A (baterie vybiji, auto bere moc).
+                  • jinak → HOLD.
+            DULEZITE: gridW drive (pre-v30.9) mel PREDNOST pred bW se soft prahem 200 W.
+            Vysledek: pri Victron ESS osclilaci (baterie pomala odezva, gridW kratkodobe 200-500 W)
+            smycka SNIZOVALA amperaci, i kdyz baterie nabijela +4 kW prebytku. Spatne.
+            Nove: gridW je jen HARD safety; bW (primary = kolik energie zbyva po domacnosti + auto)
+            je spravny signal, protoze baterie = overflow buffer v Victron ESS topologii.
         - tato korekcni smycka by mela automaticky zastavit charger, pokud se zvedne spotreba domu - napr. zacne topit
             NIBE - jelikoz to bude mit v rozdilu spotreby a vyroby. Nepotrebujeme zadny MUTEX
     - SELL-PRICE GUARD (analogicky §8.5 patrony):
