@@ -872,6 +872,18 @@ A ZAKAZU PRETOKU
     5. Baterie > 96% + přebytek → MAX/VYSOKA dle velikosti přebytku
     6. Baterie < 96% + velký přebytek → MAX; střední → VYSOKA
     7. Levná elektřina (ne v letním režimu) → STREDNI (58°C)
+    7a. NOČNÍ ÚLEVA OD DOTOPOVÁNÍ — když zítra hodně svítí (01:00–06:00)
+        Když je noc (mezi jednou a šestou ráno) a zítra se předpovídá hodně slunce
+        (víc než přibližně 35 kWh — práh se nastavuje v konfiguraci), bojler
+        se v noci NESMÍ dotopovat na 58 °C ani 60 °C ze sítě. Stačí, aby měl
+        teplotu kolem 50 °C (přesnou hodnotu si nastavíš v konfiguraci).
+        Důvod (lidsky): v noci se nikdo nekoupe a ráno už začne svítit slunce.
+        Bojler si dohřeje sám, zadarmo, místo aby mu člověk platil za drahou
+        noční elektřinu. Když se zítra předpovídá málo slunce, toto pravidlo
+        NEPLATÍ — pak má smysl využít levnou noční hodinu a předehřát ho
+        za co nejmenší peníze.
+        Výjimka: když uživatel zapne „Rychle teplá voda“, pravidlo se ignoruje
+        a bojler topí na maximum bez ohledu na noc.
     8. Jinak → MIN
 
 9.2 OCHRANA
