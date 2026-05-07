@@ -1044,6 +1044,20 @@ A ZAKAZU PRETOKU
       je to jen nastavení, v jakém režimu NIBE pracuje, když topí. Čerpadlo reálně začne topit do bazénu
       teprve ve chvíli, kdy se v HA zapne switch.nibe_jednorazove_zvyseni_tuv. Po vypnutí toho switche
       NIBE přestane topit do bazénu (pozor na povinný doběh 30 min viz výše).
+    - VENTIL JAKO PRIORITA-PŘEPÍNAČ PRO NIBE (důležitá vlastnost čerpadla):
+      Když NIBE topí přímo do výměníku bazénu (zapnutý switch.nibe_jednorazove_zvyseni_tuv)
+      a v té chvíli se otevře ventil k nádrži (switch.bazen_ventil_smesovac → ON),
+      NIBE čerpadlo si to samo VŠIMNE — interně se přepne do PRIORITY 10 a „počká".
+      To znamená, že kompresor přestane dodávat teplo do výměníku, ale čerpadlo zůstává
+      připravené. Jakmile ventil zase zavřeš (nádrž vychladla pod přibližně 30 °C),
+      NIBE bezprostředně pokračuje v topení do výměníku. Žádný 30minutový restart kompresoru.
+      Důvod (lidsky): NIBE poznává „kde je teď zdroj tepla pro výměník". Když pustíme
+      teplou vodu z nádrže, čerpadlo nechce dva zdroje sčítat (přehřátí výměníku) —
+      tak elegantně ustoupí. Jakmile zdroj z nádrže odpadne, plynule navazuje.
+      Důsledek pro náš software: POOL Heating NESMÍ vypínat switch.nibe_jednorazove_zvyseni_tuv
+      jen kvůli tomu, že se právě otevřel ventil. Stav, kdy jsou v HA oba switche „zapnuté"
+      současně, JE POVOLENÝ a normální — fyzicky teplo do výměníku poteče vždy jen
+      z jednoho zdroje (priority 10 to zařídí na straně čerpadla).
 
 11.4 FILTRACE PŘI VYTÁPĚNÍ BAZÉNU (mutex s flow §10)
     - Vždy, když do výměníku bazénu teče teplo (ať z nádrže, nebo přímo z NIBE),
@@ -1132,13 +1146,40 @@ A ZAKAZU PRETOKU
         * patrony topí VÝHRADNĚ NÁDRŽ  (plní zásobu tepla na pozadí)
         * NIBE topí VÝHRADNĚ PŘÍMO VÝMĚNÍK (switch.nibe_jednorazove_zvyseni_tuv)
         * tzn. do VÝMĚNÍKU teče teplo jen z JEDNOHO zdroje (viz §11.8)
-      Tento souběh má smysl při zákazu přetoků a záporných cenách — maximalizujeme
-      využití energie, kterou bychom jinak museli omezit nebo za ni ztratit peníze.
+      Tento souběh má smysl při zákazu přetoků, záporných cenách a také při požadavku
+      na rychlé natopení bazénu (bazen_na_max=ON) — maximalizujeme využití energie,
+      kterou bychom jinak museli omezit, nebo za kterou by nám síť dokonce platila.
+
+    - SOUBĚH PŘI ROZJEZDU NÁDRŽE BĚHEM NIBE → BAZÉN (plynulé střídání zdroje výměníku):
+      Pokud běží NIBE → výměník (kterýkoli ze čtyř případů §11.6) a zároveň jsou splněny
+      podmínky pro patrony → nádrž (přebytek, přetoky, ultralevná cena), patrony nádrž
+      paralelně předehřívají. Jakmile teplota v nádrži dosáhne přibližně 50 °C
+      (ideál pro otevření ventilu, viz §11.3), ventil se OTEVŘE — a teplo do výměníku
+      v té chvíli začne téct z nádrže. NIBE díky priority 10 (viz §11.3) přestane
+      dodávat své vlastní teplo do výměníku, ale ZŮSTÁVÁ ZAPNUTÉ.
+      Jakmile nádrž vychladne pod přibližně 30 °C a ventil se zavře, NIBE okamžitě
+      pokračuje vlastním topením.
+      Důvod (lidsky): jeden 30minutový NIBE cyklus může pokrýt 2-3× víc tepla než
+      bez patron — část mu „obětuje" nádrž (zatímco NIBE jen čeká, neutrácí proud
+      kompresorem), zbytek dodá NIBE sám. Při velkých přetocích nebo záporné nákupní
+      ceně tak vyždímáme z energie maximum, aniž bychom kompresor restartovali.
+      Důležité: POOL Heating si v tomto stavu DRŽÍ switch.nibe_jednorazove_zvyseni_tuv
+      = ON i v okamžiku, kdy je ventil ON. Vypnout NIBE-TUV smí jen tehdy, když pomine
+      celý důvod NIBE → bazén (žádný ze čtyř případů §11.6 už neplatí), a i pak
+      teprve po doběhu 30 min (kompresor).
 
 11.8 ABSOLUTNÍ ZÁKAZY (přidává k §1.2)
-    - Do VÝMĚNÍKU BAZÉNU smí v jednu chvíli téct teplo z POUZE JEDNOHO zdroje:
-        buď nádrž (ventilem), NEBO NIBE-TUV (přímo). NIKDY oba současně.
-        (Souběh patron do nádrže + NIBE do výměníku je OK — to jsou dva různé cíle, ne jeden.)
+    - Do VÝMĚNÍKU BAZÉNU smí v jednu chvíli FYZICKY téct teplo POUZE Z JEDNOHO ZDROJE:
+        buď z nádrže (přes otevřený ventil), NEBO přímo z NIBE čerpadla. NIKDY OBA SOUČASNĚ.
+        Pravidlo se vztahuje NA REÁLNÝ FYZICKÝ TOK TEPLA, NE na stav HA switchů.
+        Konkrétně: stav, kdy switch.nibe_jednorazove_zvyseni_tuv = ON a zároveň
+        switch.bazen_ventil_smesovac = ON, JE POVOLENÝ a NORMÁLNÍ — NIBE čerpadlo si
+        v tom okamžiku interně přepne na priority 10 (viz §11.3) a jeho vlastní teplo
+        do výměníku reálně neteče, dokud je ventil otevřený. Po zavření ventilu NIBE
+        bez prodlení pokračuje. Tohle umožňuje souběh §11.7 (patrony nádrž paralelně
+        s NIBE výměník) bez omezení a bez nutnosti vypínat kompresor.
+        (Souběh patron do nádrže + NIBE přímo do výměníku je OK — to jsou dva různé
+        cíle, ne jeden — viz §11.7.)
     - teplota_smesovac_teplota NIKDY nesmí překročit input_number.max_teplota_nadrz_bazen.
       Při překročení se okamžitě vypínají všechny zdroje ohřevu nádrže — tj. PATRONY
       (NIBE-TUV nádrž neohřívá, takže se tohoto stropu netýká; topí přímo do výměníku, §11.2b).
