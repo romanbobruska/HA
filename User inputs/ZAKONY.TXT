@@ -435,26 +435,55 @@ A ZAKAZU PRETOKU
 4.10 ZÁPORNÁ NÁKUPNÍ CENA — MÓD MAXIMÁLNÍ SPOTŘEBY ZE SÍTĚ
     - AKTIVACE: Nákupní cena elektřiny je záporná (< 0 Kč/kWh). Nám platí za odběr!
     - CÍL: Maximální odběr ze sítě dle priorit, abychom na záporné ceně vydělali.
+      Ideální hodinový průměr odběru ~21 kWh (těsně pod jističem 22 kW), ale NIKDY,
+      za žádných okolností, jistič nepřekročit.
+    - PROČ JISTIČ NIKDY: Když jistič vypadne, Victron ochrana drží síť OFF přibližně
+      20 minut (recovery procedura ESS) a navíc někdo musí být fyzicky doma, aby
+      jistič znovu nahodil. Po dobu výpadku přicházíme o peníze (záporná cena, ale
+      neodebíráme), nemůžeme nabíjet auto, mrznou potraviny v lednici atd. Vyhození
+      jističe je v tomto módu KATASTROFA, kterou nelze automatizací napravit.
     - JEDINÁ OMEZENÍ: max_spotreba_sit_w (jistič) a priority spotřebičů.
-    - Baterie nesmí být v tomto módu blokována „kvůli záporné ceně“ — max_discharge_power = -1 kromě §4.8 (NIBE/sauna soft blokace).
+    - Baterie zůstává trvale připravena vybíjet (PowerAssist aktivní). Žádná
+      „ekonomická blokace" — viz § 4.10.1 podrobně proč.
     - Hlavička plánu: záporná nákupní cena už sama o sobě není „Blokace: ANO“ (blokace = §4.8 a podobně).
 
-    4.10.1 VICTRON ESS NASTAVENÍ
-        - PSP = max_spotreba_sit_w - DYNAMICKÁ REZERVA (KLADNÉ = import ze sítě!!!)
-        - DYNAMICKÁ REZERVA závisí na tom, co běží:
-            - NIBE běží (neflexibilní, ~14kW) → rezerva = zaporna_nibe_reserve_w (výchozí 5000W)
-            - NIBE neběží (jen flexibilní spotřebiče) → rezerva = zaporna_flex_reserve_w (výchozí 3000W)
-            - Důvod: pokud najednou spadne solární výroba, NIBE nelze okamžitě vypnout,
-              ale patrony a auto ampéráž se přizpůsobí. Větší rezerva = ochrana jističe.
-        - Baterie se NABÍJÍ neomezeně (max_charge_power = -1)
-        - max_discharge_power = 0 (DEFAULT — baterie se NEVYBÍJÍ, chceme žrát maximum ze sítě).
-            Dynamicky se přepíná na -1 korekční smyčkou (§4.10.5) POUZE když hrozí přetížení
-            jističe — baterie pak slouží jako "safety buffer" pro krátké peaky (ručně zapnutý
-            spotřebič mimo automatizaci). Po ústupu peaku se vrací na 0 (s hysterezí).
-            §4.8 (soft-blok při NIBE/sauně) v tomto módu NEPLATÍ — primární ochrana je
-            dynamický PSP + korekční smyčka, ne statická blokace baterie.
-        - Export do sítě ZAKÁZÁN (feedin_on = false); prevent_feedback = 1 pokud platí zákaz přetoků (prodejní cena ≤ 0), jinak 0
-        - Scheduled charging NEPOUŽITO
+    4.10.1 VICTRON ESS NASTAVENÍ — PROČ NIKDY NEZAMYKAT BATERII
+        Princip (lidsky): V tomto módu chceme ze sítě brát maximum bez vybíjení baterie.
+        Cesta NENÍ baterii zamknout (to způsobuje Victron chybu ESS7 a oscilaci on/off
+        po několika sekundách — kompletně vypne PowerAssist a baterie pak nechrání
+        jistič ani v krajní nouzi). Cesta je: dát Victronu cíl „beru ze sítě XY kW"
+        (Power Set Point, PSP) a nechat baterii volně reagovat.
+
+        Jak to funguje s PSP (Power Set Point):
+        - PSP je cílový import ze sítě v wattech. KLADNÝ = beru ze sítě.
+        - Když je gridW < PSP → Victron víc importuje (nabíjí baterii nebo distribuuje).
+        - Když je gridW > PSP → Victron sníží import (přestane nabíjet, případně
+          aktivuje PowerAssist — baterie pomáhá pokrýt spotřebu nad PSP).
+        - Tedy: nastavením PSP = jistič mínus rezerva nepřímo říkáme baterii „za
+          obvyklých okolností nepomáhej, jen nabíjej. V krajní nouzi pomoz."
+
+        Konkrétní nastavení v módu zápor.nákup. cena:
+        - PSP = max_spotreba_sit_w mínus DYNAMICKÁ REZERVA. Default rezervy:
+            * NIBE běží (neflexibilní, ~14 kW peak) → rezerva ~5 kW (PSP ~17 kW)
+            * jen flexibilní spotřebiče → rezerva ~3 kW (PSP ~19 kW)
+            * Při peaku z neznámého spotřebiče (vířivka, sušička) snižuje centrální
+              arbitr (§ 4.10.5) PSP dál — baterie jde vyrovnat zbytek nad jistič.
+        - max_charge_power = -1 (baterie se nabíjí neomezeně z přebytku).
+        - max_discharge_power = -1 TRVALE (PowerAssist aktivní, žádná blokace).
+            Dříve byla snaha „zamknout" baterii nastavením max_discharge_power=0,
+            ale to způsobuje ESS7 (Victron error: „Not enough AC charge power for
+            system") a baterie pak ani v krajní nouzi nepomáhá. Lepší cesta:
+            nechat -1 a kontrolovat odběr přes PSP.
+        - feedin_on a prevent_feedback dle aktuální PRODEJNÍ ceny:
+            * Prodejní cena > 0 (síť bere export, vyděláváme dvojí — záporná
+              nákupní + kladná prodejní): feedin_on = true, max_feed_in_power
+              = max_feed_in_w (default ~7600 W), prevent_feedback = 0.
+              Když je baterie plná a auto i patrony saturované, solární přebytek
+              jde do sítě a vydělává. Žádný curtailment (§ 1.2).
+            * Prodejní cena ≤ 0 (zákaz přetoků): feedin_on = false, max_feed_in
+              = 0, prevent_feedback = 1. Solar musí najít domácí spotřebič
+              (auto, patrony, bojler, baterie); kdyby přebýval, Victron jej omezí.
+        - Scheduled charging NEPOUŽITO.
 
     4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší) — VŠECHNY MOHOU JET SOUČASNĚ!
         1. NIBE — zapnout pokud nádrž < max_teplota_nadrze, BEZ ohledu na cenu/solar/čas
@@ -494,33 +523,74 @@ A ZAKAZU PRETOKU
         - Automatizace OFF → nic neovlivňovat (§8.2)
         - Teplota nádrže < max → patrony OFF (již nepotřeba)
 
-    4.10.5 OCHRANA JISTIČE — DYNAMICKÝ SAFETY MARGIN + BATERIE JAKO BUFFER
-        Problém: NIBE je NEFLEXIBILNÍ (~14kW peak). Pokud spadne solar z 14kW na 5kW,
+    4.10.5 OCHRANA JISTIČE — TŘI VRSTVY (CENTRÁLNÍ ARBITR + DYNAMICKÝ PSP + REAL-TIME)
+        Problém: NIBE je NEFLEXIBILNÍ (~14 kW peak). Pokud spadne solar z 14 kW na 5 kW,
         NIBE nelze okamžitě vypnout. Patrony a auto ANO (flexibilní). Navíc uživatel
-        může ručně zapnout spotřebič MIMO automatizaci (např. 7kW sušička) a hrozí přetížení.
+        může KDYKOLIV ručně zapnout spotřebič MIMO automatizaci (sušička, vířivka,
+        varná deska, indukce…). Automatizace o tomto spotřebiči neví — vidí ho JEN
+        skrze sensor.spotreba_ze_site.
 
-        ŘEŠENÍ — DVĚ VRSTVY OCHRANY:
+        ŘEŠENÍ — TŘI VRSTVY OCHRANY (od pomalé/preventivní k bleskurychlé):
 
-        VRSTVA 1 — Dynamický PSP (staticky, dle typu běžících spotřebičů):
-            - NIBE běží → PSP = max_spotreba_sit_w - zaporna_nibe_reserve_w (default 5000W)
-            - jen flexibilní → PSP = max_spotreba_sit_w - zaporna_flex_reserve_w (default 3000W)
-            Config: zaporna_nibe_reserve_w (5000), zaporna_flex_reserve_w (3000)
+        VRSTVA 1 — Dynamický PSP (preventivní, dle typu běžících spotřebičů):
+            - NIBE běží → PSP = max_spotreba_sit_w mínus rezerva ~5 kW (default).
+            - jen flexibilní spotřebiče → rezerva ~3 kW (default).
+            Důvod: pokud je v hlavě plánu věděno, že NIBE žere 14 kW a nemůže se
+            okamžitě vypnout, dáváme více rezervy. Tato vrstva nastavuje PSP
+            jednorázově při změně stavu (NIBE on/off, mód on/off).
 
-        VRSTVA 2 — Korekční smyčka baterie jako buffer (dynamicky, každých X sekund):
+        VRSTVA 2 — Centrální arbitr (rychlá koordinace, každou ~1 sekundu):
             Samostatná NR smyčka běží JEN když je aktivní mód zaporna_nakupni_cena.
-            Sleduje skutečný odběr ze sítě (sensor.spotreba_ze_site) a přepíná baterii:
-            - PEAK detekce: spotreba_ze_site > zaporna_prah_critical_w (default 21000W)
-                → max_discharge_power = -1 (baterie OKAMŽITĚ poskytuje buffer)
-            - KLID detekce: spotreba_ze_site < zaporna_prah_safe_w (default 17000W)
-                → max_discharge_power = 0 (baterie se zase "zamkne", nevybíjí se)
-            - Hystereze 4kW (21→17) + cooldown zaporna_buffer_cooldown_s (default 30s)
-                mezi přepnutími proti oscilaci.
-            Config: zaporna_prah_critical_w (21000), zaporna_prah_safe_w (17000),
-                zaporna_buffer_cooldown_s (30), zaporna_buffer_interval_s (5)
+            Sleduje skutečný odběr ze sítě (sensor.spotreba_ze_site) a každou
+            sekundu zveřejňuje globální limity, které všechny spotřebiče musí ctít:
+            - patrony: maximální počet zapnutých fází (0–3)
+            - auto: maximální ampéráž nabíječky (6–16 A)
+            - bojler: ON / OFF povoleno
+            - PSP boost: pokud se odběr blíží jističi, sníží PSP ještě více
+              (např. o další 2–3 kW), čímž Victron sám aktivuje PowerAssist
+              (baterie pomáhá pokrýt zbytek). max_discharge_power zůstává -1
+              po celou dobu (žádné ESS7).
 
-        CÍL: 95% času baterie zamčená → žrát ze sítě (bod 1/). Jen při skutečném peaku
-        > 21kW baterie asistuje jako buffer → jistič nevypadne (bod 2/). Baterie se
-        v tomto módu přirozeně NEVYBÍJÍ, jen při reálném peaku spotřeby > jističe.
+            Princip: arbitr nečeká, až spotřebič „samostatně zareaguje" — diktuje
+            mu maximum rovnou. Tím se zamezí race condition (každý spotřebič
+            vidí stejné gridW a všichni reagují stejně, vznikne over-correction).
+
+            Pokud aktuální gridW přesáhne kritický práh (default ~20 kW, rezerva
+            2 kW pod jističem 22 kW), arbitr okamžitě snižuje limity pro patrony
+            a auto. Pokud gridW spadne pod bezpečný práh (~16 kW), uvolňuje je
+            zpět. Cooldown ~30 s platí JEN pro směr „uvolnit zpět" (proti
+            oscilaci); směr „omezit" je BEZ cooldown — bezpečnost přede vším.
+
+        VRSTVA 3 — Bleskurychlá reakce baterií (Victron PowerAssist, real-time):
+            Když i přes V1 + V2 odběr překročí PSP (např. uživatel zapnul
+            vířivku 7 kW současně s patronami), Victron sám okamžitě aktivuje
+            PowerAssist a doplní rozdíl z baterie. max_discharge_power = -1
+            (vždy povoleno) zaručuje, že baterie odpoví v desítkách milisekund,
+            nikdy nečeká na NR. Tato vrstva je „last resort" a je zdarma —
+            jen ji nesmíme blokovat (§ 4.10.1).
+
+        CÍL: 95 % času baterie minimálně vybíjí (PSP ~17–19 kW znamená, že
+        Victron nemá důvod sahat na PowerAssist). Jen při překročení PSP
+        baterie krátce pomůže. Jistič NIKDY nevypadne (vrstva 3 je rychlejší
+        než tepelná charakteristika jističe).
+
+    4.10.6 PRINCIP — DÍVEJ SE NA AKTUÁLNÍ SPOTŘEBU, NE NA GLOBÁLKY
+        V tomto módu MUSÍ každý regulovatelný spotřebič (auto, patrony, bojler,
+        centrální arbitr) číst v reálném čase sensor.spotreba_ze_site a nikoli
+        spoléhat na vlastní cache, globální proměnné nebo „odhady spotřeby
+        ostatních spotřebičů". Důvod: uživatel může KDYKOLIV zapnout neznámý
+        spotřebič (vířivka, sušička, varná konvice…) a automatizace o něm neví.
+        Jediný spolehlivý ukazatel je celkový odběr ze sítě.
+
+        Praktická pravidla:
+        - Centrální arbitr (§ 4.10.5 vrstva 2) tikne minimálně 1× za sekundu
+          a používá nejčerstvější hodnotu sensor.spotreba_ze_site.
+        - Spotřebiče respektují limity z globálních proměnných (zn_pat_max_floor,
+          zn_auto_max_amps, zn_bojler_allowed) zveřejněné arbitrem.
+        - Pokud kritický práh (~20 kW) trvá víc než 5 s, automatizace agresivně
+          snižuje patrony i ampéráž auta na minimum a hlásí varování v statusu.
+        - Statické rezervy (NIBE 5 kW, flex 3 kW) jsou pouze BAZÉN, real-time
+          arbitr je nadřazený a může je dál snížit.
 
     4.10.6 KOMBINACE SE ZÁKAZEM PŘETOKŮ
         Pokud je zároveň záporná nákupní I nekladná prodejní cena:
