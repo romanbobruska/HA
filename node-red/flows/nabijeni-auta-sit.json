@@ -639,8 +639,8 @@
         "name": "Chci rychle nabít auto?",
         "server": "c7421fe2.cb11c",
         "version": 3,
-        "outputs": 2,
-        "halt_if": "on",
+        "outputs": 1,
+        "halt_if": "",
         "halt_if_type": "str",
         "halt_if_compare": "is",
         "entity_id": "input_boolean.chci_rychle_nabit_auto",
@@ -673,9 +673,6 @@
         "wires": [
             [
                 "707a53451c626ff1"
-            ],
-            [
-                "0e9ad909cb38430e"
             ]
         ]
     },
@@ -930,7 +927,7 @@
         "type": "function",
         "z": "a86ad952ad7756aa",
         "name": "kWh <= prah_nizsi?",
-        "func": "var config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_nizsi || 3.0;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
+        "func": "var _rych = (global.get(\"homeassistant.homeAssistant.states['input_boolean.chci_rychle_nabit_auto']\")||{}).state===\"on\";\nif (_rych) { node.status({fill:'green',shape:'dot',text:'\\uD83D\\uDE80 rychle bypass'}); return [msg, null]; }\nvar config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_nizsi || 3.0;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
@@ -953,7 +950,7 @@
         "type": "function",
         "z": "a86ad952ad7756aa",
         "name": "kWh <= prah_vyssi?",
-        "func": "var config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_vyssi || 4.3;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
+        "func": "var _rych = (global.get(\"homeassistant.homeAssistant.states['input_boolean.chci_rychle_nabit_auto']\")||{}).state===\"on\";\nif (_rych) { node.status({fill:'green',shape:'dot',text:'\\uD83D\\uDE80 rychle bypass'}); return [msg, null]; }\nvar config = global.get('fve_config') || {};\nvar prah = config.nabijeni_auta_cena_prah_vyssi || 4.3;\nvar stav = global.get(\"homeassistant.homeAssistant.states['input_number.aktualni_cena_kwh']\") || {};\nvar cena = parseFloat(stav.state);\nif (isNaN(cena)) { node.status({fill:'red',shape:'ring',text:'cena NaN'}); return [null, msg]; }\nnode.status({fill: cena <= prah ? 'green' : 'yellow', shape:'dot', text: cena + ' Kc (prah ' + prah + ')'});\nif (cena <= prah) { return [msg, null]; }\nreturn [null, msg];",
         "outputs": 2,
         "timeout": 0,
         "noerr": 0,
