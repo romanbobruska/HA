@@ -201,57 +201,64 @@ jistá, NEZASADÍ a vysvětlí proč.
           (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
            dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
            pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
-        - AGRESIVNÍ REŽIM — výjimka (v28, upraveno): Cíl se sníží na min_soc + nMarginAgg
-          (v30.8: 2 % — tj. cíl 22 %, hlubší drain než normální nMargin=5 %).
-          Důvod hlubšího drainu: pokud platí (1) + (2)/(2b), zítřejší solar stejně zaplní baterii ZDARMA,
-          takže 2% rezerva chrání jen proti náhlému zamračení přes noc; 5% rezerva by zbytečně
-          ponechala ~1 kWh v baterii místo jejího prodeje za nejdražší sell cenu (§1.0 MAX zisk).
-          Platí POUZE pokud platí VŠECHNY tři podmínky současně:
+        - KDY VŮBEC PRODÁVAT (rozhodovací tabulka — uživatel 8. 5. 2026 19:22):
+          Klíčový práh je předpověď zítřejší solární výroby: přibližně **50 kWh**
+          (parametr v konfiguraci se jmenuje plan_aggressive_solar_day_kwh, výchozí 50).
 
-            (1) BILANCE ZÍTŘEJŠÍHO SOLÁRU — zítra bude dost slunce na dobití baterie:
-                • effSolar_zítra ≥ plan_aggressive_solar_day_kwh (default 50 kWh), kde
-                  effSolar_zítra = predpoved_solarni_vyroby_zitra
-                                  − plan_auto_demand_kwh   (default 25, jen pokud auto má hlad)
-                                  − nibe_est_consumption_kwh × nibe_cyklů  (jen pokud bude topit)
-                                  − daily_consumption_kwh  (denní spotřeba domu),
-                  NEBO
-                • zbývající_solar_dnes ≥ plan_aggressive_solar_day_kwh AND auto NEMÁ hlad
-                  (jinak by si dnešní zbytek soláru vzal automaticky charger).
+          ┌──────────────────────────┬─────────────────┬─────────────────────────────────┐
+          │ Předpověď solaru zítra   │ Auto má hlad?   │ Co dělat v drahých hodinách     │
+          ├──────────────────────────┼─────────────────┼─────────────────────────────────┤
+          │ Více než ~50 kWh         │ ANO             │ PRODÁVAT                        │
+          │ Více než ~50 kWh         │ NE              │ PRODÁVAT                        │
+          │ Méně než ~50 kWh         │ ANO             │ NEPRODÁVAT                      │
+          │ Méně než ~50 kWh         │ NE, letní režim │ PRODÁVAT                        │
+          │ Méně než ~50 kWh         │ NE, zimní režim │ NEPRODÁVAT                      │
+          └──────────────────────────┴─────────────────┴─────────────────────────────────┘
 
-            (2) NOVÁ PODMÍNKA — NOČNÍ CENA ENERGIE (business pravidlo):
-                Nejvyšší nákupní cena v okně (od konce prodeje do první solární hodiny zítra)
-                musí být LEVNÁ nebo ZÁPORNÁ:
-                  max(buy v okně) ≤ prah_ultra_levna_nakup  (default 1.0 Kč/kWh)
-                  NEBO
-                  max(buy v okně) ≤ 0  (záporná nákupní cena)
+          Důvod (lidsky):
+          - 50 kWh je dost na to, aby zítra solar pokryl všechno: nabití auta (~25 kWh),
+            spotřebu domu, dotopení baterie z minima zpátky na plno, a zbyla rezerva.
+            Když to platí, dnešní prodej drahých hodin je čistý zisk — solar to zítra
+            zadarmo nahradí (§ 1.2 „solár neomezujeme").
+          - Když je zítra slabá předpověď (méně než ~50 kWh) a auto chce nabít,
+            sebere si auto skoro celý solar a baterie by se nedobila — pak by se
+            v noci muselo nakupovat draho ze sítě. Proto NEPRODÁVAT.
+          - Když je slabá předpověď, auto je nabité, a je léto — dům má v létě nízkou
+            spotřebu, baterie přes noc vystačí, a slabší solar zítra ji nakonec dohřeje.
+            Lze tedy bezpečně prodat v drahých hodinách.
+          - Když je slabá předpověď, auto nabité, ale je zima — dům má vysokou spotřebu
+            (NIBE topí), baterie přes noc projí víc energie, a slabý solar zítra ji
+            nedoplní. Proto NEPRODÁVAT.
 
-                Důvod: HLAVNÍ PRAVIDLO §4.5 — nikdy neprodávat energii, kterou bychom pak museli
-                v noci dokoupit ze sítě DRAŽ než za kolik jsme prodali. Zítřejší solár svítí
-                až RÁNO — mezi večerním prodejem a ranním sluncem je 8–10 hodin noci, kdy
-                dům spotřebovává energii. Pokud by v té noci byly drahé hodiny (≥ prah_draha_energie),
-                prodej pod noční rezervu by znamenal ztrátu (prodám za 2.6 Kč, koupím zpět za 4.2 Kč).
+        - DO JAKÉHO SOC SE PRODÁVÁ (uživatel 8. 5. 2026 19:54):
+          Cíl SOC pro prodej se počítá tak, aby baterie přes noc **NEMUSELA šetřit**.
+          Tj. po prodeji musí v baterii zůstat dost energie na pokrytí spotřeby domu
+          od konce prodeje až do první ranní sluneční hodiny zítra.
 
-            (2b) v30.7 — TŘETÍ CESTA k (2): BILANCE SOLAR vs NOC+BATERIE
-                Podmínka (2) je OBCHÁZENA, pokud zítřejší solar dokáže zaplnit baterii
-                a zároveň pokryt dnešní noc s rezervou:
-                  (predpoved_solarni_vyroby_zitra)
-                  − (100 − current_soc)/100 × kapacita_baterie_kwh   (refill baterie na 100 %)
-                  − nightCons                                         (spotřeba domu do 1. sol. hod.)
-                  ≥ night_reserve_kwh                                  (default 10 kWh bezpečnostní rezerva)
+            cíl SOC = min_soc + (noční spotřeba domu v kWh ÷ kapacita baterie ÷ účinnost vybíjení) × 100 %
+                     + bezpečnostní rezerva (nMargin, výchozí 5 %)
 
-                Důvod: pokud solar zítra stejně přeteče baterii + dá ze sítě do domu dost
-                energie na pokrytí dne a následující noci, prodej dnes v drahých hodinách
-                je čistý zisk (solar nahradí prodanou energii ZDARMA — §1.2 solár neomezujeme).
-                Bez této cesty plán v evening drahé hodiny NEPRODÁ, i když má 80+ kWh solar
-                zítra připraveno — ztráta 2-3 Kč/kWh potenciálního zisku.
+          Důvod (lidsky): kdyby baterie po prodeji klesla pod tuto úroveň, dům by
+          si v nočních drahých hodinách musel kupovat energii ze sítě za vyšší cenu,
+          než za jakou jsme prodali — to by byla ztráta. Hlavní pravidlo § 4.5
+          říká: „nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
+          dráž." Plán proto cíl SOC zobrazuje u každé hodiny PRODÁVAT,
+          aby uživatel viděl, do jaké úrovně se baterie smí vybít.
 
-          Pokud NEPLATÍ žádná z podmínek (2) ani (2b) — tj. noc bude drahá A solar nepokryje vše —
-          použije se baseSellTarget (min_soc + night_need_soc + nMargin), který obsahuje rezervu
-          na celou noc.
+          Příklad: dům spotřebuje za noc ~10 kWh, baterie 28 kWh, účinnost vybíjení 0.9
+          → noční rezerva = 10 ÷ 28 ÷ 0.9 × 100 ≈ 40 %.
+          → cíl SOC = 20 (min) + 40 (noc) = 60 % (ne 22 %, jak by pramenil agresivní drain).
 
-          Důvod AGRESIVNÍHO režimu: §1.0 „PRODÁVÁME ZA CO NEJDRAŽŠÍ, NAKUPUJEME ZA CO NEJMENŠÍ"
-          + §1.2 „SOLÁR NEOMEZUJEME". Aktivní jen když dává ekonomický smysl sjet baterii dolů
-          (zítřejší solár dobije + noc nepřidá žádné drahé dokupy).
+          Toto pravidlo platí **VŽDY**, i když zítra předpovídá hodně slunce. Důvod:
+          dnešní noc je vlastní problém — zítřejší slunce baterii doplní teprve ráno,
+          ale spotřeba domu mezi koncem prodeje a ránem musí být pokryta z baterie,
+          ne z drahé noční sítě.
+
+        - SETRIT MÓD V NOCI (uživatel 8. 5. 2026 19:54):
+          Pokud plán naplánuje SETRIT v noční hodině po prodeji, je to signál, že
+          se prodalo příliš a baterie nedosáhne přes noc bez šetření. Plán to
+          MUSÍ POSLECHNOUT a snížit množství prodeje (zvýšit cíl SOC), ne nasadit
+          SETRIT jako kompenzaci. SETRIT v plánu noci = bug ve výpočtu cíle SOC.
 
           (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
           za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
