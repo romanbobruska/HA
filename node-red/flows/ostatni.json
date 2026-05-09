@@ -86,13 +86,11 @@
         },
         "nodes": [
             "d99ec20da7b74f45",
-            "ccebeda7eecb3e76",
             "b03c0f95ef0702c5",
             "e4c98fa8001d9bde",
             "04ea2075a325c38b",
-            "b02f66abf215419b",
-            "af7ca7e3f3e999db",
-            "8f4d10785f23c6e7"
+            "8f4d10785f23c6e7",
+            "lock_eval_func"
         ],
         "x": 14,
         "y": 559,
@@ -677,41 +675,7 @@
         "y": 660,
         "wires": [
             [
-                "ccebeda7eecb3e76"
-            ]
-        ]
-    },
-    {
-        "id": "ccebeda7eecb3e76",
-        "type": "switch",
-        "z": "58f453ee71c85d6d",
-        "g": "314bb66109910b71",
-        "name": "",
-        "property": "payload",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "armed_away",
-                "vt": "str"
-            },
-            {
-                "t": "eq",
-                "v": "disarmed",
-                "vt": "str"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 2,
-        "x": 470,
-        "y": 680,
-        "wires": [
-            [
-                "b03c0f95ef0702c5"
-            ],
-            [
-                "e4c98fa8001d9bde"
+                "lock_eval_func"
             ]
         ]
     },
@@ -898,55 +862,8 @@
         "y": 720,
         "wires": [
             [
-                "ccebeda7eecb3e76"
+                "lock_eval_func"
             ]
-        ]
-    },
-    {
-        "id": "b02f66abf215419b",
-        "type": "moment",
-        "z": "58f453ee71c85d6d",
-        "g": "314bb66109910b71",
-        "name": "",
-        "topic": "",
-        "input": "",
-        "inputType": "date",
-        "inTz": "Europe/Prague",
-        "adjAmount": "0",
-        "adjType": "days",
-        "adjDir": "add",
-        "format": "HH:mm",
-        "locale": "cs-CZ",
-        "output": "payload",
-        "outputType": "msg",
-        "outTz": "Europe/Prague",
-        "x": 380,
-        "y": 600,
-        "wires": [
-            [
-                "af7ca7e3f3e999db"
-            ]
-        ]
-    },
-    {
-        "id": "af7ca7e3f3e999db",
-        "type": "time-range-switch",
-        "z": "58f453ee71c85d6d",
-        "g": "314bb66109910b71",
-        "name": "Je noc a musí být zamknuto?",
-        "lat": "50.1064015",
-        "lon": "14.7405731",
-        "startTime": "02:00",
-        "endTime": "02:02",
-        "startOffset": "0",
-        "endOffset": "0",
-        "x": 680,
-        "y": 600,
-        "wires": [
-            [
-                "b03c0f95ef0702c5"
-            ],
-            []
         ]
     },
     {
@@ -975,7 +892,31 @@
         "y": 600,
         "wires": [
             [
-                "b02f66abf215419b"
+                "lock_eval_func"
+            ]
+        ]
+    },
+    {
+        "id": "lock_eval_func",
+        "type": "function",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Vyhodnoť stav zámku",
+        "func": "// Vyhodnoceni stavu zamku — agreguje 3 podminky a posila lock/unlock idempotentne.\n// Pravidlo (uzivatel 10.5.2026):\n//   ZAMCENO pokud: celkAlarm armed* OR garazAlarm armed* OR (cas v okne 23:00-06:00)\n//   ODEMCENO pokud: VSECHNY 3 podminky FALSE\n//   Idempotence: pokud je zamek uz ve spravnem stavu, neposila nic (predchazi spam volani lock.lock/unlock\n//                a nedeterministicke vyhrani prikazu pri kolizi).\nvar s = global.get(\"homeassistant.homeAssistant.states\") || {};\nfunction gS(id) { return ((s[id]||{}).state) || \"\"; }\nfunction isArmed(x) { return x && x.indexOf(\"armed\") === 0; }\nvar celk  = gS(\"alarm_control_panel.horousany_sekce_1_celkovy_alarm\");\nvar garaz = gS(\"alarm_control_panel.horousany_sekce_7_garaz_alarm\");\nvar lock  = gS(\"lock.yale_chytry_zamek\");\nvar h = new Date().getHours();\nvar jeNoc = (h >= 23 || h < 6); // 23:00-06:00\nvar maBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc;\nvar reason = (isArmed(celk) ? \"celk(\"+celk+\")\" : \"\")\n    + (isArmed(garaz) ? \" garaz(\"+garaz+\")\" : \"\")\n    + (jeNoc ? \" noc\" : \"\");\nnode.status({fill: maBytZamceno ? \"yellow\" : \"green\", shape: \"dot\",\n    text: (maBytZamceno?\"ZAM\":\"ODEM\") + \" lock=\"+lock+\" \"+(reason||\"vse off\")});\nif (maBytZamceno && lock !== \"locked\") return [msg, null];\nif (!maBytZamceno && lock === \"locked\") return [null, msg];\nreturn null; // zadna zmena\n",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 680,
+        "wires": [
+            [
+                "b03c0f95ef0702c5"
+            ],
+            [
+                "e4c98fa8001d9bde"
             ]
         ]
     }
