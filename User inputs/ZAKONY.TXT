@@ -777,6 +777,59 @@ A ZAKAZU PRETOKU
 8. FLOW: TOPENÍ DOMU (fve-heating.json)
 ================================================================================
 
+8.0 CÍLOVÁ TEPLOTA V DOMĚ A REŽIM NEPŘÍTOMNOSTI
+    Cílovou teplotu domu nastavuje uživatel ručně přes HA komponentu
+    `input_number.nastavena_teplota_v_dome`. Tato hodnota je hlavním
+    referenčním bodem pro topení (v zimě) i chlazení (v létě).
+
+    A) ZIMNÍ REŽIM (letni_rezim = OFF)
+       - Když uživatel není doma (`input_boolean.jsme_doma` = OFF), automatika
+         dočasně sníží cílovou teplotu domu na úspornou hodnotu (přibližně
+         21 °C — přesnou hodnotu si nastavíš v konfiguraci, parametr v kódu
+         `topeni_away_temp`). Topení tak v prázdném domě zbytečně neutrácí
+         za drahou síť.
+       - Když se uživatel vrátí (`jsme_doma` = ON), automatika obnoví tu
+         teplotu, kterou měl uživatel nastavenou před odchodem (původní
+         hodnota se uloží při odchodu, aby se neztratila).
+       - Důvod (lidsky): v zimě je drahé topit prázdný dům na komfortních
+         22–23 °C; 21 °C ho stačí udržet nad rosným bodem a před návratem
+         se rychle dotopí na původní cíl.
+
+    B) LETNÍ REŽIM (letni_rezim = ON) — CHLAZENÍ
+       - Cílová teplota domu se v létě AUTOMATICKY NEMĚNÍ podle toho,
+         jestli je někdo doma nebo ne. Udržuje se přesně ta hodnota, kterou
+         má uživatel nastavenou na `input_number.nastavena_teplota_v_dome`.
+         Tj. pravidlo „nejsme doma → snížit teplotu" platí JEN PRO ZIMNÍ
+         REŽIM, v létě nemá vliv.
+       - V létě se na cílovou teplotu domu pro chlazení NEUPLATŇUJE žádné
+         noční snížení ani snížení při „vysokém solárním dni" (parametry
+         `topeni_nocni_snizeni` a `topeni_high_sol_snizeni` se týkají
+         pouze topení v zimě). V noci se tedy chladí na úplně stejnou
+         teplotu jako přes den — uživatel chce konstantní komfort.
+       - Chlazení domu (NIBE chlazení, `switch.nibe_chlazeni`) se aktivuje
+         pouze tehdy, když platí VŠECHNY tyto podmínky najednou:
+           * letní režim je zapnutý (`input_boolean.letni_rezim` = ON),
+           * uživatel povolil chlazení (`input_boolean.chlazeni` = ON),
+           * aktuální teplota v domě je VYŠŠÍ NEŽ NASTAVENÁ TEPLOTA
+             zvýšená o malou hysterezi (přibližně 0,3 °C — přesnou
+             hodnotu si nastavíš v konfiguraci, parametr
+             `topeni_hystereze_chlazeni`).
+       - Chlazení se VYPNE, jakmile aktuální teplota dosáhne (klesne na
+         nebo pod) nastavenou teplotu. Tj. dolní práh = přesně nastavená
+         teplota, žádná spodní hystereze.
+       - Pokud je aktuální teplota v domě stejná nebo nižší než nastavená
+         (ale chlazení ještě neběželo), chlazení se vůbec NESPOUŠTÍ.
+       - Důvod hystereze (lidsky): bez ní by NIBE chlazení rychle blikalo
+         ON/OFF kolem cílové teploty (každé spuštění kompresoru zatěžuje
+         techniku). Hystereze 0,3 °C je kompromis: dům se přehřeje
+         maximálně o tři desetiny stupně nad cíl, než se chlazení rozjede.
+       - Důvod letní stálé teploty (lidsky): kdyby automatika v létě při
+         nepřítomnosti zvedla cílovou teplotu (např. na 26 °C kvůli
+         „úspoře"), uživatel by se vrátil do rozpáleného domu, který by
+         chlazení dohánělo zbytečně dlouho a draho. Lépe je držet stálou
+         teplotu — solární přebytek je v létě obvykle dost na to, aby
+         chlazení běželo skoro zadarmo.
+
 8.1 TOPENÍ MOD — KLÍČOVÝ KONCEPT
     ┌──────────┬────────────────────────────────────────────────────┐
     │ Mód      │ Podmínka aktivace                                  │
