@@ -883,7 +883,7 @@ A ZAKAZU PRETOKU
         NIBE je efektivnější a zvládne natopil nádrž rychleji.
     - SOC baterie ≥ 90 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
-    - korekcni smycka zapinani fazi patron upravi ve 20s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
+    - korekcni smycka zapinani fazi patron upravi ve 10s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
         - SOC baterie je >=95%, pak se VYBIJI baterie cca 1 - 2kWh - HLAVNE SE NESMI NABIJET!!!. Pokud se bateerie v tomto 
             SOC bude nabijet, prida se 1 faze.
             - POKUD JE SOC BATERIE >=95% A JE ZAROVEN ZAKAZ PRETOKU, ZAPNOU SE VSECHNY FAZE A NEVYPNOU SE AZ DO DOBY, KDY SE BATERIE VYBIJE POD SOC 95%.
@@ -914,7 +914,7 @@ A ZAKAZU PRETOKU
 
     Start: hlavní loop vždy spustí jen 1 fázi → korekce přidá další
 
-8.6 KOREKCE PATRONY (pat_korekce_func, každých 20s) - tady neplatí cooldown, patrony fungují okamžitě
+8.6 KOREKCE PATRONY (pat_korekce_func, každých 10s) - tady neplatí cooldown, patrony fungují okamžitě
    - Tady to funguje stejne jako u nabíjení auta ze solaru -  s tím rozdílem, že patrony mají nejmenší prioritu
     a spouští se až po 90% SOC baterie. Precti si ta pravidla, plati stejna - obecne - pokud mame prebytek solaru na 
     patrony, pak spustme 1, 2 nebo 3 faze - pokud ne, tak nic.
@@ -927,7 +927,7 @@ A ZAKAZU PRETOKU
         b) Prodejní cena ≤ topeni_boost_max_sell_price (výchozí 2 Kč/kWh)
         c) SOC ≥ 95% (baterie plná, energy overflow)
     - PRAVIDLO KOMPRESORU: Patrony se OKAMŽITĚ vypnou, jakmile NIBE kompresor nebo čerpadlo začne pracovat.
-      Kontrola probíhá v hlavní smůdce (60s) i v korekční smůdce patron (20s).
+      Kontrola probíhá v hlavní smůdce (60s) i v korekční smůdce patron (10s).
     - Všechna ostatní pravidla patron platí beze změny (SOC ≥ 90%, auto_ma_hlad=OFF, tank < maxTankPat, atd.)
     - Korekční smůdka patron řídí počet fází podle přebytku — žádný odběr ze sítě
     - Config: topeni_boost_max_sell_price (výchozí 2 Kč/kWh) 
@@ -1384,7 +1384,7 @@ A ZAKAZU PRETOKU
     topeni_patron_drain_w: 1000 (cíl vybíjení v korekci patrony, W)
     topeni_patron_dead_band_w: 500 (dead band korekce patrony, W)
     topeni_patron_max_grid_draw_w: 200 (max odběr ze sítě při patrony, W)
-    topeni_patron_change_cooldown: 6 (počet 5s cyklů mezi změnami fáze)
+    topeni_patron_change_cooldown: 3 (počet 10s cyklů mezi změnami fáze, default 30s celkem)
     topeni_solar_override_w: 8000 (min solar pro override deferral u NIBE, W)
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
     nibe_est_consumption_kwh: 7 (odhadovaná spotřeba NIBE za hodinu, kWh — reálný cyklus ~30 min / ~7 kWh)
