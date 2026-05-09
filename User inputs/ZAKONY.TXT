@@ -1168,27 +1168,41 @@ A ZAKAZU PRETOKU
             JE ALE POVOLENO TOPENI PRIMO DO VYMENIKU PRES NIBE, JELIKOZ TOTO TOPENI SPOUSTI VLASTNI RELE V BAZENOVE SACHTE,
             TAKZE TADY K PREHRATI VYMENIKU NEDOJDE, I KDYZ V HA FILTRACE NEBUDE DOSTUPNA.
 
-11.6 NIBE → BAZÉN — 4 PŘÍPADY, KDY SE AKTIVUJE PŘÍMÉ TOPENÍ
+11.6 NIBE → BAZÉN — KDY SE AKTIVUJE PŘÍMÉ TOPENÍ
     Přímá cesta NIBE → výměník (switch.nibe_jednorazove_zvyseni_tuv) se zapne POUZE
-    v jednom z těchto čtyř případů (jinak se NIKDY nespouští):
+    pokud zároveň platí ZÁKLADNÍ POVOLENÍ a alespoň jeden ze tří povolených případů.
+
+    ZÁKLADNÍ POVOLENÍ (musí být ON, jinak NIBE → bazén nikdy neběží):
+       letni_rezim = ON  AND  pool_enabled = ON  AND  automatizovat_vytapeni_bazenu = ON
+       Důvod (lidsky): když si uživatel vypne automatizaci vytápění bazénu, NESMÍ se NIBE
+       pro bazén pouštět ZA ŽÁDNÝCH OKOLNOSTÍ. Ani v zákazu přetoků, ani při záporné ceně,
+       ani jindy. Vypnutá automatizace = absolutní stop.
+
+    POVOLENÉ PŘÍPADY (alespoň jeden z těchto musí platit):
 
     1. ZÁPORNÁ NÁKUPNÍ CENA
        buy_price ≤ pool_nibe_zaporna_cena_threshold (default 0 Kč/kWh)
        → Za odběr ze sítě nám platí. Topíme bazén maximem (§1.2 absolutní pravidlo).
+       (Tento případ NEvyžaduje bazen_na_max — je to zákonem vynucená výjimka kvůli §1.2.)
 
-    2. ZÁKAZ PŘETOKŮ + SOLÁR NEMÁ KAM ODTÉCT
-       FVE mód = zakaz_pretoku  a  solární výroba ≥ pool_nibe_zakaz_pretoku_solar_kwh (default 13 kWh)
-       → Přebytek bychom museli omezit (§1.2 zakazuje!). Bazén je ideální sink.
-
-    3. bazen_na_max = ON + NEJLEPŠÍ PODMÍNKY (plánovač, §11.6.1)
+    2. bazen_na_max = ON + NEJLEPŠÍ PODMÍNKY (plánovač, §11.6.1)
        → Uživatel chce bazén natopit do 24 h. POOL Heating si vybere nejlepší hodiny v plánu.
+       (V rámci tohoto případu spadají i situace, kdy je zákaz přetoků a solar nemá kam odtéct —
+       plánovač si je vybere přirozeně, protože jsou to nejlevnější hodiny.)
 
-    4. ULTRALEVNÁ CENA + bazen_na_max = ON
+    3. ULTRALEVNÁ CENA + bazen_na_max = ON
        buy_price ≤ config.prah_ultra_levna_nakup (default 1 Kč/kWh)  AND  bazen_na_max = ON
        → Energie je tak levná, že se vyplatí topit bazén i ze sítě, pokud chceme rychle natopit.
 
-    Mimo tyto čtyři případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
-    Ve všech čtyřech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
+    DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění (8. 5. 2026, žádost uživatele):
+       Dříve existoval samostatný případ „ZÁKAZ PŘETOKŮ + SOLÁR ≥ 13 kWh", který spouštěl
+       NIBE → bazén AUTOMATICKY i když uživatel rychlé vytápění bazénu nechtěl. Toto je
+       ZRUŠENO. Zákaz přetoků sám o sobě NIKDY nespouští NIBE → bazén. Pokud uživatel
+       chce v zákazu přetoků topit bazén, MUSÍ explicitně zapnout bazen_na_max — pak to
+       řeší případ 2 (plánovač) přirozeně.
+
+    Mimo tyto případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
+    Ve všech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
     i kdyby podmínky během této doby pominuly.
 
     - U TOPENI PRES NIBE PLATI STEJNE JAKO U TOPENI DO DOMU PRAVIDLO SOLARNI VYROBY 8KWH - NAD ZEREME BATERII, POD BEREME ZE SITE
