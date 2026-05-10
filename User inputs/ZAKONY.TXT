@@ -230,70 +230,35 @@ jistá, NEZASADÍ a vysvětlí proč.
             (NIBE topí), baterie přes noc projí víc energie, a slabý solar zítra ji
             nedoplní. Proto NEPRODÁVAT.
 
-        - DO JAKÉHO SOC SE PRODÁVÁ (uživatel 10. 5. 2026 20:20 — opraveno):
-          Cíl SOC pro prodej závisí na režimu (aggressive summer vs. běžný).
+        - DO JAKÉHO SOC SE PRODÁVÁ (uživatel 8. 5. 2026 19:54):
+          Cíl SOC pro prodej se počítá tak, aby baterie přes noc **NEMUSELA šetřit**.
+          Tj. po prodeji musí v baterii zůstat dost energie na pokrytí spotřeby domu
+          od konce prodeje až do první ranní sluneční hodiny zítra.
 
-          A) AGRESIVNÍ LETNÍ REŽIM
-             (letní režim ZAPNUTÝ a zítřejší předpověď slunce nad ~50 kWh):
+            cíl SOC = min_soc + (noční spotřeba domu v kWh ÷ kapacita baterie ÷ účinnost vybíjení) × 100 %
+                     + bezpečnostní rezerva (nMargin, výchozí 5 %)
 
-             cíl SOC = min_soc + nMargin (typicky 25 %).
+          Důvod (lidsky): kdyby baterie po prodeji klesla pod tuto úroveň, dům by
+          si v nočních drahých hodinách musel kupovat energii ze sítě za vyšší cenu,
+          než za jakou jsme prodali — to by byla ztráta. Hlavní pravidlo § 4.5
+          říká: „nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
+          dráž." Plán proto cíl SOC zobrazuje u každé hodiny PRODÁVAT,
+          aby uživatel viděl, do jaké úrovně se baterie smí vybít.
 
-             Důvod (lidsky): zítřejší slunce baterii dobije zdarma. Dnes večer
-             v drahých hodinách prodáváme do hluboka — první dvě až tři ranní
-             solární hodiny začnou refill, do oběda je baterie zpátky kolem 50–80 %.
-             Když by baterie přes noc klesla na minimum, plán nasadí ŠETŘIT/NORMAL
-             podle ceny, ale NIKDY nekupuje ze sítě jen kvůli „doplnění" —
-             plán prostě počká do rána. Konzervativní cíl (60–80 %) v tomto režimu
-             ničil hlavní princip § 4.5: „PRODÁVÁME ZA NEJDRAŽŠÍ HODINY".
+          Příklad: dům spotřebuje za noc ~10 kWh, baterie 28 kWh, účinnost vybíjení 0.9
+          → noční rezerva = 10 ÷ 28 ÷ 0.9 × 100 ≈ 40 %.
+          → cíl SOC = 20 (min) + 40 (noc) = 60 % (ne 22 %, jak by pramenil agresivní drain).
 
-          B) BĚŽNÝ REŽIM
-             (zima nebo letní režim s slabou předpovědí slunce do ~50 kWh):
+          Toto pravidlo platí **VŽDY**, i když zítra předpovídá hodně slunce. Důvod:
+          dnešní noc je vlastní problém — zítřejší slunce baterii doplní teprve ráno,
+          ale spotřeba domu mezi koncem prodeje a ránem musí být pokryta z baterie,
+          ne z drahé noční sítě.
 
-             cíl SOC = min_soc + (noční spotřeba domu v kWh ÷ kapacita baterie ÷ účinnost vybíjení) × 100 %
-                      + bezpečnostní rezerva (nMargin, výchozí 5 %)
-
-             Důvod (lidsky): v zimě dům spotřebuje hodně (NIBE topí), zítřejší slabý
-             solar refill nepokryje. Baterie po prodeji musí mít dost energie na
-             noční spotřebu, jinak v noci kupujeme za 4–5 Kč to, co jsme přes
-             večer prodali za 2–3 Kč — ztráta. Hlavní pravidlo: „nikdy neprodávat
-             to, co bychom pak museli nakoupit dráž".
-
-             Příklad: dům spotřebuje za noc ~10 kWh, baterie 28 kWh, účinnost
-             vybíjení 0.9 → noční rezerva = 10 ÷ 28 ÷ 0.9 × 100 ≈ 40 %
-             → cíl SOC = 20 (min) + 40 (noc) = 60 %.
-
-          Plán u každé hodiny PRODÁVAT zobrazuje cíl SOC ve formátu
-          „cíl SOC XX %", aby uživatel viděl, do jaké úrovně se baterie smí vybít.
-
-        - PRIORITIZACE NEJDRAŽŠÍCH HODIN (uživatel 10. 5. 2026 20:20):
-          Když je víc kandidátních hodin na PRODÁVAT, než pojme rozpočet
-          (cSoc − cíl SOC), plán vybírá NEJDRAŽŠÍ první. Konkrétně: kandidáty
-          seřadí podle prodejní ceny od nejvyšší k nejnižší a zkouší je
-          chronologicky nasimulovat. Hodina projde, pokud po normálním vybíjení
-          předchozích nezvolených hodin zůstane SOC nad cílem.
-
-          Důvod (lidsky): § 4.5 hlavní princip = „od nejvyšší sell ceny dolů".
-          Kdyby plán bral první hodinu jen proto, že je první (i když pozdější
-          je o desetník dražší), porušil by tento princip. Algoritmus mírně
-          obětuje absolutní zisk za jednu hodinu, ale dodrží pravidlo: prodej
-          jde do nejdražší dosažitelné hodiny, kterou baterie ještě má z čeho.
-
-        - SETRIT MÓD V AGRESIVNÍM LETNÍM REŽIMU (uživatel 10. 5. 2026 20:20):
-          V aggressive summer plán NIKDY nenasadí ŠETŘIT/setritTop v non-solárních
-          hodinách. Levné noční hodiny jdou na NORMAL (vybíjet baterii do domu),
-          drahé jdou na PRODÁVAT (dokud SOC > cíl). Když SOC klesne pod cíl SOC,
-          plán přejde na fallback „Šetřím baterii" pouze když SOC ≤ min_soc.
-          Drobné ŠETŘIT okolo levných hodin v drahém kontextu = bug ve výpočtu
-          dO (drain set) — všechny eliminované sell kandidáty MUSÍ dostat dO=true,
-          jinak resolveMode propadne na default ŠETŘIT.
-
-        - SETRIT MÓD V BĚŽNÉM REŽIMU (uživatel 8. 5. 2026 19:54):
-          V běžném režimu (zima nebo letní s slabou předpovědí) plán smí nasadit
-          ŠETŘIT na N nejlevnějších non-solárních hodin (setritTop), aby se
-          baterie šetřila pro drahé hodiny. Pokud plán naplánuje ŠETŘIT v noční
-          hodině PO prodeji, je to signál, že se prodalo příliš a baterie
-          nedosáhne přes noc bez šetření. Plán to MUSÍ POSLECHNOUT a snížit
-          množství prodeje (zvýšit cíl SOC), ne nasadit ŠETŘIT jako kompenzaci.
+        - SETRIT MÓD V NOCI (uživatel 8. 5. 2026 19:54):
+          Pokud plán naplánuje SETRIT v noční hodině po prodeji, je to signál, že
+          se prodalo příliš a baterie nedosáhne přes noc bez šetření. Plán to
+          MUSÍ POSLECHNOUT a snížit množství prodeje (zvýšit cíl SOC), ne nasadit
+          SETRIT jako kompenzaci. SETRIT v plánu noci = bug ve výpočtu cíle SOC.
 
           (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
           za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
