@@ -69,6 +69,11 @@ input_boolean:
     name: "Pylontech balancování OK"
     icon: mdi:battery-check
 
+  automaticke_prepinani_rezimu:
+    name: "Automatické přepínání léto/zima"
+    icon: mdi:autorenew
+    initial: false
+
 # -----------------------------------------------------------------------------
 # INPUT NUMBERS - Nastavitelné parametry
 # -----------------------------------------------------------------------------

@@ -1461,6 +1461,18 @@ A ZAKAZU PRETOKU
     nibe_peak_w: 14000 (peak odběr NIBE, W)
     topeni_nibe_dt_per_cycle: 6 (°C teplotního rozdílu na 1 cyklus NIBE — kalibrováno: 3 cykly při ΔT=18°C)
 
+    — AUTOMATICKÉ PŘEPÍNÁNÍ LÉTO/ZIMA REŽIMU (§ 19) —
+    topeni_auto_rezim_indoor_gap: 0.5         (jak hluboko pod cíl spustí přepnutí na zimu, °C)
+    topeni_auto_rezim_indoor_min_minut: 60    (jak dlouho musí indoor pod cílem trvat, min)
+    topeni_auto_rezim_outdoor_now_zima: 18    (max aktuální outdoor pro přepnutí na zimu, °C)
+    topeni_auto_rezim_outdoor_max_24h: 15     (max předpovědi venku 24h pro přepnutí na zimu, °C)
+    topeni_auto_rezim_outdoor_now_leto: 14    (min aktuální outdoor pro přepnutí na léto, °C)
+    topeni_auto_rezim_outdoor_min_48h: 10     (min předpovědi venku 48h pro přepnutí na léto, °C)
+    topeni_auto_rezim_manual_override_h: 12   (jak dlouho respektovat ruční přepnutí uživatele, h)
+    topeni_auto_rezim_anti_flap_h: 6          (min doba mezi dvěma automatickými přepnutími, h)
+    topeni_auto_rezim_open_meteo_lat: 50.1051 (zeměpisná šířka pro Open-Meteo, dle zone.home)
+    topeni_auto_rezim_open_meteo_lon: 14.7408 (zeměpisná délka pro Open-Meteo, dle zone.home)
+
 13.4 ARBITRÁŽ A CENY
     - Základní pravidla arbitráže
         - Arbitraz se pouzije jen v tom pripade, ze dobiti baterie ze site vykompenzuje pozdejsi odber do zisku vzhledem k ocekavenemu
@@ -1507,6 +1519,11 @@ A ZAKAZU PRETOKU
     input_boolean.solarni_rezim → vynucení solárního nabíjení auta
     input_select.fve_manual_mod → manuální override FVE módu
     input_boolean.chlazeni → povolení chlazení
+    input_boolean.automaticke_prepinani_rezimu → hlavní vypínač orchestrátoru
+                                                  léto/zima (§ 19), default OFF.
+                                                  Když ON, automatika smí přepínat
+                                                  letni_rezim podle § 19. Když OFF,
+                                                  letni_rezim je výhradně uživatelský.
 
 ================================================================================
 15. VICTRON ESS — ENTITY A MQTT
@@ -1547,6 +1564,107 @@ A ZAKAZU PRETOKU
     DM (Degree Minutes): sensor.nibe_degree_minutes (reg 43005)
     Stav: sensor.nibe_aktualni_realny_stav (Vytápění/Ohřev vody/Klidový/...)
     Kompresory: binary_sensor.nibe_kompresory_aktivni_binarni
+
+================================================================================
+19. AUTOMATICKÉ PŘEPÍNÁNÍ LÉTO/ZIMA REŽIMU (orchestrátor v fve-modes.json)
+================================================================================
+    (uživatel 11. 5. 2026 23:23 — přechodné období jaro/podzim, kdy je v létě
+    chladno nebo v zimě nečekaně teplo)
+
+PROBLÉM, KTERÝ TOTO PRAVIDLO ŘEŠÍ:
+    V přechodných obdobích (jaro, podzim) bývá v domě chladno i v letním režimu,
+    nebo naopak v zimním režimu už není potřeba topit. Uživatel nechce ručně
+    přepínat input_boolean.letni_rezim mezi ON a OFF — chce, aby to udělala
+    automatika podle aktuální teploty v domě a předpovědi venkovní teploty.
+
+    JE TO O SPRÁVNÉ TEPLOTĚ V DOMĚ. Není to o změně letní ani zimní logiky.
+
+ZÁKLADNÍ KONTRAKT:
+    Tento orchestrátor je JEDINÝ, kdo smí automaticky přepínat
+    input_boolean.letni_rezim. Žádný jiný flow do něj nesmí psát.
+    Stávající topení (§ 8) a vytápění bazénu (§ 11) zůstávají naprosto
+    netknuté — jen reagují na to, co orchestrátor nastaví. Letní část
+    fve-heating.json a celý pool-heating.json se sami zařídí, jakmile
+    orchestrátor přepne přepínač.
+
+UŽIVATELSKÝ HLAVNÍ VYPÍNAČ:
+    input_boolean.automaticke_prepinani_rezimu (default OFF, opt-in).
+    - OFF → orchestrátor nedělá nic. Uživatel ovládá letni_rezim ručně.
+    - ON  → orchestrátor smí přepínat letni_rezim podle pravidel níže.
+
+KDY PŘEPNOUT LÉTO → ZIMA (zatop dům):
+    Všechny podmínky musí platit současně:
+    1. Hlavní vypínač automatiky je ON (viz výše).
+    2. Aktuální letní režim je zapnutý (jinak není co přepínat).
+    3. Aktuální teplota v domě je o víc než půl stupně níže
+       než nastavená cílová teplota, a tento stav drží alespoň
+       celou hodinu souvisle. (Krátkodobé poklesy z větrání se ignorují.)
+    4. Venku není teplo — aktuální venkovní teplota je pod 18 °C
+       a nejvyšší předpověď venkovní teploty na příštích 24 hodin
+       je pod 15 °C. (Pokud je venku teplo, pak je v domě zima jen
+       kvůli otevřenému oknu, ne kvůli ročnímu období.)
+    5. Manual override — uživatel ručně nepřepnul letni_rezim
+       v posledních 12 hodinách. Pokud ano, automatika respektuje
+       jeho rozhodnutí 12 hodin.
+    6. Anti-flap — od posledního automatického přepnutí uplynulo
+       alespoň 6 hodin.
+
+    Co se stane: orchestrátor zhasne input_boolean.letni_rezim. Zimní logika
+    topení v fve-heating.json (§ 8) se sama spustí v dalším 60 s ticku
+    a začne dotápět dům. Cenová logika § 8.3 zařídí, aby se topilo
+    za nejvýhodnějších podmínek (sluneční přebytek, levné hodiny,
+    odložení do dne pokud zítra svítí slunce a v domě ještě není kriticky
+    chladno).
+
+KDY PŘEPNOUT ZIMA → LÉTO (vypni topení domu):
+    Všechny podmínky musí platit současně:
+    1. Hlavní vypínač automatiky je ON.
+    2. Aktuální letní režim je vypnutý (jinak není co přepínat).
+    3. Aktuální teplota v domě dosáhla nastavené cílové teploty
+       nebo ji přesahuje. Dům drží teplotu sám.
+    4. Venku je stabilně teplo — aktuální venkovní teplota je nad 14 °C
+       a nejnižší předpověď venkovní teploty na příštích 48 hodin
+       je nad 10 °C. (Žádný noční mráz, žádné chladné fronty.)
+    5. Manual override — uživatel ručně nepřepnul letni_rezim
+       v posledních 12 hodinách.
+    6. Anti-flap — od posledního automatického přepnutí uplynulo
+       alespoň 6 hodin.
+
+    Co se stane: orchestrátor zapne input_boolean.letni_rezim. Letní větve
+    v fve-heating.json a pool-heating.json se v dalším 60 s ticku spustí
+    a převezmou (NIBE topení vypne, bazén jede pokud je aktivovaný).
+
+ZDROJE PŘEDPOVĚDI VENKOVNÍ TEPLOTY:
+    Orchestrátor volá REST API služby Open-Meteo (api.open-meteo.com)
+    přímo z Node-RED každých 30 minut — bez API klíče, zdarma, hodinová
+    předpověď na 7 dní pro souřadnice z HA zone.home (50.1051, 14.7408).
+    Z odpovědi se spočítá maximum venkovní teploty na příštích 24 h
+    a minimum na příštích 48 h, oba se uloží do flow context.
+
+    Aktuální venkovní teplota se čte ze sensoru
+    sensor.hp2551ae_pro_v2_1_0_outdoor_temperature (Meteostanice).
+    Záložní zdroj: sensor.nibe_venkovni_teplota.
+
+JAK JE ZACHYCEN MANUAL OVERRIDE:
+    Orchestrátor sleduje událost změny stavu input_boolean.letni_rezim.
+    Když změnu způsobil uživatel (= ne náš service call), uloží se časová
+    značka do global context. Po dobu 12 hodin od této značky
+    orchestrátor nesmí letni_rezim přepnout.
+
+    Detekce ručního přepnutí: orchestrátor si pamatuje "očekávaný" stav
+    (= co naposled sám nastavil). Když se reálný stav změní na něco
+    jiného, ví, že to byl uživatel.
+
+CO TATO VÝJIMKA NEDĚLÁ:
+    - Nemění logiku topení (§ 8) ani vytápění bazénu (§ 11) — ty zůstávají,
+      jak jsou. Přepnutí letni_rezim se projeví automaticky v jejich
+      existujících větvích.
+    - Nepřidává jarní/podzimní režim. Roční období jsou stále jen dvě —
+      léto a zima.
+    - Nepřepisuje cílovou teplotu nastavena_teplota_v_dome — ta zůstává
+      uživatelská (§ 14).
+    - Pokud uživatel vypne hlavní vypínač automatiky, orchestrátor
+      se okamžitě zastaví a nikdy nezasáhne.
 
 ================================================================================
 KONEC SOUBORU — EDITUJE VÝHRADNĚ UŽIVATEL

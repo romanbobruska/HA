@@ -1579,5 +1579,314 @@
         "x": 495,
         "y": 920,
         "wires": []
+    },
+    {
+        "id": "auto_letni_rezim_g",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Auto: LÉTO/ZIMA orchestrátor (§ 19)",
+        "style": {
+            "stroke": "#3f9bff",
+            "fill": "#001830",
+            "label": true,
+            "color": "#bbdefb"
+        },
+        "nodes": [
+            "alr_inject_30m",
+            "alr_http_meteo",
+            "alr_fn_parse",
+            "alr_inject_1m",
+            "alr_fn_decide",
+            "alr_switch",
+            "alr_ha_on",
+            "alr_ha_off",
+            "alr_listen",
+            "alr_fn_capture"
+        ],
+        "x": 30,
+        "y": 1110,
+        "w": 950,
+        "h": 250
+    },
+    {
+        "id": "alr_inject_30m",
+        "type": "inject",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "30 min tick",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "1800",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "10",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 1160,
+        "wires": [
+            [
+                "alr_http_meteo"
+            ]
+        ]
+    },
+    {
+        "id": "alr_http_meteo",
+        "type": "http request",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "Open-Meteo forecast",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=50.1051&longitude=14.7408&hourly=temperature_2m&forecast_days=3&timezone=Europe%2FPrague",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 320,
+        "y": 1160,
+        "wires": [
+            [
+                "alr_fn_parse"
+            ]
+        ]
+    },
+    {
+        "id": "alr_fn_parse",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "Parse forecast → flow",
+        "func": "// Parse Open-Meteo response, ulozi outdoor max 24h + min 48h do flow.\nif (!msg.payload || !msg.payload.hourly || !msg.payload.hourly.temperature_2m) {\n    node.status({fill: \"red\", shape: \"ring\", text: \"Bad response\"});\n    return null;\n}\nvar times = msg.payload.hourly.time;\nvar temps = msg.payload.hourly.temperature_2m;\nvar nowMs = Date.now();\nvar max24 = -100, min48 = 100, c24 = 0, c48 = 0;\nfor (var i = 0; i < times.length; i++) {\n    var t = new Date(times[i] + \":00\").getTime();\n    var dh = (t - nowMs) / 3600000;\n    if (dh < 0) continue;\n    if (dh <= 24) { if (temps[i] > max24) max24 = temps[i]; c24++; }\n    if (dh <= 48) { if (temps[i] < min48) min48 = temps[i]; c48++; }\n    if (dh > 48) break;\n}\nif (c24 < 12 || c48 < 24) {\n    node.status({fill: \"yellow\", shape: \"ring\", text: \"Few data: 24h=\" + c24 + \" 48h=\" + c48});\n    return null;\n}\nflow.set(\"auto_rezim_outdoor_max_24h\", max24);\nflow.set(\"auto_rezim_outdoor_min_48h\", min48);\nflow.set(\"auto_rezim_outdoor_forecast_at\", nowMs);\nnode.status({fill: \"green\", shape: \"dot\", text: \"max24=\" + max24.toFixed(1) + \"° min48=\" + min48.toFixed(1) + \"°\"});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "alr_inject_1m",
+        "type": "inject",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "1 min tick",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "30",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 1240,
+        "wires": [
+            [
+                "alr_fn_decide"
+            ]
+        ]
+    },
+    {
+        "id": "alr_fn_decide",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "Rozhodovací logika (§ 19)",
+        "func": "// Auto LETO/ZIMA orchestrator — rozhodovaci logika (§19)\n// Tick: 60s. Cte HA states + flow context.\n// Vystup: msg.payload = \"on\" / \"off\" / null\nvar cfg = global.get(\"fve_config\") || {};\nvar GAP        = cfg.topeni_auto_rezim_indoor_gap || 0.5;\nvar MIN_MIN    = cfg.topeni_auto_rezim_indoor_min_minut || 60;\nvar OD_NOW_Z   = cfg.topeni_auto_rezim_outdoor_now_zima || 18;\nvar OD_MAX_24H = cfg.topeni_auto_rezim_outdoor_max_24h || 15;\nvar OD_NOW_L   = cfg.topeni_auto_rezim_outdoor_now_leto || 14;\nvar OD_MIN_48H = cfg.topeni_auto_rezim_outdoor_min_48h || 10;\nvar MANUAL_H   = cfg.topeni_auto_rezim_manual_override_h || 12;\nvar ANTIFLAP_H = cfg.topeni_auto_rezim_anti_flap_h || 6;\n\nfunction gS(id){return(global.get(\"homeassistant.homeAssistant.states['\"+id+\"']\")||{}).state;}\nfunction gF(id,d){var v=parseFloat(gS(id));return isNaN(v)?d:v;}\nfunction gB(id){return gS(id) === \"on\";}\n\n// 1) Hlavni vypinac\nif (!gB(\"input_boolean.automaticke_prepinani_rezimu\")) {\n    node.status({fill: \"grey\", shape: \"ring\", text: \"OFF (master vypnut)\"});\n    return null;\n}\n\n// 2) Cteni stavu\nvar indoor  = gF(\"sensor.hp2551ae_pro_v2_1_0_indoor_temperature\", null);\nvar target  = gF(\"input_number.nastavena_teplota_v_dome\", null);\nvar outdoor = gF(\"sensor.hp2551ae_pro_v2_1_0_outdoor_temperature\",\n                 gF(\"sensor.nibe_venkovni_teplota\", null));\nif (indoor === null || target === null || outdoor === null) {\n    node.status({fill: \"red\", shape: \"ring\", text: \"Chybi teplota (in/tgt/out)\"});\n    return null;\n}\nvar letniNow = gB(\"input_boolean.letni_rezim\");\nvar max24 = flow.get(\"auto_rezim_outdoor_max_24h\");\nvar min48 = flow.get(\"auto_rezim_outdoor_min_48h\");\nvar fAt   = flow.get(\"auto_rezim_outdoor_forecast_at\") || 0;\nvar nowMs = Date.now();\n\n// 3) Forecast freshness check (max 90 min stare = 30 min interval s tolerance)\nif (max24 == null || min48 == null || (nowMs - fAt) > 90 * 60000) {\n    node.status({fill: \"yellow\", shape: \"ring\",\n        text: \"Forecast chybi/zastaraly (in=\" + indoor.toFixed(1) + \" out=\" + outdoor.toFixed(1) + \")\"});\n    return null;\n}\n\n// 4) Manual override + anti-flap\nvar moUntil = global.get(\"auto_rezim_manual_override_until\") || 0;\nvar lastSwitchAt = global.get(\"auto_rezim_last_auto_switch_at\") || 0;\nvar moHoursLeft = Math.max(0, (moUntil - nowMs) / 3600000);\nvar sinceSwitchH = (nowMs - lastSwitchAt) / 3600000;\nif (moHoursLeft > 0) {\n    node.status({fill: \"blue\", shape: \"dot\",\n        text: \"Manual override \" + moHoursLeft.toFixed(1) + \"h zbyva\"});\n    return null;\n}\nif (lastSwitchAt > 0 && sinceSwitchH < ANTIFLAP_H) {\n    node.status({fill: \"blue\", shape: \"dot\",\n        text: \"Anti-flap: dalsi za \" + (ANTIFLAP_H - sinceSwitchH).toFixed(1) + \"h\"});\n    return null;\n}\n\n// 5) Indoor pod cilem timestamp tracking\nvar belowSince = global.get(\"auto_rezim_indoor_below_since\") || 0;\nvar podCilem = indoor < (target - GAP);\nif (!podCilem) {\n    if (belowSince !== 0) global.set(\"auto_rezim_indoor_below_since\", 0);\n    belowSince = 0;\n} else if (belowSince === 0) {\n    belowSince = nowMs;\n    global.set(\"auto_rezim_indoor_below_since\", nowMs);\n}\nvar podCilemMin = podCilem ? Math.floor((nowMs - belowSince) / 60000) : 0;\n\n// 6) LETO -> ZIMA\nif (letniNow) {\n    var coolEnough = (outdoor < OD_NOW_Z) && (max24 < OD_MAX_24H);\n    var stableLong = podCilem && podCilemMin >= MIN_MIN;\n    if (stableLong && coolEnough) {\n        global.set(\"auto_rezim_last_auto_switch_at\", nowMs);\n        global.set(\"auto_rezim_expected_state\", \"off\");\n        global.set(\"auto_rezim_indoor_below_since\", 0);\n        node.status({fill: \"yellow\", shape: \"dot\",\n            text: \"-> ZIMA in=\" + indoor.toFixed(1) + \"<\" + (target-GAP).toFixed(1) + \" \" + podCilemMin + \"min\"});\n        msg.payload = \"off\";\n        return msg;\n    }\n    var blokL = !stableLong\n        ? (\"indoor \" + (podCilem ? podCilemMin + \"/\" + MIN_MIN + \"min\" : \"OK \" + indoor.toFixed(1) + \">=\" + (target-GAP).toFixed(1)))\n        : (\"venku teplo \" + outdoor.toFixed(1) + \"°/24h max \" + max24.toFixed(1) + \"°\");\n    node.status({fill: \"green\", shape: \"ring\", text: \"LETO drzi | \" + blokL});\n    return null;\n}\n\n// 7) ZIMA -> LETO\nvar warmEnough = (outdoor >= OD_NOW_L) && (min48 >= OD_MIN_48H);\nvar indoorOK = indoor >= target;\nif (indoorOK && warmEnough) {\n    global.set(\"auto_rezim_last_auto_switch_at\", nowMs);\n    global.set(\"auto_rezim_expected_state\", \"on\");\n    node.status({fill: \"yellow\", shape: \"dot\",\n        text: \"-> LETO in=\" + indoor.toFixed(1) + \">=\" + target.toFixed(1) + \" out=\" + outdoor.toFixed(1)});\n    msg.payload = \"on\";\n    return msg;\n}\nvar blokZ = !indoorOK\n    ? (\"indoor \" + indoor.toFixed(1) + \"<\" + target.toFixed(1))\n    : (\"venku chladno \" + outdoor.toFixed(1) + \"°/48h min \" + min48.toFixed(1) + \"°\");\nnode.status({fill: \"blue\", shape: \"ring\", text: \"ZIMA drzi | \" + blokZ});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1240,
+        "wires": [
+            [
+                "alr_switch"
+            ]
+        ]
+    },
+    {
+        "id": "alr_switch",
+        "type": "switch",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "on/off",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "on",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 530,
+        "y": 1240,
+        "wires": [
+            [
+                "alr_ha_on"
+            ],
+            [
+                "alr_ha_off"
+            ]
+        ]
+    },
+    {
+        "id": "alr_ha_on",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "letni_rezim ON",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_on",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.letni_rezim"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_on",
+        "x": 720,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "alr_ha_off",
+        "type": "api-call-service",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "letni_rezim OFF",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "input_boolean.turn_off",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [
+            "input_boolean.letni_rezim"
+        ],
+        "labelId": [],
+        "data": "",
+        "dataType": "json",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "input_boolean",
+        "service": "turn_off",
+        "x": 720,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "alr_listen",
+        "type": "server-state-changed",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "letni_rezim změna",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "input_boolean.letni_rezim"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 140,
+        "y": 1320,
+        "wires": [
+            [
+                "alr_fn_capture"
+            ]
+        ]
+    },
+    {
+        "id": "alr_fn_capture",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "auto_letni_rezim_g",
+        "name": "Detekce manual override",
+        "func": "// Detekce manual override letni_rezim (§ 19).\n// Orchestrator si pamatuje 'expected_state' (= co naposled sam nastavil).\n// Kdyz realna zmena != expected → manual.\nvar cfg = global.get(\"fve_config\") || {};\nvar MANUAL_H = cfg.topeni_auto_rezim_manual_override_h || 12;\n\nvar newState = msg.payload; // \"on\" / \"off\"\nvar expected = global.get(\"auto_rezim_expected_state\");\n\nif (expected && expected === newState) {\n    // To jsme udelali my — clear expected, zadny override\n    global.set(\"auto_rezim_expected_state\", null);\n    node.status({fill: \"grey\", shape: \"ring\", text: \"auto change → \" + newState});\n    return null;\n}\n\n// Jinak je to manual\nvar untilMs = Date.now() + MANUAL_H * 3600000;\nglobal.set(\"auto_rezim_manual_override_until\", untilMs);\nglobal.set(\"auto_rezim_indoor_below_since\", 0);\nnode.status({fill: \"blue\", shape: \"dot\",\n    text: \"MANUAL → \" + newState + \" | respektuji \" + MANUAL_H + \"h\"});\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1320,
+        "wires": [
+            []
+        ]
     }
 ]
