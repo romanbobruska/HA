@@ -285,6 +285,23 @@ jistá, NEZASADÍ a vysvětlí proč.
             První (již běžící) hodina se do budgetu započítává jen zbývajícím fragmentem (minuty do konce hodiny ÷ 60),
             aby se PRODAVAT nezastavoval uprostřed hodiny kvůli „plnému“ budgetu.
         - Plán zobrazuje: "SOC XX% (cíl YY%)"
+        - NEHALUCINOVAT — STABILNÍ ROZHODNUTÍ V ČASE (uživatel 11. 5. 2026 19:48):
+          Když plán v jednom tiku rozhodne, že daná hodina bude PRODÁVAT, v dalším
+          tiku (interval 60 vteřin) se rozhodnutí pro tu samou hodinu NESMÍ překlopit
+          zpět na NORMAL. Plán nesmí střídat módy mezi tiky kvůli drobným posunům
+          ve vstupech (cíl SOC se hne o procento, předpověď spotřeby o desetinu
+          kWh, předpověď zítřejšího slunce kolísá kolem prahu 50 kWh apod.).
+          Plán smí přepnout PRODÁVAT → NORMAL pro danou hodinu jen pokud:
+            - hodina už uplynula (plán se posunul vpřed),
+            - uživatel ručně přepnul mód,
+            - cena prodeje v té hodině reálně klesla pod práh ziskovosti, nebo
+            - aktuální SOC baterie spadl pod cílový SOC pro prodej (nemáme co prodávat).
+          Důvod (lidsky): blikání plánu z minuty na minutu znamená, že baterie
+          chvíli prodává, chvíli ne — neudělá ani jedno pořádně, nedosáhne
+          plánovaného cíle SOC, a v noci pak musí ŠETŘIT a dům nakupuje drahou
+          energii ze sítě. Jakmile plán jednou rozhodl „v této hodině prodáváme
+          do cíle SOC YY %", musí toto rozhodnutí dodržet po celou hodinu, aby
+          baterie skutečně doběhla na YY % a noc byla pokrytá.
     - HLAVNÍ PRAVIDLO: Nikdy neprodávat energii, kterou bychom pak museli v noci dokoupit
       ze sítě za vyšší cenu. Prodáváme jen to, co přes noc nepotřebujeme.
     - Nejlevnější noční hodiny se automaticky nastaví na ŠETŘIT — baterie si udrží
