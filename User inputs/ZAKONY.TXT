@@ -1464,12 +1464,12 @@ A ZAKAZU PRETOKU
     — AUTOMATICKÉ PŘEPÍNÁNÍ LÉTO/ZIMA REŽIMU (§ 19) —
     topeni_auto_rezim_indoor_gap: 0.5         (jak hluboko pod cíl spustí přepnutí na zimu, °C)
     topeni_auto_rezim_indoor_min_minut: 60    (jak dlouho musí indoor pod cílem trvat, min)
-    topeni_auto_rezim_outdoor_now_zima: 18    (max aktuální outdoor pro přepnutí na zimu, °C)
-    topeni_auto_rezim_outdoor_max_24h: 15     (max předpovědi venku 24h pro přepnutí na zimu, °C)
+    topeni_auto_rezim_outdoor_now_zima: 12    (max aktuální outdoor pro přepnutí na zimu, °C — jen skutečný chlad)
+    topeni_auto_rezim_outdoor_max_24h: 10     (max předpovědi venku 24h pro přepnutí na zimu, °C — studený front)
     topeni_auto_rezim_outdoor_now_leto: 14    (min aktuální outdoor pro přepnutí na léto, °C)
     topeni_auto_rezim_outdoor_min_48h: 10     (min předpovědi venku 48h pro přepnutí na léto, °C)
     topeni_auto_rezim_manual_override_h: 12   (jak dlouho respektovat ruční přepnutí uživatele, h)
-    topeni_auto_rezim_anti_flap_h: 6          (min doba mezi dvěma automatickými přepnutími, h)
+    topeni_auto_rezim_anti_flap_h: 12         (min doba mezi dvěma automatickými přepnutími, h)
     topeni_auto_rezim_open_meteo_lat: 50.1051 (zeměpisná šířka pro Open-Meteo, dle zone.home)
     topeni_auto_rezim_open_meteo_lon: 14.7408 (zeměpisná délka pro Open-Meteo, dle zone.home)
 
@@ -1603,20 +1603,34 @@ HLAVNÍ VYPÍNAČ AUTOMATIKY (uživatelský):
     režim podle pravidel popsaných níže.
 
 KDY PŘEPNOUT LÉTO → ZIMA (zatop dům):
-    Orchestrátor přehodí přepínač léto/zima na zimu teprve tehdy,
-    když platí všechno najednou: hlavní vypínač automatiky je zapnutý
-    a teď opravdu jede letní režim (kdyby už zima byla, není co přepínat).
-    V domě je o víc než půl stupně chladněji, než si uživatel přeje,
-    a tento chlad drží souvisle alespoň celou hodinu — krátké propady
-    teploty kvůli větrání se tedy nepletou. Venku není teplo: aktuální
-    venkovní teplota je pod osmnácti stupni a nejteplejší předpověď
-    pro příštích 24 hodin nepřesahuje patnáct stupňů. (Pokud venku teplo
-    je, chlad v domě je jen kvůli otevřenému oknu, ne kvůli ročnímu
-    období, a topit nemá smysl.) Uživatel sám v posledních 12 hodinách
-    přepínač nepřehodil — pokud ano, automatika jeho rozhodnutí
-    respektuje a 12 hodin se nepřepíná. A nakonec: od posledního
-    automatického přepnutí uplynulo aspoň 6 hodin, aby se přepínač
-    zbytečně neplácal mezi režimy.
+    Orchestrátor přehodí přepínač léto/zima na zimu jen ve skutečně
+    extrémním případě — nikdy kvůli krátkému jarnímu nebo podzimnímu
+    výkyvu počasí. Důvod téhle obezřetnosti je technický: zimní topení
+    (NIBE s ekvitermní křivkou kalibrovanou na mráz, vyšší teplota
+    nádrže, agresivnější patrony) je nastavené na to, aby vytopilo
+    dům za třeskutě studeného dne. Pustit ho při jarním šestnáctistupňovém
+    odpoledni znamená dům přetopit. Proto má orchestrátor přísné prahy
+    a přepne, jen když platí všechno najednou:
+
+    - Hlavní vypínač automatiky je zapnutý a teď opravdu jede letní
+      režim (kdyby už zima byla, není co přepínat).
+    - V domě je o víc než půl stupně chladněji, než si uživatel přeje,
+      a tento chlad drží souvisle alespoň jednu celou hodinu. Krátké
+      propady teploty kvůli větrání se tedy nepletou.
+    - Uživatel nemá zapnuté chlazení (input_boolean.chlazeni = OFF).
+      Pokud má chlazení zapnuté, je to jeho vědomá volba — NIBE chladí
+      a pokles teploty pod cíl je očekávaný důsledek (chlazení doběhne).
+      Orchestrátor v takovém případě mlčí a počká, až si uživatel
+      chlazení sám vypne.
+    - Venku je opravdu chladno — aktuální venkovní teplota je pod
+      dvanácti stupni. Šestnáctistupňové jarní odpoledne nestačí.
+    - Studený front není výjimkou: nejteplejší předpověď venkovní
+      teploty pro příštích 24 hodin nepřesahuje deset stupňů. Pokud
+      má brzy přijít teplá fronta, orchestrátor počká.
+    - Uživatel sám v posledních 12 hodinách přepínač nepřehodil. Pokud
+      ano, automatika jeho rozhodnutí respektuje 12 hodin.
+    - Od posledního automatického přepnutí uplynulo aspoň 12 hodin —
+      přepínač se nepřeplácá mezi režimy.
 
     Co se po přepnutí stane: orchestrátor zhasne přepínač letního
     režimu. Zimní logika topení (§ 8) se v dalším minutovém ticku sama
@@ -1635,7 +1649,7 @@ KDY PŘEPNOUT ZIMA → LÉTO (vypni topení domu):
     pro příštích 48 hodin je nad deseti stupni. (Žádný noční mráz,
     žádné chladné fronty na obzoru.) Uživatel sám v posledních
     12 hodinách přepínač nepřehodil. A od posledního automatického
-    přepnutí uplynulo aspoň 6 hodin.
+    přepnutí uplynulo aspoň 12 hodin.
 
     Co se po přepnutí stane: orchestrátor zapne přepínač letního
     režimu. Letní větve topení (§ 8) i vytápění bazénu (§ 11) se
@@ -1669,7 +1683,10 @@ CO TATO VÝJIMKA NEDĚLÁ:
     Nepřidává žádný jarní ani podzimní režim — roční období jsou
     stále jen dvě, léto a zima. Nepřepisuje cílovou teplotu domu
     (input_number.nastavena_teplota_v_dome) — ta zůstává výhradně
-    uživatelská (§ 14). A pokud uživatel hlavní vypínač automatiky
+    uživatelská (§ 14). Nesahá na přepínač chlazení
+    (input_boolean.chlazeni) — chlazení je úplně nezávislá uživatelská
+    volba (§ 8.0 B); orchestrátor ho jen čte jako blokační podmínku
+    pro přechod léto → zima. A pokud uživatel hlavní vypínač automatiky
     vypne, orchestrátor okamžitě zmlkne a do přepínače
     léto/zima už nikdy nezasáhne.
 
