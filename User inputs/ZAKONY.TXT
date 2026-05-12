@@ -254,11 +254,35 @@ jistá, NEZASADÍ a vysvětlí proč.
           ale spotřeba domu mezi koncem prodeje a ránem musí být pokryta z baterie,
           ne z drahé noční sítě.
 
-        - SETRIT MÓD V NOCI (uživatel 8. 5. 2026 19:54):
+        - SETRIT MÓD V NOCI (uživatel 8. 5. 2026 19:54, doplněno 12. 5. 2026):
           Pokud plán naplánuje SETRIT v noční hodině po prodeji, je to signál, že
           se prodalo příliš a baterie nedosáhne přes noc bez šetření. Plán to
           MUSÍ POSLECHNOUT a snížit množství prodeje (zvýšit cíl SOC), ne nasadit
           SETRIT jako kompenzaci. SETRIT v plánu noci = bug ve výpočtu cíle SOC.
+
+          Doplnění (uživatel 12. 5. 2026 20:29 — "PROC SE PLANUJE SETRIT, KDYZ
+          PAK V PRVNICH SOLARNICH HODINACH MAME VELKE SOC!!!"):
+          Pravidlo „nešetřit v noci" platí i mimo prodej. Když je předpověď
+          zítřejší solární výroby velká (více než ~50 kWh = solar zítra zdarma
+          dorovná baterii i z minimálního SOC zpátky na plno), plán NESMÍ v noci
+          nasadit SETRIT mód v žádné levné noční hodině. Místo toho má baterie
+          NORMÁLNĚ vybíjet do domácí spotřeby a klesnout třeba až na min_soc —
+          ráno solar baterii rychle naplní zpět. SETRIT v noci v této situaci
+          jen prodlužuje drahý nákup ze sítě, místo aby se levně vybíjelo z
+          baterie.
+
+          Naopak když je předpověď slabá (méně než ~50 kWh) a solar zítra
+          baterii nedoplní, plán SMÍ v top N (typ. 3) nejlevnějších nesolárních
+          hodinách nasadit SETRIT proaktivně — chrání baterii pro pozdější
+          dražší hodiny, kdy by se jinak muselo nakupovat za horší cenu.
+
+          Důvod (lidsky): SETRIT znamená „baterie nepouštět, dům si bere ze
+          sítě". Když je sítová cena 4 Kč a baterie má dostatečnou rezervu i
+          po vybití, je výhodnější nechat baterii vybíjet (NORMAL drain) a
+          v noci nekupovat nic. Cena drainu z baterie ≈ amortizace + ušlý zisk
+          (1.5 + ~2 Kč) = cca stejně jako sítová cena, ale neutrácíme reálné
+          peníze. Když navíc solar zítra baterii zdarma doplní, rovnice je
+          jednoznačně ve prospěch drainu.
 
           (v27 originál: aktivace jen podle hrubého fZ > 50 — to vedlo k prodeji za 2 Kč a nákupu
           za 4 Kč později, když auto „sežralo" zítřejší solar. v29 přidává podmínku (2) —
