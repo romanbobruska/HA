@@ -201,34 +201,44 @@ jistá, NEZASADÍ a vysvětlí proč.
           (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
            dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
            pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
-        - KDY VŮBEC PRODÁVAT (rozhodovací tabulka — uživatel 8. 5. 2026 19:22):
-          Klíčový práh je předpověď zítřejší solární výroby: přibližně **50 kWh**
-          (parametr v konfiguraci se jmenuje plan_aggressive_solar_day_kwh, výchozí 50).
+        - KDY VŮBEC PRODÁVAT (uživatel 23. 5. 2026 — zjednodušené pravidlo):
+          Prodáváme z baterie do sítě POUZE pokud splníme VŠECHNY tři podmínky zároveň:
 
-          ┌──────────────────────────┬─────────────────┬─────────────────────────────────┐
-          │ Předpověď solaru zítra   │ Auto má hlad?   │ Co dělat v drahých hodinách     │
-          ├──────────────────────────┼─────────────────┼─────────────────────────────────┤
-          │ Více než ~50 kWh         │ ANO             │ PRODÁVAT                        │
-          │ Více než ~50 kWh         │ NE              │ PRODÁVAT                        │
-          │ Méně než ~50 kWh         │ ANO             │ NEPRODÁVAT                      │
-          │ Méně než ~50 kWh         │ NE, letní režim │ PRODÁVAT                        │
-          │ Méně než ~50 kWh         │ NE, zimní režim │ NEPRODÁVAT                      │
-          └──────────────────────────┴─────────────────┴─────────────────────────────────┘
+            1. Předpověď zítřejší solární výroby je VYŠŠÍ než přibližně 50 kWh
+               (parametr v konfiguraci plan_aggressive_solar_day_kwh, výchozí 50).
+            2. Auto NEMÁ hlad (input_boolean.auto_ma_hlad = OFF).
+            3. NENÍ zapnuto „Bazén na max" (input_boolean.bazen_na_max = OFF).
+
+          Pokud kterákoli z těchto tří podmínek selže, NEPRODÁVÁME. Energii v baterii
+          budeme potřebovat na něco jiného: přes noc do domu, na zítřejší ranní nabití
+          auta, nebo na propálení do bazénové nádrže přes patrony (§ 8.7 + § 11.7).
 
           Důvod (lidsky):
-          - 50 kWh je dost na to, aby zítra solar pokryl všechno: nabití auta (~25 kWh),
-            spotřebu domu, dotopení baterie z minima zpátky na plno, a zbyla rezerva.
-            Když to platí, dnešní prodej drahých hodin je čistý zisk — solar to zítra
-            zadarmo nahradí (§ 1.2 „solár neomezujeme").
-          - Když je zítra slabá předpověď (méně než ~50 kWh) a auto chce nabít,
-            sebere si auto skoro celý solar a baterie by se nedobila — pak by se
-            v noci muselo nakupovat draho ze sítě. Proto NEPRODÁVAT.
-          - Když je slabá předpověď, auto je nabité, a je léto — dům má v létě nízkou
-            spotřebu, baterie přes noc vystačí, a slabší solar zítra ji nakonec dohřeje.
-            Lze tedy bezpečně prodat v drahých hodinách.
-          - Když je slabá předpověď, auto nabité, ale je zima — dům má vysokou spotřebu
-            (NIBE topí), baterie přes noc projí víc energie, a slabý solar zítra ji
-            nedoplní. Proto NEPRODÁVAT.
+
+          - Jednou větou: „Zítra nemáme kam dát energii, kterou máme dnes v baterii,
+            tak ji radši prodáme za co nejvyšší cenu, co se dá."
+
+          - Předpověď > 50 kWh = zítra solar zdarma dorovná baterii i z minima zpátky
+            na plno (§ 1.2 „solár neomezujeme"). Dnešní prodej drahých hodin je tedy
+            čistý zisk — zítřejší slunce nám tu samou energii nahradí zadarmo.
+
+          - Auto bez hladu = auto si zítra ten solar nevezme. Kdyby auto chtělo nabít,
+            sebralo by si ~25 kWh ze zítřejšího solaru a baterie by se nedobila —
+            pak by se v noci muselo nakupovat draho ze sítě.
+
+          - Bazén na max OFF = bazén se urgentně netopí. Když je „Bazén na max"
+            ZAPNUTÝ, je výhodnější přebytek z baterie propálit přes patrony do
+            bazénové nádrže (§ 8.7 „spálit přebytek do tepla" + § 11.7 „patrony do
+            nádrže pro bazén") než ho prodat. Ohřátá nádrž ušetří pozdější dražší
+            dotopení (NIBE nebo večerní patrony ze sítě), a to typicky bere víc Kč
+            než to, co bychom dostali za 1 kWh prodané do sítě.
+
+          - Předtím tu byla 4-řádková rozhodovací tabulka (různé větve pro zima/léto
+            a slabou předpověď). Uživatel 23. 5. 2026 ji nahradil výše uvedeným
+            jedním pravidlem se 3 podmínkami AND. Logika je jednodušší, předvídatelnější
+            a pokrývá hlavní reálné situace: pokud zítra dorazí 50+ kWh slunce, auto
+            nehladoví a bazén se urgentně netopí, tak to, co máme dnes v baterii,
+            stejně nemáme kam dát — prodejme to dráž.
 
         - DO JAKÉHO SOC SE PRODÁVÁ (uživatel 8. 5. 2026 19:54):
           Cíl SOC pro prodej se počítá tak, aby baterie přes noc **NEMUSELA šetřit**.
