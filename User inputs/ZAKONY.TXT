@@ -1279,21 +1279,36 @@ A ZAKAZU PRETOKU
        → Za odběr ze sítě nám platí. Topíme bazén maximem (§1.2 absolutní pravidlo).
        (Tento případ NEvyžaduje bazen_na_max — je to zákonem vynucená výjimka kvůli §1.2.)
 
-    2. bazen_na_max = ON + NEJLEPŠÍ PODMÍNKY (plánovač, §11.6.1)
-       → Uživatel chce bazén natopit do 24 h. POOL Heating si vybere nejlepší hodiny v plánu.
-       (V rámci tohoto případu spadají i situace, kdy je zákaz přetoků a solar nemá kam odtéct —
-       plánovač si je vybere přirozeně, protože jsou to nejlevnější hodiny.)
-
-    3. ULTRALEVNÁ CENA + bazen_na_max = ON
+    2. ULTRALEVNÁ CENA + bazen_na_max = ON
        buy_price ≤ config.prah_ultra_levna_nakup (default 1 Kč/kWh)  AND  bazen_na_max = ON
        → Energie je tak levná, že se vyplatí topit bazén i ze sítě, pokud chceme rychle natopit.
+       Uživatel přes bazen_na_max výslovně potvrdil, že v ultralevné ceně síť akceptuje
+       výměnou za rychlost natopení (viz dnešní zpřesnění 23. 5. 2026 níže).
 
-    DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění (8. 5. 2026, žádost uživatele):
-       Dříve existoval samostatný případ „ZÁKAZ PŘETOKŮ + SOLÁR ≥ 13 kWh", který spouštěl
-       NIBE → bazén AUTOMATICKY i když uživatel rychlé vytápění bazénu nechtěl. Toto je
-       ZRUŠENO. Zákaz přetoků sám o sobě NIKDY nespouští NIBE → bazén. Pokud uživatel
-       chce v zákazu přetoků topit bazén, MUSÍ explicitně zapnout bazen_na_max — pak to
-       řeší případ 2 (plánovač) přirozeně.
+    3. DOSTATEČNÝ SOLAR + bazen_na_max = ON  (i v drahých hodinách)
+       bazen_na_max = ON  AND  (zákaz přetoků  OR  aktuální solární přebytek pokrývá NIBE)
+       → Uživatel chce natopit bazén na maximum, kdykoli je topení „zdarma" — tj. když
+       buď síť nepřijímá náš export (zákaz přetoků, solar by se zahodil), nebo aktuální
+       solar generuje víc, než NIBE+dům spotřebují.
+       NIKDY se kvůli tomuto případu NESMÍ brát ze sítě nad rámec spotřeby domu.
+
+       „Dostatečný solar" definice (kontrolováno každých 60 s v rozhodovací smyčce):
+         - když NIBE právě neběží: aktuální sensor.vyroba_fve − sensor.celkova_spotreba
+           musí být ≥ pool_nibe_w (default 3500 W, odhad NIBE spotřeby pro bazén)
+         - když NIBE už běží: sensor.nabijeni_baterii ≥ −200 W (baterie nevybíjí silně =
+           solar pokrývá NIBE+dům, malá tolerance pro šum měření)
+         - zákaz přetoků (sell ≤ 0): platí KDYKOLI (solar nemá kam jinam odtéct)
+
+    DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění:
+       - 8. 5. 2026: zrušen samostatný případ „ZÁKAZ PŘETOKŮ + SOLÁR ≥ 13 kWh" — zákaz
+         přetoků sám o sobě NIKDY nespouští NIBE → bazén. Uživatel musí zapnout bazen_na_max.
+       - 23. 5. 2026: zrušen dřívější „případ 2 (plánovač top-N)" jako spoušť pro NIBE.
+         Plánovač mohl vybrat drahou non-solar noční hodinu (např. h00 buy 4.88 Kč) a NIBE
+         pak žralo ze sítě — to je v rozporu s uživatelovou prioritou „v bazen_na_max
+         NEZRAT ze sítě, kromě ultralevné ceny ≤ 1 Kč". Nové znění (případy 1, 2, 3 výše)
+         tento požadavek splňuje: ultralevná cena ze sítě OK (případ 2); jinak NIBE jen
+         když solar pokrývá (případ 3). Plánovač (§11.6.1) zůstává jen jako info pro UI
+         (sensor.fve_plan, atribut isPoolNibeHour), nikoli jako trigger.
 
     Mimo tyto případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
     Ve všech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
