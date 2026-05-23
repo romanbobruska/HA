@@ -1285,19 +1285,15 @@ A ZAKAZU PRETOKU
        Uživatel přes bazen_na_max výslovně potvrdil, že v ultralevné ceně síť akceptuje
        výměnou za rychlost natopení (viz dnešní zpřesnění 23. 5. 2026 níže).
 
-    3. DOSTATEČNÝ SOLAR + bazen_na_max = ON  (i v drahých hodinách)
-       bazen_na_max = ON  AND  (zákaz přetoků  OR  aktuální solární přebytek pokrývá NIBE)
-       → Uživatel chce natopit bazén na maximum, kdykoli je topení „zdarma" — tj. když
-       buď síť nepřijímá náš export (zákaz přetoků, solar by se zahodil), nebo aktuální
-       solar generuje víc, než NIBE+dům spotřebují.
-       NIKDY se kvůli tomuto případu NESMÍ brát ze sítě nad rámec spotřeby domu.
-
-       „Dostatečný solar" definice (kontrolováno každých 60 s v rozhodovací smyčce):
-         - když NIBE právě neběží: aktuální sensor.vyroba_fve − sensor.celkova_spotreba
-           musí být ≥ pool_nibe_w (default 3500 W, odhad NIBE spotřeby pro bazén)
-         - když NIBE už běží: sensor.nabijeni_baterii ≥ −200 W (baterie nevybíjí silně =
-           solar pokrývá NIBE+dům, malá tolerance pro šum měření)
-         - zákaz přetoků (sell ≤ 0): platí KDYKOLI (solar nemá kam jinam odtéct)
+    POZNÁMKA — pro DRAHÉ hodiny (buy > 1 Kč) v bazen_na_max + zákaz přetoků NIKDY
+    nejede NIBE, i kdyby solar pokrýval. Místo NIBE jedou PATRONY → NÁDRŽ (§11.7,
+    výjimka „bazen_na_max + zákaz přetoků"), které jsou škálovatelné po fázích
+    (3 / 6 / 9 kW per §8.5) a korekční smyčka dynamicky přizpůsobí počet fází
+    skutečnému solárnímu přebytku. NIBE je 3,5 kW fix — jakmile auto začne nabíjet
+    nebo dům zvedne spotřebu, NIBE by žralo ze sítě. Patrony se v té chvíli prostě
+    sníží na 0 fází a nádrž počká.
+    Tj. NIBE → bazén běží JEN v případech 1 a 2 (záporná NEBO ultralevná cena).
+    Pro „pomalé natopení nádrže za drahých hodin se zákazem přetoků" slouží patrony.
 
     DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění:
        - 8. 5. 2026: zrušen samostatný případ „ZÁKAZ PŘETOKŮ + SOLÁR ≥ 13 kWh" — zákaz
@@ -1305,9 +1301,13 @@ A ZAKAZU PRETOKU
        - 23. 5. 2026: zrušen dřívější „případ 2 (plánovač top-N)" jako spoušť pro NIBE.
          Plánovač mohl vybrat drahou non-solar noční hodinu (např. h00 buy 4.88 Kč) a NIBE
          pak žralo ze sítě — to je v rozporu s uživatelovou prioritou „v bazen_na_max
-         NEZRAT ze sítě, kromě ultralevné ceny ≤ 1 Kč". Nové znění (případy 1, 2, 3 výše)
-         tento požadavek splňuje: ultralevná cena ze sítě OK (případ 2); jinak NIBE jen
-         když solar pokrývá (případ 3). Plánovač (§11.6.1) zůstává jen jako info pro UI
+         NEZRAT ze sítě, kromě ultralevné ceny ≤ 1 Kč".
+       - 23. 5. 2026 v2: zrušen i dříve navržený „případ 3 — dostatečný solar v drahých
+         hodinách". Uživatel explicitně řekl: v drahých hodinách + zákaz přetoků mají
+         jet ŠKÁLOVATELNÉ patrony (3/6/9 kW), NE pevně 3,5 kW NIBE — riziko, že NIBE
+         by při výkyvu spotřeby (auto, dům) žralo ze sítě. Patrony se zvládnou snížit
+         na 0 fází okamžitě. NIBE → bazén jede tedy POUZE v ultralevných hodinách nebo
+         při záporné nákupní ceně. Plánovač (§11.6.1) zůstává jen jako info pro UI
          (sensor.fve_plan, atribut isPoolNibeHour), nikoli jako trigger.
 
     Mimo tyto případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
@@ -1342,6 +1342,22 @@ A ZAKAZU PRETOKU
         * teplota_smesovac_teplota ≥ input_number.max_teplota_nadrz_bazen  → OFF všech fází (§11.3)
         * solar přestane stačit a nejsme ve výjimce §11.6                   → OFF
         * SOC baterie < topeni_min_soc_patron (default 90 %)                → OFF
+
+    - VÝJIMKA „BAZÉN NA MAX + ZÁKAZ PŘETOKŮ" (uživatel 23. 5. 2026 — patrony jako
+      škálovatelná alternativa NIBE pro non-ultra ceny):
+      Když platí bazen_na_max = ON  AND  zákaz přetoků (sell ≤ 0 nebo current_mode
+      = "zakaz_pretoku") AND  buy_price > config.prah_ultra_levna_nakup (= NEní ultralevná),
+      pak se gates „SOC ≥ 90 %" a „solar ≥ 5 kW" SUSPENDUJÍ a patrony jsou ALLOWED.
+      Důvod (lidsky): NIBE bere fixní cca 3,5 kW — pokud solar v daný moment generuje
+      jen 3 kW, NIBE by si vzala 0,5 kW ze sítě (z gridu). To uživatel nechce.
+      Patrony jsou na rozdíl od NIBE škálovatelné po fázích (3 / 6 / 9 kW per §8.5),
+      takže 1 fáze zapne JEN když je v daný okamžik přebytek do baterie ≥ 3 kW
+      (korekční smyčka 10 s tick to kontroluje dynamicky). Tj. patrony nikdy nezeřou
+      ze sítě, pouze pomalu ohřívají nádrž z přebytků, dokud zákaz přetoků trvá.
+      SOC baterie tady NENÍ kritérium — uživatel v rychlém topení bazénu „kašle na SOC,
+      ale nechce zrát ze sítě".
+      Sell-price guard zůstává v platnosti per §8.5 ř.965 (zákaz přetoků = sell ≤ 0
+      ho přirozeně splňuje, takže patrony můžou jet).
     - SOUBĚH PATRON + NIBE → BAZÉN je POVOLENÝ za těchto pravidel:
         * patrony topí VÝHRADNĚ NÁDRŽ  (plní zásobu tepla na pozadí)
         * NIBE topí VÝHRADNĚ PŘÍMO VÝMĚNÍK (switch.nibe_jednorazove_zvyseni_tuv)
