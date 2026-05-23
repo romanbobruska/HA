@@ -364,7 +364,13 @@
                 "sensor.energy_production_tomorrow_3",
                 "sensor.energy_production_today_remaining_3",
                 "sensor.energy_current_hour_3",
-                "input_number.fve_plan_extreme_low_solar_kwh"
+                "input_number.fve_plan_extreme_low_solar_kwh",
+                "input_boolean.automatizovat_vytapeni_bazenu",
+                "input_boolean.bazen_na_max",
+                "input_boolean.automatizovat_filtraci_v_bazenu",
+                "input_number.pozadovana_teplota_v_bazenu",
+                "input_number.min_teplota_nadrz_bazen",
+                "input_number.max_teplota_nadrz_bazen"
             ],
             "substring": [],
             "regex": []
