@@ -980,9 +980,38 @@ A ZAKAZU PRETOKU
     - korekcni smycka zapinani fazi patron upravi ve 10s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
         - SOC baterie je >=95%, pak se VYBIJI baterie cca 1 - 2kWh - HLAVNE SE NESMI NABIJET!!!. Pokud se bateerie v tomto 
             SOC bude nabijet, prida se 1 faze.
-            - POKUD JE SOC BATERIE >=95% A JE ZAROVEN ZAKAZ PRETOKU, ZAPNOU SE VSECHNY FAZE A NEVYPNOU SE AZ DO DOBY, KDY SE BATERIE VYBIJE POD SOC 95%.
-            korekcni smycka je vyrazena.
-                - TOTO SAMOZREJME PLATI, POKUD PATRONY MOHOU BEZET - NEMA AUTO HLAD, NETOPI SE ATD!!!
+            - POKUD JE SOC BATERIE ≥ 95 % A ZÁROVEŇ NÁM SÍŤ ZA PRODEJ MOC NEPLATÍ, zapnou se všechny 3 fáze
+              patron a drží se, dokud baterie neklesne pod 95 %. Korekční smyčka (která jinak ubírá fáze
+              podle toku do baterie) je v tomto případě VYŘAZENÁ — fáze drží napevno všechny tři.
+
+              „Síť nám za prodej moc neplatí" znamená jeden ze dvou případů (chování JE V OBOU IDENTICKÉ):
+                a) ZÁKAZ PŘETOKŮ — síť nás odmítá vykupovat (prodejní cena ≤ 0 Kč/kWh, mód „zakaz_pretoku").
+                b) NÍZKÁ PRODEJNÍ CENA — síť vykupuje, ale platí míň než nastavený práh
+                   (parametr prah_nevyhodneho_prodeje_kc, výchozí 1 Kč/kWh, lze přenastavit v konfiguraci).
+
+              Důvod (lidsky, navazuje na § 1.1 + § 8.7): kdyby se naše elektřina prodávala pod korunu,
+              je výhodnější ji propálit v patronách do nádrže — v zimě tím přitopíme dům, v létě bazén.
+              Bilance: 1 kWh za 0,8 Kč prodaná → večer dotopit ze sítě za 3-4 Kč = ztráta cca 2,5 Kč.
+              Lepší ji propálit do nádrže (= ušetřená dražší elektřina pro topení) než pár haléřů z prodeje.
+
+              DRUHÝ DŮVOD (anti-curtailing): když je baterie skoro plná (≥ 95 %) a slunce ještě svítí,
+              i malá výroba (1-2 kW) baterii dotlačí na 100 %. Měnič pak začne omezovat solární výrobu,
+              což je škoda — místo curtailing radši energii propálíme do nádrže. Proto pravidlo nepotřebuje
+              vysoký solární přebytek; stačí, že solární okno běží.
+
+              JEDINÝ OCHRANNÝ GATE: aktuální hodina musí být ve slunečním okně (typicky 9-17 v zimě, 7-20
+              v létě, dle plán config solarStartHour/solarEndHour). V NOCI patrony NESPOUŠTĚT, i kdyby
+              prodejní cena byla pod 1 Kč — žralo by 9 kW ze sítě. (Stejný princip jako u zákazu přetoků:
+              ten je v kódu definovaný „cantExport = isSol && sellPrice ≤ 0", v noci se rovněž neuplatní.)
+
+              TOTO PRAVIDLO PLATÍ, POKUD PATRONY VŮBEC MOHOU JET — tj. automatizace topení je zapnutá,
+              teplota v nádrži je pod horním limitem (topeni_max_teplota_patron, ~60 °C), neběží
+              balancování baterie, NIBE kompresor zrovna netopí (§ 1.2 mutex), auto nemá hlad
+              (auto_ma_hlad = OFF — to je absolutní zákon § 4, auto má vždy přednost). Pokud kterákoli
+              z těchto podmínek selže, všechny 3 fáze se nezapnou ani při nízké prodejní ceně.
+
+              TOTO PRAVIDLO PLATÍ STEJNĚ V ZIMĚ I V LÉTĚ — sdílí ho § 11.7 (patrony do nádrže pro bazén).
+              V létě se chovají úplně stejně, jen cílová nádrž slouží bazénu místo domu.
         - Pokud je SOC baterie mezi 90-95%, pak se baterie nabiji cca 1kWh
     - Teplota nádrže < topeni_max_teplota_patron
     - Balancování neaktivní
@@ -1358,6 +1387,13 @@ A ZAKAZU PRETOKU
       ale nechce zrát ze sítě".
       Sell-price guard zůstává v platnosti per §8.5 ř.965 (zákaz přetoků = sell ≤ 0
       ho přirozeně splňuje, takže patrony můžou jet).
+
+    - FORCE-ALL VŠECH 3 FÁZÍ PŘI SOC ≥ 95 % + ZÁKAZ PŘETOKŮ / NÍZKÁ PRODEJNÍ CENA — viz § 8.5.
+      Pravidlo „když je baterie nad 95 % a síť za prodej moc neplatí (zákaz přetoků NEBO sell
+      pod prah_nevyhodneho_prodeje_kc), zapnou se všechny 3 fáze patron a drží do vybití pod 95 %"
+      platí v letním režimu STEJNĚ jako v zimním. Cílová nádrž slouží bazénu místo domu, jinak je
+      chování úplně identické — včetně nutnosti svítícího slunce pro low-sell trigger (≥ 5 kW solární
+      výroby). Detaily, podmínky a důvody viz § 8.5 (sdílená logika obou flow).
     - SOUBĚH PATRON + NIBE → BAZÉN je POVOLENÝ za těchto pravidel:
         * patrony topí VÝHRADNĚ NÁDRŽ  (plní zásobu tepla na pozadí)
         * NIBE topí VÝHRADNĚ PŘÍMO VÝMĚNÍK (switch.nibe_jednorazove_zvyseni_tuv)
@@ -1510,6 +1546,10 @@ A ZAKAZU PRETOKU
     topeni_patron_dead_band_w: 500 (dead band korekce patrony, W)
     topeni_patron_max_grid_draw_w: 200 (max odběr ze sítě při patrony, W)
     topeni_patron_change_cooldown: 3 (počet 10s cyklů mezi změnami fáze, default 30s celkem)
+    prah_nevyhodneho_prodeje_kc: 1.0 (Kč/kWh — pokud nám síť za prodej platí méně než tato částka,
+        patrony se v solárních hodinách chovají stejně jako při zákazu přetoků: SOC ≥ 95 % spustí
+        všechny 3 fáze a slévá baterii do nádrže. Viz § 8.5; platí stejně i pro letní patrony do
+        nádrže pro bazén — § 11.7.)
     topeni_solar_override_w: 8000 (min solar pro override deferral u NIBE, W)
     topeni_solar_forecast_kwh: 30 (min solar forecast pro bigSolarTomorrow, kWh)
     nibe_est_consumption_kwh: 7 (odhadovaná spotřeba NIBE za hodinu, kWh — reálný cyklus ~30 min / ~7 kWh)
