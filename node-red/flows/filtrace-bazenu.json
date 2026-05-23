@@ -76,12 +76,30 @@
         },
         "nodes": [
             "e840eaa72d311da7",
-            "filtrace_auto_check"
+            "filtrace_auto_check",
+            "filt_link_from_pool_recheck"
         ],
         "x": -6,
         "y": 19,
         "w": 432,
-        "h": 82
+        "h": 142
+    },
+    {
+        "id": "filt_link_from_pool_recheck",
+        "type": "link in",
+        "z": "ea6d31715793bece",
+        "g": "filtrace_grp_trigger",
+        "name": "← pool NIBE off recheck",
+        "links": [
+            "pool_link_to_filt_recheck"
+        ],
+        "x": 95,
+        "y": 130,
+        "wires": [
+            [
+                "filtrace_auto_check"
+            ]
+        ]
     },
     {
         "id": "e840eaa72d311da7",
