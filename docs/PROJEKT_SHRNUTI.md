@@ -396,6 +396,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.113: Filtrace — ochrana noční rezervy baterie (2026-06-04)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): filtrace běžela v nesolárních hodinách a drainovala baterii i když nebyl dostatek energie na přežití noci do prvních solárních hodin.
+
+**Příčina** (`filtrace_decision` ve `filtrace-bazenu.json`): ON větve pro nesolární hodiny (SETRIT bez budoucího soláru, urgent, EMERGENCY deadline) nekontrolovaly noční rezervu baterie. Jediná ochrana `lowSOC = soc < 40` se navíc uplatňovala jen v NORMAL při běhu → filtrace v noci vyprazdňovala baterii pod rezervu na noc.
+
+**Fix (commit `a00c437`, feature-branch deploy `--no-ha`, ověřeno, merge do main)**:
+- Nový guard `nightReserveSoc = planData.sellTargetSoc` (stabilní FVE noční rezerva, fallback `filtrace_soc_low`), `batLowForNight = soc <= nightReserveSoc`.
+- **ON guard**: filtrace se nespustí, když `batLowForNight && !gSurp && !isZapNak` (baterie u/pod noční rezervou a není free energie — solární přebytek / záporná cena).
+- **OFF při běhu**: ochrana baterie rozšířena na všechny módy — `!oSurp && !isZapNak && (batLowForNight || (inNormal && lowSOC))` → OFF.
+- Výjimky (filtrace smí i při nízké baterii): solární přebytek ≥ `filtrace_surplus_on_w`, záporná nákupní cena, POOL Heating filtrace lock (§11.4).
+
+**Pozn. k deployi**: poprvé správně dle ZAKONY §2.1.1 (`--no-ha`, bez restartu HA Core) a §2.5 (feature branch → deploy → ověření → merge+push do main).
+
+---
+
 ## v25.112: Fix prodej/šetření + letní chlazení (předchlazení + noční drift) (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): nestabilní prodej, zbytečné ŠETŘIT/nákup s plnou baterií, špatné pořadí prodeje (levnější hodina první), nepočítané letní chlazení.
