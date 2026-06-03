@@ -396,6 +396,26 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.112: Fix prodej/šetření + letní chlazení (předchlazení + noční drift) (2026-06-04)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): nestabilní prodej, zbytečné ŠETŘIT/nákup s plnou baterií, špatné pořadí prodeje (levnější hodina první), nepočítané letní chlazení.
+
+**Opravy (commit `b6939af`, deploy `deploy.sh`, NR naběhl čistě)**:
+- **BUG A — stabilní `sellTargetSoc`** (`rf_plan_output_05`): publikuje se stabilní `x.sellTarget` (z node 02) místo `p[0].simulatedSoc`, který klouzal s aktuálním SOC dolů → přeprodej a nestabilní rozhodnutí (§4.5).
+- **BUG B — prodej nejdražší hodiny první** (`rf_plan_output_05`): pro aktuální hodinu se k `sellTarget` přičte rezerva = kapacita budoucích DRAŽŠÍCH prodejních hodin (`floor = sellTarget + reserveDearer`, cap `cSoc − sellTarget`). Levnější dřívější hodina prodá jen zbytek rozpočtu, dražší pozdější dostane celou kapacitu. Bez zásahu do exekuce.
+- **BUG C — `setritTop` jen při nedostatku** (`rf_arb_trimming_3`): SETRIT (nákup v levné hodině) se aktivuje jen když `peakSoc (= cSoc + sGT) < sellTarget`. Pokud baterie stačí → NORMAL drain, žádný zbytečný nákup.
+- **BUG D — letní chlazení**:
+  - `rf_cena_discharge2`: v letním režimu se zapnutým `input_boolean.chlazeni` se do `nightCons` přičte `chlazeni_spotreba_kwh_h` (1 kWh/h) na každou nesolární noční hodinu → vyšší `sellTarget`, prodáváme méně (rezerva na noční chlazení).
+  - `rf_htg_decide2` (chlazení): v SOLÁRNÍCH hodinách s přebytkem (≥ `chlazeni_predchlazeni_min_solar_w`) předchlazuje až na `tgtT − chlazeni_predchlazeni_offset_c` (banka chladu zdarma); v nesolárních hodinách těsná hystereze max `+chlazeni_nocni_hystereze_c` (0,2 °C) nad nastavenou teplotou.
+
+**`fve-config.json`**: nové parametry `chlazeni_spotreba_kwh_h=1.0`, `chlazeni_nocni_hystereze_c=0.2`, `chlazeni_predchlazeni_offset_c=0.5`, `chlazeni_predchlazeni_min_solar_w=2000`. Synchronizovány server-only ruční hodnoty do gitu: `topeni_patron_max_sell_price=0.9`, `prah_nevyhodneho_prodeje_kc=0.5`, `pool_ventil_start_c=55`.
+
+**Ověření**: server+změny == git (žádná uživatelova změna nepřepsána), JSON round-trip byte-stabilní, `sensor.fve_plan` se přepočítal bez NaN/undefined, NR logy bez chyb (jen přechodné `NoConnectionError` při restartu HA).
+
+**Zbývá (samostatný krok)**: BUG E — sebekorekce přeprodej→noční nákup (real-time monitor + perzistentní rezerva).
+
+---
+
 ## v25.111: Filtrace bazénu — rozhodování dle TEPLOTY VODY (2026-04-18)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`):
