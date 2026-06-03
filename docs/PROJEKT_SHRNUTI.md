@@ -412,7 +412,12 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Ověření**: server+změny == git (žádná uživatelova změna nepřepsána), JSON round-trip byte-stabilní, `sensor.fve_plan` se přepočítal bez NaN/undefined, NR logy bez chyb (jen přechodné `NoConnectionError` při restartu HA).
 
-**Zbývá (samostatný krok)**: BUG E — sebekorekce přeprodej→noční nákup (real-time monitor + perzistentní rezerva).
+**BUG E — sebekorekce přeprodej→noční nákup (commit `8c55151`, deploy OK)**:
+- **Detekce** (`fve_history_collect` ve `fve-history.json`, běží hodinově): pokud jsme dnes prodávali (`soldToGridToday` = mód byl `prodavat`) a v **nesolární** hodině jsme museli nakupovat ze sítě (`netHouseGrid = hourlyGridKwh − ΔEV > sell_correction_night_buy_prah_kwh`, mimo módy `nabijet_ze_site`/`zaporna`, a `SOC ≤ min_soc + 6`) → akumulace `violationKwhToday`.
+- **Korekce** (perzistentní `/homeassistant/fve_sell_correction.json`): při rolloveru dne — při porušení `correctionKwh += violationKwhToday` (cap `sell_correction_max_kwh`), při čistém dni `correctionKwh −= sell_correction_decay_kwh` (samo-uvolnění). Publikuje globál `fve_sell_correction_kwh`.
+- **Injekce** (`rf_cena_discharge2`): `nightCons += fve_sell_correction_kwh` → vyšší `sellTarget` → příští den prodáme méně. Status zobrazuje `corr+X`.
+- **Guardy proti falešnému poplachu**: vyloučení plánovaných nákupů (módy nabijet/záporná), odečet EV nákupu, klíčová podmínka `SOC u dna` (baterie vyprázdněná = skutečný přeprodej).
+- **Config**: `sell_correction_enabled=true`, `sell_correction_max_kwh=5`, `sell_correction_decay_kwh=0.5`, `sell_correction_night_buy_prah_kwh=0.3`.
 
 ---
 
