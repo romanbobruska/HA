@@ -396,6 +396,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.118: KRITICKÁ oprava — zámek se sám odemkl při glitchi alarmu (2026-06-04)
+
+**Incident**: V 05:02 se sám odemkl zámek hlavních dveří. Časová osa: `alarm sekce_1 → disarmed` v 05:02:11 → `lock_eval_func` vyhodnotil hranu příjezdu → unlock v 05:02:28 (17 s poté). NR restart byl AŽ 05:03:32 (nesouvisí).
+
+**Root cause**: `disarmEdge = (prevCelk !== "disarmed" && celk === "disarmed")` se spouštěl i při přechodu **`unavailable`/`unknown` → `disarmed`** (glitch/reconnect integrace alarmu), ne jen při skutečném `armed → disarmed`. Při výpadku alarmové entity tak automatika omylem odemkla dům.
+
+**Oprava** (`ostatni.json` `lock_eval_func`): zaveden flag **`celk_was_armed`** (set jen když `isArmed(celk)`). `disarmEdge = celkWasArmed && celk === "disarmed"`. Po vykonaném unlocku se flag vynuluje. → Odemkne se JEN po reálném zazbrojení→odzbrojení; glitch `unavailable→disarmed` ani restart (context reset) už unlock nespustí.
+
+**Ověřeno**: deploy `--no-ha --branch=advanced` HTTP 200, fix v live `flows.json`. Pozn.: Yale lock reportoval stav se zpožděním (po incidentu se `last_updated` neměnil) — fyzické zamčení nutno ověřit přes Yale app; noční automatika (`maBytZamceno`) zámek dotlačí na locked.
+
+---
+
 ## v25.117: AUTO mód „Prodat přebytek" — plánovač automaticky exportuje přebytek (2026-06-04)
 
 > **Pozn. (klíč módu)**: mód emituje klíč **`prodavat_misto_nabijeni`** (přejmenováno z původního `prodat_prebytek` kvůli souladu s `dashboard_fve_plan.md` + `configuration.yaml fve_manual_mod`, které tento klíč už mapují na ikonu **⚪ „Prodej přebytku"**). Interní node ID v NR zůstaly `*_prodat_prebytek*` (jen identifikátory).
