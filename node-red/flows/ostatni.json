@@ -91,7 +91,8 @@
             "04ea2075a325c38b",
             "8f4d10785f23c6e7",
             "lock_eval_func",
-            "lock_ssc_hlavni_dvere"
+            "lock_ssc_hlavni_dvere",
+            "lock_ssc_sekce1_celk"
         ],
         "x": 14,
         "y": 559,
@@ -903,7 +904,7 @@
         "z": "58f453ee71c85d6d",
         "g": "314bb66109910b71",
         "name": "Vyhodnoť stav zámku",
-        "func": "// Zámek vstup — idempotentní lock/unlock (jednou na přechod, pak nic).\n// ZAMCENO: celkAlarm armed* OR garazAlarm armed* OR noc 23:00-06:00\n// gS: bracket notation (stejně jako zbytek projektu) — spolehlivější než bulk states objekt.\n\nvar HOUR_EVENING_LOCK = 18;\nvar LOCK_ID = \"lock.hlavni_dvere\";\n\nfunction gS(id) {\n    return (global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {}).state || \"\";\n}\nfunction isArmed(x) { return x && x.indexOf(\"armed\") === 0; }\nfunction isLocked(st) { return st === \"locked\" || st === \"locking\"; }\nfunction isUnlocked(st) { return st === \"unlocked\" || st === \"open\" || st === \"unlocking\"; }\n\nfunction getState(k, def) {\n    var v = global.get(\"lock_\" + k);\n    if (v === undefined) v = flow.get(\"lock_\" + k);\n    return (v === undefined || v === null) ? def : v;\n}\nfunction setState(k, v) {\n    global.set(\"lock_\" + k, v);\n    flow.set(\"lock_\" + k, v);\n}\n\nvar celk = gS(\"alarm_control_panel.horousany_sekce_1_celkovy_alarm\");\nvar garaz = gS(\"alarm_control_panel.horousany_sekce_7_garaz_alarm\");\nvar lock = gS(LOCK_ID);\nvar h = new Date().getHours();\nvar now = Date.now();\n\nif (!lock || lock === \"unavailable\" || lock === \"unknown\") {\n    node.status({ fill: \"red\", shape: \"ring\", text: \"lock nedostupny: \" + (lock || \"?\") });\n    return null;\n}\n\nvar jeNoc = (h >= 23 || h < 6);\nvar maBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc;\n\nvar lastCmdAt = getState(\"last_cmd_at\", 0);\nvar lastObs = getState(\"last_observed\", undefined);\nvar manualUntil = getState(\"manual_until\", 0);\nvar manualLocked = getState(\"manual_locked\", false);\nvar pending = getState(\"pending_action\", null);\n\n// Potvrzení pending z aktuálního stavu\nif (pending === \"lock\" && isLocked(lock)) {\n    pending = null;\n    setState(\"pending_action\", null);\n}\nif (pending === \"unlock\" && isUnlocked(lock)) {\n    pending = null;\n    setState(\"pending_action\", null);\n}\n\n// NR restart heuristika — večerní manuální zámek\nif (lastObs === undefined && isLocked(lock) && !maBytZamceno && h >= HOUR_EVENING_LOCK) {\n    manualLocked = true;\n    setState(\"manual_locked\", true);\n}\n\nvar fromAlarm = (typeof msg.payload === \"string\") &&\n    (msg.payload.indexOf(\"armed\") === 0 || msg.payload === \"disarmed\"\n        || msg.payload === \"pending\" || msg.payload === \"triggered\"\n        || msg.payload === \"arming\" || msg.payload === \"disarming\");\nvar isSecurityEvent = fromAlarm && msg.payload.indexOf(\"armed\") === 0;\n\nif (lastObs !== undefined && lock !== lastObs && (now - lastCmdAt) > 5000) {\n    var byloMaBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc;\n    if (!isLocked(lock) && byloMaBytZamceno) {\n        manualUntil = now + 60 * 60 * 1000;\n        setState(\"manual_until\", manualUntil);\n        setState(\"pending_action\", null);\n        pending = null;\n    }\n    if (isLocked(lock) && !byloMaBytZamceno && h >= HOUR_EVENING_LOCK) {\n        manualLocked = true;\n        setState(\"manual_locked\", true);\n    }\n    if (!isLocked(lock) && manualLocked) {\n        manualLocked = false;\n        setState(\"manual_locked\", false);\n        setState(\"pending_action\", null);\n        pending = null;\n    }\n}\nsetState(\"last_observed\", lock);\n\nif (isSecurityEvent && now < manualUntil) {\n    setState(\"manual_until\", 0);\n    manualUntil = 0;\n}\n\nif (now - lastCmdAt < 10000) {\n    node.status({ fill: \"grey\", shape: \"ring\", text: \"cooldown \" + Math.ceil((10000 - (now - lastCmdAt)) / 1000) + \"s\" });\n    return null;\n}\n\n// Manual unlock hold — vůbec nezasahovat\nif (now < manualUntil) {\n    var minLeft = Math.ceil((manualUntil - now) / 60000);\n    node.status({ fill: \"blue\", shape: \"ring\", text: \"MANUAL-OFF \" + minLeft + \"min lock=\" + lock });\n    return null;\n}\n\n// Cílový stav\nvar wantLocked = maBytZamceno;\nif (manualLocked) {\n    var inEveningOrNight = (h >= HOUR_EVENING_LOCK) || (h < 6);\n    if (maBytZamceno || inEveningOrNight) {\n        wantLocked = true;\n    } else {\n        setState(\"manual_locked\", false);\n        manualLocked = false;\n        wantLocked = maBytZamceno;\n    }\n}\n\nvar prevWant = getState(\"prev_want_locked\", null);\nif (prevWant !== null && prevWant !== wantLocked) {\n    pending = null;\n    setState(\"pending_action\", null);\n}\nsetState(\"prev_want_locked\", wantLocked);\n\n// Už OK — nesahej (hlavní idempotence)\nif (wantLocked && isLocked(lock)) {\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"OK ZAM lock=\" + lock });\n    return null;\n}\nif (!wantLocked && isUnlocked(lock)) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK ODEM lock=\" + lock });\n    return null;\n}\n\n// Potřeba akce — jen jednou (pending), bez opakování každou minutu\nif (wantLocked && !isLocked(lock)) {\n    if (pending === \"lock\") {\n        node.status({ fill: \"grey\", shape: \"ring\", text: \"cekam lock potvrzeni lock=\" + lock });\n        return null;\n    }\n    setState(\"pending_action\", \"lock\");\n    setState(\"last_cmd_at\", now);\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"LOCK lock=\" + lock });\n    return [msg, null];\n}\nif (!wantLocked && isLocked(lock)) {\n    if (pending === \"unlock\") {\n        node.status({ fill: \"grey\", shape: \"ring\", text: \"cekam unlock potvrzeni\" });\n        return null;\n    }\n    setState(\"pending_action\", \"unlock\");\n    setState(\"last_cmd_at\", now);\n    node.status({ fill: \"green\", shape: \"dot\", text: \"UNLOCK lock=\" + lock });\n    return [null, msg];\n}\n\nreturn null;\n",
+        "func": "// Zamek hlavni dvere (Yale Linus L2) — rizeni stavu vs pravidla.\n// PRAVIDLA:\n//   ODEMKNI: jen na HRANU vstupu sekce_1 do \"disarmed\" (prijezd domu). Jinak NIKDY neodemyka.\n//   ZAMKNI : kdyz ma byt zamceno (sekce_1 armed* OR garaz armed* OR noc 23-06) a neni zamceno.\n//   JINAK  : NIC (idempotence) — jeden prikaz na prechod => zadny Google Home spam.\n//   Rucni vstup ma prioritu (odemykame jen na hranu prijezdu; rucni odemceni v noci/armed = 1h hold).\n// out1 = ZAMKNI (lock.lock), out2 = ODEMKNI (lock.unlock)\n\nvar LOCK_ID  = \"lock.hlavni_dvere\";\nvar CELK_ID  = \"alarm_control_panel.horousany_sekce_1_celkovy_alarm\";\nvar GARAZ_ID = \"alarm_control_panel.horousany_sekce_7_garaz_alarm\";\nvar NIGHT_FROM = 23, NIGHT_TO = 6;\nvar COOLDOWN_MS = 10000;                  // po vlastnim prikazu klid (anti-spam)\nvar MANUAL_UNLOCK_HOLD_MS = 60 * 60 * 1000; // rucni odemceni v dobe \"ma byt zamceno\" -> hold\n\nfunction gS(id){ return (global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {}).state || \"\"; }\nfunction isArmed(x){ return x && x.indexOf(\"armed\") === 0; }\nfunction isLocked(st){ return st === \"locked\" || st === \"locking\"; }\nfunction isUnlocked(st){ return st === \"unlocked\" || st === \"unlocking\" || st === \"open\"; }\nfunction g(k, def){ var v = global.get(\"lock_\" + k); if (v === undefined) v = flow.get(\"lock_\" + k); return (v === undefined || v === null) ? def : v; }\nfunction s(k, v){ global.set(\"lock_\" + k, v); flow.set(\"lock_\" + k, v); }\n\nvar celk = gS(CELK_ID);\nvar garaz = gS(GARAZ_ID);\nvar lock = gS(LOCK_ID);\nvar h = new Date().getHours();\nvar now = Date.now();\n\nif (!lock || lock === \"unavailable\" || lock === \"unknown\") {\n    node.status({ fill: \"red\", shape: \"ring\", text: \"lock nedostupny: \" + (lock || \"?\") });\n    return null;\n}\n\nvar jeNoc = (h >= NIGHT_FROM || h < NIGHT_TO);\nvar maBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc;\n\nvar lastCmdAt = g(\"last_cmd_at\", 0);\nvar pending = g(\"pending_action\", null);\nvar lastObs = g(\"last_observed\", undefined);\nvar prevCelk = g(\"prev_celk\", undefined);\nvar manualUntil = g(\"manual_unlock_until\", 0);\n\n// Potvrzeni pending z realneho stavu\nif (pending === \"lock\" && isLocked(lock)) { pending = null; s(\"pending_action\", null); }\nif (pending === \"unlock\" && isUnlocked(lock)) { pending = null; s(\"pending_action\", null); }\n\n// Detekce rucni zmeny zamku (zmena, kterou jsme nezpusobili my)\nif (lastObs !== undefined && lock !== lastObs && (now - lastCmdAt) > 5000) {\n    if (isUnlocked(lock) && maBytZamceno) {\n        manualUntil = now + MANUAL_UNLOCK_HOLD_MS; // rucni odemceni v dobe \"ma byt zamceno\"\n        s(\"manual_unlock_until\", manualUntil);\n    }\n    pending = null; s(\"pending_action\", null);\n}\ns(\"last_observed\", lock);\n\n// HRANA prijezdu: sekce_1 vstoupila do \"disarmed\" z jineho stavu\nvar disarmEdge = (prevCelk !== undefined && prevCelk !== \"disarmed\" && celk === \"disarmed\");\ns(\"prev_celk\", celk);\n\n// Cooldown po vlastnim prikazu\nif (now - lastCmdAt < COOLDOWN_MS) {\n    node.status({ fill: \"grey\", shape: \"ring\", text: \"cooldown lock=\" + lock });\n    return null;\n}\n\n// === ODEMKNI — jen na hranu prijezdu, jen kdyz je zamceno, jednou ===\nif (disarmEdge && isLocked(lock)) {\n    if (pending === \"unlock\") { return null; }\n    s(\"pending_action\", \"unlock\");\n    s(\"last_cmd_at\", now);\n    s(\"manual_unlock_until\", 0);\n    node.status({ fill: \"green\", shape: \"dot\", text: \"ODEMYKAM (prijezd) lock=\" + lock });\n    return [null, msg];\n}\n\n// === ZAMKNI — kdyz ma byt zamceno a neni, jednou (respekt k rucnimu odemceni) ===\nif (maBytZamceno && !isLocked(lock)) {\n    if (now < manualUntil) {\n        var minLeft = Math.ceil((manualUntil - now) / 60000);\n        node.status({ fill: \"blue\", shape: \"ring\", text: \"rucni odemceno, hold \" + minLeft + \"min\" });\n        return null;\n    }\n    if (pending === \"lock\") { return null; }\n    s(\"pending_action\", \"lock\");\n    s(\"last_cmd_at\", now);\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"ZAMYKAM lock=\" + lock });\n    return [msg, null];\n}\n\n// === Stav odpovida pravidlum — NIC ===\nif (maBytZamceno && isLocked(lock)) {\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"OK zamceno\" });\n} else {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK (disarmed/den) lock=\" + lock });\n}\nreturn null;\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -974,6 +975,65 @@
         ],
         "x": 170,
         "y": 780,
+        "wires": [
+            [
+                "lock_eval_func"
+            ]
+        ]
+    },
+    {
+        "id": "lock_ssc_sekce1_celk",
+        "type": "server-state-changed",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Celkovy alarm sekce 1",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "alarm_control_panel.horousany_sekce_1_celkovy_alarm"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": false,
+        "ignorePrevStateUnknown": false,
+        "ignorePrevStateUnavailable": false,
+        "ignoreCurrentStateUnknown": false,
+        "ignoreCurrentStateUnavailable": false,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "eventData"
+            },
+            {
+                "property": "topic",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "triggerId"
+            }
+        ],
+        "x": 170,
+        "y": 840,
         "wires": [
             [
                 "lock_eval_func"
