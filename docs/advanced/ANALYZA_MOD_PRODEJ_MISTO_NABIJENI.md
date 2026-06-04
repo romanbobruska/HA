@@ -87,3 +87,61 @@ Pokud je curtailmentu málo a spread `sell_now − V_store` málokdy kladný, **
 - Mód dává smysl hlavně **v létě při plné baterii a poledních přetocích**, kde je alternativou nulový výnos (curtailment).
 - Ekonomicky: prodávej přebytek teď, když `sell_now > rtEff × max(buy_future) − amort` a baterie není potřeba pro noční rezervu/balancování.
 - **Doporučení:** realizovat jako **rozšíření solveru (charge-gate), ne samostatný mód**, a nejdřív změřit potenciál (curtailment kWh/den).
+
+---
+
+# 9. PRAKTICKÉ POUŽITÍ — kdy to reálně vydělá (analýza edge cases)
+
+Systém: **17 kWp, baterie 28 kWh, Victron ESS, max_feed_in 7.6 kW, amort 1.5 Kč/kWh, rtEff ≈ 0.81** (chEff·dchEff 0.9×0.9).
+
+## Klíčová myšlenka, kterou stávající logika plně neřeší
+**Cyklus baterie NENÍ zadarmo.** Uložit 1 kWh a později ji vydat stojí: amortizace **1.5 Kč** + round-trip ztráta **~19 %**. Přímý export přebytku TEĎ se těmto nákladům vyhne. Proto v řadě situací **přímý prodej přebytku > ulož-teď-prodej-večer**, i když je večerní výkupní cena vyšší.
+
+Práh (uložit pro večerní prodej vs. prodat teď):
+```
+prodej teď je lepší, když:  sell_now  >  rtEff × sell_vecer − amort
+                            sell_now  >  0.81 × sell_vecer − 1.5
+```
+Příklad: večerní výkup 4.0 Kč → práh = 0.81×4 − 1.5 = **1.74 Kč**. Tj. když je denní výkup > 1.74 Kč, přímý export bije uskladnění pro večerní prodej (baterie se ušetří).
+
+## Edge case A — KILLER: levná noc dopředu → prodej denní přebytek, dobij v noci
+**Situace:** odpolední solární přebytek + výkupní cena dne ~2 Kč; **noc/příští okno má buy blízko 0 nebo záporné** (větrná noc, nízká poptávka).
+- **Uložit přebytek:** budoucí hodnota = `rtEff × buy_future` ≈ 0.81 × ~0 ≈ **0 Kč** (energii pak koupíš skoro zadarmo, uskladnění nemá cenu).
+- **Prodat přebytek teď:** **+2 Kč/kWh**, baterii dobiješ v noci z levné sítě (mód NABÍJET ZE SÍTĚ).
+- **Zisk: ~2 Kč/kWh**, který by jinak propadl. Při 8–12 kWh přebytku = **16–24 Kč/den navíc**.
+- Tohle je hlavní lukrativní scénář — nastává hlavně na jaře/podzim a o větrných dnech.
+
+## Edge case B — plná baterie + polední přetoky (anti-curtailment)
+Baterie 100 % už dopoledne, odpolední přebytek by se **zařízl** (`zakaz_pretoku`). Alternativa exportu = **0 Kč**. Takže prodat i za nízkou cenu (klidně 0.3–1 Kč) je čistý zisk. Léto, silné dny. Modest, ale „zadarmo".
+
+## Edge case C — vzácná vysoká denní výkupní cena (volatilita trhu)
+Občas spike výkupní ceny během dne (záporné ceny jinde v EU → volatilita). Když `sell_now` vyletí na 3–5 Kč v solární hodině, přímý export přebytku (bez cyklu baterie) je nejvýhodnější okamžitý monetizační kanál. Vzácné, ale vysoká hodnota/kWh.
+
+## Edge case D — úspora cyklu baterie + delší životnost
+Každá nevyužitá obrátka baterie = ušetřená amortizace **1.5 Kč/kWh** + delší životnost článků. Když denní výkup stojí za to, přímý export šetří baterii pro hodnotnější večerní arbitráž.
+
+## Kvantifikace (hrubý odhad pro jejich systém)
+- Dny typu A (levná noc + slušný denní výkup): odhad **15–30 dní/rok**, ~10 kWh × ~2 Kč = **~200–600 Kč/rok**.
+- Anti-curtailment léto (typ B): dle množství zaříznuté energie, řádově **stovky Kč/rok**.
+- Volatilní spiky (typ C): nárazově desítky Kč/den, pár dní/rok.
+- **Souhrn: nízké stovky až ~1000 Kč/rok** — odpovídá „edge case, ale umí vydělat dost peněz". Přesnou hodnotu dá až měření (sekce 7).
+
+## Návrh AUTOMATICKÉHO spínání (charge-gate v solveru — pro pozdější schválení)
+V solární hodině s očekávaným přebytkem označit `exportSurplus = true`, když VŠECHNY platí:
+1. `sell_now > 0` (nikdy neexportovat při záporné ceně),
+2. `sell_now > rtEff × max(buy_future v horizontu) − amort` (uskladnění nemá hodnotu — typ A),
+   **NEBO** `SOC ≥ max_daily_soc` / baterie se naplní i bez tohoto přebytku (typ B),
+3. **noční rezerva** (`night_reserve_kwh` 10 kWh) je zajištěná levným nočním nákupem nebo zbývajícím solárem,
+4. nekoliduje s **balancováním** (to chce 100 % SOC),
+5. lokální spotřebiče zdarma (NIBE/bazén/ohřev) mají přednost před exportem.
+→ Když splněno: `max_charge = 0`, feed-in do `max_feed_in`. (Přesně to dělá nový mód `prodat_prebytek` — jen by ho spínal solver místo ruky.)
+
+## Jak používat MANUÁLNÍ mód teď (bez auto)
+1. Večer/ráno mrkni na spotové ceny: je **dnešní výkup ≥ ~1.5–2 Kč** a **noc/zítra levný nákup**? → typ A.
+2. Nebo je baterie plná a poledne přetéká? → typ B.
+3. Přepni `input_select.fve_manual_mod = prodat_prebytek` na dobu solárního přebytku.
+4. Večer dej zpět na `auto` (nebo NABÍJET ZE SÍTĚ pro levné noční dobití).
+
+## Rizika v praxi
+- Zapomenout přepnout zpět → baterie se přes den nenabije a večer chybí (proto je auto-spínání s pojistkou noční rezervy bezpečnější).
+- Špatný odhad nočního nákupu → uskladnění by bylo lepší. Auto pravidlo to řeší daty z `fve_prices_forecast`.
