@@ -398,7 +398,9 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 ## v25.117: AUTO mód „Prodat přebytek" — plánovač automaticky exportuje přebytek (2026-06-04)
 
-Mód `prodat_prebytek` zapojen do **automatického plánovače** (předtím jen manuální). Rozhoduje `node 04 resolveMode` v solární hodině s přebytkem.
+> **Pozn. (klíč módu)**: mód emituje klíč **`prodavat_misto_nabijeni`** (přejmenováno z původního `prodat_prebytek` kvůli souladu s `dashboard_fve_plan.md` + `configuration.yaml fve_manual_mod`, které tento klíč už mapují na ikonu **⚪ „Prodej přebytku"**). Interní node ID v NR zůstaly `*_prodat_prebytek*` (jen identifikátory).
+
+Mód `prodavat_misto_nabijeni` zapojen do **automatického plánovače** (předtím jen manuální). Rozhoduje `node 04 resolveMode` v solární hodině s přebytkem.
 
 **Bezpečné pravidlo `ppWorthIt(off, soc)`** — export se zapne JEN když VŠECHNY platí:
 1. `prodej_misto_nabijeni_enabled = true` (config, default ON),
