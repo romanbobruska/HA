@@ -60,7 +60,8 @@
             "blokace_file_update",
             "blokace_file_write",
             "lo_orch_balancovani",
-            "lo_orch_zaporna_nakup"
+            "lo_orch_zaporna_nakup",
+            "lo_orch_prodat_prebytek"
         ],
         "x": 14,
         "y": 339,
@@ -289,7 +290,7 @@
         "z": "d86bb11fab512182",
         "g": "c0d4d6462d4ebded",
         "name": "Rozhodnutí o akci",
-        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\nvar config = global.get(\"fve_config\") || {};\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    case \"zaporna_nakupni_cena\": msg.modeIndex = 7; break;\n    default: msg.modeIndex = 0;\n}\n\n// v23: Track balancing start time\n// Force-stop is now handled by BALANCOVÁNÍ Logic (so it can send service call)\nif (mode === \"Balancování\") {\n    if (!global.get(\"balancing_started_at\")) {\n        global.set(\"balancing_started_at\", Date.now());\n    }\n    var startedAt = global.get(\"balancing_started_at\");\n    var maxMs = (config.balancing_force_stop_hours || 3) * 3600 * 1000;\n    if (Date.now() - startedAt > maxMs) {\n        // v23: Don't switch mode — let BALANCOVÁNÍ Logic handle force-stop\n        // This ensures the service call to update last_pylontech_balanced is sent\n        msg.forceStopBalancing = true;\n    }\n} else {\n    global.set(\"balancing_started_at\", null);\n    global.set(\"balancing_completed\", false);\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"Balancování\");\nif (mode !== \"Balancování\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
+        "func": "var mode = msg.currentMode;\nvar skipBattery = msg.skipBatteryControl || false;\nvar config = global.get(\"fve_config\") || {};\n\nswitch (mode) {\n    case \"normal\": msg.modeIndex = 0; break;\n    case \"setrit\": msg.modeIndex = 1; break;\n    case \"nabijet_ze_site\": msg.modeIndex = 2; break;\n    case \"prodavat\": msg.modeIndex = 3; break;\n    case \"zakaz_pretoku\": msg.modeIndex = 4; break;\n    case \"solar_charging\": msg.modeIndex = 5; break;\n    case \"Balancování\": msg.modeIndex = 6; break;\n    case \"zaporna_nakupni_cena\": msg.modeIndex = 7; break;\n    case \"prodat_prebytek\": msg.modeIndex = 8; break;\n    default: msg.modeIndex = 0;\n}\n\n// v23: Track balancing start time\n// Force-stop is now handled by BALANCOVÁNÍ Logic (so it can send service call)\nif (mode === \"Balancování\") {\n    if (!global.get(\"balancing_started_at\")) {\n        global.set(\"balancing_started_at\", Date.now());\n    }\n    var startedAt = global.get(\"balancing_started_at\");\n    var maxMs = (config.balancing_force_stop_hours || 3) * 3600 * 1000;\n    if (Date.now() - startedAt > maxMs) {\n        // v23: Don't switch mode — let BALANCOVÁNÍ Logic handle force-stop\n        // This ensures the service call to update last_pylontech_balanced is sent\n        msg.forceStopBalancing = true;\n    }\n} else {\n    global.set(\"balancing_started_at\", null);\n    global.set(\"balancing_completed\", false);\n}\n\n// Set balancing globals for heating integration\nglobal.set(\"balancing_active\", mode === \"Balancování\");\nif (mode !== \"Balancování\") {\n    global.set(\"balancing_block_pump\", false);\n}\n\nmsg.skipBatteryControl = skipBattery;\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -352,11 +353,16 @@
                 "t": "eq",
                 "v": "7",
                 "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "num"
             }
         ],
         "checkall": "false",
         "repair": false,
-        "outputs": 8,
+        "outputs": 9,
         "x": 690,
         "y": 460,
         "wires": [
@@ -383,6 +389,9 @@
             ],
             [
                 "lo_orch_zaporna_nakup"
+            ],
+            [
+                "lo_orch_prodat_prebytek"
             ]
         ]
     },
@@ -1053,5 +1062,19 @@
                 "39019d1a78677231"
             ]
         ]
+    },
+    {
+        "id": "lo_orch_prodat_prebytek",
+        "type": "link out",
+        "z": "d86bb11fab512182",
+        "g": "c0d4d6462d4ebded",
+        "name": "→ Prodat přebytek",
+        "mode": "link",
+        "links": [
+            "li_modes_prodat_prebytek"
+        ],
+        "x": 1005,
+        "y": 620,
+        "wires": []
     }
 ]
