@@ -1496,7 +1496,7 @@
                 "p": "payload"
             }
         ],
-        "repeat": "2",
+        "repeat": "1",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
