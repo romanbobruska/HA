@@ -396,6 +396,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.120: AUTO „Prodej místo nabíjení" — anti-curtailment ranního přebytku (2026-06-04)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): „prodej přebytku se dá aplikovat ve chvíli, kdy nemám velké SOC v baterii a nepředpokládám, že bude velký odběr a je dobrá prodejní cena — typicky dopoledne." Mód `prodavat_misto_nabijeni` se v auto plánu nespouštěl.
+
+**Root cause #1 (sellTarget=204 %)** (`fve-orchestrator.json` node `2. Cena + replCost`): `fSolHour` (konec nočního okna) se počítal z `(cH + fSol)`, kde `fSol` je offset pro `replCost`. Ráno/přes den, kdy 12h horizont nesahá do zítřejšího východu slunce, vycházel `fSolHour` ~19:00 → noční okno 22 h → `nightCons` ~45 kWh → `sellTarget` 204 %. **Oprava**: noční okno končí skutečným východem slunce `x.solS` → okno 8 h, `sellTarget` 102 %.
+
+**Root cause #2 (mód se nespouštěl pod rezervou)** (`fve-orchestrator.json` node `4. Format plan`, `ppWorthIt`): reserve-gate `if (soc < reserveSoc) return false` blokoval prodej vždy, když `sellTarget` ≥ ~95 % (reserveSoc > 100). Ranní přebytek, který by baterie stejně doplnila z poledního solaru (a v poledni curtailovala při záporných cenách), se tak ukládal místo prodeje.
+
+**Oprava (commit `a2b2690` + `77b7bc8`, deploy `--no-ha --branch=advanced`, ověřeno)**: zaveden `remGain[off]` = zbývající solární zisk v % SOC po hodinách. `ppWorthIt` nově:
+- **Anti-curtailment**: když `soc + futureGain ≥ 100 %` (budoucí solar baterii zaplní i bez této h) → přebytek by se curtailoval → `return sell > ppMinAdv` (prodej i pod rezervou).
+- **Reserve-gate self-limiting**: `if (soc < reserveSoc && (soc + futureGain) < reserveSoc) return false` — jak se ráno prodává, `futureGain` klesá, gate se sám zavře dřív, než ohrozí noční rezervu (§4.5).
+
+**Ověřeno live**: plán prodává h16–20 (SOC 100 %, kladné ceny 0,29–2,41 Kč), záporné hodiny h13–15 neprodává. Diagnostika potvrdila správný `futureGain` (60→43→29→15→5→1→0) i reserve-gate; po ověření odstraněna. Noční trajektorie SOC bezpečná (100→74 % do půlnoci). Logy NR čisté.
+
+---
+
 ## v25.119: Ruční „Prodávat" prodává až na min_soc (20 %) (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „PROČ, KDYŽ JSEM DAL MANUÁLNĚ PRODÁVAT, SE NEPRODÁVÁ?!" Při ručně zvoleném módu Prodávat se neprodávalo, přestože SOC byl 50 % a výkupní cena kladná.
