@@ -396,6 +396,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.116: Layout FVE Modes + nový mód „Prodat přebytek" + deploy NEzapisuje layout (2026-06-04)
+
+**Layout FVE Modes (§3.1)**: tab měl všechny groupy `x=24/30/494` s 9 vzájemnými překryvy. Opraveno: všech 13 group `x=14`, vertikálně, mezera 18px, **0 překryvů** (posun group + member nodů o stejný delta, jen `x/y`, žádná změna logiky/wiringu).
+
+**KRITICKÉ poučení — `deploy_merge_flows.py` ZACHOVÁVÁ serverový layout**: `LAYOUT_KEYS = {x,y,w,h}` se u existujících nodů VŽDY berou ze serveru (řádek 17–18, 64–69). → Změna layoutu v gitu se při deployi **ignoruje**. Layout lze změnit JEN přímo na serveru (server = zdroj pravdy pro layout). Postup: Python skript na serveru přepíše `x/y` v live `flows.json` + restart NR. Poté git synchronizován ze serveru (git == server).
+
+**Nový MANUÁLNÍ mód `prodat_prebytek`** („Prodej do sítě místo nabíjení do baterie")**: aditivní, BEZ změny stávajících módů. Nová group `mode_grp_prodat_prebytek` (link in + func + link out Victron/Log), nový `case` v „Rozhodnutí o akci" (modeIndex 8), 9. výstup routeru → `lo_orch_prodat_prebytek` → `li_modes_prodat_prebytek`. Logika: `max_charge_power=0` (baterie se nenabíjí → přebytek do sítě) + `feedin_on` do `max_feed_in`; `power_set_point=0` (neprodává Z baterie); **pojistka při výkupní ceně ≤ 0 → NEEXPORTUJE**. Analýza ekonomiky: `docs/advanced/ANALYZA_MOD_PRODEJ_MISTO_NABIJENI.md`. **Aktivace vyžaduje přidat volbu `prodat_prebytek` do `input_select.fve_manual_mod`** (HA yaml).
+
+**Poučení (ZAKONY §1.5)**: NEpoužívat PowerShell pro logiku — inline PS s JSON escapováním rozbilo restart NR (HTTP 400, NR spadlo). Vše dělat přes `ssh → bash`/Python na serveru.
+
+---
+
 ## v25.115: KRITICKÝ deploy incident — duplicitní node ID maskovaly nasazení (2026-06-04)
 
 **Problém**: Uživatel správně nevěřil, že jsou všechny změny na serveru. Audit (live flows.json vs git) odhalil 2 příčiny:
