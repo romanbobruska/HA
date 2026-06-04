@@ -1,0 +1,29 @@
+# Home Assistant - Databáze a logy
+home-assistant_v2.db
+home-assistant_v2.db-wal
+home-assistant_v2.db-shm
+home-assistant.log
+home-assistant.log.1
+home-assistant.log.fault
+
+# Node-RED - Logy a dočasné soubory
+node_modules/
+.npm/
+*.log
+package-lock.json
+
+# HA Zálohy a interní storage
+backup/
+backups/
+.storage/
+
+# Systémové skryté složky
+.git/
+.DS_Store
+Thumbs.db
+
+# Python virtual environment
+.venv/
+
+# CSV exporty
+*.csv
