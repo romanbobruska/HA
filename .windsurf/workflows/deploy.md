@@ -31,10 +31,11 @@ ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman
 **§2.5: `git push` do main provádět AŽ POTÉ, co ověřím, že nasazení je OK. DŘÍVE NE.**
 Protože `deploy.sh` klonuje z gitu, verifikace před pushem do main se dělá přes feature branch:
 1. `git commit` lokálně + `git push` na **feature branch** (NE main).
-2. Deploy z branch:
+2. Deploy z branch — **POVINNĚ předat `--branch=<branch>` do deploy.sh!**
 ```
-ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 "rm -rf /tmp/HA; cd /tmp && git clone -b <branch> https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash scripts/deploy.sh --no-ha 2>&1 | tail -20"
+ssh -i "$env:USERPROFILE\.ssh\id_ha" -o MACs=hmac-sha2-256-etm@openssh.com roman@192.168.0.30 "rm -rf /tmp/HA; cd /tmp && git clone -b <branch> https://github.com/romanbobruska/HA.git && cd /tmp/HA && bash scripts/deploy.sh --no-ha --branch=<branch> 2>&1 | tail -20"
 ```
+⚠️ **KRITICKÉ**: `deploy.sh` má default `BRANCH=main` a v kroku 1 dělá `git reset --hard origin/$BRANCH`. Když se klonuje branch ale spustí `deploy.sh --no-ha` BEZ `--branch`, skript přepne `/tmp/HA` zpět na **main** → nasadí se STARÝ kód, ne branch! (Incident 2026-06-04 v25.114 — `git clone` nestačí, `--branch` je POVINNÝ.)
 3. **OVĚŘIT**: NR logy (`sudo docker logs addon_a0d7b954_nodered --since 2m 2>&1 | grep -i -E 'error|warn|exception' | tail -10`), HA stavy (baterie, grid draw, wallbox), `sensor.fve_plan` bez NaN, soulad se ZAKONY.TXT.
 4. **Až po čistém ověření**: merge branch → main + `git push origin main`.
 5. Aktualizovat `docs/PROJEKT_SHRNUTI.md`.
