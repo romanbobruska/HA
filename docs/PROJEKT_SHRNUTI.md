@@ -396,6 +396,18 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.119: Ruční „Prodávat" prodává až na min_soc (20 %) (2026-06-04)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): „PROČ, KDYŽ JSEM DAL MANUÁLNĚ PRODÁVAT, SE NEPRODÁVÁ?!" Při ručně zvoleném módu Prodávat se neprodávalo, přestože SOC byl 50 % a výkupní cena kladná.
+
+**Root cause** (`fve-modes.json` `PRODÁVAT Logic`, node `68992d178ce105ed`): podlaha prodeje `effectiveMinSoc = msg.sellTargetSoc || max(minSoc, minSoc+nightReservePct)` vycházela ~56 % (noční rezerva). SOC 50 % ≤ podlaha → větev „STOP prodej" (`PSP=0`, `feedin_on=false`, `max_feed_in_power=0`, `prevent_feedback=1`). To přesně odpovídalo live stavu Victronu.
+
+**Oprava (commit `830c044`, deploy `--no-ha --branch=advanced`, ověřeno, merge do main)**: ruční mód detekován přes `config.manual_mod === "prodavat"` → `effectiveMinSoc = isManualProdej ? minSoc : (sellTargetSoc || …)`. Ruční Prodávat tak prodává až na tvrdé `min_soc` (20 %); **automatický plán dál respektuje noční rezervu** `sellTargetSoc` (beze změny).
+
+**Ověřeno live**: po deployi se Victron přepnul z STOP na prodej — `power_set_point=-7600 W`, `max_feed_in_power=7600 W`, `overvoltage_feed_in=ON`, `min_soc=20 %`, SOC 50 % > 20 % → baterie prodává do sítě. Server flows == git před úpravou (0 diffs, žádná ruční změna nepřepsána).
+
+---
+
 ## v25.118: KRITICKÁ oprava — zámek se sám odemkl při glitchi alarmu (2026-06-04)
 
 **Incident**: V 05:02 se sám odemkl zámek hlavních dveří. Časová osa: `alarm sekce_1 → disarmed` v 05:02:11 → `lock_eval_func` vyhodnotil hranu příjezdu → unlock v 05:02:28 (17 s poté). NR restart byl AŽ 05:03:32 (nesouvisí).
