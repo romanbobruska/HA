@@ -396,6 +396,25 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.117: AUTO mód „Prodat přebytek" — plánovač automaticky exportuje přebytek (2026-06-04)
+
+Mód `prodat_prebytek` zapojen do **automatického plánovače** (předtím jen manuální). Rozhoduje `node 04 resolveMode` v solární hodině s přebytkem.
+
+**Bezpečné pravidlo `ppWorthIt(off, soc)`** — export se zapne JEN když VŠECHNY platí:
+1. `prodej_misto_nabijeni_enabled = true` (config, default ON),
+2. solární hodina + `sell > 0` (nikdy při záporné ceně),
+3. NEprobíhá balancování (`!x.potrebaBal && !balancing_active`),
+4. **`soc ≥ sellTarget + buffer (5 %)`** — noční rezerva se nabije VŽDY DŘÍV,
+5. `soc ≥ max_daily (80 %)` (anti-curtailment) **NEBO** `sell > rtEff×max(buy_future) − amort + 0.3` (uložení bez hodnoty).
+
+Když zapne: `max_charge=0` + feed-in do `max_feed_in`, baterie idle, přebytek do sítě. `simulujSOC` pro tento mód vrací `soc` (baterie idle). Když flag off / podmínky neplatí → **chování plánovače 100% identické**.
+
+**Změny (aditivní)**: `node 03` vystaví `x.potrebaBal`; `node 04` helper `ppWorthIt` + větev v `resolveMode`/`simulujSOC` + `nazevModu`; config `prodej_misto_nabijeni_enabled: true`, `min_export_advantage_czk: 0.3`, `prodej_misto_nabijeni_buffer_soc: 5`.
+
+**Ověřeno live**: deploy `--no-ha --branch=advanced` HTTP 200, plán bez NaN, žádné errory. (Den nasazení měl záporný polední výkup → správně `zakaz_pretoku`, export se nespustil.)
+
+---
+
 ## v25.116: Layout FVE Modes + nový mód „Prodat přebytek" + deploy NEzapisuje layout (2026-06-04)
 
 **Layout FVE Modes (§3.1)**: tab měl všechny groupy `x=24/30/494` s 9 vzájemnými překryvy. Opraveno: všech 13 group `x=14`, vertikálně, mezera 18px, **0 překryvů** (posun group + member nodů o stejný delta, jen `x/y`, žádná změna logiky/wiringu).
