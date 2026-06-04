@@ -155,7 +155,7 @@
             "shared_prevent_on"
         ],
         "x": 14,
-        "y": 1326,
+        "y": 1452,
         "w": 942,
         "h": 422
     },
@@ -176,7 +176,7 @@
             "fve_log_rotate_func"
         ],
         "x": 14,
-        "y": 1766,
+        "y": 1892,
         "w": 492,
         "h": 182
     },
@@ -200,7 +200,7 @@
             "opp_bal_check"
         ],
         "x": 14,
-        "y": 1026,
+        "y": 1152,
         "w": 662,
         "h": 282
     },
@@ -620,7 +620,7 @@
             "lo_victron_zaporna_nakup"
         ],
         "x": 55,
-        "y": 1367,
+        "y": 1493,
         "wires": [
             [
                 "shared_fanout_func"
@@ -641,7 +641,7 @@
         "finalize": "",
         "libs": [],
         "x": 180,
-        "y": 1367,
+        "y": 1493,
         "wires": [
             [
                 "shared_psp",
@@ -682,7 +682,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1487,
+        "y": 1613,
         "wires": [
             []
         ]
@@ -714,7 +714,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1487,
+        "y": 1613,
         "wires": [
             []
         ]
@@ -746,7 +746,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1547,
+        "y": 1673,
         "wires": [
             []
         ]
@@ -778,7 +778,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1547,
+        "y": 1673,
         "wires": [
             []
         ]
@@ -810,7 +810,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1607,
+        "y": 1733,
         "wires": [
             []
         ]
@@ -842,7 +842,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1607,
+        "y": 1733,
         "wires": [
             []
         ]
@@ -874,7 +874,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 620,
-        "y": 1487,
+        "y": 1613,
         "wires": [
             []
         ]
@@ -894,7 +894,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 1607,
+        "y": 1733,
         "wires": []
     },
     {
@@ -917,7 +917,7 @@
         "repair": false,
         "outputs": 2,
         "x": 620,
-        "y": 1547,
+        "y": 1673,
         "wires": [
             [
                 "shared_feedin_on",
@@ -958,7 +958,7 @@
         "domain": "switch",
         "service": "turn_on",
         "x": 860,
-        "y": 1487,
+        "y": 1613,
         "wires": [
             []
         ]
@@ -990,7 +990,7 @@
         "domain": "switch",
         "service": "turn_off",
         "x": 860,
-        "y": 1567,
+        "y": 1693,
         "wires": [
             []
         ]
@@ -1022,7 +1022,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 860,
-        "y": 1407,
+        "y": 1533,
         "wires": [
             []
         ]
@@ -1052,7 +1052,7 @@
         "domain": "mqtt",
         "service": "publish",
         "x": 860,
-        "y": 1627,
+        "y": 1753,
         "wires": [
             []
         ]
@@ -1082,7 +1082,7 @@
         "domain": "mqtt",
         "service": "publish",
         "x": 860,
-        "y": 1707,
+        "y": 1833,
         "wires": [
             []
         ]
@@ -1103,7 +1103,7 @@
             "lo_log_zaporna_nakup"
         ],
         "x": 85,
-        "y": 1807,
+        "y": 1933,
         "wires": [
             [
                 "fve_log_writer_001"
@@ -1124,7 +1124,7 @@
         "finalize": "",
         "libs": [],
         "x": 220,
-        "y": 1807,
+        "y": 1933,
         "wires": [
             [
                 "fve_log_file_001"
@@ -1144,7 +1144,7 @@
         "overwriteFile": "false",
         "encoding": "utf8",
         "x": 410,
-        "y": 1807,
+        "y": 1933,
         "wires": [
             []
         ]
@@ -1168,7 +1168,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 1907,
+        "y": 2033,
         "wires": [
             [
                 "fve_log_rotate_func"
@@ -1194,7 +1194,7 @@
             }
         ],
         "x": 400,
-        "y": 1907,
+        "y": 2033,
         "wires": []
     },
     {
@@ -1207,7 +1207,7 @@
             "lo_orch_balancovani"
         ],
         "x": 55,
-        "y": 1087,
+        "y": 1213,
         "wires": [
             [
                 "bal_logic_func"
@@ -1228,7 +1228,7 @@
         "finalize": "",
         "libs": [],
         "x": 210,
-        "y": 1087,
+        "y": 1213,
         "wires": [
             [
                 "lo_victron_bal",
@@ -1273,7 +1273,7 @@
         "domain": "input_datetime",
         "service": "set_datetime",
         "x": 340,
-        "y": 1147,
+        "y": 1273,
         "wires": [
             []
         ]
@@ -1289,7 +1289,7 @@
             "li_victron_shared"
         ],
         "x": 395,
-        "y": 1067,
+        "y": 1193,
         "wires": []
     },
     {
@@ -1303,7 +1303,7 @@
             "li_log_shared"
         ],
         "x": 395,
-        "y": 1107,
+        "y": 1233,
         "wires": []
     },
     {
@@ -1330,7 +1330,7 @@
         "domain": "",
         "service": "",
         "x": 560,
-        "y": 1187,
+        "y": 1313,
         "wires": [
             []
         ]
@@ -1348,7 +1348,7 @@
         "onceDelay": "30",
         "topic": "",
         "x": 190,
-        "y": 1247,
+        "y": 1373,
         "wires": [
             [
                 "opp_bal_check"
@@ -1369,7 +1369,7 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 1267,
+        "y": 1393,
         "wires": [
             [
                 "bal_svc_set_datetime"
@@ -1481,7 +1481,7 @@
             "lo_log_zb"
         ],
         "x": 14,
-        "y": 896,
+        "y": 1022,
         "w": 592,
         "h": 112
     },
@@ -1504,7 +1504,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 110,
-        "y": 942,
+        "y": 1068,
         "wires": [
             [
                 "zb_func"
@@ -1525,7 +1525,7 @@
         "finalize": "",
         "libs": [],
         "x": 280,
-        "y": 942,
+        "y": 1068,
         "wires": [
             [
                 "shared_psp",
@@ -1544,7 +1544,7 @@
             "li_log_shared"
         ],
         "x": 485,
-        "y": 982,
+        "y": 1108,
         "wires": []
     },
     {
@@ -1571,7 +1571,7 @@
             "alr_fn_capture"
         ],
         "x": 14,
-        "y": 1966,
+        "y": 2092,
         "w": 950,
         "h": 250
     },
@@ -1594,7 +1594,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 114,
-        "y": 2016,
+        "y": 2142,
         "wires": [
             [
                 "alr_http_meteo"
@@ -1619,7 +1619,7 @@
         "senderr": false,
         "headers": [],
         "x": 304,
-        "y": 2016,
+        "y": 2142,
         "wires": [
             [
                 "alr_fn_parse"
@@ -1640,7 +1640,7 @@
         "finalize": "",
         "libs": [],
         "x": 514,
-        "y": 2016,
+        "y": 2142,
         "wires": [
             []
         ]
@@ -1664,7 +1664,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 114,
-        "y": 2096,
+        "y": 2222,
         "wires": [
             [
                 "alr_fn_decide"
@@ -1685,7 +1685,7 @@
         "finalize": "",
         "libs": [],
         "x": 334,
-        "y": 2096,
+        "y": 2222,
         "wires": [
             [
                 "alr_switch"
@@ -1716,7 +1716,7 @@
         "repair": false,
         "outputs": 2,
         "x": 514,
-        "y": 2096,
+        "y": 2222,
         "wires": [
             [
                 "alr_ha_on"
@@ -1753,7 +1753,7 @@
         "domain": "input_boolean",
         "service": "turn_on",
         "x": 704,
-        "y": 2076,
+        "y": 2202,
         "wires": [
             []
         ]
@@ -1785,7 +1785,7 @@
         "domain": "input_boolean",
         "service": "turn_off",
         "x": 704,
-        "y": 2116,
+        "y": 2242,
         "wires": [
             []
         ]
@@ -1830,7 +1830,7 @@
             }
         ],
         "x": 124,
-        "y": 2176,
+        "y": 2302,
         "wires": [
             [
                 "alr_fn_capture"
@@ -1851,9 +1851,96 @@
         "finalize": "",
         "libs": [],
         "x": 364,
-        "y": 2176,
+        "y": 2302,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "li_modes_prodat_prebytek",
+        "type": "link in",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodat_prebytek",
+        "name": "→ Prodat přebytek",
+        "links": [
+            "lo_orch_prodat_prebytek"
+        ],
+        "x": 55,
+        "y": 958,
+        "wires": [
+            [
+                "prodat_prebytek_func"
+            ]
+        ]
+    },
+    {
+        "id": "prodat_prebytek_func",
+        "type": "function",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodat_prebytek",
+        "name": "PRODAT PŘEBYTEK Logic",
+        "func": "// === Mod PRODAT PREBYTEK (prodej do site MISTO nabijeni baterie) — MANUALNI ===\n// Cil: solarni prebytek NEukladat do baterie, ale exportovat (prodat) do site.\n//   max_charge_power = 0  => baterie se nenabiji => prebytek tece do site (feedin_on).\n//   power_set_point  = 0  => NEprodavame Z baterie (to dela mod PRODAVAT).\n//   max_discharge    = -1 => baterie stale kryje deficit domu (nevybiji se do site).\n// POJISTKA: pri zaporne/nulove vykupni cene NEEXPORTOVAT (feedin off, nabijeni povoleno).\n// Aktivace: rucne pres input_select.fve_manual_mod = \"prodat_prebytek\".\nvar config = global.get(\"fve_config\") || {};\nvar status = global.get(\"fve_status\") || {};\nvar currentSoc = status.battery_soc || 50;\nvar minSoc = config.min_soc || 20;\nvar maxFeedIn = config.max_feed_in_w || 7600;\n\n// NIBE blok vybijeni (stejny vzor jako ostatni mody)\nvar _nibeEntity = global.get(\"homeassistant.homeAssistant.states['binary_sensor.nibe_kompresory_aktivni_binarni']\") || {};\nvar _nibeKompresoryOn = _nibeEntity.state === \"on\";\nvar pvFveEntity = global.get(\"homeassistant.homeAssistant.states['sensor.vyroba_fve']\") || {};\nvar currentPvPower = parseFloat(pvFveEntity.state) || 0;\nvar solarPassthrough = currentPvPower > 10 ? Math.max(50, Math.round(currentPvPower)) : 0;\nvar _solOvr = config.topeni_solar_override_w || 8000;\nvar saunaAktivni = msg.saunaAktivni || false;\nvar blockDischarge = (_nibeKompresoryOn && currentPvPower < _solOvr) || saunaAktivni;\n\n// Aktualni vykupni cena — pojistka proti exportu pri zaporne cene\nvar prices = global.get(\"fve_prices_forecast\") || [];\nvar hour = new Date().getHours();\nvar sellPrice = 99;\nfor (var i = 0; i < prices.length; i++) {\n    if (prices[i].hour === hour && (prices[i].minute === 0 || prices[i].minute === undefined)) {\n        sellPrice = parseFloat(prices[i].priceCZKhourProd);\n        if (isNaN(sellPrice)) sellPrice = 0;\n        break;\n    }\n}\n\nif (sellPrice <= 0) {\n    // POJISTKA: zaporna/nulova vykupni cena -> NEEXPORTOVAT (jako zakaz_pretoku)\n    msg.victron = {\n        power_set_point: 0,\n        min_soc: minSoc,\n        schedule_soc: 0,\n        schedule_charge_duration: 0,\n        schedule_charge_day: -7,\n        max_discharge_power: blockDischarge ? solarPassthrough : -1,\n        max_charge_power: -1,\n        feedin_on: false,\n        max_feed_in_power: 0,\n        prevent_feedback: 1\n    };\n    msg.mode = \"prodat_prebytek_stop\";\n    global.set(\"energy_arbiter\", {\n        mode: \"prodat_prebytek_stop\", battery_charging: false,\n        max_discharge_allowed: !blockDischarge, consumers_active: [], timestamp: Date.now()\n    });\n    node.status({ fill: \"purple\", shape: \"dot\", text: \"STOP export — vykup \" + sellPrice.toFixed(2) + \" Kc <= 0 | SOC \" + currentSoc + \"%\" });\n    return msg;\n}\n\n// Normalni provoz modu: nenabijet baterii, prebytek exportovat\nmsg.victron = {\n    power_set_point: 0,\n    min_soc: minSoc,\n    schedule_soc: 0,\n    schedule_charge_duration: 0,\n    schedule_charge_day: -7,\n    max_discharge_power: blockDischarge ? solarPassthrough : -1,\n    max_charge_power: 0,\n    feedin_on: true,\n    max_feed_in_power: maxFeedIn,\n    prevent_feedback: 0\n};\nmsg.mode = \"prodat_prebytek\";\nmsg.feedInExcess = true;\n\nvar consumers = [];\nif (msg.cerpadloTopi) consumers.push(\"Topeni\");\nif (saunaAktivni) consumers.push(\"Sauna\");\nif (msg.virivkaAktivni) consumers.push(\"Virivka\");\nif (msg.autoNabijeniAktivni) consumers.push(\"Auto\");\nglobal.set(\"energy_arbiter\", {\n    mode: \"prodat_prebytek\", battery_charging: false, reserved_for_battery_w: 0,\n    max_discharge_allowed: !blockDischarge, consumers_active: consumers, timestamp: Date.now()\n});\nnode.status({ fill: \"red\", shape: \"dot\", text: \"PRODAT PREBYTEK (charge=0, feedin<=\" + maxFeedIn + \"W) | vykup \" + sellPrice.toFixed(2) + \" Kc | SOC \" + currentSoc + \"%\" });\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 958,
+        "wires": [
+            [
+                "lo_victron_prodat_prebytek",
+                "lo_log_prodat_prebytek"
+            ]
+        ]
+    },
+    {
+        "id": "lo_victron_prodat_prebytek",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodat_prebytek",
+        "name": "→ Victron",
+        "mode": "link",
+        "links": [
+            "li_victron_shared"
+        ],
+        "x": 415,
+        "y": 945,
+        "wires": []
+    },
+    {
+        "id": "lo_log_prodat_prebytek",
+        "type": "link out",
+        "z": "bb3654998a6bf514",
+        "g": "mode_grp_prodat_prebytek",
+        "name": "→ Log",
+        "mode": "link",
+        "links": [
+            "li_log_shared"
+        ],
+        "x": 415,
+        "y": 971,
+        "wires": []
+    },
+    {
+        "id": "mode_grp_prodat_prebytek",
+        "type": "group",
+        "z": "bb3654998a6bf514",
+        "name": "Mód: PRODAT PŘEBYTEK - Prodej do sítě místo nabíjení",
+        "style": {
+            "fill": "#f3d9c0",
+            "label": true
+        },
+        "nodes": [
+            "li_modes_prodat_prebytek",
+            "prodat_prebytek_func",
+            "lo_victron_prodat_prebytek",
+            "lo_log_prodat_prebytek"
+        ],
+        "x": 14,
+        "y": 896,
+        "w": 442,
+        "h": 108
     }
 ]
