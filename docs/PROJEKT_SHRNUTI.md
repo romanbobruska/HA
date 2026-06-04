@@ -396,6 +396,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.115: KRITICKÝ deploy incident — duplicitní node ID maskovaly nasazení (2026-06-04)
+
+**Problém**: Uživatel správně nevěřil, že jsou všechny změny na serveru. Audit (live flows.json vs git) odhalil 2 příčiny:
+
+**Příčina 1 — branch deploy bez `--branch`**: `git clone -b <branch>` + `deploy.sh --no-ha` (BEZ `--branch`) → `deploy.sh` má default `BRANCH=main` a v kroku 1 dělá `git reset --hard origin/main` → přepnul `/tmp/HA` zpět na main a nasadil starý kód. Reportoval „HTTP 200", ale live flows byly staré. Oprava: workflow `.windsurf/workflows/deploy.md` + memory — branch deploy MUSÍ předat `--branch=<branch>`.
+
+**Příčina 2 — duplicitní node ID napříč tab soubory**: `deploy_merge_flows.py` při shodném node ID ve více git souborech bere ten ALFABETICKY PRVNÍ (`if nid not in git_by_id`). Nalezeno:
+- `fve-history-learning.json` (stale, naposled v25.67) byl 100% duplikát `fve-history.json` (18/18 ID, stejný tab `fve_history_tab`). Lišil se jen `fve_history_collect` — learning verze NEMĚLA BUG E. `fve-history-learning.json` < `fve-history.json` abecedně (`-` < `.`) → vyhrával → **BUG E sebekorekce se NIKDY nedeploynul na server**, přestože commit 8c55151 tvrdil „deploy OK". → **Smazán `fve-history-learning.json`** (commit `4068367`), žádné unikátní nody neměl.
+- `boiler.json` vs `fve-bojler.json`: 26 identických ID (obsahově shodné). `boiler.json` vyhrává. Dnešní změny se jich netýkaly → žádná ztráta, ale latentní past — **doporučeno konsolidovat** (do budoucna může maskovat změny v `fve-bojler.json`).
+
+**Ověření po opravě (deploy z branche s `--branch`, NR HTTP 200)**: kompletní porovnání live vs git → **MISSING in LIVE: žádný**. BUG E (`BUG E: sebekorekce`, `fve_sell_correction_kwh`) potvrzeno na serveru. Zbylé 2 odchylky benigní: layout `h` u `Zámek vstup` a skupinové `nodes[]` u `pool_g_exec_nibe` (přepisuje `deploy_audit_groups.py` při každém deployi).
+
+**Trvalé poučení (memory)**: po KAŽDÉM deployi grepnout LIVE `flows.json` na unikátní řetězec změny — nikdy nevěřit jen „HTTP 200". Vyhýbat se duplicitním node ID napříč tab soubory.
+
+---
+
 ## v25.114: Centrální manager jističe (záporná nákupní cena) v2 (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): v módu záporné nákupní ceny dochází k vyhazování jističe a "halucinacím" (zbytečné cukání patron/auta). Cíl: maximalizovat odběr ze sítě, ale NIKDY nepřekročit jistič; manager má znát svůj buffer (baterie + solár) a primárně jím tlumit přechodné špičky (i neviditelné zátěže jako vířivka), spotřebiče krátit jen stabilně při trvalém peaku.
