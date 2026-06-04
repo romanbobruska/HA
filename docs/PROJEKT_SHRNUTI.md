@@ -396,6 +396,24 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.114: Centrální manager jističe (záporná nákupní cena) v2 (2026-06-04)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): v módu záporné nákupní ceny dochází k vyhazování jističe a "halucinacím" (zbytečné cukání patron/auta). Cíl: maximalizovat odběr ze sítě, ale NIKDY nepřekročit jistič; manager má znát svůj buffer (baterie + solár) a primárně jím tlumit přechodné špičky (i neviditelné zátěže jako vířivka), spotřebiče krátit jen stabilně při trvalém peaku.
+
+**Řešení (commit `842fea1`, feature-branch deploy `--no-ha`, ověřeno HTTP 200 + čisté logy, merge do main)** — node `zb_func` "Centrální manager jističe (zn_grid_guard)" v `fve-modes.json`:
+- **Tik 2 s, konfigurovatelný** (`zaporna_buffer_interval_s`, default 2) — řízeno injectem `zb_inject` (repeat 1→2 s). Předchozí 1 s tvořilo race-condition se 60s/15s vrstvami.
+- **Buffer-aware**: manager počítá `bufferW = aktuální nabíjení baterie + dostupné vybíjení (PowerAssist)`; zdravá baterie (`SOC > min_soc+5`) dostane `zaporna_peak_sustain_ticks` (default 2) tiků na absorpci špičky DŘÍV, než sáhne na spotřebiče; vybitá baterie → krátí hned (`effSustain=1`). Anti-halucinace.
+- **Třívrstvá reakce na peak**: 1) PSP boost → Victron zastaví nabíjení / spustí PowerAssist (instant, zdarma); 2) sustained peak (≥ effSustain tiků) → bojler OFF + auto −1 A + patrony −1 f / tik (stabilně po 1); 3) emergency (`gridW > critW + emergMargin`) → patrony 0, auto 6 A, bojler OFF, boost ×2 IHNED.
+- **Mode fallback proti 15s mezeře**: aktivace přes `energy_arbiter.mode` NEBO `fve_current_mode === zaporna_nakupni_cena`.
+- **Deadband** `safeW` (NORMAL) ÷ `critW` (PEAK) s hold zónou mezi prahy (baterie tiše kryje, žádné cukání). Návrat do NORMAL jen po `zaporna_buffer_cooldown_s` (30 s).
+- `max_discharge_power = -1` drží dál `zaporna_nakup_logic` (60s tick, PowerAssist trvale ON, §4.10.5 vrstva 3).
+
+**`fve-config.json`** — upravené/nové parametry: `zaporna_prah_critical_w` 18000→**20000** (jistič 22 kW, margin 2 kW), `zaporna_prah_safe_w` 15000→**19000** (deadband 1 kW), `zaporna_prah_emergency_w` 500→**1000** (critW+1 kW = 21 kW), `zaporna_buffer_interval_s` 1→**2**, nové `zaporna_peak_sustain_ticks=2`, `zaporna_bat_max_discharge_w=12000`.
+
+**Ověření**: server flows == git před úpravou (žádná ruční změna nepřepsána), JSON round-trip validní, deploy `--no-ha` z branche → NR HTTP 200, flows čisté bez banneru, logy bez error/exception (jen benigní `Projects disabled`), HA Core nerestartován.
+
+---
+
 ## v25.113: Filtrace — ochrana noční rezervy baterie (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): filtrace běžela v nesolárních hodinách a drainovala baterii i když nebyl dostatek energie na přežití noci do prvních solárních hodin.
