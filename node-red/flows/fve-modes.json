@@ -155,7 +155,7 @@
             "shared_prevent_on"
         ],
         "x": 14,
-        "y": 1452,
+        "y": 1462,
         "w": 942,
         "h": 422
     },
@@ -176,7 +176,7 @@
             "fve_log_rotate_func"
         ],
         "x": 14,
-        "y": 1892,
+        "y": 1902,
         "w": 492,
         "h": 182
     },
@@ -200,7 +200,7 @@
             "opp_bal_check"
         ],
         "x": 14,
-        "y": 1152,
+        "y": 1162,
         "w": 662,
         "h": 282
     },
@@ -620,7 +620,7 @@
             "lo_victron_zaporna_nakup"
         ],
         "x": 55,
-        "y": 1493,
+        "y": 1503,
         "wires": [
             [
                 "shared_fanout_func"
@@ -641,7 +641,7 @@
         "finalize": "",
         "libs": [],
         "x": 180,
-        "y": 1493,
+        "y": 1503,
         "wires": [
             [
                 "shared_psp",
@@ -682,7 +682,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1613,
+        "y": 1623,
         "wires": [
             []
         ]
@@ -714,7 +714,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1613,
+        "y": 1623,
         "wires": [
             []
         ]
@@ -746,7 +746,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1673,
+        "y": 1683,
         "wires": [
             []
         ]
@@ -778,7 +778,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1673,
+        "y": 1683,
         "wires": [
             []
         ]
@@ -810,7 +810,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 180,
-        "y": 1733,
+        "y": 1743,
         "wires": [
             []
         ]
@@ -842,7 +842,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 400,
-        "y": 1733,
+        "y": 1743,
         "wires": [
             []
         ]
@@ -874,7 +874,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 620,
-        "y": 1613,
+        "y": 1623,
         "wires": [
             []
         ]
@@ -894,7 +894,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 1733,
+        "y": 1743,
         "wires": []
     },
     {
@@ -917,7 +917,7 @@
         "repair": false,
         "outputs": 2,
         "x": 620,
-        "y": 1673,
+        "y": 1683,
         "wires": [
             [
                 "shared_feedin_on",
@@ -958,7 +958,7 @@
         "domain": "switch",
         "service": "turn_on",
         "x": 860,
-        "y": 1613,
+        "y": 1623,
         "wires": [
             []
         ]
@@ -990,7 +990,7 @@
         "domain": "switch",
         "service": "turn_off",
         "x": 860,
-        "y": 1693,
+        "y": 1703,
         "wires": [
             []
         ]
@@ -1022,7 +1022,7 @@
         "domain": "number",
         "service": "set_value",
         "x": 860,
-        "y": 1533,
+        "y": 1543,
         "wires": [
             []
         ]
@@ -1052,7 +1052,7 @@
         "domain": "mqtt",
         "service": "publish",
         "x": 860,
-        "y": 1753,
+        "y": 1763,
         "wires": [
             []
         ]
@@ -1082,7 +1082,7 @@
         "domain": "mqtt",
         "service": "publish",
         "x": 860,
-        "y": 1833,
+        "y": 1843,
         "wires": [
             []
         ]
@@ -1103,7 +1103,7 @@
             "lo_log_zaporna_nakup"
         ],
         "x": 85,
-        "y": 1933,
+        "y": 1943,
         "wires": [
             [
                 "fve_log_writer_001"
@@ -1124,7 +1124,7 @@
         "finalize": "",
         "libs": [],
         "x": 220,
-        "y": 1933,
+        "y": 1943,
         "wires": [
             [
                 "fve_log_file_001"
@@ -1144,7 +1144,7 @@
         "overwriteFile": "false",
         "encoding": "utf8",
         "x": 410,
-        "y": 1933,
+        "y": 1943,
         "wires": [
             []
         ]
@@ -1168,7 +1168,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 180,
-        "y": 2033,
+        "y": 2043,
         "wires": [
             [
                 "fve_log_rotate_func"
@@ -1194,7 +1194,7 @@
             }
         ],
         "x": 400,
-        "y": 2033,
+        "y": 2043,
         "wires": []
     },
     {
@@ -1207,7 +1207,7 @@
             "lo_orch_balancovani"
         ],
         "x": 55,
-        "y": 1213,
+        "y": 1223,
         "wires": [
             [
                 "bal_logic_func"
@@ -1228,7 +1228,7 @@
         "finalize": "",
         "libs": [],
         "x": 210,
-        "y": 1213,
+        "y": 1223,
         "wires": [
             [
                 "lo_victron_bal",
@@ -1273,7 +1273,7 @@
         "domain": "input_datetime",
         "service": "set_datetime",
         "x": 340,
-        "y": 1273,
+        "y": 1283,
         "wires": [
             []
         ]
@@ -1289,7 +1289,7 @@
             "li_victron_shared"
         ],
         "x": 395,
-        "y": 1193,
+        "y": 1203,
         "wires": []
     },
     {
@@ -1303,7 +1303,7 @@
             "li_log_shared"
         ],
         "x": 395,
-        "y": 1233,
+        "y": 1243,
         "wires": []
     },
     {
@@ -1330,7 +1330,7 @@
         "domain": "",
         "service": "",
         "x": 560,
-        "y": 1313,
+        "y": 1323,
         "wires": [
             []
         ]
@@ -1348,7 +1348,7 @@
         "onceDelay": "30",
         "topic": "",
         "x": 190,
-        "y": 1373,
+        "y": 1383,
         "wires": [
             [
                 "opp_bal_check"
@@ -1369,7 +1369,7 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 1393,
+        "y": 1403,
         "wires": [
             [
                 "bal_svc_set_datetime"
@@ -1482,8 +1482,8 @@
         ],
         "x": 14,
         "y": 1022,
-        "w": 592,
-        "h": 112
+        "w": 532,
+        "h": 122
     },
     {
         "id": "zb_inject",
@@ -1503,8 +1503,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 110,
-        "y": 1068,
+        "x": 130,
+        "y": 1063,
         "wires": [
             [
                 "zb_func"
@@ -1524,8 +1524,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 280,
-        "y": 1068,
+        "x": 300,
+        "y": 1063,
         "wires": [
             [
                 "shared_psp",
@@ -1543,8 +1543,8 @@
         "links": [
             "li_log_shared"
         ],
-        "x": 485,
-        "y": 1108,
+        "x": 505,
+        "y": 1103,
         "wires": []
     },
     {
@@ -1571,9 +1571,9 @@
             "alr_fn_capture"
         ],
         "x": 14,
-        "y": 2092,
-        "w": 950,
-        "h": 250
+        "y": 2102,
+        "w": 812,
+        "h": 242
     },
     {
         "id": "alr_inject_30m",
@@ -1593,8 +1593,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 114,
-        "y": 2142,
+        "x": 130,
+        "y": 2143,
         "wires": [
             [
                 "alr_http_meteo"
@@ -1618,8 +1618,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 304,
-        "y": 2142,
+        "x": 320,
+        "y": 2143,
         "wires": [
             [
                 "alr_fn_parse"
@@ -1639,8 +1639,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 514,
-        "y": 2142,
+        "x": 530,
+        "y": 2143,
         "wires": [
             []
         ]
@@ -1663,8 +1663,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 114,
-        "y": 2222,
+        "x": 130,
+        "y": 2223,
         "wires": [
             [
                 "alr_fn_decide"
@@ -1684,8 +1684,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 334,
-        "y": 2222,
+        "x": 350,
+        "y": 2223,
         "wires": [
             [
                 "alr_switch"
@@ -1715,8 +1715,8 @@
         "checkall": "false",
         "repair": false,
         "outputs": 2,
-        "x": 514,
-        "y": 2222,
+        "x": 530,
+        "y": 2223,
         "wires": [
             [
                 "alr_ha_on"
@@ -1752,8 +1752,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_on",
-        "x": 704,
-        "y": 2202,
+        "x": 720,
+        "y": 2203,
         "wires": [
             []
         ]
@@ -1784,8 +1784,8 @@
         "blockInputOverrides": true,
         "domain": "input_boolean",
         "service": "turn_off",
-        "x": 704,
-        "y": 2242,
+        "x": 720,
+        "y": 2243,
         "wires": [
             []
         ]
@@ -1829,8 +1829,8 @@
                 "valueType": "entityState"
             }
         ],
-        "x": 124,
-        "y": 2302,
+        "x": 140,
+        "y": 2303,
         "wires": [
             [
                 "alr_fn_capture"
@@ -1850,8 +1850,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 364,
-        "y": 2302,
+        "x": 380,
+        "y": 2303,
         "wires": [
             []
         ]

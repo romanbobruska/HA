@@ -60,7 +60,8 @@
             "blokace_file_update",
             "blokace_file_write",
             "lo_orch_balancovani",
-            "lo_orch_zaporna_nakup"
+            "lo_orch_zaporna_nakup",
+            "lo_orch_prodat_prebytek"
         ],
         "x": 14,
         "y": 339,
