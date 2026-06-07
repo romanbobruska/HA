@@ -477,6 +477,23 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.125: FIX §4.5 — `sellTarget` přepočítán na REÁLNÝ no-sell trough (2026-06-08)
+
+**Problém uživatele** (`User inputs/problemy.txt` C, pokrač.): i po v25.124 plán prodával do nesmyslných hodin a hrozil Šetřit. Diagnostika (dočasný `_dbg` v `5. Výstup plánu`, čteno přes `sensor.fve_plan`) odhalila tvrdá data: **`sellTarget=70 %`** (`nightNeedSoc=45 %`, `nightCons=19,3 kWh`, `solarPokryvaVse=true`), zatímco reálná no-sell trajektorie klesá jen na **~34–40 %**. Tedy `sellTarget` byl o ~30 % přerezervovaný.
+
+**Root cause** (`fve-orchestrator.json` node `2. Cena + replCost`): `sellTarget = minSoc + nightNeedSoc + nMargin`, kde `nightCons` se akumulovala od **`solE` (21:00)** přes celé noční okno (8 h). Při večerním běhu (23:xx) tak započítával i **už uplynulé** hodiny (21–24) → rezerva nafouknutá na 70 %. Navíc solver (`_simChrono`) i displej (`4. Format plan`) `sellTarget` **ignorovaly** — per-hour gate používal `minSafe=25 %` a drainoval prodej až na `minSoc` → plán ukazoval prodej do 20–31 % a falešný Šetřit, i když exekuce reálně stojí na `sellTargetSoc`. Trough-gate z v25.124 navíc vybíral chybné hodiny (h6 slabý solár).
+
+**Oprava (NESAHÁ na jistič)** — sjednocení modelu napříč 3 uzly:
+- **`2. Cena + replCost`**: `sellTarget` se počítá z **reálného no-sell troughu** (stejný SOC model jako `_simChrono`): `headroom = trough − (minSoc+nMargin)`; `sellTarget = cSoc − headroom`. Po prodeji na `sellTarget` je nový trough přesně `minSoc+nMargin` (žádný Šetřit). Self-stabilní; na slunečném ranním scénáři je trough vysoko → `sellTarget` nízko (lze prodat víc) — subsumuje 12.5. ranní fix.
+- **`3. Solver per-hour` (`_simChrono`)**: revert trough-gate z v25.124; per-hour floor = `x.sellTarget` (clamp), prodej nejde pod `sellTarget`, NORMAL drain do domu až na `minSoc`.
+- **`4. Format plan`**: PRODAVAT displej drainuje jen na `sellTarget` (guard proti clamp-up: `soc<=floor → soc`), gate `sellMap` přes `sellTarget`.
+
+**Ověřeno live** (plán po restartu NR, h0, SOC 62 %): `sellTarget` ~47 %; **žádný noční prodej baterie** (energie potřebná na noc se neprodá za 2,88, aby se pak nekupovala za 4,83 — §4.5), h0–h5 NORMAL přirozený drain **62→40 %**, **NIKDE Šetřit**, ráno h6–h10 prodej solárního přebytku (baterie idle 40 %), h11 nabíjení levně (2,26) 40→63 %. `node --check` všech 4 funkcí OK, NR logy čisté.
+
+**Nasazení**: server-side patch flows.json (uzly `2. Cena + replCost`, `3. Solver per-hour`, `4. Format plan`, odstraněn `_dbg` z `5. Výstup plánu`), backup `flows.json.bak_20260608_001940`, syntax-check `node --check` v containeru PŘED restartem, pak restart NR. Git `fve-orchestrator.json` synchronizován ze serveru.
+
+---
+
 ## v25.120: AUTO „Prodej místo nabíjení" — anti-curtailment ranního přebytku (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „prodej přebytku se dá aplikovat ve chvíli, kdy nemám velké SOC v baterii a nepředpokládám, že bude velký odběr a je dobrá prodejní cena — typicky dopoledne." Mód `prodavat_misto_nabijeni` se v auto plánu nespouštěl.
