@@ -426,6 +426,28 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Ověřeno live**: po restartu NR `topeni_mod` = „BAZÉN - Patrony", `switch.patrona_faze_1/2/3` = ON (3 fáze), SOC 100→99 % (vybíjení přes patrony dle §8.5), NR logy čisté. Git `pool-heating.json` přegenerován ze serveru + fix (opravena i zastaralá `nodes[]` skupiny `pool_g_exec_nibe`).
 
+---
+
+## v25.123: FIX „Prodej přebytku" prodával levný solár před večerní špičkou místo dobití baterie (2026-06-07)
+
+**Problém uživatele** (`User inputs/problemy.txt` A): plán ukazoval v h18–20 (solární hodiny těsně před večerní špičkou) `prodavat_misto_nabijeni` („Prodej přebytku / Solár do sítě místo nabití") při `simulatedSoc=97 %`. Uživatel chce v těch hodinách `NORMAL` = dobít baterii na 100 % na drahou špičku (h21–22 buy 4,64–4,84 Kč), ne prodávat přebytek levně (sell 1,11–2,51 Kč).
+
+**Root cause** (`fve-orchestrator.json` node `4. Format plan`, fce `ppWorthIt`): při SOC ≥ `max_daily_soc` (default **80 %**) větev `if (soc >= C.maxDaily) return true` (resp. `soc+futureGain>=100`) vracela „prodej" bez porovnání s hodnotou uložení energie na pozdější DRAHÝ nákup. Cap 80 % („nenabíjet výš kvůli životnosti") tak v solárních hodinách před špičkou nutil prodej přebytku místo dobití.
+
+**Oprava (NESAHÁ na jistič)**: do `ppWorthIt` přidán store-value guard hned po `soc>=100` checku:
+```js
+var _rtPP = C.rtEff || (C.chEff * C.dchEff) || 0.81;
+var _storeValPP = _rtPP * ppMaxBuyFuture(off) - C.amort;
+if (sell <= _storeValPP + ppMinAdv) return false;   // uložit na nejdražší budoucí nákup > prodat teď → NORMAL (nabíjet)
+```
+Přebytek se prodá JEN když aktuální výkupní cena překoná hodnotu uložení 1 kWh na nejdražší budoucí nákup. Tím anti-curtailment (prodej přebytku) zůstává jen pro situace, kdy je budoucí nákup levný (uložení nemá smysl) — přesně „typicky ráno / velká předpověď / levná budoucnost". Plná baterie (SOC≥100) dál spadne na NORMAL s `feedin_on` (exportuje přebytek). 
+
+**Ověřeno live** (plán po restartu NR): h18 = `Normální provoz` „Solární + drahá hodina, SOC 96 %" simSoc **96→100** (nabíjí), h19/h20 = `Normální provoz` SOC 100, **h22 zůstal `Prodávat do sítě`** „zisk 1,1 Kč/kWh, SOC 87→57 %" (z plnější baterie). NR logy čisté.
+
+**Část B** (`fve-modes.json` `PRODÁVAT Logic`): ověřeno, že exekuce módu `prodavat` nastaví `power_set_point: -7600 W` + `feedin_on:true` + `max_feed_in_power` = aktivní prodej Z BATERIE do sítě (identické s manuálním „prodej z baterie"), stop na `effectiveMinSoc`. Stabilitu plánu (že h22 nezmizí) drží sticky-fix v25.121.
+
+**Nasazení**: chirurgický server-side patch flows.json nodu `4. Format plan` (NE plný deploy), backup `flows.json.bak_20260607_172039`, stop→patch→start NR. Git `fve-orchestrator.json` přegenerován ze serveru + fix.
+
 **ZÁKON C — záporná nákupní cena (uživatel 7.6.2026, PENDING implementace):**
 - Teploty nádrže NEMĚNIT (maxTankPat zůstává jak je). Nezavádět nové teplotní stropy.
 - Počet zapnutých FÁZÍ PATRON řídit DYNAMICKY KAŽDÉ ~2 s (arbiter `zn_grid_guard`/`zb_func`, §4.10.5) tak, aby odběr ze sítě byl ~18 kW (jistič 22 kW, margin). Arbiter musí umět nejen KRÁTIT dolů při peaku, ale i RAMPOVAT NAHORU počet fází k cíli ~18 kW.
