@@ -448,6 +448,26 @@ Přebytek se prodá JEN když aktuální výkupní cena překoná hodnotu ulože
 
 **Nasazení**: chirurgický server-side patch flows.json nodu `4. Format plan` (NE plný deploy), backup `flows.json.bak_20260607_172039`, stop→patch→start NR. Git `fve-orchestrator.json` přegenerován ze serveru + fix.
 
+---
+
+## v25.124: FIX §4.5 — prodej v noci do příliš nízkého SOC → Šetřit + drahý dokup (2026-06-07)
+
+**Problém uživatele** (`User inputs/problemy.txt` C): plán prodával v h0 baterii do **31 %** (sell 2,88 Kč), pak SOC klesl na 20 % (h2-3), **h4 = Šetřit** „Ochrana min. SOC" a baterie zůstala na 20 % přes h5-h7 (h6 nákup **5,49 Kč**). Tedy prodej energie, kterou je nutné vzápětí draho dokoupit — §4.5 to přímo zakazuje. Dřív prodával v h22 do ~53 %.
+
+**Root cause** (`fve-orchestrator.json` node `3. Solver per-hour`, fce `_simChrono`): globální gate kontroloval jen **`endSoc`** na KONCI 12h horizontu (= poledne příštího dne po slunci = 58 %), ne **minimum (trough)** v brzkých ranních nesolárních hodinách (h4-h7), kde SOC padá na minSoc. Navíc při `solarPokryvaVse=true` (velká zítřejší předpověď) se gate **úplně přeskočil** a `replCost` vracela 0 → prodej bez omezení. Jenže zítřejší POLEDNÍ slunce ranním hodinám nepomůže (h5-h7 jsou „solární", ale slabé — SOC neroste).
+
+**Oprava (NESAHÁ na jistič)**: do `_simChrono` přidáno sledování **troughu přes NESOLÁRNÍ hodiny** a gate, který **VŽDY** (i při `solarPokryvaVse`) odmítne prodej, který srazí SOC pod `minSoc+nMargin` (=25 %) v některé nesolární hodině:
+```js
+var _trough = s;
+// ... v loopu: trough se updatuje jen v nesolarnich hodinach (!_inWin)
+if ((!x.solarPokryvaVse && s < x.sellTarget) || _trough < minSafeForSell) { /* rollback nejmene cenneho prodeje */ }
+```
+Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. fix), kde slunce hned po prodeji dobije.
+
+**Ověřeno live** (plán po restartu NR): h0 už **NEprodává** (normal, SOC 48 %), prodej jen v h23 do **48 %** (skutečný přebytek), SOC dno **23 %** v h6 (> minSoc 20 % → žádný forced nákup), **NIKDE Šetřit**, energie vydrží všechny nesolární hodiny. NR logy čisté.
+
+**Nasazení**: server-side patch flows.json nodu `3. Solver per-hour`, backup `flows.json.bak_20260607_232316`, stop→patch→start NR. Git `fve-orchestrator.json` přegenerován ze serveru + fix.
+
 **ZÁKON C — záporná nákupní cena (uživatel 7.6.2026, PENDING implementace):**
 - Teploty nádrže NEMĚNIT (maxTankPat zůstává jak je). Nezavádět nové teplotní stropy.
 - Počet zapnutých FÁZÍ PATRON řídit DYNAMICKY KAŽDÉ ~2 s (arbiter `zn_grid_guard`/`zb_func`, §4.10.5) tak, aby odběr ze sítě byl ~18 kW (jistič 22 kW, margin). Arbiter musí umět nejen KRÁTIT dolů při peaku, ale i RAMPOVAT NAHORU počet fází k cíli ~18 kW.
