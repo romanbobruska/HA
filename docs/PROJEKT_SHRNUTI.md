@@ -396,6 +396,31 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 
 
+## v25.121: Prodej baterie ve špičce + plná baterie = NORMAL + zákon záporné ceny (2026-06-07)
+
+**Požadavky uživatele** (`User inputs/problemy.txt`):
+- **A/** „Prodej přebytku" se NESMÍ zobrazovat při PLNÉ baterii (SOC 100 %) — to je jen běžný export. Mód `prodavat_misto_nabijeni` má nastat jen když baterie NENÍ plná a místo nabíjení se solár prodává (typicky ráno, velká předpověď).
+- **B/** V nesolární NEJDRAŽŠÍ hodině se má baterie PRODÁVAT do sítě (mód `prodavat`) — když je nabitá zdarma ze slunce, vyplatí se to vždy.
+- **D/** Zkrátit ukecaný reason text.
+
+**Root cause B** (`fve-orchestrator.json` node `3. Solver per-hour`, `_simChrono`): globální gate `if (s < x.sellTarget)` porovnával SOC na KONCI 12h horizontu (v noci, PŘED zítřejším sluncem) proti `sellTarget`. Při odpoledním běhu noční spotřeba stáhne SOC pod `sellTarget` i bez prodeje → gate vždy rollbackoval VŠECHNY prodeje. Komentář předpokládal ranní běh (horizont sahá do slunce).
+
+**Oprava (commit `11d1a7d`, deploy `--no-ha --branch=advanced`, ověřeno, merge do main)**:
+- **B**: gate relaxován na `if (!x.solarPokryvaVse && s < x.sellTarget)` — při velké zítřejší předpovědi (`solarPokryvaVse`) se nerollbackuje; zítřejší solar baterii doplní, per-hour `minSafe` (minSoc+nMargin) + budget (`peakSoc−sellTarget`) chrání před pre-prodejem. Kombinace s v25.120 fixem `sellTarget` (vyloučení nočního chlazení z rezervy při velké předpovědi → 102 %→71 %, budget 29 %).
+- **A**: `ppWorthIt` — `if (soc >= 100) return false` (plná baterie není „prodej přebytku" → spadne na NORMAL, který přebytek exportuje `feedin_on:true`).
+- **D**: reason text `prodavat_misto_nabijeni` zkrácen na „Solár do sítě místo nabití".
+
+**Ověřeno live**: plán h22 (nejdražší nesolární hodina 2,89 Kč) = `Prodávat do sítě` „zisk 1,1 Kč/kWh, SOC 87→57 %"; plné hodiny h18–21 (SOC 100 %) = `Normální provoz` (ne „Prodej přebytku"); logy NR čisté, server == git ve všech tabech.
+
+**ZÁKON C — záporná nákupní cena (uživatel 7.6.2026, PENDING implementace):**
+- Teploty nádrže NEMĚNIT (maxTankPat zůstává jak je). Nezavádět nové teplotní stropy.
+- Počet zapnutých FÁZÍ PATRON řídit DYNAMICKY KAŽDÉ ~2 s (arbiter `zn_grid_guard`/`zb_func`, §4.10.5) tak, aby odběr ze sítě byl ~18 kW (jistič 22 kW, margin). Arbiter musí umět nejen KRÁTIT dolů při peaku, ale i RAMPOVAT NAHORU počet fází k cíli ~18 kW.
+- Solár + baterie = BUFFER (tlumič špiček), ne důvod ke škrcení.
+- NEŠKRTIT solár — místo curtailmentu využít na natápění nádrže (patrony) a nabíjení auta.
+- Bazén: střídat NIBE s ventilem dle zákonů.
+
+---
+
 ## v25.120: AUTO „Prodej místo nabíjení" — anti-curtailment ranního přebytku (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „prodej přebytku se dá aplikovat ve chvíli, kdy nemám velké SOC v baterii a nepředpokládám, že bude velký odběr a je dobrá prodejní cena — typicky dopoledne." Mód `prodavat_misto_nabijeni` se v auto plánu nespouštěl.
