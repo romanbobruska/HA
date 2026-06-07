@@ -412,6 +412,20 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 
 **Ověřeno live**: plán h22 (nejdražší nesolární hodina 2,89 Kč) = `Prodávat do sítě` „zisk 1,1 Kč/kWh, SOC 87→57 %"; plné hodiny h18–21 (SOC 100 %) = `Normální provoz` (ne „Prodej přebytku"); logy NR čisté, server == git ve všech tabech.
 
+---
+
+## v25.122: FIX stale flag `pool_nibe_running` — patrony pro bazén nejely při zákazu přetoků (2026-06-07)
+
+**Problém uživatele** (`User inputs/problemy.txt`): při zákazu přetoků (SOC 100 %, sell −0,84) nejely patrony, ač dle §8.5/§11.7 mají jet všechny 3 fáze (pálení přebytku do nádrže / anti-curtailing). V létě patrony řídí VÝHRADNĚ `pool-heating.json`, ne heating.
+
+**Root cause** (`pool-heating.json` node `POOL NIBE decide (§11.6)`): if-chain nastavovala `flow.pool_nibe_running=false` jen ve větvi `nibeOn && !any` (tj. když je spínač NIBE→bazén ještě ZAPNUTÝ). Kombinace `nibeOn=false && any=false` (spínač `switch.nibe_jednorazove_zvyseni_tuv` OFF, žádný cenový case) nespadla do žádné resetující větve → `pool_nibe_running` visel na `true` z dřívějška. Důsledek: `topeni_mod` zamrzlé na „BAZÉN - NIBE", v `POOL decide` `_nibeBazenRunning=true` → `forceAll` (SOC≥95 % + zákaz přetoků → 3 fáze) vyřazen přes `&& !_nibeBazenRunning` → patrony OFF. NIBE přitom REÁLNĚ stál (`sensor.nibe_aktualni_realny_stav`=„Klidový stav") → žádný konflikt na jističi.
+
+**Oprava (NESAHÁ na jistič)**: přidána `else` větev (`!nibeOn && !any`) → `flow.set("pool_nibe_running", false); flow.set("pool_nibe_start_ts", 0)`. Flag nyní odpovídá REÁLNÉMU stavu spínače NIBE. Clamp na jistič (§11.7 B6: max 1 fáze při běžícím NIBE) ponechán beze změny — uplatní se až NIBE→bazén reálně poběží.
+
+**Nasazení**: chirurgický server-side patch flows.json nodu `pool_nibe_decide` (NE plný deploy — chránil ostatní taby před přepsáním uživatelových ručních změn), backup `flows.json.bak_20260607_163533`, stop→patch→start NR.
+
+**Ověřeno live**: po restartu NR `topeni_mod` = „BAZÉN - Patrony", `switch.patrona_faze_1/2/3` = ON (3 fáze), SOC 100→99 % (vybíjení přes patrony dle §8.5), NR logy čisté. Git `pool-heating.json` přegenerován ze serveru + fix (opravena i zastaralá `nodes[]` skupiny `pool_g_exec_nibe`).
+
 **ZÁKON C — záporná nákupní cena (uživatel 7.6.2026, PENDING implementace):**
 - Teploty nádrže NEMĚNIT (maxTankPat zůstává jak je). Nezavádět nové teplotní stropy.
 - Počet zapnutých FÁZÍ PATRON řídit DYNAMICKY KAŽDÉ ~2 s (arbiter `zn_grid_guard`/`zb_func`, §4.10.5) tak, aby odběr ze sítě byl ~18 kW (jistič 22 kW, margin). Arbiter musí umět nejen KRÁTIT dolů při peaku, ale i RAMPOVAT NAHORU počet fází k cíli ~18 kW.
