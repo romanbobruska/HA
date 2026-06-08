@@ -498,7 +498,9 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „nikdy se nesmí stát, že odemkneš zámek tak, aby se mi i otevřely dveře"; zamykání domu je kritické a **zamknutí má prioritu před odemknutím**.
 
-**Root cause** (`ostatni.json`, node `Vyhodnoť stav zámku`): komentář správně varoval, že Yale Linus L2 `Pull Spring` při `lock.unlock` fyzicky otevře dveře, ale `AUTO_UNLOCK_ENABLED` bylo `true` a druhý výstup funkce byl připojený na `lock.unlock` node `Odemkni dům`. Navíc ruční odemčení v době „má být zamčeno" zakládalo 1h hold, který blokoval zamykání, a logika nepoužívala dveřní kontakt `binary_sensor.hlavni_dvere_dvere`.
+**Root cause** (`ostatni.json`, node `Vyhodnoť stav zámku`): `AUTO_UNLOCK_ENABLED` bylo `true` a druhý výstup funkce byl připojený na `lock.unlock` node `Odemkni dům`. Navíc ruční odemčení v době „má být zamčeno" zakládalo 1h hold, který blokoval zamykání, a logika nepoužívala dveřní kontakt `binary_sensor.hlavni_dvere_dvere`.
+
+**POTVRZENÁ HW/integrační příčina otevírání dveří** (HA core issue #146352, stejný Yale Linus L2): `lock.unlock` poslaný z **Home Assistantu / Node-RED** zámek odemkne **A ZÁROVEŇ FYZICKY OTEVŘE DVEŘE**; odemčení přímo v **Yale appce dveře NEOTEVÍRÁ**. Není to tedy „Pull Spring" nastavení v appce (uživatel ho nenašel, protože neexistuje), ale chování Yale integrace v HA. Důsledek: automatika **NESMÍ NIKDY** poslat `lock.unlock` ani `lock.open` — obojí otevře dveře a vytvoří „neuzamykatelný" stav. Automatika smí volat **jen `lock.lock`**. Odemykání na vyžádání řeší uživatel v **Yale appce** (app-unlock dveře neotevírá) nebo nativním Yale geofencingem — nikdy přes HA.
 
 **Oprava (fail-closed)**:
 - `AUTO_UNLOCK_ENABLED = false`; disarm edge se pouze zkonzumuje a zapíše status „AUTO UNLOCK ZAKAZAN".
