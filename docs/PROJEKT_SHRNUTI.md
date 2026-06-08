@@ -494,6 +494,24 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.126: KRITICKÉ — Yale hlavní dveře fail-closed, automatika nikdy neodemkne / neotevře dveře (2026-06-09)
+
+**Požadavek uživatele** (`User inputs/problemy.txt`): „nikdy se nesmí stát, že odemkneš zámek tak, aby se mi i otevřely dveře"; zamykání domu je kritické a **zamknutí má prioritu před odemknutím**.
+
+**Root cause** (`ostatni.json`, node `Vyhodnoť stav zámku`): komentář správně varoval, že Yale Linus L2 `Pull Spring` při `lock.unlock` fyzicky otevře dveře, ale `AUTO_UNLOCK_ENABLED` bylo `true` a druhý výstup funkce byl připojený na `lock.unlock` node `Odemkni dům`. Navíc ruční odemčení v době „má být zamčeno" zakládalo 1h hold, který blokoval zamykání, a logika nepoužívala dveřní kontakt `binary_sensor.hlavni_dvere_dvere`.
+
+**Oprava (fail-closed)**:
+- `AUTO_UNLOCK_ENABLED = false`; disarm edge se pouze zkonzumuje a zapíše status „AUTO UNLOCK ZAKAZAN".
+- Druhý výstup `Vyhodnoť stav zámku` je fyzicky odpojen (`wires[1]=[]`); node `Odemkni dům` přejmenován na `Odemkni dům — ZAKÁZÁNO AUTO`. I kdyby někdo v budoucnu omylem vrátil `[null,msg]`, automatický unlock nikam nevede.
+- Ruční hold zrušen jako překážka zamknutí (`manual_unlock_until=0`). Když má být zamčeno (alarm armed nebo noc 23–06), systém zamyká vždy, jakmile to jde.
+- Přidán trigger na dveřní kontakt `binary_sensor.hlavni_dvere_dvere`: při otevřených dveřích se nezamyká naslepo; jakmile se zavřou a má být zamčeno, pošle `lock.lock`.
+
+**Ověřeno live**: `lock.hlavni_dvere=locked`, `binary_sensor.hlavni_dvere_dvere=off` (zavřeno), `wires [['Zamkni dům'], []]`, `AUTO_UNLOCK_ENABLED=false`, door trigger existuje, `node --check` v Node-RED containeru OK, NR restart čistý.
+
+**Nasazení**: server-side patch `flows.json` (tab `ostatni.json`), backup `flows.json.bak_20260609_003824`, syntax-check před restartem, potom restart Node-RED. Git `ostatni.json` synchronizován ze serveru.
+
+---
+
 ## v25.120: AUTO „Prodej místo nabíjení" — anti-curtailment ranního přebytku (2026-06-04)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „prodej přebytku se dá aplikovat ve chvíli, kdy nemám velké SOC v baterii a nepředpokládám, že bude velký odběr a je dobrá prodejní cena — typicky dopoledne." Mód `prodavat_misto_nabijeni` se v auto plánu nespouštěl.
