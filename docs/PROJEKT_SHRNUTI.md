@@ -520,12 +520,12 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 **Nový best scénář (nasazeno, `lock_func_v2.js` → node `lock_eval_func`):**
 - **má být zamčeno** = `isArmed(sekce1)` NEBO `isArmed(garáž)` NEBO noc 23–06 NEBO **nikdo doma** (`person.home_assitant=not_home` NEBO `input_boolean.jsme_doma=off`).
-- **UC6 grace**: každé odemčení = manuální (automatika neodemyká). Po manuálním odemčení **GRACE 120 s** — nezamyká, dokud (a) neprojdeš dveřmi (open→close) → zamkne hned, nebo (b) nevyprší 120 s → zamkne. Door-open guard má přednost (nezamyká do otevřených dveří).
+- **UC6 manuální priorita (grace)**: každé odemčení = manuální (automatika neodemyká). Po manuálním odemčení **drží odemčeno pevně 60 min** (manuální priorita) — **bez ohledu na noc/přítomnost/průchod dveřmi i alarm**. Po vypršení 60 min se priorita zamykání vrátí (zamkne, pokud má být zamčeno a dveře zavřené). Door-open guard má přednost (nezamyká do otevřených dveří). Řeší anti-lockout: vyjdeš ven, máš hodinu, vrátíš se — pořád odemčeno. *(Změněno z původních 120 s + door-cycle na 60 min pevně dle požadavku uživatele „co když budu venku".)*
 - Přidány spouštěče `lock_ssc_person` (`person.home_assitant`) a `lock_ssc_jsmedoma` (`input_boolean.jsme_doma`), oba → `lock_eval_func`.
 
-**Ověřeno:** offline simulace `scripts/test_lock_logic_v2.py` **13/13 PASS, critical-unlock-fails=0** (unlock výstup vždy prázdný). Živě: UC1 dálkové zamknutí, UC2 noční zámek, UC3 pojistka otevřených dveří + zámek po zavření, UC4 reálné zakódování (sekce 6+7) bez odemčení, UC6 grace (drží odemčené 30+ s, po průchodu dveřmi zamkl za 4 s). UC5 ověřeno simulací (živě nejlíp ve dne). `node --check` OK, NR restart čistý, `wires [['Zamkni dům'], []]` (out2 stále odpojen).
+**Ověřeno:** offline simulace `scripts/test_lock_logic_v2.py` **15/15 PASS, critical-unlock-fails=0** (unlock výstup vždy prázdný; UC6 grace drží přes průchod dveřmi i alarm, po vypršení zamyká). Audit `scripts/audit_lock_full.py`: žádná dosažitelná cesta k `lock.unlock`/`lock.open` v Node-RED ani HA configu, žádné dynamické volání. Živě: UC1 dálkové zamknutí, UC2 noční zámek, UC3 pojistka otevřených dveří + zámek po zavření, UC4 reálné zakódování (sekce 6+7) bez odemčení, UC6 (grace drží odemčené). UC5 ověřeno simulací (živě nejlíp ve dne). `node --check` OK, NR restart čistý, `wires [['Zamkni dům'], []]` (out2 stále odpojen).
 
-**Nasazení**: server-side patch `flows.json` (tab `ostatni.json`), backup `flows.json.bak_20260609_021626`, syntax-check před restartem, restart Node-RED. Git commit `767f520` na `advanced`.
+**Nasazení**: server-side patch `flows.json` (tab `ostatni.json`), syntax-check před restartem, restart Node-RED. Git: `767f520` (UC5+UC6 120s) → 60min manuální priorita (commit níže).
 
 ---
 
