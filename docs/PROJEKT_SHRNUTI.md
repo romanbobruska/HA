@@ -494,6 +494,19 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.133: Zámek — konflikt-pravidlo „ZAMKNI vyhrává" (dva členové rodiny) (2026-06-12)
+
+**Požadavek uživatele**: systém je bias k **zamykání**. Když na noční dotaz jeden klepne „Nechám" a druhý „Zamkni" (nebo opačně, i během pár sekund) → **platí ZAMKNUTÍ**; druhý si pak odemkne ručně. Auto-unlock při příjezdu (disarm) musí dál fungovat (žádné hledání klíčů) — konflikt-pravidlo se týká jen nočních tapů.
+
+**Změny** (`ostatni.json`):
+- `lock_night_action` (handler): zavedeno `dominant_until = now + 15 s` při `LOCK_NOW`. `LEAVE_UNLOCKED` se **ignoruje**, pokud `now < dominant_until` (někdo právě dal ZAMKNI) → řeší souběh tapů z obou telefonů bez ohledu na zpoždění propagace stavu. `LOCK_NOW` navíc nuluje `night_leave_until` (pořadí LEAVE→LOCK).
+- `lock_eval_func`: při zamčení (větev `!jeNoc || isLocked`) se nově **vždy** vynuluje `night_leave_until` (dřív jen ve dne) → po zamčení je „nechat" slib neplatný, další odemčení v noci se zeptá znovu.
+- Beze změny: auto-unlock na disarm, grace okno, fail-closed, 30min auto-lock, 1h re-ask, notifikace na oba telefony.
+
+**Ověřeno**: `node --check` obou funkcí OK; simulace konfliktu: LOCK_NOW → zámek + `dominant_until`; LEAVE hned poté → ignorováno (leave NEnastaveno); LEAVE po 15 s → leave +60 min.
+
+---
+
 ## v25.132: Zámek — notifikace i na manželčin iPhone + potvrzení ignorace→zámek (2026-06-12)
 
 **Požadavky uživatele** (`problemy.txt`):
