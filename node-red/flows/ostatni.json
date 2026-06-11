@@ -85,22 +85,30 @@
             "fill": "#c8e7a7"
         },
         "nodes": [
+            "8f4d10785f23c6e7",
             "d99ec20da7b74f45",
+            "04ea2075a325c38b",
+            "lock_ssc_sekce1_celk",
+            "lock_ssc_hlavni_dvere",
+            "lock_ssc_hlavni_dvere_dvere",
+            "lock_ssc_person",
+            "lock_ssc_jsmedoma",
+            "lock_eval_func",
             "b03c0f95ef0702c5",
             "e4c98fa8001d9bde",
-            "04ea2075a325c38b",
-            "8f4d10785f23c6e7",
-            "lock_eval_func",
-            "lock_ssc_hlavni_dvere",
-            "lock_ssc_sekce1_celk",
+            "lock_night_notify",
+            "lock_night_notify_wife",
             "lock_notif_ssc",
             "lock_notif_func",
-            "lock_notif_call"
+            "lock_notif_call",
+            "lock_notif_call_wife",
+            "lock_night_event",
+            "lock_night_action"
         ],
         "x": 14,
         "y": 559,
-        "w": 832,
-        "h": 262
+        "w": 1140,
+        "h": 760
     },
     {
         "id": "d172dcd2f5166a9d",
@@ -774,8 +782,8 @@
         "blockInputOverrides": true,
         "domain": "lock",
         "service": "lock",
-        "x": 730,
-        "y": 620,
+        "x": 720,
+        "y": 660,
         "wires": [
             []
         ]
@@ -806,8 +814,8 @@
         "blockInputOverrides": true,
         "domain": "lock",
         "service": "unlock",
-        "x": 740,
-        "y": 760,
+        "x": 720,
+        "y": 820,
         "wires": [
             []
         ]
@@ -863,7 +871,7 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
+        "x": 140,
         "y": 720,
         "wires": [
             [
@@ -893,7 +901,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
+        "x": 140,
         "y": 600,
         "wires": [
             [
@@ -914,8 +922,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 680,
+        "x": 460,
+        "y": 810,
         "wires": [
             [
                 "b03c0f95ef0702c5"
@@ -980,8 +988,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
-        "y": 780,
+        "x": 140,
+        "y": 840,
         "wires": [
             [
                 "lock_eval_func"
@@ -1039,8 +1047,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
-        "y": 840,
+        "x": 140,
+        "y": 780,
         "wires": [
             [
                 "lock_eval_func"
@@ -1098,8 +1106,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
-        "y": 820,
+        "x": 140,
+        "y": 900,
         "wires": [
             [
                 "lock_eval_func"
@@ -1157,8 +1165,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
-        "y": 920,
+        "x": 140,
+        "y": 960,
         "wires": [
             [
                 "lock_eval_func"
@@ -1216,8 +1224,8 @@
                 "valueType": "triggerId"
             }
         ],
-        "x": 170,
-        "y": 960,
+        "x": 140,
+        "y": 1020,
         "wires": [
             [
                 "lock_eval_func"
@@ -1263,8 +1271,8 @@
                 "valueType": "entityState"
             }
         ],
-        "x": 180,
-        "y": 900,
+        "x": 140,
+        "y": 1140,
         "wires": [
             [
                 "lock_notif_func"
@@ -1284,8 +1292,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 430,
-        "y": 900,
+        "x": 460,
+        "y": 1140,
         "wires": [
             [
                 "lock_notif_call",
@@ -1317,8 +1325,8 @@
         "blockInputOverrides": true,
         "domain": "notify",
         "service": "mobile_app_sm_s938b",
-        "x": 700,
-        "y": 900,
+        "x": 720,
+        "y": 1140,
         "wires": [
             []
         ]
@@ -1347,8 +1355,8 @@
         "blockInputOverrides": true,
         "domain": "notify",
         "service": "mobile_app_sm_s938b",
-        "x": 1010,
-        "y": 700,
+        "x": 980,
+        "y": 740,
         "wires": [
             []
         ]
@@ -1372,8 +1380,8 @@
                 "valueType": "eventData"
             }
         ],
-        "x": 160,
-        "y": 980,
+        "x": 140,
+        "y": 1260,
         "wires": [
             [
                 "lock_night_action"
@@ -1393,8 +1401,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
-        "y": 980,
+        "x": 460,
+        "y": 1260,
         "wires": [
             [
                 "b03c0f95ef0702c5"
@@ -1425,8 +1433,8 @@
         "blockInputOverrides": true,
         "domain": "notify",
         "service": "mobile_app_iphone",
-        "x": 700,
-        "y": 960,
+        "x": 980,
+        "y": 1140,
         "wires": [
             []
         ]
@@ -1455,8 +1463,8 @@
         "blockInputOverrides": true,
         "domain": "notify",
         "service": "mobile_app_iphone",
-        "x": 1010,
-        "y": 760,
+        "x": 980,
+        "y": 820,
         "wires": [
             []
         ]
