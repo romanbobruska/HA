@@ -494,6 +494,18 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.135: Zámek — čistý layout skupiny „Zámek vstup" (přímá úprava serveru) (2026-06-12)
+
+**Problém**: po přidání uzlů (notifikace na oba telefony, konflikt-handler) se uzly ve skupině „Zámek vstup" překrývaly a přetékaly mimo box (box jen 832×262, uzly až na x=1010/y=980).
+
+**KLÍČOVÉ ZJIŠTĚNÍ (deploy)**: `scripts/deploy_merge_flows.py` má `LAYOUT_KEYS = {x,y,w,h}` → **při merge VŽDY zachová pozice ze serveru**, pokud uzel na serveru existuje. Tj. **layout NELZE změnit přes git/deploy** — pozice jsou doménou serveru (aby uživatel mohl přesouvat uzly v NR UI bez přepsání gitem). Layout se proto musí měnit **přímo v serverovém `flows.json`**: fetch → záloha (`flows.json.bak_layout`) → stop NR (addon_stop) → `sudo tee` zápis → start NR.
+
+**Změna**: čistá mřížka 4 sloupců (x=140 vstupy, 460 funkce, 720 akce/notif, 980 sekundární notif), řádky po 60 px, box zvětšen na **1140×760**. 3 logické řetězce: EVAL (8 vstupů → `lock_eval_func` → Zamkni/Odemkni/akční notif S25+iPhone), NOTIF (`lock_notif_ssc`→`lock_notif_func`→S25+iPhone), ACTION (`lock_night_event`→`lock_night_action`→Zamkni). Žádná změna logiky/wiringu.
+
+**Ověřeno na serveru**: box 1140×760, 19 uzlů, 0 překryvů, 0 mimo box; NR „Started flows" čistě. Git `ostatni.json` synchronizován (i když merge pozice ignoruje).
+
+---
+
 ## v25.134: Zámek — ignorace 30→3 min + přejmenování tlačítka „Nech to na mě" (2026-06-12)
 
 **Požadavek uživatele**: po úspěšném live testu (test větev `test-10min`: re-ask 10 min, ignorace 5 min — ověřeno, že ignorace → auto-lock funguje, dům se sám zamkl) finalizovat produkci:
