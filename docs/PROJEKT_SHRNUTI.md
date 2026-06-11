@@ -494,6 +494,22 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.129: Bojler — strop teploty dle SOC baterie + letní večerní strop bez vybíjení baterie (2026-06-11)
+
+**Požadavek uživatele** (`problemy.txt`):
+1. Nezávisle na režimu (léto/zima) se bojler smí natápět na MAX (69 °C) **až při SOC baterie ≥ 80 %**. Pod 80 % je strop **60 °C** (konfig parametr).
+2. V **letním režimu** + **dobrá předpověď na zítra** se bojler večer natápěl a vybíjel baterii (nechtěné). Nově: večerní strop **55 °C** (konfig), a topit jen z **přebytku/levné sítě, NE z baterie**.
+
+**Změny** (`boiler.json` i duplicitní `fve-bojler.json` — drženy identické; deploy bere `boiler.json`, nody `7efc2560d20a0a05` parametry + `f8bbbf2eb77de391` rozhodovací logika):
+- Nové konfig parametry: `SOC_PRAH_MAX_TEPLOTA = 80`, `TEPLOTA_POD_SOC = 60`, `TEPLOTA_LETO_VECER = 55`.
+- **§req1 (globální strop)**: po rozhodovacím stromě — pokud `battery < SOC_PRAH_MAX_TEPLOTA` a cílová > `TEPLOTA_POD_SOC`, sníží na 60 °C. **Výjimka** (jedou na 69 °C i pod 80 %): záporná cena, ultra levný grid (`nabijet_ze_site`), ruční „chci rychle teplou vodu" (dle §1.2/§4.6 — tam se vyplatí brát ze sítě).
+- **§req2 (letní večer)**: ve větvi „povinný čas 17:00–19:30", když `letni_rezim && slunecny_den_zitra` → topí na max `TEPLOTA_LETO_VECER` (55 °C) **jen pokud je solární přebytek ≥ spotřeba bojleru NEBO levná síť**; jinak nechá vychladnout (MIN) — ráno doohřeje solár zdarma. Zimní chování (good zítřek → 40 °C) zachováno.
+- **Bugfix**: `slunecny_den_zitra` četl jen globální `forecast_vyroba_zitra` (často 0/nenastavený → větev spadla na 60 °C a tahala z baterie). Nově robustní fallback na entitu `input_number.predpoved_solarni_vyroby_zitra` (stejně jako noční cap).
+
+**Ověřeno**: `node --check` obou funkcí OK; simulace 8/8 PASS (req1 cap/výjimka, req2 přebytek/levná/bez zdroje, zachování zima 40 °C + noční cap 50 °C); `boiler.json == fve-bojler.json`; server == git před úpravou.
+
+---
+
 ## v25.128: Yale zámek — přechod na MATTER (lokálně) + AUTO-UNLOCK při odkódování domu + notifikace (2026-06-11)
 
 **Požadavek uživatele** (`problemy.txt`): ovládat zámek **pouze lokálně přes Matter** (ne cloud), aby se zámek **odemkl při odkódování celého domu** (bez otevření dveří), a dostávat **notifikaci** o zamčení/odemčení na telefon (Samsung S25 Ultra).
