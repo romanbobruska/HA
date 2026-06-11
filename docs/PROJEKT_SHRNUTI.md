@@ -494,6 +494,19 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.134: Zámek — ignorace 30→3 min + přejmenování tlačítka „Nech to na mě" (2026-06-12)
+
+**Požadavek uživatele**: po úspěšném live testu (test větev `test-10min`: re-ask 10 min, ignorace 5 min — ověřeno, že ignorace → auto-lock funguje, dům se sám zamkl) finalizovat produkci:
+- **Ignorační interval (`ASK_TIMEOUT_MS`) 30 → 3 min** (bez reakce na noční dotaz → zamknout).
+- **Přejmenovat tlačítko** „Necham na sobe" → **„Nech to na mě"**.
+- Re-ask interval (`LEAVE_MS`) zůstává **1 h** (10 min byl jen test).
+
+**Změny** (`ostatni.json`, `lock_eval_func`): `ASK_TIMEOUT_MS = 180000`; akční tlačítko `LEAVE_UNLOCKED.title = "Nech to na mě"`; status texty aktualizovány (`/3 min`, „bez reakce → ZAMYKAM"). Test větev `test-10min` smazána.
+
+**Ověřeno**: `node --check` OK; live test ignorace→zámek proběhl (lock `locked`, changed_by Remote).
+
+---
+
 ## v25.133: Zámek — konflikt-pravidlo „ZAMKNI vyhrává" (dva členové rodiny) (2026-06-12)
 
 **Požadavek uživatele**: systém je bias k **zamykání**. Když na noční dotaz jeden klepne „Nechám" a druhý „Zamkni" (nebo opačně, i během pár sekund) → **platí ZAMKNUTÍ**; druhý si pak odemkne ručně. Auto-unlock při příjezdu (disarm) musí dál fungovat (žádné hledání klíčů) — konflikt-pravidlo se týká jen nočních tapů.
