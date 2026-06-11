@@ -494,6 +494,24 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.130: Zámek — noční akční notifikace 21:00–07:00 (zeptej se, nech, nebo zamkni po 30 min) + fix grace (2026-06-11)
+
+**Požadavek uživatele** (`problemy.txt`): ručně odemkl, odešel, zapomněl zamknout → dům zůstal odemčený. Chce: v noci **21:00–07:00** dostat na mobil **akční notifikaci** „Mám zamknout?" se dvěma tlačítky; když klepne „Zamkni teď" → zamknout; když „Nechám na sobě" → **za 1 h se zeptat znovu**; když **30 min nezareaguje → automaticky zamknout**. Bezpečné a neotravné.
+
+**Příčina starého problému**: každé ruční odemčení nastavovalo **60min grace okno**, které blokovalo VEŠKERÉ auto-zamykání (i odchod, i noc, i alarm) → po odchodu zůstalo odemčeno.
+
+**Změny** (`ostatni.json`, skupina „Zámek vstup", tab `58f453ee71c85d6d`):
+- `lock_eval_func` přepsán (3. výstup = akční notifikace):
+  - **Fix grace**: ruční odemčení už grace NENASTAVUJE; grace zůstává jen po auto-unlock (disarm). Takže **odchod (nikdo doma) / alarm zamknou ihned** (door closed).
+  - `maBytZamceno` = TVRDÉ spouštěče (alarm armed NEBO nikdo doma); noc se řeší notifikací, ne tvrdým zámkem.
+  - **Noční okno 21:00–07:00**, jsme doma, odemčeno, dveře zavřené → pošle akční notifikaci (`night_ask_at`); bez reakce ≥ 30 min → `lock.lock`; „Nechám" → `night_leave_until = +1 h` (pak se zeptá znovu).
+- Nové nody: `lock_night_notify` (`notify.mobile_app_sm_s938b`, data=payload jsonata), `lock_night_event` (`server-events`, event_type `mobile_app_notification_action`), `lock_night_action` (handler: `LOCK_NOW` → `lock.lock`, `LEAVE_UNLOCKED` → grace 1 h).
+- Zachováno: fail-closed (dveře otevřené = nezamyká), auto-unlock při disarmu, cooldown 10 s, inject 1 min.
+
+**Ověřeno**: `node --check` obou funkcí OK; simulace **13/13 PASS** (noční dotaz/timeout/„nechám", odchod=zámek bez grace, alarm, disarm-unlock, dveře otevřené=null, noc+nikdo doma=zámek, akce LOCK_NOW/LEAVE).
+
+---
+
 ## v25.129: Bojler — strop teploty dle SOC baterie + letní večerní strop bez vybíjení baterie (2026-06-11)
 
 **Požadavek uživatele** (`problemy.txt`):
