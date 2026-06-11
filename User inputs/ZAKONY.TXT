@@ -1100,6 +1100,15 @@ A ZAKAZU PRETOKU
     - Meross unavailable → přeskočit zápis
     - Cílová teplota = aktuální nastavená → přeskočit zápis (zbytečné API volání)
     - Celková spotřeba + bojler > SAFE_LIMIT → neohřívat (přetížení sítě)
+9.3 STROP TEPLOTY BOJLERU PODLE BATERIE A LETNÍ VEČER (jednoduše, uživatel 11. 6. 2026)
+    - Na úplné maximum se bojler dohřívá, jen když je baterie skoro plná.
+      Když je baterie spíš prázdná, dohřeje se jen na rozumnou střední teplotu.
+      Výjimka: když je elektřina mimořádně levná nebo dokonce záporná (platí se
+      nám za odběr), nebo když si ručně vyžádám rychlou teplou vodu — tehdy se
+      vyplatí dohřát naplno i ze sítě.
+    - V létě večer, když se na zítra předpovídá hodně slunce, bojler se nedohřívá
+      z baterie. Topí jen z aktuálního solárního přebytku nebo z levné sítě;
+      jinak ho necháme vychladnout a ráno ho slunce dohřeje zadarmo.
 
 ================================================================================
 10. FLOW: FILTRACE BAZÉNU (filtrace-bazenu.json)
@@ -1794,6 +1803,49 @@ CO TATO VÝJIMKA NEDĚLÁ:
     pro přechod léto → zima. A pokud uživatel hlavní vypínač automatiky
     vypne, orchestrátor okamžitě zmlkne a do přepínače
     léto/zima už nikdy nezasáhne.
+
+================================================================================
+20. ZÁMEK HLAVNÍCH VSTUPNÍCH DVEŘÍ
+================================================================================
+
+    Tato pravidla jsou napsaná schválně jednoduše, bez čísel a technických
+    detailů — popisují jen to, jak se má zámek chovat.
+
+20.1 NEJDŮLEŽITĚJŠÍ PRAVIDLO
+    - Zamknout je vždy důležitější než odemknout. Když si systém není jistý,
+      vždy raději zamkne.
+    - Automatika smí dveře jen ZAMKNOUT. Když je potřeba odemknout, jen povytáhne
+      závoru — nikdy dveře fyzicky neotevře.
+
+20.2 KDY SE DŮM SÁM ZAMKNE
+    - Když je zapnutý alarm.
+    - Když není nikdo doma.
+    - V noci, když jsme doma a hlavní dveře zůstanou zbytečně odemčené
+      (viz noční dotaz níže).
+    - Vždy platí: dům se nikdy nezamyká, když jsou dveře otevřené (musí být zavřené).
+
+20.3 KDY SE DŮM SÁM ODEMKNE
+    - Jediný případ: když přijedeme domů a vypne se alarm celého domu. Tehdy se
+      závora sama povytáhne, abychom u dveří nehledali klíče, a chvíli se nechá
+      odemčeno.
+    - Stane se to jen po skutečném vypnutí alarmu, ne kvůli výpadku nebo poruše
+      alarmu — aby se dům nikdy neodemkl omylem.
+
+20.4 NOČNÍ DOTAZ „MÁM ZAMKNOUT?“
+    - V noci (večer až ráno), když jsme doma a hlavní dveře jsou odemčené, pošle
+      systém dotaz na telefon — na můj i na manželčin — s nabídkou „Zamkni“ nebo
+      „Nech to na mě“.
+    - Když nikdo neodpoví během chvilky, dům se sám zamkne.
+    - Když někdo zvolí „Nech to na mě“, systém chvíli počká a pak se zeptá znovu.
+
+20.5 KDYŽ SE NESHODNEME (dva lidé, dvě odpovědi)
+    - Když jeden zvolí „nech odemčeno“ a druhý „zamkni“, platí ZAMKNUTÍ.
+      Kdo chtěl mít odemčeno, si jednoduše odemkne sám.
+
+20.6 ZPRÁVY NA TELEFON
+    - O každém zamčení i odemčení dostaneme zprávu na telefon (oba telefony).
+    - Když dům zamkne, předchozí noční dotaz z telefonu sám zmizí.
+
 
 ================================================================================
 KONEC SOUBORU — EDITUJE VÝHRADNĚ UŽIVATEL
