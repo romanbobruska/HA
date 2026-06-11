@@ -92,7 +92,10 @@
             "8f4d10785f23c6e7",
             "lock_eval_func",
             "lock_ssc_hlavni_dvere",
-            "lock_ssc_sekce1_celk"
+            "lock_ssc_sekce1_celk",
+            "lock_notif_ssc",
+            "lock_notif_func",
+            "lock_notif_call"
         ],
         "x": 14,
         "y": 559,
@@ -759,7 +762,7 @@
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "lock.hlavni_dvere"
+            "lock.chodba_hlavni_dvere"
         ],
         "labelId": [],
         "data": "",
@@ -782,7 +785,7 @@
         "type": "api-call-service",
         "z": "58f453ee71c85d6d",
         "g": "314bb66109910b71",
-        "name": "Odemkni dům — ZAKÁZÁNO AUTO",
+        "name": "Odemkni dum (Matter — jen zavora)",
         "server": "c7421fe2.cb11c",
         "version": 7,
         "debugenabled": false,
@@ -791,7 +794,7 @@
         "areaId": [],
         "deviceId": [],
         "entityId": [
-            "lock.hlavni_dvere"
+            "lock.chodba_hlavni_dvere"
         ],
         "labelId": [],
         "data": "",
@@ -904,7 +907,7 @@
         "z": "58f453ee71c85d6d",
         "g": "314bb66109910b71",
         "name": "Vyhodnoť stav zámku",
-        "func": "// Zamek hlavni dvere (Yale Linus L2) — FAIL-CLOSED rizeni.\n// KRITICKE PRAVIDLO: automatika NIKDY neposila lock.unlock ani lock.open.\n// HA Yale integrace: lock.unlock z HA odemkne A OTEVRE DVERE (overeno rizenym testem 2026-06-09, issue #146352).\n// Odemceni primo v Yale appce dvere NEOTEVIRA. Proto automatika smi volat jen lock.lock.\n// Manualni LOCK/UNLOCK ma prioritu: po rucnim odemceni drzi odemceno GRACE_MS (60 min), pak se vrati auto-zamek.\n// out1 = ZAMKNI (lock.lock), out2 = NEPOUZITO (unlock odpojeno i ve wiring)\n\nvar LOCK_ID   = \"lock.hlavni_dvere\";\nvar DOOR_ID   = \"binary_sensor.hlavni_dvere_dvere\";\nvar CELK_ID   = \"alarm_control_panel.horousany_sekce_1_celkovy_alarm\";\nvar GARAZ_ID  = \"alarm_control_panel.horousany_sekce_7_garaz_alarm\";\nvar PERSON_ID = \"person.home_assitant\";\nvar HOME_ID   = \"input_boolean.jsme_doma\";\nvar AUTO_UNLOCK_ENABLED = false;\nvar NIGHT_FROM = 23, NIGHT_TO = 6;\nvar COOLDOWN_MS = 10000;\nvar GRACE_MS = 3600000; // 60 min po manualnim odemceni: rucni priorita, nezamykat (bez ohledu na noc/pritomnost/pruchod)\n\nfunction gS(id){ return (global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {}).state || \"\"; }\nfunction isArmed(x){ return x && x.indexOf(\"armed\") === 0; }\nfunction isLocked(st){ return st === \"locked\" || st === \"locking\"; }\nfunction isUnlocked(st){ return st === \"unlocked\" || st === \"unlocking\" || st === \"open\"; }\nfunction isDoorOpen(st){ return st === \"on\" || st === \"open\"; }\nfunction isDoorClosed(st){ return st === \"off\" || st === \"closed\"; }\nfunction g(k, def){ var v = global.get(\"lock_\" + k); if (v === undefined) v = flow.get(\"lock_\" + k); return (v === undefined || v === null) ? def : v; }\nfunction s(k, v){ global.set(\"lock_\" + k, v); flow.set(\"lock_\" + k, v); }\n\nvar celk = gS(CELK_ID);\nvar garaz = gS(GARAZ_ID);\nvar person = gS(PERSON_ID);\nvar homeB = gS(HOME_ID);\nvar lock = gS(LOCK_ID);\nvar door = gS(DOOR_ID);\nvar h = new Date().getHours();\nvar now = Date.now();\n\nif (!lock || lock === \"unavailable\" || lock === \"unknown\") {\n    node.status({ fill: \"red\", shape: \"ring\", text: \"lock nedostupny: \" + (lock || \"?\") });\n    return null;\n}\n\nvar jeNoc = (h >= NIGHT_FROM || h < NIGHT_TO);\nvar nikdoDoma = (person === \"not_home\") || (homeB === \"off\");\nvar maBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc || nikdoDoma;\nvar doorOpen = isDoorOpen(door);\nvar doorClosed = isDoorClosed(door);\n\nvar lastCmdAt = g(\"last_cmd_at\", 0);\nvar pending = g(\"pending_action\", null);\nvar lastObs = g(\"last_observed\", undefined);\n\nif (pending === \"lock\" && isLocked(lock)) { pending = null; s(\"pending_action\", null); }\nif (pending === \"unlock\") { pending = null; s(\"pending_action\", null); }\n\nif (lastObs !== undefined && lock !== lastObs && (now - lastCmdAt) > 5000) {\n    pending = null; s(\"pending_action\", null);\n}\n\n// MANUALNI odemceni (automatika nikdy neodemyka -> kazde odemceni je manualni): nastartuj grace okno.\nvar justUnlocked = (lastObs !== undefined && lastObs !== lock && lock === \"unlocked\");\nif (justUnlocked) {\n    s(\"grace_until\", now + GRACE_MS);\n}\ns(\"last_observed\", lock);\n\n// GRACE: po manualnim odemceni drz odemceno pevne GRACE_MS (manualni priorita), pak se vrati auto-zamek.\nvar graceUntil = g(\"grace_until\", 0);\nif (now >= graceUntil) { graceUntil = 0; }\nvar graceActive = (graceUntil > 0 && now < graceUntil);\n\nvar celkWasArmed = g(\"celk_was_armed\", false);\nif (isArmed(celk)) { celkWasArmed = true; s(\"celk_was_armed\", true); }\nvar disarmEdge = (celkWasArmed === true && celk === \"disarmed\");\nif (disarmEdge) {\n    s(\"celk_was_armed\", false);\n    node.status({ fill: \"red\", shape: \"ring\", text: \"AUTO UNLOCK ZAKAZAN (HA unlock otevira dvere)\" });\n}\n\nif (AUTO_UNLOCK_ENABLED) {\n    node.error(\"AUTO_UNLOCK_ENABLED nesmi byt true: HA unlock otevira dvere (issue #146352)\", msg);\n}\n\nif (now - lastCmdAt < COOLDOWN_MS) {\n    node.status({ fill: \"grey\", shape: \"ring\", text: \"cooldown lock=\" + lock + \" door=\" + (door || \"?\") });\n    return null;\n}\n\nif (maBytZamceno && !isLocked(lock)) {\n    if (doorOpen) {\n        s(\"pending_action\", null);\n        node.status({ fill: \"red\", shape: \"ring\", text: \"ma byt zamceno, ale dvere otevrene\" });\n        return null;\n    }\n    if (!doorClosed && door !== \"\") {\n        s(\"pending_action\", null);\n        node.status({ fill: \"red\", shape: \"ring\", text: \"kontakt dveri nejisty: \" + door });\n        return null;\n    }\n    if (graceActive) {\n        node.status({ fill: \"blue\", shape: \"dot\", text: \"rucni odemceni — priorita \" + Math.round((graceUntil - now) / 60000) + \" min\" });\n        return null;\n    }\n    if (pending === \"lock\") { return null; }\n    s(\"pending_action\", \"lock\");\n    s(\"last_cmd_at\", now);\n    var duvod = isArmed(celk) || isArmed(garaz) ? \"alarm\" : (nikdoDoma ? \"nikdo doma\" : \"noc\");\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"ZAMYKAM (\" + duvod + \") door=\" + (door || \"?\") });\n    return [msg, null];\n}\n\nif (maBytZamceno && isLocked(lock)) {\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"OK zamceno door=\" + (door || \"?\") });\n} else if (!maBytZamceno && isUnlocked(lock)) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK doma/den, unlock jen rucne\" });\n} else {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK lock=\" + lock + \" door=\" + (door || \"?\") });\n}\nreturn null;\n",
+        "func": "// Zamek hlavni dvere (Yale Linus L2) — rizeni pres MATTER (lokalni, bez cloudu).\n// Matter lock.unlock retrahuje JEN zavoru (deadbolt) — dvere zustanou zavrene.\n//   Overeno rizenym testem 2026-06-11: po unlock zustal kontakt dveri 'off' (zavreno).\n// Proto je AUTO-UNLOCK pri odkodovani celeho domu POVOLENO\n//   (stara cloud integrace pri unlock fyzicky otvirala dvere — issue #146352 — proto byl zakazan).\n// FAIL-CLOSED: kdyz ma byt zamceno (alarm / noc / nikdo doma) a dvere jsou zavrene -> lock.lock.\n// AUTO-UNLOCK: kdyz celkovy alarm prejde armed -> disarmed -> lock.unlock (jen zavora) + grace okno.\n// Manualni odemceni ma prioritu: drzi odemceno GRACE_MS, pak se vrati auto-zamek.\n// out1 = ZAMKNI (lock.lock), out2 = ODEMKNI (lock.unlock — Matter, jen zavora)\n\nvar LOCK_ID   = \"lock.chodba_hlavni_dvere\";\nvar DOOR_ID   = \"binary_sensor.chodba_hlavni_dvere_dvere\";\nvar CELK_ID   = \"alarm_control_panel.horousany_sekce_1_celkovy_alarm\";\nvar GARAZ_ID  = \"alarm_control_panel.horousany_sekce_7_garaz_alarm\";\nvar PERSON_ID = \"person.home_assitant\";\nvar HOME_ID   = \"input_boolean.jsme_doma\";\nvar NIGHT_FROM = 23, NIGHT_TO = 6;\nvar COOLDOWN_MS = 10000;\nvar GRACE_MS = 3600000; // 60 min: po odemceni (rucnim i auto) nezamykat\n\nfunction gS(id){ return (global.get(\"homeassistant.homeAssistant.states['\" + id + \"']\") || {}).state || \"\"; }\nfunction isArmed(x){ return x && x.indexOf(\"armed\") === 0; }\nfunction isLocked(st){ return st === \"locked\" || st === \"locking\"; }\nfunction isUnlocked(st){ return st === \"unlocked\" || st === \"unlocking\" || st === \"open\"; }\nfunction isDoorOpen(st){ return st === \"on\" || st === \"open\"; }\nfunction isDoorClosed(st){ return st === \"off\" || st === \"closed\"; }\nfunction g(k, def){ var v = global.get(\"lock_\" + k); if (v === undefined) v = flow.get(\"lock_\" + k); return (v === undefined || v === null) ? def : v; }\nfunction s(k, v){ global.set(\"lock_\" + k, v); flow.set(\"lock_\" + k, v); }\n\nvar celk = gS(CELK_ID);\nvar garaz = gS(GARAZ_ID);\nvar person = gS(PERSON_ID);\nvar homeB = gS(HOME_ID);\nvar lock = gS(LOCK_ID);\nvar door = gS(DOOR_ID);\nvar h = new Date().getHours();\nvar now = Date.now();\n\nif (!lock || lock === \"unavailable\" || lock === \"unknown\") {\n    node.status({ fill: \"red\", shape: \"ring\", text: \"lock nedostupny: \" + (lock || \"?\") });\n    return null;\n}\n\nvar jeNoc = (h >= NIGHT_FROM || h < NIGHT_TO);\nvar nikdoDoma = (person === \"not_home\") || (homeB === \"off\");\nvar maBytZamceno = isArmed(celk) || isArmed(garaz) || jeNoc || nikdoDoma;\nvar doorOpen = isDoorOpen(door);\nvar doorClosed = isDoorClosed(door);\n\nvar lastCmdAt = g(\"last_cmd_at\", 0);\nvar pending = g(\"pending_action\", null);\nvar lastObs = g(\"last_observed\", undefined);\n\nif (pending === \"lock\" && isLocked(lock)) { pending = null; s(\"pending_action\", null); }\nif (pending === \"unlock\" && isUnlocked(lock)) { pending = null; s(\"pending_action\", null); }\n\nif (lastObs !== undefined && lock !== lastObs && (now - lastCmdAt) > 5000) {\n    pending = null; s(\"pending_action\", null);\n}\n\n// Kazde pozorovane odemceni (rucni i auto) nastartuje grace okno -> nezamykat hned.\nvar justUnlocked = (lastObs !== undefined && lastObs !== lock && lock === \"unlocked\");\nif (justUnlocked) { s(\"grace_until\", now + GRACE_MS); }\ns(\"last_observed\", lock);\n\nvar graceUntil = g(\"grace_until\", 0);\nif (now >= graceUntil) { graceUntil = 0; }\nvar graceActive = (graceUntil > 0 && now < graceUntil);\n\n// Detekce hrany odkodovani celeho domu (armed -> disarmed)\nvar celkWasArmed = g(\"celk_was_armed\", false);\nif (isArmed(celk)) { celkWasArmed = true; s(\"celk_was_armed\", true); }\nvar disarmEdge = (celkWasArmed === true && celk === \"disarmed\");\n\n// AUTO-ODEMKNUTI: odkodovani celeho domu -> odemkni zavoru (Matter, dvere se neotevrou)\nif (disarmEdge) {\n    s(\"celk_was_armed\", false);\n    s(\"grace_until\", now + GRACE_MS);\n    if (!isUnlocked(lock) && (now - lastCmdAt >= COOLDOWN_MS)) {\n        s(\"pending_action\", \"unlock\");\n        s(\"last_cmd_at\", now);\n        node.status({ fill: \"green\", shape: \"dot\", text: \"ODEMYKAM (odkodovan dum)\" });\n        return [null, msg];\n    }\n}\n\nif (now - lastCmdAt < COOLDOWN_MS) {\n    node.status({ fill: \"grey\", shape: \"ring\", text: \"cooldown lock=\" + lock + \" door=\" + (door || \"?\") });\n    return null;\n}\n\n// FAIL-CLOSED zamykani\nif (maBytZamceno && !isLocked(lock)) {\n    if (doorOpen) {\n        s(\"pending_action\", null);\n        node.status({ fill: \"red\", shape: \"ring\", text: \"ma byt zamceno, ale dvere otevrene\" });\n        return null;\n    }\n    if (!doorClosed && door !== \"\") {\n        s(\"pending_action\", null);\n        node.status({ fill: \"red\", shape: \"ring\", text: \"kontakt dveri nejisty: \" + door });\n        return null;\n    }\n    if (graceActive) {\n        node.status({ fill: \"blue\", shape: \"dot\", text: \"odemceno — priorita \" + Math.round((graceUntil - now) / 60000) + \" min\" });\n        return null;\n    }\n    if (pending === \"lock\") { return null; }\n    s(\"pending_action\", \"lock\");\n    s(\"last_cmd_at\", now);\n    var duvod = isArmed(celk) || isArmed(garaz) ? \"alarm\" : (nikdoDoma ? \"nikdo doma\" : \"noc\");\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"ZAMYKAM (\" + duvod + \") door=\" + (door || \"?\") });\n    return [msg, null];\n}\n\nif (maBytZamceno && isLocked(lock)) {\n    node.status({ fill: \"yellow\", shape: \"dot\", text: \"OK zamceno door=\" + (door || \"?\") });\n} else if (!maBytZamceno && isUnlocked(lock)) {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK doma/den\" });\n} else {\n    node.status({ fill: \"green\", shape: \"dot\", text: \"OK lock=\" + lock + \" door=\" + (door || \"?\") });\n}\nreturn null;\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -917,7 +920,9 @@
             [
                 "b03c0f95ef0702c5"
             ],
-            []
+            [
+                "e4c98fa8001d9bde"
+            ]
         ]
     },
     {
@@ -932,7 +937,7 @@
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "lock.hlavni_dvere"
+                "lock.chodba_hlavni_dvere"
             ],
             "substring": [],
             "regex": []
@@ -1050,7 +1055,7 @@
         "exposeAsEntityConfig": "",
         "entities": {
             "entity": [
-                "binary_sensor.hlavni_dvere_dvere"
+                "binary_sensor.chodba_hlavni_dvere_dvere"
             ],
             "substring": [],
             "regex": []
@@ -1213,6 +1218,104 @@
             [
                 "lock_eval_func"
             ]
+        ]
+    },
+    {
+        "id": "lock_notif_ssc",
+        "type": "server-state-changed",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Stav zamku (notifikace)",
+        "server": "c7421fe2.cb11c",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "lock.chodba_hlavni_dvere"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": true,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 180,
+        "y": 900,
+        "wires": [
+            [
+                "lock_notif_func"
+            ]
+        ]
+    },
+    {
+        "id": "lock_notif_func",
+        "type": "function",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Sestav notifikaci",
+        "func": "// Notifikace na telefon pri zmene stavu zamku hlavnich dveri.\nvar st = msg.payload;\nvar text = \"\";\nif (st === \"locked\") { text = \"Hlavni dvere byly zamceny.\"; }\nelse if (st === \"unlocked\") { text = \"Hlavni dvere byly odemceny.\"; }\nelse if (st === \"jammed\") { text = \"Pozor: zamek hlavnich dveri hlasi zaseknuti.\"; }\nelse { return null; }\nmsg.payload = { title: \"Hlavni dvere\", message: text };\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 900,
+        "wires": [
+            [
+                "lock_notif_call"
+            ]
+        ]
+    },
+    {
+        "id": "lock_notif_call",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Notifikace S25 Ultra",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.mobile_app_sm_s938b",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "payload",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "mobile_app_sm_s938b",
+        "x": 700,
+        "y": 900,
+        "wires": [
+            []
         ]
     }
 ]
