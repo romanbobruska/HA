@@ -1276,7 +1276,7 @@
         "z": "58f453ee71c85d6d",
         "g": "314bb66109910b71",
         "name": "Sestav notifikaci",
-        "func": "// Notifikace na telefon pri zmene stavu zamku hlavnich dveri.\nvar st = msg.payload;\nvar text = \"\";\nif (st === \"locked\") { text = \"Hlavni dvere byly zamceny.\"; }\nelse if (st === \"unlocked\") { text = \"Hlavni dvere byly odemceny.\"; }\nelse if (st === \"jammed\") { text = \"Pozor: zamek hlavnich dveri hlasi zaseknuti.\"; }\nelse { return null; }\nmsg.payload = { title: \"Hlavni dvere\", message: text };\nreturn msg;\n",
+        "func": "// Notifikace na telefon pri zmene stavu zamku hlavnich dveri (VZDY informovat).\nvar st = msg.payload;\nvar text = \"\";\nif (st === \"locked\") { text = \"Hlavni dvere byly ZAMCENY.\"; }\nelse if (st === \"unlocked\") { text = \"Hlavni dvere byly ODEMCENY.\"; }\nelse if (st === \"jammed\") { text = \"Pozor: zamek hlavnich dveri hlasi ZASEKNUTI.\"; }\nelse { return null; }\nvar info = { payload: { title: \"Hlavni dvere\", message: text } };\nif (st === \"locked\") {\n    // po zamceni smaz pripadny visici nocni dotaz (tag nocni_zamek)\n    var clear = { payload: { message: \"clear_notification\", data: { tag: \"nocni_zamek\" } } };\n    return [[info, clear]];\n}\nreturn info;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,

@@ -494,6 +494,20 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.131: Zámek — notifikační politika bez konfliktů (vždy informovat + smazat noční dotaz po zamčení) (2026-06-12)
+
+**Požadavek uživatele**: chce být **vždy** informován notifikací, když se zámek zamkl/odemkl (i vlastní ruční akcí) — informativně. A pokud je **v noci odemčeno (kritické)**, chce být „spamován každou hodinu" (re-ask cyklus z v25.130). Bez konfliktů / zbytečného opakování.
+
+**Změny** (`ostatni.json`, `lock_notif_func`):
+- Zachováno „vždy informovat": `locked` → „Hlavní dveře byly ZAMČENY.", `unlocked` → „…ODEMČENY.", `jammed` → „…ZASEKNUTÍ." (na každou změnu stavu, nezávisle na zdroji).
+- **Anti-konflikt**: při přechodu na `locked` se navíc odešle `clear_notification` pro `tag: "nocni_zamek"` → visící noční dotaz „Mám zamknout?" z mobilu **zmizí**, jakmile je zamčeno (auto-lock po 30 min, „Zamkni teď" i ruční zámek). Návrat `[[info, clear]]` (dvě zprávy na jeden výstup notify).
+- **Grace-skip vědomě NEpřidán**: noční dotaz se posílá vždy, když je v noci odemčeno (i hned po příchodu) — dle přání být v noci vždy upozorněn.
+- Beze změny: noční dotaz max 1× za 30min okno / 1× za hodinu („Nechám" → +1 h), bez reakce 30 min → zámek (z v25.130). Generické notifikace nemají `tag`, takže nekolidují s `nocni_zamek`.
+
+**Ověřeno**: `node --check` OK; simulace návratů: `locked` → [info „ZAMČENY" + clear `nocni_zamek`], `unlocked`/`jammed` → info, jiný stav → null.
+
+---
+
 ## v25.130: Zámek — noční akční notifikace 21:00–07:00 (zeptej se, nech, nebo zamkni po 30 min) + fix grace (2026-06-11)
 
 **Požadavek uživatele** (`problemy.txt`): ručně odemkl, odešel, zapomněl zamknout → dům zůstal odemčený. Chce: v noci **21:00–07:00** dostat na mobil **akční notifikaci** „Mám zamknout?" se dvěma tlačítky; když klepne „Zamkni teď" → zamknout; když „Nechám na sobě" → **za 1 h se zeptat znovu**; když **30 min nezareaguje → automaticky zamknout**. Bezpečné a neotravné.
