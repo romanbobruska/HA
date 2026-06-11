@@ -494,6 +494,22 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.132: Zámek — notifikace i na manželčin iPhone + potvrzení ignorace→zámek (2026-06-12)
+
+**Požadavky uživatele** (`problemy.txt`):
+1. **Ignorace po hodině → zamknout**: když po hodinovém „Nechám" nezareaguje ani na re-ask (spí) → dům se zamkne. → **Už splněno v25.130** (re-ask větev má 30min `ASK_TIMEOUT_MS` → `lock.lock`). Ověřeno v nasazeném kódu (`now - askAt >= ASK_TIMEOUT_MS` i `now < leaveUntil` přítomny). Beze změny.
+2. **Kopírovat notifikace i na manželčin iPhone** (`notify.mobile_app_iphone`, HA iOS app 2026.6.0 — podporuje akční notifikace i `clear_notification`).
+
+**Změny** (`ostatni.json`): přidány 2 paralelní notify uzly na `notify.mobile_app_iphone`:
+- `lock_notif_call_wife` ← `lock_notif_func` (generické „zamčeno/odemčeno/jammed" + clear `nocni_zamek`).
+- `lock_night_notify_wife` ← `lock_eval_func` out3 (akční noční dotaz „Mám zamknout?").
+- Wiring: `lock_notif_func.wires[0] = [lock_notif_call, lock_notif_call_wife]`, `lock_eval_func.wires[2] = [lock_night_notify, lock_night_notify_wife]`.
+- **Odpověď z obou telefonů funguje**: event `mobile_app_notification_action` (LOCK_NOW/LEAVE_UNLOCKED) je zařízení-agnostický → `lock_night_event` (server-events) chytá tap z tvého Samsungu i z jejího iPhonu; jeden handler `lock_night_action`.
+
+**Pozn.**: noční stav (`night_leave_until`) je v paměti NR → restart při deployi ho vynuluje, takže po nasazení přijde noční dotaz hned (na oba telefony) — vhodné jako živý test ženina iPhonu.
+
+---
+
 ## v25.131: Zámek — notifikační politika bez konfliktů (vždy informovat + smazat noční dotaz po zamčení) (2026-06-12)
 
 **Požadavek uživatele**: chce být **vždy** informován notifikací, když se zámek zamkl/odemkl (i vlastní ruční akcí) — informativně. A pokud je **v noci odemčeno (kritické)**, chce být „spamován každou hodinu" (re-ask cyklus z v25.130). Bez konfliktů / zbytečného opakování.

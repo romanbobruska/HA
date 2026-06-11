@@ -924,7 +924,8 @@
                 "e4c98fa8001d9bde"
             ],
             [
-                "lock_night_notify"
+                "lock_night_notify",
+                "lock_night_notify_wife"
             ]
         ]
     },
@@ -1287,7 +1288,8 @@
         "y": 900,
         "wires": [
             [
-                "lock_notif_call"
+                "lock_notif_call",
+                "lock_notif_call_wife"
             ]
         ]
     },
@@ -1397,6 +1399,66 @@
             [
                 "b03c0f95ef0702c5"
             ]
+        ]
+    },
+    {
+        "id": "lock_notif_call_wife",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Stav zamku -> iPhone (zena)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.mobile_app_iphone",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "payload",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "mobile_app_iphone",
+        "x": 700,
+        "y": 960,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "lock_night_notify_wife",
+        "type": "api-call-service",
+        "z": "58f453ee71c85d6d",
+        "g": "314bb66109910b71",
+        "name": "Akcni notifikace -> iPhone (zena)",
+        "server": "c7421fe2.cb11c",
+        "version": 7,
+        "debugenabled": false,
+        "action": "notify.mobile_app_iphone",
+        "floorId": [],
+        "areaId": [],
+        "deviceId": [],
+        "entityId": [],
+        "labelId": [],
+        "data": "payload",
+        "dataType": "jsonata",
+        "mergeContext": "",
+        "mustacheAltTags": false,
+        "outputProperties": [],
+        "queue": "none",
+        "blockInputOverrides": true,
+        "domain": "notify",
+        "service": "mobile_app_iphone",
+        "x": 1010,
+        "y": 760,
+        "wires": [
+            []
         ]
     }
 ]
