@@ -494,6 +494,23 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.128: Yale zámek — přechod na MATTER (lokálně) + AUTO-UNLOCK při odkódování domu + notifikace (2026-06-11)
+
+**Požadavek uživatele** (`problemy.txt`): ovládat zámek **pouze lokálně přes Matter** (ne cloud), aby se zámek **odemkl při odkódování celého domu** (bez otevření dveří), a dostávat **notifikaci** o zamčení/odemčení na telefon (Samsung S25 Ultra).
+
+**Klíčové zjištění**: stará **cloud Yale integrace** při `lock.unlock` fyzicky **otvírala dveře** (Pull Spring, issue #146352) → auto-unlock byl proto zakázán. **Matter `lock.unlock` retrahuje JEN závoru** — řízeným testem 2026-06-11 ověřeno: po unlocku zůstal `binary_sensor.chodba_hlavni_dvere_dvere = off` (dveře zavřené). Zámek (Yale Linus L2, vestavěná Wi-Fi) je nově spárovaný **jen do HA přes Matter** (ne Google Home — dva ovladače dělaly nestabilní spojení na bateriovém Wi-Fi zámku).
+
+**Entity (cloud → Matter)**: `lock.hlavni_dvere` → `lock.chodba_hlavni_dvere`; `binary_sensor.hlavni_dvere_dvere` → `binary_sensor.chodba_hlavni_dvere_dvere`.
+
+**Změny** (`ostatni.json`, skupina „Zámek vstup"):
+- `lock_eval_func`: migrace na Matter entity; **AUTO-UNLOCK povolen** — při hraně celkového alarmu `armed → disarmed` pošle `lock.unlock` (jen závora) + nastaví 60min grace okno (nezamykat hned). Fail-closed zamykání zachováno (alarm/noc/nikdo doma + dveře zavřené → `lock.lock`).
+- `Zamkni dům` / `Odemkni dům` nody → `lock.chodba_hlavni_dvere`; out2 funkce znovu zapojen na unlock.
+- Nové notifikační nody: `lock_notif_ssc` (trigger stav zámku) → `lock_notif_func` (sestaví zprávu locked/unlocked/jammed) → `lock_notif_call` (`notify.mobile_app_sm_s938b`).
+
+**Ověřeno**: server flows.json obsahuje změny (Matter entity, 2 výstupy, notif nody), deploy `--no-ha --branch=advanced` HTTP 200 čistě, test notifikace na S25 doručen, `git == server + změny` (žádná ztráta ručních změn). **Pozn.**: cloud Yale integraci lze nyní bezpečně smazat — žádný živý flow/yaml ji nepoužívá.
+
+---
+
 ## v25.126: KRITICKÉ — Yale hlavní dveře fail-closed, automatika nikdy neodemkne / neotevře dveře (2026-06-09)
 
 **Požadavek uživatele** (`User inputs/problemy.txt`): „nikdy se nesmí stát, že odemkneš zámek tak, aby se mi i otevřely dveře"; zamykání domu je kritické a **zamknutí má prioritu před odemknutím**.
