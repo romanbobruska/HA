@@ -64,86 +64,40 @@ fve_plan_extreme_low_solar_kwh:
   initial: 5
 
 # === Parametry FVE (dashboard) — generovano scriptem, needituj rucne ===
-cfg_max_daily_soc:
-  name: "Max daily soc"
-  min: 0
-  max: 100
-  step: 1
-  icon: mdi:sort-numeric-variant
-  mode: box
-  initial: 80
-
-cfg_daily_consumption_kwh:
-  name: "Odhadovaná denní spotřeba domu"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 20
-
-cfg_safety_margin_w:
-  name: "Safety margin w"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 2000
-
-cfg_charger_max_amper:
-  name: "Max ampéry wallboxu"
-  min: 0
-  max: 64.0
-  step: 1
-  icon: mdi:tune
-  mode: box
-  initial: 16
-
-cfg_charger_faze:
-  name: "Počet fází wallboxu"
-  min: 0
-  max: 12.0
-  step: 1
-  icon: mdi:tune
-  mode: box
-  initial: 3
-
-cfg_sit_napeti:
-  name: "Napětí sítě"
-  min: 0
-  max: 920.0
-  step: 1
-  icon: mdi:tune
-  mode: box
-  initial: 230
-
 cfg_nabijeni_auta_forecast_kwh:
-  name: "Min forecast výroby"
+  name: "Min. denní výroba pro nabíjení ze slunce"
   min: 0
-  max: 120
-  step: 0.5
+  max: 80
+  step: 1
   unit_of_measurement: "kWh"
   icon: mdi:solar-power
-  mode: box
+  mode: slider
   initial: 40
 
 cfg_nabijeni_auta_min_soc:
-  name: "Min SOC baterie pro nabíjení ze sítě"
+  name: "Min. SOC baterie pro solární nabíjení"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
+  mode: slider
   initial: 95
 
-cfg_nabijeni_auta_solar_w:
-  name: "Min přebytek výroby pro sluneční nabíjení"
+cfg_nabijeni_auta_min_soc_slunce:
+  name: "Min. SOC pro korekční smyčku slunce"
   min: 0
-  max: 30000
+  max: 100
+  step: 1
+  unit_of_measurement: "%"
+  icon: mdi:percent
+  mode: slider
+  initial: 85
+
+cfg_nabijeni_auta_solar_w:
+  name: "Min. přebytek pro solární nabíjení"
+  min: 0
+  max: 10000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -151,79 +105,69 @@ cfg_nabijeni_auta_solar_w:
   initial: 4000
 
 cfg_nabijeni_auta_cena_prah_vyssi:
-  name: "Max cena kWh pro nabíjení ze sítě"
+  name: "Max. cena ze sítě — vyšší práh"
   min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
   initial: 4.3
 
 cfg_nabijeni_auta_cena_prah_nizsi:
-  name: "Max cena kWh pro nabíjení ze sítě"
+  name: "Max. cena ze sítě — nižší práh"
   min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
   initial: 3.0
 
-cfg_nabijeni_auta_min_soc_slunce:
-  name: "Min SOC baterie pro povolení solárního nabíjení"
+cfg_nabijeni_auta_max_sell_price:
+  name: "Prodejní cena: prodávat místo nabíjení"
   min: 0
-  max: 100
-  step: 1
-  unit_of_measurement: "%"
-  icon: mdi:percent
-  mode: box
-  initial: 85
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 2.5
 
 cfg_nabijeni_auta_pretizeni_w:
-  name: "Práh přetížení sítě při nabíjení auta"
+  name: "Max. odběr sítě při nabíjení auta"
   min: 0
-  max: 54000
-  step: 100
+  max: 22000
+  step: 500
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 18000
 
 cfg_nabijeni_auta_soc_drain_prah:
-  name: "SOC práh pro drain mód solárního nabíjení"
+  name: "SOC práh pro drain mód"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
+  mode: slider
   initial: 95
 
 cfg_nabijeni_auta_soc_drain_w:
-  name: "Max odběr z baterie v drain módu při SOC>=95%"
+  name: "Povolený odběr z baterie (drain mód)"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 1000
 
-cfg_nabijeni_auta_max_sell_price:
-  name: "Max prodejní cena pro solární nabíjení"
-  min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 2.5
-
 cfg_nabijeni_auta_soc_charge_w:
-  name: "Rezerva solaru pro nabíjení baterie při SOC<95%"
+  name: "Rezerva solaru pro baterii (charge mód)"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -231,367 +175,109 @@ cfg_nabijeni_auta_soc_charge_w:
   initial: 1000
 
 cfg_nabijeni_auta_target_batt_w:
-  name: "Cíl nabíjení baterie při sol"
+  name: "Cíl nabíjení baterie při solárním nabíjení"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 1000
 
-cfg_prah_levna_energie:
-  name: "Level <= prah = levná energie"
-  min: 0
-  max: 15
-  step: 1
-  icon: mdi:sort-numeric-variant
-  mode: box
-  initial: 4
-
-cfg_prah_draha_energie:
-  name: "Level >= prah = drahá energie"
-  min: 0
-  max: 15
-  step: 1
-  icon: mdi:sort-numeric-variant
-  mode: box
-  initial: 12
-
-cfg_prah_ultra_levna_nakup:
-  name: "Nákupní cena"
-  min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 1.0
-
-cfg_topeni_nocni_snizeni:
-  name: "Noční snížení cílové teploty"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.5
-
-cfg_topeni_nocni_od:
-  name: "Začátek nočního režimu"
-  min: 0
-  max: 48
+cfg_rychle_nabit_deadline_h:
+  name: "Rychlé nabití — max. délka"
+  min: 1
+  max: 24
   step: 1
   unit_of_measurement: "h"
   icon: mdi:clock-outline
-  mode: box
-  initial: 22
-
-cfg_topeni_nocni_do:
-  name: "Konec nočního režimu"
-  min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 4
-
-cfg_topeni_nouzova_teplota:
-  name: "Nouzová teplota"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 18
-
-cfg_topeni_min_teplota_nadrze:
-  name: "Topeni min teplota nadrze"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 33
-
-cfg_topeni_bezpecny_pokles:
-  name: "Bezpečný pokles pod target"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.7
-
-cfg_topeni_hystereze_chlazeni:
-  name: "Hystereze ZAP chlazeni nad nastavenou teplotou"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.3
-
-cfg_topeni_solar_forecast_kwh:
-  name: "Forecast"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 30
-
-cfg_topeni_solar_high_day_kwh:
-  name: "Práh pro 'vysoký solární den'"
-  min: 0
-  max: 150
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 50
-
-cfg_plan_aggressive_solar_day_kwh:
-  name: "Při vysoké denní predikci preferuj NORMAL"
-  min: 0
-  max: 150
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 50
-
-cfg_plan_aggressive_soc_pct:
-  name: "Min SOC pro agresivnější NORMAL chování"
-  min: 0
-  max: 240
-  step: 1
-  unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 60
-
-cfg_plan_aggressive_remaining_solar_kwh:
-  name: "Min zbývající solar dnes"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 0
-
-cfg_plan_auto_demand_kwh:
-  name: "Odhad zítřejší/dnešní spotřeby auta"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 25
-
-cfg_plan_solar_insufficient_threshold_kwh:
-  name: "Pod tímto forecastem dnes = „nízký solar“ pro ZP+nabíjení"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 30
-
-cfg_plan_letni_min_solar_kwh:
-  name: "LETO: pokud zitra fZ >= toto, agresivni drain"
-  min: 0
-  max: 100
-  step: 1
-  unit_of_measurement: "%"
-  icon: mdi:percent
-  mode: box
-  initial: 30
-
-cfg_plan_solar_sell_threshold_kwh:
-  name: "Plan solar sell threshold kwh"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 6.0
-
-cfg_topeni_solar_override_w:
-  name: "Práh solárního přebytku pro NIBE bez blokace"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 8000
-
-cfg_topeni_solar_defer_margin:
-  name: "Margin pro deferral k solární výrobě"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.2
-
-cfg_topeni_final_solar_kwh:
-  name: "Zbývající solar pro aktivaci mustHeatByPrice"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 20
-
-cfg_topeni_final_hours:
-  name: "Hodiny před koncem solaru pro mustHeatByPrice"
-  min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 3
-
-cfg_topeni_solar_margin_hours:
-  name: "Hodiny před koncem solaru přestat čekat na patrony"
-  min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 2
-
-cfg_topeni_zakaz_pretok_defer_max_sol_kwh:
-  name: "Pod timto"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 30
-
-cfg_topeni_zakaz_pretok_defer_safe_margin_extra:
-  name: "°C: o kolik nizsi podlaha nez bezpecny pokles pri cekan…"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.2
+  mode: slider
+  initial: 6
 
 cfg_topeni_auto_rezim_indoor_gap:
-  name: "Jak hluboko pod cil spusti prepnuti na zimu"
+  name: "Spouštěcí pokles pod cílovou teplotu"
   min: 0
-  max: 90
-  step: 0.5
+  max: 3
+  step: 0.1
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 0.5
 
 cfg_topeni_auto_rezim_indoor_min_minut:
-  name: "Jak dlouho musi indoor pod cilem trvat"
+  name: "Jak dlouho musí pokles trvat"
   min: 0
   max: 240
-  step: 1
+  step: 5
   unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
+  icon: mdi:timer-outline
+  mode: slider
   initial: 60
 
 cfg_topeni_auto_rezim_outdoor_now_zima:
-  name: "Max aktualni outdoor pro prepnuti na zimu"
+  name: "Max. venkovní teplota → zima"
   min: 0
-  max: 90
+  max: 25
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 12
 
 cfg_topeni_auto_rezim_outdoor_max_24h:
-  name: "Max predpovedi venku 24h pro prepnuti na zimu"
+  name: "Max. předpověď 24 h → zima"
   min: 0
-  max: 90
+  max: 25
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 10
 
 cfg_topeni_auto_rezim_outdoor_now_leto:
-  name: "Min aktualni outdoor pro prepnuti na leto"
+  name: "Min. venkovní teplota → léto"
   min: 0
-  max: 90
+  max: 25
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 14
 
 cfg_topeni_auto_rezim_outdoor_min_48h:
-  name: "Min predpovedi venku 48h pro prepnuti na leto"
+  name: "Min. předpověď 48 h → léto"
   min: 0
-  max: 90
+  max: 25
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 10
 
 cfg_topeni_auto_rezim_manual_override_h:
-  name: "Jak dlouho respektovat rucni prepnuti uzivatele"
+  name: "Respektovat ruční přepnutí"
   min: 0
   max: 48
   step: 1
   unit_of_measurement: "h"
   icon: mdi:clock-outline
-  mode: box
+  mode: slider
   initial: 12
 
 cfg_topeni_auto_rezim_anti_flap_h:
-  name: "Min doba mezi dvema automatickymi prepnutimi"
+  name: "Min. pauza mezi auto přepnutími"
   min: 0
   max: 48
   step: 1
   unit_of_measurement: "h"
   icon: mdi:clock-outline
-  mode: box
+  mode: slider
   initial: 12
 
-cfg_nibe_peak_w:
-  name: "Peak odběr NIBE"
-  min: 0
-  max: 42000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 14000
-
 cfg_topeni_min_pretok_patron_w:
-  name: "Min přebytek pro start 1"
+  name: "Min. přebytek pro start 1. patrony"
   min: 0
-  max: 30000
+  max: 9000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -601,7 +287,7 @@ cfg_topeni_min_pretok_patron_w:
 cfg_topeni_patron_faze_w:
   name: "Výkon jedné fáze patrony"
   min: 0
-  max: 30000
+  max: 4000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -609,207 +295,359 @@ cfg_topeni_patron_faze_w:
   initial: 3000
 
 cfg_topeni_min_soc_patron:
-  name: "Min SOC baterie pro patron ohřev"
+  name: "Min. SOC baterie pro patrony"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
+  mode: slider
   initial: 90
 
-cfg_topeni_patron_max_grid_draw_w:
-  name: "Max odběr ze sítě při patrony"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 200
-
-cfg_topeni_patron_max_sell_price:
-  name: "Max prodejní cena pro patrony"
-  min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 0.9
-
-cfg_chlazeni_nocni_hystereze_c:
-  name: "Chlazeni nocni hystereze c"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 0.2
-
-cfg_chlazeni_predchlazeni_offset_c:
-  name: "Predchlazeni v solarnich hodinach: chladit az na tgtT"
-  min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 0.5
-
-cfg_chlazeni_predchlazeni_min_solar_w:
-  name: "Min solarni prebytek pro predchlazeni pod tgtT"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 2000
-
-cfg_chlazeni_spotreba_kwh_h:
-  name: "Odhad pridavne spotreby chlazeni v nesolarni hodine"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 1.0
-
-cfg_sell_correction_max_kwh:
-  name: "Strop perzistentni korekce nightCons"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 5
-
-cfg_sell_correction_decay_kwh:
-  name: "Denni uvolneni korekce pri cistem dni"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 0.5
-
-cfg_sell_correction_night_buy_prah_kwh:
-  name: "Min nocni nakup pro detekci poruseni"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 0.3
-
-cfg_prah_nevyhodneho_prodeje_kc:
-  name: "+: pod tuto prodejní cenu"
-  min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 0.5
-
-cfg_topeni_boost_max_sell_price:
-  name: "Max prodejní cena pro NIBE+Patrony boost"
-  min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 2
-
 cfg_topeni_patron_min_solar_w:
-  name: "Min solar pro patrony"
+  name: "Min. výkon slunce pro patrony"
   min: 0
-  max: 30000
+  max: 15000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 5000
 
-cfg_topeni_patron_discharge_limit_w:
-  name: "Max vybíjení baterie při SOC 90-95%"
+cfg_topeni_patron_max_grid_draw_w:
+  name: "Max. odběr ze sítě při patronách"
   min: 0
-  max: 30000
-  step: 100
+  max: 2000
+  step: 50
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
-  initial: 50
+  initial: 200
+
+cfg_topeni_patron_max_sell_price:
+  name: "Max. prodejní cena pro patrony"
+  min: 0
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 0.9
 
 cfg_topeni_patron_drain_soc_prah:
-  name: "SOC práh pro drain mód patronů"
+  name: "SOC práh slévání baterie do nádrže"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
+  mode: slider
   initial: 95
 
 cfg_topeni_patron_drain_w:
-  name: "Max odběr z baterie v drain módu"
+  name: "Cíl vybíjení při korekci patron"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 1000
 
-cfg_topeni_patron_discharge_hyst:
-  name: "Hystereze fází patrony"
+cfg_topeni_patron_discharge_limit_w:
+  name: "Limit vybíjení baterie při patronách"
   min: 0
-  max: 12.0
-  step: 1
-  icon: mdi:tune
+  max: 12000
+  step: 100
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 50
+
+cfg_topeni_patron_discharge_hyst:
+  name: "Hystereze vybíjení patron"
+  min: 0
+  max: 2000
+  step: 50
+  unit_of_measurement: "W"
+  icon: mdi:flash
   mode: box
   initial: 3
 
-cfg_posledni_solarni_hodiny:
-  name: "Pocet poslednich solarnich hodin kde se patrony/auto NE…"
+cfg_topeni_nocni_snizeni:
+  name: "Noční snížení cílové teploty"
+  min: 0
+  max: 3
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.5
+
+cfg_topeni_nocni_od:
+  name: "Noční režim od (hodina)"
+  min: 0
+  max: 23
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 22
+
+cfg_topeni_nocni_do:
+  name: "Noční režim do (hodina)"
+  min: 0
+  max: 23
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 4
+
+cfg_topeni_nouzova_teplota:
+  name: "Nouzová teplota (topit i draze)"
+  min: 10
+  max: 25
+  step: 0.5
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 18
+
+cfg_topeni_min_teplota_nadrze:
+  name: "Min. teplota nádrže pro oběhovku"
+  min: 20
+  max: 60
+  step: 1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 33
+
+cfg_topeni_chladna_nadrz:
+  name: "Práh chladné nádrže (proaktivní ohřev)"
+  min: 20
+  max: 60
+  step: 1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 40
+
+cfg_topeni_bezpecny_pokles:
+  name: "Bezpečný pokles pod cílovou teplotu"
+  min: 0
+  max: 3
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.7
+
+cfg_topeni_hystereze_chlazeni:
+  name: "Hystereze zapnutí chlazení"
+  min: 0
+  max: 2
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.3
+
+cfg_topeni_solar_forecast_kwh:
+  name: "Forecast pro méně agresivní topení"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 30
+
+cfg_topeni_solar_high_day_kwh:
+  name: "Práh vysokého solárního dne"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 50
+
+cfg_topeni_solar_override_w:
+  name: "Přebytek pro NIBE bez blokace baterie"
+  min: 0
+  max: 17000
+  step: 500
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 8000
+
+cfg_topeni_solar_defer_margin:
+  name: "Rezerva pro odklad topení na slunce"
+  min: 0
+  max: 2
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.2
+
+cfg_topeni_final_solar_kwh:
+  name: "Zbývající solar → povinné dotopení"
+  min: 0
+  max: 60
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 20
+
+cfg_topeni_final_hours:
+  name: "Hodin před koncem slunce → dotopit"
+  min: 0
+  max: 12
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 3
+
+cfg_topeni_solar_margin_hours:
+  name: "Hodin před koncem slunce → nečekat na patrony"
+  min: 0
+  max: 12
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 2
+
+cfg_topeni_zakaz_pretok_defer_max_sol_kwh:
+  name: "Max. zítřejší solar pro odklad do zákazu přetoků"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 30
+
+cfg_topeni_zakaz_pretok_defer_safe_margin_extra:
+  name: "Extra pokles při čekání na zákaz přetoků"
+  min: 0
+  max: 2
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.2
+
+cfg_nibe_peak_w:
+  name: "Špičkový odběr NIBE"
+  min: 0
+  max: 20000
+  step: 500
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 14000
+
+cfg_topeni_boost_max_sell_price:
+  name: "Max. prodejní cena pro SOLAR BOOST"
+  min: 0
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 2
+
+cfg_topeni_dump_solar_soc:
+  name: "SOC pro dump solaru do topení"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
-  initial: 2
-
-cfg_topeni_dump_solar_soc:
-  name: "Topeni dump solar soc"
-  min: 0
-  max: 100
-  step: 1
-  icon: mdi:sort-numeric-variant
-  mode: box
+  mode: slider
   initial: 85
 
-cfg_topeni_chladna_nadrz:
-  name: "Práh chladné nádrže pro proaktivní ohřev"
-  min: 0
-  max: 90
-  step: 0.5
+cfg_pool_ventil_start_c:
+  name: "Teplota nádrže pro otevření ventilu"
+  min: 30
+  max: 70
+  step: 1
   unit_of_measurement: "°C"
   icon: mdi:thermometer
+  mode: slider
+  initial: 55
+
+cfg_pool_nibe_min_runtime_sec:
+  name: "Min. doběh NIBE"
+  min: 0
+  max: 3600
+  step: 60
+  unit_of_measurement: "s"
+  icon: mdi:timer-outline
+  mode: slider
+  initial: 1800
+
+cfg_pool_nibe_solar_zere_baterii_kwh:
+  name: "Solar práh: NIBE smí brát z baterie"
+  min: 0
+  max: 40
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 8
+
+cfg_pool_nibe_plan_horizon_h:
+  name: "Horizont plánovače bazénu"
+  min: 1
+  max: 48
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 24
+
+cfg_pool_nibe_zaporna_cena_threshold:
+  name: "Cenový práh pro NIBE → bazén"
+  min: -5
+  max: 5
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 0
+
+cfg_pool_nibe_zakaz_pretoku_solar_kwh:
+  name: "Min. solar pro zákaz přetoků → bazén"
+  min: 0
+  max: 40
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 13
+
+cfg_pool_nibe_w:
+  name: "Odhad spotřeby NIBE pro bazén"
+  min: 0
+  max: 8000
+  step: 100
+  unit_of_measurement: "W"
+  icon: mdi:flash
   mode: box
-  initial: 40
+  initial: 3500
 
 cfg_filtrace_surplus_on_w:
-  name: "Min přebytek pro zapnutí filtrace"
+  name: "Přebytek pro zapnutí filtrace"
   min: 0
-  max: 30000
+  max: 6000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -817,9 +655,9 @@ cfg_filtrace_surplus_on_w:
   initial: 2500
 
 cfg_filtrace_surplus_off_w:
-  name: "Hystereze pro vypnutí"
+  name: "Přebytek pro vypnutí filtrace"
   min: 0
-  max: 30000
+  max: 6000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -827,269 +665,169 @@ cfg_filtrace_surplus_off_w:
   initial: 1500
 
 cfg_filtrace_pool_temp_min:
-  name: "HARD CUT-OFF: pod touto teplotou filtrace VŮBEC NEBĚŽÍ"
+  name: "Hard cut-off teploty vody"
   min: 0
-  max: 90
+  max: 10
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 2
 
 cfg_filtrace_pool_temp_threshold_c:
-  name: "Přepínač studená↔teplá voda pro denní limit"
+  name: "Hranice studená/teplá voda"
   min: 0
-  max: 90
+  max: 25
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 10
 
 cfg_filtrace_pool_temp_hysterese_c:
-  name: "Hystereze prahu studená/teplá"
+  name: "Hystereze hranice vody"
   min: 0
-  max: 90
+  max: 5
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:thermometer
-  mode: box
+  mode: slider
   initial: 1
 
 cfg_filtrace_min_studena_min:
-  name: "Min běh při teplotě < threshold"
+  name: "Denní minimum — studená voda"
   min: 0
-  max: 240
-  step: 1
+  max: 360
+  step: 10
   unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
+  icon: mdi:timer-outline
+  mode: slider
   initial: 60
 
 cfg_filtrace_min_tepla_min:
-  name: "Min běh při teplotě ≥ threshold"
+  name: "Denní minimum — teplá voda"
   min: 0
-  max: 240
-  step: 1
+  max: 600
+  step: 10
   unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
+  icon: mdi:timer-outline
+  mode: slider
   initial: 120
 
 cfg_filtrace_deadline_h:
-  name: "Deadline pro splnění minima"
+  name: "Deadline splnění minima (hodina)"
   min: 0
-  max: 48
+  max: 23
   step: 1
   unit_of_measurement: "h"
   icon: mdi:clock-outline
-  mode: box
+  mode: slider
   initial: 23
 
 cfg_filtrace_anti_cycle_min:
-  name: "Anti-cycling ochrana"
+  name: "Min. pauza mezi běhy (anti-cyklus)"
   min: 0
-  max: 240
-  step: 1
+  max: 120
+  step: 5
   unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
+  icon: mdi:timer-outline
+  mode: slider
   initial: 10
 
+cfg_filtrace_min_run_min:
+  name: "Min. délka jednoho běhu"
+  min: 0
+  max: 120
+  step: 5
+  unit_of_measurement: "min"
+  icon: mdi:timer-outline
+  mode: slider
+  initial: 15
+
 cfg_filtrace_soc_low:
-  name: "Min SOC pro grid běh"
+  name: "Min. SOC pro filtraci v NORMAL"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
+  mode: slider
   initial: 40
 
 cfg_filtrace_solar_ok_kwh:
-  name: "Filtrace solar ok kwh"
+  name: "Budoucí solar → počkat na slunce"
   min: 0
-  max: 100
+  max: 40
   step: 0.5
   unit_of_measurement: "kWh"
   icon: mdi:solar-power
-  mode: box
+  mode: slider
   initial: 10
 
-cfg_filtrace_min_run_min:
-  name: "Min nepřetržitý běh filtrace"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 15
-
-cfg_pool_ventil_start_c:
-  name: "Idealni teplota nadrze pro otevreni ventilu"
-  min: 0
-  max: 90
-  step: 0.5
-  unit_of_measurement: "°C"
-  icon: mdi:thermometer
-  mode: box
-  initial: 55
-
-cfg_pool_nibe_min_runtime_sec:
-  name: "Min dobeh NIBE bez vyjimky"
-  min: 0
-  max: 3600.0
-  step: 1
-  unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 1800
-
-cfg_pool_nibe_solar_zere_baterii_kwh:
-  name: "Solar prah, nad kterym NIBE smi zrat baterii"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 8
-
-cfg_pool_nibe_plan_horizon_h:
-  name: "Horizont planovace pro bazen_na_max"
-  min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 24
-
-cfg_pool_nibe_zaporna_cena_threshold:
-  name: "Pripad 1: prah zaporne ceny pro NIBE → bazen"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 0
-
-cfg_pool_nibe_zakaz_pretoku_solar_kwh:
-  name: "Pripad 2: min solar pro trigger zakaz pretoku"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 13
-
-cfg_pool_nibe_w:
-  name: "Pool nibe w"
-  min: 0
-  max: 7000.0
-  step: 0.5
-  unit_of_measurement: "kW"
-  icon: mdi:flash
-  mode: box
-  initial: 3500
-
-cfg_min_vybijeni_blokace_w:
-  name: "Povinná spotřeba domu z baterie při blokaci"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 1300
-
-cfg_setrit_grid_bias_w:
-  name: "Grid setpoint bias v ŠETŘIT módu"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 150
-
 cfg_zaporna_psp_max_w:
-  name: "Zaporna psp max w"
+  name: "Max. cílový import ze sítě"
   min: 0
-  max: 36000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 22000
+  step: 500
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 18000
 
 cfg_zaporna_nibe_reserve_w:
-  name: "NIBE běží → PSP ~14 kW"
+  name: "Rezerva při běžícím NIBE"
   min: 0
-  max: 16000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 15000
+  step: 500
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 8000
 
 cfg_zaporna_flex_reserve_w:
-  name: "Jen flex → PSP 18 kW"
+  name: "Rezerva bez NIBE (jen flex)"
   min: 0
-  max: 8000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 10000
+  step: 500
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 4000
 
 cfg_zaporna_prah_critical_w:
-  name: "Arbitr PEAK nad 20 kW"
+  name: "Arbitr: PEAK práh"
   min: 0
-  max: 40000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 25000
+  step: 500
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 20000
 
 cfg_zaporna_prah_safe_w:
-  name: "Arbitr NORMAL pod 19 kW"
+  name: "Arbitr: návrat do NORMAL"
   min: 0
-  max: 38000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 25000
+  step: 500
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 19000
 
 cfg_zaporna_prah_emergency_w:
-  name: "Nad critW+1kW"
+  name: "Emergency pásmo nad PEAK"
   min: 0
-  max: 2000.0
-  step: 0.5
-  unit_of_measurement: "kW"
+  max: 5000
+  step: 100
+  unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 1000
 
-cfg_min_export_advantage_czk:
-  name: "Min vyhoda exportu ted vs ulozeni"
-  min: 0
-  max: 100
-  step: 0.5
-  unit_of_measurement: "kWh"
-  icon: mdi:solar-power
-  mode: box
-  initial: 0.3
-
 cfg_zaporna_psp_boost_w:
-  name: "O kolik snížit PSP při peaku"
+  name: "Snížení PSP při peaku (PowerAssist)"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
@@ -1097,151 +835,418 @@ cfg_zaporna_psp_boost_w:
   initial: 2000
 
 cfg_zaporna_bat_max_discharge_w:
-  name: "Odhad max vybití baterie"
+  name: "Odhad max. vybití baterie"
   min: 0
-  max: 36000
-  step: 100
+  max: 15000
+  step: 500
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 12000
 
 cfg_zaporna_min_solar_passthrough_w:
-  name: "Zaporna min solar passthrough w"
+  name: "Min. solar passthrough"
   min: 0
-  max: 30000
+  max: 10000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 5000
 
-cfg_hystereze_zapnuti_w:
-  name: "Hystereze zapnuti w"
+cfg_prah_levna_energie:
+  name: "Levná energie (level ≤)"
   min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 500
-
-cfg_hystereze_vypnuti_w:
-  name: "Hystereze vypnuti w"
-  min: 0
-  max: 30000
-  step: 100
-  unit_of_measurement: "W"
-  icon: mdi:flash
-  mode: box
-  initial: 200
-
-cfg_plan_interval_min:
-  name: "Interval aktualizace plánu"
-  min: 0
-  max: 240
+  max: 15
   step: 1
-  unit_of_measurement: "min"
-  icon: mdi:clock-outline
-  mode: box
-  initial: 1
+  icon: mdi:tune
+  mode: slider
+  initial: 4
 
-cfg_plan_horizon_hours:
-  name: "Horizont plánování"
+cfg_prah_draha_energie:
+  name: "Drahá energie (level ≥)"
   min: 0
-  max: 48
+  max: 15
   step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
+  icon: mdi:tune
+  mode: slider
   initial: 12
 
-cfg_balancing_force_stop_hours:
-  name: "Balancing force stop hours"
+cfg_prah_ultra_levna_nakup:
+  name: "Ultra levný nákup (cena pod)"
   min: 0
-  max: 48
-  step: 1
-  unit_of_measurement: "h"
-  icon: mdi:clock-outline
-  mode: box
+  max: 5
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 1.0
+
+cfg_min_export_advantage_czk:
+  name: "Min. výhoda exportu vs. uložení"
+  min: 0
+  max: 5
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 0.3
+
+cfg_min_arbitrage_profit_czk:
+  name: "Min. zisk arbitráže (nákup ze sítě)"
+  min: 0
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
   initial: 3
 
-cfg_balancing_interval_days:
-  name: "Balancing interval days"
+cfg_min_sell_profit_czk:
+  name: "Min. zisk prodeje do sítě"
   min: 0
+  max: 10
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 3
+
+cfg_plan_solar_sell_threshold_kwh:
+  name: "Solar/h, pod kterým smí baterie prodávat"
+  min: 0
+  max: 10
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 6.0
+
+cfg_sell_correction_max_kwh:
+  name: "Korekce prodeje — maximum"
+  min: 0
+  max: 20
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 5
+
+cfg_sell_correction_decay_kwh:
+  name: "Korekce prodeje — decay za hodinu"
+  min: 0
+  max: 10
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 0.5
+
+cfg_sell_correction_night_buy_prah_kwh:
+  name: "Korekce — práh nočního nákupu"
+  min: 0
+  max: 20
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 0.3
+
+cfg_night_target_soc_margin:
+  name: "Noční rezerva nad min. SOC"
+  min: 0
+  max: 30
+  step: 1
+  unit_of_measurement: "%"
+  icon: mdi:percent
+  mode: slider
+  initial: 5
+
+cfg_night_reserve_kwh:
+  name: "Noční rezerva energie"
+  min: 0
+  max: 28
+  step: 0.5
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 10
+
+cfg_balancing_interval_days:
+  name: "Interval balancování"
+  min: 1
   max: 90
   step: 1
   unit_of_measurement: "dny"
   icon: mdi:calendar
-  mode: box
+  mode: slider
   initial: 30
 
+cfg_balancing_force_stop_hours:
+  name: "Max. délka balancování"
+  min: 1
+  max: 12
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 3
+
 cfg_balancing_min_solar_kwh:
-  name: "Balancing min solar kwh"
+  name: "Min. solar pro balancování"
   min: 0
-  max: 100
+  max: 20
   step: 0.5
   unit_of_measurement: "kWh"
   icon: mdi:solar-power
-  mode: box
+  mode: slider
   initial: 3
 
 cfg_balancing_grid_reserve_w:
-  name: "Balancing grid reserve w"
+  name: "Rezerva sítě při balancování"
   min: 0
-  max: 30000
+  max: 5000
   step: 100
   unit_of_measurement: "W"
   icon: mdi:flash
   mode: box
   initial: 1000
 
-cfg_night_target_soc_margin:
-  name: "Margin nad minSOC pro noční cíl"
+cfg_plan_horizon_hours:
+  name: "Horizont plánu"
+  min: 6
+  max: 24
+  step: 1
+  unit_of_measurement: "h"
+  icon: mdi:clock-outline
+  mode: slider
+  initial: 12
+
+cfg_plan_interval_min:
+  name: "Interval přepočtu plánu"
+  min: 1
+  max: 15
+  step: 1
+  unit_of_measurement: "min"
+  icon: mdi:timer-outline
+  mode: slider
+  initial: 1
+
+cfg_plan_aggressive_solar_day_kwh:
+  name: "Agresivní NORMAL — denní predikce"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 50
+
+cfg_plan_aggressive_soc_pct:
+  name: "Agresivní NORMAL — min. SOC"
   min: 0
   max: 100
   step: 1
   unit_of_measurement: "%"
   icon: mdi:percent
-  mode: box
-  initial: 5
+  mode: slider
+  initial: 60
 
-cfg_night_reserve_kwh:
-  name: "Rezerva na noční spotřebu"
+cfg_plan_aggressive_remaining_solar_kwh:
+  name: "Agresivní NORMAL — zbývající solar"
   min: 0
-  max: 100
-  step: 0.5
+  max: 60
+  step: 1
   unit_of_measurement: "kWh"
   icon: mdi:solar-power
-  mode: box
-  initial: 10
+  mode: slider
+  initial: 0
 
-cfg_min_arbitrage_profit_czk:
-  name: "Min arbitrage profit czk"
+cfg_plan_auto_demand_kwh:
+  name: "Odhad spotřeby auta (když má hlad)"
   min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
+  max: 80
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 25
+
+cfg_plan_solar_insufficient_threshold_kwh:
+  name: "Nízký solar dne (práh)"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 30
+
+cfg_plan_letni_min_solar_kwh:
+  name: "Letní agresivní drain — min. zítřejší solar"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 30
+
+cfg_hystereze_zapnuti_w:
+  name: "Hystereze zapnutí spotřebičů"
+  min: 0
+  max: 2000
+  step: 50
+  unit_of_measurement: "W"
+  icon: mdi:flash
   mode: box
+  initial: 500
+
+cfg_hystereze_vypnuti_w:
+  name: "Hystereze vypnutí spotřebičů"
+  min: 0
+  max: 2000
+  step: 50
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 200
+
+cfg_max_daily_soc:
+  name: "Max. denní SOC baterie"
+  min: 0
+  max: 100
+  step: 1
+  unit_of_measurement: "%"
+  icon: mdi:percent
+  mode: slider
+  initial: 80
+
+cfg_daily_consumption_kwh:
+  name: "Odhad denní spotřeby domu"
+  min: 0
+  max: 60
+  step: 1
+  unit_of_measurement: "kWh"
+  icon: mdi:solar-power
+  mode: slider
+  initial: 20
+
+cfg_min_vybijeni_blokace_w:
+  name: "Povinná spotřeba z baterie při blokaci"
+  min: 0
+  max: 3000
+  step: 50
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 1300
+
+cfg_setrit_grid_bias_w:
+  name: "Grid bias v Šetřit módu"
+  min: 0
+  max: 1000
+  step: 10
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 150
+
+cfg_safety_margin_w:
+  name: "Bezpečnostní rezerva jističe"
+  min: 0
+  max: 5000
+  step: 100
+  unit_of_measurement: "W"
+  icon: mdi:flash
+  mode: box
+  initial: 2000
+
+cfg_sit_napeti:
+  name: "Napětí sítě"
+  min: 220
+  max: 240
+  step: 1
+  unit_of_measurement: "V"
+  icon: mdi:sine-wave
+  mode: box
+  initial: 230
+
+cfg_charger_max_amper:
+  name: "Max. proud wallboxu"
+  min: 6
+  max: 32
+  step: 1
+  unit_of_measurement: "A"
+  icon: mdi:current-ac
+  mode: slider
+  initial: 16
+
+cfg_charger_faze:
+  name: "Počet fází wallboxu (1/3)"
+  min: 1
+  max: 3
+  step: 2
+  icon: mdi:tune
+  mode: slider
   initial: 3
 
-cfg_min_sell_profit_czk:
-  name: "Min sell profit czk"
+cfg_posledni_solarni_hodiny:
+  name: "Posledních solárních hodin (auto)"
   min: 0
-  max: 10
-  step: 0.1
-  unit_of_measurement: "Kč/kWh"
-  icon: mdi:currency-usd
-  mode: box
-  initial: 3
-
-cfg_rychle_nabit_deadline_h:
-  name: "Max delka rychle rezimu"
-  min: 0
-  max: 48
+  max: 8
   step: 1
   unit_of_measurement: "h"
   icon: mdi:clock-outline
+  mode: slider
+  initial: 2
+
+cfg_prah_nevyhodneho_prodeje_kc:
+  name: "Nevýhodný prodej (cena pod)"
+  min: 0
+  max: 5
+  step: 0.1
+  unit_of_measurement: "Kč/kWh"
+  icon: mdi:currency-usd
+  mode: slider
+  initial: 0.5
+
+cfg_chlazeni_nocni_hystereze_c:
+  name: "Chlazení — noční hystereze"
+  min: 0
+  max: 3
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.2
+
+cfg_chlazeni_predchlazeni_offset_c:
+  name: "Předchlazení — offset"
+  min: 0
+  max: 3
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.5
+
+cfg_chlazeni_predchlazeni_min_solar_w:
+  name: "Předchlazení — min. solar"
+  min: 0
+  max: 15000
+  step: 500
+  unit_of_measurement: "W"
+  icon: mdi:flash
   mode: box
-  initial: 6
+  initial: 2000
+
+cfg_chlazeni_spotreba_kwh_h:
+  name: "Odhad spotřeby chlazení"
+  min: 0
+  max: 10
+  step: 0.1
+  unit_of_measurement: "kWh/h"
+  icon: mdi:snowflake
+  mode: slider
+  initial: 1.0

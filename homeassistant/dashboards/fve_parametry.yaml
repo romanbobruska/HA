@@ -1,181 +1,234 @@
-# Generovano scriptem — dashboard Parametry FVE
+# Generovano scriptem — dashboard Parametry FVE (UX v2)
 title: Parametry FVE
 views:
   - title: Parametry FVE
     path: parametry-fve
     icon: mdi:tune
-    type: masonry
-    cards:
-      - type: markdown
-        content: >-
-          ## ⚙️ Parametry FVE
-          Tady ladiš všechny parametry bez lézání do Node-RED. Změna se projeví do minuty.
-      - type: entities
-        title: "🚗 Nabíjení auta"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_nabijeni_auta_forecast_kwh
-          - entity: input_number.cfg_nabijeni_auta_min_soc
-          - entity: input_number.cfg_nabijeni_auta_solar_w
-          - entity: input_number.cfg_nabijeni_auta_cena_prah_vyssi
-          - entity: input_number.cfg_nabijeni_auta_cena_prah_nizsi
-          - entity: input_number.cfg_nabijeni_auta_min_soc_slunce
-          - entity: input_number.cfg_nabijeni_auta_pretizeni_w
-          - entity: input_number.cfg_nabijeni_auta_soc_drain_prah
-          - entity: input_number.cfg_nabijeni_auta_soc_drain_w
-          - entity: input_number.cfg_nabijeni_auta_max_sell_price
-          - entity: input_number.cfg_nabijeni_auta_soc_charge_w
-          - entity: input_number.cfg_nabijeni_auta_target_batt_w
-          - entity: input_number.cfg_rychle_nabit_deadline_h
-      - type: entities
-        title: "🔄 Automatické přepínání léto/zima"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_topeni_auto_rezim_indoor_gap
-          - entity: input_number.cfg_topeni_auto_rezim_indoor_min_minut
-          - entity: input_number.cfg_topeni_auto_rezim_outdoor_now_zima
-          - entity: input_number.cfg_topeni_auto_rezim_outdoor_max_24h
-          - entity: input_number.cfg_topeni_auto_rezim_outdoor_now_leto
-          - entity: input_number.cfg_topeni_auto_rezim_outdoor_min_48h
-          - entity: input_number.cfg_topeni_auto_rezim_manual_override_h
-          - entity: input_number.cfg_topeni_auto_rezim_anti_flap_h
-      - type: entities
-        title: "🔥 Patrony (přímotopy)"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_topeni_min_pretok_patron_w
-          - entity: input_number.cfg_topeni_patron_faze_w
-          - entity: input_number.cfg_topeni_min_soc_patron
-          - entity: input_number.cfg_topeni_patron_max_grid_draw_w
-          - entity: input_number.cfg_topeni_patron_max_sell_price
-          - entity: input_number.cfg_topeni_patron_min_solar_w
-          - entity: input_number.cfg_topeni_patron_discharge_limit_w
-          - entity: input_number.cfg_topeni_patron_drain_soc_prah
-          - entity: input_number.cfg_topeni_patron_drain_w
-          - entity: input_number.cfg_topeni_patron_discharge_hyst
-      - type: entities
-        title: "🌡️ Topení domu (NIBE)"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_topeni_nocni_snizeni
-          - entity: input_number.cfg_topeni_nocni_od
-          - entity: input_number.cfg_topeni_nocni_do
-          - entity: input_number.cfg_topeni_nouzova_teplota
-          - entity: input_number.cfg_topeni_min_teplota_nadrze
-          - entity: input_number.cfg_topeni_bezpecny_pokles
-          - entity: input_number.cfg_topeni_hystereze_chlazeni
-          - entity: input_number.cfg_topeni_solar_forecast_kwh
-          - entity: input_number.cfg_topeni_solar_high_day_kwh
-          - entity: input_number.cfg_topeni_solar_override_w
-          - entity: input_number.cfg_topeni_solar_defer_margin
-          - entity: input_number.cfg_topeni_final_solar_kwh
-          - entity: input_number.cfg_topeni_final_hours
-          - entity: input_number.cfg_topeni_solar_margin_hours
-          - entity: input_number.cfg_topeni_zakaz_pretok_defer_max_sol_kwh
-          - entity: input_number.cfg_topeni_zakaz_pretok_defer_safe_margin_extra
-          - entity: input_number.cfg_nibe_peak_w
-          - entity: input_number.cfg_topeni_boost_max_sell_price
-          - entity: input_number.cfg_topeni_dump_solar_soc
-          - entity: input_number.cfg_topeni_chladna_nadrz
-      - type: entities
-        title: "🏊 Vytápění bazénu"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_pool_ventil_start_c
-          - entity: input_number.cfg_pool_nibe_min_runtime_sec
-          - entity: input_number.cfg_pool_nibe_solar_zere_baterii_kwh
-          - entity: input_number.cfg_pool_nibe_plan_horizon_h
-          - entity: input_number.cfg_pool_nibe_zaporna_cena_threshold
-          - entity: input_number.cfg_pool_nibe_zakaz_pretoku_solar_kwh
-          - entity: input_number.cfg_pool_nibe_w
-      - type: entities
-        title: "💧 Filtrace bazénu"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_filtrace_surplus_on_w
-          - entity: input_number.cfg_filtrace_surplus_off_w
-          - entity: input_number.cfg_filtrace_pool_temp_min
-          - entity: input_number.cfg_filtrace_pool_temp_threshold_c
-          - entity: input_number.cfg_filtrace_pool_temp_hysterese_c
-          - entity: input_number.cfg_filtrace_min_studena_min
-          - entity: input_number.cfg_filtrace_min_tepla_min
-          - entity: input_number.cfg_filtrace_deadline_h
-          - entity: input_number.cfg_filtrace_anti_cycle_min
-          - entity: input_number.cfg_filtrace_soc_low
-          - entity: input_number.cfg_filtrace_solar_ok_kwh
-          - entity: input_number.cfg_filtrace_min_run_min
-      - type: entities
-        title: "⚡ Záporná cena a ochrana jističe"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_zaporna_psp_max_w
-          - entity: input_number.cfg_zaporna_nibe_reserve_w
-          - entity: input_number.cfg_zaporna_flex_reserve_w
-          - entity: input_number.cfg_zaporna_prah_critical_w
-          - entity: input_number.cfg_zaporna_prah_safe_w
-          - entity: input_number.cfg_zaporna_prah_emergency_w
-          - entity: input_number.cfg_zaporna_psp_boost_w
-          - entity: input_number.cfg_zaporna_bat_max_discharge_w
-          - entity: input_number.cfg_zaporna_min_solar_passthrough_w
-      - type: entities
-        title: "💰 Ceny a arbitráž"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_prah_levna_energie
-          - entity: input_number.cfg_prah_draha_energie
-          - entity: input_number.cfg_prah_ultra_levna_nakup
-          - entity: input_number.cfg_min_export_advantage_czk
-          - entity: input_number.cfg_min_arbitrage_profit_czk
-          - entity: input_number.cfg_min_sell_profit_czk
-      - type: entities
-        title: "📤 Prodej a noční rezerva"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_plan_solar_sell_threshold_kwh
-          - entity: input_number.cfg_sell_correction_max_kwh
-          - entity: input_number.cfg_sell_correction_decay_kwh
-          - entity: input_number.cfg_sell_correction_night_buy_prah_kwh
-          - entity: input_number.cfg_night_target_soc_margin
-          - entity: input_number.cfg_night_reserve_kwh
-          - entity: input_boolean.cfg_sell_correction_enabled
-          - entity: input_boolean.cfg_prodej_misto_nabijeni_enabled
-      - type: entities
-        title: "🔋 Balancování baterie"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_balancing_force_stop_hours
-          - entity: input_number.cfg_balancing_interval_days
-          - entity: input_number.cfg_balancing_min_solar_kwh
-          - entity: input_number.cfg_balancing_grid_reserve_w
-      - type: entities
-        title: "📊 Plánování a hystereze"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_plan_aggressive_solar_day_kwh
-          - entity: input_number.cfg_plan_aggressive_soc_pct
-          - entity: input_number.cfg_plan_aggressive_remaining_solar_kwh
-          - entity: input_number.cfg_plan_auto_demand_kwh
-          - entity: input_number.cfg_plan_solar_insufficient_threshold_kwh
-          - entity: input_number.cfg_plan_letni_min_solar_kwh
-          - entity: input_number.cfg_hystereze_zapnuti_w
-          - entity: input_number.cfg_hystereze_vypnuti_w
-          - entity: input_number.cfg_plan_interval_min
-          - entity: input_number.cfg_plan_horizon_hours
-      - type: entities
-        title: "🔋 Baterie a ostatní"
-        state_color: true
-        entities:
-          - entity: input_number.cfg_max_daily_soc
-          - entity: input_number.cfg_daily_consumption_kwh
-          - entity: input_number.cfg_safety_margin_w
-          - entity: input_number.cfg_charger_max_amper
-          - entity: input_number.cfg_charger_faze
-          - entity: input_number.cfg_sit_napeti
-          - entity: input_number.cfg_chlazeni_nocni_hystereze_c
-          - entity: input_number.cfg_chlazeni_predchlazeni_offset_c
-          - entity: input_number.cfg_chlazeni_predchlazeni_min_solar_w
-          - entity: input_number.cfg_chlazeni_spotreba_kwh_h
-          - entity: input_number.cfg_prah_nevyhodneho_prodeje_kc
-          - entity: input_number.cfg_posledni_solarni_hodiny
-          - entity: input_number.cfg_min_vybijeni_blokace_w
-          - entity: input_number.cfg_setrit_grid_bias_w
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: markdown
+            content: >-
+              ## ⚙️ Parametry FVE
+
+              Všechna nastavení automatizace bez lézání do Node-RED.
+              Změna se projeví **do minuty**. Defaulty zůstávají v NR jako záloha.
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🚗 Nabíjení auta"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_nabijeni_auta_forecast_kwh
+              - entity: input_number.cfg_nabijeni_auta_min_soc
+              - entity: input_number.cfg_nabijeni_auta_min_soc_slunce
+              - entity: input_number.cfg_nabijeni_auta_solar_w
+              - entity: input_number.cfg_nabijeni_auta_cena_prah_vyssi
+              - entity: input_number.cfg_nabijeni_auta_cena_prah_nizsi
+              - entity: input_number.cfg_nabijeni_auta_max_sell_price
+              - entity: input_number.cfg_nabijeni_auta_pretizeni_w
+              - entity: input_number.cfg_nabijeni_auta_soc_drain_prah
+              - entity: input_number.cfg_nabijeni_auta_soc_drain_w
+              - entity: input_number.cfg_nabijeni_auta_soc_charge_w
+              - entity: input_number.cfg_nabijeni_auta_target_batt_w
+              - entity: input_number.cfg_rychle_nabit_deadline_h
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🔄 Automatické přepínání léto/zima"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_topeni_auto_rezim_indoor_gap
+              - entity: input_number.cfg_topeni_auto_rezim_indoor_min_minut
+              - entity: input_number.cfg_topeni_auto_rezim_outdoor_now_zima
+              - entity: input_number.cfg_topeni_auto_rezim_outdoor_max_24h
+              - entity: input_number.cfg_topeni_auto_rezim_outdoor_now_leto
+              - entity: input_number.cfg_topeni_auto_rezim_outdoor_min_48h
+              - entity: input_number.cfg_topeni_auto_rezim_manual_override_h
+              - entity: input_number.cfg_topeni_auto_rezim_anti_flap_h
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🔥 Patrony (přímotopy)"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_topeni_min_pretok_patron_w
+              - entity: input_number.cfg_topeni_patron_faze_w
+              - entity: input_number.cfg_topeni_min_soc_patron
+              - entity: input_number.cfg_topeni_patron_min_solar_w
+              - entity: input_number.cfg_topeni_patron_max_grid_draw_w
+              - entity: input_number.cfg_topeni_patron_max_sell_price
+              - entity: input_number.cfg_topeni_patron_drain_soc_prah
+              - entity: input_number.cfg_topeni_patron_drain_w
+              - entity: input_number.cfg_topeni_patron_discharge_limit_w
+              - entity: input_number.cfg_topeni_patron_discharge_hyst
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🌡️ Topení domu (NIBE)"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_topeni_nocni_snizeni
+              - entity: input_number.cfg_topeni_nocni_od
+              - entity: input_number.cfg_topeni_nocni_do
+              - entity: input_number.cfg_topeni_nouzova_teplota
+              - entity: input_number.cfg_topeni_min_teplota_nadrze
+              - entity: input_number.cfg_topeni_chladna_nadrz
+              - entity: input_number.cfg_topeni_bezpecny_pokles
+              - entity: input_number.cfg_topeni_hystereze_chlazeni
+              - entity: input_number.cfg_topeni_solar_forecast_kwh
+              - entity: input_number.cfg_topeni_solar_high_day_kwh
+              - entity: input_number.cfg_topeni_solar_override_w
+              - entity: input_number.cfg_topeni_solar_defer_margin
+              - entity: input_number.cfg_topeni_final_solar_kwh
+              - entity: input_number.cfg_topeni_final_hours
+              - entity: input_number.cfg_topeni_solar_margin_hours
+              - entity: input_number.cfg_topeni_zakaz_pretok_defer_max_sol_kwh
+              - entity: input_number.cfg_topeni_zakaz_pretok_defer_safe_margin_extra
+              - entity: input_number.cfg_nibe_peak_w
+              - entity: input_number.cfg_topeni_boost_max_sell_price
+              - entity: input_number.cfg_topeni_dump_solar_soc
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🏊 Vytápění bazénu"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_pool_ventil_start_c
+              - entity: input_number.cfg_pool_nibe_min_runtime_sec
+              - entity: input_number.cfg_pool_nibe_solar_zere_baterii_kwh
+              - entity: input_number.cfg_pool_nibe_plan_horizon_h
+              - entity: input_number.cfg_pool_nibe_zaporna_cena_threshold
+              - entity: input_number.cfg_pool_nibe_zakaz_pretoku_solar_kwh
+              - entity: input_number.cfg_pool_nibe_w
+      - type: grid
+        cards:
+          - type: heading
+            heading: "💧 Filtrace bazénu"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_filtrace_surplus_on_w
+              - entity: input_number.cfg_filtrace_surplus_off_w
+              - entity: input_number.cfg_filtrace_pool_temp_min
+              - entity: input_number.cfg_filtrace_pool_temp_threshold_c
+              - entity: input_number.cfg_filtrace_pool_temp_hysterese_c
+              - entity: input_number.cfg_filtrace_min_studena_min
+              - entity: input_number.cfg_filtrace_min_tepla_min
+              - entity: input_number.cfg_filtrace_deadline_h
+              - entity: input_number.cfg_filtrace_anti_cycle_min
+              - entity: input_number.cfg_filtrace_min_run_min
+              - entity: input_number.cfg_filtrace_soc_low
+              - entity: input_number.cfg_filtrace_solar_ok_kwh
+      - type: grid
+        cards:
+          - type: heading
+            heading: "⚡ Záporná cena a ochrana jističe"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_zaporna_psp_max_w
+              - entity: input_number.cfg_zaporna_nibe_reserve_w
+              - entity: input_number.cfg_zaporna_flex_reserve_w
+              - entity: input_number.cfg_zaporna_prah_critical_w
+              - entity: input_number.cfg_zaporna_prah_safe_w
+              - entity: input_number.cfg_zaporna_prah_emergency_w
+              - entity: input_number.cfg_zaporna_psp_boost_w
+              - entity: input_number.cfg_zaporna_bat_max_discharge_w
+              - entity: input_number.cfg_zaporna_min_solar_passthrough_w
+      - type: grid
+        cards:
+          - type: heading
+            heading: "💰 Ceny a arbitráž"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_prah_levna_energie
+              - entity: input_number.cfg_prah_draha_energie
+              - entity: input_number.cfg_prah_ultra_levna_nakup
+              - entity: input_number.cfg_min_export_advantage_czk
+              - entity: input_number.cfg_min_arbitrage_profit_czk
+              - entity: input_number.cfg_min_sell_profit_czk
+      - type: grid
+        cards:
+          - type: heading
+            heading: "📤 Prodej a noční rezerva"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_plan_solar_sell_threshold_kwh
+              - entity: input_number.cfg_sell_correction_max_kwh
+              - entity: input_number.cfg_sell_correction_decay_kwh
+              - entity: input_number.cfg_sell_correction_night_buy_prah_kwh
+              - entity: input_number.cfg_night_target_soc_margin
+              - entity: input_number.cfg_night_reserve_kwh
+              - entity: input_boolean.cfg_prodej_misto_nabijeni_enabled
+              - entity: input_boolean.cfg_sell_correction_enabled
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🔋 Balancování baterie"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_balancing_interval_days
+              - entity: input_number.cfg_balancing_force_stop_hours
+              - entity: input_number.cfg_balancing_min_solar_kwh
+              - entity: input_number.cfg_balancing_grid_reserve_w
+      - type: grid
+        cards:
+          - type: heading
+            heading: "📊 Plánování a hystereze"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_plan_horizon_hours
+              - entity: input_number.cfg_plan_interval_min
+              - entity: input_number.cfg_plan_aggressive_solar_day_kwh
+              - entity: input_number.cfg_plan_aggressive_soc_pct
+              - entity: input_number.cfg_plan_aggressive_remaining_solar_kwh
+              - entity: input_number.cfg_plan_auto_demand_kwh
+              - entity: input_number.cfg_plan_solar_insufficient_threshold_kwh
+              - entity: input_number.cfg_plan_letni_min_solar_kwh
+              - entity: input_number.cfg_hystereze_zapnuti_w
+              - entity: input_number.cfg_hystereze_vypnuti_w
+      - type: grid
+        cards:
+          - type: heading
+            heading: "🔋 Baterie a ostatní"
+          - type: entities
+            show_header_toggle: false
+            state_color: true
+            entities:
+              - entity: input_number.cfg_max_daily_soc
+              - entity: input_number.cfg_daily_consumption_kwh
+              - entity: input_number.cfg_min_vybijeni_blokace_w
+              - entity: input_number.cfg_setrit_grid_bias_w
+              - entity: input_number.cfg_safety_margin_w
+              - entity: input_number.cfg_sit_napeti
+              - entity: input_number.cfg_charger_max_amper
+              - entity: input_number.cfg_charger_faze
+              - entity: input_number.cfg_posledni_solarni_hodiny
+              - entity: input_number.cfg_prah_nevyhodneho_prodeje_kc
+              - entity: input_number.cfg_chlazeni_nocni_hystereze_c
+              - entity: input_number.cfg_chlazeni_predchlazeni_offset_c
+              - entity: input_number.cfg_chlazeni_predchlazeni_min_solar_w
+              - entity: input_number.cfg_chlazeni_spotreba_kwh_h

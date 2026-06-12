@@ -76,11 +76,11 @@ input_boolean:
 
   # === Parametry FVE (dashboard) ===
   cfg_sell_correction_enabled:
-    name: "BUG E: zapnout sebekorekci preprodej->nocni nakup"
+    name: "Korekce prodeje dle plánu (zap/vyp)"
     icon: mdi:toggle-switch
 
   cfg_prodej_misto_nabijeni_enabled:
-    name: "Master prepinac AUTO exportu prebytku"
+    name: "Prodávat přebytek místo nabíjení (AUTO)"
     icon: mdi:toggle-switch
 
 # -----------------------------------------------------------------------------
