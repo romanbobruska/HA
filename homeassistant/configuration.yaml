@@ -74,6 +74,15 @@ input_boolean:
     icon: mdi:autorenew
     initial: false
 
+  # === Parametry FVE (dashboard) ===
+  cfg_sell_correction_enabled:
+    name: "BUG E: zapnout sebekorekci preprodej->nocni nakup"
+    icon: mdi:toggle-switch
+
+  cfg_prodej_misto_nabijeni_enabled:
+    name: "Master prepinac AUTO exportu prebytku"
+    icon: mdi:toggle-switch
+
 # -----------------------------------------------------------------------------
 # INPUT NUMBERS - Nastavitelné parametry
 # -----------------------------------------------------------------------------
@@ -145,3 +154,14 @@ input_select:
       - "BAZÉN - NIBE + Patrony"
       - "BAZÉN - Ventil (NIBE čeká)"
     icon: mdi:radiator
+
+# === Dashboard Parametry FVE (YAML mode) ===
+lovelace:
+  mode: storage
+  dashboards:
+    fve-parametry:
+      mode: yaml
+      title: Parametry FVE
+      icon: mdi:tune
+      show_in_sidebar: true
+      filename: dashboards/fve_parametry.yaml

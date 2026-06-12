@@ -16,7 +16,7 @@ for f in files:
         print('   SKIP ' + f + ' (nenalezen v repo)')
 
 # Kopíruj adresáře (themes, atd.)
-dirs = ['themes']
+dirs = ['themes', 'dashboards']
 for d in dirs:
     src_dir = os.path.join(repo, d)
     dst_dir = os.path.join(dst, d)

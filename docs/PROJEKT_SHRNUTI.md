@@ -494,6 +494,21 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.136: Dashboard „Parametry FVE" — ladění configu z HA bez NR (větev `parameters`) (2026-06-12)
+
+**Požadavek uživatele**: panel v HA dashboardu pro nastavení parametrů, které dnes žijí jen v NR `fve_config` (nemají HA entitu) — ať se ladí z telefonu/PC bez lézání do Node-RED. Co nejvíc user-friendly, logicky seskupené.
+
+**Řešení (bezpečné — config funkce NETKNUTÁ)**:
+- **Override vrstva v NR**: nový node `Parametry z dashboardu (override)` v `fve-config.json` se zařadí ZA `Nastav konfiguraci` (base config → override → debug). Po sestavení defaultů přepíše hodnoty z HA entit `input_number.cfg_*` / `input_boolean.cfg_*` (default zůstává jako fallback). Nový listener `Param dashboard zmena` (server-state-changed, regex `^(input_number|input_boolean)\.cfg_`) → override → živá aktualizace do minuty. Base config funkce se vůbec needitovala (nulové riziko pro FVE logiku).
+- **121 parametrů** (119 čísel + 2 boolean) vytěženo z `fve_config` (jen hardcoded literály = NR-only). **Vyřazeno**: zákonem chráněné `min_soc` (§1.2, už má `number.min_soc`), kalibrační/modelové konstanty (účinnosti, soc-drop model, dt_per_cycle), instalační geometrie, anti-oscilační interní (cooldowny, deadbandy, ticks).
+- **HA helpery**: `cfg_*` `input_number` do `input_numbers.yaml` (popisky z komentářů v kódu, jednotky/ikony dle významu), 2 `input_boolean` do `configuration.yaml`.
+- **Dashboard** `dashboards/fve_parametry.yaml` (YAML mode, registrováno v `configuration.yaml`, v postranním panelu): **12 logických UX group** s ikonami — Nabíjení auta, Auto léto/zima, Patrony, Topení NIBE, Vytápění bazénu, Filtrace, Záporná cena/jistič, Ceny a arbitráž, Prodej a noční rezerva, Balancování, Plánování a hystereze, Baterie a ostatní.
+- `deploy_copy_ha.py` nově kopíruje i složku `dashboards/`.
+
+**Ověřeno**: `node --check` override OK; 121 entit = 121 referencí na dashboardu, 0 duplicit, 0 chybějících definic. **Nenasazeno** — vyžaduje `--with-ha` (restart HA Core kvůli novým helperům/dashboardu); čeká na schválení. Vše ve větvi `parameters`.
+
+---
+
 ## v25.135: Zámek — čistý layout skupiny „Zámek vstup" (přímá úprava serveru) (2026-06-12)
 
 **Problém**: po přidání uzlů (notifikace na oba telefony, konflikt-handler) se uzly ve skupině „Zámek vstup" překrývaly a přetékaly mimo box (box jen 832×262, uzly až na x=1010/y=980).
