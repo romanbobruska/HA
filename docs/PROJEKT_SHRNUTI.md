@@ -494,6 +494,12 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.137: Parametry FVE — UX v2 (české popisky, slidery, sections view) (2026-06-12)
+
+**Doladění v25.136**: ručně kurátorovaná tabulka všech 119 `cfg_*` parametrů — české popisky, smysluplné min/max/step, **85× slider** (%, °C, h, min, Kč/kWh, kWh) + **34× box** (přesné W), jednotkové ikony. Dashboard přestavěn na **sections view** (`max_columns: 3`, heading + entities karta na skupinu). Booleany přejmenovány („Korekce prodeje dle plánu", „Prodávat přebytek místo nabíjení (AUTO)"). Entity ID beze změny → **NR override netknutý**. Nasazení bez restartu HA: deploy `--no-ha` + služby `input_number.reload` / `input_boolean.reload` (hodnoty zachovány). Pozn.: nový panel nebyl vidět v sidebaru kvůli uživatelskému `panelOrder` (frontend user_data) — doplněn přes websocket `frontend/set_user_data` za „Řízení FVE".
+
+---
+
 ## v25.136: Dashboard „Parametry FVE" — ladění configu z HA bez NR (větev `parameters`) (2026-06-12)
 
 **Požadavek uživatele**: panel v HA dashboardu pro nastavení parametrů, které dnes žijí jen v NR `fve_config` (nemají HA entitu) — ať se ladí z telefonu/PC bez lézání do Node-RED. Co nejvíc user-friendly, logicky seskupené.
