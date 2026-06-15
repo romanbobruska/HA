@@ -494,6 +494,16 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.138: ZÁMEK — fix spurious daytime lock + fix auto-unlock po disarmu (§20) (2026-06-15)
+
+**Symptomy** (uživatel): zámek se přes den zamyká, i když nemá; po příjezdu a odkódování domu se neodemkne. **Root cause z historie HA (72 h)**:
+- **Bug 1 (zamyká přes den)**: `nikdoDoma = (person==="not_home") || (homeB==="off")` — OR. `person.home_assitant` (GPS) přes den flapuje na `not_home`, i když `input_boolean.jsme_doma=on`. Důkazy: 06-13 11:01 a 15:26 (person not_home → LOCK locked, za ~30 s zase home). **Fix**: `nikdoDoma = (homeB === "off")` — autoritativní `jsme_doma`; odchod stejně pokrývá `isArmed(celk/garaz)`.
+- **Bug 2 (neodemkne po disarmu)**: detekce hrany `armed→disarmed` stála na perzistentním příznaku `celk_was_armed` (ztráta při restartu NR) + gate `(now-lastCmdAt>=COOLDOWN_MS)` → když chvíli předtím něco zamklo (Bug 1), odemčení se zahodilo a příznak se přesto smazal. Navíc `unavailable→disarmed` (výpadek alarmu, 06-13 05:00) by falešně odemkl (porušení §20.3). **Fix**: hrana z UDÁLOSTI `msg.data.old_state→new_state` (`evId===CELK_ID && newS==="disarmed" && armish(oldS)`), odolné vůči restartu NR i výpadku alarmu, bez perzistentního flagu a bez cooldown gate (vědomý úkon). `armish` = armed*/disarming/arming/pending/triggered (vylučuje unavailable/unknown).
+
+**Soubor**: `node-red/flows/ostatni.json`, node `lock_eval_func` (skupina „Zámek vstup"). Entity: `lock.chodba_hlavni_dvere` (Yale Linus L2, Matter), `alarm_control_panel.horousany_sekce_1_celkovy_alarm`, `input_boolean.jsme_doma`. Ověřeno: git==server (hash), `node --check` OK, NR logy čisté, deploy `--no-ha`.
+
+---
+
 ## v25.137: Parametry FVE — UX v2 (české popisky, slidery, sections view) (2026-06-12)
 
 **Doladění v25.136**: ručně kurátorovaná tabulka všech 119 `cfg_*` parametrů — české popisky, smysluplné min/max/step, **85× slider** (%, °C, h, min, Kč/kWh, kWh) + **34× box** (přesné W), jednotkové ikony. Dashboard přestavěn na **sections view** (`max_columns: 3`, heading + entities karta na skupinu). Booleany přejmenovány („Korekce prodeje dle plánu", „Prodávat přebytek místo nabíjení (AUTO)"). Entity ID beze změny → **NR override netknutý**. Nasazení bez restartu HA: deploy `--no-ha` + služby `input_number.reload` / `input_boolean.reload` (hodnoty zachovány). Pozn.: nový panel nebyl vidět v sidebaru kvůli uživatelskému `panelOrder` (frontend user_data) — doplněn přes websocket `frontend/set_user_data` za „Řízení FVE".
