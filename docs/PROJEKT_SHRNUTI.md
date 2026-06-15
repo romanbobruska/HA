@@ -494,6 +494,14 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.139: PRODEJ — striktní §4.5 „nejdražší hodiny první" (sticky budget check + greedy break) (2026-06-15)
+
+**Symptom** (uživatel): plán prodával v 19:00 za **2,64 Kč** (skoro nejnižší), zatímco 22:00 (**3,26**) bylo „Normální" = neprodává. Porušení §4.5 ř. 195 („PRODÁVÁME ZA NEJDRAŽŠÍ HODINY — od nejvyšší sell ceny dolů"). **Root cause** (`fve-orchestrator.json`, node `3. Solver per-hour`): výběr prodejních hodin = sticky pre-pass + greedy DESC s budget checkem (`budget = peakSoc − sellTarget`). Konstanty: `maxFeed 7600 W`, `kap 28 kWh`, `dchEff 0.9` → `sellSocPerH = 30,2 %`/h, budget ~30 % → **jedna hodina prodeje pokryje celý budget**, takže greedy DESC sám vybere jen tu nejdražší (21:00). 19:00 přidávala **sticky smyčka, která jako jediná NEMĚLA budget check** (ř. 227–246) → držela levnou hodinu z minulého tiku navíc. Druhotně greedy `continue` (ř. 255) místo `break` umožňoval po vyčerpání budgetu doplnit levnou **zlomkovou** aktuální hodinu.
+
+**Fix** (2 řádky, oba jen snižují objem prodeje → bezpečné vůči noční rezervě §4.5 ř. 257): (1) sticky smyčka dostala stejný budget check jako greedy (`if (budget − used) < add*0.5) break`); (2) greedy budget `continue` → `break` (DESC: po vyčerpání budgetu STOP, nižší hodiny se neprodávají). **Ověřeno live** po deploy: plán prodává jen 21:00 (3,28, nejdražší), drain na cíl 65 %, §4.5 invariant „žádná neprodejní hodina dražší než prodejní" splněn, žádný noční SETRIT. `node --check` OK, git==server (md5), deploy `--no-ha`.
+
+---
+
 ## v25.138: ZÁMEK — fix spurious daytime lock + fix auto-unlock po disarmu (§20) (2026-06-15)
 
 **Symptomy** (uživatel): zámek se přes den zamyká, i když nemá; po příjezdu a odkódování domu se neodemkne. **Root cause z historie HA (72 h)**:
