@@ -494,6 +494,14 @@ Sledování JEN nesolárních hodin zachovává legitimní ranní prodej (12.5. 
 
 ---
 
+## v25.140: PRODEJ — sellTarget pokrývá CELOU noc do rána (no-sell trough přes horizont) (2026-06-16)
+
+**Symptom** (uživatel): odpolední plán (13:00) prodával do **SOC 40 %** (20:00+21:00), což na noc nestačí → nutný noční nákup/SETRIT (porušení §4.5 ř. 262). Den předtím (výpočet ve 20:00) vyšel správně 65 % — rozdíl byl podezřelý. **Root cause** (`fve-orchestrator.json`, node `2. Cena + replCost`, ř. 218–227): `sellTarget` je trough-based = `cSoc − (noSellTrough − (minSoc+nMargin))`, kde `noSellTrough` = minimum SOC v no-sell simulaci. Smyčka ale běžela **jen přes plánovací horizont `hp` (12 h)**. Při výpočtu odpoledne horizont končí ~1:00 a **mine hluboké ranní minimum (~6:00)** → trough moc vysoký (~76 %) → `sellHeadroom` moc velký → `sellTarget` moc nízký (40 %). Večer horizont sahá za východ slunce, proto tehdy vyšel správně. `consAt()` historii spotřeby používá per-hodina (ř. 60–112), jen okno simulace bylo příliš krátké.
+
+**Fix**: po smyčce přes `hp` se trough simuluje dál — od poslední hodiny horizontu **až do první ranní solární hodiny** (`_ngh` while not in `[solS,solE)`), drain `consAt()` z historie každou noční hodinu, tracking `_nsTr`. Bezpečné když horizont už ráno pokrývá (break na první solární hodině = žádný double-count). **Ověřeno live** (13:00): `sellTarget` skočil z 40 % → **67 %**, prodává jen 21:00 (3,71, nejdražší), noc kryta z baterie (0:00 @ 53 %, ráno ~25 % nad min, žádný noční nákup). `node --check` OK, git==server, deploy `--no-ha`.
+
+---
+
 ## v25.139: PRODEJ — striktní §4.5 „nejdražší hodiny první" (sticky budget check + greedy break) (2026-06-15)
 
 **Symptom** (uživatel): plán prodával v 19:00 za **2,64 Kč** (skoro nejnižší), zatímco 22:00 (**3,26**) bylo „Normální" = neprodává. Porušení §4.5 ř. 195 („PRODÁVÁME ZA NEJDRAŽŠÍ HODINY — od nejvyšší sell ceny dolů"). **Root cause** (`fve-orchestrator.json`, node `3. Solver per-hour`): výběr prodejních hodin = sticky pre-pass + greedy DESC s budget checkem (`budget = peakSoc − sellTarget`). Konstanty: `maxFeed 7600 W`, `kap 28 kWh`, `dchEff 0.9` → `sellSocPerH = 30,2 %`/h, budget ~30 % → **jedna hodina prodeje pokryje celý budget**, takže greedy DESC sám vybere jen tu nejdražší (21:00). 19:00 přidávala **sticky smyčka, která jako jediná NEMĚLA budget check** (ř. 227–246) → držela levnou hodinu z minulého tiku navíc. Druhotně greedy `continue` (ř. 255) místo `break` umožňoval po vyčerpání budgetu doplnit levnou **zlomkovou** aktuální hodinu.
