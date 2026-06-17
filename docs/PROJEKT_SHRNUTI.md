@@ -395,6 +395,24 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.143: ZÁMEK — §20.3 re-odemknutí po HW auto-relocku Yale (dveře zůstávaly zamčené po příjezdu) (2026-06-17)
+
+**Symptom** (uživatel, opakovaně): „Odkódoval jsem celý dům a zámek se NEODEMKL." Po disarmu celého domu zůstávaly hlavní dveře zamčené, než uživatel došel ke dveřím.
+
+**Root cause** (z recorder DB, incident 2026-06-17 15:45): NR auto-unlock §20.3 **zafungoval** — `lock.chodba_hlavni_dvere` šel v 15:45:24 do `unlocking` (changed_by „Remote" = Matter příkaz z NR). ALE o **30 s později (15:45:54)** se zámek znovu `locked` — to je **vlastní HW auto-relock zámku Yale Linus L2** (~30 s, konfiguruje se v Yale appce, z HA/Matter nevypnu). NR `grace` (60 min) brání NR znovu zamknout, ale NEBRÁNÍ HW auto-relocku a NR po něm znovu neodemykal. Uživatel došel ke dveřím až v 15:49 → zamčeno, odemkl ručně. Jediný SW aktér `lock.lock` je NR; žádná HA automatizace zámek nezamyká.
+
+**Fix** (`ostatni.json`, 2 nody): 
+- `lock_eval_func`: po disarmu se nastaví „příchozí okno" `arrival_until = now + 5 min` (nová konstanta `ARRIVAL_MS`). Dokud okno běží a alarm je DISARMED (celk i garáž) a dveře zavřené: když se zámek sám zamkne (HW auto-relock), NR **znovu odemkne závoru** (`RE-ODEMYKAM`). Re-lock událost sama spouští `lock_eval`, takže není potřeba časovač. Okno se **okamžitě ukončí při otevření dveří** (vejdeme) nebo po 5 min. §20.1 zachován: re-odemyká jen když je systém jistý (čerstvý disarm, dveře zavřené).
+- `lock_notif_func`: během příchozího okna se POTLAČÍ notifikace `locked`/`unlocked` (jinak by střídání zámku spamovalo oba telefony, §20.6). `jammed` se hlásí vždy.
+
+**Ověřeno** (offline simulace nad nasazenou serverovou funkcí, 5 scénářů, vše PASS): incident relock→re-odemkne; 2. relock→re-odemkne; po otevření dveří→už ne; po vypršení okna (+6 min)→už ne; arm→ZAMKNE (žádné falešné odemykání). `node --check` OK, git==server (vyřešen i layout drift 2 nodů), deploy `--no-ha --branch=advanced`, NR logy čisté, merge do main.
+
+**Pozn.**: trvalé řešení by bylo prodloužit/vypnout HW auto-relock přímo v Yale appce; to z HA nelze. NR re-odemykání je softwarový workaround respektující §20.
+
+
+---
+
+
 ## v25.142: PLÁN — plan == realita: „PRODÁVAT“ v plánu se reálně neprodávalo (2026-06-17)
 
 **Symptom** (uživatel, opakovaně): v `sensor.fve_plan` svítil aktuální mód **Prodávat do sítě**, ale fyzicky se NEPRODÁVALO (např. ráno v H8). Plán a realita se rozcházely.
