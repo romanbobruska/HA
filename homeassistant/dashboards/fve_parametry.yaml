@@ -118,9 +118,6 @@ views:
         - entity: input_number.cfg_topeni_patron_max_grid_draw_w
         - entity: input_number.cfg_topeni_patron_max_sell_price
         - entity: input_number.cfg_topeni_patron_drain_soc_prah
-        - entity: input_number.cfg_topeni_patron_drain_w
-        - entity: input_number.cfg_topeni_patron_discharge_limit_w
-        - entity: input_number.cfg_topeni_patron_discharge_hyst
     - type: grid
       cards:
       - type: heading
@@ -159,11 +156,8 @@ views:
         entities:
         - entity: input_number.cfg_pool_ventil_start_c
         - entity: input_number.cfg_pool_nibe_min_runtime_sec
-        - entity: input_number.cfg_pool_nibe_solar_zere_baterii_kwh
         - entity: input_number.cfg_pool_nibe_plan_horizon_h
         - entity: input_number.cfg_pool_nibe_zaporna_cena_threshold
-        - entity: input_number.cfg_pool_nibe_zakaz_pretoku_solar_kwh
-        - entity: input_number.cfg_pool_nibe_w
     - type: grid
       cards:
       - type: heading
@@ -200,7 +194,6 @@ views:
         - entity: input_number.cfg_zaporna_prah_emergency_w
         - entity: input_number.cfg_zaporna_psp_boost_w
         - entity: input_number.cfg_zaporna_bat_max_discharge_w
-        - entity: input_number.cfg_zaporna_min_solar_passthrough_w
     - type: grid
       cards:
       - type: heading
@@ -252,15 +245,12 @@ views:
         state_color: true
         entities:
         - entity: input_number.cfg_plan_horizon_hours
-        - entity: input_number.cfg_plan_interval_min
         - entity: input_number.cfg_plan_aggressive_solar_day_kwh
         - entity: input_number.cfg_plan_aggressive_soc_pct
         - entity: input_number.cfg_plan_aggressive_remaining_solar_kwh
         - entity: input_number.cfg_plan_auto_demand_kwh
         - entity: input_number.cfg_plan_solar_insufficient_threshold_kwh
         - entity: input_number.cfg_plan_letni_min_solar_kwh
-        - entity: input_number.cfg_hystereze_zapnuti_w
-        - entity: input_number.cfg_hystereze_vypnuti_w
     - type: grid
       cards:
       - type: heading
