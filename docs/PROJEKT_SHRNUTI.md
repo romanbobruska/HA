@@ -395,6 +395,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.144: NABÍJENÍ AUTA — §5.1 sell-price guard používal hodinovou cenu místo čtvrthodinové (auto nabíjelo místo prodeje) (2026-06-17)
+
+**Symptom** (uživatel): „Proč se teď nabíjí auto, když mám v parametrech, že se má prodávat místo nabíjení?!" Uživatel ~1 h předtím změnil parametr `cfg_nabijeni_auta_max_sell_price` („Prodejní cena: prodávat místo nabíjení") na 2,1 Kč/kWh a měl podezření, že se změna nepropsala.
+
+**Root cause** (živá data): Propagace parametrů je OK — override (`fve-config.json`, node `Parametry z dashboardu`) je **event-driven** na každou `cfg_` změnu (`server-state-changed` regex `^(input_number|input_boolean)\.cfg_`), git==server, žádný periodický reset defaultů → práh 2,1 se propsal okamžitě. **Skutečný bug:** §5.1 SELL-PRICE GUARD v obou car-funkcích (`manager-nabijeni-auta` → `Rozhodovací logika v2.8` i `nabijeni-auta-slunce` → `Vypočítej max amperaci v2`) četl **hodinovou** prodejní cenu `input_number.aktualni_cena_prodej_kwh_h` (= 2,07). Práh 2,1 byl NAD hodinovou (2,07 < 2,1) → guard nespustil → auto nabíjelo dál. Aktuální **čtvrthodinová** cena `_q` = 2,56 (to, co uživatel vidí jako aktuální prodejní a podle čeho nastavil 2,1) byla NAD prahem → mělo se prodávat. ČR má 15min zúčtování, „aktuální prodejní cena" = čtvrthodinová.
+
+**Fix**: obě funkce čtou nově `input_number.aktualni_cena_prodej_kwh_q` (čtvrthodinová). MUSEL se změnit guard v OBOU současně — komentář v manageru přímo říká, že oba guardy musí používat STEJNOU cenu, jinak by se manager(ON) a korekční smyčka(OFF) cyklicky přepínaly. Čtvrthodinová cena je v rámci 15min bloku konstantní → žádný flapping uvnitř čtvrthodiny.
+
+**Ověřeno**: git==server před zásahem, 1 výskyt v každé funkci, `node --check` OK, diff minimální (4 řádky), deploy `--no-ha --branch=advanced`, server po deployi má `_q` v obou (=1, `_h`=0), NR logy bez chyb, merge do main.
+
+**Pozn.**: Stejný vzorec (hodinová `_h`) zůstává ještě v `pool-heating.json` (POOL guard) a v manageru u `sensor.current_spot_sell_price` pro zakaz-přetoků check (<=0, granularita irelevantní) — mimo rozsah tohoto fixu (auto). K případnému sjednocení na `_q` i jinde.
+
+
+---
+
+
 ## v25.143: ZÁMEK — §20.3 re-odemknutí po HW auto-relocku Yale (dveře zůstávaly zamčené po příjezdu) (2026-06-17)
 
 **Symptom** (uživatel, opakovaně): „Odkódoval jsem celý dům a zámek se NEODEMKL." Po disarmu celého domu zůstávaly hlavní dveře zamčené, než uživatel došel ke dveřím.
