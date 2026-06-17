@@ -395,6 +395,33 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.142: PLÁN — plan == realita: „PRODÁVAT“ v plánu se reálně neprodávalo (2026-06-17)
+
+**Symptom** (uživatel, opakovaně): v `sensor.fve_plan` svítil aktuální mód **Prodávat do sítě**, ale fyzicky se NEPRODÁVALO (např. ráno v H8). Plán a realita se rozcházely.
+
+**Root cause** (`fve-orchestrator.json`): exekutor `Kontrola podmínek` degraduje `prodavat→normal`, když živé SOC `≤ sellTargetSoc` (správně — nedrancovat noční rezervu), ALE publikovaný plán (node `5. Výstup plánu`) tuto degradaci na `currentMode`/`p[0]` neaplikoval. Navíc per-hour rezerva pro DRAŽŠÍ budoucí hodiny (§4.5 BUG B) zvedne `sellTargetSoc` až k aktuálnímu SOC — v levnější prodejní hodině se reálně neprodá nic, ale displej stále ukazoval `prodavat`.
+
+**Fix** (node `5. Výstup plánu`): po výpočtu `sTgt` pro aktuální prodejní hodinu — pokud `x.cSoc <= sTgt + 0.5` (není co prodat), nastav `currentMode="normal"` i `p[0].mode="normal"` s reason „Prodej odložen na dražší hodinu". Plán tak ukazuje přesně to, co exekutor udělá.
+
+**Ověřeno** (offline simulace nad nasazenou serverovou funkcí, 4 scénáře): A) SOC80>cíl20 bez dražších → zůstává `prodavat`; B) SOC25≤cíl40 → `normal`; C) levnější teď + dražší později, rezerva spotřebuje vše → `normal` (scénář H8); D) SOC90 částečný prodej nad rezervou → `prodavat`. `node --check` OK, deploy `--no-ha --branch=advanced`, NR logy čisté, `sensor.fve_plan` bez NaN (legitimní H20/H21 prodej zachován), merge do main.
+
+
+---
+
+
+## v25.141: PLÁN — `consAt` plausibilní práh spotřeby (půlnoční reset měřáku) (2026-06-16)
+
+**Symptom** (uživatel): plán/simulace ukazovala SOC 44 % konstantní mezi 00:00 a 01:00 (nulový pokles) → simulace nezohledňovala noční spotřebu, což vedlo k přehnaně optimistickému plánu a zbytečnému prodeji.
+
+**Root cause** (`fve-orchestrator.json`, node `2. Cena + replCost`, funkce `consAt`): historie spotřeby pro hodinu 0 (půlnoc) je poškozená (typicky `avgCons=0` nebo `0.01` kWh/h) kvůli půlnočnímu resetu měřáku. Filtry historie (`> 0`) nuly přeskočí, ale nakonec vrátí víkendovou `0.01` ≈ nula → nulový pokles SOC v simulaci.
+
+**Fix**: do `consAt` přidán plausibilní práh `_CONS_FLOOR` (výchozí 0.2 kWh/h). Hodnoty z historie pod práhem se považují za artefakt a ignorují, tím se vynutí fallback `C.dayCons/24`. Simulace SOC tak realisticky klesá i přes půlnoc.
+
+**Ověřeno live**: půlnoc (0:00) již odečítá spotřebu (`dSOC -3 %` místo `0 %`), SOC klesá realisticky přes noc, ráno doplní slunce, všechny hodiny `Normální provoz` (žádný prodej). `node --check` OK, git==server, deploy `--no-ha`.
+
+
+---
+
 
 ## v25.121: Prodej baterie ve špičce + plná baterie = NORMAL + zákon záporné ceny (2026-06-07)
 
