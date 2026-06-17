@@ -544,21 +544,31 @@ A ZAKAZU PRETOKU
         - Scheduled charging NEPOUŽITO.
 
     4.10.2 SPOTŘEBIČE — PRIORITY (od nejvyšší) — VŠECHNY MOHOU JET SOUČASNĚ!
-        1. NIBE — zapnout pokud nádrž < max_teplota_nadrze, BEZ ohledu na cenu/solar/čas
-        2. Nabíjení baterie — automaticky přes PSP, neomezeně
-        3. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě
-        4. Patrony — zapnout max fází BEZ ohledu na SOC/solar/auto_ma_hlad
-        5. Bojler — nastavit MAX (69°C) pokud je prostor pod jističem
+        ZMĚNA 17.6.2026 (uživatel): GRID JE KING. Cíl = odběr ~18 kW ze sítě (pásmo 15–21 kW,
+        oscilace ±3 kW), jistič max_spotreba_sit_w (22 kW) NIKDY nepřekročit. Nejdřív nasytit
+        UŽITEČNÉ škálovatelné spotřebiče, teprve potom „plýtvat" do bazénu přes NIBE.
+        NIBE → bazén (~12 kW, NEŠKÁLOVATELNÉ) je proto DUMP LOAD POSLEDNÍ PRIORITY, ne první!
+        1. Nabíjení auta — pokud auto_ma_hlad=ON, na maximální ampéráži ze sítě (škálovatelné 6–16 A)
+        2. Patrony → nádrž — max počet fází BEZ ohledu na SOC/solar/auto_ma_hlad (škálovatelné 3/6/9 kW)
+        3. Bojler — nastavit MAX (69°C) pokud je prostor pod jističem
            (max_spotreba_sit_w - aktuální_odběr >= 2500W). Ignoruje normální prahy přebytku,
            auto_ma_hlad degradaci a baterie/forecast podmínky. Bojler je VŽDY důležitější než filtrace!
-        6. Filtrace bazénu — NEJNIŽŠÍ PRIORITA. Zapnout JEN pokud je prostor pod jističem
-           (max_spotreba_sit_w - aktuální_odběr >= 2500W). I když minimum splněno (met=true).
+        4. Filtrace bazénu — zapnout pokud je prostor pod jističem (>= 2500W rezerva).
            NIBE kompresor NEBLOKUJE filtraci v tomto módu. T_FREEZE stále platí (bezpečnost).
            Anti-cycling a min continuous run (15 min) zachovány proti oscilaci.
-        KLÍČOVÝ ROZDÍL OD NORMÁLNÍHO REŽIMU:
-        - NIBE + patrony MOHOU jet současně! Patrony hřejí nádrž, NIBE topí dům.
-        - auto_ma_hlad NEBLOKUJE patrony! Auto i patrony jsou flexibilní (škálovatelné).
-        - Všechny flexibilní spotřebiče (patrony fáze, auto ampéráž) se přizpůsobí aktuální situaci.
+        5. Nabíjení baterie — automaticky přes PSP, neomezeně. Baterie je BUFFER: soaká
+           zbytek gridu, aby se držel cílový odběr ~18 kW, dokud se nenasytí.
+        6. NIBE → bazén — NEJNIŽŠÍ PRIORITA (DUMP LOAD). Zapnout JEN když už není co krmit:
+           skutečný odběr ze sítě klesl pod zaporna_nibe_grid_floor_w (default 15000 W) A
+           baterie se už nedobíjí (sensor.nabijeni_baterii_plus < zaporna_nibe_bat_charge_floor_w,
+           default 800 W = plná/limitovaná). Tj. bez NIBE bychom nedrželi cílový ~18 kW odběr.
+           Jakmile NIBE běží, počítá se s jeho ~12 kW a zbytek dorovnají škálovatelné spotřebiče.
+           Drží se dokud buy<=0 (běh), konec řeší strop teploty vody / min_runtime (kompresor §1.2).
+           Vyžaduje automatizovat_vytapeni_bazenu=ON (vypnutá automatizace = NIC, §4.10.4).
+
+        SOLÁR a VYBÍJENÍ BATERIE jsou jen BUFFERY / poslední možnost: pokud je kvůli držení
+        cíle nebo ochraně jističe potřeba OMEZIT solární výrobu nebo VYBÍT baterii (PowerAssist),
+        je to OK — ale primární je GRID. Solár se jinak plně využije (feedin když sell>0).
 
     4.10.3 SUSPENDOVANÁ PRAVIDLA (platí JEN v tomto módu — GAMECHANGER)
         - SOC minimum pro patrony (§8.5: 90%) — patrony jedou i při nízkém SOC
