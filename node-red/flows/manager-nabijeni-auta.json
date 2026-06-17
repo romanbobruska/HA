@@ -76,7 +76,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "180",
+        "repeat": "60",
         "crontab": "",
         "once": true,
         "onceDelay": 10,

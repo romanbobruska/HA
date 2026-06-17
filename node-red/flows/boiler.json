@@ -177,7 +177,7 @@
                 "p": "payload"
             }
         ],
-        "repeat": "120",
+        "repeat": "60",
         "crontab": "",
         "once": true,
         "onceDelay": "5",
