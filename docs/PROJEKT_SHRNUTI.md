@@ -395,6 +395,23 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.147: Mód záporné ceny — nulová=záporná + NIBE poslední priorita (2026-06-17)
+
+**Požadavek (problemy.txt)**: v módu záporné nákupní ceny (1) nulová cena = záporná, (2) NIBE NESMÍ naskříit před nasycením škálovatelných spotřebičů (NIBE 12 kW neflexibilní), (3) GRID king, cíl ~18 kW odběru, solár+baterie buffer, (4) korekce ≤2s, (5) vypnutá automatizace = NIC.
+
+**Změny (nasazeno --no-ha, git==server, NR bez chyb)**:
+- **1/ buy<=0**: `fve-orchestrator` „3. Solver per-hour“ + „4. Format plan“ — ZAP_NAK se aktivuje při `buy <= 0` (nulová cena = záporná). Pool NIBE c1 a zakazPretoku už <=0 měly.
+- **2/ NIBE poslední**: `pool-heating` „POOL NIBE decide“ — v záporné ceně je NIBE->bazén DUMP LOAD poslední priority. START jen když `grid < zaporna_nibe_grid_floor_w` (15000) A `baterie se nedobíjí < zaporna_nibe_bat_charge_floor_w` (800) = už není co krmit. Běh se drží dokud buy<=0 (anyKeep) — žádný short-cycle. Zákon **§4.10.2 přepsán** (GRID king, nové pořadí auto→patrony→bojler→filtrace→baterie→NIBE).
+- **3/ Grid-first/buffer**: již řeší PSP (~18 kW, `zaporna_psp_max_w`) + arbitr `zn_grid_guard` + PowerAssist (max_discharge=-1). Solár curtailment při zakazu přetoků (prevent_feedback=1). Bez změny kódu.
+- **4/ Korekce ≤2s**: arbitr tik `zb_inject` repeat=1s. Bez změny.
+- **5/ Automation off audit**: auto (manager+sit), topení, filtrace, pool — všechny respektují `automatizovat_*` (return null při OFF, i v záporném módu). OTEVŘENÉ: NIBE pool doběh min_runtime ~30 min po vypnutí automatizace = konflikt §1.2 (kompresor) — čeká na rozhodnutí uživatele.
+
+**Nové config klíče** (default, bez dashboard slideru): `zaporna_nibe_grid_floor_w: 15000`, `zaporna_nibe_bat_charge_floor_w: 800`.
+
+
+---
+
+
 ## v25.146: Odebrání 10 mrtvých dashboard sliderů (2026-06-17)
 
 **Pozadavek**: žádné mrtvé slidery v dashboardu, vše funguje dle zákonů.
