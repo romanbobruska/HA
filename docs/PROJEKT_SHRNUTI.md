@@ -395,6 +395,22 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.148: Vypnutá automatizace bazénu = NIC neovlivňovat (2026-06-17)
+
+**Požadavek (problemy.txt #4 + volba uživatele "nechat běžet, nesahat")**: když uživatel vypne `automatizovat_vytapeni_bazenu` a NIBE→bazén právě běží, automatizace nesmí poslat ŽÁDNÝ příkaz (ani `nibe_off`). NIBE zůstane v aktuálním stavu, uživatel ho ovládá ručně (§8.2 doslovný výklad "nic neovlivňovat").
+
+**Změna** (`pool-heating` POOL NIBE decide, nasazeno --no-ha, git==server, NR bez chyb):
+- Dříve: `if (!_letniLive || !_poolEnabledLive)` po doběhu min_runtime poslal `nibe_off` → po vypnutí automatizace NIBE ještě ~30 min běžel a pak ho automatizace VYPNULA (uživatel to vnímal jako neuposlechnutí).
+- Nyní rozděleno:
+  - `!_poolEnabledLive` (automatizace bazénu OFF) → **NIC**: vrátí null bez příkazu. Pokud NIBE běží, drží jen filtrace lock (safety cirkulace), jinak grey idle. Uživatel vypíná ručně.
+  - `!_letniLive` (zimní režim, automatizace ON) → ponecháno původní: doběh min_runtime (kompresor §1.2), pak `nibe_off`.
+
+**Audit ostatních spotřebičů**: auto (manager + sit), topení, filtrace již při svém `automatizovat_*` OFF vrací null (žádný příkaz) — odpovídá "nesahat". §8/§9 jednorázové bezpečnostní zastavení patron/bojleru ponecháno beze změny (neměněno bez explicitního pokynu).
+
+
+---
+
+
 ## v25.147: Mód záporné ceny — nulová=záporná + NIBE poslední priorita (2026-06-17)
 
 **Požadavek (problemy.txt)**: v módu záporné nákupní ceny (1) nulová cena = záporná, (2) NIBE NESMÍ naskříit před nasycením škálovatelných spotřebičů (NIBE 12 kW neflexibilní), (3) GRID king, cíl ~18 kW odběru, solár+baterie buffer, (4) korekce ≤2s, (5) vypnutá automatizace = NIC.
