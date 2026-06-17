@@ -395,6 +395,33 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.146: Odebrání 10 mrtvých dashboard sliderů (2026-06-17)
+
+**Pozadavek**: žádné mrtvé slidery v dashboardu, vše funguje dle zákonů.
+
+**Analýza** (zákony + skutečný kód): všech 10 „mrtvých" parametrů bylo obsolete/redundantních — žádná chybějící logika, protože zákonem požadované chování je buď implementováno globálně, nebo zákon pravidlo zrušil:
+- `topeni_patron_drain_w`, `topeni_patron_discharge_limit_w`, `topeni_patron_discharge_hyst` — patrony korekce reálně používá `topeni_patron_drain_soc_prah` + `topeni_patron_dead_band_w` + `topeni_patron_extreme_drain_w` (SOC-threshold). `_w` varianty jsou pozustatky.
+- `pool_nibe_solar_zere_baterii_kwh` — pravidlo „solár 8 kWh → nad žereme baterii" platí pro NIBE GLOBÁLNĚ (§11.6 ř.1365) přes `topeni_solar_override_w: 8000`. Redundantní.
+- `pool_nibe_zakaz_pretoku_solar_kwh` — zákon §11.6 (8.5.2026) ZRUŠIL případ „zákaz přetoků + solár ≥ 13 kWh".
+- `pool_nibe_w` — redundantní s globálním `nibe_est_consumption_kwh: 7` / `nibe_peak_w`.
+- `zaporna_min_solar_passthrough_w` — solarPassthrough je hardcoded `Math.max(50, solar)` (§12.1).
+- `plan_interval_min` — přepočet plánu je hardcoded 60s (§11.6.1 krok 3).
+- `hystereze_zapnuti_w`, `hystereze_vypnuti_w` — bez zákonného podkladu (zákony používají specifické: `topeni_hystereze_chlazeni`, `filtrace_surplus_off_w`, `filtrace_pool_temp_hysterese_c`).
+
+**Provedené změny**:
+- `homeassistant/input_numbers.yaml`: odebráno 10 bloků (−100 řádků).
+- `homeassistant/dashboards/fve_parametry.yaml`: odebráno 10 entit.
+- `node-red/flows/fve-config.json` PARAM_MAP: odebráno 10 entries.
+- Entity registry: 10 lingering `unavailable` entit odebráno přes WS API `config/entity_registry/remove`.
+
+**Ověřeno**: rekoncilace dashboard==PARAM_MAP==111 (0 mrtvých, 0 nemapovaných), final dead-check 0 mrtvých, git==server pro všechny ostatní nody, deploy s HA restartem, 10 entit PRYČ (404) na živém systému, HA RUNNING, NR bez chyb. 2 booleany `cfg_prodej_misto_nabijeni_enabled` + `cfg_sell_correction_enabled` (definované v configuration.yaml) zůstávají — jsou konzumované.
+
+**Stav dashboardu**: 111 sliderů, všechny se propisují do `fve_config` (≤ 1 s) A jsou konzumovány nějakou automatizací. Žádný mrtvý slider.
+
+
+---
+
+
 ## v25.145: AUDIT propagace dashboard parametrů + timing ≤ 1 min (2026-06-17)
 
 **Pozadavek uživatele**: ověřit, že se VŠECHNY dashboard parametry (`cfg_`) správně načítají do `fve_config` a NR automatizace je zohledňuje **do 1 minuty**.
