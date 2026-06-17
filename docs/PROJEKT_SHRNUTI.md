@@ -395,6 +395,29 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.149: 2 WALLBOXY (2cars) — per-charger split nabíjení (2026-06-17, branch 2cars)
+
+**Požadavek (problemy.txt)**: oba EV chargery (garáž + venek) se chovají STEJNĚ; 2 auta → split ampér ~50/50 (min 6A, garáž priorita); záporná cena → až 32 A (2×16) ~22 kW škálovatelně; dashboard ukazuje oba wallboxy. Branch `2cars`, test, pak merge.
+
+**Hardware**: GARÁŽ=evcharger/41 (charger_state_garage), VENEK=evcharger/40 (sensor.stav_wallboxu_venek; POZOR: charger_state_out NEEXISTUJE). Stav {1,2,6}=hlad.
+
+**Implementace (nasazeno na 2cars --no-ha, git==server, NR bez chyb)**:
+- **Splitter modul** `wb2_*` (manager flow, sdílený): dělí TOTAL budget mezi garáž/venek (50/50, lichý zbytek→garáž, B<12→jen garáž), per-charger start/stop, gating boolean off když nikdo. Aplikuje zn_auto_max_amps PER-CHARGER (arbitr peak krátí oba).
+- **sit budget**: MAX_AMP→16 cap → MAX_TOTAL=nHladových×16 (32A pro 2 auta v záporné), chargerAmpsTotal (oba). zn cap přesunut do splitteru.
+- **manager**: hlad = OR obou chargerů (i venek spustí). Globální stop nodes (manager/sit/solar) vypínají OBA wallboxy.
+- **solar**: rychle bypass ×nHungry, src=solar.
+- Budget funkce přepojeny přes link-out → wb2_link_in → splitter (místo mirror na oba selecty).
+- **template_sensors.yaml**: venek popis sensor charger_state_out → stav_wallboxu_venek (byl "Error - No Data").
+- **Zákon §7.4** (DVA WALLBOXY) + celý princip zdokumentován.
+
+**S 1 autem (současný stav)**: chování jako dříve (jediné auto dostane celý budget, venek off). Ověřeno živě.
+
+**Zbývá**: dashboard AUTO sekce (přidat venek, .storage, nutný HA reload/restart) + template.reload + test s 2 auty + merge do advanced/main.
+
+
+---
+
+
 ## v25.148: Vypnutá automatizace bazénu = NIC neovlivňovat (2026-06-17)
 
 **Požadavek (problemy.txt #4 + volba uživatele "nechat běžet, nesahat")**: když uživatel vypne `automatizovat_vytapeni_bazenu` a NIBE→bazén právě běží, automatizace nesmí poslat ŽÁDNÝ příkaz (ani `nibe_off`). NIBE zůstane v aktuálním stavu, uživatel ho ovládá ručně (§8.2 doslovný výklad "nic neovlivňovat").

@@ -834,6 +834,29 @@ A ZAKAZU PRETOKU
 7.3 AUTO MÁ HLAD — DEFINICE
     - input_boolean.auto_ma_hlad = ON nebo OFF. Pokud ON, auto se chce nabíjet, pokud OFF, auto uz je nabito. nic více, nic méně.
 
+7.4 DVA WALLBOXY (2 AUTA) — ROZDĚLENÍ NABÍJENÍ  [branch 2cars, user 17.6.2026]
+    HARDWARE: GARÁŽ = evcharger/41 (switch.wallbox_garaz_start_stop, select.wallboxu_garaz_amperace,
+      stav sensor.charger_state_garage). VENEK/ZAHRADA = evcharger/40 (switch.wallbox_zahrada_start_stop,
+      select.wallbox_venek_amperace, stav sensor.stav_wallboxu_venek). Stav: 0 odpojeno,1 připojeno,
+      2 nabíjí,3 nabito,6 čeká na start. "Hlad" daného wallboxu = stav ∈ {1,2,6}.
+    PRINCIP: Oba wallboxy se chovají STEJNĚ — auto připojené v garáži NEBO venku se nabíjí identicky.
+      Globální přepínače (automatizovat_nabijeni_auta, solarni_rezim_nabijeni_auta, chci_rychle_nabit_auto,
+      nabijet_auto_rano_3h) platí pro OBA. Hlad se detekuje AUTOMATICKY per wallbox ze stavu.
+      auto_ma_hlad (manager gate) = OR obou (stačí, aby mělo hlad jedno auto).
+    ROZDĚLENÍ BUDGETU (splitter, sdílený modul "Split 2WB"):
+      - Manager rozhodne MÓD (stop/solar/síť) globálně; budget-kalkulace spočítá TOTAL ampérový budget B.
+      - Oba hladové & B ≥ 12 A → každý clamp(B/2, 6, 16); lichý zbytek → GARÁŽ (priorita).
+      - B < 12 A (nestačí na 2×6) → jede JEN garáž clamp(B,6,16), venek čeká (priorita garáže).
+      - Jen jedno auto hladové → dostane celý budget clamp(B,6,16), druhý OFF.
+      - Per-charger start/stop: wallbox se zapne jen když dostal ≥6 A, jinak OFF (ne jen garáž jako dřív).
+    ZÁPORNÁ NÁKUPNÍ CENA — 2 AUTA = AŽ 32 A (~22 kW):
+      - Budget B se v záporné větvi (nabijeni-auta-sit) NESTROPUJE na 16 A, ale na (počet_hladových × 16) A
+        — tj. 2 auta umožní TOTAL až 32 A, tvrdě limitováno jističem max_spotreba_sit_w.
+      - Plně ŠKÁLOVATELNÉ po 1 A. Arbitr zn_grid_guard (zn_auto_max_amps) se při peaku aplikuje
+        PER-CHARGER ve splitteru → krátí oba wallboxy → jistič zůstává svatý (§4.10.5, §1.2 jistič).
+    BEZPEČNOST: TOTAL odběr obou chargerů NIKDY nepřekročí jistič. Při globálním stopu (manager,
+      SELL-guard, atd.) se vypínají OBA wallboxy (ne jen garáž). Vypnutá automatizace = NIC (§5.0).
+
 ================================================================================
 8. FLOW: TOPENÍ DOMU (fve-heating.json)
 ================================================================================
