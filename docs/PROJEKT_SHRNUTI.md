@@ -395,6 +395,33 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.145: AUDIT propagace dashboard parametrů + timing ≤ 1 min (2026-06-17)
+
+**Pozadavek uživatele**: ověřit, že se VŠECHNY dashboard parametry (`cfg_`) správně načítají do `fve_config` a NR automatizace je zohledňuje **do 1 minuty**.
+
+**Výsledky auditu** (skripty: porovnání HA `cfg_` entit vs PARAM_MAP vs konzumace `cfg.<klic>` ve všech flow):
+- **Propagace 100 %**: 121 HA `cfg_` entit = 121 záznamů v PARAM_MAP (override `Parametry z dashboardu`). Žádný parametr nechybí. Override je **event-driven** (`server-state-changed` regex `cfg_`) → zápis do `fve_config` do ~1 s po změně. Žádný periodický reset defaultů.
+- **Čtení čerstvé**: 40 funkcí čte `global.get("fve_config")` v TĚLE funkce (0× cache při startu) → každý cyklus bere aktuální hodnoty.
+- **TIMING FIX**: tři flow měly heartbeat > 60 s, takže config-only změna (bez změny senzoru) se projevila až za 2–3 min. Zkráceno na 60 s: `boiler.json` (120→60), `filtrace-bazenu.json` (120→60), `manager-nabijeni-auta.json` (180→60). Ostatní flow již tikaly ≤60 s (auta solar 10 s, plan 15–30 s, topení 60 s, ...). Merge bere `repeat` z gitu (ověřeno v `deploy_merge_flows.py`).
+
+**Ověřeno**: git==server před zásahem, diff jen `repeat` (3 řádky), deploy `--no-ha`, server má repeat=60 na všech třech, NR logy bez chyb, merge do main.
+
+**NALEZENO — 10 „mrtvých" sliderů** (propisují se do `fve_config`, ale žádná funkce je nečte → změna nemá efekt). Čeká na rozhodnutí uživatele (zapojit dle zákonů / odebrat slider):
+- `topeni_patron_discharge_limit_w` (Limit vybíjení baterie při patronách)
+- `topeni_patron_drain_w` (Cíl vybíjení při korekci patron)
+- `topeni_patron_discharge_hyst` (Hystereze vybíjení patron)
+- `pool_nibe_solar_zere_baterii_kwh` (Solar práh: NIBE smí brát z baterie — §11.6.1 to vyžaduje!)
+- `pool_nibe_zakaz_pretoku_solar_kwh` (Min. solar pro zákaz přetoků → bazén)
+- `pool_nibe_w` (Odhad spotřeby NIBE pro bazén)
+- `zaporna_min_solar_passthrough_w` (Min. solar passthrough)
+- `hystereze_zapnuti_w` (Hystereze zapnutí spotřebičů)
+- `hystereze_vypnuti_w` (Hystereze vypnutí spotřebičů)
+- `plan_interval_min` (Interval přepočtu plánu — reálně je hardcoded 60s inject)
+
+
+---
+
+
 ## v25.144: NABÍJENÍ AUTA — §5.1 sell-price guard používal hodinovou cenu místo čtvrthodinové (auto nabíjelo místo prodeje) (2026-06-17)
 
 **Symptom** (uživatel): „Proč se teď nabíjí auto, když mám v parametrech, že se má prodávat místo nabíjení?!" Uživatel ~1 h předtím změnil parametr `cfg_nabijeni_auta_max_sell_price` („Prodejní cena: prodávat místo nabíjení") na 2,1 Kč/kWh a měl podezření, že se změna nepropsala.
