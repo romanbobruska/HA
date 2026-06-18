@@ -397,6 +397,30 @@ Všechny NR funkce zkráceny na ≤100 řádků. Hardcoded hodnoty nahrazeny con
 ---
 
 
+## v25.150: CHYTRÉ CHLAZENÍ — odsun z drahých nočních hodin (§8.0 B v3) (2026-06-18)
+
+**Požadavek (problemy.txt)**: chlazení má fungovat jako zimní topení přes NIBE — za co
+nejlepších podmínek. Když je drahá elektřina + prodali jsme + nesolární hodina + zítra
+velká výroba → přesunout chlazení na solární hodiny místo vybíjení baterie; využít
+komfortní pásmo ±~0,4 °C.
+
+**Diagnóza**: chlazení (`fve-heating.json`, node „2. Rozhodování topení") bylo čistý
+termostat bez cenové logiky — noční větev `cool_on` při `inT > tgtT+0,2`, `cool_off`
+při `inT ≤ tgtT`. V 23:00 (buy 5,44 Kč, level 18, nesolární, baterie se vybíjí) tak
+chladilo z 23,3 → 23,0 °C bez ohledu na cenu i přes velkou zítřejší předpověď.
+
+**Změny (nasazeno --no-ha, git==server, NR bez chyb)**:
+- **`fve-heating.json`** (node „2. Rozhodování topení"): v noční větvi přidán defer —
+  `_coolDeferNow = h.isDraha && h.bigSolTom`. Když platí, dům driftuje až na
+  `tgtT + chlazeni_levne_drift_c` (def. 0,4 °C), `cool_off` při `inT ≤ tgtT+drift−nocniHyst`.
+  Jinak beze změny (těsná `chlazeni_nocni_hystereze_c` 0,2 °C). Předchlazení v solárních
+  hodinách (v2) zůstává.
+- **`fve-config.json`** (Nastav konfiguraci): nový default `chlazeni_levne_drift_c: 0.4`.
+- **`User inputs/ZAKONY.TXT`** §8.0 B: doplněn podblok v2/v3 (předchlazení + odsun) a
+  výjimka u věty o konstantní noční teplotě.
+- Dashboard slider zatím NEpřidán (vyžadoval by restart HA Core); drift se ladí přes
+  config default / NR. Lze doplnit `cfg_chlazeni_levne_drift_c` při příštím full deployi.
+
 ## v25.149: 2 WALLBOXY (2cars) — per-charger split nabíjení (2026-06-17, branch 2cars)
 
 **Požadavek (problemy.txt)**: oba EV chargery (garáž + venek) se chovají STEJNĚ; 2 auta → split ampér ~50/50 (min 6A, garáž priorita); záporná cena → až 32 A (2×16) ~22 kW škálovatelně; dashboard ukazuje oba wallboxy. Branch `2cars`, test, pak merge.
