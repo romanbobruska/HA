@@ -395,24 +395,3 @@
     plan: "{{ state_attr('sensor.fve_plan_data', 'plan') | default([]) }}"
     last_update: "{{ state_attr('sensor.fve_plan_data', 'last_update') | default(now().isoformat()) }}"
     blokace_text: "{{ state_attr('sensor.fve_plan_data', 'blokace_text') | default('NE') }}"
-
-- name: "Tesla SOC"
-  unique_id: tesla_soc_latched
-  unit_of_measurement: "%"
-  device_class: battery
-  state_class: measurement
-  icon: mdi:car-electric
-  picture: "/local/tesla.png?v=2"
-  state: >
-    {% set v = states('sensor.tesla_bobrici_uroven_baterie') %}
-    {% if v not in ['unknown','unavailable','none',''] %}{{ v | int }}
-    {% elif this.state not in ['unknown','unavailable','none',''] %}{{ this.state }}
-    {% else %}{{ none }}{% endif %}
-  attributes:
-    zdroj_ziva: "{{ states('sensor.tesla_bobrici_uroven_baterie') not in ['unknown','unavailable','none',''] }}"
-    zdroj_raw: "{{ states('sensor.tesla_bobrici_uroven_baterie') }}"
-
-- name: "Tesla logo"
-  unique_id: tesla_logo_badge
-  state: "Tesla"
-  picture: "/local/tesla.png?v=2"

@@ -30,6 +30,24 @@ template:
   - sensor: !include template_sensors.yaml
   - switch: !include template_switches.yaml
 
+  - trigger:
+      - platform: state
+        entity_id: sensor.tesla_bobrici_uroven_baterie
+        not_to:
+          - unavailable
+          - unknown
+          - none
+    sensor:
+      - name: "Tesla SOC"
+        unique_id: tesla_soc_latched
+        device_class: battery
+        state_class: measurement
+        unit_of_measurement: "%"
+        icon: mdi:car-electric
+        state: "{{ trigger.to_state.state | int }}"
+        attributes:
+          zdroj_raw: "{{ trigger.to_state.state }}"
+
 # OVLÁDÁNÍ FVE
 # -----------------------------------------------------------------------------
 # COMMAND LINE - Čtení JSON souboru s plánem
