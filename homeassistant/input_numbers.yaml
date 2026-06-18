@@ -1121,6 +1121,16 @@ cfg_chlazeni_nocni_hystereze_c:
   mode: slider
   initial: 0.2
 
+cfg_chlazeni_levne_drift_c:
+  name: "Chlazeni - drift v drahe noci"
+  min: 0
+  max: 3
+  step: 0.1
+  unit_of_measurement: "°C"
+  icon: mdi:thermometer
+  mode: slider
+  initial: 0.4
+
 cfg_chlazeni_predchlazeni_offset_c:
   name: "Předchlazení — offset"
   min: 0
