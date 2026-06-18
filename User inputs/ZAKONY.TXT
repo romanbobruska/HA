@@ -1366,15 +1366,25 @@ A ZAKAZU PRETOKU
        Uživatel přes bazen_na_max výslovně potvrdil, že v ultralevné ceně síť akceptuje
        výměnou za rychlost natopení (viz dnešní zpřesnění 23. 5. 2026 níže).
 
-    POZNÁMKA — pro DRAHÉ hodiny (buy > 1 Kč) v bazen_na_max + zákaz přetoků NIKDY
-    nejede NIBE, i kdyby solar pokrýval. Místo NIBE jedou PATRONY → NÁDRŽ (§11.7,
-    výjimka „bazen_na_max + zákaz přetoků"), které jsou škálovatelné po fázích
-    (3 / 6 / 9 kW per §8.5) a korekční smyčka dynamicky přizpůsobí počet fází
-    skutečnému solárnímu přebytku. NIBE je 3,5 kW fix — jakmile auto začne nabíjet
-    nebo dům zvedne spotřebu, NIBE by žralo ze sítě. Patrony se v té chvíli prostě
-    sníží na 0 fází a nádrž počká.
-    Tj. NIBE → bazén běží JEN v případech 1 a 2 (záporná NEBO ultralevná cena).
-    Pro „pomalé natopení nádrže za drahých hodin se zákazem přetoků" slouží patrony.
+    3. ZÁKAZ PŘETOKŮ + SOLÁRNÍ HODINA + bazen_na_max = ON  (uživatel 18. 6. 2026)
+       (sell ≤ 0  NEBO  current_mode = "zakaz_pretoku")  AND  isSolarHour = true  AND  bazen_na_max = ON
+       → NIBE → bazén jede BEZ OHLEDU NA NÁKUPNÍ CENU.
+       Důvod (lidsky): při zákazu přetoků je solární přebytek jinak ořezávaný (nevyplatí se / nesmí
+       prodávat). V solární hodině je proto výhodnější ho nasypat do bazénu přes NIBE než ho zahodit.
+       Uživatel výslovně řekl: „NIBE má běžet za nejvýhodnějších podmínek = zákaz přetoků + solární
+       výroba, bez ohledu na cenu." Tím VĚDOMĚ ruší své rozhodnutí z 23. 5. 2026 (které pro tyto
+       hodiny preferovalo škálovatelné patrony místo NIBE).
+       GATE isSolarHour: mimo solární hodiny (noc) případ 3 NEPLATÍ — brání topení bazénu ze sítě v noci.
+       UPOZORNĚNÍ: NIBE je ~12 kW NEškálovatelné — pokud solár nestačí, část se dobere ze sítě.
+       To uživatel akceptuje (potvrzeno 18. 6. 2026).
+
+    POZNÁMKA (aktualizováno 18. 6. 2026) — pro DRAHÉ hodiny (buy > 1 Kč) v bazen_na_max platí:
+    pokud je SOLÁRNÍ HODINA + zákaz přetoků, NIBE JEDE (případ 3 výše). Mimo solární hodiny
+    (noc, bez výroby) NIBE v drahých hodinách NEjede — místo něj jedou PATRONY → NÁDRŽ (§11.7,
+    výjimka „bazen_na_max + zákaz přetoků"), škálovatelné po fázích (3 / 6 / 9 kW per §8.5),
+    které neberou ze sítě. SOUBĚH patrony (nádrž) + NIBE (výměník) je povolený (§11.7) — patrony
+    se škálují podle zbytkového přebytku.
+    Tj. NIBE → bazén běží v případech 1, 2 a 3.
 
     DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění:
        - 8. 5. 2026: zrušen samostatný případ „ZÁKAZ PŘETOKŮ + SOLÁR ≥ 13 kWh" — zákaz
@@ -1390,6 +1400,12 @@ A ZAKAZU PRETOKU
          na 0 fází okamžitě. NIBE → bazén jede tedy POUZE v ultralevných hodinách nebo
          při záporné nákupní ceně. Plánovač (§11.6.1) zůstává jen jako info pro UI
          (sensor.fve_plan, atribut isPoolNibeHour), nikoli jako trigger.
+       - 18. 6. 2026: PŘIDÁN případ 3 „ZÁKAZ PŘETOKŮ + SOLÁRNÍ HODINA + bazen_na_max". Uživatel
+         VĚDOMĚ obrátil rozhodnutí z 23. 5. 2026 (v2): v solárních hodinách se zákazem přetoků má
+         NIBE → bazén jet BEZ OHLEDU NA CENU, protože přebytek jinak ořezáváme. Akceptuje, že NIBE
+         (~12 kW) může část dobírat ze sítě. Gate isSolarHour drží noční ochranu (mimo slunce NIBE
+         z gridu nejede). Patrony (§11.7) zůstávají pro non-solar drahé hodiny + souběžně jako
+         škálovatelná nádrž.
 
     Mimo tyto případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
     Ve všech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
