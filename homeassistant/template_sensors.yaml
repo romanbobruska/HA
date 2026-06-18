@@ -411,3 +411,8 @@
   attributes:
     zdroj_ziva: "{{ states('sensor.tesla_bobrici_uroven_baterie') not in ['unknown','unavailable','none',''] }}"
     zdroj_raw: "{{ states('sensor.tesla_bobrici_uroven_baterie') }}"
+
+- name: "Tesla logo"
+  unique_id: tesla_logo_badge
+  state: "Tesla"
+  picture: "/local/tesla.png"
