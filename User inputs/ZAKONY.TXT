@@ -899,6 +899,9 @@ A ZAKAZU PRETOKU
          `topeni_nocni_snizeni` a `topeni_high_sol_snizeni` se týkají
          pouze topení v zimě). V noci se tedy chladí na úplně stejnou
          teplotu jako přes den — uživatel chce konstantní komfort.
+         VÝJIMKA: chytrá optimalizace chlazení podle ceny a soláru
+         (předchlazení v solárních hodinách a odsun chlazení z drahých
+         nočních hodin) — viz § 8.0 B v2/v3 níže.
        - Chlazení domu (NIBE chlazení, `switch.nibe_chlazeni`) se aktivuje
          pouze tehdy, když platí VŠECHNY tyto podmínky najednou:
            * letní režim je zapnutý (`input_boolean.letni_rezim` = ON),
@@ -922,6 +925,30 @@ A ZAKAZU PRETOKU
          chlazení dohánělo zbytečně dlouho a draho. Lépe je držet stálou
          teplotu — solární přebytek je v létě obvykle dost na to, aby
          chlazení běželo skoro zadarmo.
+
+       --- § 8.0 B v2/v3: CHYTRÁ OPTIMALIZACE CHLAZENÍ (cena + solár) ---
+       Cíl: chladit za co NEJLEPŠÍCH PODMÍNEK (analogie zimního topení přes
+       NIBE), při komfortu v rozmezí cca ±0,4 °C kolem nastavené teploty.
+
+       - PŘEDCHLAZENÍ V SOLÁRNÍCH HODINÁCH (v2): v solární hodině s dostatečným
+         přebytkem (výroba nebo přebytek ≥ `chlazeni_predchlazeni_min_solar_w`,
+         def. 2000 W) se chladí HLOUBĚJI, až na nastavenou teplotu
+         − `chlazeni_predchlazeni_offset_c` (def. 0,5 °C). Tím se do domu uloží
+         „banka chladu" zdarma ze slunce.
+
+       - ODSUN CHLAZENÍ Z DRAHÝCH NOČNÍCH HODIN (v3): v NESOLÁRNÍ (noční) hodině,
+         která je DRAHÁ (level ≥ prah drahé energie) A SOUČASNĚ je na zítřek velká
+         předpověď solární výroby (`bigSolTom`, tj. zítřejší výroba
+         ≥ `topeni_solar_forecast_kwh`), se chlazení ODSUNE: dům se nechá driftovat
+         až na nastavenou teplotu + `chlazeni_levne_drift_c` (def. 0,4 °C), místo
+         chlazení na tgtT + 0,2 °C. Smysl: NEvybíjet baterii ani NEkupovat drahou
+         noční síť kvůli chlazení, když zítra solár dům ochladí prakticky zdarma.
+         Pokud teplota přesto vystoupá nad strop (tgtT + drift), chlazení se zapne
+         jen těsně pod strop (minimální zásah — komfort má přednost).
+
+       - V OSTATNÍCH NOČNÍCH HODINÁCH (levná hodina NEBO zítra málo slunce) platí
+         těsná noční hystereze `chlazeni_nocni_hystereze_c` (def. 0,2 °C) jako dosud
+         — chladí se na nastavenou teplotu, protože odsun by se nevyplatil.
 
 8.1 TOPENÍ MOD — KLÍČOVÝ KONCEPT
     ┌──────────┬────────────────────────────────────────────────────┐
