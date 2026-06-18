@@ -402,6 +402,7 @@
   device_class: battery
   state_class: measurement
   icon: mdi:car-electric
+  picture: "/local/tesla.svg"
   state: >
     {% set v = states('sensor.tesla_bobrici_uroven_baterie') %}
     {% if v not in ['unknown','unavailable','none',''] %}{{ v | int }}
