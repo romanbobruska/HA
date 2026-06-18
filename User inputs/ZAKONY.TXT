@@ -206,7 +206,12 @@ jistá, NEZASADÍ a vysvětlí proč.
 
             1. Předpověď zítřejší solární výroby je VYŠŠÍ než přibližně 50 kWh
                (parametr v konfiguraci plan_aggressive_solar_day_kwh, výchozí 50).
-            2. Auto NEMÁ hlad (input_boolean.auto_ma_hlad = OFF).
+            2. Auto NEMÁ hlad (input_boolean.auto_ma_hlad = OFF)
+               NEBO je Tesla nabitá nad práh (sensor.tesla_soc ≥ plan_sell_min_tesla_soc,
+               výchozí 65 %). Tj. i s „hladovým" autem PRODÁVÁME, pokud je Tesla už dost
+               nabitá — auto si zítřejší solár tolik nevezme, takže přebytek raději
+               prodáme za vysokou cenu. (uživatel 18. 6. 2026 večer; parametr je v
+               dashboardu „Parametry FVE" v sekci Auto, na obou záložkách.)
 
           ZMĚNA 18. 6. 2026 (uživatel): „Bazén na max" (input_boolean.bazen_na_max) UŽ
           NEOVLIVŇUJE prodej. V létě svítí dost — prodej za vysoké ceny má PŘEDNOST před

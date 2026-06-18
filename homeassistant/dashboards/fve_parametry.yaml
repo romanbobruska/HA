@@ -52,6 +52,7 @@ views:
             entities:
               - entity: input_number.cfg_nabijeni_auta_cena_prah_vyssi
               - entity: input_number.cfg_nabijeni_auta_min_soc
+              - entity: input_number.cfg_plan_sell_min_tesla_soc
               - entity: input_number.cfg_filtrace_pool_temp_threshold_c
   - title: Vše (pokročilé)
     path: vse
@@ -87,6 +88,7 @@ views:
         - entity: input_number.cfg_nabijeni_auta_soc_charge_w
         - entity: input_number.cfg_nabijeni_auta_target_batt_w
         - entity: input_number.cfg_rychle_nabit_deadline_h
+        - entity: input_number.cfg_plan_sell_min_tesla_soc
     - type: grid
       cards:
       - type: heading

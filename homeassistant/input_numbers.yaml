@@ -1150,3 +1150,13 @@ cfg_chlazeni_spotreba_kwh_h:
   icon: mdi:snowflake
   mode: slider
   initial: 1.0
+
+cfg_plan_sell_min_tesla_soc:
+  name: "Prodávat i s hladovým autem nad SOC Tesly"
+  min: 0
+  max: 100
+  step: 1
+  initial: 65
+  unit_of_measurement: "%"
+  icon: mdi:car-electric
+  mode: slider
