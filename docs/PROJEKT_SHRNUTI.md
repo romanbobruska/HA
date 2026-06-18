@@ -418,8 +418,8 @@ chladilo z 23,3 → 23,0 °C bez ohledu na cenu i přes velkou zítřejší pře
 - **`fve-config.json`** (Nastav konfiguraci): nový default `chlazeni_levne_drift_c: 0.4`.
 - **`User inputs/ZAKONY.TXT`** §8.0 B: doplněn podblok v2/v3 (předchlazení + odsun) a
   výjimka u věty o konstantní noční teplotě.
-- Dashboard slider zatím NEpřidán (vyžadoval by restart HA Core); drift se ladí přes
-  config default / NR. Lze doplnit `cfg_chlazeni_levne_drift_c` při příštím full deployi.
+- Dashboard slider PŘIDÁN: `input_number.cfg_chlazeni_levne_drift_c` (init 0.4, záložka Vše)
+  + PARAM_MAP v `fve-config.json`. Nasazeno --no-ha + `input_number.reload` (BEZ restartu HA Core).
 
 ## v25.149: 2 WALLBOXY (2cars) — per-charger split nabíjení (2026-06-17, branch 2cars)
 

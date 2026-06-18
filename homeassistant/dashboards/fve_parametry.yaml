@@ -275,3 +275,4 @@ views:
         - entity: input_number.cfg_chlazeni_predchlazeni_offset_c
         - entity: input_number.cfg_chlazeni_predchlazeni_min_solar_w
         - entity: input_number.cfg_chlazeni_spotreba_kwh_h
+        - entity: input_number.cfg_chlazeni_levne_drift_c
