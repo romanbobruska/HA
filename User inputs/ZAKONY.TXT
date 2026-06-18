@@ -1382,8 +1382,10 @@ A ZAKAZU PRETOKU
     pokud je SOLÁRNÍ HODINA + zákaz přetoků, NIBE JEDE (případ 3 výše). Mimo solární hodiny
     (noc, bez výroby) NIBE v drahých hodinách NEjede — místo něj jedou PATRONY → NÁDRŽ (§11.7,
     výjimka „bazen_na_max + zákaz přetoků"), škálovatelné po fázích (3 / 6 / 9 kW per §8.5),
-    které neberou ze sítě. SOUBĚH patrony (nádrž) + NIBE (výměník) je povolený (§11.7) — patrony
-    se škálují podle zbytkového přebytku.
+    které neberou ze sítě. SOUBĚH patrony (nádrž) + NIBE (výměník) je povolený POUZE při
+    ZÁPORNÉ/NULOVÉ NÁKUPNÍ CENĚ (buy ≤ 0, mód zaporna_nakupni_cena). PŘI ZÁKAZU PŘETOKŮ (buy > 0)
+    běží NIBE (případ 3) a patrony se NESMÍ spustit současně — patrony jedou jen v non-solar
+    hodinách, kdy NIBE stojí (uživatel 18. 6. 2026).
     Tj. NIBE → bazén běží v případech 1, 2 a 3.
 
     DŮLEŽITÉ — co se ZMĚNILO oproti dřívějšímu znění:
@@ -1404,8 +1406,9 @@ A ZAKAZU PRETOKU
          VĚDOMĚ obrátil rozhodnutí z 23. 5. 2026 (v2): v solárních hodinách se zákazem přetoků má
          NIBE → bazén jet BEZ OHLEDU NA CENU, protože přebytek jinak ořezáváme. Akceptuje, že NIBE
          (~12 kW) může část dobírat ze sítě. Gate isSolarHour drží noční ochranu (mimo slunce NIBE
-         z gridu nejede). Patrony (§11.7) zůstávají pro non-solar drahé hodiny + souběžně jako
-         škálovatelná nádrž.
+         z gridu nejede). Patrony (§11.7) jedou pro non-solar drahé hodiny (kdy NIBE stojí).
+         SOUBĚH patrony+NIBE je povolen JEN při buy ≤ 0 (záporná/nulová nákupní cena), NE při
+         zákazu přetoků (buy > 0) — patrony se při běžícím NIBE v zákazu přetoků VYPNOU.
 
     Mimo tyto případy se NIBE → bazén NIKDY nespouští (topí se jen přes nádrž, §11.2a).
     Ve všech případech platí: NIBE musí běžet minimálně 30 min v kuse (kompresor, §1.2),
@@ -1445,6 +1448,9 @@ A ZAKAZU PRETOKU
       Když platí bazen_na_max = ON  AND  zákaz přetoků (sell ≤ 0 nebo current_mode
       = "zakaz_pretoku") AND  buy_price > config.prah_ultra_levna_nakup (= NEní ultralevná),
       pak se gates „SOC ≥ 90 %" a „solar ≥ 5 kW" SUSPENDUJÍ a patrony jsou ALLOWED.
+      KOREKCE 18. 6. 2026: tato výjimka platí JEN když NEběží NIBE → bazén. Jakmile v zákazu
+      přetoků naběhne NIBE (případ 3, solární hodina), patrony se VYPNOU — souběh patrony+NIBE
+      je povolen pouze při záporné/nulové nákupní ceně (buy ≤ 0), viz §11.6.
       Důvod (lidsky): NIBE bere fixní cca 3,5 kW — pokud solar v daný moment generuje
       jen 3 kW, NIBE by si vzala 0,5 kW ze sítě (z gridu). To uživatel nechce.
       Patrony jsou na rozdíl od NIBE škálovatelné po fázích (3 / 6 / 9 kW per §8.5),
