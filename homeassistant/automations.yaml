@@ -114,3 +114,25 @@
           - switch.wallbox_garaz_start_stop
           - switch.wallbox_zahrada_start_stop
   mode: single
+
+- id: "1750800000001"
+  alias: "Filtrace - default doby pri prepnuti letni/zimni rezim"
+  description: "ZAKONY §10.2: pri prepnuti input_boolean.letni_rezim nastavi cfg_filtrace_doba_min na default (leto/zima)"
+  triggers:
+    - trigger: state
+      entity_id: input_boolean.letni_rezim
+      to: "on"
+      id: leto
+    - trigger: state
+      entity_id: input_boolean.letni_rezim
+      to: "off"
+      id: zima
+  conditions: []
+  actions:
+    - action: input_number.set_value
+      target:
+        entity_id: input_number.cfg_filtrace_doba_min
+      data:
+        value: >
+          {% if trigger.id == 'leto' %}{{ states('input_number.cfg_filtrace_doba_default_leto_min') | int(120) }}{% else %}{{ states('input_number.cfg_filtrace_doba_default_zima_min') | int(60) }}{% endif %}
+  mode: single

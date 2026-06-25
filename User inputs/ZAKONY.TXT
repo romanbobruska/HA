@@ -1183,93 +1183,118 @@ A ZAKAZU PRETOKU
 10. FLOW: FILTRACE BAZÉNU (filtrace-bazenu.json)
 ================================================================================
 
+    PŘEPRACOVÁNO 25.6.2026 (uživatel, problemy.txt): denní doba filtrace je PARAMETR
+    v dashboardu (default dle režimu, ruční přepis se respektuje). V TEPLÉ VODĚ (≥ 10 °C)
+    je hlavním cílem CHLORACE (ORP) — "voda musí být čistá, mám malého syna". Ve STUDENÉ
+    vodě (< 10 °C) se jen splní nastavená doba. Pod 5 °C se nefiltruje vůbec.
+
 10.1 ZÁKLADNÍ PRAVIDLA
-    - Filtrace bazénu je KRITICKÁ pro kvalitu vody — bez filtrace se tvoří řasy a bakterie
-    - Filtrace bere ze sítě ~2.5 kW pokud je zapnutá
-    - Filtrace musí běžet v kuse alespoň 15 minut (konfigurovatelny parametr) - nepřerušovat nikdy, pokud není splněna tato podmínka!
-    - Ovládá se přes: switch.filtrace
-    - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1 
-    - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu
-    - Rozhodování každé 2 minuty (inject → gate → data chain → rozhodovací funkce)
-    - FILTRACE NESMÍ BĚŽET DÉLE, NEŽ JE POŽADOVÁNO, ZÁROVEŇ MUSÍ BÝT DODRŽENA MINIMÁLNÍ DOBA BĚHU
-    - pokud je teplota vody nizsi nez 2 stupne, filtrace NESMI BEZET!!! FILTRACE SE ZAPINA JEN TEHDY, POKUD JE TEPLOTA VODY VYSSI NEZ 2 STUPNE!
-        - TOTO JE KONFIGUROVATELENY PARAMETR
-    - DO CELKOVEHO CASU FILTRACE BAZENU SE ZAPOCITAVA VESKERA FILTRACE - VCETNE MANUALNIHO SPUSTENI FILTRACE
-    - ROZHODOVÁNÍ O DENNÍ DOBĚ BĚHU SE ŘÍDÍ VÝHRADNĚ TEPLOTOU VODY V BAZÉNU — NIKOLIV input_boolean.letni_rezim.
-        Detail viz §10.2 (prahy + hystereze).
-    - HARD CUT-OFF: Pokud teplota vody ≤ filtrace_pool_temp_min (výchozí 2 °C), filtrace NESMÍ BĚŽET — žádná výjimka.
+    - Filtrace bazénu je KRITICKÁ pro kvalitu vody — bez filtrace se tvoří řasy a bakterie.
+    - Filtrace bere ze sítě ~2.5 kW pokud je zapnutá. Ovládá se přes switch.filtrace.
+    - Teplota bazénu: sensor.hp2551ae_pro_v2_1_0_temperature_1.
+    - Chlorace (ORP): sensor.exo_pool_orp.
+    - Automatizace: input_boolean.automatizovat_filtraci_v_bazenu (OFF = NEOVLÁDAT NIC).
+    - Rozhodování každé 2 minuty. Do celkového času se započítává VEŠKERÁ filtrace (i manuální).
+    - HARD CUT-OFF: teplota vody ≤ filtrace_pool_temp_min (5 °C) → filtrace NESMÍ BĚŽET, žádná výjimka.
 
- 10.2 MINIMÁLNÍ DENNÍ DOBA BĚHU (dle TEPLOTY VODY, NEZÁVISLE na letním/zimním režimu)
-    - input_boolean.letni_rezim NESMÍ být vstupem do tohoto rozhodnutí.
-    - Teplota vody (sensor.hp2551ae_pro_v2_1_0_temperature_1) určuje denní limit:
-        a) Teplota ≤ filtrace_pool_temp_min (2 °C)                       → filtrace VŮBEC NEBĚŽÍ (§10.1 hard cut-off)
-        b) filtrace_pool_temp_min < teplota < práh_studena_tepla         → min filtrace_min_studena_min (60 min/den)
-        c) Teplota ≥ práh_studena_tepla                                  → min filtrace_min_tepla_min  (120 min/den)
-    - PRÁH STUDENÁ↔TEPLÁ S HYSTEREZÍ (proti oscilaci kolem 10 °C):
-        * práh přechodu STUDENÁ → TEPLÁ : teplota ≥ filtrace_pool_temp_threshold_c                               (default 10 °C)
-        * práh přechodu TEPLÁ → STUDENÁ : teplota <  filtrace_pool_temp_threshold_c − filtrace_pool_temp_hysterese_c (default 10−1 = 9 °C)
-        * Mezi 9 °C a 10 °C režim drží předchozí stav (flow context: filt_temp_band ∈ {"studena", "tepla"}).
-        * Při startu flow (žádný předchozí stav): rozhodne aktuální teplota vůči filtrace_pool_temp_threshold_c bez hystereze.
-    - Denní čítač běhu se resetuje o půlnoci (flow context: filt_date, filt_run).
+10.2 DOBA FILTRACE (jeden parametr v dashboardu) + SOUVISLÝ BLOK ½
+    - Denní doba filtrace D = input_number.filtrace_doba_min (min) → fve_config.filtrace_doba_min.
+      Jeden hlavní slider. (Dříve dvě hodnoty studená/teplá — ZRUŠENO.)
+    - DEFAULT se nastaví PŘI PŘEPNUTÍ input_boolean.letni_rezim (automatizace):
+        * léto (ON):  filtrace_doba_default_leto_min  (default 120 min = 2 h)
+        * zima (OFF): filtrace_doba_default_zima_min  (default 60 min = 1 h)
+      Po přepnutí se filtrace_doba_min přepíše na default; uživatel pak může hodnotu ručně
+      změnit (30 min, 4 h, 8 h, …) a PLATÍ (respektuje se).
+    - MINIMÁLNÍ SOUVISLÝ BLOK = POLOVINA doby (D/2): 60→30, 120→60, 240→120 min.
+      Jakmile filtrace JEDNOU začne, MUSÍ jet ≥ D/2 v kuse BEZ PŘERUŠENÍ — BEZ OHLEDU NA FVE
+      (i kdyby přestalo svítit / zdražilo). Důvod: přerušení krátí účinnost a ztrácí se chlor.
+      JEDINÁ výjimka přerušení: dosažení IDEÁLNÍ chlorace (§10.5 a) — cíl splněn, nemá smysl pokračovat.
+    - POVINNÝ DENNÍ BLOK: každý den proběhne alespoň JEDEN souvislý blok D/2 = garantované minimum
+      (proběhne i z gridu, BEZ OHLEDU NA FVE), spuštěný v NEJLEPŠÍM OKNĚ (§10.4). Deadline pojistka:
+      pokud do filtrace_deadline_h (23) povinný blok neproběhl, spustí se i bez ideálního okna.
 
-10.3 OPTIMALIZACE ENERGIE — PRIORITNÍ ŘETĚZEC (od nejlepší po nejhorší)
-    1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500W) → zapnout
-       - Zdarma energie, nulový dopad na baterii
-       - Nejlepší podmínky — filtrace běží, dokud přebytek trvá, do maxima povinného času - zároveň ale platí základní pravidla, ta jsou prioritní!
-    2. ŠETŘIT MÓD + žádný budoucí solar → zapnout (grid, baterie chráněna)
-       - Pouze pokud FVE plán nemá žádné solární hodiny vpředu
-       - A zbývající solární předpověď < filtrace_solar_ok_kwh (10 kWh)
-    3. URGENT DEADLINE + ŠETŘIT → zapnout (musíme splnit minimum)
-       - Deadline = zbývající čas do filtrace_deadline_h ≤ zbývající minuty + 15 min buffer
-    4. URGENT DEADLINE + NORMAL + SOC ≥ filtrace_soc_low (40%) → zapnout
-       - Emergency: SOC musí být dostatečný pro grid běh v normal módu
-    5. SUPER URGENT (< 20 min do deadline) → zapnout za každou cenu
-       - Absolutní poslední možnost — nesplnění minimální doby = degradace vody
+10.3 TEPLOTNÍ PÁSMA — CO ŘÍDÍ FILTRACI
+    - HARD CUT-OFF: teplota ≤ filtrace_pool_temp_min (5 °C) → NEBĚŽÍ vůbec.
+    - PRÁH STUDENÁ↔TEPLÁ: filtrace_pool_temp_threshold_c (10 °C) + hystereze
+      filtrace_pool_temp_hysterese_c (1 °C): studená→teplá při ≥ 10 °C, teplá→studená při < 9 °C,
+      mezi tím se drží předchozí stav (flow context filt_temp_band ∈ {"studena","tepla"}).
+    - STUDENÁ VODA (< 10 °C): pouze ČASOVĚ — splní se nastavená doba D (blok ≥ D/2). ŽÁDNÁ chlorace,
+      ORP se neřeší (ve studené vodě chlorace nehraje roli; respektuje se přesně nastavená doba).
+    - TEPLÁ VODA (≥ 10 °C): hlavním cílem je CHLORACE (§10.5). Povinný blok D/2 + dohánění ORP.
 
-10.4 VYPÍNACÍ PODMÍNKY (když filtrace běží)
-    1. Minimum splněno + přebytek < filtrace_surplus_off_w (1500W) → OFF
-    2. NORMAL mód + SOC < filtrace_soc_low → OFF (ochrana baterie)
-    3. Min nesplněno + přebytek klesl + budoucí solar existuje → PAUZA (čeká na solar)
-    4. Min nesplněno + přebytek klesl + není šetřit + není urgent → PAUZA
+10.4 KDY SPUSTIT — VÝBĚR NEJLEPŠÍHO OKNA (od nejlepší podmínky po nejhorší)
+    1. SOLÁRNÍ PŘEBYTEK ≥ filtrace_surplus_on_w (2500 W) → IDEÁLNÍ (zdarma, nezatěžuje baterii).
+       Zvlášť přebytek, který bychom jinak NEPRODALI (limit prodeje ~7.6 kW / zákaz přetoků /
+       záporná cena) → filtrace je ideální spotřebič, "spálí" jinak ztracenou energii.
+    2. Levná / záporná nákupní cena, zákaz přetoků.
+    3. Pouze povinný blok D/2 (§10.2): když chybí výhodné okno a blíží se deadline → spustit
+       i z gridu. NAD RÁMEC povinného bloku se z gridu/baterie NESPOUŠTÍ (§10.6).
 
-10.5 OCHRANNÉ MECHANISMY
-    - PRIORITA NIBE: pokud NIBE kompresor aktivně pracuje (binary_sensor.nibe_kompresory_aktivni_binarni=ON),
-      filtrace se POZASTAVÍ (vypne). Důvod: nespotřebovávat energii pro filtraci a NIBE současně.
-      Jakmile kompresor přestane pracovat, filtrace se může znovu zapnout.
-      Anti-cycling se pro tuto podmínku NEPŘESKAKUJE — kompresor override má přednost.
-      POZOR: kontroluje se stav kompresoru (pracuje), NE switch.nibe_topeni (zapnuto)!
-    - Anti-cycling: min filtrace_anti_cycle_min (10 min) mezi ON/OFF přepnutími
-    - SOC ochrana: pod filtrace_soc_low (40%) neběžet na grid (pokud je solar dnes)
-    - Plán awareness: skenuje FVE plán na budoucí solární hodiny
-    - Solar forecast: čte sensor.energy_production_today_remaining_3
-    - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): pokud global.pool_heating_filtrace_lock_until > now(),
-      filtrace je FORCE ON bez ohledu na všechna pravidla výše (priorita NIBE, anti-cycling,
-      SOC ochrana, vypínací podmínky §10.4). Důvod: pokud se topí do výměníku bazénu, filtrace
-      MUSÍ běžet, jinak se výměník přehřeje (§11.4). Lock drží POOL Heating po celou dobu topení
-      + pool_filtrace_cooldown_min (10 min) po jeho skončení. Anti-cycling se pro tento override
-      NEPŘESKAKUJE — lock má nejvyšší přednost. Minuty běhu pod lockem se normálně započítávají
-      do denního čítače §10.2.
+10.5 CHLORACE JE HLAVNÍ CÍL — jen TEPLÁ VODA (sensor.exo_pool_orp)
+    - Parametry v dashboardu:
+        * filtrace_min_chlorace   (default 680) — MINIMUM, pod které nesmí klesnout.
+        * filtrace_ideal_chlorace (default 720) — IDEÁL/OPTIMUM, kam mířit.
+    - ORP ŘÍKÁ PRAVDU JEN ZA BĚHU FILTRACE: bez průtoku (filtrace OFF) hodnota okamžitě padá.
+      Proto se ukládá POSLEDNÍ PLATNÁ hodnota naměřená ZA BĚHU (global filtrace_orp_last_valid),
+      vzorkovaná až po ustálení průtoku (filtrace běží ≥ filtrace_orp_stabilizace_min, default 5 min).
+      Když filtrace neběží, rozhoduje se podle této poslední platné hodnoty.
+    - ROZHODOVÁNÍ podle chlorace (jen teplá voda):
+        a) ORP ≥ filtrace_ideal_chlorace (720) → IDEÁL splněn → filtraci lze PŘERUŠIT/UKONČIT
+           I KDYŽ je nastavena delší doba D (nemá smysl plýtvat). Tohle je JEDINÁ výjimka, kdy se
+           smí přerušit i nedokončený povinný blok D/2.
+        b) ORP < filtrace_min_chlorace (680) → MINIMUM nesplněno → filtrovat VÍC než D: hledat
+           další okno a spouštět DALŠÍ souvislé bloky ≥ D/2, dokud se nedosáhne aspoň 680, ideálně 720.
+        c) Mezi 680 a 720 → minimum splněno; doběhne nastavená doba D, další filtrace jen za
+           výhodných podmínek (§10.4 bod 1–2).
+    - PRIORITA BAZÉNU ROSTE S KLESAJÍCÍ CHLORACÍ: čím níž pod minimem, tím vyšší prioritu má
+      filtrace v arbitráži spotřebičů (velmi nízká chlorace = voda ohrožena → bazén dostává přednost).
+    - NEPLÝTVAT: nad rámec povinného bloku NEVYBÍJET BATERII a NEPRODĚLÁVAT. Když chybí výhodné okno,
+      dohnání chlorace se ODLOŽÍ na další den (a další…). Cíl: KAŽDÝ DEN se co nejvíc přiblížit minimu.
 
-10.6 DASHBOARD — ZOBRAZENÍ STAVU FILTRACE
-    - V dashboardu (dashboard_fve_plan.md) se zobrazuje stav filtrace bazénu:
-      - ✅ OK (XX/YY min) — minimum splněno (XX = skutečný běh, YY = požadované minimum)
-      - ❌ -ZZ min — minimum NESPLNĚNO, zbývá ZZ minut do splnění
-    - Data pocházejí z atributu filtrace_status v sensor.fve_plan_data
-    - filtrace_decision exportuje stav do global kontextu (filtrace_status)
-    - Orchestrator přenáší filtrace_status do sensor.fve_plan_data atributů
+    PŘÍKLADY (uživatel 25.6.2026):
+    - D=4 h, teplá voda: jede ≥ 2 h v kuse. ORP dosáhne 720 → STOP (i kdyby do 4 h zbývalo).
+      ORP < 680 → hledá se okno na další blok ≥ 2 h v kuse.
+    - D=8 h (blok ≥ 4 h), ORP=670 (těsně pod min): povinný blok splněn, ale není výhodné okno
+      (nesvítí, vybíjel bych baterii) → necháme na další den.
+    - ORP=200 (velmi nízká), D=2 h: provede se povinný 1 h blok, pak se čeká na výhodné okno;
+      když nepřijde, dožene se další den. Voda se čistí postupně.
+    - D=1 h, ale ORP nízká: i když je nastaveno jen 1 h, filtruje se VÍC (za nejlepších podmínek),
+      aby se dosáhlo aspoň minima.
 
-10.7 KONFIGUROVATELNÉ PARAMETRY (fve_config)
-    filtrace_surplus_on_w: 2500           (min přebytek pro zapnutí, W)
-    filtrace_surplus_off_w: 1500          (hystereze pro vypnutí, W)
-    filtrace_pool_temp_min: 2             (HARD CUT-OFF: pod touto teplotou filtrace VŮBEC NEBĚŽÍ, °C — §10.1)
-    filtrace_pool_temp_threshold_c: 10    (přepínač studená↔teplá voda pro denní limit, °C — §10.2)
-    filtrace_pool_temp_hysterese_c: 1     (hystereze prahu studená/teplá, °C — proti oscilaci kolem prahu)
-    filtrace_min_studena_min: 60          (min běh při teplotě < threshold, min/den — §10.2)
-    filtrace_min_tepla_min: 120           (min běh při teplotě ≥ threshold, min/den — §10.2)
-    filtrace_deadline_h: 23               (deadline pro splnění minima, hodina)
-    filtrace_anti_cycle_min: 10           (anti-cycling ochrana, min)
-    filtrace_soc_low: 40                  (min SOC pro grid běh, %)
-    filtrace_solar_ok_kwh: 10             (zbývající solar = "čekej na solar", kWh)
+10.6 OCHRANNÉ MECHANISMY
+    - HARD CUT-OFF teploty (≤ 5 °C) — filtrace nikdy neběží (§10.1).
+    - SOUVISLÝ BLOK D/2 (§10.2) má přednost: jakmile běží, NEPŘERUŠOVAT do uplynutí D/2 — ani při
+      poklesu přebytku, ANI při běhu NIBE kompresoru. (ZMĚNA 25.6.2026: dříve NIBE kompresor filtraci
+      pozastavil; nově je ztráta chloru horší → povinný souvislý blok se nepřerušuje.) Jediná výjimka:
+      dosažení ideální chlorace (§10.5 a).
+    - SOC ochrana baterie: NAD RÁMEC povinného bloku se filtrace NESPOUŠTÍ na úkor baterie
+      (pod filtrace_soc_low, default 40 %, neběžet z baterie/gridu jen kvůli dohnání chlorace).
+      Povinný blok D/2 má výjimku (musí proběhnout), i ten se ale plánuje do nejlepšího okna.
+    - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): global.pool_heating_filtrace_lock_until > now() →
+      filtrace FORCE ON (výměník se nesmí přehřát). Minuty se započítávají do denního čítače.
+    - Anti-cycling: po vypnutí se znovu nespouští dřív než filtrace_anti_cycle_min (10 min),
+      pokud to nevyžaduje povinný blok / lock z vytápění.
+
+10.7 DASHBOARD — ZOBRAZENÍ STAVU
+    - Stav filtrace: ✅ OK / ❌ + zbývající minuty povinného bloku; aktuální vs. POSLEDNÍ PLATNÁ
+      chlorace (ORP) a cíl (min/ideál). Data z global filtrace_status → sensor.fve_plan_data atributy.
+
+10.8 KONFIGUROVATELNÉ PARAMETRY (fve_config)
+    filtrace_doba_min                   (denní doba filtrace D, min — hlavní slider v dashboardu)
+    filtrace_doba_default_leto_min: 120 (default po přepnutí na léto)
+    filtrace_doba_default_zima_min:  60 (default po přepnutí na zimu)
+    filtrace_min_chlorace:          680 (ORP minimum — slider)
+    filtrace_ideal_chlorace:        720 (ORP ideál/optimum — slider)
+    filtrace_orp_stabilizace_min:     5 (min běhu filtrace, než je ORP platné)
+    filtrace_pool_temp_min:           5 (HARD CUT-OFF teplota vody, °C)
+    filtrace_pool_temp_threshold_c:  10 (práh studená/teplá voda, °C)
+    filtrace_pool_temp_hysterese_c:   1 (hystereze prahu, °C)
+    filtrace_deadline_h:             23 (deadline pro povinný denní blok, hodina)
+    filtrace_surplus_on_w:         2500 (min přebytek pro výhodné okno, W)
+    filtrace_surplus_off_w:        1500 (hystereze pro vypnutí, W)
+    filtrace_anti_cycle_min:         10 (anti-cycling, min)
+    filtrace_soc_low:                40 (min SOC pro běh nad rámec povinného bloku, %)
+    filtrace_solar_ok_kwh:           10 (zbývající solar = "čekej na solar", kWh)
 
 ================================================================================
 11. FLOW: VYTÁPĚNÍ BAZÉNU (pool-heating.json)
