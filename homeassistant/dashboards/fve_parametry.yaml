@@ -54,6 +54,9 @@ views:
               - entity: input_number.cfg_nabijeni_auta_min_soc
               - entity: input_number.cfg_plan_sell_min_tesla_soc
               - entity: input_number.cfg_filtrace_pool_temp_threshold_c
+              - entity: input_number.cfg_filtrace_doba_min
+              - entity: input_number.cfg_filtrace_min_chlorace
+              - entity: input_number.cfg_filtrace_ideal_chlorace
   - title: Vše (pokročilé)
     path: vse
     icon: mdi:tune-variant
