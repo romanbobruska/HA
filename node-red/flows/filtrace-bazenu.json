@@ -23,8 +23,8 @@
             "filtrace_st_auto",
             "filtrace_st_flag"
         ],
-        "x": 274,
-        "y": 119,
+        "x": 254,
+        "y": 219,
         "w": 602,
         "h": 182
     },
@@ -40,8 +40,8 @@
         "nodes": [
             "filtrace_decision"
         ],
-        "x": 474,
-        "y": 344,
+        "x": 354,
+        "y": 424,
         "w": 232,
         "h": 112
     },
@@ -60,8 +60,8 @@
             "filtrace_flag_on",
             "filtrace_flag_off"
         ],
-        "x": 364,
-        "y": 499,
+        "x": 264,
+        "y": 559,
         "w": 502,
         "h": 182
     },
@@ -82,7 +82,7 @@
         "x": -6,
         "y": 19,
         "w": 432,
-        "h": 142
+        "h": 152
     },
     {
         "id": "filt_link_from_pool_recheck",
@@ -210,8 +210,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 370,
-        "y": 160,
+        "x": 350,
+        "y": 260,
         "wires": [
             [
                 "filtrace_st_surplus"
@@ -249,8 +249,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 770,
-        "y": 160,
+        "x": 750,
+        "y": 260,
         "wires": [
             [
                 "filtrace_st_soc"
@@ -288,8 +288,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 370,
-        "y": 260,
+        "x": 350,
+        "y": 360,
         "wires": [
             [
                 "filtrace_st_auto"
@@ -327,8 +327,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 570,
-        "y": 260,
+        "x": 550,
+        "y": 360,
         "wires": [
             [
                 "filtrace_st_flag"
@@ -366,8 +366,8 @@
         "override_payload": "msg",
         "entity_location": "data",
         "override_data": "msg",
-        "x": 770,
-        "y": 260,
+        "x": 750,
+        "y": 360,
         "wires": [
             [
                 "filtrace_decision"
@@ -392,8 +392,8 @@
                 "module": "fs"
             }
         ],
-        "x": 590,
-        "y": 400,
+        "x": 470,
+        "y": 480,
         "wires": [
             [
                 "filtrace_act_on"
@@ -435,8 +435,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 490,
-        "y": 540,
+        "x": 390,
+        "y": 600,
         "wires": [
             []
         ]
@@ -467,8 +467,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 690,
-        "y": 540,
+        "x": 590,
+        "y": 600,
         "wires": [
             []
         ]
@@ -499,8 +499,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_on",
-        "x": 490,
-        "y": 640,
+        "x": 390,
+        "y": 700,
         "wires": [
             []
         ]
@@ -531,8 +531,8 @@
         "blockInputOverrides": true,
         "domain": "switch",
         "service": "turn_off",
-        "x": 740,
-        "y": 640,
+        "x": 640,
+        "y": 700,
         "wires": [
             []
         ]
