@@ -1277,9 +1277,19 @@ A ZAKAZU PRETOKU
     - Anti-cycling: po vypnutí se znovu nespouští dřív než filtrace_anti_cycle_min (10 min),
       pokud to nevyžaduje povinný blok / lock z vytápění.
 
-10.7 DASHBOARD — ZOBRAZENÍ STAVU
-    - Stav filtrace: ✅ OK / ❌ + zbývající minuty povinného bloku; aktuální vs. POSLEDNÍ PLATNÁ
-      chlorace (ORP) a cíl (min/ideál). Data z global filtrace_status → sensor.fve_plan_data atributy.
+10.7 DASHBOARD — ZOBRAZENÍ STAVU FILTRACE (uživatel 29. 6. 2026)
+    - Indikátor „Bazén“ v hlavičce Řízení FVE ukazuje VŽDY závorku se TŘEMI hodnotami:
+        Bazén: <ikona> <odfiltrováno dnes [min]> / <cíl D [min]> / <max ORP dnes>
+      Příklad po půlnoci: „Bazén: ❌ 0 / 240 min / 0 ORP“.
+    - IKONA: ✅ zelená fajfka JEN když je splněna NASTAVENÁ DOBA D (timeMet: run ≥ D) ZÁROVEŇ
+      s MIN ORP (chlorMet: max ORP dnes ≥ filtrace_min_chlorace; ve studené vodě je chlorace vždy OK).
+      Pokud NENÍ splněno BUĎ doba, NEBO min ORP → ❌ červený křížek.
+    - VŽDY VIDITELNÉ: závorka i všechny tři hodnoty se zobrazují za všech okolností. Po půlnoci se
+      hodnoty resetují (run=0, max ORP=0) a v průběhu dne se průběžně aktualizují (NE jen „-X min“).
+    - max ORP dnes = nejvyšší PLATNÁ hodnota ORP naměřená dnes za běhu filtrace (reset po půlnoci,
+      persistuje přes restart NR ve filt_counter.json: orpMax). Data: filtrace_decision → global
+      filtrace_disp → orchestrátor → sensor.fve_plan_data.filtrace_status
+      (run, minReq=D, orpMaxToday, orpMin, timeMet, chlorMet).
 
 10.8 KONFIGUROVATELNÉ PARAMETRY (fve_config)
     filtrace_doba_min                   (denní doba filtrace D, min — hlavní slider v dashboardu)
