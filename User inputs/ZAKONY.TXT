@@ -1270,8 +1270,10 @@ A ZAKAZU PRETOKU
     - SOC ochrana baterie: NAD RÁMEC povinného bloku se filtrace NESPOUŠTÍ na úkor baterie
       (pod filtrace_soc_low, default 40 %, neběžet z baterie/gridu jen kvůli dohnání chlorace).
       Povinný blok D/2 má výjimku (musí proběhnout), i ten se ale plánuje do nejlepšího okna.
-    - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): global.pool_heating_filtrace_lock_until > now() →
+    - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): global.pool_heating_filtrace_lock_until > now()
+      A SOUČASNĚ pool reálně topí (switch.bazen_ventil_smesovac NEBO switch.nibe_jednorazove_zvyseni_tuv = ON) →
       filtrace FORCE ON (výměník se nesmí přehřát). Minuty se započítávají do denního čítače.
+      Doznívající lock bez aktivního topení filtraci NESPOUŠTÍ (fix 28.6.2026).
     - Anti-cycling: po vypnutí se znovu nespouští dřív než filtrace_anti_cycle_min (10 min),
       pokud to nevyžaduje povinný blok / lock z vytápění.
 
@@ -1380,8 +1382,13 @@ A ZAKAZU PRETOKU
         * Po celou dobu aktivního topení bazénu je lock prodlužován +60 s.
         * Po SKONČENÍ topení (ať přes patrony, nebo přes NIBE) drží lock ještě pool_filtrace_cooldown_min
           (default 10 min) — aby se výměník pořádně vypláchl do bazénu.
-    - Flow FILTRACE (§10) tento lock respektuje: pokud lock_until > now(), filtrace je FORCE ON
-      bez ohledu na své vlastní rozhodování (přebytek, šetřit mód atd.).
+    - Flow FILTRACE (§10) tento lock respektuje: pokud lock_until > now() A POOL REÁLNĚ TOPÍ TEĎ
+      (switch.bazen_ventil_smesovac = ON NEBO switch.nibe_jednorazove_zvyseni_tuv = ON), filtrace je
+      FORCE ON bez ohledu na své vlastní rozhodování (přebytek, šetřit mód atd.).
+    - FIX (28.6.2026): Doznívající / zaseknutý lock SÁM O SOBĚ filtraci NESPOUŠTÍ. Pokud lock_until > now(),
+      ale ŽÁDNÝ ze switchů topení (ventil / NIBE→bazén) není ON, znamená to, že už nic netopí — filtrace se
+      NESMÍ vynutit (jinak by se „bez důvodu“ spustila po zapnutí automatizace). Ochrana výměníku je vázána
+      na SKUTEČNÉ topení, ne na časový zbytek locku.
     - Filtrace běžící pod tímto lockem SE STANDARDNĚ ZAPOČÍTÁVÁ do denního čítače §10 —
       uživatel v dashboardu vidí skutečné minuty běhu bez ohledu na to, kdo filtraci spustil.
     - Filtrace NESMÍ být v průběhu topení ani bezprostředně po něm vypínána/zapínána anti-cycling logikou.
