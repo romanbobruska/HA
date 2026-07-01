@@ -932,9 +932,13 @@ A ZAKAZU PRETOKU
 
        - PŘEDCHLAZENÍ V SOLÁRNÍCH HODINÁCH (v2): v solární hodině s dostatečným
          přebytkem (výroba nebo přebytek ≥ `chlazeni_predchlazeni_min_solar_w`,
-         def. 2000 W) se chladí HLOUBĚJI, až na nastavenou teplotu
+         def. 2000 W) A POUZE V DEN S VELKOU PŘEDPOVĚDÍ SOLÁRU
+         (highSolDay: dnešní předpověď ≥ topeni_solar_high_day_kwh, def. 50 kWh) se chladí HLOUBĚJI, až na nastavenou teplotu
          − `chlazeni_predchlazeni_offset_c` (def. 0,5 °C). Tím se do domu uloží
          „banka chladu" zdarma ze slunce.
+         V DEN S MALOU PŘEDPOVĚDÍ (ne-highSolDay) se NEPŘEDCHLAZUJE (není z čeho „bankovat“ — jen by se
+         zbytečně vybíjela baterie / kupovala síť; když je venku chladněji než uvnitř a jsi na nastavené
+         teplotě, dům se dochladí pasivně). Komfortní chlazení (inT > tgtT + hystereze) běží dál normálně. ZMĚNA 1.7.2026, uživatel.
 
        - ODSUN CHLAZENÍ Z DRAHÝCH NOČNÍCH HODIN (v3): v NESOLÁRNÍ (noční) hodině,
          která je DRAHÁ (level ≥ prah drahé energie) A SOUČASNĚ je na zítřek velká
