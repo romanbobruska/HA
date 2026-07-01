@@ -1205,10 +1205,13 @@ A ZAKAZU PRETOKU
         * zima (OFF): filtrace_doba_default_zima_min  (default 60 min = 1 h)
       Po přepnutí se filtrace_doba_min přepíše na default; uživatel pak může hodnotu ručně
       změnit (30 min, 4 h, 8 h, …) a PLATÍ (respektuje se).
-    - MINIMÁLNÍ SOUVISLÝ BLOK = POLOVINA doby (D/2): 60→30, 120→60, 240→120 min.
-      Jakmile filtrace JEDNOU začne, MUSÍ jet ≥ D/2 v kuse BEZ PŘERUŠENÍ — BEZ OHLEDU NA FVE
-      (i kdyby přestalo svítit / zdražilo). Důvod: přerušení krátí účinnost a ztrácí se chlor.
-      JEDINÁ výjimka přerušení: dosažení IDEÁLNÍ chlorace (§10.5 a) — cíl splněn, nemá smysl pokračovat.
+    - BĚH V KUSE AŽ DO CELÉ DOBY D (ZMĚNA 1.7.2026, uživatel): jakmile filtrace JEDNOU začne,
+      MUSÍ jet SOUVISLE až do splnění celé nastavené doby D — BEZ OHLEDU NA FVE (toleruje výpadky
+      přebytku, krátké výpadky bufruje baterie). KRÁTKÁ SPUŠTĚNÍ NESMÍ NASTÁVAT / nerozpadat na krátké
+      běhy. Důvod: přerušení krátí účinnost a ztrácí se chlor.
+      TVRDÉ STOP-Y (jediné, co smí přerušit běh před dosažením D): (1) HARD CUT-OFF teploty (≤5 °C),
+      (2) dosažení IDEÁLNÍ chlorace ORP≥720 (§10.5 a), (3) jistič při záporné nákupní ceně (headroom),
+      (4) ochrana noční rezervy baterie (SOC ≤ sellTargetSoc). Garantované minimum je i tak souvislý blok D/2.
     - POVINNÝ DENNÍ BLOK: každý den proběhne alespoň JEDEN souvislý blok D/2 = garantované minimum
       (proběhne i z gridu, BEZ OHLEDU NA FVE), spuštěný v NEJLEPŠÍM OKNĚ (§10.4). Deadline pojistka:
       pokud do filtrace_deadline_h (23) povinný blok neproběhl, spustí se i bez ideálního okna.
@@ -1227,8 +1230,10 @@ A ZAKAZU PRETOKU
        Zvlášť přebytek, který bychom jinak NEPRODALI (limit prodeje ~7.6 kW / zákaz přetoků /
        záporná cena) → filtrace je ideální spotřebič, "spálí" jinak ztracenou energii.
     2. Levná / záporná nákupní cena, zákaz přetoků.
-    3. Pouze povinný blok D/2 (§10.2): když chybí výhodné okno a blíží se deadline → spustit
-       i z gridu. NAD RÁMEC povinného bloku se z gridu/baterie NESPOUŠTÍ (§10.6).
+    3. Povinný blok D/2 (§10.2): když chybí výhodné okno a blíží se deadline → spustit i z gridu.
+       CELÁ DOBA D běží v kuse (§10.2, toleruje výpadky přebytku — bufruje baterie až po noční rezervu).
+       DOHÁNĚNÍ CHLORACE NAD RÁMEC D (§10.5 b) se spouští JEN za free okna (přebytek/záporná cena),
+       nikdy z baterie/gridu — odloží se na další den.
 
 10.5 CHLORACE JE HLAVNÍ CÍL — jen TEPLÁ VODA (sensor.exo_pool_orp)
     - Parametry v dashboardu:
@@ -1248,8 +1253,12 @@ A ZAKAZU PRETOKU
            výhodných podmínek (§10.4 bod 1–2).
     - PRIORITA BAZÉNU ROSTE S KLESAJÍCÍ CHLORACÍ: čím níž pod minimem, tím vyšší prioritu má
       filtrace v arbitráži spotřebičů (velmi nízká chlorace = voda ohrožena → bazén dostává přednost).
-    - NEPLÝTVAT: nad rámec povinného bloku NEVYBÍJET BATERII a NEPRODĚLÁVAT. Když chybí výhodné okno,
-      dohnání chlorace se ODLOŽÍ na další den (a další…). Cíl: KAŽDÝ DEN se co nejvíc přiblížit minimu.
+    - NEPLÝTVAT: nad rámec CELÉ DOBY D (dohánění chlorace §10.5 b) NEVYBÍJET BATERII a NEPRODĚLÁVAT.
+      Když chybí výhodné okno, dohnání chlorace NAD D se ODLOŽÍ na další den (a další…). Cíl: KAŽDÝ DEN
+      se co nejvíc přiblížit minimu. (Samotná nastavená doba D ale běží v kuse — §10.2.)
+    - ORP BOOST (Exo, switch.exo_pool_orp_boost) — uživatel 30.6.2026: když teplota vody > filtrace_boost_temp_c
+      (default 27 °C) → BOOST ZAP (vyšší tvorba chloru v horku); pod prah −1 °C (hystereze) → BOOST VYP.
+      Řídí samostatná smyčka v NR (kontrola 60 s, povel jen při změně stavu), nezávisle na běhu filtrace.
 
     PŘÍKLADY (uživatel 25.6.2026):
     - D=4 h, teplá voda: jede ≥ 2 h v kuse. ORP dosáhne 720 → STOP (i kdyby do 4 h zbývalo).
@@ -1263,13 +1272,13 @@ A ZAKAZU PRETOKU
 
 10.6 OCHRANNÉ MECHANISMY
     - HARD CUT-OFF teploty (≤ 5 °C) — filtrace nikdy neběží (§10.1).
-    - SOUVISLÝ BLOK D/2 (§10.2) má přednost: jakmile běží, NEPŘERUŠOVAT do uplynutí D/2 — ani při
-      poklesu přebytku, ANI při běhu NIBE kompresoru. (ZMĚNA 25.6.2026: dříve NIBE kompresor filtraci
-      pozastavil; nově je ztráta chloru horší → povinný souvislý blok se nepřerušuje.) Jediná výjimka:
-      dosažení ideální chlorace (§10.5 a).
-    - SOC ochrana baterie: NAD RÁMEC povinného bloku se filtrace NESPOUŠTÍ na úkor baterie
-      (pod filtrace_soc_low, default 40 %, neběžet z baterie/gridu jen kvůli dohnání chlorace).
-      Povinný blok D/2 má výjimku (musí proběhnout), i ten se ale plánuje do nejlepšího okna.
+    - BĚH V KUSE AŽ DO D (§10.2) má přednost: jakmile běží, NEPŘERUŠOVAT do splnění celé doby D — ani při
+      poklesu přebytku (bufruje baterie), ANI při běhu NIBE kompresoru. (ZMĚNA 25.6.2026: dříve NIBE
+      kompresor filtraci pozastavil; nově je ztráta chloru horší. ZMĚNA 1.7.2026: ochrana rozšířena z
+      D/2 na celé D — krátká spuštění nesmí nastávat.) Výjimky přerušení: ideální chlorace (§10.5 a),
+      jistič při záporné ceně, ochrana noční rezervy baterie.
+    - SOC ochrana baterie: běh se pozastaví, když SOC klesne na noční rezervu (sellTargetSoc). NAD RÁMEC
+      CELÉ DOBY D (dohánění chlorace §10.5 b) se filtrace NESPOUŠTÍ na úkor baterie — jen za free okna.
     - OVERRIDE Z VYTÁPĚNÍ BAZÉNU (§11.4): global.pool_heating_filtrace_lock_until > now()
       A SOUČASNĚ pool reálně topí (switch.bazen_ventil_smesovac NEBO switch.nibe_jednorazove_zvyseni_tuv = ON) →
       filtrace FORCE ON (výměník se nesmí přehřát). Minuty se započítávají do denního čítače.
@@ -1307,6 +1316,7 @@ A ZAKAZU PRETOKU
     filtrace_anti_cycle_min:         10 (anti-cycling, min)
     filtrace_soc_low:                40 (min SOC pro běh nad rámec povinného bloku, %)
     filtrace_solar_ok_kwh:           10 (zbývající solar = "čekej na solar", kWh)
+    filtrace_boost_temp_c:           27 (teplota vody pro ORP boost, °C; hystereze −1 °C)
 
 ================================================================================
 11. FLOW: VYTÁPĚNÍ BAZÉNU (pool-heating.json)
