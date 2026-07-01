@@ -1209,9 +1209,14 @@ A ZAKAZU PRETOKU
       MUSÍ jet SOUVISLE až do splnění celé nastavené doby D — BEZ OHLEDU NA FVE (toleruje výpadky
       přebytku, krátké výpadky bufruje baterie). KRÁTKÁ SPUŠTĚNÍ NESMÍ NASTÁVAT / nerozpadat na krátké
       běhy. Důvod: přerušení krátí účinnost a ztrácí se chlor.
-      TVRDÉ STOP-Y (jediné, co smí přerušit běh před dosažením D): (1) HARD CUT-OFF teploty (≤5 °C),
-      (2) dosažení IDEÁLNÍ chlorace ORP≥720 (§10.5 a), (3) jistič při záporné nákupní ceně (headroom),
-      (4) ochrana noční rezervy baterie (SOC ≤ sellTargetSoc). Garantované minimum je i tak souvislý blok D/2.
+      POVINNÝ SOUVISLÝ BLOK D/2 = ABSOLUTNÍ MINIMUM: jakmile filtrace začne, MUSÍ odjet min. D/2
+      (180→90) SOUVISLE V KUSE, BEZ OHLEDU NA COKOLIV (FVE, přebytek, baterie, ORP, NIBE). Tento blok
+      smí přerušit JEN fyzická ochrana: (1) HARD CUT-OFF teploty ≤5 °C, (2) přetížení hlavního jističe
+      při záporné ceně. NIC jiného (ANI ideální ORP, ANI nízká baterie) povinný blok NEPŘERUŠÍ. Sleduje se
+      SOUVISLÝ běh (contRunMin), ne kumulativní čas; dokončení se persistuje (filt_counter.json: blockDoneDate).
+      TEPRVE PO dokončení bloku D/2 se vyhodnocuje pokračování: běží dál v kuse k celé době D (toleruje výpadky
+      přebytku, bufruje baterie) a AŽ TEď smí přerušit dosažení IDEÁLNÍ chlorace ORP≥720 (§10.5 a) nebo ochrana
+      noční rezervy baterie (SOC ≤ sellTargetSoc).
     - POVINNÝ DENNÍ BLOK: každý den proběhne alespoň JEDEN souvislý blok D/2 = garantované minimum
       (proběhne i z gridu, BEZ OHLEDU NA FVE), spuštěný v NEJLEPŠÍM OKNĚ (§10.4). Deadline pojistka:
       pokud do filtrace_deadline_h (23) povinný blok neproběhl, spustí se i bez ideálního okna.
@@ -1244,9 +1249,9 @@ A ZAKAZU PRETOKU
       vzorkovaná až po ustálení průtoku (filtrace běží ≥ filtrace_orp_stabilizace_min, default 5 min).
       Když filtrace neběží, rozhoduje se podle této poslední platné hodnoty.
     - ROZHODOVÁNÍ podle chlorace (jen teplá voda):
-        a) ORP ≥ filtrace_ideal_chlorace (720) → IDEÁL splněn → filtraci lze PŘERUŠIT/UKONČIT
-           I KDYŽ je nastavena delší doba D (nemá smysl plýtvat). Tohle je JEDINÁ výjimka, kdy se
-           smí přerušit i nedokončený povinný blok D/2.
+        a) ORP ≥ filtrace_ideal_chlorace (720) → IDEÁL splněn → filtraci lze UKONČIT i když je
+           nastavena delší doba D (nemá smysl plýtvat). POZOR: platí AŽ PO dokončení povinného souvislého
+           bloku D/2 (§10.2). Během povinného bloku ideál filtraci NIKDY nepřeruší (ZMĚNA 1.7.2026, uživatel).
         b) ORP < filtrace_min_chlorace (680) → MINIMUM nesplněno → filtrovat VÍC než D: hledat
            další okno a spouštět DALŠÍ souvislé bloky ≥ D/2, dokud se nedosáhne aspoň 680, ideálně 720.
         c) Mezi 680 a 720 → minimum splněno; doběhne nastavená doba D, další filtrace jen za
@@ -1290,9 +1295,9 @@ A ZAKAZU PRETOKU
     - Indikátor „Bazén“ v hlavičce Řízení FVE ukazuje VŽDY závorku se TŘEMI hodnotami:
         Bazén: <ikona> <odfiltrováno dnes [min]> / <cíl D [min]> / <max ORP dnes>
       Příklad po půlnoci: „Bazén: ❌ 0 / 240 min / 0 ORP“.
-    - IKONA: ✅ zelená fajfka JEN když je splněna NASTAVENÁ DOBA D (timeMet: run ≥ D) ZÁROVEŇ
-      s MIN ORP (chlorMet: max ORP dnes ≥ filtrace_min_chlorace; ve studené vodě je chlorace vždy OK).
-      Pokud NENÍ splněno BUĎ doba, NEBO min ORP → ❌ červený křížek.
+    - IKONA: ✅ zelená fajfka když je DEN HOTOV (timeMet=dayDone): povinný souvislý blok D/2 dokončen A ZÁROVEŇ
+      buď (plná doba D s max ORP ≥ min), NEBO (teplá voda a dosažen IDEÁL ORP≥720). chlorMet: max ORP dnes ≥ filtrace_min_chlorace (studená voda vždy OK).
+      Dokud den není hotový (povinný blok neproběhl, nebo se ještě dohání doba/chlorace) → ❌ červený křížek.
     - VŽDY VIDITELNÉ: závorka i všechny tři hodnoty se zobrazují za všech okolností. Po půlnoci se
       hodnoty resetují (run=0, max ORP=0) a v průběhu dne se průběžně aktualizují (NE jen „-X min“).
     - max ORP dnes = nejvyšší PLATNÁ hodnota ORP naměřená dnes za běhu filtrace (reset po půlnoci,
