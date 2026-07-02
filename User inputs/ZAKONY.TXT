@@ -31,6 +31,10 @@ jistá, NEZASADÍ a vysvětlí proč.
       (rozdil_vyroby + příkon patron), aby se rozhodl na MAX. Vždy je lepší natopit bojler na max než pustit
       o fázi patron víc. VÝJIMKA: grid-nabíjení (zaporna_nakupni_cena / nabijet_ze_site) — neplatí, tam
       není nouze o přebytek a limit řeší centrální arbitr jističe (§4.10.5).
+      PLATÍ V ZIMĚ (fve-heating: patrony odečtou rezervaci z availPat) I V LÉTĚ (pool-heating §11:
+      bojlerOk počítá záměr bojleru = max(aktuální příkon, 2 kW když bojler chce topit dle rezervace),
+      takže patrony ustoupí i v mezicyklu, kdy bojler zrovna netopí). Bojler běží každých 60 s a rezervaci
+      publikuje v obou režimech.
 
 1.2 ABSOLUTNÍ ZÁKAZY — NIKDY NEPORUŠIT
     - NIBE a patrony NIKDY nesmí běžet současně (riziko přetížení jističe: 14kW + 9kW = 23kW > 22kW)
