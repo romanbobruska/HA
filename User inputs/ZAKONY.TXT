@@ -1108,16 +1108,22 @@ A ZAKAZU PRETOKU
     - SOC baterie ≥ 90 procent
     - auto_ma_hlad = OFF  ← ABSOLUTNÍ ZÁKON
     - korekcni smycka zapinani fazi patron upravi ve 10s cyklech pocet zapnutych fazi tak, aby byly splene podminky:
-        - SOC baterie je >=95%, pak se VYBIJI baterie cca 1 - 2kWh - HLAVNE SE NESMI NABIJET!!!. Pokud se bateerie v tomto 
-            SOC bude nabijet, prida se 1 faze.
-            - POKUD JE SOC BATERIE ≥ 95 % A ZÁROVEŇ NÁM SÍŤ ZA PRODEJ MOC NEPLATÍ, zapnou se všechny 3 fáze
-              patron a drží se, dokud baterie neklesne pod 95 %. Korekční smyčka (která jinak ubírá fáze
-              podle toku do baterie) je v tomto případě VYŘAZENÁ — fáze drží napevno všechny tři.
+        - SOC baterie ≥ 95 % **A ZÁKAZ PŘETOKŮ** (nebo záporná nákupní cena): pak se přes patrony VYBÍJÍ baterie
+            cca 1-2 kWh (anti-curtail). Pokud se v tomto stavu baterie nabíjí, přidá se 1 fáze.
+            ***MIMO ZÁKAZ PŘETOKŮ (i při nízké prodejní ceně) SE BATERIE PŘES PATRONY NIKDY NEVYBÍJÍ A NETAHÁ SE ZE SÍTĚ***
+            (uživatel 2.7.2026) — patrony se při SOC ≥ 95 % chovají STEJNĚ jako při SOC < 95 %: jedou JEN ze solárního
+            přebytku přes korekční smyčku (cíl: baterie mírně NABÍJÍ ~1 kWh). Lepší je přebytek PRODAT za pár haléřů,
+            než ho pálit v patronách nákupem ze sítě za > 1 Kč nebo vybíjením baterie (kterou pak v noci dokupuji dráž).
+            - POKUD JE SOC BATERIE ≥ 95 % A ZÁROVEŇ JE ZÁKAZ PŘETOKŮ (prodejní cena ≤ 0 Kč, mód „zakaz_pretoku"),
+              zapnou se všechny 3 fáze patron a drží se, dokud baterie neklesne pod 95 %. Korekční smyčka
+              (která jinak ubírá fáze podle toku do baterie) je v tomto případě VYŘAZENÁ — fáze drží napevno všechny tři.
+              Totéž platí při ZÁPORNÉ NÁKUPNÍ CENĚ (mód „zaporna_nakupni_cena" — síť nám platí za odběr).
 
-              „Síť nám za prodej moc neplatí" znamená jeden ze dvou případů (chování JE V OBOU IDENTICKÉ):
-                a) ZÁKAZ PŘETOKŮ — síť nás odmítá vykupovat (prodejní cena ≤ 0 Kč/kWh, mód „zakaz_pretoku").
-                b) NÍZKÁ PRODEJNÍ CENA — síť vykupuje, ale platí míň než nastavený práh
-                   (parametr prah_nevyhodneho_prodeje_kc, výchozí 1 Kč/kWh, lze přenastavit v konfiguraci).
+              ***ZMĚNA 2.7.2026 (uživatel): NÍZKÁ PRODEJNÍ CENA BEZ ZÁKAZU PŘETOKŮ UŽ NENÍ důvod pro 3 fáze / vybíjení.***
+              Dřív sem spadal i případ „síť vykupuje, ale platí míň než prah_nevyhodneho_prodeje_kc" — ZRUŠENO.
+              Když síť přebytek VYKUPUJE (prodejní cena > 0), je LEPŠÍ HO PRODAT (i za pár haléřů), než kvůli patronám
+              vybíjet baterii nebo dokonce nakupovat ze sítě za > 1 Kč. V tom případě jedou patrony jen ze skutečného
+              solárního přebytku přes korekční smyčku (chová se to jako při SOC < 95 %).
 
               Důvod (lidsky, navazuje na § 1.1 + § 8.7): kdyby se naše elektřina prodávala pod korunu,
               je výhodnější ji propálit v patronách do nádrže — v zimě tím přitopíme dům, v létě bazén.
