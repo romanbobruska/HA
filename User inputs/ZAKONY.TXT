@@ -22,6 +22,15 @@ jistá, NEZASADÍ a vysvětlí proč.
     2. Nabíjení baterie FVE — baterie má přednost před autem i patrony
     3. Nabíjení auta (solární nebo síť dle podmínek)
     4. Patrony (přetokové vytápění nádrže) — POSLEDNÍ, jen solární přebytky
+    - BOJLER > PATRONY o SOLÁRNÍ PŘEBYTEK (uživatel 2.7.2026): když se bojler i patrony perou o stejný
+      přebytek (typicky když „není energii kam dát" — plná baterie / zákaz přetoků), bojler má VŽDY přednost.
+      Nejdřív se natopí bojler na MAX z přebytku (~SPOTREBA_BOJLER, def. 2500 W), teprve ZBYTEK dostanou patrony.
+      Když přebytek nestačí na oba, ubere se patronám fáze: bojler publikuje bojler_prebytek_rezervace_w =
+      max(0, SPOTREBA_BOJLER − aktuální příkon bojleru), korekce patron ji odečte z přebytku (availPat) →
+      sníží počet fází. Ve větvi zakaz_pretoku bojler navíc počítá cíl z „reclaimovatelného" přebytku
+      (rozdil_vyroby + příkon patron), aby se rozhodl na MAX. Vždy je lepší natopit bojler na max než pustit
+      o fázi patron víc. VÝJIMKA: grid-nabíjení (zaporna_nakupni_cena / nabijet_ze_site) — neplatí, tam
+      není nouze o přebytek a limit řeší centrální arbitr jističe (§4.10.5).
 
 1.2 ABSOLUTNÍ ZÁKAZY — NIKDY NEPORUŠIT
     - NIBE a patrony NIKDY nesmí běžet současně (riziko přetížení jističe: 14kW + 9kW = 23kW > 22kW)
