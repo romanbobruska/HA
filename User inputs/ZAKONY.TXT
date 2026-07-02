@@ -1218,6 +1218,8 @@ A ZAKAZU PRETOKU
       smí přerušit JEN fyzická ochrana: (1) HARD CUT-OFF teploty ≤5 °C, (2) přetížení hlavního jističe
       při záporné ceně. NIC jiného (ANI ideální ORP, ANI nízká baterie) povinný blok NEPŘERUŠÍ. Sleduje se
       SOUVISLÝ běh (contRunMin), ne kumulativní čas; dokončení se persistuje (filt_counter.json: blockDoneDate).
+      Souvislý blok PŘEŽIJE RESTART Node-RED (2.7.2026): contStart+wasOn se persistují; pokud filtrace fyzicky
+      běží dál i po restartu, blok POKRAČUJE (neresetuje se od nuly).
       TEPRVE PO dokončení bloku D/2 se vyhodnocuje pokračování: běží dál v kuse k celé době D (toleruje výpadky
       přebytku, bufruje baterie) a AŽ TEď smí přerušit dosažení IDEÁLNÍ chlorace ORP≥720 (§10.5 a) nebo ochrana
       noční rezervy baterie (SOC ≤ sellTargetSoc).
