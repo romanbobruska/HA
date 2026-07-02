@@ -201,6 +201,13 @@ jistá, NEZASADÍ a vysvětlí proč.
           (Pravidlo „STABILNÍ cíl“ nesmí být obcházeno tím, že by se cíl zastropoval na aktuální SOC — to jsme
            dříve dělali a způsobovalo to oscilaci: jakmile SOC během prodeje klesl, cíl klesl s ním a prodej
            pokračoval dál, než bylo bezpečné. Cíl je počítaný z předpovědi, ne ze stavu baterie.)
+        - ANTI-OSCILACE „HALUCINACE PRODEJE" (uživatel 2.7.2026): prodej se NESMÍ zapínat/vypínat
+          dokola (dříve toggloval po ~30 s = perioda regenerace plánu). Degradace prodavat→normal
+          jede přes JEDEN hysterezní LATCH: prodává se dokud SOC > cíl; jakmile SOC klesne NA cíl,
+          latch sepne a drží NORMAL až dokud SOC nevyskočí na cíl + sell_stop_hysteresis_soc (def. 3 %).
+          Teprve pak smí prodej znovu naběhnout. Tím se odstraní blikání na hranici SOC. Latch je
+          sdílený mezi plánovačem (node „5. Výstup plánu") a executorem („Kontrola podmínek") —
+          jeden zdroj pravdy, ne dva prahy, co se perou.
         - KDY VŮBEC PRODÁVAT (uživatel 23. 5. 2026; ZMĚNA 18. 6. 2026):
           Prodáváme z baterie do sítě POUZE pokud splníme OBĚ podmínky zároveň:
 
