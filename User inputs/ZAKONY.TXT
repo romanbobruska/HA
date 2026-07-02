@@ -358,6 +358,16 @@ jistá, NEZASADÍ a vysvětlí proč.
       rezervu na ráno, kdy ještě nesvítí slunce.
 
 
+4.5b PRODEJ PŘEBYTKU MÍSTO NABÍJENÍ (auto mód „prodavat_misto_nabijeni", anti-curtailment)
+    - Solární přebytek se MÍSTO uložení do baterie EXPORTUJE (prodá) do sítě za dobrou cenu.
+    - Plánuje se JEN když v dané hodině předpověď výroby REÁLNĚ převyšuje spotřebu domu
+      (solarKwh(h) > consAt(h)). Když výroba ≤ spotřeba, žádný přebytek NEEXISTUJE a mód se
+      NESMÍ v plánu objevit (uživatel 2.7.2026: „prodej přebytku se objevoval i v h20 večer
+      a ráno, když nesvítí dost na pokrytí spotřeby baráku"). Dřív se řídilo jen ČASOVÝM
+      solárním oknem (solS..solE) bez ohledu na reálnou výrobu → halucinace prodeje přebytku.
+    - Dále platí: prodejní cena > 0, baterie na/nad denním stropem (maxDaily) a prodej se
+      vyplatí víc než uložení pro večerní špičku (sell > storeValue + min_export_advantage_czk).
+
 4.6 ZÁKAZ PŘETOKŮ
     - Nesmi se exportovat do site, idealne ani 100 Wh. Zaroven se nesmi ze site brat (povoleno cca 150W)!
     - OZNAČENÍ — ULTRA LEVNÁ CENA (buy < prah_ultra_levna_nakup, výchozí 1.0 Kč/kWh):
