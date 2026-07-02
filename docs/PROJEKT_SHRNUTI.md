@@ -1089,7 +1089,7 @@ Když zapne: `max_charge=0` + feed-in do `max_feed_in`, baterie idle, přebytek 
 
   - Rate limit ±2A per cyklus (config `nabijeni_auta_max_step`)
 
-  - Grid draw safety: pokud `spotreba_ze_site > nabijeni_auta_max_grid_w` (200W) → okamžitě snížit
+  - Grid draw safety: TRVALÝ net odběr (`fve_net_odber_ze_site`) > `nabijeni_auta_max_grid_w` (100W) po 2 cyklech (20s) → snížit amperaci (momentální dorovnávání Victronu se ignoruje)
 
 
 

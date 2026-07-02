@@ -767,8 +767,11 @@ A ZAKAZU PRETOKU
     - Pri nabijeni auta ze solaru NIKDY NESMI BYT BLOKOVANE VYBIJENI BATERIE!!!!!!!!!! TOTO SE RIDI KOREKCNI SMYCKOU!!!
     - Rozsah wallboxu pro amperaci: 6A–16A (select.wallboxu_garaz_amperace)
     - NIKDY SE NESMI BRAT ZE SITE ANI 1WH!!!
-    - GRID DRAIN GUARD (uživatel 2.7.2026): korekční smyčka BERE V POTAZ net odběr ze sítě
-      (sensor.fve_net_odber_ze_site) a SNIŽUJE amperaci o 1A/cyklus tak dlouho, DOKUD net odběr nezmizí.
+    - GRID DRAIN GUARD (uživatel 2.7.2026): „ANI 1WH ze sítě" je v praxi NEDOSAŽITELNÉ — Victron neustále
+      dorovnává (chvíli malý import, chvíli export). Cílem NENÍ nulový import, ale ŽÁDNÝ TRVALÝ grid drain.
+      Korekční smyčka bere v potaz net odběr (sensor.fve_net_odber_ze_site): když je TRVALE >= nabijeni_auta_max_grid_w
+      (default 100 W) po nabijeni_auta_grid_persist_cycles (default 2 = 20 s), SNIŽUJE amperaci o 1A/cyklus,
+      dokud trvalý odběr nezmizí. Momentální špičky z dorovnávání Victronu se ignorují (persistence počítadlo).
       Platí do SOC 94 % VŽDY — i v zákazu přetoků (baterie ještě absorbuje přebytek → žádný curtailment,
       solár jde do baterie místo do auta ze sítě). JEDINÁ VÝJIMKA = stávající stav: zákaz přetoků A SOC > 94 %
       → malý grid draw tolerován (baterie skoro plná, Victron nestíhá vybíjet, lepší než omezit solár).
