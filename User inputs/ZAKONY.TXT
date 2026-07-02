@@ -367,6 +367,14 @@ jistá, NEZASADÍ a vysvětlí proč.
       solárním oknem (solS..solE) bez ohledu na reálnou výrobu → halucinace prodeje přebytku.
     - Dále platí: prodejní cena > 0, baterie na/nad denním stropem (maxDaily) a prodej se
       vyplatí víc než uložení pro večerní špičku (sell > storeValue + min_export_advantage_czk).
+    - VÝJIMKA — VELKÝ SOLÁRNÍ DEN (uživatel 2.7.2026): když BUDOUCÍ solární přebytek zbytku dne
+      spolehlivě dobije baterii na denní strop I S REZERVOU (jistota proti chybě předpovědi,
+      param prodej_prebytek_refill_jistota_soc, def. 15 % SOC), je ranní přebytek „navíc" —
+      PRODÁVÁ se za dobrou cenu (sell > min_export_advantage_czk) i POD maxDaily. Důvod: později
+      hrozí zákaz přetoků nebo nízké ceny → přebytek by se propálil do patron. Lepší ho prodat
+      za peníze, dokud se dá. Odpolední zákaz-přetoky hodiny pak baterii dobijí (místo patron)
+      a večerní špička se prodá z baterie. Na slabém/normálním dni platí přísná ochrana z 26.6.
+      (nejdřív nabít na strop) beze změny.
 
 4.6 ZÁKAZ PŘETOKŮ
     - Nesmi se exportovat do site, idealne ani 100 Wh. Zaroven se nesmi ze site brat (povoleno cca 150W)!
